@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html><!-- InstanceBegin template="/Templates/contenttpl.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META name="keywords" content="Linux,document,Open Source,GNU,icephoton,C/C++,PHP,QT/KDE自由软件,资料,文档">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>icephoton 笔记</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+
+<!-- InstanceEndEditable -->
+<script language="javascript">
+
+</script>
+</head>
+
+<body>
+<a name="pagetop"></a>
+<br>
+<table width="90%" border="1"  align="center">
+  <tr>
+    <td width="359">&nbsp;&nbsp;&nbsp;&nbsp;本站内容为本人在工作与学习过程中收集及组织的一些文档资料，方便随时查阅。</td>
+  </tr>
+</table>
+<br>
+<hr align="center"  size="1" width="96%" >
+
+<p align="right">
+<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</p>
+
+<table width="90%"  border="1" align="center">
+  <tr>
+    <td style="line-height:20px;color:#333333;font-size:14px;padding:15px 30px 15px 30px" bgcolor="#F7F7F7">&nbsp;
+
+<!-- InstanceBeginEditable name="content" -->
+	<br>/**<br>* @param s 需要编码的url字符串<br>* @param len 需要编码的url的长度<br>* @param new_length 编码后的url的长度<br>* @return char * 返回编码后的url<br>* @note 存储编码后的url存储在一个新审请的内存中，<br>*&nbsp; &nbsp; &nbsp; 用完后，调用者应该释放它<br>*/<br>char * urlencode(char const *s, int len, int *new_length)<br>{<br>&nbsp; &nbsp; &nbsp; &nbsp; printf( s);<br>&nbsp; &nbsp; &nbsp; &nbsp; printf(&quot;\n&quot;);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; unsigned char const *from, *end;<br>&nbsp; &nbsp; &nbsp; &nbsp; from = s;<br>&nbsp; &nbsp; &nbsp; &nbsp; end = s + len;<br>&nbsp; &nbsp; &nbsp; &nbsp; start = to = (unsigned char *) malloc(3 * len + 1);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; unsigned char hexchars[] = &quot;0123456789ABCDEF&quot;;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; while (from &lt; end) {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c = *from++;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (c == ' ') {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *to++ = '+';<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else if ((c &lt; '0' && c != '-' && c != '.') ||<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (c &lt; 'A' && c &gt; '9') ||<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (c &gt; 'Z' && c &lt; 'a' && c != '_') ||<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (c &gt; 'z')) {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; to[0] = '%';<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; to[1] = hexchars[c &gt;&gt; 4];<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; to[2] = hexchars[c & 15];<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; to += 3;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *to++ = c;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; *to = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (new_length) {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *new_length = to - start;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; return (char *) start;<br><br>}<br><br>/**<br>* @param str 需要解码的url字符串<br>* @param len 需要解码的url的长度<br>* @return int 返回解码后的url长度<br>*/<br>int urldecode(char *str, int len)<br>{<br>&nbsp; &nbsp; &nbsp; &nbsp; char *dest = str;<br>&nbsp; &nbsp; &nbsp; &nbsp; char *data = str;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; int value;<br>&nbsp; &nbsp; &nbsp; &nbsp; int c;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; while (len--) {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (*data == '+') {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *dest = ' ';<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if (*data == '%' && len &gt;= 2 && isxdigit((int) *(data + 1))<br>&nbsp; && isxdigit((int) *(data + 2)))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c = ((unsigned char *)(data+1))[0];<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isupper(c))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c = tolower(c);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; value = (c &gt;= '0' && c &lt;= '9' ? c - '0' : c - 'a' + 10) * 16;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c = ((unsigned char *)(data+1))[1];<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isupper(c))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c = tolower(c);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; value += c &gt;= '0' && c &lt;= '9' ? c - '0' : c - 'a' + 10;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *dest = (char)value ;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; data += 2;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; len -= 2;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *dest = *data;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; data++;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dest++;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; *dest = '\0';<br>&nbsp; &nbsp; &nbsp; &nbsp; return dest - str;<br>}<br> <br>
+
+<!-- InstanceEndEditable -->
+	</td>
+  </tr>
+</table>
+
+<p align="right">
+	<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="#pagetop">TOP</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<hr align="center"  size="1" width="96%" >
+<center>Copyleft &copy;IcePhoton 2000 - 2005, 北京</center>
+
+
+</body>
+<!-- InstanceEnd --></html>

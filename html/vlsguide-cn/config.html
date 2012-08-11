@@ -1,0 +1,649 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Configuration</title>
+  <meta name="GENERATOR"
+ content="Modular DocBook HTML Stylesheet Version 1.76b+">
+  <link rel="HOME" title="VLS user guide" href="vls-user-guide-en.html">
+  <link rel="PREVIOUS" title="Overview and basic concepts"
+ href="overview.html">
+  <link rel="NEXT" title="Running VLS" href="run.html">
+</head>
+<body class="chapter"
+ style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"
+ link="#0000ff" vlink="#840084" alink="#0000ff">
+<div class="NAVHEADER">
+<table summary="Header navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <th colspan="3" align="center">VLS user guide</th>
+    </tr>
+    <tr>
+      <td width="10%" align="left" valign="bottom"><a
+ href="overview.html" accesskey="P">上一节</a></td>
+      <td width="80%" align="center" valign="bottom"><br>
+      </td>
+      <td width="10%" align="right" valign="bottom"><a href="run.html"
+ accesskey="N">下一节</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr align="left" width="100%"></div>
+<div class="chapter">
+<h1><a name="config">Chapter 4. 配置</a></h1>
+<div class="TOC">
+<dl>
+  <dt><a name="config"></a>内容列表 </dt>
+  <dt><a name="config">4.1. </a><a href="config.html#AEN432">总体结构</a></dt>
+  <dt>4.2. <a href="config.html#AEN439"><tt class="filename">编写vls.cfg</tt></a></dt>
+</dl>
+</div>
+<p>VLS
+从vls.cfg配置文件中读取它的配置，前提是假设它放于当前目录或SYSCONF_DIR/videolan/vls(如果你是从源程序安装，SYSCONF_DIR是/usr/local/etc,否则是/etc).</p>
+<p>要编写vls.cfg文件，可用给出的这个做起点。</p>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN432">4.1.总体结构</a></h1>
+<p><a name="AEN432">VLS 配置文件分成许多小节，每一小节包含了几个变量。</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "FirstSection"<br>  Variable1 = "value1"<br>  Variable2 = "value2"<br>  [...]<br>END<br><br>BEGIN "SecondSection"<br>  Variable1 = "value1"<br>  Variable3 = "value3"<br>  [...]<br>END<br><br>[...]<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN432">所有小节的名字，变量的名字和值不都是很敏感的。可以有空的小节和子小节。注解前要有 #
+字符。有些变量有缺省值；这就是说你可以略过这些变量的定义，然后它会得到他们的缺省值。</a></p>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN439">4.2. 编写 <tt class="filename">vls.cfg</tt></a></h1>
+<p><a name="AEN439">下面是你能在vls.cfg文件中看到的所有小节的解释 ：</a></p>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN444">4.2.1. Section "Vls"</a></h2>
+<p><a name="AEN444">这一小节包含应用程序的僵局设置。</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">LogFile = "name"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN444">VLS日志文件的名字。如果置空"",缺省值为 "vls.log".</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">SystemLog = "[disable|enable]"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN444">是否写系统日志。现在，仅有syslogd被作为写系统日志的程序：编译时用 <b
+ class="command">./configure --enable-syslog</b>.</a></p>
+<div class="caution">
+<table class="caution" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="config_%CE%C4%BC%FE/caution.gif" hspace="5" alt="Caution"></td>
+      <td align="left" valign="top">
+      <p>如果VLS以vlsd启动，那么下面的配置是合理：</p>
+      <table border="0" bgcolor="#e0e0e0" width="100%">
+        <tbody>
+          <tr>
+            <td>
+            <pre class="programlisting">BEGIN "Vls"<br>  LogFile   = ""<br>  SystemLog = "enabled"<br>  ScreenLog = "disabled"<br>END<br></pre>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">ScreenLog = "[disable|enable]"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN444">写日志到控制台.</a></p>
+<p><a name="AEN444">例子:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Vls"<br>  LogFile   = "vls.log"<br>  SystemLog = "disable"<br>  ScreenLog = "enable"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN460">4.2.2. Section "Groups"</a></h2>
+<p><a name="AEN460">这一小节中，用户组，这些用户可以执行哪些命令。对每一个你想定义的组，你必须以下面的格式加入一行：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">groupname = "command1|command2|..."<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN460">这样添加了"groupname"组，这个组里的所有用户可以执行的命令有command1,command2,等。现在，可用的命令有:help,
+browse, start, suspend, resume, forward, rewind, stop, shutdown, logout.</a></p>
+<p><a name="AEN460">例子：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Groups"<br>  monitor = "help|browse|logout"<br>  master  = "help|browse|start|resume|suspend|forward|rewind|stop|shutdown|logout"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN467">4.2.3. Section "Users"</a></h2>
+<p><a name="AEN467">这一小节包含了允许通过管理接口控制VLS的用户列表 。对每一个用户，要以下面的格式添加一行:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">username = "password:groupname"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN467">这添加了
+属于组"groupname"(在"Groups"一节中定义的组名)的用户"username‘，该用户可以用密码"password"登陆。</a></p>
+<ul>
+  <li>
+    <p><a name="AEN467">在Unix/Linux系统,密码必须加密，可用mkpasswd工具或者用UNIX函数crypt.</a></p>
+  </li>
+  <li>
+    <p><a name="AEN467">在 Windows 系统,密码必须是明文。 </a></p>
+  </li>
+</ul>
+<p><a name="AEN467">例如在 Unix/Linux系统:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Users"<br>  monitor = "3BcKWoiQn0vi6:monitor"       # password is 'monitor'<br>  admin   = "42BKiCguFAL/c:master"        # password is 'Vir4Gv5S'<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN480">4.2.4. Section "Telnet"</a></h2>
+<p><a name="AEN480">这一小节你可以配置telnet管理接口。</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">LocalPort = "port"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN480">设定哪个端口用来做telnet服务器，缺省为"9999".</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">Domain = "domain"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN480"> "inet4" 或者 "inet6" (缺省是 "inet4").
+如果你想使用IPv4地址，写入inet4.如果想用IPv6地址，写入inet6.</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">LocalAddress = "IP address"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN480">定义telnet服务器将侦听在哪个IP地址上。缺省地址是 "0.0.0.0" (或者 "0::0"
+with IPv6).</a></p>
+<p><a name="AEN480">例子:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Telnet"<br>  LocalPort = "9999"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN491">4.2.5. Section "NativeAdmin"</a></h2>
+<p><a name="AEN491">和 "Telnet" 一节的语法相同. 现在还没有用.</a></p>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN494">4.2.6. Section "Inputs"</a></h2>
+<p><a name="AEN494">在这一小节，你可以定义你想用的输入流。对每一个你想用的，以下面的格式添加一行：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">InputName = "Type"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN494">这添加了一个名字为 "InputName"的输入流, 其类型为 "Type".
+正如前面解释的，有下面几种类型的输入:</a></p>
+<ul>
+  <li>
+    <p><a name="AEN494">"local" 播放来自文件或者DVD的流,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN494">"video" 播放来自MPEG编码卡的流,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN494">"dvb" 播放来自 DVB card 的流,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN494">"v4l" 播放来自Video4Linux 设备的流.</a></p>
+  </li>
+</ul>
+<p><a name="AEN494">每一个输入必须在自己的小节里配置。</a></p>
+<p><a name="AEN494">例子:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Inputs"<br>  local1 = "local"<br>  pvr    = "video"<br>  dvb1   = "dvb"<br>  tuner  = "v4l"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN511">4.2.7.输入配置</a></h2>
+<p><a name="AEN511">对每个在"Inputs"一节里声明的输入，除了"local"输入外，你必须添加同名的一小节作为一致的输入。例如，如果你定义了输入"pvr",这儿也要有一个名字为"pvr"的小节。这小节的语法依赖于一致性输入的输入的类型。</a></p>
+<p><a name="AEN511">要配置一个"lacal" 类型的输入，你不必做任何事，除 了当另一个更巧妙的策略要用时。</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Local1"<br>  ProgramCount = "1"<br>  TrickPlay    = "normal"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN511">"Local1" 你想配置的"local"类型的输入的名字 。"ProgramCount"
+分配给这个输入的节目的数目。"TrickPlay"是被用作这个输入的播放策略(缺省为"normal"). </a></p>
+<p><a name="AEN511">要配置视频输入，以下面的格式添加一行：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "VideoInputName"<br>  Device = "device"<br>  Type   = "type"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN511">"VideoInputName" 是你想配置的视频输入的名字。 "Device"
+是你想读取的MPEG编码卡设备的路径(缺省为 "/dev/video"). "Type" 是 "Mpeg2-PS" 或者是
+"Mpeg2-TS", 这依赖于你的设备的配置(缺省为"Mpeg2-PS").</a></p>
+<p><a name="AEN511">Example for a Hauppauge WinTV-PVR-250 card:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "pvr"<br>  Device = "/dev/video0"<br>  Type   = "Mpeg2-PS"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN511">要配置dvd输入，以下面的格式添加一行：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "DvbInputName"<br>  DeviceNumber = "devicenumber"<br>  SendMethod   = "0"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN511">"DvbInputName" 是你想配置的dvd输入的名字。如果你想完全的DVB流，设置
+"SendMethod" 成 "0" ，如果你仅想播放MPEG音频和视频流，那么将它设置为 "1",(缺省是"0") .
+"DeviceNumber" 是你想读取的DVB设备的数目(/dev/ost/drv&lt;devicenumber&gt;).
+dvd配置文件是由驱动定义的。你可以找到/dev/dvb/adapter0的配置文件：$HOME/dvbrc，/dev/bvb/adapterX的配置文件 <tt
+ class="filename">$HOME/.dvbrc.X</tt>.</a></p>
+<p><a name="AEN511">Example:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "dvb1"<br>  DeviceNumber = "0"<br>  TrickPlay = "normal"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN531">4.2.8. Section "Channels"</a></h2>
+<p><a name="AEN531">这一小节，定义你想用的频道(输出).对每一个频道，以下面的格式添加一行:I</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">ChannelName = "Type"<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN531">这添加一个名为 "ChannelName"频道, 其类型为 "Type". "Type" 一定是
+"network" 或者 "file". 像输入一样，频道一定要在自己独有的小节定义。</a></p>
+<p><a name="AEN531">例子:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Channels"<br>  localhost  = "network"<br>  client1    = "network"<br>  client2    = "network"<br>  multicast1 = "network"<br>  multicast2 = "network"<br>  localfile  = "file"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN538">4.2.9. Channels configuration</a></h2>
+<p><a name="AEN538">对每一个 "Channels"
+小节中定义的频道,你必须添加一个同名的作为一致性的频道。这个小节的语法依赖于一致性频道的类型。 </a></p>
+<p><a name="AEN538">要配置一个网络频道，以下面的格式添加一行：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "NetChannelName"<br>  Domain    = "Domain"<br>  Type      = "Type"<br>  SrcHost   = "SourceHost"<br>  SrcPort   = "SourcePort"<br>  DstHost   = "DestHost"<br>  DstPort   = "DestPort"<br>  TTL       = "ttl"<br>  Interface = "Interface"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ul>
+  <li>
+    <p><a name="AEN538">"NetChannelName" 是你想配置的频道的名字。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"Domain" 是 "inet4" 如果你用IPv4地址, 或者"inet6"
+如果你用IPv6 (缺省为 "inet4").</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"Type"  是 "unicast", "broadcast" 或者 "multicast"
+(缺省为 "unicast"), 这依赖于你想做什么 。(和你的"DsHost"地址).</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"SourceHost" 是VLS发布流的源IP地址(或是DNS名字).</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"SourcePort" 是发布流的UDP端口。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"DestHost" 是发送流的目的IP地址(或DNS名字). </a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"DestPort" 是发送流的目的UDP端口。(缺省为"1234").</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"TTL"  仅在 "Type" 是 "multicast"的时候才有用的参数(缺省值是
+"0"). 如果要经过几个路由器时，你可以增加多播包的TTL.</a></p>
+  </li>
+  <li>
+    <p><a name="AEN538">"Interface"
+接口仅在Linux才支持参数,强迫流由一个给定的网络接口发送出去.例如"eth1".(要用这个参数，你要有超级用户权限).</a></p>
+  </li>
+</ul>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="config_%CE%C4%BC%FE/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>"SrcHost" 和 "SrcPort" 可操作的 (如果你没设置它们，VLS不会绑定套接口).</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><a name="AEN538">要配置一个文件 频道，以下面的格式添加下面一行:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "FileChannelName"<br>  FileName = "file"<br>  Append   = "append"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN538">"FileChannelName" 是你想配置的文件频道的名字。is the name of the
+file channel you want to configure. "file" 是存储流的文件 (缺省是 "fileout.ts").
+"append" 为 "yes" 或 "no",这表明VLS是在文件尾添加还是重写它. </a></p>
+<p><a name="AEN538">例子:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "localhost"         # The client is on the same host as the server<br>  DstHost = "localhost"<br>  DstPort = "1234"<br>END<br><br>BEGIN "client1"           # unicast towards client1<br>  DstHost = "192.168.1.2"<br>  DstPort = "1234"<br>END<br><br>BEGIN "client2"           # unicast towards client2 in IPv6<br>  Domain  = "inet6"<br>  DstHost = "3ffe:ffff::2:12:42"<br>  DstPort = "1234"<br>END<br><br>BEGIN "multicast1"         # multicast streaming<br>  Type    = "multicast"<br>  DstHost = "239.2.12.42"<br>  DstPort = "1234"<br>  TTL     = "2"<br>END<br><br>BEGIN "multicast2"         # multicast streaming in IPv6<br>  Domain  = "inet6"<br>  Type    = "multicast"<br>  DstHost = "ff08::1"<br>  DstPort = "1234"<br>  TTL     = "12"<br>END<br><br>BEGIN "localfile"         # file output<br>  FileName = "stream.ts"<br>  Append   = "no"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="caution">
+<table class="caution" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="config_%CE%C4%BC%FE/caution.gif" hspace="5" alt="Caution"></td>
+      <td align="left" valign="top">
+      <p>如果你用Windows, 应该确定 "SrcHost" 和 "SrcPort" 域.例如：</p>
+      <table border="0" bgcolor="#e0e0e0" width="100%">
+        <tbody>
+          <tr>
+            <td>
+            <pre class="programlisting">BEGIN "client1"         # The client is on the same host as the server<br>  SrcHost = "192.168.1.1"  # IP of VLS<br>  SrcPort = "1242"         # Source port : the value is not important<br>  DstHost = "192.168.1.2"  # IP of the client<br>  DstPort = "1234"<br>END<br></pre>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN572">4.2.10. Programs Configuration</a></h2>
+<p><a name="AEN572">像前面解释的，你必须定义 节目。每个均是MPEG流(例如,一个文件).
+为此，要在vls.cfg文件里添加"Input"小节。每个"Input"小节一定要遵从下面的语法 。</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Input"<br>  FilesPath    = "path"<br>  ProgramCount = "count"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN572">"path" 是MPEG文件所在的路劲 (缺省为当前目录). "count" 是定义的节目的数目
+("0" 为缺省值).</a></p>
+<p><a name="AEN572">对每一个要定义的节目，必须以下面的格式添加一个小节：</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "number"<br>  Name     = "name"<br>  Type     = "type"<br>  FileName = "file"<br>  Device   = "device"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ul>
+  <li>
+    <p><a name="AEN572">"number" 是节目的序号：第一个节目为1号，第二个为2.....</a></p>
+  </li>
+  <li>
+    <p><a name="AEN572">"name" 是节目名字。通过它告诉VLS启动这个节目(看下一章"Running VLS").</a></p>
+  </li>
+  <li>
+    <p><a name="AEN572">"type" 可以是 "Mpeg1-PS", "Mpeg2-PS", "Mpeg2-TS",
+或 "DVD". 如果流存储于MPEG文件(*.mpeg, *.mpg, *.vob, and so on...), 很有可能为
+Mpeg1-PS 或 Mpeg2-PS 格式.</a></p>
+  </li>
+  <li>
+    <p><a name="AEN572">如果 "type" 设置为 "Mpeg1-PS", "Mpeg2-PS", 或
+"Mpeg2-TS", VLS 将假设流于文件存储于"path"目录下的 "file"文件" ("path"
+是定义在"Input"一节里的变量).</a></p>
+  </li>
+  <li>
+    <p><a name="AEN572">如果 "type" 是 "DVD", 变量  "Device" 取代
+"FileName"而被使用. 变量 "Device" 是DVD驱动器名字(如/dev/hdc 或/dev/cdrom).
+也可以播放DVD在硬盘上的拷贝: 那么 "device" 就是.vob文件的存储目录(如/mnt/data/VIDEO).</a></p>
+  </li>
+</ul>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="config_file/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>VLS 能传送下面两种MPEG流文件 ：</p>
+      <ul>
+        <li>
+          <p>MPEG <span class="emphasis"><i class="emphasis">PS</i></span>
+(Program Stream) or MPEG <span class="emphasis"><i class="emphasis">TS</i></span>
+(Transport Stream), 包含视频我音频多媒体文件。 VLS 不能传送 MPEG <span class="emphasis"><i
+ class="emphasis">ES</i></span> (Elementary Stream)流, 例如仅有音频或者视频的文件.</p>
+          <p>要知道一个MPEG文件是MPEG <span class="emphasis"><i
+ class="emphasis">PS</i></span>, MPEG <span class="emphasis"><i
+ class="emphasis">TS</i></span> 还是 MPEG <span class="emphasis"><i
+ class="emphasis">ES</i></span>, 用VLC读取它并查看信息(选择菜单 中的r<span
+ class="emphasis"><i class="emphasis">View / Messages</i></span>,
+或者用命令行 <b class="command">vlc -vvv</b>).</p>
+          <ul>
+            <li>
+              <p>如果看到下面一行：</p>
+              <table border="0" bgcolor="#e0e0e0" width="100%">
+                <tbody>
+                  <tr>
+                    <td>
+                    <pre class="programlisting">[00000107] main module debug: using demux module "ts_dvbpsi"<br></pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>这意味着文件 为 MPEG TS.</p>
+            </li>
+            <li>
+              <p>如果看到下面一行：</p>
+              <table border="0" bgcolor="#e0e0e0" width="100%">
+                <tbody>
+                  <tr>
+                    <td>
+                    <pre class="programlisting">[00000109] main module debug: using demux module "ps"<br></pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>这意味着文件为 MPEG PS.</p>
+            </li>
+            <li>
+              <p>如果看到下面一行：</p>
+              <table border="0" bgcolor="#e0e0e0" width="100%">
+                <tbody>
+                  <tr>
+                    <td>
+                    <pre class="programlisting">[00000109] main module debug: using demux module "es"<br></pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>这意味着文件为 MPEG ES, 并且 VLS 不能传送它。</p>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>视频的数字头部会规则的重复，其经常为 MPEG-2, 但很少为 MPEG-1.
+并没有容易的方法知道数字头部是否规则的重复。带.vod扩展名的文件应该为MPEG-2文件， 带 <span class="emphasis"><i
+ class="emphasis">.mpg</i></span> 或 <span class="emphasis"><i
+ class="emphasis">.mpeg</i></span> 扩展名的通常为 MPEG-1 文件.</p>
+        </li>
+      </ul>
+      <p>你可以下载可编成流的 MPEG-2 PS 文件作为测试 : <a
+ href="ftp://ftp.videolan.org/pub/videolan/streams/presentation/presentation_short.vob"
+ target="_top">presentation_short.vob</a>.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="config_file/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>要播放DVD,在编译时要带DVD支持，它使用 libdvdread 和 libdvdcss
+两个库.另外，要对DVD设备有读写权限。</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p><a name="AEN572">Full example:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">BEGIN "Input"<br>  FilesPath = "/home/videolan/streams"<br>  ProgramCount = "4"<br>END<br><br>BEGIN "1"     # MPEG2 stream stored in /home/videolan/streams/Dolby.vob<br>  Name     = "dolby"<br>  FileName = "Dolby.vob"<br>  Type     = "Mpeg2-PS"<br>END<br><br>BEGIN "2"     # another file<br>  Name     = "canyon"<br>  FileName = "Dolby_Canyon.vob"<br>  Type     = "Mpeg2-PS"<br>END<br><br>BEGIN "3"     # DVD<br>  Name     = "dvd"<br>  Device   = "/dev/cdrom"<br>  Type     = "Dvd"<br>END<br><br>BEGIN "4"     # DVD stored on a hard disk<br>  Name     = "matrix"<br>  Device   = "/mnt/data/matrix/VIDEO_TS"<br>  Type     = "Dvd"<br>END<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="NAVFOOTER">
+<hr align="left" width="100%">
+<table summary="Footer navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="33%" align="left" valign="top"><a href="overview.html"
+ accesskey="P">上一页<br>
+      </a></td>
+      <td width="34%" align="center" valign="top"><a
+ href="vls-user-guide-en.html" accesskey="H">Home</a></td>
+      <td width="33%" align="right" valign="top"><a href="run.html"
+ accesskey="N">下一页</a></td>
+    </tr>
+    <tr>
+      <td width="33%" align="left" valign="top">概述与基本概念</td>
+      <td width="34%" align="center" valign="top"> <br>
+      </td>
+      <td width="33%" align="right" valign="top">运行 VLS</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

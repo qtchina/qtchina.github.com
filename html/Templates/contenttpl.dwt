@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META name="keywords" content="Linux,document,Open Source,GNU,icephoton,C/C++,PHP,QT/KDE自由软件,资料,文档">
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>icephoton 笔记</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+
+<!-- TemplateEndEditable -->
+<script language="javascript">
+
+</script>
+</head>
+
+<body>
+<a name="pagetop"></a>
+<br>
+<table width="90%" border="1"  align="center">
+  <tr>
+    <td width="359">&nbsp;&nbsp;&nbsp;&nbsp;本站内容为本人在工作与学习过程中收集及组织的一些文档资料，方便随时查阅。</td>
+  </tr>
+</table>
+<br>
+<hr align="center"  size="1" width="96%" >
+
+<p align="right">
+<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</p>
+
+<table width="90%"  border="1" align="center">
+  <tr>
+    <td style="line-height:20px;color:#333333;font-size:14px;padding:15px 30px 15px 30px" bgcolor="#F7F7F7">&nbsp;
+
+<!-- TemplateBeginEditable name="content" -->
+	
+<!-- TemplateEndEditable -->
+	</td>
+  </tr>
+</table>
+
+<p align="right">
+	<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="#pagetop">TOP</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<hr align="center"  size="1" width="96%" >
+<center>Copyleft &copy;IcePhoton 2000 - 2005, 北京</center>
+
+
+</body>
+</html>

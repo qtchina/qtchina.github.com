@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html><!-- InstanceBegin template="/Templates/contenttpl.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META name="keywords" content="Linux,document,Open Source,GNU,icephoton,C/C++,PHP,QT/KDE自由软件,资料,文档">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>icephoton 笔记</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<script language="javascript">
+
+</script>
+</head>
+
+<body>
+<a name="pagetop"></a>
+<br>
+<table width="90%" border="1"  align="center">
+  <tr>
+    <td width="359">&nbsp;&nbsp;&nbsp;&nbsp;本站内容为本人在工作与学习过程中收集及组织的一些文档资料，方便随时查阅。</td>
+  </tr>
+</table>
+<br>
+<hr align="center"  size="1" width="96%" >
+
+<p align="right">
+<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</p>
+
+<table width="90%"  border="1" align="center">
+  <tr>
+    <td style="line-height:20px;color:#333333;font-size:14px;padding:15px 30px 15px 30px" bgcolor="#F7F7F7">&nbsp;
+
+<!-- InstanceBeginEditable name="content" -->
+
+linux下C++ 插件(plugin)实现技术- -&nbsp;  <br><br>（使用的特殊宏，对编译器的预处理器的使用&nbsp;  ,预处理器对##的处理）&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <br><br>应用程序中使用插件技术，有利于日后的版本更新、维护（比如打补丁）和功能扩展，是一种很实用的技术。其最大的特点是更新插件时无需重新编译主程序，对于一个设计良好的应用系统而言，甚至可以做到业务功能的在线升级。本文介绍了linux下用C++实现插件的一个简单实例，希望能对大家有所启发。<br><br>为了能做到更新插件时无需重新编译主程序，要求主程序中定义的接口是定死的，而接口的实现被放到了具体的插件中，这样主程序在运行时刻将插件加载进来，就可以使用这些接口所提供的功能了。在面向对象的系统中，各个功能模块被封装到类中，因此在C++中实现插件技术，就需要在主程序中提供基类，并为这些基类定义明确的接口，然后在插件（动态库或共享库）中定义派生类，并实现基类中所有的接口。<br><br>我们以计算多边形面积为例，首先定义一个基类CPolygon：<br>/*+********************************************************/<br>/* polygon.h */<br>#ifndef __POLYGON_H__<br>#define __POLYGON_H__<br><br>class CPolygon<br>{<br>public:<br>&nbsp; &nbsp; CPolygon(){}<br>&nbsp; &nbsp; virtual ~CPolygon(){}<br>&nbsp; &nbsp; virtual double area(void) const = 0;<br>};<br><br>#endif /* __POLYGON_H__ */<br><br>/*-********************************************************/<br><br>注意基类不一定是虚类（有纯虚函数的类），但是接口一定要定义成虚函数，因为最终主程序是通过基类指针来调派生类的接口函数，另外如果基类中有资源分配（new）的话，析构函数一定要定义成虚的，否则不会被调用，造成内存泄漏。<br><br>接下来要定义派生类CTriangle，并放到共享库（.so）中：<br><br>/*+********************************************************/<br>/* .h */<br>#ifndef __TRIANGLE_H__<br>#define __TRIANGLE_H__<br><br>#include &quot;polygon.h&quot;<br>#include &lt;iostream&gt;<br><br>class CTriangle : public CPolygon<br>{<br>public:<br>&nbsp; &nbsp; virtual double area(void) const;<br>};<br><br>#endif /* __TRIANGLE_H__ */<br><br>/* .cpp */<br>#include &quot;.h&quot;<br>extern &quot;C&quot;<br>{<br>&nbsp; &nbsp; void * create()<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; return new CTriangle;<br>&nbsp; &nbsp; }<br>}<br><br>double CTriangle::area(void) const<br>{<br>&nbsp; &nbsp; std::cout &lt;&lt; &quot;area of &quot; &lt;&lt; std::endl;<br>&nbsp; &nbsp; return 0;<br>}<br><br>/*-********************************************************/<br>其中定义了函数&quot;create&quot;用来创建CTriangle类对象，该函数可让主程序获得CTriangle对象指针，从而可以访问CTriangle类对象。主程序通过调用dlsym获取指向该函数的指针，需要指出的是，由于dlsym被设计成c-style方式，因此调用c++定义的函数时，需要加上extern &quot;C&quot;<br><br>那么主程序是如何调用共享库的呢，代码片段如下：<br>/*+********************************************************/<br>typedef CPolygon* create_t();<br>void * handle = dlopen(&quot;.so&quot;, RTLD_LAZY);<br>if( !handle )<br>{<br> std::cerr &lt;&lt; dlerror() &lt;&lt; std::endl;<br> exit(1);<br>}<br>create_t * create_ = (create_t *)dlsym(handle, &quot;create&quot;);<br>CPolygon * pObj = create_();<br>if( 0 != pObj )<br>{<br> pObj-&gt;area();<br>}<br>delete pObj;<br>dlclose(handle);<br><br>/*-********************************************************/<br><br>主程序通过dlopen打开.so，然后通过dlsym得到库中的函数create指针，调用create后返回了指向CTriangle类对象的指针，类型是CPolygon的，由于虚函数的多态性， pObj-&gt;area() 实际是调用了CTriangle::area.<br><br>好了，插件技术就是这么简单，回顾一下实现过程：写一个基类，定义接口函数，然后在共享库中写派生类，最后在主程序运行时刻打开共享库（dlopen），并通过create函数得到指向新创建的派生类对象的指针，然后利用虚函数的多态性，调用派生类的各种方法。不过进一步使用后你可能会发现，这样实现会有些问题：<br><br>1. 每写一个派生类就需要重写一个create函数<br>注意到CTriangle类实现时定义的create函数必须返回 new CTriangle：<br>extern &quot;C&quot;<br>{<br>&nbsp; &nbsp; void * create()<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; return new CTriangle;<br>&nbsp; &nbsp; }<br>}<br>那么如果再建一个类比如CRectangle， create函数必须重写，返回 new CRectangle<br><br>这样做一方面麻烦，另外CTriangle、CRectangle两个类不能放到同一个共享库中，否则会编译时刻提示重复定义错误。<br><br>2. 主程序无法判断create函数返回的是哪个类所创建的对象<br>当只有一个基类（CPolygon）时主程序当然知道返回的是CPolygon派生类的对象指针：<br>create_t * create_ = (create_t *)dlsym(handle, &quot;create&quot;);<br>CPolygon * pObj = create_();<br><br>假如有多个基类，根据这些基类派生出不同类型的类时，无法在主程序中判断使用哪个基类指针。<br><br>3. 操作繁琐<br>没有一个统一的操作界面，实现共享库的加载、卸载、派生类对象的创建，特别是当需要加载一个目录下所有的共享库时，感觉一个一个地加载太麻烦了，能不能批量加载呢。<br>通过动态类加载和建立Helper类可以很好地解决上述问题，其中dynclass.h/dynclass.cpp中实现了动态加载类对象，pluginhelper.h/pluginhelper.cpp实现了Plugin Helper，具体细节见附件。<br><br>下面简单介绍一下使用步骤：<br><br>1. 首先定义基类（CPolygon），方法同上。<br>2. 在共享库中实现派生类<br>比如CTriangle：<br><br>/*+********************************************************/<br>/* .h */<br><br>#ifndef __TRIANGLE_H__<br>#define __TRIANGLE_H__<br><br>#include &quot;polygon.h&quot;<br>#include &lt;iostream&gt;<br><br>class CTriangle : public CPolygon<br>{<br>public:<br>&nbsp; &nbsp; virtual double area(void) const;<br>};<br><br>#endif /* __TRIANGLE_H__ */<br><br><br>/* .cpp */<br><br>#include &quot;.h&quot;<br>#include &quot;dynclass.h&quot;<br><br>DYN_DECLARE(CTriangle);<br><br>double CTriangle::area(void) const<br>{<br>&nbsp; &nbsp; std::cout &lt;&lt; &quot;area of &quot; &lt;&lt; std::endl;<br>&nbsp; &nbsp; return 0;<br>}<br><br>/*-********************************************************/<br><br>注意到此时派生类的实现（.cpp）中已没有了那个讨厌的create了，被我偷偷放到<br>dynclass.cpp中了：<br><br>extern &quot;C&quot;<br>{<br>&nbsp; &nbsp; void * createByClassName(const char * strClassName)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; return DYN_CREATE(strClassName);<br>&nbsp; &nbsp; }<br>}<br><br>由于对任何派生类而言，该函数的实现都一样，因此只需要实现一次，对使用者是不可见的,这样了从派生类中拿走的目的。<br>另外增加了一个宏：DYN_DECLARE(CTriangle); 参数是类名（这里用到了RTTI),每个派生类对应一个这样的宏，该类就可以支持类对象的动态加载了，需要包含头文件dynclass.h<br><br>3. 在主程序中如何使用<br>使用起来也非常简单,在主程序（main.cpp）中：<br><br>/*+********************************************************/<br>...<br>#include &quot;pluginhelper.h&quot;<br>#include &quot;polygon.h&quot;<br>...<br>CPluginHelper pluginHelper;<br>pluginHelper.Load( &quot;./plugin&quot;, &quot;*.so&quot; );<br>CPolygon * pbase = (CPolygon *)pluginHelper.Create(&quot;CTriangle&quot;);<br><br>if( 0 != pbase )<br>{<br>&nbsp; &nbsp; pbase-&gt;area();<br>}<br>delete pbase;<br>pluginHelper.Unload( &quot;./plugin&quot;, &quot;*.so&quot; );<br><br>/*-********************************************************/<br>首先定义CPluginHelper对象，调用Load方法加载共享库，其中第一个参数是共享库的路径，第二个参数是共享库的名称，共享库名支持模式匹配，这里表示要加载./plugin目录所有so共享库，当然也可以是某个具体的共享库名。<br>随后可以通过CPluginHelper::Create方法，根据类名称创建该类的对象，实现了参数化创建对象的目的，然后就是对该对象的调用，当不用该对象时，需要调用delete来删除。<br>最后，调用CPluginHelper::Unload将指定共享库卸载。<br><br>本文提供了linux下的实现插件技术的方法，其实下在window下也一样，可以用Loadlibrary代替dlopen，用GetProcAddress代替dlsym，具体实现就不细说了。<br><br><br><br> 
+
+
+<!-- InstanceEndEditable -->
+	</td>
+  </tr>
+</table>
+
+<p align="right">
+	<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="#pagetop">TOP</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<hr align="center"  size="1" width="96%" >
+<center>Copyleft &copy;IcePhoton 2000 - 2005, 北京</center>
+
+
+</body>
+<!-- InstanceEnd --></html>

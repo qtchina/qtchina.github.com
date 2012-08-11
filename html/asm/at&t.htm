@@ -1,0 +1,485 @@
+在阅读linux内核源代码的时候，必须先掌握汇编，大家都知道，内核代码用的编译器是gcc，而gcc采用的是AT&amp;T的汇编格式，与MS的intel有些区别。
+<p>一　AT&amp;T的基本语法</p>
+<p> 语法上主要有以下几个不同. </p>
+<p>★ 寄存器命名原则 </p>
+<p>AT&amp;T: %eax Intel: eax </p>
+<p>★ 源/目的操作数顺序 </p>
+<p>AT&amp;T: movl %eax,%ebx Intel: mov ebx,eax </p>
+<p>★ 常数/立即数的格式 </p>
+<p>AT&amp;T: movl $_value,%ebx Intel: mov eax,_value </p>
+<p>把_value的地址放入eax寄存器 </p>
+<p>AT&amp;T: movl $0xd00d,%ebx Intel: mov ebx,0xd00d </p>
+<p>★ 操作数长度标识 </p>
+<p>AT&amp;T: movw %ax,%bx Intel: mov bx,ax </p>
+<p>★寻址方式 </p>
+<p>AT&amp;T: immed32(basepointer,indexpointer,indexscale) </p>
+<p>Intel: [basepointer + indexpointer*indexscale + imm32) </p>
+<p>Linux工作于保护模式下，用的是３２位线性地址，所以在计算地址时 </p>
+<p>不用考虑segment:offset的问题．上式中的地址应为： </p>
+<p>imm32 + basepointer + indexpointer*indexscale </p>
+<p>下面是一些例子： </p>
+<p>★直接寻址 </p>
+<p>AT&amp;T: _booga　; _booga是一个全局的C变量 </p>
+<p>注意加上$是表示地址引用，不加是表示值引用． </p>
+<p>注：对于局部变量，可以通过堆栈指针引用． </p>
+<p>Intel: [_booga] </p>
+<p>★寄存器间接寻址 </p>
+<p>AT&amp;T: (%eax) </p>
+<p>Intel: [eax] </p>
+<p>★变址寻址 </p>
+<p>AT&amp;T: _variable(%eax) </p>
+<p>Intel: [eax + _variable] </p>
+<p>AT&amp;T: _array(,%eax,4) </p>
+<p>Intel: [eax*4 + _array] </p>
+<p>AT&amp;T: _array(%ebx,%eax,8) </p>
+<p>Intel: [ebx + eax*8 + _array] <br>
+</p>
+<p>二　基本的行内汇编 </p>
+<p> 基本的行内汇编很简单，一般是按照下面的格式 </p>
+<p>asm(&quot;statements&quot;); </p>
+<p>例如：asm(&quot;nop&quot;); asm(&quot;cli&quot;); </p>
+<p>asm　和　__asm__是完全一样的． </p>
+<p>如果有多行汇编，则每一行都要加上　&quot;\n\t&quot; </p>
+<p>例如： </p>
+<p>asm( &quot;pushl %eax\n\t&quot; </p>
+<p>&quot;movl $0,%eax\n\t&quot; </p>
+<p>&quot;popl %eax&quot;); </p>
+<p>实际上gcc在处理汇编时，是要把asm(...)的内容&quot;打印&quot;到汇编 </p>
+<p>文件中，所以格式控制字符是必要的． </p>
+<p>再例如： </p>
+<p>asm(&quot;movl %eax,%ebx&quot;); </p>
+<p>asm(&quot;xorl %ebx,%edx&quot;); </p>
+<p>asm(&quot;movl $0,_booga); </p>
+<p>在上面的例子中，由于我们在行内汇编中改变了edx和ebx的值，但是 </p>
+<p>由于gcc的特殊的处理方法，即先形成汇编文件，再交给GAS去汇编， </p>
+<p>所以GAS并不知道我们已经改变了edx和ebx的值，如果程序的上下文 </p>
+<p>需要edx或ebx作暂存，这样就会引起严重的后果．对于变量_booga也 </p>
+<p>存在一样的问题．为了解决这个问题，就要用到扩展的行内汇编语法． <br>
+</p>
+<p>三　扩展的行内汇编 </p>
+<p> 扩展的行内汇编类似于Watcom. </p>
+<p>基本的格式是： </p>
+<p>asm ( &quot;statements&quot; : output_regs : input_regs : clobbered_regs); </p>
+<p>clobbered_regs指的是被改变的寄存器． </p>
+<p>下面是一个例子(为方便起见，我使用全局变量）： </p>
+<p>int count=1; </p>
+<p>int value=1; </p>
+<p>int buf[10]; </p>
+<p>void main() </p>
+<p>{ </p>
+<p>asm( </p>
+<p>&quot;cld \n\t&quot; </p>
+<p>&quot;rep \n\t&quot; </p>
+<p>&quot;stosl&quot; </p>
+<p>: </p>
+<p>: &quot;c&quot; (count), &quot;a&quot; (value) , &quot;D&quot; (buf[0]) </p>
+<p>: &quot;%ecx&quot;,&quot;%edi&quot; ); </p>
+<p>} </p>
+<p>得到的主要汇编代码为： </p>
+<p>movl count,%ecx </p>
+<p>movl value,%eax </p>
+<p>movl buf,%edi </p>
+<p>#APP </p>
+<p>cld </p>
+<p>rep </p>
+<p>stosl </p>
+<p>#NO_APP </p>
+<p>cld,rep,stos就不用多解释了． </p>
+<p>这几条语句的功能是向buf中写上count个value值． </p>
+<p>冒号后的语句指明输入，输出和被改变的寄存器． </p>
+<p>通过冒号以后的语句，编译器就知道你的指令需要和改变哪些寄存器， </p>
+<p>从而可以优化寄存器的分配． </p>
+<p>其中符号&quot;c&quot;(count)指示要把count的值放入ecx寄存器 </p>
+<p>类似的还有： </p>
+<p>a eax </p>
+<p>b ebx </p>
+<p>c ecx </p>
+<p>d edx </p>
+<p>S esi </p>
+<p>D edi </p>
+<p>I 常数值，(0 - 31) </p>
+<p>q,r 动态分配的寄存器 </p>
+<p>g eax,ebx,ecx,edx或内存变量 </p>
+<p>A 把eax和edx合成一个64位的寄存器(use long longs) </p>
+<p>我们也可以让gcc自己选择合适的寄存器． </p>
+<p>如下面的例子： </p>
+<p>asm(&quot;leal (%1,%1,4),%0&quot; </p>
+<p>: &quot;=r&quot; (x) </p>
+<p>: &quot;0&quot; (x) ); </p>
+<p>这段代码实现5*x的快速乘法． </p>
+<p>得到的主要汇编代码为： </p>
+<p>movl x,%eax </p>
+<p>#APP </p>
+<p>leal (%eax,%eax,4),%eax </p>
+<p>#NO_APP </p>
+<p>movl %eax,x </p>
+<p>几点说明： </p>
+<p>1.使用q指示编译器从eax,ebx,ecx,edx分配寄存器． </p>
+<p>使用r指示编译器从eax,ebx,ecx,edx,esi,edi分配寄存器． </p>
+<p>2.我们不必把编译器分配的寄存器放入改变的寄存器列表，因为寄存器 </p>
+<p>已经记住了它们． </p>
+<p>3.&quot;=&quot;是标示输出寄存器，必须这样用． </p>
+<p>4.数字%n的用法： </p>
+<p>数字表示的寄存器是按照出现和从左到右的顺序映射到用&quot;r&quot;或&quot;q&quot;请求 </p>
+<p>的寄存器．如果我们要重用&quot;r&quot;或&quot;q&quot;请求的寄存器的话，就可以使用它们． </p>
+<p>5.如果强制使用固定的寄存器的话，如不用%1,而用ebx,则 </p>
+<p>asm(&quot;leal (%%ebx,%%ebx,4),%0&quot; </p>
+<p>: &quot;=r&quot; (x) </p>
+<p>: &quot;0&quot; (x) ); </p>
+<p>注意要使用两个%,因为一个%的语法已经被%n用掉了． </p>
+<p>下面可以来解释letter 4854-4855的问题： </p>
+<p>1、变量加下划线和双下划线有什么特殊含义吗？ </p>
+<p>加下划线是指全局变量，但我的gcc中加不加都无所谓． </p>
+<p>2、以上定义用如下调用时展开会是什么意思？ </p>
+<p>#define _syscall1(type,name,type1,arg1) \ </p>
+<p>type name(type1 arg1) \ </p>
+<p>{ \ </p>
+<p>long __res; \ </p>
+<p>/* __res应该是一个全局变量　*/ </p>
+<p>__asm__ volatile (&quot;int $0x80&quot; \ </p>
+<p>/* volatile 的意思是不允许优化，使编译器严格按照你的汇编代码汇编*/ </p>
+<p>: &quot;=a&quot; (__res) \ </p>
+<p>/* 产生代码　movl %eax, __res */ </p>
+<p>: &quot;0&quot; (__NR_##name),&quot;b&quot; ((long)(arg1))); \ </p>
+<p>/* 如果我没记错的话，这里##指的是两次宏展开． </p>
+<p>　　即用实际的系统调用名字代替&quot;name&quot;,然后再把__NR_...展开． </p>
+<p>　　接着把展开的常数放入eax，把arg1放入ebx */ </p>
+<p>if (__res &gt;= 0) \ </p>
+<p>return (type) __res; \ </p>
+<p>errno = -__res; \ </p>
+<p>return -1; \ </p>
+<p>} <br>
+  ////////////////////////////////////////////////////////////////////////</p>
+<p>四.AT&amp;T汇编与Intel汇编的比较</p>
+<p>Intel和AT&amp;T语法的区别 <br>
+  Intel和AT&amp;T汇编语言的语法表面上各不相同,这将导致刚刚学会INTEL汇编的人第一次见到AT&amp;T汇编时<br>
+  会感到困惑,或者反之。因此让我们从基础的东西开始。 </p>
+<p>前缀 <br>
+  在Intel汇编中没有寄存器前缀或者立即数前缀。而在AT&amp;T汇编中寄存器有一个“%”前缀，立即数有<br>
+  一个“$”前缀。Intel语句中十六进制和二进制数据分别带有“h”和“b”后缀，并且如果十六进制 <br>
+  数字的第一位是字母的话，那么数值的前面要加一个“0”前缀。 <br>
+  例如， <br>
+  Intex Syntax <br>
+  mov eax,1 <br>
+  mov ebx,0ffh <br>
+  int 80h </p>
+<p>AT&amp;T Syntax <br>
+  movl $1,%eax <br>
+  movl $0xff,%ebx <br>
+  int $0x80 <br>
+  就像你看到的，AT&amp;T非常难懂。[base+index*scale+disp] 看起来比disp(base,index,scale)更好理解。<br>
+</p>
+<p>操作数的用法 <br>
+  intel语句中操作数的用法和AT&amp;T中的用法相反。在Intel语句中，第一个操作数表示目的，第二个<br>
+  操作数表示源。然而在AT&amp;T语句中第一个操作数表示源而第二个操作数表示目的。在这种情形下AT&amp;T语法<br>
+  的好处是显而易见的。我们从左向右读，也从左向右写，这样比较自然。 <br>
+  例如， <br>
+  Intex Syntax <br>
+  instr dest,source <br>
+  mov eax,[ecx] <br>
+  <br>
+  AT&amp;T Syntax <br>
+  instr source,dest <br>
+  movl (%ecx),%eax </p>
+<p>存储器操作数 <br>
+  如同上面所看到的，存储器操作数的用法也不相同。在Intel语句中基址寄存器用“[”和“]”括起来<br>
+  而在AT&amp;T语句中是用“（”和“）”括起来的。 <br>
+  例如， <br>
+  Intex Syntax <br>
+  mov eax,[ebx] <br>
+  mov eax,[ebx+3] <br>
+  AT&amp;T Syntax <br>
+  movl (%ebx),%eax <br>
+  movl 3(%ebx),%eax <br>
+  AT&amp;T语法中用来处理复杂的操作的指令的形式和Intel语法中的形式比较起来要难懂得多。在Intel语句<br>
+  中这样的形式是segreg:[base+index*scale+disp]。在AT&amp;T语句中这样的形式是<br>
+  %segreg:disp(base,index,scale)。 <br>
+  Index/scale/disp/segreg 都是可选并且可以去掉的。Scale在本身没有说明而index已指定的情况下<br>
+  缺省值为1。segreg的确定依赖于指令本身以及程序运行在实模式还是pmode。在实模式下它依赖于<br>
+  指令本身而pmode模式下它是不需要的。在AT&amp;T语句中用作scale/disp的立即数不要加“$”前缀。 <br>
+  例如 <br>
+  Intel Syntax <br>
+  instr foo,segreg:[base+index*scale+disp] <br>
+  mov eax,[ebx+20h] <br>
+  add eax,[ebx+ecx*2h] <br>
+  lea eax,[ebx+ecx] <br>
+  sub eax,[ebx+ecx*4h-20h] <br>
+  AT&amp;T Syntax <br>
+  instr %segreg:disp(base,index,scale),foo <br>
+  movl 0x20(%ebx),%eax <br>
+  addl (%ebx,%ecx,0x2),%eax <br>
+  leal (%ebx,%ecx),%eax <br>
+  subl -0x20(%ebx,%ecx,0x4),%eax </p>
+<p>后缀 <br>
+  就像你已经注意到的，AT&amp;T语法中有一个后缀，它的意义是表示操作数的大小。“l”代表long，<br>
+  “w”代表word，“b”代表byte。Intel语法中在处理存储器操作数时也有类似的表示，<br>
+  如byte ptr, word ptr, dword ptr。&quot;dword&quot; 显然对应于“long”。这有点类似于C语言中定义的<br>
+  类型，但是既然使用的寄存器的大小对应着假定的数据类型，这样就显得不必要了。 <br>
+  例子: <br>
+  Intel Syntax <br>
+  mov al,bl <br>
+  mov ax,bx <br>
+  mov eax,ebx <br>
+  mov eax, dword ptr [ebx] <br>
+  AT&amp;T Syntax <br>
+  movb %bl,%al <br>
+  movw %bx,%ax <br>
+  movl %ebx,%eax <br>
+  movl (%ebx),%eax </p>
+<p>注意：从此开始所有的例子都使用AT&amp;T语法 <br>
+  系统调用 <br>
+  本节将介绍linux中汇编语言系统调用的用法。系统调用包括位于/usr/man/man2的手册里第二部分所有<br>
+  的函数。这些函数也在/usr/include/sys/syscall.h中列出来了。一个重要的关于这些函数的列表是<br>
+  在http://www.linuxassembly.org/syscall.html里。这些函数通过linux中断服务：int $0x80来被执行 <br>
+  小于六个参数的系统调用 <br>
+  对于所有的系统调用，系统调用号在%eax中。对于小于六个参数的系统调用，参数依次存放<br>
+  在%ebx,%ecx,%edx,%esi,%edi中，系统调用的返回值保存在%eax中。 <br>
+  系统调用号可以在/usr/include/sys/syscall.h中找到。宏被定义成SYS_的形式，<br>
+  如SYS_exit, SYS_close等。 <br>
+  例子：（hello world 程序） <br>
+  参照write（2）的帮助手册，写操作被声明为ssize_t write(int fd, const void *buf, size_t count); <br>
+  这样，fd应存放在%ebx中，buf放在 %ecx, count 放在 %edx ， SYS_write 放在 %eax中，紧跟着是<br>
+  int $0x80语句来执行系统调用。系统调用的返回值保存在%eax中。 <br>
+  $ cat write.s <br>
+  .include &quot;defines.h&quot; <br>
+  .data <br>
+  hello: <br>
+  .string &quot;hello world\n&quot; </p>
+<p>.globl main <br>
+  main: <br>
+  movl $SYS_write,%eax <br>
+  movl $STDOUT,%ebx <br>
+  movl $hello,%ecx <br>
+  movl $12,%edx <br>
+  int $0x80 </p>
+<p> ret <br>
+  $ <br>
+  少于5个参数的系统调用的处理也是这样的。只是没有用到的寄存器保持不变罢了。象open或者fcntl这样<br>
+  带有一个可选的额外参数的系统调用也就知道怎么用了。 <br>
+  大于5个参数的系统调用 <br>
+  参数个数大于五个的系统调用仍然把系统调用号保存在%eax中，但是参数存放在内存中，并且指向第一个<br>
+  参数的指针保存在%ebx中。 <br>
+  如果你使用栈，参数必须被逆序压进栈里，即按最后一个参数到第一个参数的顺序。然后将栈的指针拷贝<br>
+  到%ebx中。或者将参数拷贝到一块分配的内存区域，然后把第一个参数的地址保存在%ebx中。 <br>
+  例子：（使用mmap作为系统调用的例子）。在C中使用mmap（）： <br>
+  #include <br>
+  #include <br>
+  #include <br>
+  #include <br>
+  #include </p>
+<p>#define STDOUT 1 </p>
+<p>void main(void) { <br>
+  char file[]=&quot;mmap.s&quot;; <br>
+  char *mappedptr; <br>
+  int fd,filelen; </p>
+<p> fd=fopen(file, O_RDONLY); <br>
+  filelen=lseek(fd,0,SEEK_END); <br>
+  mappedptr=mmap(NULL,filelen,PROT_READ,MAP_SHARED,fd,0); <br>
+  write(STDOUT, mappedptr, filelen); <br>
+  munmap(mappedptr, filelen); <br>
+  close(fd); <br>
+  } <br>
+  mmap（）参数在内存中的排列： <br>
+  %esp %esp+4 %esp+8 %esp+12 %esp+16 %esp+20 <br>
+  00000000 filelen 00000001 00000001 fd 00000000 <br>
+  等价的汇编程序： <br>
+  $ cat mmap.s <br>
+  .include &quot;defines.h&quot; </p>
+<p>.data <br>
+  file: <br>
+  .string &quot;mmap.s&quot; <br>
+  fd: <br>
+  .long 0 <br>
+  filelen: <br>
+  .long 0 <br>
+  mappedptr: <br>
+  .long 0 </p>
+<p>.globl main <br>
+  main: <br>
+  push %ebp <br>
+  movl %esp,%ebp <br>
+  subl $24,%esp </p>
+<p>// open($file, $O_RDONLY); </p>
+<p> movl $fd,%ebx // save fd <br>
+  movl %eax,(%ebx) </p>
+<p>// lseek($fd,0,$SEEK_END); </p>
+<p> movl $filelen,%ebx // save file length <br>
+  movl %eax,(%ebx) </p>
+<p> xorl %edx,%edx </p>
+<p>// mmap(NULL,$filelen,PROT_READ,MAP_SHARED,$fd,0); <br>
+  movl %edx,(%esp) <br>
+  movl %eax,4(%esp) // file length still in %eax <br>
+  movl $PROT_READ,8(%esp) <br>
+  movl $MAP_SHARED,12(%esp) <br>
+  movl $fd,%ebx // load file descriptor <br>
+  movl (%ebx),%eax <br>
+  movl %eax,16(%esp) <br>
+  movl %edx,20(%esp) <br>
+  movl $SYS_mmap,%eax <br>
+  movl %esp,%ebx <br>
+  int $0x80 </p>
+<p> movl $mappedptr,%ebx // save ptr <br>
+  movl %eax,(%ebx) <br>
+  <br>
+  // write($stdout, $mappedptr, $filelen); <br>
+  // munmap($mappedptr, $filelen); <br>
+  // close($fd); <br>
+  <br>
+  movl %ebp,%esp <br>
+  popl %ebp </p>
+<p> ret <br>
+  $ <br>
+  注意：上面所列出的源代码和本文结束部分的例子的源代码不同。上面列出的代码中没有说明其它的<br>
+  系统调用，因为这不是本节的重点，上面列出的源代码仅仅打开mmap.s文件，而例子的源代码要读<br>
+  命令行的参数。这个mmap的例子还用到lseek来获取文件大小。 <br>
+  Socket系统调用 <br>
+  Socket系统调用使用唯一的系统调用号：SYS_socketcall，它保存在%eax中。Socket函数是通过位于<br>
+  /usr/include/linux/net.h的一个子函数号来确定的，并且它们被保存在%ebx中。指向系统调用参数<br>
+  的一个指针存放在%ecx中。Socket系统调用也是通过int $0x80来执行的。 <br>
+  $ cat socket.s <br>
+  .include &quot;defines.h&quot; </p>
+<p>.globl _start <br>
+  _start: <br>
+  pushl %ebp <br>
+  movl %esp,%ebp <br>
+  sub $12,%esp </p>
+<p>// socket(AF_INET,SOCK_STREAM,IPPROTO_TCP); <br>
+  movl $AF_INET,(%esp) <br>
+  movl $SOCK_STREAM,4(%esp) <br>
+  movl $IPPROTO_TCP,8(%esp) </p>
+<p> movl $SYS_socketcall,%eax <br>
+  movl $SYS_socketcall_socket,%ebx <br>
+  movl %esp,%ecx <br>
+  int $0x80 </p>
+<p> movl $SYS_exit,%eax <br>
+  xorl %ebx,%ebx <br>
+  int $0x80 </p>
+<p> movl %ebp,%esp <br>
+  popl %ebp <br>
+  ret <br>
+  $ </p>
+<p>命令行参数 <br>
+  在linux中执行的时候命令行参数是放在栈上的。先是argc，跟着是一个由指向命令行中各字符串的<br>
+  指针组成的数组（**argv）并以空指针结束。接下来是一个由指向环境变量的指针组成的<br>
+  数组（**envp）。这些东西在asm中都可以很容易的获得，并且在例子代码（args.s)中有示范。 </p>
+<p> <br>
+  GCC内联汇编 <br>
+  本节中GCC内联汇编仅涉及x86的应用程序。操作数约束会和其它处理器上的有所不同。关于这部分<br>
+  的说明放在本文的最后。 <br>
+  gcc中基本的内联汇编非常易懂，如 <br>
+  __asm__(&quot;movl %esp,%eax&quot;); // look familiar ? </p>
+<p>或者是 <br>
+  __asm__(&quot; <br>
+  movl $1,%eax // SYS_exit <br>
+  xor %ebx,%ebx <br>
+  int $0x80 <br>
+&quot;); <br>
+  如果指定了用作asm的输入、输出数据并指出哪一个寄存器会被修改，会使程序的执行效率提高。<br>
+  input/output/modify都不是必需的。格式如下： <br>
+  __asm__(&quot;&quot; : output : input : modify); <br>
+  output和input中必须包含一个操作数约束字符串，并紧跟一个用圆括号括起来的C语言表达式。<br>
+  输出操作数约束的前面必须有一个“=”，表示这是一个输出。可能会有多个输出，多个输入和<br>
+  多个修改过的寄存器。每个“入口”应该用“，”分隔开，并且入口的总数不多有10个。<br>
+  操作数约束字符串可以是包含整个寄存器的名称也可以是简写。 <br>
+  Abbrev Table <br>
+  Abbrev Register <br>
+  a %eax/%ax/%al <br>
+  b %ebx/%bx/%bl <br>
+  c %ecx/%cx/%cl <br>
+  d %edx/%dx/%dl <br>
+  S %esi/%si <br>
+  D %edi/%di <br>
+  m memory <br>
+  例如: </p>
+<p> __asm__(&quot;test %%eax,%%eax&quot;, : /* no output */ : &quot;a&quot;(foo)); <br>
+</p>
+<p>或者是 </p>
+<p> __asm__(&quot;test %%eax,%%eax&quot;, : /* no output */ : &quot;eax&quot;(foo)); <br>
+  你可以在__asm__后使用关键字__volatile__：“你可以利用在__asm__后使用关键字__volatile__的<br>
+  方法防止一条‘asm’指令被删除、移动或者被重新组合。”（出自gcc的info文件中&quot;Assembler <br>
+  Instructions with C Expression Operands&quot; 部分) <br>
+  $ cat inline1.c <br>
+  #include </p>
+<p>int main(void) { <br>
+  int foo=10,bar=15; <br>
+  <br>
+  __asm__ __volatile__ (&quot;addl %%ebxx,%%eax&quot; <br>
+  : &quot;=eax&quot;(foo) // ouput <br>
+  : &quot;eax&quot;(foo), &quot;ebx&quot;(bar)// input <br>
+  : &quot;eax&quot; // modify <br>
+  ); <br>
+  printf(&quot;foo+bar=%d\n&quot;, foo); <br>
+  return 0; <br>
+  } <br>
+  $ <br>
+  你可能已经注意到现在寄存器使用“%%”前缀而不是“%”。这在使用output/input/modify域时是必要的，<br>
+  这是因为此时基于其它域的寄存器的别名的使用。我马上来讨论这个问题。 <br>
+  你可以很简单的指定“a”而不是写“eax”或者强制使用一个特殊寄存器如&quot;eax&quot;、&quot;ax&quot;、&quot;al&quot;，<br>
+  这同样适用于其它一般用途的寄存器（在Abbrev表中列出的）。当你在当前的代码中使用特殊的寄存器<br>
+  时这好像毫无用处，因此gcc提供了寄存器别名。最多有10个别名（%0—%9），这也是为什么只允许10个<br>
+  输入/输出的原因。 <br>
+  $ cat inline2.c <br>
+  int main(void) { <br>
+  long eax; <br>
+  short bx; <br>
+  char cl; </p>
+<p> __asm__(&quot;nop;nop;nop&quot;); // to separate inline asm from the rest of <br>
+  // the code <br>
+  __volatile__ __asm__(&quot; <br>
+  test %0,%0 <br>
+  test %1,%1 <br>
+  test %2,%2&quot; <br>
+  : /* no outputs */ <br>
+  : &quot;a&quot;((long)eax), &quot;b&quot;((short)bx), &quot;c&quot;((char)cl) <br>
+  ); <br>
+  __asm__(&quot;nop;nop;nop&quot;); <br>
+  return 0; <br>
+  } <br>
+  $ gcc -o inline2 inline2.c <br>
+  $ gdb ./inline2 <br>
+  GNU gdb 4.18 <br>
+  Copyright 1998 Free Software Foundation, Inc. <br>
+  GDB is free software, covered by the GNU General Public License, and you are <br>
+  welcome to change it and/or distribute copies of it under certain conditions. <br>
+  Type &quot;show copying&quot; to see the conditions. <br>
+  There is absolutely no warranty for GDB. Type &quot;show warranty&quot; for details. <br>
+  This GDB was configured as &quot;i686-pc-linux-gnulibc1&quot;... <br>
+  (no debugging symbols found)... <br>
+  (gdb) disassemble main <br>
+  Dump of assembler code for function main: <br>
+  ... start: inline asm ... <br>
+  0x8048427 : nop <br>
+  0x8048428 : nop <br>
+  0x8048429 : nop <br>
+  0x804842a : mov 0xfffffffc(%ebp),%eax <br>
+  0x804842d : mov 0xfffffffa(%ebp),%bx <br>
+  0x8048431 : mov 0xfffffff9(%ebp),%cl <br>
+  0x8048434 : test %eax,%eax <br>
+  0x8048436 : test %bx,%bx <br>
+  0x8048439 : test %cl,%cl <br>
+  0x804843b : nop <br>
+  0x804843c : nop <br>
+  0x804843d : nop <br>
+  ... end: inline asm ... <br>
+  End of assembler dump. <br>
+  $ <br>
+  就像你看到的，由内联汇编生成的代码将变量的值放入它们在input域中指定的寄存器中，然后继续<br>
+  执行当前的代码。编译器自动根据变量的大小来侦测操作数的大小，这样相应的寄存器就被<br>
+  别名%0, %1 和 %2代替了（当使用寄存器别名时在存储器里指定操作数的大小回导致编译时发生错误） <br>
+  在操作数约束里也可以使用别名。这不允许你在输入/输出域中指定多于10个的入口。我能想到的这样<br>
+  做的唯一用法是在你指定操作数约束为“q”以便让编译器在a，b，c，d寄存器之间进行选择的时候。<br>
+  当这个寄存器被修改时，我们不会知道选中了那个寄存器，因而不能在modify域中指定它。<br>
+  这种情况下你只需指定&quot;&quot;。 <br>
+  例子： <br>
+  $ cat inline3.c <br>
+  #include </p>
+<p>int main(void) { <br>
+  long eax=1,ebx=2; </p>
+<p> __asm__ __volatile__ (&quot;add %0,%2&quot; <br>
+  : &quot;=b&quot;((long)ebx) <br>
+  : &quot;a&quot;((long)eax), &quot;q&quot;(ebx) <br>
+  : &quot;2&quot; <br>
+  ); <br>
+  printf(&quot;ebx=%x\n&quot;, ebx); <br>
+  return 0; <br>
+  } </p>

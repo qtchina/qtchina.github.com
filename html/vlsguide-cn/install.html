@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Installing VLS</title>
+  <meta name="GENERATOR"
+ content="Modular DocBook HTML Stylesheet Version 1.76b+">
+  <link rel="HOME" title="VLS user guide" href="vls-user-guide-en.html">
+  <link rel="PREVIOUS" title="Introduction" href="intro.html">
+  <link rel="NEXT" title="Overview and basic concepts"
+ href="overview.html">
+</head>
+<body class="chapter"
+ style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"
+ link="#0000ff" vlink="#840084" alink="#0000ff">
+<div class="NAVHEADER">
+<table summary="Header navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <th colspan="3" align="center">VLS user guide</th>
+    </tr>
+    <tr>
+      <td width="10%" align="left" valign="bottom"><a href="intro.html"
+ accesskey="P">上一节</a></td>
+      <td width="80%" align="center" valign="bottom"><br>
+      </td>
+      <td width="10%" align="right" valign="bottom"><a
+ href="overview.html" accesskey="N">下一节</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr align="left" width="100%"></div>
+<div class="chapter">
+<h1><a name="install">Chapter 2. 安装 VLS</a></h1>
+<div class="TOC">
+<dl>
+  <dt><a name="install"><b>内容列表</b></a></dt>
+  <dt><a name="install">2.1. </a><a href="install.html#AEN243">安装 VLS</a></dt>
+  <dt>2.2. <a href="install.html#AEN335">删除 VLS</a></dt>
+</dl>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN243">2.1. 安装 VLS</a></h1>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN245">2.1.1. 在 Windows 上</a></h2>
+<p><a name="AEN245">在 </a><a
+ href="http://www.videolan.org/streaming/download-vls-windows.html"
+ target="_top">VLS Windows download page</a>,下载ZIP压缩文件，解压缩并运行里面的setup.exe.</p>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN250">2.1.2. 在 Linux 和 Mac OS X 上</a></h2>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN252">2.1.2.1. 安装库文件</a></h3>
+<p><a name="AEN252">正常使用需要很多库文件:</a></p>
+<ul>
+  <li>
+    <p><span class="emphasis"><a name="AEN252"><i class="emphasis">libdvbpsi</i></a></span><a
+ name="AEN252"> (always needed)</a></p>
+  </li>
+  <li>
+    <p><span class="emphasis"><a name="AEN252"><i class="emphasis">libdvdcss</i></a></span><a
+ name="AEN252"> 如果你想访问加密的DVDs,</a></p>
+  </li>
+  <li>
+    <p><span class="emphasis"><a name="AEN252"><i class="emphasis">libdvdread</i></a></span><a
+ name="AEN252"> 如果你想编码 DVDs成流,</a></p>
+  </li>
+  <li>
+    <p><span class="emphasis"><a name="AEN252"><i class="emphasis">libdvb</i></a></span><a
+ name="AEN252"> 如果你想能从  DVB card (a satellite card or a digital
+terrestial TV card)编码流。</a></p>
+  </li>
+</ul>
+<p><a name="AEN252">从</a><a
+ href="http://www.videolan.org/streaming/download-vls-sources.html"
+ target="_top">VLS sources download page</a>.下载库文件。</p>
+<p>对每个库文件解压缩，配置(不包括<span class="emphasis"><i class="emphasis">libdvb</i></span>
+因为它没有<span class="emphasis"><i class="emphasis">./configure</i></span>),
+编译并安装:</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>tar xvzf library.tar.gz</b></tt><br><tt
+ class="prompt">% </tt><tt class="userinput"><b>cd library</b></tt><br><tt
+ class="prompt">% </tt><tt class="userinput"><b>./configure --enable-shared</b></tt><br><tt
+ class="prompt">% </tt><tt class="userinput"><b>make</b></tt><br><tt
+ class="prompt"># </tt><tt class="userinput"><b>make install</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>检查配置文件 <tt class="filename">/etc/ld.so.conf</tt> 是否有下面这行 :</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="programlisting">/usr/local/lib<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>如果没有这行，加入，并运行ldconfig:</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt"># </tt><tt
+ class="userinput"><b>ldconfig</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN291">2.1.2.2. 安装 VLS</a></h3>
+<p><a name="AEN291">下载最新的源程序包 : 从 </a><a
+ href="http://www.videolan.org/streaming/download-vls-sources.html"
+ target="_top">VLS sources download page</a>.获得vls-version.tar.gz文件，解压缩并生成<span
+ class="emphasis"><i class="emphasis">./configure</i></span> :</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>tar xvzf vls-version.tar.gz</b></tt><br><tt
+ class="prompt">% </tt><tt class="userinput"><b>cd vls-version</b></tt><br><tt
+ class="prompt">% </tt><tt class="userinput"><b>autoconf</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>要锋利配置参数，打入 :</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>./configure --help</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>然后配置 vls :</p>
+<ul>
+  <li>
+    <p>如果你要一个不带DVD支持的基本的VLS, 打入 : </p>
+    <table border="0" bgcolor="#e0e0e0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+          <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>./configure --disable-dvd</b></tt><br>          </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>如果你要带DVD支持的VLS,打入 :</p>
+    <table border="0" bgcolor="#e0e0e0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+          <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>./configure</b></tt><br>          </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>如果你要带DVB支持的VLS，打入 :</p>
+    <table border="0" bgcolor="#e0e0e0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+          <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>./configure --enable-dvb</b></tt><br>          </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+<p>然后，编译并安装 :</p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>make</b></tt><br><tt class="prompt"># </tt><tt
+ class="userinput"><b>make install</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>如果必要，你可用运行make uninstall,make clean,或make distclean.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN335">2.2. 删除 VLS</a></h1>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN337">2.2.1. 在 Windows 上</a></h2>
+<p><a name="AEN337">打开"控制面板"，点击"添加删除程序"，选择 "VLS",点击"修改/删除".</a></p>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN344">2.2.2. 如果你从源程序编译VLS</a></h2>
+<p><a name="AEN344">转到包含VLS源程序的目录下并运行:</a></p>
+<table border="0" bgcolor="#e0e0e0" width="100%">
+  <tbody>
+    <tr>
+      <td>
+      <pre class="screen"><tt class="prompt"># </tt><tt
+ class="userinput"><b>make uninstall</b></tt><br>      </pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><a name="AEN344">然后删除VLS源程序。</a></p>
+</div>
+</div>
+</div>
+<div class="NAVFOOTER">
+<hr align="left" width="100%">
+<table summary="Footer navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="33%" align="left" valign="top"><a href="intro.html"
+ accesskey="P">前一节</a></td>
+      <td width="34%" align="center" valign="top"><a
+ href="vls-user-guide-en.html" accesskey="H">Home</a></td>
+      <td width="33%" align="right" valign="top"><a href="overview.html"
+ accesskey="N">下一节</a></td>
+    </tr>
+    <tr>
+      <td width="33%" align="left" valign="top">介绍</td>
+      <td width="34%" align="center" valign="top"> <br>
+      </td>
+      <td width="33%" align="right" valign="top">概述与基本概念</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

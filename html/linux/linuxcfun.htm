@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html><!-- InstanceBegin template="/Templates/contenttpl.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META name="keywords" content="Linux,document,Open Source,GNU,icephoton,C/C++,PHP,QT/KDE自由软件,资料,文档">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>icephoton 笔记</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<script language="javascript">
+
+</script>
+</head>
+
+<body>
+<a name="pagetop"></a>
+<br>
+<table width="90%" border="1"  align="center">
+  <tr>
+    <td width="359">&nbsp;&nbsp;&nbsp;&nbsp;本站内容为本人在工作与学习过程中收集及组织的一些文档资料，方便随时查阅。</td>
+  </tr>
+</table>
+<br>
+<hr align="center"  size="1" width="96%" >
+
+<p align="right">
+<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</p>
+
+<table width="90%"  border="1" align="center">
+  <tr>
+    <td style="line-height:20px;color:#333333;font-size:14px;padding:15px 30px 15px 30px" bgcolor="#F7F7F7">&nbsp;
+
+<!-- InstanceBeginEditable name="content" -->
+
+一。命令行参数的分析<br><br>&nbsp; 　　几乎所有的GNU/Linux程序都遵循一些同样的命令行解释习惯，程序的参数通常分为了两大类：选项(option)或者一些标志(flag)、其他参数。选项（option）主要是提供给程序一些运行上的选择，而其他参数则通常是提供给程序运行的输入之类的值。按照习惯，选项通常有两种表达形式：<br><br>　　- 短形式：通常是由一个“－”加上一个字母组合而成。这种形式的好处是输入快捷。<br><br>　　-- 长形式：通常是由两个“－”加上一个单词组合而成。这种形式的好处是形象、好记、直观。<br><br>&nbsp; 经常使用的解析函数是getopt和getopt_long.<br>&nbsp; 但是函数getopt只能解析短形式的参数，而getopt_long则既可以解析短形式的参数，也可以解析长形式的参数。因此如果想让你的程序能同时支持两种类型的参数，则需要使用后者。<br><br>&nbsp; 函数声明在#include &lt;getopt.h&gt;文件中，但有的unix操作系统并不带这个参数，需要自己实现。<br>&nbsp; 上面两个函数的声明为：<br>&nbsp; int getopt(int argc,char const **argv, const char *optstring);<br>&nbsp; /**<br>&nbsp;  * @param optstring 所有可能的短参数名组成的字符串<br>&nbsp;  * @param longindex 将会填充查找到的参数在字符串中的位置<br>&nbsp;  */ <br>&nbsp; int getopt_long(int argc,char const **argc, <br>&nbsp; &nbsp; &nbsp; &nbsp; const char *optstring,const struct option *longopts, <br>&nbsp; &nbsp; &nbsp; &nbsp; int *longindex);<br><br>&nbsp; extern char *optarg; <br>&nbsp; extern int optind,opterr,optopt; <br><br>&nbsp; struct option { <br>&nbsp; &nbsp; char *name;&nbsp; &nbsp; &nbsp; &nbsp;  //参数的长名字<br>&nbsp; &nbsp; int has_flag;&nbsp; &nbsp; &nbsp;  //是否需要，0，不需要，1，必须，2，可选<br>&nbsp; &nbsp; int *flag;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //如没有特殊需要，设置为NULL即可<br>&nbsp; &nbsp; int value;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //短名字，一般是一个字符<br>&nbsp; };<br><br>&nbsp; getopt_long是getopt的扩展.getopt接受的命令行参数只可以是以(-)开头,而getopt_long还可以接受(--)开头的参数.一般以(-)开头的参数的标志只有一个字母,而以(--)开头的参数可以是一个字符串.<br>&nbsp; 参数说明：<br>&nbsp; &nbsp; argc,和argv参数是main函数的参数.optstring指出了我们可以接受的参数.其一般的形式为:参数1[:]参数2[:].... 其中参数是我们可以接受的参数,<b>如果后面的冒号没有省略,那么表示这个参数出现时后面必需要带参数值.</b> 比如一个optstring为abc:d:表示这个参数选项可以为a,b,c,d其中c,d出现时候必须要有参数值.如果我们输入了一个我们没有提供的参数选项.系统将会说 不认识的 选项. getopt返回我们指定的参数选项.同时将参数值保存在optarg中,如果已经分析完成所有的参数函数返回-1.这个时候optind指出非可选参数的开始位置. <br><br>&nbsp; #include &lt;stdio.h&gt; <br>#include &lt;unistd.h&gt; <br><br>int main(int argc,char **argv) <br>{ <br> int is_a,is_b,is_c,is_d,i; <br> char *a_value,*b_value,*c_value,temp; <br><br> is_a=is_b=is_c=is_d=0; <br>&nbsp; a_value=b_value=c_value=NULL; <br>&nbsp; <br> if(argc==1) <br>&nbsp;  { <br>&nbsp; &nbsp; &nbsp;  fprintf(stderr,&quot;Usage:%s [-a value] [-b value] [-c value] [-d] arglist ...\n&quot;,argv[0]); <br>&nbsp; &nbsp; &nbsp;  exit(1); <br>&nbsp;  } <br><br> while((temp=getopt(argc,argv,&quot;a:b:c:d&quot;))!=-1) <br>&nbsp; { <br>&nbsp; &nbsp;  switch (temp)&nbsp; <br>&nbsp; &nbsp;  { <br>&nbsp; &nbsp; &nbsp; &nbsp; case 'a': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  is_a=1; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  a_value=optarg; <br>&nbsp; &nbsp; &nbsp; &nbsp;  break; <br>&nbsp; &nbsp; &nbsp; &nbsp; case 'b': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; is_b=1; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; b_value=optarg; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  break; <br>&nbsp; &nbsp; &nbsp; &nbsp;  case 'c': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  is_c=1; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  c_value=optarg; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  break; <br>&nbsp; &nbsp; &nbsp; &nbsp;  case 'd': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  is_d=1; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br>&nbsp; &nbsp;  } <br>&nbsp; } <br><br> printf(&quot;Option has a:%s with value:%s\n&quot;,is_a?&quot;YES&quot;:&quot;NO&quot;,a_value); <br> printf(&quot;Option has b:%s with value:%s\n&quot;,is_b?&quot;YES&quot;:&quot;NO&quot;,b_value); <br> printf(&quot;Option has c:%s with value:%s\n&quot;,is_c?&quot;YES&quot;:&quot;NO&quot;,c_value); <br> printf(&quot;OPtion has d:%s\n&quot;,is_d?&quot;YES&quot;:&quot;NO&quot;); <br> i=optind; <br> while(argv[i]) printf(&quot; with arg:%s\n&quot;,argv[i++]); <br><br> exit(0); <br>}&nbsp; <br><br>&nbsp; getopt_long比getopt复杂一点,不过用途要比getopt广泛.<br>&nbsp; struct option 指出我们可以接受的附加参数选项.&nbsp; <br>&nbsp; name:指出长选项的名称(如我们的option1)&nbsp; <br>&nbsp; has_flag:为0时表示没有参数值,当为1的时候表明这个参数选项要接受一个参数值.为2时表示参数值可以有也可以没有.&nbsp; <br> optarg:指出函数的返回值.如果为NULL,那么返回val,否则返回0.并将longindex赋值为选项所在数组(longopts)的位置. <br><br>&nbsp; /* 这个实例是从 GNU Libc 手册上看到的 */ <br><br>#include &lt;stdio.h&gt; <br>#include &lt;stdlib.h&gt; <br>#include &lt;getopt.h&gt; <br><br><br>int main (int argc, char **argv) <br>{ <br>&nbsp; int c; <br><br>&nbsp; while (1) <br>&nbsp; &nbsp; { <br>&nbsp; &nbsp; &nbsp; struct option long_options[] = <br>&nbsp; &nbsp; &nbsp; &nbsp; { <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {&quot;add&quot;, 1, 0, 0}, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {&quot;append&quot;, 0, 0, 0}, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {&quot;delete&quot;, 1, 0, 0}, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /* 返回字符c,等同于 -c 选项 */ <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {&quot;create&quot;, 0, 0, 'c'}, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {&quot;file&quot;, 1, 0, 0}, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  /* 数组结束 */ <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {0, 0, 0, 0} <br>&nbsp; &nbsp; &nbsp; &nbsp; }; <br>&nbsp; &nbsp; &nbsp; /* getopt_long stores the option index here. */ <br>&nbsp; &nbsp; &nbsp; int option_index = 0; <br><br>&nbsp; &nbsp; &nbsp; c = getopt_long (argc, argv, &quot;abc:d:&quot;, <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  long_options, &option_index); <br><br>&nbsp; &nbsp; &nbsp; /* Detect the end of the options. */ <br>&nbsp; &nbsp; &nbsp; if (c == -1) <br>&nbsp; &nbsp; &nbsp; &nbsp; break; <br><br>&nbsp; &nbsp; &nbsp; switch (c) <br>&nbsp; &nbsp; &nbsp; &nbsp; { <br>&nbsp; &nbsp; &nbsp; &nbsp; case 0: <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; printf (&quot;option %s&quot;, long_options[option_index].name); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (optarg) <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; printf (&quot; with arg %s\n&quot;, optarg); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br><br>&nbsp; &nbsp; &nbsp; &nbsp; case 'a': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; puts (&quot;option -a\n&quot;); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br><br>&nbsp; &nbsp; &nbsp; &nbsp; case 'b': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; puts (&quot;option -b\n&quot;); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br><br>&nbsp; &nbsp; &nbsp; &nbsp; /* 可能是-c --creat参数指出来的 */ <br>&nbsp; &nbsp; &nbsp; &nbsp; case 'c': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; printf (&quot;option -c with value `%s'\n&quot;, optarg); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br><br>&nbsp; &nbsp; &nbsp; &nbsp; case 'd': <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; printf (&quot;option -d with value `%s'\n&quot;, optarg); <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break; <br>&nbsp; &nbsp; &nbsp; &nbsp; } <br>&nbsp; &nbsp; } <br><br>&nbsp; exit (0); <br>} <br><br>&nbsp; 当我们输入了错误的选项后,系统会给出错误的提示,如果我们想屏蔽这个信息,我们可以设置opterr为0,对于错误的选项,函数分析时候返回一个'?'字符.我们可以自己对这个字符进行处理. <br> <br>
+
+
+<!-- InstanceEndEditable -->
+	</td>
+  </tr>
+</table>
+
+<p align="right">
+	<a href="../index.htm">回首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="#pagetop">TOP</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<hr align="center"  size="1" width="96%" >
+<center>Copyleft &copy;IcePhoton 2000 - 2005, 北京</center>
+
+
+</body>
+<!-- InstanceEnd --></html>

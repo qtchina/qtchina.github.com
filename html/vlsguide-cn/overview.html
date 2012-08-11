@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Overview and basic concepts</title>
+  <meta name="GENERATOR"
+ content="Modular DocBook HTML Stylesheet Version 1.76b+">
+  <link rel="HOME" title="VLS user guide" href="vls-user-guide-en.html">
+  <link rel="PREVIOUS" title="Installing VLS" href="install.html">
+  <link rel="NEXT" title="Configuration" href="config.html">
+</head>
+<body class="chapter"
+ style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"
+ link="#0000ff" vlink="#840084" alink="#0000ff">
+<div class="NAVHEADER">
+<table summary="Header navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <th colspan="3" align="center">VLS user guide</th>
+    </tr>
+    <tr>
+      <td width="10%" align="left" valign="bottom"><a
+ href="install.html" accesskey="P">前一节</a></td>
+      <td width="80%" align="center" valign="bottom"><br>
+      </td>
+      <td width="10%" align="right" valign="bottom"><a
+ href="config.html" accesskey="N">下一节</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr align="left" width="100%"></div>
+<div class="chapter">
+<h1><a name="overview">Chapter 3.概述与基本概念</a></h1>
+<div class="TOC">
+<dl>
+  <dt><a name="overview"><b>内容列表 </b></a></dt>
+  <dt><a name="overview">3.1. </a><a href="overview.html#AEN353">VLS
+的结构</a></dt>
+  <dt>3.2. <a href="overview.html#AEN410">管理界面</a></dt>
+</dl>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN353">3.1. VLS的结构</a></h1>
+<p><a name="AEN353">从用户的观点来看，VLS可被分成4种组件:</a></p>
+<ul>
+  <li>
+    <p><a name="AEN353">a <span class="emphasis"><i class="emphasis">manager</i></span>,</a></p>
+  </li>
+  <li>
+    <p><span class="emphasis"><a name="AEN353"><i class="emphasis">inputs</i></a></span><a
+ name="AEN353">,</a></p>
+  </li>
+  <li>
+    <p><span class="emphasis"><a name="AEN353"><i class="emphasis">converters</i></a></span><a
+ name="AEN353">,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN353">and <span class="emphasis"><i class="emphasis">channels</i></span>.</a></p>
+  </li>
+</ul>
+<div class="figure"><a name="AEN369"></a>
+<p><a name="AEN369"><b>Figure 3-1. VLS structure</b></a></p>
+<div class="mediaobject">
+<p><a name="AEN369"><img src="overview_file/archi-vls.jpg" title=""
+ alt="" style="width: 720px; height: 279px;"></a></p>
+</div>
+</div>
+<div class="simplesect">
+<h2 class="simplesect"><a name="AEN374">3.1.1. 输入-Input</a></h2>
+<p><a name="AEN374">输入的规则是从一个给定的源 (file, DVD, DVB card, device,
+...)读入MPEG流，并把这些源流提供给正确的转换器-<span class="emphasis"><i class="emphasis">converters</i></span>.
+输入可以是几股流 , 我们称这为 <span class="emphasis"><i class="emphasis">programs</i></span>.
+有下面几种类型的输入：</a></p>
+<ul>
+  <li>
+    <p><a name="AEN374">the <span class="emphasis"><i class="emphasis">local</i></span>
+input, 从文件或者DVD读入视频,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN374">the <span class="emphasis"><i class="emphasis">video</i></span>
+input, 从 MPEG 编码卡设备读入视频,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN374">the <span class="emphasis"><i class="emphasis">dvb</i></span>
+input, 从 DVB cards 读入视频，</a></p>
+  </li>
+  <li>
+    <p><a name="AEN374">the <span class="emphasis"><i class="emphasis">v4l</i></span>
+input, 从支持 Video4Linux 驱动的采集卡读入视频.</a></p>
+  </li>
+</ul>
+<p><a name="AEN374">你可以在同一时间用几股输入来播放几个节目。</a></p>
+</div>
+<div class="simplesect">
+<h2 class="simplesect"><a name="AEN394">3.1.2. 转换-Converter</a></h2>
+<p><a name="AEN394">转换规则是接收输入流，转换成MPEG-TS格式
+。如果你不知道什么是PS或TS,下面是一些解释。例如，在你从DVD播放MPEG视频时，MPEG流实际上由几种流(元素流)组成：一个视频流，一个音频流，另一个是字幕等。这些不同的流混合成单一的节目流(PS).因此，你在DVD中见到的
+.vob文件实际上是MPEG2-PS文件。但PS格式并不适合通过网络或恒星卫星传送的视频流。因此，另一个叫做传输流(TS)的格式被设计用来做通过这些渠道传播的MPEG视频.VLS适合把PS(来看DVD等)流转换成TS流(ps2ts
+转换器)。当然，它也能读TS流，并通过处理流的不连续性来适应它们(ts2ts 转换器).</a></p>
+</div>
+<div class="simplesect">
+<h2 class="simplesect"><a name="AEN398">3.1.3. 频道-Channel</a></h2>
+<p><a name="AEN398">频道接收来自转换器的流，并发送它到给定的地(网络，文件等).如果你原意，你可以称"channel"为"output":实际上是一回事。现在两种频道受支持:网络和文件
+。注意，现在VLS仅支持每一股流有一个输出，因此，你不能同时播放网络上的流并写到文件中。网络输出是高可配置的：你可以选择你想使用的网络接口，确定源地址和目的IP地址。</a></p>
+</div>
+<div class="simplesect">
+<h2 class="simplesect"><a name="AEN404">3.1.4. 管理-Manager</a></h2>
+<p><a name="AEN404">管理控件-<span class="emphasis"><i class="emphasis">manager</i></span>
+管理发送流的去向。通过管理接口，你可以认知告诉管理控件启动，停止，挂起，恢复，后退或者搜寻到其他节目。你也可以获得这个节目表格中的所有可用
+节目。管理控件从VLS配置文件(vls.cfg)得到这个列表，因此一旦VLS启动，它是不能更改的。现在你不能通过管理控件来获知一个给出的流是否在广播，但你可以试着停止一个没有广播的流来得到信息。</a></p>
+</div>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN410">3.2. 管理接口 -Administration interface</a></h1>
+<p><a name="AEN410">有两种方法启动流服务：</a></p>
+<ul>
+  <li>
+    <p><a name="AEN410">你可以用带参数的命令行，</a></p>
+  </li>
+  <li>
+    <p><a name="AEN410">在任何你原意的时候用 <span class="emphasis"><i
+ class="emphasis">telnet interface</i></span> 来 start/stop/pause 流服务。</a></p>
+  </li>
+</ul>
+<p><a name="AEN410">在 telnet接口
+时，你必须得到认证，因为不是所有的用户都被允许执行所有命令(这可在配置文件vls.cfg中设置).</a></p>
+</div>
+</div>
+<div class="NAVFOOTER">
+<hr align="left" width="100%">
+<table summary="Footer navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="33%" align="left" valign="top"><a
+ href="e/en/install.html" accesskey="P">上一节</a></td>
+      <td width="34%" align="center" valign="top"><a
+ href="vls-user-guide-en.html" accesskey="H">Home</a></td>
+      <td width="33%" align="right" valign="top"><a href="config.html"
+ accesskey="N">下一节</a></td>
+    </tr>
+    <tr>
+      <td width="33%" align="left" valign="top">安装 VLS</td>
+      <td width="34%" align="center" valign="top"> <br>
+      </td>
+      <td width="33%" align="right" valign="top">配置</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

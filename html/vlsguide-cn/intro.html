@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Introduction</title>
+  <meta name="GENERATOR"
+ content="Modular DocBook HTML Stylesheet Version 1.76b+">
+  <link rel="HOME" title="VLS user guide" href="vls-user-guide-en.html">
+  <link rel="PREVIOUS" title="VLS user guide"
+ href="vls-user-guide-en.html">
+  <link rel="NEXT" title="Installing VLS" href="install.html">
+</head>
+<body class="chapter"
+ style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"
+ link="#0000ff" vlink="#840084" alink="#0000ff">
+<div class="NAVHEADER">
+<table summary="Header navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <th colspan="3" align="center">VLS user guide</th>
+    </tr>
+    <tr>
+      <td width="10%" align="left" valign="bottom"><a
+ href="vls-user-guide-en.html" accesskey="P">上一节</a></td>
+      <td width="80%" align="center" valign="bottom"><br>
+      </td>
+      <td width="10%" align="right" valign="bottom"><a
+ href="install.html" accesskey="N">下一节</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr align="left" width="100%"></div>
+<div class="chapter">
+<h1><a name="intro">Chapter 1. Introduction</a></h1>
+<div class="TOC">
+<dl>
+  <dt><a name="intro"><b>内容列表 </b></a></dt>
+  <dt><a name="intro">1.1. </a><a href="intro.html#AEN32">VideoLAN
+工程是什么 ?</a></dt>
+  <dt>1.2. <a href="intro.html#AEN116">我如何用 VideoLAN ?</a></dt>
+  <dt>1.3. <a href="intro.html#AEN159">命令行用法</a></dt>
+</dl>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN32">1.1. VideoLAN 工程是什么 ?</a></h1>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN34">1.1.1.概述</a></h2>
+<p><a name="AEN34">VideoLAN 是一个完整的视频流解决方案,由 </a><a
+ href="http://www.ecp.fr/" target="_top">Ecole Centrale Paris</a>
+的学生和世界各地的开发者开发, 基于<a href="http://www.gnu.org/copyleft/gpl.html"
+ target="_top">GNU General Public License</a> (GPL).
+VideoLAN被设计成在宽带网络上播放视频流.</p>
+<p>VideoLAN解决方案包括:</p>
+<ul>
+  <li>
+    <p>VLS (VideoLAN 服务器)能传送 MPEG-1, MPEG-2 and MPEG-4 流文件,
+DVDs,数字卫星频道, 数字电视频道与基本网络单播和多播的即时流。</p>
+  </li>
+  <li>
+    <p>VLC (initially VideoLAN 客户端), 可用来作基于网络单播和多播的MPEG-1, MPEG-2 and
+MPEG-4流媒体文件，DVDs,即时视频服务器 ; 或者用作多用户系统上的接收，解码与播放MPEG流媒体的客户端。</p>
+  </li>
+</ul>
+<p>下面是的VideoLAN方案的图解 :</p>
+<div class="figure"><a name="AEN46"></a>
+<p><a name="AEN46"><b>Figure 1-1. Global VideoLAN solution La solution
+VideoLAN globale </b></a></p>
+<div class="mediaobject">
+<p><a name="AEN46"><img src="intro_file/global-diagram.jpg" title=""
+ alt="" style="width: 800px; height: 379px;"></a></p>
+</div>
+</div>
+<p><a name="AEN46">更详细的有关这一工程的资料可以在这个网站上找到:</a><a
+ href="http://www.videolan.org/" target="_top">VideoLAN Web site</a></p>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN53">1.1.2. VideoLAN 软件</a></h2>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN55">1.1.2.1. VLC</a></h3>
+<p><a name="AEN55">VLC 可工作于许多平台 : Linux, Windows, Mac OS X, BeOS, *BSD,
+Solaris, Familiar Linux, Yopy/Linupy and QNX. 它能读:</a></p>
+<ul>
+  <li>
+    <p><a name="AEN55">硬盘上的MPEG-1, MPEG-2 and MPEG-4 / DivX 文件k,
+CD-ROM 文件 ...</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">DVDs 和 VCDs,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">from a satellite card (DVB-S),</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">网络上的VLS或VLC 输出流:MPEG-1, MPEG-2 和 MPEG-4.</a></p>
+  </li>
+</ul>
+<p><a name="AEN55"> VLC 也可用作从can also be used as a server to stream : </a></p>
+<ul>
+  <li>
+    <p><a name="AEN55">MPEG-1, MPEG-2 和 MPEG-4 / DivX 文件,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">DVDs,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55"> MPEG 编码卡,</a></p>
+  </li>
+</ul>
+<p><a name="AEN55">到 : </a></p>
+<ul>
+  <li>
+    <p><a name="AEN55">一台机器 (例如到一个 IP地址) : 这叫单播,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">动态的客户可自由加入和离开的机器组 (例如到一个多播IP地址) :这叫多播。</a></p>
+  </li>
+</ul>
+<p><a name="AEN55">支持 IPv4 或 IPv6       .</a></p>
+<p><a name="AEN55">要获得所有可能平台支持完整列表，请看 </a><a
+ href="http://www.videolan.org/vlc/features.html" target="_top">VLC
+features page</a>.</p>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="intro_%CE%C4%BC%FE/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p> VLC 不适用在Mac OS 9平台, 并用可能永不会. </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN88">1.1.2.2. VLS</a></h3>
+<p><a name="AEN88"> VLS 能编码符合下面条件的流 :从 </a></p>
+<ul>
+  <li>
+    <p><a name="AEN88"> 硬盘上的MPEG-1, MPEG-2 或 MPEG-4 和 CD上的文件, </a></p>
+  </li>
+  <li>
+    <p><a name="AEN88"> DVD驱动器上的DVD 或者硬盘上的拷贝,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN88">a satellite card (DVB-S) or a digital terrestial
+television card (DVB-T),</a></p>
+  </li>
+  <li>
+    <p><a name="AEN88"> MPEG 编码卡 ;</a></p>
+  </li>
+</ul>
+<p><a name="AEN88">到 :</a></p>
+<ul>
+  <li>
+    <p><a name="AEN88">一台机器 (例如到一个IP 地址) : 这叫单播,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN55">动态的客户可自由加入和离开的机器组 (例如到一个多播IP地址) :这叫多播。</a></p>
+  </li>
+</ul>
+<p><a name="AEN88">支持 IPv4 或 IPv6.</a></p>
+<p><a name="AEN88">在网络上一台32MB和 Pentium 100
+MHz的机器就足够了。当要播放大量硬盘上的视频流时，实际的限制不是处理器，而是硬盘和刚强连接。</a></p>
+<p><a name="AEN88">VLS 可工作于 Linux 和 Windows.要获得平台支持的完整列表，请看 </a><a
+ href="http://www.videolan.org/streaming/features.html" target="_top">streaming
+features page</a>.</p>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN112">1.1.2.3. Mini-SAP-server</a></h3>
+<p><a name="AEN112">你可以添加一个基于SAP/SAD标准的频道信息服务到VideoLAN解决方案中。
+mini-SAP-server 可以在IPv4或IPv6网络上传递多播节目的预报，并且VLCs可接收预报并自动加入到播放列表中.</a></p>
+<p><a name="AEN112"> mini-SAP-server 工作于 Linux 和 Mac OS X.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN116">1.2. 如何使用 VideoLAN ?</a></h1>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN118">1.2.1.文档</a></h2>
+<p><a name="AEN118">用户文档是由下面4部分组成:</a></p>
+<ul>
+  <li>
+    <p><a name="AEN118"> <span class="emphasis"><i class="emphasis">VideoLAN
+Quickstart</i></span>. 这一文档给你一个快速的VLC概述，VLC的流输出，视频演示解决方案和频道信息服务系统 。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN118"> <span class="emphasis"><i class="emphasis">VideoLAN
+HOWTO</i></span>. 这一文档是完整的VideoLAN视频流解决方案的指导。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN118"><span class="emphasis"><i class="emphasis">VLC
+user guide</i></span>. 这一文档是完整的VLC指导。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN118"> <span class="emphasis"><i class="emphasis">VLS
+user guide</i></span>. 这一文档是完整的VLS指导。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN118"> <span class="emphasis"><i class="emphasis">VideoLAN
+FAQ</i></span>. 这一文档包括有关VideoLAN的常见问题。</a></p>
+  </li>
+</ul>
+<p><a name="AEN118">这些文档的最新版本可以在 </a><a
+ href="http://www.videolan.org/doc/" target="_top">documentation page</a>找到。</p>
+<p>你还可看看<a href="http://wiki.videolan.org/" target="_top">VideoLAN Wiki</a>.
+这是一个每个人都可更改的网页。我们用它来做非"官方"的所有文档：每个系统的使用技巧，图形接口等。</p>
+</div>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN141">1.2.2.使用支持</a></h2>
+<p><a name="AEN141">如果你在使用videoLAN时有问题,并且你在这个文档中没有找到问题的解答，请看 </a><a
+ href="http://www.via.ecp.fr/via/ml/videolan/index-en.html"
+ target="_top">online archive of the mailing-lists</a>. 这有两个为用户准备的邮箱:</p>
+<ul>
+  <li>
+    <p><span class="emphasis"><i class="emphasis">vlc@videolan.org</i></span>
+为 VLC 的问题,</p>
+  </li>
+  <li>
+    <p><span class="emphasis"><i class="emphasis">streaming@videolan.org</i></span>
+为 VLS 的问题, mini-SAP-server 网络 。</p>
+  </li>
+</ul>
+<p>如果你想订阅或者解除订阅上面的邮件，请到 <a
+ href="http://www.videolan.org/support/lists.html" target="_top">
+mailing-list page</a>.</p>
+<p>你还可在IRC:<span class="emphasis"><i class="emphasis">irc.freenode.net</i></span>,
+channel <span class="emphasis"><i class="emphasis">#videolan上与VideoLAN用户和开发都交流。</i></span></p>
+<p>如果你发现了bug, 请看下面的介绍 <a
+ href="http://www.videolan.org/support/bug-reporting.html" target="_top">bug
+reporting page</a>.</p>
+</div>
+</div>
+<div class="sect1">
+<h1 class="sect1"><a name="AEN159">1.3. 命令行用法</a></h1>
+<ul>
+  <li>
+    <p><a name="AEN159"> VLC 有许多不同的图形接口
+，它们为每个操作系统的指导作协调的组织。为第一个图形界面写文档实在太长，并且一些特性林适用于命令行，但在大多数时候可以很容易的猜到如何用图形接口。</a></p>
+  </li>
+  <li>
+    <p><a name="AEN159">VLS 有命令行和telnet 接口，但没有图形接口。</a></p>
+  </li>
+</ul>
+<p><a name="AEN159">这篇文档所示的所有命令要运行在终端上。</a></p>
+<div class="sect2">
+<h2 class="sect2"><a name="AEN167">1.3.1.打开一个终端</a></h2>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN169">1.3.1.1.在windows 下 </a></h3>
+<p><a name="AEN169">点 <span class="emphasis"><i class="emphasis">Start</i></span>,<span
+ class="emphasis"><i class="emphasis">Run</i></span> 并 打入 :</a></p>
+<ul>
+  <li>
+    <p><a name="AEN169"><b class="command">cmd</b> 然后回车 <b
+ class="keycap">(在windows 2000/xp下)</b>,</a></p>
+  </li>
+  <li>
+    <p><a name="AEN169"><b class="command">command</b> 然后回车 (在 Windows
+95 / 98 / ME下).</a></p>
+  </li>
+</ul>
+<p><a name="AEN169">终端显示如下 :</a></p>
+<div class="figure"><a name="AEN184"></a>
+<p><a name="AEN184"><b>Figure 1-2. Windows终端</b></a></p>
+<div class="mediaobject">
+<p><a name="AEN184"><img src="intro_file/terminal-windows.jpg" title=""
+ alt="" style="width: 668px; height: 331px;"></a></p>
+</div>
+</div>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="intro_%CE%C4%BC%FE/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>在windows下， 你要在程序的安装目录中来运行它。</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN191">1.3.1.2. 在 Linux 或 Unix 下</a></h3>
+<p><a name="AEN191">在 X-window上, 打开一个终端 :</a></p>
+<div class="figure"><a name="AEN194"></a>
+<p><a name="AEN194"><b>Figure 1-3. Linux终端</b></a></p>
+<div class="mediaobject">
+<p><a name="AEN194"><img src="intro_file/terminal-linux.jpg" title=""
+ alt="" style="width: 492px; height: 287px;"></a></p>
+</div>
+</div>
+<p><a name="AEN194">在这篇文档，我们采用下面的协定使用Unix命令：</a></p>
+<ul>
+  <li>
+    <p><a name="AEN194">要作为root来运行的命令有一个 # 号:</a></p>
+    <table border="0" bgcolor="#e0e0e0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+          <pre class="screen"><tt class="prompt"># </tt><tt
+ class="userinput"><b>command_to_be_typed_as_root</b></tt><br>          </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p><a name="AEN194">要作为普通用户来运行的命令 有一个 % 号：</a></p>
+    <table border="0" bgcolor="#e0e0e0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+          <pre class="screen"><tt class="prompt">% </tt><tt
+ class="userinput"><b>command_to_be_typed_as_regular_user</b></tt><br>          </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN214">1.3.1.3. 在 Mac OS X-window上</a></h3>
+<p><a name="AEN214">到 <span class="emphasis"><i class="emphasis">Applications</i></span>,打开<span
+ class="emphasis"><i class="emphasis">Utilities</i></span> 文件夹并在<span
+ class="emphasis"><i class="emphasis">Terminal</i></span> 上双击:</a></p>
+<div class="figure"><a name="AEN220"></a>
+<p><a name="AEN220"><b>Figure 1-4. Mac OS X终端</b></a></p>
+<div class="mediaobject">
+<p><a name="AEN220"><img src="intro_file/terminal-macosx.jpg" title=""
+ alt="" style="width: 505px; height: 366px;"></a></p>
+</div>
+</div>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="intro_%CE%C4%BC%FE/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>在 Mac OS X上，你要在程序的安装目录来运行它, 并在程序前加上 <b class="command">./</b> .</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="simplesect">
+<h3 class="simplesect"><a name="AEN228">1.3.1.4. 在 BeOS 上</a></h3>
+<p><a name="AEN228">在 deskbar,到 <span class="emphasis"><i
+ class="emphasis">Application</i></span> 然后打开 <span class="emphasis"><i
+ class="emphasis">Terminal</i></span> :</a></p>
+<div class="figure"><a name="AEN233"></a>
+<p><a name="AEN233"><b>Figure 1-5. BeOS终端</b></a></p>
+<div class="mediaobject">
+<p><a name="AEN233"><img src="intro_file/terminal-beos.jpg" title=""
+ alt="" style="width: 590px; height: 427px;"></a></p>
+</div>
+</div>
+<div class="note">
+<table class="note" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td width="25" align="center" valign="top"><img
+ src="intro_file/note.gif" hspace="5" alt="Note"></td>
+      <td align="left" valign="top">
+      <p>在BeOS上，你要在程序的安装目录运行它，并在程序前加上 <b class="command">./</b>.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="NAVFOOTER">
+<hr align="left" width="100%">
+<table summary="Footer navigation table" width="100%" border="0"
+ cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="33%" align="left" valign="top"><a
+ href="vls-user-guide-en.html" accesskey="P">上一节</a></td>
+      <td width="34%" align="center" valign="top"><a
+ href="vls-user-guide-en.html" accesskey="H">Home</a></td>
+      <td width="33%" align="right" valign="top"><a href="install.html"
+ accesskey="N">下一节</a></td>
+    </tr>
+    <tr>
+      <td width="33%" align="left" valign="top">VLS user guide</td>
+      <td width="34%" align="center" valign="top"> <br>
+      </td>
+      <td width="33%" align="right" valign="top">安装 VLS</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>
