@@ -1,0 +1,28 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>LLVM,Clang编译工具键项目介绍</title>
+</head>
+<body>
+llvm, LLVM 是 Low Level Virtual Machine 的简称，这个库提供了与编译器相关的支持，能够进行程序语言的编译期优化、链接优化、在线编译优化、代码生成。简而言之，可以作为多种语言编译器的后台来使用。
+clang, Clang 是一个 C++ 编写、基于 LLVM、发布于 LLVM BSD 许可证下的 C/C++/Objective C/Objective C++ 编译器，其目标（之一）就是超越 GCC。
+libc++, 如同每个C++编译器套装都自带一份对应的C++标准库一样，clang 在可使用GNU libstdc++作为标准库之后，开始了自己的C++标准库编写项目，这就是libc++。
+libc++以C++0x 为目标，同样以BSD风格的llvm许可证发布，其特性及目标除了“编译/执行速度快”和“占用内存小”之外，还可在如异常对象、 RTTI（Runtime Type Identification 运行时类型识别）和内存分配等低级特性上与GCC的libstdc++保持 ABI兼容性。
+lldb, 基于LLVM的 debugger新一代高性能调试器，集成LLVM反编译器和Clang表达式解析器等高阶组件，用于C/C++ /Objective-C 程序的调试，同样以LLVM许可证发布。
+
+这几个项目之间的关系，clang是这些编译工具键组件的集合名称， 与 GCC工具键中的GCC对应，libc++ 与GCC工具键GNU libstdc++库对应, lldb与GCC工具键中的gdb对应。
+
+虽然clang的终极目标是能取代gcc,但就日前来说，还有差距。从功能上来说，缺少gcc 中的gfortron编译器，ada编译器，java编译器。
+clang项目主要由apple支持，在成为完善通用能取代gcc之前，可能会侧重Object-C。
+
+llvm的未来，clang中的几个项目都使用BSD风格的llvm 许可证，与GCC的GPL很不相同，是否在成熟之后改成闭源也未可知。但就目前来说，开源界C/C++工具键多了一个选择。
+
+接下来尝试创建这个工具键编译环境，测试些库或者软件用llvm编译的情况。
+
+
+
+
+</body>
+</html>

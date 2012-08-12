@@ -1,0 +1,26 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>试用 Reiser4 文件系统的透明压缩功能</title>
+</head>
+<body>
+用了两个月的ext4,效率方面，稳定性没有什么问题，可硬盘使用率低，我的小硬盘经常用满，感觉很不舒服。
+
+测试一把Reiser4的透明压缩功能，看是否能像网上说的压缩率70%
+
+我使用的是 Zen-Sources 2.6.28-zen5 内核，这个比较新。
+
+创建支持压缩的reiser4文件系统：
+mkfs.reiser4 -o create=ccreg40,compress=gzip1 /dev/hdaX
+
+测试结果：仍旧有不稳定情况出现，文件系统的bug导致系统死机。
+在启用压缩的时候，会占用cpu，不过变通linux文件的压缩率在60-70%。
+对压缩包gz，bz2,和一些多媒体文件没有压缩效果。
+
+gzip1压缩的太不稳定，切换到 lzo1压缩。
+
+测试过lzo1压缩后，还是不稳定，看来现在用reiser4不行。
+</body>
+</html>

@@ -1,0 +1,142 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>hack了一下pssh,现在更好用了</title>
+</head>
+<body>
+原来的pssh,只在使用无密码证书登陆的时候非常方便,而对只支持密码登陆的ssh主机,则会弹出输入密码的交互提示,导致自动化脚本运行不自动了.
+
+由于服务器比较多,并且登陆方式不一样,有的用证书,有的使用密码,所以对pssh作一点hack,以方便提高工作效率.
+
+现在对pssh稍微做了点修改,在定义hosts.txt文件的时候,可选地加入密码项,如果检测到密码则使用sshpass这个命令来处理密码的自动输入功能.这样就能全自动进行了.
+
+原来的hosts.txt 格式:
+1. host[:port] [login]
+2. [user@]host[:port]
+
+hack后的文件格式:
+1. host[:port] [login[:passwd]]
+2. [user[:passwd]@]host[:port]
+
+虽然这样有些安全问题,但即使使用证书也存在同样级别的安全问题,因为如果保存hosts.txt的主机不安装,那么这主机上的登陆证书一样不安全. 把hosts.txt的权限设置与证书权限一样高,安全性是一样的.
+
+pssh-2.1.1的补丁:
+[code type="diff"]
+Index: psshlib/psshutil.py
+===================================================================
+--- psshlib/psshutil.py (版本 496)
++++ psshlib/psshutil.py (工作副本)
+@@ -42,7 +42,12 @@
+         else:
+             sys.stderr.write("Bad line. Must be host[:port] [login]\n")
+             sys.exit(3)
+-        hosts.append((host, port, user))
++        # add by liuguangzhao@users.sf.net   host[:port] [login[:passwd]]
++        passwd = None
++        user_fields = user.split(':')
++        if len(user_fields) == 2:
++            user, passwd = user_fields
++        hosts.append((host, port, user, passwd))
+     return hosts
+ 
+ def parse_host(host, default_user=None, default_port=None):
+@@ -54,4 +59,8 @@
+         user, host = host.split('@', 1)
+     if ':' in host:
+         host, port = host.rsplit(':', 1)
+-    return (host, port, user)
++    # add by liuguangzhao@users.sf.net   [user[:passwd]@]host[:port]
++    passwd = None
++    if ':' in user:
++        user, passwd = user.split(':')
++    return (host, port, user, passwd)
+Index: bin/pnuke
+===================================================================
+--- bin/pnuke   (版本 496)
++++ bin/pnuke   (工作副本)
+@@ -51,8 +51,11 @@
+     if opts.errdir and not os.path.exists(opts.errdir):
+         os.makedirs(opts.errdir)
+     manager = Manager(opts)
+-    for host, port, user in hosts:
++    for host, port, user, passwd in hosts:
+         cmd = ['ssh', host, '-o', 'NumberOfPasswordPrompts=1']
++        if passwd != None:
++            cmd = ['sshpass', '-p', passwd, 'ssh', host, '-o', 'NumberOfPasswordPrompts=1']
++        
+         if not opts.verbose:
+             cmd.append('-q')
+         if opts.options:
+Index: bin/pscp
+===================================================================
+--- bin/pscp    (版本 496)
++++ bin/pscp    (工作副本)
+@@ -61,8 +61,14 @@
+     if opts.errdir and not os.path.exists(opts.errdir):
+         os.makedirs(opts.errdir)
+     manager = Manager(opts)
+-    for host, port, user in hosts:
+-        cmd = ['scp', '-qC']
++    for host, port, user, passwd in hosts:
++        if passwd == None:
++            cmd = ['scp', '-qC']
++            # sys.stderr.write('using standard scp method\n')
++        else:
++            cmd = ['sshpass', '-p', passwd, 'scp', '-qC']
++            # sys.stderr.write('using sshpass scp method\n')
++
+         if opts.options:
+             cmd += ['-o', opts.options]
+         if port:
+Index: bin/pssh
+===================================================================
+--- bin/pssh    (版本 496)
++++ bin/pssh    (工作副本)
+@@ -90,9 +90,16 @@
+             sys.stderr.write('Automatic reading from stdin is deprecated.  '
+                     'Please use the -I option.\n')
+     manager = Manager(opts)
+-    for host, port, user in hosts:
+-        cmd = ['ssh', host, '-o', 'NumberOfPasswordPrompts=1',
+-                '-o', 'SendEnv=PSSH_NODENUM']
++    for host, port, user, passwd in hosts:
++        if passwd == None:
++            cmd = ['ssh', host, '-o', 'NumberOfPasswordPrompts=1',
++                   '-o', 'SendEnv=PSSH_NODENUM']
++            # sys.stderr.write('using standard ssh method\n')
++        else:
++            cmd = ['sshpass', '-p', passwd, 'ssh', host, '-o', 'NumberOfPasswordPrompts=1',
++                   '-o', 'SendEnv=PSSH_NODENUM']
++            # sys.stderr.write('using sshpass method\n')
++
+         if not opts.verbose:
+             cmd.append('-q')
+         if opts.options:
+Index: bin/prsync
+===================================================================
+--- bin/prsync  (版本 496)
++++ bin/prsync  (工作副本)
+@@ -66,8 +66,15 @@
+     if opts.errdir and not os.path.exists(opts.errdir):
+         os.makedirs(opts.errdir)
+     manager = Manager(opts)
+-    for host, port, user in hosts:
+-        ssh = ['ssh']
++    for host, port, user, passwd in hosts:
++        # ssh = ['ssh']
++        if passwd == None:
++            ssh = ['ssh']
++            # sys.stderr.write('using standard ssh method\n')
++        else:
++            cmd = ['sshpass', '-p', passwd, 'ssh']
++            # sys.stderr.write('using sshpass method\n')
++
+         if opts.options:
+             ssh += ['-o', opts.options]
+         if port:
+[/code]
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>彻底关闭FreeBSD中的sendmail服务</title>
+</head>
+<body>
+<p>FreeBSD系统中的sendmail一直默认启动，而且不容易关闭。</p>
+<p>必须修改配置文件rc.conf，并一关闭几个相关进程才行。</p>
+<p>&nbsp;</p>
+<p>在/etc/rc.conf文件中加入下面几行：</p>
+<p>sendmail_enable=&quot;NO&quot;<br />
+sendmail_submit_enable=NO<br />
+sendmail_outbound_enable=NO<br />
+sendmail_msp_queue_enable=NO<br />
+&nbsp;</p>
+<p>重新启动系统。sendmail进程不再启动了。</p>
+</body>
+</html>

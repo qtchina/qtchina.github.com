@@ -1,0 +1,59 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux 下第一个汇编程序</title>
+</head>
+<body>
+<p>将下面的代码分别保存为 sasm.s, Makefile , 然后执行make可编译此汇编程序。输入 ./ta ，执行结果为: &quot;hello world&quot;</p>
+<p>代码如下：</p>
+<p>##############sasm.s</p>
+<p>.section .data<br />
+hello:<br />
+&nbsp;&nbsp;&nbsp; .ascii &quot;hello worldn&quot;<br />
+.section .bss<br />
+.section .text<br />
+.globl _start<br />
+_start:<br />
+&nbsp;&nbsp;&nbsp; movl $4, %eax<br />
+&nbsp;&nbsp;&nbsp; movl $1, %ebx<br />
+&nbsp;&nbsp;&nbsp; movl $hello, %ecx<br />
+&nbsp;&nbsp;&nbsp; movl $12, %edx<br />
+&nbsp;&nbsp;&nbsp; int $0x80<br />
+&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp; movl $1, %eax<br />
+&nbsp;&nbsp;&nbsp; movl $0, %ebx<br />
+&nbsp;&nbsp;&nbsp; int $0x80<br />
+<br />
+####################sasm.s</p>
+<p>######################Makefile</p>
+<p>all: ta<br />
+<br />
+ta: sasm.o<br />
+&nbsp;&nbsp;&nbsp; ld -o $@ $&lt;<br />
+<br />
+.s.o:<br />
+&nbsp;&nbsp;&nbsp; as&nbsp; --gstabs -o $@ $&lt;<br />
+&nbsp;&nbsp;&nbsp; <br />
+clean:<br />
+&nbsp;&nbsp;&nbsp; rm -fv *.o ta</p>
+<p>######################Makefile</p>
+<p>&nbsp;</p>
+<p>下面给出汇编程序的模板，也就是最简单的汇编程序，什么也不做，启动立即退出：</p>
+<p>##############tpl.s</p>
+<p>.section .data<br />
+.section .bss<br />
+.section .text<br />
+.globl _start<br />
+_start:<br />
+&nbsp;&nbsp;&nbsp; movl $1, %eax<br />
+&nbsp;&nbsp;&nbsp; movl $0, %ebx<br />
+&nbsp;&nbsp;&nbsp; int $0x80<br />
+<br />
+##############tpl.s</p>
+<p>说明：最后三条指令执行系统调用 exit(0)</p>
+<p>注： 以上汇编语法使用 AT&amp;T 语法， 使用 gnu as 或者 gcc 编译。</p>
+<p>&nbsp;</p>
+</body>
+</html>

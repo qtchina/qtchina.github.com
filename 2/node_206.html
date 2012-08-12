@@ -1,0 +1,93 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>分隔条</title>
+</head>
+<body>
+	QSplitter是一个可包含其他物件的物件。在分隔条中的物件被分隔手柄分开。用户可拖动手柄改变分隔条中的子物件的尺寸。分隔条经常被用作一种布局管理器的替代，以给用户更多的控制。
+	一个QSplitter的子物件被以它们被创建的顺序并排（或者一个在其他的下面）在一起放置，并在相邻的物件间有分隔手柄。下面是创建图6.7中的窗口的代码：
+[code type="cpp-qt"]
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QTextEdit *editor1 = new QTextEdit;
+    QTextEdit *editor2 = new QTextEdit;
+    QTextEdit *editor3 = new QTextEdit;
+    QSplitter splitter(Qt::Horizontal);
+    splitter.addWidget(editor1);
+    splitter.addWidget(editor2);
+    splitter.addWidget(editor3);
+    ...
+    splitter.show();
+    return app.exec();
+}
+[/code]
+图6.7　分隔条应用程序
+
+
+	该登陆由3个被Qsplitter物件水平布置的QTextEdit。与布局管理器不同，它们只是简单地布置窗体的子物件但没有可见表示，而Qsplitter是继承自QWidget并能像其他任何物件一样使用。
+图6.8　分隔条程序的物件
+
+
+	复杂的布局可通过嵌套使用水平和垂直QSplitter实现。例如，图6.9中展示的邮件客户端程序由右边包含一个垂直QSplitter的一个水平QSplitter组成。
+图6.9　在Mac OS X系统上的邮件客户程序
+
+
+下面是邮件客户端程序的QMainWindow的子类的构造函数代码：
+[code type="cpp-qt"]
+MailClient::MailClient()
+{
+    ...
+
+    rightSplitter = new QSplitter(Qt::Vertical);
+    rightSplitter->addWidget(messagesTreeWidget);
+    rightSplitter->addWidget(textEdit);
+    rightSplitter->setStretchFactor(1, 1);
+    mainSplitter = new QSplitter(Qt::Horizontal);
+    mainSplitter->addWidget(foldersTreeWidget);
+    mainSplitter->addWidget(rightSplitter);
+    mainSplitter->setStretchFactor(1, 1);
+    setCentralWidget(mainSplitter);
+    setWindowTitle(tr("Mail Client"));
+    readSettings();
+}
+[/code]
+	在创建了我们要显示的3个物件之后，我们创建了一个垂直分隔器rightSplitter并把要放在右侧的两个物件添加到其中。然后我们创建现代战争水平分隔器mainSplitter并把第3个放在左侧，rightSplitter放在右侧。我们使mainSplitter 成为 QMainWindow's 的中央物件。
+	当用户调整一个窗口的尺寸时，QSplitter正常分配空间，因此这些子物件间的相对距离仍旧不变。在邮件客户端程序例子中，我们并不想要这种行为。相反，我们希望QtreeWidget和QTableWidget保持它们的尺寸想给QTextEdit更多的额外空间。这可通过两个setStretchFactor()调用实现。第一个参数是分隔器的子物件以0为开始的索引，第二个参数是我们想设的伸长因子，它默认为0。
+图6.10　邮件客户端的分隔器索引
+
+
+	第一个setStretchFactor()调用针对rightSplitter，它设位置为1（textEdit）物件的伸长因子为1。第二个setStretchFactor()调用针对mainSplitter，它设置位置为1（rightSplitter）物件的伸长因子为1。这保证textEdit将得到任何可用的空间。
+	当程序启动的时候，QSplitter根据他们的初始化尺寸给这些子物件合适的尺寸（或者如果没有指定初始化尺寸的话则根据它们的尺寸暗示）。我们可以通过调用QSplitter::setSizes()用程序移动分隔手柄。QSplitter类还提供了一种保存和在程序下次运行恢复它的状态的方法。下面是保存邮件客户端设置的writeSettings()函数：
+[code type="cpp-qt"]
+void MailClient::writeSettings()
+{
+    QSettings settings("Software Inc.", "Mail Client");
+    settings.beginGroup("mainWindow");
+    settings.setValue("size", size());
+    settings.setValue("mainSplitter", mainSplitter->saveState());
+    settings.setValue("rightSplitter", rightSplitter->saveState());
+    settings.endGroup();
+}
+[/code]
+	下面是相应的readSettings()函数：
+[code type="cpp-qt"]
+void MailClient::readSettings()
+{
+    QSettings settings("Software Inc.", "Mail Client");
+    settings.beginGroup("mainWindow");
+    resize(settings.value("size", QSize(480, 360)).toSize());
+    mainSplitter->restoreState(
+            settings.value("mainSplitter").toByteArray());
+    rightSplitter->restoreState(
+            settings.value("rightSplitter").toByteArray());
+    settings.endGroup();
+}
+[/code]
+	Qt设计师完全支持QSplitter。要把物件放进分隔器中，把这些子物件放置在它们期望的合适位置上，选中它们，并点击“Form|Lay Out Horizontally in Splitter“ 或者 “Form|Lay Out Vertically in Splitter“。
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>KVM虚拟机试用手记</title>
+</head>
+<body>
+确认CPU支持虚拟化技术，VT-x/AMD-V。
+
+编译最新内核，我用的 linux-2.6.32-rc3-git2
+由于之前在使用vbox, 与kvm冲突，所以将kvm, intel-kvm,编译为模块方式。
+
+安装kvm外围实用软件，kvm包, 在gentoo上直接 emerge -va kvm.
+我的内核已经有了kvm模块，所以不再需要给这个包加modules这个USE了。
+
+重启动计算机，加载新的内核。modprobe kvm, modprobe intel-kvm加载kvm模块。
+
+kvm-img 创建虚拟硬盘镜像文件。参考qemu-img相关的参数。
+kvm 启动虚拟机,参考qemu相关的参数。
+
+启动之后使用lsmod查看，有这个说明已经用上kvm了。
+kvm_intel              43539  3
+kvm                   273965  1 kvm_intel
+
+
+kvm -M pc -net nic -net user -localtime -vnc 127.0.0.1:0 -redir tcp:3389::3389 -hda ./miniwinxp.img -hdb /dev/sda3 -cdrom ../software/Deepin-LiteXP-SP3.ISO -m 512 -boot c
+
+
+kvm实用工具与qemu的关系：
+kvm是使用kvm模块的虚拟机管理工具，借用了qemu代码基础，有所不同.
+现在的qemu也可以直接使用kvm模块替代原来的kqemu模块，但还有不少问题。
+它们的命令行参数基本一致。
+kvm-88添加了一个叫kvm-img的虚拟磁盘管理工具，现在就只需要安装kvm包了。(以前需要安装qemu使用qemu-img管理磁盘文件的）。
+kvm虚拟化效率要比qemu高，但图形效率还有差距。
+
+kvm对桌面图形的虚拟效果还比较差，应该用在服务器上比较好。
+
+参考：http://forum.ubuntu.org.cn/viewtopic.php?t=120857
+
+附:安装kvm网络,磁盘加速驱动包virtio.这个包在gentoo上名叫libvirt,安装提示如下:
+
+USE="kvm qemu -xen" emerge -va libvirt
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies ... done!
+[ebuild  N    ] net-misc/bridge-utils-1.4  32 kB
+[ebuild  N    ] net-analyzer/netcat6-1.0-r2  USE="bluetooth ipv6 nls" 259 kB
+[ebuild  N    ] net-firewall/iptables-1.4.5  USE="ipv6" 451 kB
+[ebuild  N    ] net-dns/dnsmasq-2.50  USE="dbus dhcp ipv6 nls -tftp" 289 kB
+[ebuild  N    ] app-emulation/libvirt-0.6.5-r1  USE="avahi hal kvm lxc network nls policykit qemu sasl -iscsi -lvm -numa -openvz -parted (-selinux) -uml -virtualbox -xen" 7,262 kB
+
+Total: 5 packages (5 new), Size of downloads: 8,291 kB
+
+Would you like to merge these packages? [Yes/No] yes
+
+这里我使用自定义的USE,表示让它支持kvm,qemu而不支持xen.
+
+
+
+</body>
+</html>

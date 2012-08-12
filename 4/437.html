@@ -1,0 +1,21 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>从Qt MainMenuBar上移除一个主菜单</title>
+</head>
+<body>
+在Qt中有一套非常完整的菜单系统，通过QMainWindow::menuBar()调用可以获得主菜单，这些主菜单上有一些一级菜单，如果希望移除其中某几个，可以使用两种方法，一种是暂时的隐藏，另一种是永久删除。
+Qt中向主菜单添加新的一级菜单的时候，会返回一个QAction, 可以使用这个QAction 操作菜单，如
+this->ui.testMenu->menuAction()->setVisible(false);
+这样程序运行的时候这个testMenu一级菜单隐藏，这样还可以在某些特定时刻需要的时候再显示出来。
+
+另一种使用delete obj;语句，如 delete this->ui.testMenu;
+这样移除的菜单对象永久消失。
+如果testMenu是使用Qt Designer创建的，那么出现一个问题，在做程序动态语言locale切换的时候，程序会因为这个操作而崩溃，即使delete语句后使用this->ui.testMenu = NULL;也没有用。
+
+如果需要动态调整某些菜单的显示，则使用第一种方法，
+如果这个菜单的确用不着了，那么不要用Qt Designer创建菜单，而是手编码创建菜单，手工加入到菜单栏，合适的时候删除这个菜单，不会导致程序出问题。
+
+</body>
+</html>

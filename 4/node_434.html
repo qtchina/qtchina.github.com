@@ -1,0 +1,44 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>karia2下载管理器开发进展及功能摘要</title>
+</head>
+<body>
+在加入karia2后，对karia2进行大规模的升级，使用原来nullget的UI部分相关代码及控制类，加入aria2c 后端控制代码，与之通信控制的代码等。
+
+目前实现的功能，
+多任务同时下载的管理功能，
+任务暂停及恢复续传功能，
+任务分类功能，
+BT下载文件选择功能，
+BT下载peers端显示功能，
+Opera浏览器关联菜单功能，
+IE浏览器关联菜单功能，
+Firefor通过flashgot插件进行关联下载功能，
+自动监测并使用浏览器中的cookie功能，
+实时速度控制功能。
+Opera浏览器中可下载 163.com邮箱中的附件,163.com网盘中的文件. 其他邮箱暂时没试.
+
+以上功能都能在不同平台上使用，没有任何平台障碍，目前测试的平台有window xp, windows 7, 主要linux桌面发行版，包括YLMF Linus OS, Mac OS X Snow Leopard 10.6.x。
+
+karia2 作为一个开源绿色下载软件，在windows上尽量不向系统注册表写入大量信息，目前只写入了关于IE下载菜单关联的一项2个值。与其他浏览器的关联都是通过浏览器相关的功能实现，不向系统写入垃圾信息。当然这么做会限制软件可实现的某些功能，影响软件使用的方便性，易用性，不过会不断完善。
+
+项目进展总体已经到了alpha中期，后面再实现一些选项处理功能进入beta测试阶段。
+
+如果您了解linux平台的程序编译，现在就可以检出karia2 svn代码，并编译试用。
+如果您在使用时遇到什么问题，可以email我。
+如果您有什么意见或建议，可以email我。
+如果您是开发人员，想参与进来，我将非常高What I need is an high level abstracted system similar to Adobe's Flash which allowes to easily create custom widgets and place them in an animated scene.
+Does QT allow to do this?兴，欢迎您加入，请email我。
+如果您觉得软件很有价值，并希望支持它，让它越来越完善，fell free donate to me。
+
+features in mind:
+基于P2P的资源共享，只共享链接资源，不共享下载的数据资源。
+远程aria2c下载后端支持功能。
+
+预览：
+<a href="http://farm5.static.flickr.com/4117/4911374333_d408d0e036_b.jpg" target=_blank><img src="http://farm5.static.flickr.com/4117/4911374333_d408d0e036_b.jpg" width=800 height=600></a>
+</body>
+</html>

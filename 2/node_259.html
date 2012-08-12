@@ -1,0 +1,20 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在gentoo上用上btrfs最新版了</title>
+</head>
+<body>
+目前btrfs代码还没有放到内核源码树，现在是一个单独的模块。
+
+把一测试用临时分区格式化为btrfs了，一些临时数据放上面测试。
+使用的是sys-fs/btrfs和 sys-fs/btrfs-progs两个包，内核是2.6.28-rc6的。
+使用bonnie++测试，与ext4相比较有得有失，好象CPU使用率比较高。
+但感觉磁盘的使用率高些，我的gentoo的最新portage在 ext4上du出来500M,在btrfs上 du出来300M。
+
+ext4的磁盘使用率真是低，和ext3一个毛病。
+
+btrfs也出现过怪问题，开机后在btrfs分区上ls，一共3个目录，共500M数据，竟然发了3,4秒，不知道怎么回事。
+</body>
+</html>

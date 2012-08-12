@@ -1,0 +1,101 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>(七) cmake常用变量和常用环境变量</title>
+</head>
+<body>
+<p>&nbsp;</p>
+<h2>一，cmake变量引用的方式：</h2>
+<p>前面我们已经提到了，使用${}进行变量的引用。在IF等语句中，是直接使用变量名而不<br />
+通过${}取值</p>
+<h2>二，cmake自定义变量的方式：</h2>
+<p>主要有隐式定义和显式定义两种，前面举了一个隐式定义的例子，就是PROJECT指令，他<br />
+会隐式的定义&lt;projectname&gt;_BINARY_DIR和&lt;projectname&gt;_SOURCE_DIR两个变<br />
+量。<br />
+显式定义的例子我们前面也提到了，使用SET指令，就可以构建一个自定义变量了。<br />
+比如: <br />
+SET(HELLO_SRC main.SOURCE_PATHc)，就PROJECT_BINARY_DIR可以通过<br />
+${HELLO_SRC}来引用这个自定义变量了.</p>
+<h2>三，cmake常用变量：</h2>
+<p>1，CMAKE_BINARY_DIR <br />
+PROJECT_BINARY_DIR <br />
+&lt;projectname&gt;_BINARY_DIR <br />
+这三个变量指代的内容是一致的，如果是in source编译，指得就是工程顶层目录，如果<br />
+是out-of-source编译，指的是工程编译发生的目录。PROJECT_BINARY_DIR跟其他<br />
+指令稍有区别，现在，你可以理解为他们是一致的。<br />
+２，CMAKE_SOURCE_DIR <br />
+PROJECT_SOURCE_DIR <br />
+&lt;projectname&gt;_SOURCE_DIR <br />
+这三个变量指代的内容是一致的，不论采用何种编译方式，都是工程顶层目录。<br />
+也就是在in source编译时，他跟CMAKE_BINARY_DIR等变量一致。<br />
+PROJECT_SOURCE_DIR跟其他指令稍有区别，现在，你可以理解为他们是一致的。<br />
+３，CMAKE_CURRENT_SOURCE_DIR <br />
+指的是当前处理的CMakeLists.txt所在的路径，比如上面我们提到的src子目录。<br />
+４，CMAKE_CURRRENT_BINARY_DIR <br />
+如果是in-source编译，它跟CMAKE_CURRENT_SOURCE_DIR一致，如果是out-ofsource<br />
+编译，他指的是target编译目录。<br />
+使用我们上面提到的ADD_SUBDIRECTORY(src bin)可以更改这个变量的值。<br />
+使用SET(EXECUTABLE_OUTPUT_PATH &lt;新路径&gt;)并不会对这个变量造成影响，它仅仅<br />
+修改了最终目标文件存放的路径。<br />
+<br />
+５，CMAKE_CURRENT_LIST_FILE <br />
+输出调用这个变量的CMakeLists.txt的完整路径<br />
+６，CMAKE_CURRENT_LIST_LINE <br />
+输出这个变量所在的行<br />
+7，CMAKE_MODULE_PATH <br />
+这个变量用来定义自己的cmake模块所在的路径。如果你的工程比较复杂，有可能会自己<br />
+编写一些cmake模块，这些cmake模块是随你的工程发布的，为了让cmake在处理<br />
+CMakeLists.txt时找到这些模块，你需要通过SET指令，将自己的cmake模块路径设<br />
+置一下。<br />
+比如<br />
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake) <br />
+这时候你就可以通过INCLUDE指令来调用自己的模块了。<br />
+８，EXECUTABLE_OUTPUT_PATH和LIBRARY_OUTPUT_PATH <br />
+分别用来重新定义最终结果的存放目录，前面我们已经提到了这两个变量。<br />
+9，PROJECT_NAME <br />
+返回通过PROJECT指令定义的项目名称。</p>
+<h2>四，cmake调用环境变量的方式</h2>
+<p>使用$ENV{NAME}指令就可以调用系统的环境变量了。<br />
+比如<br />
+MESSAGE(STATUS &ldquo;HOME dir: $ENV{HOME}&rdquo;) <br />
+设置环境变量的方式是： <br />
+SET(ENV{变量名} 值) <br />
+1,CMAKE_INCLUDE_CURRENT_DIR <br />
+自动添加CMAKE_CURRENT_BINARY_DIR和CMAKE_CURRENT_SOURCE_DIR到当前处理<br />
+的CMakeLists.txt。相当于在每个CMakeLists.txt加入： <br />
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} <br />
+${CMAKE_CURRENT_SOURCE_DIR}) <br />
+2,CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE <br />
+将工程提供的头文件目录始终至于系统头文件目录的前面，当你定义的头文件确实跟系统发<br />
+<br />
+生冲突时可以提供一些帮助。<br />
+3,CMAKE_INCLUDE_PATH和CMAKE_LIBRARY_PATH我们在上一节已经提及。</p>
+<h2>五，系统信息</h2>
+<p>1,CMAKE_MAJOR_VERSION，CMAKE主版本号，比如2.4.6中的2 <br />
+2,CMAKE_MINOR_VERSION，CMAKE次版本号，比如2.4.6中的4 <br />
+3,CMAKE_PATCH_VERSION，CMAKE补丁等级，比如2.4.6 中的6 <br />
+4,CMAKE_SYSTEM，系统名称，比如Linux-2.6.22 <br />
+5,CMAKE_SYSTEM_NAME，不包含版本的系统名，比如Linux <br />
+6,CMAKE_SYSTEM_VERSION，系统版本，比如2.6.22 <br />
+7,CMAKE_SYSTEM_PROCESSOR，处理器名称，比如i686. <br />
+8,UNIX，在所有的类UNIX平台为TRUE，包括OS X和cygwin <br />
+9,WIN32，在所有的win32平台为TRUE，包括cygwin</p>
+<h2>六，主要的开关选项：</h2>
+<p>1，CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS，用来控制IF ELSE语句的书写方式，在<br />
+下一节语法部分会讲到。<br />
+2，BUILD_SHARED_LIBS <br />
+这个开关用来控制默认的库编译方式，如果不进行设置，使用ADD_LIBRARY并没有指定库<br />
+类型的情况下，默认编译生成的库都是静态库。<br />
+如果SET(BUILD_SHARED_LIBS ON)后，默认生成的为动态库。<br />
+３，CMAKE_C_FLAGS <br />
+设置C编译选项，也可以通过指令ADD_DEFINITIONS()添加。<br />
+4，CMAKE_CXX_FLAGS <br />
+设置C++编译选项，也可以通过指令ADD_DEFINITIONS()添加。</p>
+<h2>小结：</h2>
+<p>本章介绍了一些较常用的cmake变量，这些变量仅仅是所有cmake变量的很少一部分，目<br />
+前cmake的英文文档也是比较缺乏的，如果需要了解更多的cmake变量，更好的方式是阅<br />
+读一些成功项目的cmake工程文件，比如KDE4的代码。</p>
+</body>
+</html>

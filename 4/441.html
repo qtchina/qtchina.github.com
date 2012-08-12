@@ -1,0 +1,22 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>w500 安装 gentoo相关优化</title>
+</head>
+<body>
+由于笔记本温度过高，经常达到70、80度，任务重的时候到90度。
+查找发现与开源ati显卡驱动有一部分关系，现在将xorg-server降到1.7.7，并安装ati官方闭源驱动，感觉温度有所降低，大概总体降10度。glxgear值达到5000左右。
+
+目前升级到KDE 4.5 RC, 不开特效，不打其他程序，仅系统，CPU温度在55度，风扇转速3000左右。
+
+风扇控制还没有处理好。
+
+记一个opera的问题，opera 10.60 开16个标签，CPU占用一直在20%，应该还有问题。发现www.google.com让opera多用了15%的CPU，还有其他一些网页占到%5的CPU就不正常。
+
+播放器及virtualbox声音方案全设置为pulseaudio, 都有声音了。
+
+virtualbox虚拟机 winxp，由于把系统设置中“非Unicode语言”设置为“英语(美国)", ppstream显示中文乱码，安装microsoft applocale util，使用这个选择ppstream，可正常显示中文。
+
+</body>
+</html>

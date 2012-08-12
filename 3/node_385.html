@@ -1,0 +1,837 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>FreeBSD 8.0 新特性概览</title>
+</head>
+<body>
+<p>
+<strong>系统全局/架构变化</strong> 
+</p>
+
+<p>
+<strong>无 INET / 仅IPv6 形式的内核</strong><br/>
+
+ 
+现状: 开发中, 大部分能用<br/>
+
+将出现在8.0: 或许不会<br/>
+
+作者: Bjoern Zeeb 以及其他 <br/>
+
+网址:<a href="http://lists.freebsd.org/pipermail/freebsd-current/2009-June/008067.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2009-June/008067.html"  rel="nofollow">邮件列表公告</a> <br/>
+
+</p>
+
+<p>
+IPv6 的开发和部署有条不紊地进行着, 而人们乐于看到 FreeBSD 系统能够仅配上 IPv6(而不是<br/>
+
+缺省配置的 IPv4+IPv6 双料) 运行 .<br/>
+
+</p>
+
+<p>
+从历史上看， BSD的是所有TCP / IP协议实现的鼻祖, 而FreeBSD 中 的 IPv4 代码则遍及<br/>
+
+内核的整个网络层，从设备驱动程序到更高的套接字层。最近的一项倡议旨在确定分层行为的准备，<br/>
+
+首先建立一个不带 INET 支持（即IPv4的） 的内核，然后建立一个仅 带有 IPv6 的内核。<br/>
+
+这一变化涉及大量内核子系统，如防火墙，桥接， NFS和其他等。<br/>
+
+</p>
+
+<p>
+<strong><a href="http://clang.llvm.org" class="urlextern" title="http://clang.llvm.org"  rel="nofollow">CLANG</a>/ <a href="http://www.llvm.org" class="urlextern" title="http://www.llvm.org"  rel="nofollow">LLVM</a> 编译器</strong> 
+</p>
+
+<p>
+现状:实验阶段,但已可用.动作频频.<br/>
+
+将出现在8.0: 不会<br/>
+
+作者:Roman Divacky ,Pawel Worach ，Ed Schouten 和其他<br/>
+
+网址: <a href="http://www.llvm.org" class="urlextern" title="http://www.llvm.org"  rel="nofollow">LLVM</a> , <a href="http://clang.llvm.org" class="urlextern" title="http://clang.llvm.org"  rel="nofollow">CLANG</a> ， <a href="http://wiki.freebsd.org/BuildingFreeBSDWithClang" class="urlextern" title="http://wiki.freebsd.org/BuildingFreeBSDWithClang"  rel="nofollow">FreeBSD的维基页面</a> , <a href="http://lists.freebsd.org/pipermail/freebsd-current/2009-February/003743.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2009-February/003743.html"  rel="nofollow">邮件列表公告</a><br/>
+
+</p>
+
+<p>
+由于GCC 这套编译器在4.2 版本之后以GPLv3重发布,以及 一些BSD系统的用户<br/>
+
+对 GPLv3 本身极为不满(主要是商业用户,有着 “GPLv3 不得入内”的公司政策)，<br/>
+
+ 若有另一种替代的选择，非 GPL3 的编译器进驻基础系统 (base system) 即成众望所归.<br/>
+
+目前,总的一致意见是,GCC 4.3 版将不会引入到基础系统(同样的问题也存在于其他 GPLv3 代码) 。<br/>
+
+</p>
+
+<p>
+<a href="http://www.llvm.org" class="urlextern" title="http://www.llvm.org"  rel="nofollow">LLVM</a> 和 <a href="http://clang.llvm.org" class="urlextern" title="http://clang.llvm.org"  rel="nofollow">CLANG</a> 项目一起, 提供了完全BSD 授权的C / C + +编译器的基础设施,<br/>
+
+而且是性能和功能层面接近或好于GCC.其中 <a href="http://www.llvm.org" class="urlextern" title="http://www.llvm.org"  rel="nofollow">LLVM</a> 做后端而 <a href="http://clang.llvm.org" class="urlextern" title="http://clang.llvm.org"  rel="nofollow">CLANG</a> 则构成这一基础设施的前端部分。<br/>
+
+</p>
+
+<p>
+最近的开发进度表明,<a href="http://www.llvm.org" class="urlextern" title="http://www.llvm.org"  rel="nofollow">LLVM</a> + <a href="http://clang.llvm.org" class="urlextern" title="http://clang.llvm.org"  rel="nofollow">CLANG</a> 不仅立马可用,而且也十分的稳定.<br/>
+
+在不久的将来取代基础系统中的 GCC 的概率颇高,虽然它可能不会在8.x系列做为默认编译器.<br/>
+
+</p>
+
+<p>
+要知道,这基本上还是在基础系统动这个。有太多的第三方软件依赖于GCC 以致于它不可能被彻底取代.<br/>
+
+</p>
+
+<p>
+<strong>Port并行联编</strong>
+</p>
+
+<p>
+现状:已提交<br/>
+
+将出现在8.0: 确定<br/>
+
+作者: Pav Lucistnik和成千上万的人<br/>
+
+网址:<a href="http://lists.freebsd.org/pipermail/freebsd-ports/2009-March/053736.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-ports/2009-March/053736.html"  rel="nofollow">邮件列表公告</a><br/>
+
+</p>
+
+<p>
+Port 基础设施作为FreeBSD操作系统的一部分,肩负着提供数以千计(实际上接近20 000数)的第三方软件包<br/>
+
+给FreeBSD的用户.它使每个人都能够安装定制软件, 不论是从源代码(传统并且是推荐方式)或类似的二进制<br/>
+
+软件包的方式.<br/>
+
+</p>
+
+<p>
+Port 基础设施的源代码编译已得到加强,能够以并联方式联编.在这多核心CPU的时代,这意味着软件包的编译<br/>
+
+时间将大幅度减少。默认情况下,(编译时)所有可用的逻辑CPU都会被启用.<br/>
+
+</p>
+
+<p>
+此项增强功能无关8.0版本,可用于现有较新版本的FreeBSD.<br/>
+
+Port依赖图仍是串行编译(即一次仅编译一个port,但每个port的编译过程并行化) .<br/>
+
+</p>
+
+<p>
+<strong>内核级及底层的改进</strong>
+</p>
+
+<p>
+<strong>更好地处理设备热拔插</strong>
+</p>
+
+<p>
+现状:提交至CURRENT, 合并回STABLE<br/>
+
+将出现在8.0: 确定<br/>
+
+作者: Edward Tomasz Napierala<br/>
+
+网站: <a href="http://www.freebsdfoundation.org/projects.shtml" class="urlextern" title="http://www.freebsdfoundation.org/projects.shtml"  rel="nofollow">FreeBSD 基金项目</a><br/>
+
+</p>
+
+<p>
+热拔插加载了文件系统的设备引起的系统崩溃(典型的例子就是拔掉已加载文件系统的 USB 闪存)是<br/>
+
+最终用户报告的最最常见的问题.新的进展是,在FreeBSD 基金项目的资助下,这个问题解决了。<br/>
+
+</p>
+
+<p>
+<strong>Jail 第2版</strong>
+</p>
+
+<p>
+现状:提交至CURRENT, 合并回STABLE<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Bjoern Zeeb 以及其他<br/>
+
+网址: <a href="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=185435" class="urlextern" title="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=185435"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+该<a href="http://en.wikipedia.org/wiki/FreeBSD_jail" class="urlextern" title="http://en.wikipedia.org/wiki/FreeBSD_jail"  rel="nofollow">Jail 子系统</a>已大大加强和更新,以支持现代FreeBSD的功能.<br/>
+
+除了支持每个 Jail 多个(或无需)IP 地址, 亦实现了对 IPv6 和 SCTP 协议的支持, Jail 现在也可以支持绑到特定CPU.<br/>
+
+Jail 结合ZFS 时尤其强大,系统管理员可以在Jail 内创建和管理自己的文件系统.<br/>
+
+</p>
+
+<p>
+<strong>Xen的DOM-u 支持</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Kip Macy<br/>
+
+网址: <a href="http://wiki.freebsd.org/FreeBSD/Xen" class="urlextern" title="http://wiki.freebsd.org/FreeBSD/Xen"  rel="nofollow">维基页面</a> , <a href="http://lists.freebsd.org/mailman/listinfo/freebsd-xen" class="urlextern" title="http://lists.freebsd.org/mailman/listinfo/freebsd-xen"  rel="nofollow">邮件列表</a><br/>
+
+</p>
+
+<p>
+FreeBSD 已集成了对Xen的支持,能够被用来作为较新版本的Xen dom0系统的<br/>
+
+32位客户操作系统(不是宿主系统!) .<br/>
+
+8.0 的一个目标是让FreeBSD适用于亚马逊EC2 .该项目需要测试和赞助.<br/>
+
+</p>
+
+<p>
+<strong>新的USB协议栈</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Hans Petter Selasky<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-current/2008-August/087610.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2008-August/087610.html"  rel="nofollow">公告</a>, <a href="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=184610" class="urlextern" title="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=184610"  rel="nofollow">SVN信息</a><br/>
+
+</p>
+
+<p>
+(新) USB 协议栈获得了重大改革而且新的代码修正了许多的问题.<br/>
+
+新特性有是完全支持事务分离,事务同步，剔除巨锁依赖( MPSAFE ) ,<br/>
+
+一套新的API等等.详见SVN信息.
+</p>
+
+<p>
+新的USB协议栈将沿用旧的驱动和内核模块的名字,增加的向后兼容.<br/>
+
+</p>
+
+<p>
+<strong>MPSAFE TTY</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Ed Schouten<br/>
+
+网址: <a href="http://wiki.freebsd.org/TTYRedesign" class="urlextern" title="http://wiki.freebsd.org/TTYRedesign"  rel="nofollow">维基页面</a><br/>
+
+</p>
+
+<p>
+TTY 层是系统用户的传统Unix界面,提供交互会话来运行各类 shell 等.<br/>
+
+目前 TTY 层在FreeBSD中是最古老的BSD TTY,它和驱动程序以及其他层<br/>
+
+紧密集成，虽有效率，也使它难以维护和扩展.<br/>
+
+重写的 TTY 层的旨在成为一个真正的抽象层,运作时协调 TTY 层的两端。<br/>
+
+operating on behalf of both sides of TTY(不好翻)<br/>
+
+此外，它还将剔除 TTY 当中的巨锁,这将消除控制台以及X.Org 下的用户界面<br/>
+
+延迟或者跳跃行为等问题.<br/>
+
+</p>
+
+<p>
+<strong>AMD64平台内核的内存上限增加</strong>
+</p>
+
+<p>
+现状:提交至CURRENT, 合并回STABLE<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Alan Cox<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-hackers/2008-June/024807.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-hackers/2008-June/024807.html"  rel="nofollow">公告</a><br/>
+
+</p>
+
+<p>
+一些时兴的功能(其中目前最引人注目的是 ZFS )需要大量的内核内存(与传统的<br/>
+
+磁盘高速缓存或系统可见内存容量无关) .直至目前为止,kmem_max 仅能分配到<br/>
+
+最高2 GB的空间,这点正在趋于紧缺。<br/>
+
+此限制最近已增加至512 GB的。加上ARC 的 backpressur改善，这将会是ZFS 用户喜闻乐见的。。<br/>
+
+</p>
+
+<p>
+<strong>内核级线程</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Julian Elischer<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2007-October/082727.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2007-October/082727.html"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+目前的内核线程实际上是“重量级”的进程在内核地址空间上运行.<br/>
+
+这项改进引入了真正轻量级的内核线程, 消耗较少的底层资源(进程锁,内存映射表).<br/>
+
+它还能更好将线程分组以便于显示.<br/>
+
+</p>
+
+<p>
+<strong>procstat (1): 一个检查进程的实用工具</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Robert Watson<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-current/2007-December/080898.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2007-December/080898.html"  rel="nofollow">公告</a><br/>
+
+</p>
+
+<p>
+procstat结合现已淘汰的procfs (4)功能, 并增加了一些新的功能.<br/>
+
+procstat 可以提供的数据有:进程的命令行参数,文件描述符信息,<br/>
+
+栈的内核线程在这个过程中，信息安全认证的进程,线程信息和虚拟内存映射.这工具对调试来说最有用.<br/>
+
+</p>
+
+<p>
+<strong>TextDumps: 内核崩溃后的资料收集</strong>
+</p>
+
+<p>
+现状:提交至CURRENT, 合并回STABLE<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Robert Watson<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-stable/2008-April/041672.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-stable/2008-April/041672.html"  rel="nofollow">textdumps 常见问题</a><br/>
+
+</p>
+
+<p>
+内核崩溃后通常会发生内核内存转储,要么是完全转储或“ minidump ”(7.0和更高版本).<br/>
+
+新的“ textdump ”功能并不储存内核内存的实际转储,而是从中提取通常需要的那部分信息，<br/>
+
+并将它储存成一个文本文件的 tar 压缩包而后删除转储文件.<br/>
+
+这极大地降低了收集这些资料的尺寸要求,提高了开发速度，使人们无需内核开发经验就能够收集崩溃后的调试信息。<br/>
+
+</p>
+
+<p>
+<strong>ULE 3.0: 为 SMP 优化的新调度器</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Jeff Roberson<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2008-March/087965.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2008-March/087965.html"  rel="nofollow">已提交信息</a>, <a href="http://lists.freebsd.org/pipermail/cvs-src/2008-March/087969.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2008-March/087969.html"  rel="nofollow">已提交信息</a>， <a href="http://lists.freebsd.org/pipermail/freebsd-current/2008-March/083981.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2008-March/083981.html"  rel="nofollow">公告</a><br/>
+
+</p>
+
+<p>
+ULE 调度器的演变带来了支持细粒度的CPU粘着度的计算,同时将CPU的物理拓扑结构(缓存，多核，多socket )<br/>
+
+并大大改善了线程绑定到CPU的支持.如此带来额外的功能(展现了分配特定 CPU 到 Jails 的可能性)和可观的性能改进.<br/>
+
+</p>
+
+<p>
+<strong>Superpages</strong>
+</p>
+
+<p>
+现状:提交至CURRENT, 合并回STABLE<br/>
+
+将出现在8.0: 确定<br/>
+
+作者Alan Cox<br/>
+
+网址: <a href="http://www.cs.rice.edu/~ssiyer/r/superpages/osdi02superpages/" class="urlextern" title="http://www.cs.rice.edu/~ssiyer/r/superpages/osdi02superpages/"  rel="nofollow">研究论文</a>, <a href="http://ivoras.sharanet.org/blog/tree/2008-08-19.status-of-superpages-support.html" class="urlextern" title="http://ivoras.sharanet.org/blog/tree/2008-08-19.status-of-superpages-support.html"  rel="nofollow">现况</a><br/>
+
+</p>
+
+<p>
+大部分通用CPU提供了对大尺寸内存页的支持,即superpages. Superpages能使旁路转换缓冲(TLB)当中的每个条目<br/>
+
+得以将一大块物理内存区域映射到一个虚拟地址空间.这大大增加 TLB 覆盖面,降低 TLB 失误，并改进的许多应用性能。<br/>
+
+然而,支持 superpages 对操作系统来说,在 superpage 分配和权衡，碎片控制方面等颇有挑战.<br/>
+
+(Superpages 的)性能优势是巨大的,往往超过30 %; 这些益处即便在重负载环境下仍然有效。<br/>
+
+</p>
+
+<p>
+虽然可以用在大多数的X86 CPU上, 基准测试表明，获益最大的见于四核以及更新的多核CPU 上.<br/>
+
+</p>
+
+<p>
+<strong>DTrace</strong>
+</p>
+
+<p>
+现状:提交至CURRENT(仅内核跟踪)<br/>
+
+将出现在8.0: 确定<br/>
+
+作者: John Birrell<br/>
+
+网址: <a href="http://dtrace.what-creek.com/" class="urlextern" title="http://dtrace.what-creek.com/"  rel="nofollow">项目主页</a><br/>
+
+</p>
+
+<p>
+DTrace的是升阳公司开发的一种工具和语言用以帮助调试和档案化操作系统.它可以汇总自不同部分<br/>
+
+的内核( 用户态环境跟踪尚未实现)信息 ,并以一种对用户来说意义明确的方式来分析它们.<br/>
+
+</p>
+
+<p>
+<strong>网络方面的改进</strong>
+</p>
+
+<p>
+<strong>基于 802.11s 草案3.0版 无线网状网络</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 试验性<br/>
+
+作者: Rui Paulo<br/>
+
+网址: <a href="http://wiki.freebsd.org/WifiMesh" class="urlextern" title="http://wiki.freebsd.org/WifiMesh"  rel="nofollow">维基页面</a><br/>
+
+无线网状网络, 有时称之为 WMN, 是一种采用网状拓扑结构而不是更常见的AP 客户端拓扑结构的无线网络.<br/>
+
+这类网络常被视为实际网络中的特殊类型, 因为(在该网络中)不存在中心节点也就不会导致连接中断(与之相比常见的无线网络具有一个中心接入点). <br/>
+
+802.11s 是对 802.11-2007 无线标准的一项改进, 其描述了网状网络如何运作于现有 802.11 MAC 之上.<br/>
+
+</p>
+
+<p>
+<strong>VirtNet / VIMAGE / Imunes /网络堆栈的虚拟化</strong>
+</p>
+
+<p>
+现状:开发接近尾声<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Marko Zec<br/>
+
+网址: <a href="http://imunes.tel.fer.hr/virtnet/" class="urlextern" title="http://imunes.tel.fer.hr/virtnet/"  rel="nofollow">项目主页</a><br/>
+
+</p>
+
+<p>
+虚拟的网络协议栈项目旨在扩展 FreeBSD的内核使其能维护多个独立的网络状态实例.<br/>
+
+这使得系统的多个Jail 之间的网络能够独立,包括让每一个Jail 拥有自己的防火墙, 虚拟网络设备,<br/>
+
+速率限制, 路由表, 以及 IPSec 配置.<br/>
+
+</p>
+
+<p>
+VIMAGE+Jails 在 8.0 将作为试验性功能; 系统可能不如宣传上那样适用, 尤其是考虑到安全时.<br/>
+
+</p>
+
+<p>
+<strong>多路由表/ FIBs</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Julian Elischer<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-arch/2007-December/007331.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-arch/2007-December/007331.html"  rel="nofollow">提案</a><br/>
+
+</p>
+
+<p>
+支持多种路由表(基于信息转发)带来高级的网络拓扑结构.使用setfib工具可以在逐个进程层面选择路由表.<br/>
+
+</p>
+
+<p>
+<strong>等价多路径路由</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Qing Li<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2008-April/089956.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2008-April/089956.html"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+ECMP 路由允许内核通过多种途径来处理,其中包括默认路由.它有可能在具备多个路径的负载均衡流量状况下极大地增加带宽.<br/>
+
+</p>
+
+<p>
+<strong>零复制 BPF</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Robert Watson, Christian S.J. Peron<br/>
+
+网址: <a href="http://www.watson.org/~robert/freebsd/2007bsdcan/20070517-devsummit-zerocopybpf.pdf" class="urlextern" title="http://www.watson.org/~robert/freebsd/2007bsdcan/20070517-devsummit-zerocopybpf.pdf"  rel="nofollow">BSDCan 幻灯片</a><br/>
+
+</p>
+
+<p>
+BPF 即伯克利数据包过滤器,用于根据用户定义的过滤器从低层次的网络协议栈捕获原始网络数据包,<br/>
+
+并转发到应用程序, 亦可将原始数据包插入网络协议栈.<br/>
+
+</p>
+
+<p>
+这项针对 BPF 的改善减少了内核和应用程序之间的内存复制次数,提高了某些情况下的性能.<br/>
+
+</p>
+
+<p>
+<strong>内核的NFS锁支持</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Doug Rabson<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2008-March/089272.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2008-March/089272.html"  rel="nofollow">已提交信息</a>, <a href="http://lists.freebsd.org/pipermail/freebsd-current/2008-March/084446.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-current/2008-March/084446.html"  rel="nofollow">公告</a><br/>
+
+</p>
+
+<p>
+NFS的锁管理器改善了NFS锁(用来同步文件访问远程机器)在内核中的性能和行为. <br/>
+
+新功能包括:多线程操作, 死锁检测, 与限定于服务器上的文档互动。<br/>
+
+</p>
+
+<p>
+<strong>NFSv4支持</strong>
+</p>
+
+<p>
+现状:正在开发<br/>
+
+将出现在8.0: 可能<br/>
+
+作者:Rick Macklem<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/freebsd-fs/2008-July/004945.html" class="urlextern" title="http://lists.freebsd.org/pipermail/freebsd-fs/2008-July/004945.html"  rel="nofollow">召唤测试者</a><br/>
+
+</p>
+
+<p>
+NFSv4是<a href="http://www.iaps.com/NFSv4-new-features.html" class="urlextern" title="http://www.iaps.com/NFSv4-new-features.html"  rel="nofollow">NFS 协议的一个重大改动</a> ,它带来许多新的功能，如状态协议，性能方面的改进<br/>
+
+和更强大的安全特性( ACLs ，强认证). 直到最近, NFSv4支持在FreeBSD是不完整的(仅客户端),<br/>
+
+而且有些不稳定。新的开发目标是完成这一支持.<br/>
+
+</p>
+
+<p>
+这一引进的 NFSv4 基础设施亦将采用新的取代原有的 NFSv2 和 NFSv3 服务端以及客户端.<br/>
+
+</p>
+
+<p>
+<strong>存储子系统改进</strong>
+</p>
+
+<p>
+<strong>试验性的 AHCI 新驱动</strong>
+</p>
+
+<p>
+现状: 提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者: Scott Long 及 其他<br/>
+
+网址: <a href="http://svn.freebsd.org/changeset/base/195534" class="urlextern" title="http://svn.freebsd.org/changeset/base/195534"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+在 8.0 中缺省未启用的这一新驱动, 将通过 CAM (通用存储控制方法)支持原生的 AHCI (进阶主机控制器接口). <br/>
+
+AHCI 设备通过 camcontrol 命令操作并且一些新特性如 NCQ (原生命令队列) 也被整合进来了.<br/>
+
+</p>
+
+<p>
+<strong>gvinum 2 </strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者: Ulf Lilleengen<br/>
+
+网址: <a href="http://svn.freebsd.org/changeset/base/190507" class="urlextern" title="http://svn.freebsd.org/changeset/base/190507"  rel="nofollow">已提交信息</a> , <a href="http://svn.freebsd.org/changeset/base/191856" class="urlextern" title="http://svn.freebsd.org/changeset/base/191856"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+gvinum 是一种基于 vinum—— 这是 FreeBSD 上长存且实际上的传统卷管理器—— 并与之兼容 的一种逻辑卷管理器. <br/>
+
+它的特性包括 JBOD, <acronym title="Redundant Array of Inexpensive Disks">RAID</acronym> 0, <acronym title="Redundant Array of Inexpensive Disks">RAID</acronym> 1 以及 <acronym title="Redundant Array of Inexpensive Disks">RAID</acronym> 5 等模式以整合存储设备成为高阶的卷, 而由于新版本融合了 GEOM 因而它可以被其他 GEOM 设备或类型使用.<br/>
+
+</p>
+
+<p>
+Gvinum 2 是 gvinum 上的一次重大重构并且修复了许多长期存在的问题. <br/>
+
+在 gvinum 上做的改进使它更为可用并且适合于生产环境, 同时还保持了与旧版本的兼容性. Gvinum 与 GEOM 层级的比如 gmirror, gstripe 以及其他等并存.<br/>
+
+</p>
+
+<p>
+<strong>GEOM_PART 成为缺省分区工具</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Marcel Moolenaa 及其他<br/>
+
+网址: <a href="http://svn.freebsd.org/changeset/base/186240" class="urlextern" title="http://svn.freebsd.org/changeset/base/186240"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+GEOM_PART ( gpart )是一种新的分区类别和实用工具,在一个统一的代码基础上支持多分区格式(MBR, BSD, GPT 等格式).<br/>
+
+</p>
+
+<p>
+注意:升级时警告!<br/>
+
+GEOM_PART 对现有分区表(特别是如果许多操作系统都存在-多开机)的解读可能不同于以前的种类.您的设备可能会被重新命名.<br/>
+
+</p>
+
+<p>
+<strong>支持GPT分区的引导</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:John Baldwin<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2007-October/082851.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2007-October/082851.html"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+GEOM_PART ( gpart )是一种新的分区类别和实用工具, 在一个统一的代码基础上支持多分区格式(MBR,BSD ，GPT 等格式).<br/>
+
+</p>
+
+<p>
+注意:升级时警告! GEOM_PART 对现有分区表(特别是如果多操作系统并存-多级启动)的解读可能不同于以前的种类.您的设备可能会被重新命名.<br/>
+
+</p>
+
+<p>
+注意: 一些旧的工具如 bsdlabel 可能不能工作如果内核中不包括 GEOM_BSD以及其他原有的 slicer 类型. <br/>
+
+换言之, bsdlabel 等无法与 GEOM_PART 一起工作.<br/>
+
+</p>
+
+<p>
+<strong>bsdlabel被扩展至26分区</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Marcel Moolenaar<br/>
+
+网址: <a href="http://lists.freebsd.org/pipermail/cvs-src/2007-December/084949.html" class="urlextern" title="http://lists.freebsd.org/pipermail/cvs-src/2007-December/084949.html"  rel="nofollow">已提交信息</a><br/>
+
+</p>
+
+<p>
+bsdlabel(终于! )扩展到支持8个以上分区.新的26个分区的限制源于小写字母的数目.<br/>
+
+</p>
+
+<p>
+借这一变化, GEOM_PART将代替GEOM_BSD (这需要自定义内核的配置).<br/>
+
+</p>
+
+<p>
+<strong>安全</strong>
+</p>
+
+<p>
+<strong>ProPolice SSP(堆栈溢出保护)</strong>
+</p>
+
+<p>
+现状:提交至CURRENT<br/>
+
+将出现在8.0: 确定<br/>
+
+作者:Jeremie Le Hen<br/>
+
+网址: <a href="http://tataz.chchile.org/~tataz/FreeBSD/SSP/" class="urlextern" title="http://tataz.chchile.org/~tataz/FreeBSD/SSP/"  rel="nofollow">相关网页</a><br/>
+
+</p>
+
+<p>
+ProPolice有助于防止那些基于堆栈的缓冲区溢出的攻击方法, 它采用的是在堆栈的<br/>
+
+返回地址前设置一个随机整数(被称为“canary” ).它(“canary”)设置在函数之前并在<br/>
+
+函数返回时检测这个值, 如果它被改变了, 那就表明缓冲区溢出了, 该程序就会用 SIGABRT <br/>
+
+杀掉自己(如果是内核则发生崩溃). 用户态环境和内核都能得到保护.<br/>
+
+</p>
+
+<p>
+<strong>其他变化</strong>
+</p>
+
+<p>
+下面列出较小和/或更模糊的变化,但是值得特别一提，因为某些用户会对他们感兴趣的:<br/>
+
+</p>
+<ul>
+<li class="level1"><div class="li">用户可控的CPU / IRQ 绑定( jhb )<br/>
+</div>
+</li>
+<li class="level1"><div class="li">支持CPU 集合上的用户可控的CPU线程绑定( jeffr )<br/>
+</div>
+</li>
+<li class="level1"><div class="li">对 InfiniBand 实现<a href="http://en.wikipedia.org/wiki/RDMA" class="urlextern" title="http://en.wikipedia.org/wiki/RDMA"  rel="nofollow">远程直接内存访问(远程的DMA )支持</a><br/>
+</div>
+</li>
+<li class="level1"><div class="li">ZFS的更新到zpool 第13版 (从第 6 版), 之前的实现当中大部分 (如果不能说全部的话）的问题得以修正（ pjd ,kip) , 合并回STABLE<br/>
+</div>
+</li>
+<li class="level1"><div class="li">以将来需要时可以扩展的方式, 增大用户所属的组的最大数目 (NGROUPS) 的值缺省为 1024. (brooks)<br/>
+</div>
+</li>
+<li class="level1"><div class="li">升级syscons 使其支持 UTF-8 的解析(ed)<br/>
+</div>
+</li>
+<li class="level1"><div class="li">引进新版本的<a href="http://www.trustedbsd.org/openbsm.html" class="urlextern" title="http://www.trustedbsd.org/openbsm.html"  rel="nofollow">OpenBSM</a> ( rwatson )<br/>
+</div>
+</li>
+<li class="level1"><div class="li">支持更多的ARM /Xscale平台<br/>
+</div>
+</li>
+<li class="level1"><div class="li">从NetBSD 引入makefs 工具(sam)<br/>
+</div>
+</li>
+<li class="level1"><div class="li">AMD64平台上支持<a href="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=189283" class="urlextern" title="http://svn.freebsd.org/viewvc/base?view=revision&amp;revision=189283"  rel="nofollow">大于2 GB的SYSVSHM 段</a> ( kib ) , 合并回STABLE<br/>
+</div>
+</li>
+<li class="level1"><div class="li">新的网络 ARP 代码<br/>
+</div>
+</li>
+<li class="level1"><div class="li">无线虚拟 AP(又名 VAP,又称“虚拟 WiFi ” )模式(sam）<br/>
+</div>
+</li>
+<li class="level1"><div class="li">tcpdump更新为4.0 (注:新的输出格式) （ rpaulo ）<br/>
+</div>
+</li>
+<li class="level1"><div class="li">性能方面的改进,主要是 SMP 的可扩展性<br/>
+</div>
+</li>
+<li class="level1"><div class="li">支持英特尔Nehalem/Core ì7 平台( jeffr ) , 合并回STABLE<br/>
+</div>
+</li>
+</ul>
+
+</div>
+
+</body>
+</html>

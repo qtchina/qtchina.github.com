@@ -1,0 +1,999 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>PostgreSQL 9.0新功能示例</title>
+</head>
+<body>
+<div id="bodyContent">
+<p> <a href="http://developer.postgresql.org/pgdocs/postgres/release-9-0.html">PostgreSQL 9.0 release notes</a>
+</p>
+			<p>This document showcases many of the latest developments in PostgreSQL 9.0, compared to the last major release – PostgreSQL 8.4. There are more than 200 improvements in this release. While all the important advances are explained and demonstrated, some of the more esoteric changes are not covered, but these are unlikely to be known issues for most users.
+</p><p>Hot Standby and Streaming Replication are the two new features that mark Version 9.0 as a landmark in PostgreSQL's development.
+</p><p>While there are several third party replication solutions available for PostgreSQL that meet a range of specific needs, this new release brings a simple, sturdy and integrated version that will probably be used as a default in most High Availability installations using PostgreSQL.
+</p><p>Changes are arranged in four chapters:
+</p>
+<ul><li> The two new features you can't ignore
+</li><li> Other new features
+</li><li> Potential issues when upgrading existing systems
+</li><li> Other improvements
+</li></ul>
+<p><br>
+</p>
+<table id="toc" class="toc" summary="Contents"><tbody><tr><td><div id="toctitle"><h2>Contents</h2> <span class="toctoggle">[<a id="togglelink" class="internal" href="javascript:toggleToc()">hide</a>]</span></div>
+<ul>
+<li class="toclevel-1"><a href="#The_two_features_you_can.27t_ignore"><span class="tocnumber">1</span> <span class="toctext">The two features you can't ignore</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Hot_Standby"><span class="tocnumber">1.1</span> <span class="toctext">Hot Standby</span></a></li>
+<li class="toclevel-2"><a href="#Streaming_Replication"><span class="tocnumber">1.2</span> <span class="toctext">Streaming Replication</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#New_features"><span class="tocnumber">2</span> <span class="toctext">New features</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Exclusion_constraints"><span class="tocnumber">2.1</span> <span class="toctext">Exclusion constraints</span></a></li>
+<li class="toclevel-2"><a href="#Column_triggers"><span class="tocnumber">2.2</span> <span class="toctext">Column triggers</span></a></li>
+<li class="toclevel-2"><a href="#WHEN_Triggers"><span class="tocnumber">2.3</span> <span class="toctext">WHEN Triggers</span></a></li>
+<li class="toclevel-2"><a href="#DEFERRABLE_UNIQUE_CONSTRAINTS"><span class="tocnumber">2.4</span> <span class="toctext">DEFERRABLE UNIQUE CONSTRAINTS</span></a></li>
+<li class="toclevel-2"><a href="#Anonymous_Functions"><span class="tocnumber">2.5</span> <span class="toctext">Anonymous Functions</span></a></li>
+<li class="toclevel-2"><a href="#Named_parameters"><span class="tocnumber">2.6</span> <span class="toctext">Named parameters</span></a></li>
+<li class="toclevel-2"><a href="#GRANT.2FREVOKE_IN_SCHEMA"><span class="tocnumber">2.7</span> <span class="toctext">GRANT/REVOKE IN SCHEMA</span></a></li>
+<li class="toclevel-2"><a href="#ALTER_DEFAULT_PRIVILEGES"><span class="tocnumber">2.8</span> <span class="toctext">ALTER DEFAULT PRIVILEGES</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#PL.2FpgSQL_changes_which_may_cause_regressions"><span class="tocnumber">3</span> <span class="toctext">PL/pgSQL changes which may cause regressions</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Removal_of_column.2Fvariable_name_ambiguity"><span class="tocnumber">3.1</span> <span class="toctext">Removal of column/variable name ambiguity</span></a></li>
+<li class="toclevel-2"><a href="#Reserved_words"><span class="tocnumber">3.2</span> <span class="toctext">Reserved words</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Improvements"><span class="tocnumber">4</span> <span class="toctext">Improvements</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Join_Removal"><span class="tocnumber">4.1</span> <span class="toctext">Join Removal</span></a></li>
+<li class="toclevel-2"><a href="#IS_NOT_NULL_can_now_use_indexes"><span class="tocnumber">4.2</span> <span class="toctext">IS NOT NULL can now use indexes</span></a></li>
+<li class="toclevel-2"><a href="#Use_of_index_to_get_better_statistics_on_the_fly"><span class="tocnumber">4.3</span> <span class="toctext">Use of index to get better statistics on the fly</span></a></li>
+<li class="toclevel-2"><a href="#Per_tablespace_seq_page_cost.2Frandom_page_cost"><span class="tocnumber">4.4</span> <span class="toctext">Per tablespace seq_page_cost/random_page_cost</span></a></li>
+<li class="toclevel-2"><a href="#Force_distinct_statistics_on_a_column"><span class="tocnumber">4.5</span> <span class="toctext">Force distinct statistics on a column</span></a></li>
+<li class="toclevel-2"><a href="#Better_VACUUM_FULL"><span class="tocnumber">4.6</span> <span class="toctext">Better VACUUM FULL</span></a></li>
+<li class="toclevel-2"><a href="#64_bits_for_windows."><span class="tocnumber">4.7</span> <span class="toctext">64 bits for windows.</span></a></li>
+<li class="toclevel-2"><a href="#PL.2FpgSQL_by_default"><span class="tocnumber">4.8</span> <span class="toctext">PL/pgSQL by default</span></a></li>
+<li class="toclevel-2"><a href="#Many_improvements_on_PL_languages."><span class="tocnumber">4.9</span> <span class="toctext">Many improvements on PL languages.</span></a></li>
+<li class="toclevel-2"><a href="#ALIAS_keyword"><span class="tocnumber">4.10</span> <span class="toctext">ALIAS keyword</span></a></li>
+<li class="toclevel-2"><a href="#Message_passing_in_NOTIFY.2Fpg_notify"><span class="tocnumber">4.11</span> <span class="toctext">Message passing in NOTIFY/pg_notify</span></a></li>
+<li class="toclevel-2"><a href="#get_bit_and_set_bit_for_bit_strings"><span class="tocnumber">4.12</span> <span class="toctext">get_bit and set_bit for bit strings</span></a></li>
+<li class="toclevel-2"><a href="#application_name_in_pg_stat_activity"><span class="tocnumber">4.13</span> <span class="toctext">application_name in pg_stat_activity</span></a></li>
+<li class="toclevel-2"><a href="#Per_database.2Brole_configuration"><span class="tocnumber">4.14</span> <span class="toctext">Per database+role configuration</span></a></li>
+<li class="toclevel-2"><a href="#Log_all_changed_parameters_on_a_postgresql.conf_reload"><span class="tocnumber">4.15</span> <span class="toctext">Log all changed parameters on a postgresql.conf reload</span></a></li>
+<li class="toclevel-2"><a href="#New_frame_options_for_window_functions"><span class="tocnumber">4.16</span> <span class="toctext">New frame options for window functions</span></a></li>
+<li class="toclevel-2"><a href="#Sort_in_aggregates"><span class="tocnumber">4.17</span> <span class="toctext">Sort in aggregates</span></a></li>
+<li class="toclevel-2"><a href="#Better_unique_constraints_error_messages"><span class="tocnumber">4.18</span> <span class="toctext">Better unique constraints error messages</span></a></li>
+<li class="toclevel-2"><a href="#Explain_buffers.2C_hashing_statistics.2C_xml.2C_json.2C_yaml.2C_new_optional_explain_syntax"><span class="tocnumber">4.19</span> <span class="toctext">Explain buffers, hashing statistics, xml, json, yaml, new optional explain syntax</span></a></li>
+<li class="toclevel-2"><a href="#Unaccent_filtering_dictionary"><span class="tocnumber">4.20</span> <span class="toctext">Unaccent filtering dictionary</span></a></li>
+<li class="toclevel-2"><a href="#vacuumdb_--analyze-only"><span class="tocnumber">4.21</span> <span class="toctext">vacuumdb --analyze-only</span></a></li>
+<li class="toclevel-2"><a href="#Hstore_contrib_enhancements"><span class="tocnumber">4.22</span> <span class="toctext">Hstore contrib enhancements</span></a></li>
+<li class="toclevel-2"><a href="#Statement_logged_by_auto_explain"><span class="tocnumber">4.23</span> <span class="toctext">Statement logged by auto_explain</span></a></li>
+<li class="toclevel-2"><a href="#Buffers_accounting_for_pg_stat_statements"><span class="tocnumber">4.24</span> <span class="toctext">Buffers accounting for pg_stat_statements</span></a></li>
+<li class="toclevel-2"><a href="#passwordcheck"><span class="tocnumber">4.25</span> <span class="toctext">passwordcheck</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table><script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<a name="The_two_features_you_can.27t_ignore"></a><h2> <span class="mw-headline">The two features you can't ignore</span></h2>
+<p>The significance of these two new features is the motivation for allocating a full version number to this release – 9.0 (not 8.5).
+</p>
+<a name="Hot_Standby"></a><h3> <span class="mw-headline">Hot Standby</span></h3>
+<p>This feature allows users to create a 'Standby' database – that is, a database replaying the primary's binary log, while making it available for read-only queries. It is substantially similar to enterprise standby database features of top proprietary databases, such as Oracle's DataGuard.
+</p><p>Implementation of this feature took over two years and is quite complex. While read-only queries are running, the standby database has to be able to replay the binary modifications coming from the production database, decide if these modifications are conflicting with the read-only queries and which action should be taken as a consequence: pause the replay or kill some read-only queries and move forward. Hot Standby also adds some data in WAL logs for the standby database and a conflict resolution mechanism.
+</p><p>To setup Hot standby, you just have to set up the production database as follows:
+</p><p><tt>postgresql.conf</tt>, Primary:
+</p>
+<pre> wal_level = 'hot standby' # Adds the required data in the WAL logs
+ # vacuum_defer_cleanup_age # You may want to set this up, but it could be complicated (see documentation)
+</pre>
+<p>Then, create a standby database (the same way you did with previous standby databases: pg_start_backup on primary, copy the files (on the , pg_end_backup on primary).
+</p><p>Then, you just have to copy logs and data files on the secondary server and add this in its postgresql.conf:
+</p><p><tt>postgresql.conf</tt>, Secondary:
+</p>
+<pre> hot_standby=on
+ max_standby_delay=30s # -1= always wait, 0= never wait, else wait for this
+</pre>
+<p>and use a program such as pg_standby on the secondary to help replay the logs (this parameter goes in <tt>recovery.conf</tt>, but there are new options there too, see next feature).
+</p><p>max_standby_delay determines the behaviour of the standby database when conflicts between replay and read-only queries occur. In this situation, the standby database will wait at most until it's lagging max_standby_delay behind the production database before killing the conflicting read-only queries.
+</p><p>Of course, you're strongly encouraged to read the documentation before putting this feature in place… if only to understand the consequences of tuning max_standby_delay and vacuum_defer_cleanup_age, which are not easy to grasp.
+</p>
+<a name="Streaming_Replication"></a><h3> <span class="mw-headline">Streaming Replication</span></h3>
+<p>Complimenting Hot Standby, Streaming Replication is the second half of the "great leap forward" for PostgreSQL. This time, the goal is improving the archiving mechanism to make it as continuous as possible and to not rely on file shipping. Standby databases can now connect to the master and get sent, whenever they want, what they are missing from the Write Ahead Log, not in terms of complete files ('wal segments'), but in terms of records in the WAL (you can think of them as fragments of these files).
+</p><p>Streaming Replication is an asynchronous mechanism; the standby database lags behind the master.  But unlike other replication methods, this lag is very short, and can be as little as a single transaction, depending on network speed, database activity, and Hot Standby settings.  Also, the load on the master for each slave is minimal, allowing a single master to support dozens of slaves.
+</p><p>Production and standby databases are identical at the binary level (well, almost, we won't get into details, but don't worry if your datafiles don't have the same checksum).
+</p><p>For Streaming Replication, wal_level should be 'archive' (or 'hot standby') to do continuous archiving.
+</p><p><tt>postgresql.conf</tt>, Primary:
+</p>
+<pre> max_wal_senders = x # Maximum 'wal_senders', processes responsible for managing a connection with a standby server
+ wal_keep_segments # How many WAL segments(files) should be kept on the primary, whatever may happen (you won't have to copy them manually on the standby if the standby gets too far behind)
+</pre>
+<p>On the secondary:
+</p><p><tt>recovery.conf</tt>, Secondary:
+</p>
+<pre> standby_mode = on
+ primary_conninfo = 'host=192.168.1.50 port=5432 user=foo password=foopass' # connection string to reach the primary database
+</pre>
+<p><tt>postgresql.conf</tt>, Secondary:
+</p>
+<pre> wal_level # same value as on the primary (you'll need this after a failover, to build a new standby)
+ hot_standby=on/off # Do you want to use Hot Standby at the same time&nbsp;?
+</pre>
+<p>pg_hba.conf file:
+</p><p>There must be an entry here for the replication connections. The fake database is 'replication', the designated user should be superuser. Be careful not to give broad access to this account: a lot of privileged data can be extracted from WAL records.
+</p><p><tt>pg_hba.conf</tt>, Primary:
+</p>
+<pre> host    replication     foo             192.168.1.100/32        md5
+</pre>
+<p>As for Hot Standby, this feature is rich and complex. It's advised to read the documentation. And to perform failovers and switchovers tests when everything is in place.
+</p><p>One thing should be stressed about these two features: you can use them together. This means you can have a near-realtime standby database, and run read-only queries on it, such as reporting queries.  You can also use them independently; a standby database can be Hot Standby with file shipping only, and a Streaming Replication database can stream without accepting queries.
+</p>
+<a name="New_features"></a><h2> <span class="mw-headline">New features</span></h2>
+<a name="Exclusion_constraints"></a><h3> <span class="mw-headline">Exclusion constraints</span></h3>
+<p>Exclusion constraints are very similar to unique constraints. They could be seen as unique constraints using other operators than '=': A unique constraint defines a set of columns for which two records in the table cannot be identical.
+</p><p>To illustrate this, we will use the example provided by this feature's author, using the temporal data type, that he also developed. This datatype stores time ranges, that is 'the time range from 10:15 to 11:15'.
+</p><p>First, we need to retrieve the temporal module here: <a href="http://pgfoundry.org/projects/temporal/" class="external free" title="http://pgfoundry.org/projects/temporal/" rel="nofollow">http://pgfoundry.org/projects/temporal/</a> , then compile and install it as a contrib (run the provided sql script).
+</p>
+<pre> CREATE TABLE reservation
+ (
+   room      TEXT,
+   professor TEXT,
+   during    PERIOD);
+</pre>
+<pre> ALTER TABLE reservation ADD CONSTRAINT test_exclude EXCLUDE   USING gist (room WITH =,during WITH &amp;&amp;);
+</pre>
+<p>Doing this, we declare that a record should be rejected (exclusion constraint) if there already is one verifying the two conditions 'the same room' and 'be in intersection for the time range' (the &amp;&amp; operator).
+</p>
+<pre> marc=# INSERT INTO reservation (professor,room,during) VALUES ( 'mark', 'tech room', period('2010-06-16 09:00:00', '2010-06-16 10:00:00'));
+ INSERT 0 1
+ marc=# INSERT INTO reservation (professor,room,during) VALUES ( 'john', 'chemistry room', period('2010-06-16 09:00:00', '2010-06-16 11:00:00'));
+ INSERT 0 1
+ marc=# INSERT INTO reservation (professor,room,during) VALUES ( 'mark', 'chemistry room', period('2010-06-16 10:00:00', '2010-06-16 11:00:00'));
+ ERROR:  conflicting key value violates exclusion constraint "test_exclude"
+ DETAIL:  Key (room, during)=(chemistry room, [2010-06-16 10:00:00+02, 2010-06-16 11:00:00+02)) conflicts with existing key (room, during)=(chemistry room, [2010-06-16 09:00:00+02, 2010-06-16 11:00:00+02)).
+</pre>
+<p>The insert is forbidden, as the chemistry room is already reserved from 9 to 11.
+</p><p>Exclusion constraints may also be used with arrays, geographic data, or other non-scalar data in order to implement advanced scientific and calendaring applications.  No other database system has this feature.
+</p>
+<a name="Column_triggers"></a><h3> <span class="mw-headline">Column triggers</span></h3>
+<p>Column triggers fire only when a specific column is explicitly UPDATED.  They allow you to avoid adding lots of conditional logic and value comparisons in your trigger code.
+</p><p>Example:
+</p>
+<pre> CREATE TRIGGER foo BEFORE UPDATE OF a ON t1 FOR EACH ROW EXECUTE PROCEDURE my_trigger();
+</pre>
+<p>This trigger fires only when t1's 'a' column of the t1 table has been updated.
+</p><p>Column triggers are not executed if columns are set to DEFAULT.
+</p>
+<a name="WHEN_Triggers"></a><h3> <span class="mw-headline">WHEN Triggers</span></h3>
+<p>Completing PostgreSQL's effort to limit IF ... THEN code in triggers, conditional triggers define simple conditions under which the trigger will be executed.  This can dramatically decrease the number of trigger executions and reduce CPU load on the database server.
+</p><p>For example, this trigger would check that an account was correctly balanced only when the balance changes:
+</p>
+<pre> CREATE TRIGGER check_update
+ BEFORE UPDATE ON accounts
+ FOR EACH ROW
+ WHEN (OLD.balance IS DISTINCT FROM NEW.balance)
+ EXECUTE PROCEDURE check_account_update();
+</pre>
+<p>And this trigger will only log a row update when the row actually changes.  It's very helpful with framework or ORM applications, which may attempt to save unchanged rows:
+</p>
+<pre> CREATE TRIGGER log_update
+ AFTER UPDATE ON accounts
+ FOR EACH ROW
+ WHEN (OLD.* IS DISTINCT FROM NEW.*)
+ EXECUTE PROCEDURE log_account_update();
+</pre>
+<p>You could even further than this and decide not to save a row at all if it hasn't changed:
+</p>
+<pre> CREATE TRIGGER log_update
+ AFTER UPDATE ON accounts
+ FOR EACH ROW
+ WHEN (OLD.* IS NOT DISTINCT FROM NEW.*)
+ EXECUTE PROCEDURE no_op();
+</pre>
+<a name="DEFERRABLE_UNIQUE_CONSTRAINTS"></a><h3> <span class="mw-headline">DEFERRABLE UNIQUE CONSTRAINTS</span></h3>
+<p>This feature will also be very useful. Here is an example, using a primary key instead of a simple unique key:
+</p>
+<pre> marc=# CREATE TABLE test (a int primary key);
+ marc=# INSERT INTO test values (1), (2);
+ marc=# UPDATE test set a = a+1;
+ ERROR:  duplicate key value violates unique constraint "test_pkey"
+ DETAIL:  Key (a)=(2) already exists.
+</pre>
+<p>That's normal, but a pity nevertheless: at the end of the transaction, my data would have been consistent, as far as this constraint is concerned. Even worse, if the table had been physically sorted by descending order, the query would have worked! With 8.4, there was no easy way out, we had to find a trick to update the records in the right order.
+</p><p>We can now do this:
+</p>
+<pre> marc=# CREATE TABLE test (a int primary key deferrable);
+ marc=# INSERT INTO test values (2),(1);
+ marc=# UPDATE test set a = a+1;
+ ERROR:  duplicate key value violates unique constraint "test_pkey"
+ DETAIL:  Key (a)=(2) already exists.
+</pre>
+<p>Oops, it doesn't work.
+</p><p>As a matter of fact, this is on purpose: It's a little reminder on deferrable/deferred constraints: a deferrable constraint CAN be checked at the end of a transaction. You still have to ask PostgreSQL to defer it.
+</p><p>One can, for the current session, require that all the constraints be deferred:
+</p>
+<pre> marc=# SET CONSTRAINTS ALL DEFERRED;
+ SET CONSTRAINTS
+ marc=# UPDATE test set a = a+1;
+ UPDATE 2
+</pre>
+<p>If one doesn't want to perform a SET CONSTRAINTS each time, the constraint can also be declared as INITIALLY DEFERRED:
+</p>
+<pre> CREATE TABLE test (a int PRIMARY KEY DEFERRABLE INITIALLY DEFERRED);
+</pre>
+<p>Another reminder is necessary here: DEFERRED constraints are slower than IMMEDIATE constraints. Furthermore, the list of records to be checked at the end of the transaction has to be stored somewhere. So be careful of not doing this for millions of records at once. This is one of the reasons that DEFERRABLE constraints aren't INITIALLY DEFERRED by default.
+</p>
+<a name="Anonymous_Functions"></a><h3> <span class="mw-headline">Anonymous Functions</span></h3>
+<p>This new feature is for creating run-once functions. Effectively, this allows you to run stored procedure code on the command line or dynamically as you can on SQL Server and Oracle.  Unlike those, however, PostgreSQL allows you to run an anonymous function in any procedural language which is installed of the more than a dozen which PostgreSQL supports.
+</p><p>This feature will be very useful for schema upgrade scripts for instance. Here is a slightly different version of the 'GRANT SELECT ON ALL TABLES' that will be seen later in this document, giving SELECT rights to a bunch of tables, depending on the table owner, and not taking into account two schemas.:
+</p>
+<pre> DO language plpgsql $$
+ DECLARE
+ vr record;
+ 
+ BEGIN
+ 
+ FOR vr IN SELECT tablename FROM pg_tables WHERE tableowner = 'marc' AND schemaname NOT IN ('pg_catalog','information_schema')
+ LOOP
+   EXECUTE 'GRANT SELECT ON ' || vr.tablename || ' TO toto';
+ END LOOP;
+ END
+ $$;
+</pre>
+<p>As of 8.4, this would have required creating a function (with CREATE&nbsp;FUNCTION), running it, then removing it (with DROP FUNCTION). All of this requiring having rights to do this. 9.0 simplifies performing this kind of procedures.
+</p><p>Anonymous functions are also called "anonymous code blocks" in the software industry.
+</p>
+<a name="Named_parameters"></a><h3> <span class="mw-headline">Named parameters</span></h3>
+<p>Combined with the Default Parameters introduced in version 8.4, named parameters allow for dynamic calling of functions with variable numbers of arguments, much as they would be inside a programming language.  Named parameters are familiar to users of SQL Server or Sybase, but PostgreSQL does one better by supporting both named parameter calls <i>and</i> function overloading.
+</p><p>The chosen syntax to name parameters is the following:
+</p>
+<pre> CREATE FUNCTION test (a int, b text) RETURNS text AS $$
+ DECLARE
+   value text;
+ BEGIN
+   value&nbsp;:= 'a is ' || a::text || ' and b is ' || b;
+   RETURN value;
+ END;
+ $$ LANGUAGE plpgsql;
+</pre>
+<p>Until now, we wrote:
+</p>
+<pre> SELECT test(1,'foo');
+ test          
+ -------------------------
+ a is 1 and b is foo
+ (1 row)
+</pre>
+<p>Now this explicit syntax can be used:
+</p>
+<pre> SELECT test( b:='foo', a:=1);
+ test          
+ -------------------------
+ a is 1 and b is foo
+ (1 row)
+</pre>
+<p>Named parameters should eliminate the need to write many overloaded "wrapper" functions.  Note that this does add a backwards compatibility issue; you are no longer able to rename function parameters using a REPLACE command, but must now drop and recreate the function.
+</p>
+<a name="GRANT.2FREVOKE_IN_SCHEMA"></a><h3> <span class="mw-headline">GRANT/REVOKE IN SCHEMA</span></h3>
+<p>One annoying limitation in PostgreSQL has been the lack of global GRANT/REVOKE capabilities. With 9.0 it's now possible to set privileges on all tables, sequences and functions within a schema using without having to write a script or a stored procedure:
+</p>
+<pre> GRANT SELECT ON ALL TABLES IN SCHEMA public TO toto;
+</pre>
+<p>And reverting this:
+</p>
+<pre> REVOKE SELECT ON ALL TABLES IN SCHEMA public FROM toto;
+</pre>
+<p>See the <a href="http://www.postgresql.org/docs/9.0/static/sql-grant.html" class="external text" title="http://www.postgresql.org/docs/9.0/static/sql-grant.html" rel="nofollow">GRANT</a> documentation page for further details.
+</p><p>Note that the above only works for existing objects. However, it's now also possible to define default permissions for new objects:
+</p>
+<a name="ALTER_DEFAULT_PRIVILEGES"></a><h3> <span class="mw-headline">ALTER DEFAULT PRIVILEGES</span></h3>
+<p>This feature also makes permission management more efficient.
+</p>
+<pre> ALTER DEFAULT PRIVILEGES FOR ROLE marc GRANT SELECT ON TABLES TO PUBLIC;
+ CREATE TABLE test_priv (a int);
+ \z test_priv
+                             Access privileges
+ Schema |    Name    | Type  | Access privileges | Column access privileges
+--------+------------+-------+-------------------+--------------------------
+ public | test_priv  | table | =r/marc          +|
+        |            |       | marc=arwdDxt/marc |
+</pre>
+<p>These new informations are stored in the pg_default_acl system table.
+</p>
+<a name="PL.2FpgSQL_changes_which_may_cause_regressions"></a><h2> <span class="mw-headline">PL/pgSQL changes which may cause regressions</span></h2>
+<p>There are two changes in PL/pgSQL which may break code which works in 8.4 or earlier, meaning PL/pgSQL functions should be audited before before migrating to 9.0 to prevent possible runtime errors.
+</p>
+<a name="Removal_of_column.2Fvariable_name_ambiguity"></a><h3> <span class="mw-headline">Removal of column/variable name ambiguity</span></h3>
+<p>In 8.4 and earlier, PL/PgSQL variables will take preference over a table or view column with the same name. While this behaviour is consistent, it is a potential source of coding errors. 9.0 will throw a runtime error if this situation occurs:
+</p>
+<pre> marc=# DO LANGUAGE plpgsql
+ $$
+ DECLARE
+   a int;
+ BEGIN
+   SELECT a FROM test;
+ END
+ $$
+&nbsp;;
+ ERROR:  column reference "a" is ambiguous
+ LINE 1: select a from test
+ DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+ QUERY:  select a from test
+ CONTEXT:  PL/pgSQL function "inline_code_block" line 4 at SQL statement
+</pre>
+<p>This behaviour can be altered globally in postgresql.conf, or on a per function basis by inserting one of these three options in the function declaration:
+</p>
+<pre> #variable_conflict error        (default)
+ #variable_conflict use_variable (variable name name takes precedence - pre-9.0 behaviour)
+ #variable_conflict use_column   (column name takes precedence)
+</pre>
+<p>The <a href="http://www.postgresql.org/docs/9.0/static/plpgsql-implementation.html" class="external text" title="http://www.postgresql.org/docs/9.0/static/plpgsql-implementation.html" rel="nofollow">manual</a> contains more details.
+</p>
+<a name="Reserved_words"></a><h3> <span class="mw-headline">Reserved words</span></h3>
+<p>From 9.0, use of unquoted reserved words as PL/PgSQL variable names is no longer permitted:
+</p>
+<pre> marc=# DO LANGUAGE plpgsql
+ $$
+ DECLARE
+ table int;
+ BEGIN
+ table&nbsp;:=table+1;
+ END
+ $$
+&nbsp;;
+ ERROR:  syntax error at or near "table"
+ LINE 6: table&nbsp;:=table+1;
+</pre>
+<p>The correct syntax is:
+</p>
+<pre> marc=# DO LANGUAGE plpgsql
+ $$
+ DECLARE
+ "table" int;
+ BEGIN
+ "table"&nbsp;:="table"+1;
+ END
+ $$
+&nbsp;;
+ DO
+</pre>
+<p>Best practice is of course to avoid reserved words completely.
+</p>
+<a name="Improvements"></a><h2> <span class="mw-headline">Improvements</span></h2>
+<p>The query planner got a lot of improvements in this version. So we'll start by talking about these:
+</p>
+<a name="Join_Removal"></a><h3> <span class="mw-headline">Join Removal</span></h3>
+<pre> marc=# CREATE TABLE t1 (a int);
+ CREATE TABLE
+ marc=# CREATE TABLE t2 (b int);
+ CREATE TABLE
+ marc=# CREATE TABLE t3 (c int);
+ CREATE TABLE
+</pre>
+<p>We put a little bit of data with a generate_series…
+</p>
+<pre> marc=# EXPLAIN SELECT t1.a,t2.b from t1 join t2 on (t1.a=t2.b) left join t3 on (t1.a=t3.c);
+ QUERY PLAN                                 
+ ------------------------------------------------------------------------------
+ Merge Right Join  (cost=506.24..6146.24 rows=345600 width=8)
+     Merge Cond: (t3.c = t1.a)
+   -&gt;  Sort  (cost=168.75..174.75 rows=2400 width=4)
+         Sort Key: t3.c
+         -&gt;  Seq Scan on t3  (cost=0.00..34.00 rows=2400 width=4)
+   -&gt;  Materialize  (cost=337.49..853.49 rows=28800 width=8)
+         -&gt;  Merge Join  (cost=337.49..781.49 rows=28800 width=8)
+               Merge Cond: (t1.a = t2.b)
+               -&gt;  Sort  (cost=168.75..174.75 rows=2400 width=4)
+                     Sort Key: t1.a
+                     -&gt;  Seq Scan on t1  (cost=0.00..34.00 rows=2400 width=4)
+               -&gt;  Sort  (cost=168.75..174.75 rows=2400 width=4)
+                     Sort Key: t2.b
+                     -&gt;  Seq Scan on t2  (cost=0.00..34.00 rows=2400 width=4)
+</pre>
+<p>For now, everything is normal, and we have the same behavior in 8.4. But let's imagine that on t3, there is a UNIQUE constraint on the 'c' column. In this case, the join on t3 doesn't serve any purpose, theoretically speaking: the number of rows returned won't change, neither will their content. It's because the column is UNIQUE, the join is a LEFT JOIN, and no column of t3 is retrieved. If the column wasn't UNIQUE, the join could bring more rows. If that wasn't a LEFT JOIN, the join could ignore some rows.
+</p><p>With 9.0:
+</p>
+<pre> marc=# ALTER TABLE t3 ADD UNIQUE (c);
+ NOTICE:  ALTER TABLE / ADD UNIQUE will create implicit index "t3_c_key" for table "t3"
+ ALTER TABLE
+ marc=# EXPLAIN SELECT t1.a,t2.b from t1 join t2 on (t1.a=t2.b) left join t3 on (t1.a=t3.c);
+                             QUERY PLAN                           
+ ------------------------------------------------------------------
+ Merge Join  (cost=337.49..781.49 rows=28800 width=8)
+   Merge Cond: (t1.a = t2.b)
+   -&gt;  Sort  (cost=168.75..174.75 rows=2400 width=4)
+         Sort Key: t1.a
+         -&gt;  Seq Scan on t1  (cost=0.00..34.00 rows=2400 width=4)
+   -&gt;  Sort  (cost=168.75..174.75 rows=2400 width=4)
+         Sort Key: t2.b
+         -&gt;  Seq Scan on t2  (cost=0.00..34.00 rows=2400 width=4)
+ (8 rows)
+</pre>
+<p>This enhancement will sometimes be very nice, among other things when using an ORM (Object Relation Mapping). These tools have a tendency to write unnecessary joins. In this simple case, the estimated cost has been divided by 10.
+</p><p>This could also help a lot for programs using a lot of joins and nested views.
+</p><p>This feature is another reason to declare the constraints in the database: without these constraints, there is no way for the engine to be sure these rewrites can be done.
+</p>
+<a name="IS_NOT_NULL_can_now_use_indexes"></a><h3> <span class="mw-headline">IS NOT NULL can now use indexes</span></h3>
+<p>For this demonstration, we will compare the 8.4 and 9.0 versions (the table I created contains mostly nulls):
+</p><p>With 8.4:
+</p>
+<pre> marc=# EXPLAIN ANALYZE SELECT max(a) from test;
+ QUERY PLAN                                                                  
+ ------------------------------------------------------------------------------------------------------------------------------------------------
+ Result  (cost=0.03..0.04 rows=1 width=0) (actual time=281.320..281.321 rows=1 loops=1)
+ InitPlan 1 (returns $0)
+   -&gt;  Limit  (cost=0.00..0.03 rows=1 width=4) (actual time=281.311..281.313 rows=1 loops=1)
+   -&gt;  Index Scan Backward using idxa on test  (cost=0.00..29447.36 rows=1001000 width=4) (actual time=281.307..281.307 rows=1 loops=1)
+ Filter: (a IS NOT NULL)
+ Total runtime: 281.360 ms
+ (6 rows)
+</pre>
+<p>With 9.0:
+</p>
+<pre> marc=# EXPLAIN ANALYZE SELECT max(a) from test;
+ QUERY PLAN                                                                
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ Result  (cost=0.08..0.09 rows=1 width=0) (actual time=0.100..0.102 rows=1 loops=1)
+ InitPlan 1 (returns $0)
+   -&gt;  Limit  (cost=0.00..0.08 rows=1 width=4) (actual time=0.092..0.093 rows=1 loops=1)
+   -&gt;  Index Scan Backward using idxa on test  (cost=0.00..84148.06 rows=1001164 width=4) (actual time=0.089..0.089 rows=1 loops=1)
+ Index Cond: (a IS NOT NULL)
+ Total runtime: 0.139 ms
+ (6 rows)
+</pre>
+<p>The difference is that 9.0 only scans the not-null keys in the index. 8.4 has to go check in the table (Filter step, when 9.0 uses an index condition). In this precise use case, the gain is really big.
+</p>
+<a name="Use_of_index_to_get_better_statistics_on_the_fly"></a><h3> <span class="mw-headline">Use of index to get better statistics on the fly</span></h3>
+<p>Before starting to explain this new feature, let's talk about histograms: PostgreSQL, like some other databases, uses a statistical optimizer. This means that when planning a query it has (or should have) an approximately correct idea of how many records each step of the query will bring back. In order to do this, it uses statistics, such as the approximate number of records in a table, its size, most common values, and histograms. PostgreSQL use these to get estimates about the number of records brought back by a WHERE&nbsp;clause on a column, depending on the value or range asked in this WHERE&nbsp;clause.
+</p><p>In some cases, these histograms are rapidly out of date, and become a problem, for certain SQL queries. For instance, a log table in which timestamped records would be inserted, and from which we would most of the time want to get the records from the last 5 minutes.
+</p><p>In this specific case, it was impossible before 9.0 to get correct statistics. Now, when PostgreSQL detects while planning that a query asks for a 'range scan' on a value larger than the largest of the histogram (or smaller than the smallest), that is, the largest detected value during the last statistics calculation, and this column has an index, it gets the max (or min) value for this column using the index BEFORE really executing the query, in order to get more realistic statistics. As PostgreSQL uses an index for this, there HAS to be an index, of course.
+</p><p>Here comes an example. The a column of the test table has already been filled with a lot of dates, all in the past. It's statistics are up to date.
+</p><p>It's 13:37, and I haven't inserted anything after 13:37 yet.
+</p>
+<pre> marc=# EXPLAIN ANALYZE select * from test where a &gt; '2010-06-03 13:37:00';
+ QUERY PLAN                                                 
+ --------------------------------------------------------------------------------------------------------------
+ Index Scan using idxtsta on test  (cost=0.00..8.30 rows=1 width=8) (actual time=0.007..0.007 rows=0 loops=1)
+ Index Cond: (a &gt; '2010-06-03 13:37:00'::timestamp without time zone)
+ Total runtime: 0.027 ms
+ (3 rows)
+</pre>
+<p>Everything's normal. The upper boundary of the histogram is '2010-06-03 13:36:16.830007' (this information comes from pg_stats). There is no way of guessing how many records are larger than 13:37, and with 8.4, PostgreSQL would have continued estimating '1' until the next analyze.
+</p>
+<pre> marc=# DO LANGUAGE plpgsql
+ $$
+ DECLARE
+   i int;
+ BEGIN
+   FOR i IN 1..10000 LOOP
+   INSERT INTO test VALUES (clock_timestamp());
+   END LOOP;
+ END
+ $$
+&nbsp;;
+ DO
+</pre>
+<p>(I must say I really like 'DO').
+We just inserted 10000 records with a date larger than 13:37.
+</p>
+<pre> marc=# EXPLAIN ANALYZE SELECT * FROM test WHERE a &gt; '2010-06-03 13:37:00';
+ QUERY PLAN                                                      
+ -----------------------------------------------------------------------------------------------------------------------
+ Index Scan using idxtsta on test  (cost=0.00..43.98 rows=1125 width=8) (actual time=0.012..13.590 rows=10000 loops=1)
+ Index Cond: (a &gt; '2010-06-03 13:37:00'::timestamp without time zone)
+ Total runtime: 23.567 ms
+ (3 rows)
+</pre>
+<p>The estimated rows isn't 0 or 1 anymore. The statistics haven't been updated, though:
+</p>
+<pre> marc=# SELECT last_autoanalyze FROM pg_stat_user_tables WHERE relname = 'test';
+ last_autoanalyze       
+ -------------------------------
+ 2010-06-03 13:36:21.553477+02
+ (1 row)
+</pre>
+<p>We still have a one magnitude error in the evaluation (10 times). But it's not that bad: without this enhancement, it would be of four magnitudes (10,000). Anyway, a much smaller error makes it more likely we'll get a good plan out of this kind of queries.
+</p>
+<a name="Per_tablespace_seq_page_cost.2Frandom_page_cost"></a><h3> <span class="mw-headline">Per tablespace seq_page_cost/random_page_cost</span></h3>
+<pre> marc=# ALTER TABLESPACE pg_default SET ( random_page_cost = 10, seq_page_cost=5);
+ ALTER TABLESPACE
+</pre>
+<p>We just changed random_page_cost and seq_page_cost for all the objects contained in pg_default. What for&nbsp;?
+</p><p>The use case is when different tablespaces have different performance: for instance, you have some critical data on a SSD drive, or historical data on an older disk array, slower than the brand new array you use for active data. This makes it possible to tell PostgreSQL that all your tablespaces don't always behave the same way, from a performance point of view. This is only useful, of course, for quite big databases.
+</p>
+<a name="Force_distinct_statistics_on_a_column"></a><h3> <span class="mw-headline">Force distinct statistics on a column</span></h3>
+<p>This makes it possible to set the number of different values for a column. This mustn't be used lightly, but only when ANALYZE on this column can't get a good value.
+</p><p>Here's how to do this:
+</p>
+<pre> marc=# ALTER TABLE test ALTER COLUMN a SET (n_distinct = 2);
+ ALTER TABLE
+</pre>
+<p>ANALYZE has to be run again for this to be taken into account:
+</p>
+<pre> marc=# ANALYZE test;
+ ANALYZE
+</pre>
+<p>Let's try now:
+</p>
+<pre> marc=# EXPLAIN SELECT distinct * from test;
+ QUERY PLAN                           
+ ------------------------------------------------------------------
+ HashAggregate  (cost=6263.00..6263.02 rows=2 width=8)
+ -&gt;  Seq Scan on test  (cost=0.00..5338.00 rows=370000 width=8)
+ (2 rows)
+</pre>
+<p>This is an example of what SHOULDN'T be done&nbsp;: there REALLY is 370 000 distinct values in my table. Now my execution plans may be very bad.
+</p><p>If n_distinct is positive, it's the number of distinct values.
+</p><p>If it's negative (between 0 and -1), it's the multiplying factor regarding the number of estimated records in the table: for instance, -0.2 means that there is a distinct value for each 5 records of the table.
+</p><p>0 brings the behavior back to normal (ANALYZE estimates distinct by itself).
+</p><p>Don't change this parameter, unless you are completely sure you have correctly diagnosed you problem. Else, be assured performance will be degraded.
+</p><p><br>
+</p><p>Many other aspects of the database have been improved. Here are a few amongst them:
+</p>
+<a name="Better_VACUUM_FULL"></a><h3> <span class="mw-headline">Better VACUUM FULL</span></h3>
+<p>Until now, VACUUM FULL was very slow. This statement can recover free space from a table to reduce its size, mostly when VACUUM itself hasn't been run frequently enough.
+</p><p>It was slow because of the way it operated: records were read and moved one by one from their source bloc to a bloc closer to the beginning of the table. Once the end of the table was emptied, this empty part was removed.
+</p><p>This strategy was very inefficient: moving records one by one creates a lot of random IO. Moreover, during this reorganization, indexes had to be maintained, making everything even more costly, and fragmenting indexes. It was therefore advised to reindex a table just after a VACUUM FULL.
+</p><p>The VACUUM FULL statement, as of version 9.0, creates a new table from the current one, copying all the records sequentially. Once all records are copied, index are created back, and the old table is destroyed and replaced.
+</p><p>This has the advantage of being much faster. VACUUM FULL still needs an AccessExclusiveLock while running though. The only drawback of this method compared to the old one, is that VACUUM FULL can use as much as two times the size of the table on disk, as it is creating a new version of it.
+</p><p>Let's now compare the runtimes of the two methods. In both cases, we prepare the test data as follows (for 8.4 and 9.0)
+</p>
+<pre> marc=# CREATE TABLE test (a int);
+ CREATE TABLE
+ marc=# CREATE INDEX idxtsta on test (a);
+ CREATE INDEX
+ marc=# INSERT INTO test SELECT generate_series(1,1000000);
+ INSERT 0 1000000
+ marc=# DELETE FROM test where a%3=0; -- making holes everywhere
+ DELETE 333333
+ marc=# VACUUM test;
+ VACUUM
+</pre>
+<p>With 8.4:
+</p>
+<pre> marc=# \timing
+ Timing is on.
+ marc=# VACUUM FULL test;
+ VACUUM
+ Time: 6306,603 ms
+ marc=# REINDEX TABLE test;
+ REINDEX
+ Time: 1799,998 ms
+</pre>
+<p>So around 8 seconds.
+With 9.0:
+</p>
+<pre> marc=# \timing
+ Timing is on.
+ marc=# VACUUM FULL test;
+ VACUUM
+ Time: 2563,467 ms
+</pre>
+<p>That still doesn't mean that VACUUM FULL is a good idea in production. If you need it, it's probably because your VACUUM policy isn't appropriate.
+</p>
+<a name="64_bits_for_windows."></a><h3> <span class="mw-headline">64 bits for windows.</span></h3>
+<p>There is now a 64 bits version of PostgreSQL for Windows. There is no evidence for now the 500MB shared_buffers size limit before performance degrades seen on the 32 bits version for Windows is solved with this 64&nbsp;bit version, though. But there are many other reasons you may want to use this 64 bit version, such as larger work_mem.
+</p>
+<a name="PL.2FpgSQL_by_default"></a><h3> <span class="mw-headline">PL/pgSQL by default</span></h3>
+<p>You won't have to add PL/pgSQL in databases, as it will be installed by default.
+</p>
+<a name="Many_improvements_on_PL_languages."></a><h3> <span class="mw-headline">Many improvements on PL languages.</span></h3>
+<p>Many languages have been vastly improved, PLPerl for instance. Read the release notes if you want more details, there are too many to detail here.
+</p>
+<a name="ALIAS_keyword"></a><h3> <span class="mw-headline">ALIAS keyword</span></h3>
+<p>ALIAS can now be used. As its name suggests, it can be used to alias variable names to other names.
+</p><p>The syntax is <tt>new_name ALIAS FOR old_name</tt>. This is put in the DECLARE section of PL/pgSQL code.
+</p><p>It has two main use cases:
+</p>
+<ul><li> to give names to PL functions variables:
+</li></ul>
+<pre> myparam ALIAS FOR $0
+</pre>
+<ul><li> to rename potentially conflicting variables. In a trigger for instance:
+</li></ul>
+<pre> new_value ALIAS FOR new
+</pre>
+<dl><dd> (without this, we might have conflicted with the NEW variable in the trigger function).
+</dd></dl>
+<a name="Message_passing_in_NOTIFY.2Fpg_notify"></a><h3> <span class="mw-headline">Message passing in NOTIFY/pg_notify</span></h3>
+<p>Messages can now be passed using NOTIFY. Here is how:
+</p>
+<ul><li> Subscribe in session 1 to the 'instant_messenging' queue.
+</li></ul>
+<dl><dd> Session 1:
+</dd></dl>
+<pre> marc=# LISTEN instant_messenging;
+ LISTEN
+</pre>
+<ul><li> Send a notification through 'instant_messenging', from another session
+</li></ul>
+<dl><dd> Session 2:
+</dd></dl>
+<pre> marc=# NOTIFY instant messenging, 'You just received a message';
+ NOTIFY
+</pre>
+<ul><li> Check the content of the queue in the first session
+</li></ul>
+<dl><dd> Session 1:
+</dd></dl>
+<pre> marc=# LISTEN instant_messenging;
+ LISTEN
+ Asynchronous notification "instant_messenging" with payload "You just received a message" received from server process with PID 5943.
+</pre>
+<p>So we can now associate messages (payloads) with notifications, making NOTIFY even more useful.
+</p><p>Let's also mention the new pg_notify function. With it, the second session's code can also be:
+</p>
+<pre> SELECT pg_notify('instant_messenging','You just received a message');
+</pre>
+<p>This can simplify some code, in the case of a program managing a lot of different queues.
+</p>
+<a name="get_bit_and_set_bit_for_bit_strings"></a><h3> <span class="mw-headline">get_bit and set_bit for bit strings</span></h3>
+<p>Here is a very simple example. This tool can manipulate bits in a bit() independently.
+</p>
+<pre> marc=# SELECT set_bit('1111'::bit(4),2,0);
+ set_bit
+ ---------
+ 1101
+ (1 row)
+</pre>
+<p><br>
+</p>
+<pre> marc=# SELECT get_bit('1101'::bit(4),2);
+ get_bit
+ ---------
+       0
+ (1 row)
+</pre>
+<a name="application_name_in_pg_stat_activity"></a><h3> <span class="mw-headline">application_name in pg_stat_activity</span></h3>
+<p>In a monitoring session:
+</p>
+<pre> marc=# SELECT * from pg_stat_activity where procpid= 5991;
+ datid | datname | procpid | usesysid | usename | application_name | client_addr | client_port |         backend_start         | xact_start | query_start | waiting | current_query
+ ------+---------+---------+----------+---------+------------------+-------------+-------------+-------------------------------+------------+-------------+---------+----------------
+ 16384 | marc    |    5991 |       10 | marc    | psql             |             |          -1 | 2010-05-16 13:48:10.154113+02 |            |             | f       | &lt;IDLE&gt;
+ (1 row)
+</pre>
+<p>In the '5991' session:
+</p>
+<pre> marc=# SET application_name TO 'my_app';
+ SET
+</pre>
+<p>Back to the monitoring session:
+</p>
+<pre> &gt;marc=# SELECT * from pg_stat_activity where procpid= 5991;
+ datid | datname | procpid | usesysid | usename | application_name | client_addr | client_port |         backend_start         | xact_start |          query_start          | waiting | current_query
+ ------+---------+---------+----------+---------+------------------+-------------+-------------+-------------------------------+------------+-------------+---------+-----------------+----------------
+ 16384 | marc    |    5991 |       10 | marc    | my_app           |             |          -1 | 2010-05-16 13:48:10.154113+02 |            | 2010-05-16 13:49:13.107413+02 | f       | &lt;IDLE&gt;
+ (1 row)
+</pre>
+<p>It's your job to set this up correctly in your program or your sessions. Your DBA will thank you for this, at last knowing who runs what on the database easily.
+</p>
+<a name="Per_database.2Brole_configuration"></a><h3> <span class="mw-headline">Per database+role configuration</span></h3>
+<p>Instead of being able to set up configuration variables per database or per user, one can now set them up for a certain user in a certain database:
+</p>
+<pre> marc=# ALTER ROLE marc IN database marc set log_statement to 'all';
+ ALTER ROLE
+</pre>
+<p>To know who has which variables set-up in which user+database, there is a new psql command:
+</p>
+<pre> marc=# \drds
+         List of settings
+ role | database |     settings
+ -----+----------+-----------------
+ marc | marc     | log_statement=all
+ (1 row)
+</pre>
+<p>There was a catalog change to store this:
+</p>
+<pre> Table "pg_catalog.pg_db_role_setting"
+   Column    |  Type  | Modifier
+ ------------+--------+----------
+ setdatabase | oid    | not null
+ setrole     | oid    | not null
+ setconfig   | text   |
+</pre>
+<a name="Log_all_changed_parameters_on_a_postgresql.conf_reload"></a><h3> <span class="mw-headline">Log all changed parameters on a postgresql.conf reload</span></h3>
+<p>Here is an example, the log_line_prefix parameter has been changed:
+</p>
+<pre> LOG:&nbsp; received SIGHUP, reloading configuration files
+ &lt;%&gt; LOG:&nbsp; parameter "log_line_prefix" changed to "&lt;%u%%%d&gt; "
+</pre>
+<a name="New_frame_options_for_window_functions"></a><h3> <span class="mw-headline">New frame options for window functions</span></h3>
+<p>If you don't know window functions yet, you'd better learn about them. You can start here&nbsp;: &lt;a href='<a href="http://www.depesz.com/index.php/2009/01/21/waiting-for-84-window-functions'" class="external free" title="http://www.depesz.com/index.php/2009/01/21/waiting-for-84-window-functions'" rel="nofollow">http://www.depesz.com/index.php/2009/01/21/waiting-for-84-window-functions'</a> /&gt;. They make writing certain kind of queries much easier.
+</p><p>New options have been added for declaring frames of windowing functions. Let's use this table (not having a better example…)
+</p>
+<pre> marc=# SELECT * FROM salary&nbsp;;
+ entity     | name      | salary | start_date
+ -----------+-----------+---------+---------------
+ R&amp;D        | marc      |  700.00 | 2010-02-15
+ Accounting | jack      |  800.00 | 2010-05-01
+ R&amp;D        | maria     |  700.00 | 2009-01-01
+ R&amp;D        | kevin     |  500.00 | 2009-05-01
+ R&amp;D        | john      | 1000.00 | 2008-07-01
+ R&amp;D        | tom       | 1100.00 | 2005-01-01
+ Accounting | millicent |  850.00 | 2006-01-01
+</pre>
+<p>Here is a window function example, without declaring the frame:
+</p>
+<pre> marc=# SELECT entity, name, salary, start_date, avg(salary) OVER (PARTITION BY entity ORDER BY start_date) FROM salary;
+ entity     | name      | salary | start_date    |          avg         
+ -----------+-----------+---------+---------------+-----------------------
+ Accounting | millicent |  850.00 | 2006-01-01    |  850.0000000000000000
+ Accounting | jack      |  800.00 | 2010-05-01    |  825.0000000000000000
+ R&amp;D        | tom       | 1100.00 | 2005-01-01    | 1100.0000000000000000
+ R&amp;D        | john      | 1000.00 | 2008-07-01    | 1050.0000000000000000
+ R&amp;D        | maria     |  700.00 | 2009-01-01    |  933.3333333333333333
+ R&amp;D        | kevin     |  500.00 | 2009-05-01    |  825.0000000000000000
+ R&amp;D        | marc      |  700.00 | 2010-02-15    |  800.0000000000000000
+</pre>
+<p>The frame is the group of records over which the window function is run. Of course, if the frame isn't explicitly declared, there is a default one.
+</p><p>Here is the same query, with an explicit frame:
+</p>
+<pre> marc=# SELECT entity, name, salary, start_date, avg(salary) OVER (PARTITION BY entity ORDER BY start_date    RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) FROM salary;
+ entity     | name      | salary | start_date    |          avg         
+ -----------+-----------+---------+---------------+-----------------------
+ Accounting | millicent |  850.00 | 2006-01-01    |  850.0000000000000000
+ Accounting | jack      |  800.00 | 2010-05-01    |  825.0000000000000000
+ R&amp;D        | tom       | 1100.00 | 2005-01-01    | 1100.0000000000000000
+ R&amp;D        | john      | 1000.00 | 2008-07-01    | 1050.0000000000000000
+ R&amp;D        | maria     |  700.00 | 2009-01-01    |  933.3333333333333333
+ R&amp;D        | kevin     |  500.00 | 2009-05-01    |  825.0000000000000000
+ R&amp;D        | marc      |  700.00 | 2010-02-15    |  800.0000000000000000
+</pre>
+<p>In this example, the frame is a 'range' frame, between the start of the partition (the group of similar rows) and the current row (not exactly the current row, but let's put that aside for now, read the documentation if you want to learn more). One can see, the average (avg) function is evaluated from the frame's first row (grouped together records) and the current row.
+</p><p>First new feature: as of 9.0, the frame can be declared to be between the current row and the end of the partition:
+</p>
+<pre> marc=# SELECT entity, name, salary, start_date, avg(salary)  OVER (PARTITION BY entity ORDER BY start_date    RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) FROM salary;
+ entity     | name      | salary | start_date    |         avg         
+ -----------+-----------+---------+---------------+----------------------
+ Accounting | millicent |  850.00 | 2006-01-01    | 825.0000000000000000
+ Accounting | jack      |  800.00 | 2010-05-01    | 800.0000000000000000
+ R&amp;D        | tom       | 1100.00 | 2005-01-01    | 800.0000000000000000
+ R&amp;D        | john      | 1000.00 | 2008-07-01    | 725.0000000000000000
+ R&amp;D        | maria     |  700.00 | 2009-01-01    | 633.3333333333333333
+ R&amp;D        | kevin     |  500.00 | 2009-05-01    | 600.0000000000000000
+ R&amp;D        | marc      |  700.00 | 2010-02-15    | 700.0000000000000000
+</pre>
+<p>Second new feature: frames can be declared as 'x previous records to y next records'. There is no point with this example, but let's do it anyway::
+</p>
+<pre> marc=# SELECT entity, name, salary, start_date, avg(salary)  OVER (PARTITION BY entity ORDER BY start_date    RANGE ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) FROM salary;
+ entity     | name      | salary | start_date    |          avg         
+ -----------+-----------+---------+---------------+-----------------------
+ Accounting | millicent |  850.00 | 2006-01-01    |  825.0000000000000000
+ Accounting | jack      |  800.00 | 2010-05-01    |  825.0000000000000000
+ R&amp;D        | tom       | 1100.00 | 2005-01-01    | 1050.0000000000000000
+ R&amp;D        | john      | 1000.00 | 2008-07-01    |  933.3333333333333333
+ R&amp;D        | maria     |  700.00 | 2009-01-01    |  733.3333333333333333
+ R&amp;D        | kevin     |  500.00 | 2009-05-01    |  633.3333333333333333
+ R&amp;D        | marc      |  700.00 | 2010-02-15    |  600.0000000000000000
+</pre>
+<p>The frame is still limited to the partition (see tom's record, for instance: jack's record isn't use for it's average).
+</p><p>If one wanted the same query, with a moving average on three rows, not reset on each partition switch (still no practical use):
+</p>
+<pre> marc=# SELECT entity, name, salary, start_date, avg(salary) OVER (ORDER BY entity, start_date    ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) FROM salary;
+ entity     | name      | salary | start_date    |         avg         
+ -----------+-----------+---------+---------------+----------------------
+ Accounting | millicent |  850.00 | 2006-01-01    | 825.0000000000000000
+ Accounting | jack      |  800.00 | 2010-05-01    | 916.6666666666666667
+ R&amp;D        | tom       | 1100.00 | 2005-01-01    | 966.6666666666666667
+ R&amp;D        | john      | 1000.00 | 2008-07-01    | 933.3333333333333333
+ R&amp;D        | maria     |  700.00 | 2009-01-01    | 733.3333333333333333
+ R&amp;D        | kevin     |  500.00 | 2009-05-01    | 633.3333333333333333
+ R&amp;D        | marc      |  700.00 | 2010-02-15    | 600.0000000000000000
+</pre>
+<p>In short, a power full tool to be mastered, even if I couldn't provide a good example.
+</p>
+<a name="Sort_in_aggregates"></a><h3> <span class="mw-headline">Sort in aggregates</span></h3>
+<p>This feature is a subtle one: the result of an aggregate function may depend on the order it receives the data.
+</p><p>Of course, we're not talking about count, avg, but of array_agg, string_agg…
+</p><p>This is nice, as this will showcase string_agg, which is another 9.0 feature, killing two birds with one stone.
+</p><p>Let's start again with our salary table. We want the list of employees, concatenated as a single value, grouped by entity. It's going into a spreadsheet…
+</p>
+<pre> marc=# SELECT entity,string_agg(name,', ') FROM salary GROUP BY entity;
+ entity     |          string_agg          
+ -----------+-------------------------------
+ Accounting | jack, millicent
+ R&amp;D        | marc, maria, kevin, john, tom
+</pre>
+<p>That's already nice. But I want them sorted in alphabetical order, because I don't know how to write a macro in my spreadsheet to sort this data.
+</p>
+<pre> marc=# SELECT entity,string_agg(name,', ' ORDER BY name) FROM salary GROUP BY entity;
+ entity     |          string_agg          
+ -----------+-------------------------------
+ Accounting | etienne, stephanie
+ R&amp;D        | john, kevin, marc, maria, tom
+</pre>
+<p>To use this new feature, the sort clause must be inserted inside the aggregate function, without a comma to separate it from the parameters.
+</p>
+<a name="Better_unique_constraints_error_messages"></a><h3> <span class="mw-headline">Better unique constraints error messages</span></h3>
+<p>With 8.4: 
+</p>
+<pre> marc=# INSERT INTO test VALUES (1);
+ ERROR:  duplicate key value violates unique constraint "test_a_key"
+</pre>
+<p>With 9.0:
+</p>
+<pre> marc=# INSERT INTO test VALUES (1);
+ ERROR:  duplicate key value violates unique constraint "test_a_key"
+ DETAIL:  Key (a)=(1) already exists.
+</pre>
+<p>This will make diagnosing constraint violation errors much easier.
+</p>
+<a name="Explain_buffers.2C_hashing_statistics.2C_xml.2C_json.2C_yaml.2C_new_optional_explain_syntax"></a><h3> <span class="mw-headline">Explain buffers, hashing statistics, xml, json, yaml, new optional explain syntax</span></h3>
+<p>Here is EXPLAIN ANALYZE as we all know it:
+</p>
+<pre> marc=# EXPLAIN ANALYZE SELECT a, sum(c) FROM pere JOIN fils ON (pere.a = fils.b) WHERE b BETWEEN 1000 AND 300000 GROUP BY a;
+                                                           QUERY PLAN                                                          
+ ---------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=905.48..905.86 rows=31 width=8) (actual time=0.444..0.453 rows=6 loops=1)
+   -&gt;  Nested Loop  (cost=10.70..905.32 rows=31 width=8) (actual time=0.104..0.423 rows=6 loops=1)
+         -&gt;  Bitmap Heap Scan on fils  (cost=10.70..295.78 rows=31 width=8) (actual time=0.040..0.154 rows=30 loops=1)
+               Recheck Cond: ((b &gt;= 1000) AND (b &lt;= 300000))
+               -&gt;  Bitmap Index Scan on fils_pkey  (cost=0.00..10.69 rows=31 width=0) (actual time=0.023..0.023 rows=30 loops=1)
+                     Index Cond: ((b &gt;= 1000) AND (b &lt;= 300000))
+         -&gt;  Index Scan using pere_pkey on pere  (cost=0.00..19.65 rows=1 width=4) (actual time=0.005..0.005 rows=0 loops=30)
+               Index Cond: (pere.a = fils.b)
+ Total runtime: 0.560 ms
+ (9 rows)
+</pre>
+<p>To get access to the new available information, use the new syntax::
+</p>
+<pre> EXPLAIN [ ( { ANALYZE boolean | VERBOSE boolean | COSTS boolean | BUFFERS boolean | FORMAT { TEXT | XML | JSON | YAML } } [, ...] ) ] instruction
+</pre>
+<p>For instance:
+</p>
+<pre> marc=# EXPLAIN (ANALYZE true, VERBOSE true, BUFFERS true) SELECT a, sum(c) FROM pere JOIN fils ON (pere.a = fils.b) WHERE b BETWEEN 1000 AND 300000 GROUP BY a;
+                                                             QUERY PLAN
+ -------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=905.48..905.86 rows=31 width=8) (actual time=1.326..1.336 rows=6 loops=1)
+   Output: pere.a, sum(fils.c)
+   Buffers: shared hit=58 read=40
+   -&gt;  Nested Loop  (cost=10.70..905.32 rows=31 width=8) (actual time=0.278..1.288 rows=6 loops=1)
+         Output: pere.a, fils.c
+         Buffers: shared hit=58 read=40
+         -&gt;  Bitmap Heap Scan on public.fils  (cost=10.70..295.78 rows=31 width=8) (actual time=0.073..0.737 rows=30 loops=1)
+               Output: fils.b, fils.c
+               Recheck Cond: ((fils.b &gt;= 1000) AND (fils.b &lt;= 300000))
+               Buffers: shared hit=4 read=28
+               -&gt;  Bitmap Index Scan on fils_pkey  (cost=0.00..10.69 rows=31 width=0) (actual time=0.030..0.030 rows=30 loops=1)
+                     Index Cond: ((fils.b &gt;= 1000) AND (fils.b &lt;= 300000))
+                     Buffers: shared hit=3
+         -&gt;  Index Scan using pere_pkey on public.pere  (cost=0.00..19.65 rows=1 width=4) (actual time=0.013..0.014 rows=0 loops=30)
+               Output: pere.a
+               Index Cond: (pere.a = fils.b)
+               Buffers: shared hit=54 read=12
+ Total runtime: 1.526 ms
+ (18 rows)
+</pre>
+<p>VERBOSE displays the 'Output' lines (it already existed on 8.4).
+</p><p>BUFFERS displays data about buffers (input-output operations performed by the query): hit is the number of blocks obtained directly from shared_buffers, read is the number of blocs asked to the operating system. Here, there was very little data in shared_buffers.
+</p><p>One can also ask for another formatting than plain text. For a user, it's not useful. For people developing GUIs over EXPLAIN, it simplifies development as they can get rid of an 'explain' parser (and its potential bugs), and use a more standard one, such as XML.
+</p><p>Costs display can also be deactivated with COSTS false.
+</p>
+<a name="Unaccent_filtering_dictionary"></a><h3> <span class="mw-headline">Unaccent filtering dictionary</span></h3>
+<p>Filtering dictionaries can now be set up. This is about Full Text Search dictionaries.
+</p><p>These dictionaries' purpose it applying a first filter on words before lexemizing them. The module presented here is the first one to use this mechanism. Filtering can consist in removing words or modifying them.
+</p><p>Unaccent doesn't remove words, it removes accents (all diacritic signs, as a matter of fact), replacing accentuated characters with non-accentuated ones (many people, at least in French, don't type them). Unaccent is a contrib module.
+</p><p>Installing it, as all contrib modules, is as easy as
+</p>
+<pre> psql mydb &lt; contribs_path/unaccent.sql.
+</pre>
+<p>We'll now follow unaccent's documentation, the example being filtering french words.
+</p><p>Let's create a new 'fr' dictionary (keeping standard 'french' dictionary clean): 
+</p>
+<pre> marc=# CREATE TEXT SEARCH CONFIGURATION fr ( COPY = french );
+ CREATE TEXT SEARCH CONFIGURATION
+</pre>
+<p>The next statement alters the 'fr' setup for word and alike lexemes. These now have to go through unaccent and french_stem instead of only french_stem.
+</p>
+<pre> marc=# ALTER TEXT SEARCH CONFIGURATION fr
+ &gt;ALTER MAPPING FOR hword, hword_part, word
+ &gt;WITH unaccent, french_stem;
+ &gt;ALTER TEXT SEARCH CONFIGURATION
+ 
+ SELECT to_tsvector('fr','Hôtels de la Mer');
+ to_tsvector   
+ -------------------
+ 'hotel':1 'mer':4
+ (1 row)
+ 
+ marc=# SELECT to_tsvector('fr','Hôtel de la Mer') @@ to_tsquery('fr','Hotels');
+&nbsp;?column?
+ ----------
+ t
+ (1 row)
+</pre>
+<p>It's now easy, without changing even one line of code in the client application, and keeping accentuated characters in the database, to look up words without taking accents into account.
+</p>
+<a name="vacuumdb_--analyze-only"></a><h3> <span class="mw-headline">vacuumdb --analyze-only</span></h3>
+<p>As the parameter name's indicates, one can now use vacuumdb to run analyzes only. It may be useful for cronjobs for instance.
+</p>
+<a name="Hstore_contrib_enhancements"></a><h3> <span class="mw-headline">Hstore contrib enhancements</span></h3>
+<p>This already powerful contrib module has become even more powerful:
+</p>
+<ul><li> Keys and values size limit has been removed.
+</li><li> GROUP BY and DISTINCT can now be used.
+</li><li> New operators and functions have been added.
+</li></ul>
+<p>An example would take too long, this module has a lot of features. Read the documentation at once&nbsp;!
+</p>
+<a name="Statement_logged_by_auto_explain"></a><h3> <span class="mw-headline">Statement logged by auto_explain</span></h3>
+<p>auto_explain contrib module will now print the statement with its plan, which will make it much easier to use.
+</p>
+<a name="Buffers_accounting_for_pg_stat_statements"></a><h3> <span class="mw-headline">Buffers accounting for pg_stat_statements</span></h3>
+<p>This already very useful contrib module now provides data about buffers. pg_stat_statements, as a reminder, collects statistics on the queries run on the database. Until now, it stored the query's code, number of executions, accumulated runtime, accumulated returned records. It now collects buffer operations too.
+</p>
+<pre> marc=# SELECT * from pg_stat_statements order by total_time desc limit 2;
+ -[ RECORD 1 ]-------+---------------------
+ userid              | 10
+ dbid                | 16485
+ query               | SELECT * from table1&nbsp;;
+ calls               | 2
+ total_time          | 0.491229
+ rows                | 420000
+ shared_blks_hit     | 61
+ shared_blks_read    | 2251
+ shared_blks_written | 0
+ local_blks_hit      | 0
+ local_blks_read     | 0
+ local_blks_written  | 0
+ temp_blks_read      | 0
+ temp_blks_written   | 0
+ -[ RECORD 2 ]-------+---------------------
+ userid              | 10
+ dbid                | 16485
+ query               | SELECT * from table2;
+ calls               | 2
+ total_time          | 0.141445
+ rows                | 200000
+ shared_blks_hit     | 443
+ shared_blks_read    | 443
+ shared_blks_written | 0
+ local_blks_hit      | 0
+ local_blks_read     | 0
+ local_blks_written  | 0
+ temp_blks_read      | 0
+ temp_blks_written   | 0
+</pre>
+<p>When this contrib is installed, one can now answer these questions:
+</p>
+<ul><li> Which query has the biggest accumulated runtime&nbsp;?
+</li><li> Which query generates the most IO operations&nbsp;? (we still can't know if data has been found in the Operating System's cache)
+</li><li> Which query uses mostly the cache (and hence won't be faster if we make it bigger)&nbsp;?
+</li><li> Which query modifies the most blocks&nbsp;?
+</li><li> Who does sorting&nbsp;?
+</li></ul>
+<p>'temp' and 'local' are the buffer operations relative to temporary tables and other local operations (sorts, hashs) to a database backend.
+</p>
+<a name="passwordcheck"></a><h3> <span class="mw-headline">passwordcheck</span></h3>
+<p>This contrib module can check passwords, and prevent the worst of them from getting in. After having it installed and set up as described in the documentation, here is the result:
+</p>
+<pre> marc=# ALTER USER marc password 'marc12';
+ &lt;marc%marc&gt; ERROR:  password is too short
+ &lt;marc%marc&gt; STATEMENT:  ALTER USER marc password 'marc12';
+ ERROR:  password is too short
+ marc=# ALTER USER marc password 'marc123456';
+ &lt;marc%marc&gt; ERROR:  password must not contain user name
+ &lt;marc%marc&gt; STATEMENT:  ALTER USER marc password 'marc123456';
+ ERROR:  password must not contain user name
+</pre>
+<p>This module has limitations, mostly due to PostgreSQL accepting already encrypted passwords to be declared, making correct verification impossible. Nevertheless, it's a step forward in the right direction.
+</p><p>Moreover, its code is well documented, and can be easily adapted to suit specific needs (one can activate cracklib very easily, for instance)
+</p>
+<!-- 
+NewPP limit report
+Preprocessor node count: 50/1000000
+Post-expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+#ifexist count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikidb:pcache:idhash:1423-0!1!0!!en!2!edit=0 and timestamp 20100629052345 -->
+<div class="printfooter">
+Retrieved from "<a href="http://wiki.postgresql.org/wiki/What%27s_new_in_PostgreSQL_9.0">http://wiki.postgresql.org/wiki/What%27s_new_in_PostgreSQL_9.0</a>"</div>
+			<div class="visualClear"></div>
+		</div>
+</body>
+</html>

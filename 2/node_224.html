@@ -1,0 +1,18 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>mingw编译qt 4.4.x的问题</title>
+</head>
+<body>
+前两天qt 4.4.1 bug修正版本出来，正好nullfxp 发布新版本1.6.2，为编译windows版本的nullfxp准备编译这个版本的qt一起发布。
+
+在winxp, mingw 上编译qt 4.4.1的时候，在inputmethod目录下遇到一个编译问题。使用的g++版本为 4.2.1-sjlj.
+遇到错误可能是这个版本的g++不稳定，有bug的问题。把g++换到3.4.5稳定版本这个错误没有再出现。qt 4.4.1终于可以完整的编译出来了。(注： 在编译nullfxp的时候需要再把 gcc版本换为4.2.1)
+
+记得上次在mingw平台编译qt 4.4.0的时候遇到编译webkit时的问题，下载编译好的二进制版本用着了，当时使用的是同样的编译环境。出现错误的原因应该也在这。
+
+
+</body>
+</html>

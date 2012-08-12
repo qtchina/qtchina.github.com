@@ -1,0 +1,134 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>布局窗体上的物件</title>
+</head>
+<body>
+	有三种管理窗体上的子物件的布局的方法：绝对位置，手工布局和布局管理器。我们将依次看看每种方法，使用图6.1中的“Find File “对话框作为例子。
+图6.1　文件查找对话框
+
+
+	绝对位置法是布置物件的最让人讨厌的。它通过硬编码窗体上子物件的尺寸和位置以及固定尺寸的窗体。在上面是使用了绝对位置法的FindFileDialog构造函数：
+[code type="cpp-qt"]
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    namedLabel->setGeometry(9, 9, 50, 25);
+    namedLineEdit->setGeometry(65, 9, 200, 25);
+    lookInLabel->setGeometry(9, 40, 50, 25);
+    lookInLineEdit->setGeometry(65, 40, 200, 25);
+    subfoldersCheckBox->setGeometry(9, 71, 256, 23);
+    tableWidget->setGeometry(9, 100, 256, 100);
+    messageLabel->setGeometry(9, 206, 256, 25);
+    findButton->setGeometry(271, 9, 85, 32);
+    stopButton->setGeometry(271, 47, 85, 32);
+    closeButton->setGeometry(271, 84, 85, 32);
+    helpButton->setGeometry(271, 199, 85, 32);
+    setWindowTitle(tr("Find Files or Folders"));
+    setFixedSize(365, 240);
+}
+[/code]
+	绝对位置法有许多的缺点：
+用户不能调整窗口的尺寸。
+如果用户选择了非同寻常的大字体或者程序程序被翻译为另一种语言，可能一些文本会被截断。
+物件可能对某些风格有不适当的尺寸。
+位置和尺寸必须要手工计算出来，这是非常乏味的，容易出错的，让人感觉非常的痛苦。
+绝对位置法的一个替代是人工布局。使用人工布局，物件依旧被给定绝对位置，但它们的尺寸可自动适应窗口的尺寸而不必都进行硬编码。这可通过重新实现窗体的resize()函数设置它的子物件的几何参数：
+[code type="cpp-qt"]
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    setMinimumSize(265, 190);
+    resize(365, 240);
+}
+void FindFileDialog::resizeEvent(QResizeEvent * /* event */)
+{
+    int extraWidth = width() - minimumWidth();
+    int extraHeight = height() - minimumHeight();
+    namedLabel->setGeometry(9, 9, 50, 25);
+    namedLineEdit->setGeometry(65, 9, 100 + extraWidth, 25);
+    lookInLabel->setGeometry(9, 40, 50, 25);
+    lookInLineEdit->setGeometry(65, 40, 100 + extraWidth, 25);
+    subfoldersCheckBox->setGeometry(9, 71, 156 + extraWidth, 23);
+    tableWidget->setGeometry(9, 100, 156 + extraWidth,
+                             50 + extraHeight);
+    messageLabel->setGeometry(9, 156 + extraHeight, 156 + extraWidth,
+                              25);
+    findButton->setGeometry(171 + extraWidth, 9, 85, 32);
+    stopButton->setGeometry(171 + extraWidth, 47, 85, 32);
+    closeButton->setGeometry(171 + extraWidth, 84, 85, 32);
+    helpButton->setGeometry(171 + extraWidth, 149 + extraHeight, 85,
+                            32);
+}
+[/code]
+	在FindFileDialog的构造函数中，我们设置窗体的最小尺寸为266x190，设置初始化尺寸为365x240。在resizeEvent()处理函数中，我们要给物件所有额外的空间以便能增长它的尺寸。这可保证当用户调整它的尺寸时窗体能平滑缩放。
+图6.2　调整一个可调整大小的对话框
+
+
+	就像绝对位置法一样，人工布局需要程序员计算许多硬编码常量。这样的编码是烦人的，物件是在设置改变了的时候。并且这还是可能文本被截断的风险。我们可以通过充分利用子物件的尺寸暗示避免此风险，但这很可能使编码更加复杂。
+	布置窗体上的物件的最方便的解决方法是使用Qt的布局管理器。布局管理器为物件的每种类型都提供了很明智的默认行为并且充分利用了每个物件的尺寸暗示，它们一般都依赖于物件的字体，风格和内容。布局管理器还会考虑最小和最大的尺寸，并能自动调用负责字体改变、内容变化和窗口尺寸变化的布局。
+	最重要的3种布局管理器是QHBoxLayout, QVBoxLayout, 和 QGridLayout。这些类继承自QLayout，它为布局提供了基本的框架。Qt Designer完全所有这3个类，并且也能直接在代码中使用。
+	下面的FindFileDialog代码使用了布局管理器：
+[code type="cpp-qt"]
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    QGridLayout *leftLayout = new QGridLayout;
+    leftLayout->addWidget(namedLabel, 0, 0);
+    leftLayout->addWidget(namedLineEdit, 0, 1);
+    leftLayout->addWidget(lookInLabel, 1, 0);
+    leftLayout->addWidget(lookInLineEdit, 1, 1);
+    leftLayout->addWidget(subfoldersCheckBox, 2, 0, 1, 2);
+    leftLayout->addWidget(tableWidget, 3, 0, 1, 2);
+    leftLayout->addWidget(messageLabel, 4, 0, 1, 2);
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(findButton);
+    rightLayout->addWidget(stopButton);
+    rightLayout->addWidget(closeButton);
+    rightLayout->addStretch();
+    rightLayout->addWidget(helpButton);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addLayout(leftLayout);
+    mainLayout->addLayout(rightLayout);
+    setLayout(mainLayout);
+    setWindowTitle(tr("Find Files or Folders"));
+}
+[/code]
+	该布局使用了一个QHBoxLayout, 一个QGridLayout, 和 一个 QVBoxLayout来处理。左边的QgridLayout和右边的QVBoxLayout并排在一起放置在外面的QHBoxLayout中。对话框周围的边距和子物件间的空间被设置为基于当前物件风格类型的默认值。它们可通过QLayout::setMargin() 和 QLayout::setSpacing()来改变。
+	在Qt设计师中可以可视化地把子物件放置到它们合适的位置来创建出相同的方法。选中需要布置的物件，再点击网格中的“Form|Lay Out Horizontally“，”Form|Lay Out Vertically“, 或” Form|Lay Out“ 。我们曾在第2章中使用这种方法创建Spreadsheet程序的”转到单元格“和排序对话框。
+图6.3　文件查找对话框的布局
+
+
+	QHBoxLayout 和 QVBoxLayout的使用非常的直接，但QgridLayout的使用有那一点复杂。QgridLayout工作于一个二维网关单元格。在布局左上角的QLabel的位置为(0,0)，对应的QlineEdit位置为(0,1)。QcheckBox跨越了两列，它占据了位置为(2,0)和（2,1)的单元格。QtreeWidget和它下面的QLabel也跨越了两列。addWidget()调用的讲法如下所示：
+
+layout->addWidget(widget, row, column, rowSpan, columnSpan);
+
+	这里widget是要插入到布局中的子物件，（row,column）是被该物件占据的左上角单元格，rowSpan是该物件占据的行数，columnSpan是该物件占据的列数。如果被忽略了，rowSpan和columnSpan参数默认设为1。
+	addStretch()调用告诉布局管理器用尽该布局中此处的空间。通过添加一个伸缩项，我们就等于告诉了布局管理器在”Close”按钮和”Help”按钮间放置一个足够大的空间。在Qt设计师中，我们可以通过插入一个间隔生成物件。Qt设计师中的间隔生成物件显示为一个绿色的“弹簧“。
+	布局管理器还提供了我们现在为止还没有涉及的优点。如果我们向布局添加一个物件到或者从布局中删除一个物件，布局会自动适应新的情况。如果我们调用一个子物件的hide()或show()情况也一样。如果一个子物件的尺寸暗示改变了，该布局会自动重做，并充分利用新的尺寸暗示。并且布局管理器还能自动根据窗体的子物件的最小尺寸和尺寸暗示设置整个窗体的最小尺寸。
+	在前面看到的例子中，我们只是简单的把物件放到布局中并使用间隔生成器（伸缩器）来占据所有多余空间。在某些情况下，这并不能有效的得到我们所需类型的布局。这些情况下，我们可以通过改变要布置的物件的尺寸策略和尺寸暗示调用该布局。
+	物件的尺寸策略告诉布局管理系统它是否能被拉伸或者缩放。Qt为它的所有内建物件提供了明智的默认尺寸策略，但因为没有单个的默认值无法解释每种可能的布局，对开发者来说依旧需要为窗体上的一两个物件改变它们的尺寸策略。QsizePolicy兼有水平和垂直组件。下面是它的最有用的值：
+
+Fixed 意味着物件不能伸长或者缩小。物件总是坚持它的尺寸暗示的值。
+Minimum 意味着物件的尺寸暗示是它的最小值。物件不能缩小到低于尺寸暗示的值，但必要的话它能伸长以填充可用空间。
+Maximum 意味着物件的尺寸暗示是它的最大尺寸。物件可以被缩小到它的最小尺寸暗示值。
+Preferred 意味着物件的尺寸暗示是它的首选值，但必要的话物件能缩小或者伸长。
+Expanding 意味着物件能缩小或者伸长并且它将优先伸长。
+
+图6.4　总结了不同尺寸策略意义，并使用显示文本"Some Text" 的QLabel作为例子。
+图6.4　不同尺寸策略的意义
+
+
+		在图中，Preferred 和 Expanding以相同的方式描述的。那么不同之处是什么呢？当一个包含Preferred 和 Expanding 两种类型的物件的窗体都被调整大小的时候，额外的空间给了Expanding的物件，而Preferred的物件坚持它们的尺寸暗示。
+还有其他两种尺寸策略：MinimumExpanding 和 Ignored。前都在Qt的老版本中一些罕见的情况下有必要，但它不再被使用了。更好的方法是使用Expanding并重新实现适当的minimumSizeHint()。后者与Expanding类似，但它忽略了物件尺寸暗示和最小尺寸暗示。
+	除了尺寸策略的水平和垂直组件，QsizePolicy类还存储了水平和垂直伸缩因子。这些伸缩因子可被用于表示在窗体扩展的时候不同的子物件应该以不同的速率伸长。例如，如果我们在QTextEdit上面有一个QtreeWidget并且我们希望QTextEdit应该是QtreeWidget的两倍高，那么我们可以把QTextEdit的垂直伸长因子设为2并把QtreeWidget's的垂直伸缩因子设为1。
+	然而其他影响布局的方法有设置子物件的最小尺寸，最大尺寸或者固定尺寸。布局管理器将会在布置这些物件的时候充分考虑这些常量。并且如果这还不够的话，我们还可从子物件类继承并重新实现sizeHint()来获得我们需要的尺寸暗示。
+
+
+</body>
+</html>

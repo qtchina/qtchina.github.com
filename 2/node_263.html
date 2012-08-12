@@ -1,0 +1,14 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>cmake中如何指定非系统路径中的qt版本</title>
+</head>
+<body>
+在cmake命令行使用参数 
+    -DQT_QMAKE_EXECUTABLE:FILEPATH=/path/to/your/qt/bin/qmake
+如： cmake -DQT_QMAKE_EXECUTABLE:FILEPATH=/path/to/your/qt/bin/qmake .
+将/path/to/your/qt/bin/qmake 换成不同的qt版本，可以生成依赖不同qt版本的Makefile文件。
+</body>
+</html>

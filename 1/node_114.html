@@ -1,0 +1,296 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>第3章 创建主窗口 (创建QMainWindow的子类)</title>
+</head>
+<body>
+<h3>&nbsp;<input type="image" src="/upfile/image/043fig1.jpg" width="200" height="163" /><br />
+本章目录</h3>
+<p>创建QMainWindow的子类<br />
+创建菜单和工具栏<br />
+建立状态栏<br />
+实现File菜单<br />
+使用对话框<br />
+保存设置<br />
+多文档窗口<br />
+启动欢迎窗口</p>
+<p><br />
+本章将教你如何使用Qt创建主窗口。最后，你将能够创建一个完整的用户界面应用程序，包括菜单，工具栏，状态栏和许多应用程序中要用到的对话框。<br />
+应用程序主窗口提供了构建应用程序用户界面的基本框架。图 3.1中的电子表格窗口将构成本章的基础。该电子表格程序使用了第二章中创建的查找，跳转到单元，及排序对话框。<br />
+图 3.1. 电子表格程序<br />
+<br />
+在大多数GUI程序的背后都有大量的提供底层功能的代码,例如，用于读写文件或者处理用户界面中的数据表示的代码。在 Chapter 4 ，我们还将以这个电子表格程序为例来展示如何实现些类功能。<br />
+<input type="image" src="/upfile/image/spreadsheet_population.jpg" width="500" height="417" /><br />
+<br />
+&nbsp;</p>
+<h3>创建QmainWindow的子类<br />
+&nbsp;</h3>
+<p><br />
+应用程序的主窗口通过继承QMainWindow类来创建的。我们在第二章中看到的创建对话框的许多技术也可用于创建主窗口，因为QDialog和QMainWindow都是从Qwidget类继承的。<br />
+主窗口可用Qt 设计师创建，但本章中我们将用代码做这些工作以演示它是如何做的。如果你更倾向于可视化方法，请看Qt设计师在线手册中的&ldquo;在Qt设计师中创建主窗口&rdquo;一章。<br />
+电子表格程序的主窗口的源代码包括mainwindow.h和mainwindow.cpp两个文件。现在从头文件开始看起：<br />
+<br />
+#ifndef MAINWINDOW_H<br />
+#define MAINWINDOW_H<br />
+#include &lt;QMainWindow><br />
+class QAction;<br />
+class QLabel;<br />
+class FindDialog;<br />
+class Spreadsheet;<br />
+class MainWindow : public QMainWindow<br />
+{<br />
+&nbsp;   Q_OBJECT<br />
+public:<br />
+&nbsp;   MainWindow();<br />
+protected:<br />
+&nbsp;   void closeEvent(QCloseEvent *event);<br />
+<br />
+我们将类MainWindow 定义为QMainWindow的子类。由于它要提供自己的信号和槽，所以它包含了Q_OBJECT宏。<br />
+closeEvent()函数是QWidget中的一个虚函数，在用户关闭窗口的时候它被自动调用。它在MainWindow类中实现后，我们就能询问用户&ldquo;你要保存修改吗&rdquo;这样规范化的问题，然后就可以保存用户的参数设置到磁盘上。<br />
+<br />
+private slots:<br />
+&nbsp;   void newFile();<br />
+&nbsp;   void open();<br />
+&nbsp;   bool save();<br />
+&nbsp;   bool saveAs();<br />
+&nbsp;   void find();<br />
+&nbsp;   void goToCell();<br />
+&nbsp;   void sort();<br />
+&nbsp;   void about();<br />
+<br />
+一些菜单选项，如文件｜新建和帮助|关于，则作为私有槽在MainWindow中实现。大多数槽的返回值都是 void ，　但 save() 和saveAs() 返回的是 bool 值。该返回值在槽当作　信号的响应而执行时将被忽略，但是当我们把槽作为一个的函数调用时，我们可以得到它的返回值，正像我们调用任何普通C++函数一样。<br />
+&nbsp;   void openRecentFile();<br />
+&nbsp;   void updateStatusBar();<br />
+&nbsp;   void spreadsheetModified();<br />
+private:<br />
+&nbsp;   void createActions();<br />
+&nbsp;   void createMenus();<br />
+&nbsp;   void createContextMenu();<br />
+&nbsp;   void createToolBars();<br />
+&nbsp;   void createStatusBar();<br />
+&nbsp;   void readSettings();<br />
+&nbsp;   void writeSettings();<br />
+&nbsp;   bool okToContinue();<br />
+&nbsp;   bool loadFile(const QString &amp;fileName);<br />
+&nbsp;   bool saveFile(const QString &amp;fileName);<br />
+&nbsp;   void setCurrentFile(const QString &amp;fileName);<br />
+&nbsp;   void updateRecentFileActions();<br />
+&nbsp;   QString strippedName(const QString &amp;fullFileName);<br />
+<br />
+为支撑些用户界面，主窗口还需要几个么有槽和几个私有函数。<br />
+<br />
+&nbsp;   Spreadsheet *spreadsheet;<br />
+&nbsp;   FindDialog *findDialog;<br />
+&nbsp;   QLabel *locationLabel;<br />
+&nbsp;   QLabel *formulaLabel;<br />
+&nbsp;   QStringList recentFiles;<br />
+&nbsp;   QString curFile;<br />
+&nbsp;   enum { MaxRecentFiles = 5 };<br />
+&nbsp;   QAction *recentFileActions[MaxRecentFiles];<br />
+&nbsp;   QAction *separatorAction;<br />
+&nbsp;   QMenu *fileMenu;<br />
+&nbsp;   QMenu *editMenu;<br />
+&nbsp;   ...<br />
+&nbsp;   QToolBar *fileToolBar;<br />
+&nbsp;   QToolBar *editToolBar;<br />
+&nbsp;   QAction *newAction;<br />
+&nbsp;   QAction *openAction;<br />
+&nbsp;   ...<br />
+&nbsp;   QAction *aboutQtAction;<br />
+};<br />
+#endif<br />
+<br />
+MainWindow除了私有槽和私有函数外，它还有一些私有变量。所有这些都会在我们用到的时候做解释。<br />
+现存来预览一下实现：<br />
+#include &lt;QtGui><br />
+#include &quot;finddialog.h&quot;<br />
+#include &quot;gotocelldialog.h&quot;<br />
+#include &quot;mainwindow.h&quot;<br />
+#include &quot;sortdialog.h&quot;<br />
+#include &quot;spreadsheet.h&quot;<br />
+<br />
+我们包括了头文件&lt;QtGui>，它包含MainWindow中用到的所有Qt 类的定义。其中还包括了一些定制头文件，如第二章中的finddialog.h, gotocelldialog.h, 和 sortdialog.h。<br />
+<br />
+MainWindow::MainWindow()<br />
+{<br />
+&nbsp;   spreadsheet = new Spreadsheet;<br />
+&nbsp;   setCentralWidget(spreadsheet);<br />
+&nbsp;   createActions();<br />
+&nbsp;   createMenus();<br />
+&nbsp;   createContextMenu();<br />
+&nbsp;   createToolBars();<br />
+&nbsp;   createStatusBar();<br />
+&nbsp;   readSettings();<br />
+&nbsp;   findDialog = 0;<br />
+&nbsp;   setWindowIcon(QIcon(&quot;:/images/icon.png&quot;));<br />
+&nbsp;   setCurrentFile(&quot;&quot;);<br />
+}<br />
+<br />
+在构造函数中，我们在开始的地方创建一个Spreadsheet物件，然后将它设置为方窗口的主物件。该主物件占据主窗口的中央位置（见图3.2）。Spreadsheet是类QtableWidget的含有电子表格功能的子类，如电子表格的计算功能。我们将在第四章中实现它。<br />
+图3.2　QmainWindow的区域图<br />
+<input type="image" src="/upfile/image/qmainwndow_s.jpg" width="228" height="203" /><br />
+<br />
+我们调用私有函数createActions(), createMenus(), createContext-Menu(), createToolBars(), 和 createStatusBar()来创建主窗口的其他部分。另外还调用私有函数readSettings()来读取程序保存的设置。<br />
+我们将findDialog指针初始化成空指针。并在MainWindow::find()首次调用的时候创建FindDialog&nbsp;对象。<br />
+在构造函数的最后，我们把窗口图标设成一个PNG图像文件，icon.png。Qt支持许多图像类型，如BMP, GIF,[*] JPEG, PNG, PNM, XBM, 和 XPM。调用Qwidget::setWindowIcon()设置显示在窗口左上角的图标。遗憾的是，现在还没有一种平台无关方法用于设置显示在桌面上的应用程序图标。平台相关处理详见http://doc.trolltech.com/4.1/appicon.html。<br />
+[*] GIF 支持在Qt默认设置中是关闭的，因为Qt中使用的GIF 解压方法在一些承认软件专利的国家是需要专利许可的。我们知道这一专利现存已经过期。要打开Qt的GIF支持，可以将命令行参数-qt-gif传递给配置脚本，或者在Qt安装程序中设置适当的参数。<br />
+GUI 程序一般会用到许多图像。有几种给程序提供图像方法。最常用的是：<br />
+将图像保存在文件中，并在运行时加载。<br />
+在源代码中包含XPM 文件。（这是可行的，因为XPM 文件是有效的C++文件。)<br />
+使用Qt资源机制。<br />
+这里我们使用Qt的资源机制，因为它比运行时加载文件更方便，并且它对任何支持的文件格式都有效。我们选择将图像存储在源代码树中的一个叫images的子文件夹中。<br />
+要想使用Qt的资源系统，我们必须创建一个资源文件，并在.pro&nbsp;资源文件中加入一行。在本示例中，我们创建资源文件spreadsheet.qrc，然后把下面一行放到.pro文件中：<br />
+RESOURCES     = spreadsheet.qrc<br />
+<br />
+资源文件本身使用的是简单的XML格式。这是从我们曾经用过的文件中抽取出来的：<br />
+<br />
+&lt;!DOCTYPE RCC>&lt;RCC version=&quot;1.0&quot;><br />
+&lt;qresource><br />
+&nbsp;   &lt;file>images/icon.png&lt;/file><br />
+&nbsp;   ...<br />
+&nbsp;   &lt;file>images/gotocell.png&lt;/file><br />
+&lt;/qresource><br />
+&lt;/RCC><br />
+<br />
+资源文件被编译进可执行程序中，因而它们不会丢失。在引用资源的时候，我们使用路径前缀 :/ （冒号　斜线），这就是为什么图标被指定为:/images/icon.png。资源可以是任何类型的文件（不仅仅指图像），并且我们可以在Qt需要文件名的大多数地方使用它们。我们将在第12章做详细解释。<br />
+<br />
+<br />
+&nbsp;</p>
+<h3>创建菜单和工具栏</h3>
+<p><br />
+<br />
+大多数现代GUI应用程序会提供菜单，上下文菜单和工具栏。菜单能让用户探索应用程序和学习如何做新的事情，而上下文菜单和工具栏提供常用功能的快捷访问。<br />
+<br />
+图3.3　电子表格程序的菜单<br />
+<input type="image" src="/upfile/image/spreadsheet_menus.jpg" width="500" height="126" /><br />
+<br />
+Qt通过它的操作概念简化菜单和工具栏编程。操作（action）是能添加到许多菜单与工具栏的项（item）。在Qt中创建菜单和工具栏包含下面一些步骤：<br />
+创建并建立操作（actions）。<br />
+创建菜单并把它们与操作绑在一起。<br />
+创建工具栏并把它们与操作绑在一起。<br />
+在此电子表格程序中，操作在createActions()中创建：<br />
+void MainWindow::createActions()<br />
+{<br />
+&nbsp;   newAction = new QAction(tr(&quot;&amp;New&quot;), this);<br />
+&nbsp;   newAction->setIcon(QIcon(&quot;:/images/new.png&quot;));<br />
+&nbsp;   newAction->setShortcut(tr(&quot;Ctrl+N&quot;));<br />
+&nbsp;   newAction->setStatusTip(tr(&quot;Create a new spreadsheet file&quot;));<br />
+&nbsp;   connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));<br />
+&ldquo;Nww&rdquo;操作有一个加速键（New）,一个父窗口（主窗口)，一个图标（new.png），一个快捷键（Ctrl+N）和一个小提示。我们把该操作的triggered()信号连接到主窗口的私有槽newFile()上，下一节将实现这个私有槽。该连接保证在用户选择&ldquo;File｜New&rdquo;菜单项，点击&ldquo;新建&rdquo;工具栏按钮或者按下Ctrl+N的时候，newFile()槽会被调用。<br />
+&ldquo;Open&rdquo;,&rdquo;Save&rdquo;,&rdquo;Save As&rdquo;操作与&ldquo;New&rdquo;操作非常相似，因此我们直接跳到&rdquo;File&rdquo;菜单的&rdquo;recently opened files&rdquo;部分：<br />
+...<br />
+for (int i = 0; i &lt; MaxRecentFiles; ++i) {<br />
+&nbsp;   recentFileActions[i] = new QAction(this);<br />
+&nbsp;   recentFileActions[i]->setVisible(false);<br />
+&nbsp;   connect(recentFileActions[i], SIGNAL(triggered()),<br />
+&nbsp;           this, SLOT(openRecentFile()));<br />
+}<br />
+我们把所有操作组装成recentFileActions 数组。每个操作都被隐藏并被连接到槽openRecentFile() 上。稍后，我们将看到最近的文件操作是如何显示和使用的。<br />
+现存我们可以跳到&ldquo; All action&ldquo;了：<br />
+...<br />
+selectAllAction = new QAction(tr(&quot;&amp;All&quot;), this);<br />
+selectAllAction->setShortcut(tr(&quot;Ctrl+A&quot;));<br />
+selectAllAction->setStatusTip(tr(&quot;Select all the cells in the &quot;<br />
+&nbsp;                                &quot;spreadsheet&quot;));<br />
+connect(selectAllAction, SIGNAL(triggered()),<br />
+&nbsp;       spreadsheet, SLOT(selectAll()));<br />
+槽selectAll()由QtableWidget的一个祖先QabstractItemView类提供，因而我们不必自己实现它了。<br />
+现存跳到更远一点的&ldquo;Option&rdquo;菜单的&ldquo;Show Grid&ldquo;操作：<br />
+...<br />
+showGridAction = new QAction(tr(&quot;&amp;Show Grid&quot;), this);<br />
+showGridAction->setCheckable(true);<br />
+showGridAction->setChecked(spreadsheet->showGrid());<br />
+showGridAction->setStatusTip(tr(&quot;Show or hide the spreadsheet's &quot;<br />
+&nbsp;                               &quot;grid&quot;));<br />
+connect(showGridAction, SIGNAL(toggled(bool)),<br />
+&nbsp;       spreadsheet, SLOT(setShowGrid(bool)));<br />
+&ldquo;Show Grid&rdquo;是一个可选中操作。它在菜单中被渲染出一个选中标记，在工具栏中实现为一个开关按钮。在该操作是选中的时候，Spreadsheet组件会显示一个网络。默认情况下，我们为Spreadsheet组件初始化这种状态，那么在启动的时候就能够操持同步。然后我们把&rdquo;Show Grid&rdquo;操作的toggled(bool)信号连接到Spreadsheet组件的setShowGrid(bool)槽，这个槽其实是从QtableWidget类继承来的。一旦这个操作被添加到菜单或者工具栏，用户就能开启或者关闭网络。<br />
+&ldquo;Show Grid&rdquo;和&rdquo;Auto-Recalculate&rdquo;操作两个无关的可选中操作。Qt还能通过QActionGroup类支持互斥的操作。<br />
+...<br />
+aboutQtAction = new QAction(tr(&quot;About &amp;Qt&quot;), this);<br />
+aboutQtAction->setStatusTip(tr(&quot;Show the Qt library's About box&quot;));<br />
+<br />
+&nbsp;   connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));<br />
+}<br />
+对&rdquo;About Qt&rdquo;操作，我们使用QApplication对象的aboutQt()槽，它可以通过qApp全局变量来访问。<br />
+图3.4　关于Qt<br />
+<input type="image" src="/upfile/image/about_qt.jpg" width="500" height="284" /><br />
+既然创建了操作，我们就可以继续构建一个包含它们的菜单系统了：<br />
+void MainWindow::createMenus()<br />
+{<br />
+&nbsp;   fileMenu = menuBar()->addMenu(tr(&quot;&amp;File&quot;));<br />
+&nbsp;   fileMenu->addAction(newAction);<br />
+&nbsp;   fileMenu->addAction(openAction);<br />
+&nbsp;   fileMenu->addAction(saveAction);<br />
+&nbsp;   fileMenu->addAction(saveAsAction);<br />
+&nbsp;   separatorAction = fileMenu->addSeparator();<br />
+&nbsp;   for (int i = 0; i &lt; MaxRecentFiles; ++i)<br />
+&nbsp;       fileMenu->addAction(recentFileActions[i]);<br />
+&nbsp;   fileMenu->addSeparator();<br />
+&nbsp;   fileMenu->addAction(exitAction);<br />
+在Qt中，菜单是Qmenu的实例。addMenu()函数调用创建一个带有指定文本的QMenu物件并将它添加到菜单条中。QMainWindow::menuBar()函数返回一个指向QMenuBar的指针。主菜单条在首次调用menuBar()时创建。<br />
+我们以创建&ldquo;File&rdquo;菜单开始，然后在菜单上添加&rdquo;New&rdquo;,&rdquo;Open&rdquo;,&rdquo;Save&rdquo;,&rdquo;Save As&rdquo;一系列操作。我们插入一个分隔符以形象地将相关的项排到一起。我们使用for循环从recentFileActions数组添加（初始化为隐藏）操作，然后在最后添加exitAction操作。<br />
+我们已经保存了指向其中一个分隔符的指针。这让我们能隐藏或者显示它，因为在中间没有东西时候我们并不想显示两个分隔符。<br />
+&nbsp;   editMenu = menuBar()->addMenu(tr(&quot;&amp;Edit&quot;));<br />
+&nbsp;   editMenu->addAction(cutAction);<br />
+&nbsp;   editMenu->addAction(copyAction);<br />
+<br />
+&nbsp;   editMenu->addAction(pasteAction);<br />
+&nbsp;   editMenu->addAction(deleteAction);<br />
+&nbsp;   selectSubMenu = editMenu->addMenu(tr(&quot;&amp;Select&quot;));<br />
+&nbsp;   selectSubMenu->addAction(selectRowAction);<br />
+&nbsp;   selectSubMenu->addAction(selectColumnAction);<br />
+&nbsp;   selectSubMenu->addAction(selectAllAction);<br />
+&nbsp;   editMenu->addSeparator();<br />
+&nbsp;   editMenu->addAction(findAction);<br />
+&nbsp;   editMenu->addAction(goToCellAction);<br />
+现在我人来创建&ldquo;Edit&rdquo;菜单，就像我们已为&rdquo;File&rdquo;菜单所做的，使用QMenu::addAction()添加操作，使用QMenu::addMenu()在你放的位置添加子菜单。子菜单像它所属的菜单一样也是个QMenu。<br />
+&nbsp;   toolsMenu = menuBar()->addMenu(tr(&quot;&amp;Tools&quot;));<br />
+&nbsp;   toolsMenu->addAction(recalculateAction);<br />
+&nbsp;   toolsMenu->addAction(sortAction);<br />
+&nbsp;   optionsMenu = menuBar()->addMenu(tr(&quot;&amp;Options&quot;));<br />
+&nbsp;   optionsMenu->addAction(showGridAction);<br />
+&nbsp;   optionsMenu->addAction(autoRecalcAction);<br />
+&nbsp;   menuBar()->addSeparator();<br />
+&nbsp;   helpMenu = menuBar()->addMenu(tr(&quot;&amp;Help&quot;));<br />
+&nbsp;   helpMenu->addAction(aboutAction);<br />
+&nbsp;   helpMenu->addAction(aboutQtAction);<br />
+}<br />
+我们以相似的样式创建&ldquo;Tools&rdquo;,&rdquo;Options&rdquo;和&rdquo;Help&rdquo;菜单。在&rdquo;Options&rdquo;和&rdquo;Help&rdquo;菜单中间插入一个分隔符。在Motif和CDE风格中，分隔符把&rdquo;Help&rdquo;菜单挤压到了右侧。对于其他风格，分隔符将被忽略。<br />
+图3.5	Motif和Windows风格的菜单<br />
+<input type="image" src="/upfile/image/motif_menubar.jpg" width="400" height="59" /><br />
+void MainWindow::createContextMenu()<br />
+{<br />
+&nbsp;   spreadsheet->addAction(cutAction);<br />
+&nbsp;   spreadsheet->addAction(copyAction);<br />
+&nbsp;   spreadsheet->addAction(pasteAction);<br />
+&nbsp;   spreadsheet->setContextMenuPolicy(Qt::ActionsContextMenu);<br />
+}<br />
+任何Qt物件都可以拥有一系列与之关联的QAction。为给程序提供一个上下文菜单，我们把所需的操作添加到Spreadsheet物件，设置该物件的上下文菜单策略以显示包含这些操作的上下文菜单。上下文菜单将在右键点击或者按下一个平台相关的键的时候触发。<br />
+图3.6　电子表格程序的上下文菜单<br />
+<input type="image" src="/upfile/image/contextmenu.jpg" width="146" height="85" /><br />
+一个更复杂的提供上下文菜单的方法是实现QWidget::contectMenuEvent()函数，创建一个QMenu物件，把所需的操作添加到该QMenu物件上，并调用它的exec()方法。<br />
+void MainWindow::createToolBars()<br />
+{<br />
+&nbsp;   fileToolBar = addToolBar(tr(&quot;&amp;File&quot;));<br />
+&nbsp;   fileToolBar->addAction(newAction);<br />
+&nbsp;   fileToolBar->addAction(openAction);<br />
+&nbsp;   fileToolBar->addAction(saveAction);<br />
+&nbsp;   editToolBar = addToolBar(tr(&quot;&amp;Edit&quot;));<br />
+&nbsp;   editToolBar->addAction(cutAction);<br />
+&nbsp;   editToolBar->addAction(copyAction);<br />
+&nbsp;   editToolBar->addAction(pasteAction);<br />
+&nbsp;   editToolBar->addSeparator();<br />
+&nbsp;   editToolBar->addAction(findAction);<br />
+&nbsp;   editToolBar->addAction(goToCellAction);<br />
+}<br />
+创建工具栏与创建菜单类似。我们创建了一个&ldquo;File&rdquo;与工具栏和一个&rdquo;Edit&rdquo;工具栏。正如菜单一样，工具栏也可以有分隔符。<br />
+图3.7	电子表格程序的工具栏<br />
+<input type="image" src="/upfile/image/spreadsheet_application.jpg" width="403" height="45" /><br />
+<br />
+&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

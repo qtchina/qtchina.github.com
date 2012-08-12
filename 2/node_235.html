@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>安装事件过滤器</title>
+</head>
+<body>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Qt的事件模型的一个强大的功能是一个QObject实例能够在另一个QObject实例看到它的事件前监控它的事件。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们假设我们有一个给几个QLineEidt组成的CustomerInfoDialog物件，我们希望使用安全可靠键把焦点从一个移动到下一个QLineEdit上。这一非标准的行为可能对使用都经过良好训练的内部程序非常合适。一个直接的解决方法是创建QLineEdit的子类并重新实现keyPressEvent()来调用　docusNextChild()，代码如下所示：
+[code type="cpp-qt"]
+void MyLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space) {
+        focusNextChild();
+    } else {
+        QLineEdit::keyPressEvent(event);
+    }
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这种方法有一个主要的缺点：如果我们在窗体中使用了几种不同类型的物件（例如，QComboBoxes 和 QSpinBoxes），我们必要也创建它们的子类以实现相同的行为。一个比较好的方法是让CustomerInfoDialog监视它的子物件的键盘事件并在监视代码中实现所需行为的代码。这可通过事件过滤器实现。安装事件过滤器需要两步调用：
+1.  通过调用目标对象的installEventFilter()为目标对象注册监视对象。 
+2.  在监视对象的eventFilter()函数中处理目标对象的事件。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个较好的注册监视对象的地方是在CustomerInfoDialog的构造函数中：
+[code type="cpp-qt"]
+CustomerInfoDialog::CustomerInfoDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    firstNameEdit->installEventFilter(this);
+    lastNameEdit->installEventFilter(this);
+    cityEdit->installEventFilter(this);
+    phoneNumberEdit->installEventFilter(this);
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一旦事件过滤器被注册，被发送到firstNameEdit, lastNameEdit, cityEdit, 和 phoneNumberEdit物件的事件将在被发送到它们的目的地之前首先被发送到CustomerInfoDialog的eventFilter()函数中。
+下面是接受事件的eventFilter()函数：
+[code type="cpp-qt"]
+bool CustomerInfoDialog::eventFilter(QObject *target, QEvent *event)
+{
+    if (target == firstNameEdit || target == lastNameEdit
+            || target == cityEdit || target == phoneNumberEdit) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Space) {
+                focusNextChild();
+                return true;
+            }
+        }
+    }
+    return QDialog::eventFilter(target, event);
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	首先我们检测目标物件是否是QLineEdit物件中的一个。如果事件是个键盘事件，我们把它转换为QKeyEvent并检测按下的是哪个键。如果按下的键是空格键，我们调用focusNextChild()把焦点传递到焦点链中的下个物件，并且我们返回true告诉Qt我们已经处理了该事件。如果我们返回false，Qt仍旧把该事件发送到它的目的物件，将导致一个多余的空格被手稿到当前的QLineEdit中。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	首先我们检测目标物件是否是QLineEdit物件中的一个。如果事件是个键盘事件，我们把它转换为QKeyEvent并检测按下的是哪个键。如果按下的键是空格键，我们调用focusNextChild()把焦点传递到焦点链中的下个物件，并且我们返回true告诉Qt我们已经处理了该事件。如果我们返回false，Qt仍旧把该事件发送到它的目的物件，将导致一个多余的空格被手稿到当前的QLineEdit中。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果目标物件不是一个QLineEdit，或者如果该事件不是一个空格按键事件，我们把控制传递到蕨类的eventFilter()实现中。这里的目标物件应该也是一些基类，如QDialog正在监视的物件。（在Qt4.1中，对对话框却不是这种情况。然而，其他的Qt物件类，如QScrollArea，因为许多的原因它的确要监视它们的子物件。）
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Qt提供了事件可被处理并过滤的5种级别：
+1。重新实现一个特定的事件处理器。
+重新实现事件处理器如mousePressEvent(), keyPress-Event(), 和paintEvent() 是到现在为止最常用的处理事件的方法。我们已经在许多的例子见过这种方法。
+2。重新实现QObject::event()。 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 通过重新实现event() 函数，我们能在事件到达特定的事件处理器前处理它们。这种方法大多数用于需要覆盖Tab键的默认行为，如早先展示过的（p.164）。这还用于处理没有指定事件处理器的罕见类型的事件（例如，QEvent::HoverEnter）。当我们重新实现了event()的时候，我们必须调用基类的event()以处理我们没有显式处理的情况。
+
+3。可以在单个的QObject上安装一个事件过滤函数。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一旦一个对象被用installEventFilter()注册，所有目标对象的事件都被首先发送到监视者对象的eventFilter()函数。如果同一个对象被安装在多个事件过滤器上，这些过滤器将被依次激活，从最近安装的退到第一个安装的。
+4。可以在QApplication对象上安装一个事件过滤器。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一旦为qApp（唯一的QApplication对象）注册了一个事件过滤器，程序中的每个对象的每个事件在被发送到其他任何事件过滤器之前都被发送到该eventFilter()函数。这种方法大多数对调试有用。它还可用于处理发送到禁用物件的鼠标事件，而一般情况下这些事件则被被QApplication丢弃了。
+5。创建QApplication的子类并重新实现notify()。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Qt调用QApplication::notify()来发送一个事件。重新实现这个函数是在任何事件过滤器有机会看到它们之前得到所有事件的唯一方法。事件过滤器一般来说更有用，因为可以用任何数目的并行的事件过滤器，但仅有一个notify()函数。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	许多事件类型，包括鼠标和键盘事件都是可传播的。如果向目标对象传递过程中或者目标对象都没有处理这些事件，整个事件处理过程会继承重复，但这次是把目标对象的父对象作为新目的对象。这会一直继承下去，从父对象到父对象的父对象，直到事件被处理或者到达顶级对象。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	图7.2展示在对话框一个键盘事件中是如何从子对象向父对象传递的。当用户按下一个键时，事件先被发送到带焦点的物件，这里是右下角的QCheckBox。如果该QCheckBox没有处理该事件，Qt把它发送到QGroupBox，最后再发送到顶级QDialog对象。
+
+图7.2　对话框中的事件传递
+
+<img src="upfile/image/propagation.jpg" border="0">
+
+
+
+</body>
+</html>

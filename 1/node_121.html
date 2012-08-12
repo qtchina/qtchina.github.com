@@ -1,0 +1,246 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>第3章 创建主窗口 (建立状态栏)</title>
+</head>
+<body>
+<h3>&nbsp;<b>建立状态栏</b><br />
+在完成菜单与工具栏后，我们准备创建电子表格程序的状态栏。<br />
+正常情况下，状态栏包含两个指示器：当前单元格的位置和当前单元格的公式。状态栏还用于显示状态提示和其他临时消息。<br />
+MainWindow的构造函数中调用createStatusBar()来建立状态栏：<br />
+void MainWindow::createStatusBar()<br />
+{<br />
+&nbsp;   locationLabel = new QLabel(&quot; W999 &quot;);<br />
+&nbsp;   locationLabel->setAlignment(Qt::AlignHCenter);<br />
+&nbsp;   locationLabel->setMinimumSize(locationLabel->sizeHint());<br />
+&nbsp;   formulaLabel = new QLabel;<br />
+&nbsp;   formulaLabel->setIndent(3);<br />
+&nbsp;   statusBar()->addWidget(locationLabel);<br />
+&nbsp;   statusBar()->addWidget(formulaLabel, 1);<br />
+&nbsp;   connect(spreadsheet, SIGNAL(currentCellChanged(int, int, int, int)),<br />
+&nbsp;           this, SLOT(updateStatusBar()));<br />
+&nbsp;   connect(spreadsheet, SIGNAL(modified()),<br />
+&nbsp;           this, SLOT(spreadsheetModified()));<br />
+&nbsp;   updateStatusBar();<br />
+}<br />
+QMainWindow::statusBar()函数返回指向状态栏的指针。（状态栏在statusBar()首次调用的时候创建）。状态指示器简单化为QLabel，我们可在任何需要的时候修改它们的文本内容。我们已在formulaLabel中加入了缩进，所以它的文本显示与左边缘稍有偏移。当QLabel被添加到状态栏时，他们将被自动重新安排为状态栏的子物件。<br />
+图3.8显示出两个不同的标签需要不同的空间大小。单元格位置指示器需要非常小的空间，并且当窗口改变大小的时候，所有空间都会分配给右侧的公式指示器。这可通过给公式标签的QStatusBar::addWidget()调用指定伸缩因子为1来实现。位置指示器的伸缩因子是默认值0，这就是说它宁可不被伸缩。<br />
+图3.8　电子表格程序的状态栏</h3>
+<h3><input type="image" src="/upfile/image/statusbar1.jpg" width="400" height="115" /><br />
+<br />
+在QStatusBar 安排指示器物件的时候，它试着考虑每个物件的QWidget::sizeHint()给出的理想尺寸，然后再拉伸所有可以拉伸的物件以填充可用空间。一个物件的理想尺寸依赖于物件的内容和我们对它的内容所做的改变。为避免接边不断的改变位置指示器的尺寸，我们把它的最小尺寸设置为足够容纳最大可能出现的内容（&ldquo;W999&rdquo;）大小，再加上一点额外空间。我们再把它的对齐方式设置为Qt::AlignHCenter 使它的文本处理水平线的中间。<br />
+在函数的结尾附近，我们连接Spreadsheet的两个信号到MainWindow的两个槽updateStatusBar() 和 spreadsheetModified()上。<br />
+void MainWindow::updateStatusBar()<br />
+{<br />
+&nbsp;   locationLabel->setText(spreadsheet->currentLocation());<br />
+&nbsp;   formulaLabel->setText(spreadsheet->currentFormula());<br />
+}<br />
+updateStatusBar()槽更新单元格的位置和公式指示器。它在用户移动光标到新单元格时被调用。在createStatusBar()的未尾这个槽还被当作一个普通函数使用来初始化这两个指示器。由于Spreadsheet在启动的时候并不发射currentCellChanged()信号，所以这是必须的。<br />
+void MainWindow::spreadsheetModified()<br />
+{<br />
+&nbsp;   setWindowModified(true);<br />
+&nbsp;   updateStatusBar();<br />
+}<br />
+spreadsheetModified()会把windowModified属性设为true，并更新标题栏。该函数还更新位置和公式指示器，因而他们反映了事件的当前状态。<br />
+<br />
+&nbsp;</h3>
+<h3><b><ins>实现&ldquo;File&rdquo;菜单</ins></b><br />
+本节中，我们会实现让&ldquo;File&rdquo;菜单操作工作和管理最近打开的文件列表的必要的槽和私有函数。<br />
+void MainWindow::newFile()<br />
+{<br />
+&nbsp;   if (okToContinue()) {<br />
+&nbsp;       spreadsheet->clear();<br />
+&nbsp;       setCurrentFile(&quot;&quot;);<br />
+&nbsp;   }<br />
+}<br />
+newFile()槽在用户点击&ldquo;File|New&rdquo;菜单或者点击工具栏上的&rdquo;New&rdquo;按钮的时候被调用。如果有没保存的修改，私有函数okToContinue()询问用户&ldquo;是否保存修改&rdquo;？如果用户选择Yes或者No（当选择Yes的时候保存）时则返回true，如果用户选择Cancel的时候则返回false 。私有函数setCurrentFile()更新窗口的标题以表示一个文档已经被修改了，另外还设置curFile私有变量和更新最近打开的文件列表。<br />
+bool MainWindow::okToContinue()<br />
+{<br />
+&nbsp;   if (isWindowModified()) {<br />
+&nbsp;       int r = QMessageBox::warning(this, tr(&quot;Spreadsheet&quot;),<br />
+&nbsp;                       tr(&quot;The document has been modified.n&quot;<br />
+&nbsp;                          &quot;Do you want to save your changes?&quot;),<br />
+&nbsp;                       QMessageBox::Yes | QMessageBox::Default,<br />
+&nbsp;                       QMessageBox::No,<br />
+&nbsp;                       QMessageBox::Cancel | QMessageBox::Escape);<br />
+&nbsp;       if (r == QMessageBox::Yes) {<br />
+&nbsp;           return save();<br />
+&nbsp;       } else if (r == QMessageBox::Cancel) {<br />
+&nbsp;           return false;<br />
+&nbsp;       }<br />
+&nbsp;   }<br />
+&nbsp;   return true;<br />
+}<br />
+在okToContinue()中，我们检测windowModified属性的状态。如果为true，则显示图3.9中的消息框。消息框有一个Yes,一个No和一个Cancel按钮。QMessageBox::Default修饰量让Yes成为默认按钮。QMessageBox::Escape修饰量让Esc键和Cancel等效。<br />
+图3.9　&ldquo;是否保存修改&rdquo;</h3>
+<h3><input type="image" src="/upfile/image/wanna_save.jpg" width="309" height="138" /><br />
+<br />
+调用warning()乍看上去有点吓人，不过基本语法是非常直接的：<br />
+QMessageBox::warning(parent, title, message, button0, button1, ...);<br />
+QmessageBox还提供了information(), question(), 和 critical()，每一个调用都有特定的图标。<br />
+图3.10　消息框<br />
+<input type="image" src="/upfile/image/information.jpg" width="286" height="52" /><br />
+void MainWindow::open()<br />
+{<br />
+&nbsp;   if (okToContinue()) {<br />
+&nbsp;       QString fileName = QFileDialog::getOpenFileName(this,<br />
+&nbsp;                                  tr(&quot;Open Spreadsheet&quot;), &quot;.&quot;,<br />
+&nbsp;                                  tr(&quot;Spreadsheet files (*.sp)&quot;));<br />
+&nbsp;       if (!fileName.isEmpty())<br />
+&nbsp;           loadFile(fileName);<br />
+&nbsp;   }<br />
+}<br />
+<br />
+open()槽对应于&quot;File|Open&quot;。它像newFile()一样，先调用okTOContinue()处理所有未保存的修改。然后它使用静态便利的函数QFileDialog::getOpenFileName()从用户那里获取一个新的文件名。该函数弹出一个文件对话框，让用户选择一个文件，如果用户点击&quot;Cancel&quot;它则返回一个空字符串。<br />
+QFileDialog::getOpenFileName()的第一个参数是父物件。这一父子关系对对话框来说与其他物件的间的父子关系不是一回事。对话框有自己的主动权，但是如果它有父物件，那么默认情况下它会被放置在父物件上面的中央位置。子对话框还与它的父物件共享工具栏入口。<br />
+第二个参数是对话框的标题。第三个参数告诉它初始化目录是哪儿，我们使用的是当前目录。<br />
+第四个参数指定文件过滤器。一个文件过滤器由一个描述文本和一个通配符规则组成。 要支持&ldquo;comma-separated values files&rdquo;，&ldquo;Lotus 1-2-3 files&rdquo;和电子表格的本地文件格式，我们需要使用下面的过虑规则：<br />
+<br />
+tr(&quot;Spreadsheet files (*.sp)n&quot;<br />
+&nbsp;  &quot;Comma-separated values files (*.csv)n&quot;<br />
+&nbsp;  &quot;Lotus 1-2-3 files (*.wk1 *.wks)&quot;)<br />
+<br />
+loadFile()私有函数在open()中被调用来加载文件。由于我们需要相同功能的加载最近打开过的文件而把它写成一个单独的函数。<br />
+<br />
+bool MainWindow::loadFile(const QString &amp;fileName)<br />
+{<br />
+&nbsp;   if (!spreadsheet->readFile(fileName)) {<br />
+&nbsp;       statusBar()->showMessage(tr(&quot;Loading canceled&quot;), 2000);<br />
+&nbsp;       return false;<br />
+&nbsp;   }<br />
+&nbsp;   setCurrentFile(fileName);<br />
+&nbsp;   statusBar()->showMessage(tr(&quot;File loaded&quot;), 2000);<br />
+&nbsp;   return true;<br />
+}<br />
+<br />
+我们使用Spreadsheet::readFile() 从磁盘读取文件。如果加载成功，就调用setCurrentFile()来更新窗口标题。否则Spread-sheet::readFile()会通过一个消息框通知用户出现问题的原因。一般情况下，让低层的组件显示错误消息是很好的习惯，因为他们能提供精确的错误细节。<br />
+在两种情况下，我们在状态栏中显示一个消息并保护2秒(2000毫秒)，确保用户知道程序现在在干什么。<br />
+<br />
+bool MainWindow::save()<br />
+{<br />
+&nbsp;   if (curFile.isEmpty()) {<br />
+&nbsp;       return saveAs();<br />
+&nbsp;   } else {<br />
+&nbsp;       return saveFile(curFile);<br />
+&nbsp;   }<br />
+}<br />
+bool MainWindow::saveFile(const QString &amp;fileName)<br />
+{<br />
+&nbsp;   if (!spreadsheet->writeFile(fileName)) {<br />
+&nbsp;       statusBar()->showMessage(tr(&quot;Saving canceled&quot;), 2000);<br />
+&nbsp;       return false;<br />
+&nbsp;   }<br />
+&nbsp;   setCurrentFile(fileName);<br />
+&nbsp;   statusBar()->showMessage(tr(&quot;File saved&quot;), 2000);<br />
+&nbsp;   return true;<br />
+}<br />
+<br />
+save()槽对应于&ldquo;File|Save&rdquo;。如果文件已经有名字了，或者是刚才打开的，或者已经保存过了，那么save()会以该名字为参数调用saveFile()。否则简单的调用saveAs()即可。<br />
+<br />
+bool MainWindow::saveAs()<br />
+{<br />
+&nbsp;   QString fileName = QFileDialog::getSaveFileName(this,<br />
+&nbsp;                              tr(&quot;Save Spreadsheet&quot;), &quot;.&quot;,<br />
+&nbsp;                              tr(&quot;Spreadsheet files (*.sp)&quot;));<br />
+&nbsp;   if (fileName.isEmpty())<br />
+&nbsp;       return false;<br />
+&nbsp;   return saveFile(fileName);<br />
+}<br />
+<br />
+saveAs()槽对应于&ldquo;File|Save As&rdquo;操作，我们调用QFileDialog::getSaveFile-Name()从用户那里获取一个文件名。如果用户点击&ldquo;Cancel&rdquo;，则返回false ，返回值将被传递到它的调用者(save()或者okToContinue())。<br />
+如果文件已经在在，getSaveFileName()函数会让用户确定是否标要覆盖。我们可通过给getSaveFile-Name()传递一个附加参数QFileDialog::DontConfirmOverwrite修改这一行为。<br />
+<br />
+void MainWindow::closeEvent(QCloseEvent *event)<br />
+{<br />
+&nbsp;   if (okToContinue()) {<br />
+&nbsp;       writeSettings();<br />
+&nbsp;       event->accept();<br />
+&nbsp;   } else {<br />
+&nbsp;       event->ignore();<br />
+&nbsp;   }<br />
+}<br />
+<br />
+当用户点击&rdquo;File|Exit&ldquo;或者点击标题栏上的关闭按钮时，QWidget::close()槽会被调用。这将发送一个&ldquo;close&rdquo;事件给该物件。通过重新实现QWidget::closeEvent()，我们可以捕捉关闭主窗口的企图并决定是否要真正关闭主窗口。<br />
+如果还有未保存的修改并且用户选择了&ldquo;Cancel&rdquo;，我们就&ldquo;忽略&rdquo;该事件并保持窗口不受它的影响。正常情况下，我们接受此事件，导致Qt隐藏窗口。我们还要调用私有函数writeSettings()来保存程序当前的设置。<br />
+当最后一个窗口关闭的时候，应用程序就会终止。如果需要的话，我们可以把QApplication的 quitOnLastWindowClosed属性设置为false以禁止该行为。<br />
+<br />
+void MainWindow::setCurrentFile(const QString &amp;fileName)<br />
+{<br />
+&nbsp;   curFile = fileName;<br />
+&nbsp;   setWindowModified(false);<br />
+&nbsp;   QString shownName = &quot;Untitled&quot;;<br />
+&nbsp;   if (!curFile.isEmpty()) {<br />
+&nbsp;       shownName = strippedName(curFile);<br />
+&nbsp;       recentFiles.removeAll(curFile);<br />
+&nbsp;       recentFiles.prepend(curFile);<br />
+&nbsp;       updateRecentFileActions();<br />
+&nbsp;   }<br />
+&nbsp;   setWindowTitle(tr(&quot;%1[*] - %2&quot;).arg(shownName)<br />
+&nbsp;                                  .arg(tr(&quot;Spreadsheet&quot;)));<br />
+}<br />
+QString MainWindow::strippedName(const QString &amp;fullFileName)<br />
+{<br />
+&nbsp;   return QFileInfo(fullFileName).fileName();<br />
+}<br />
+<br />
+在setCurrentFile()函数中，我们设定保存当前正被修改的文件名的私有变量curFile的值。在把文件名显示到标题栏之前，先用strippedName()把文件名的路径去掉，让它显得更友好一点。<br />
+所有QWidget都有一个windowModified属性，当窗口中的文件有未保存的时候它被设为true，否则为false。在Mac OS X平台上，未保存的文档表示为窗口标题栏的关闭按钮上有一个点。其他平台上，它表示为文件名后面带一个&rdquo;*&ldquo;。只要我们保证及时更新windowModified属性，Qt就能自动处理这一行为，并且在需要的时候把标志&quot;[*]&quot;放到窗口的标题栏中。<br />
+我们传递到函数setWindowTitle()的内容是：<br />
+<br />
+tr(&quot;%1[*] - %2&quot;).arg(shownName).arg(tr(&quot;Spreadsheet&quot;))<br />
+<br />
+QString::arg()函数使用它的参数从小到大的替换出现过的&quot;%n&quot;参数并返回结果字符串。现在这种情况下，arg()与两个&quot;%n&quot;参数连用。第一个arg()调用替换掉了&quot;%1&quot;,第二个调用替换掉了&quot;%2&quot;。如果文件名为&quot;budget.sp&quot;，并且没有加载翻译文件，结果字符会是&quot;budget.sp[*] - Spreadsheet&quot;。这样就可以只用arg()提供的操作符把它简写为：<br />
+setWindowTitle(shownName + tr(&quot;[*] - Spreadsheet&quot;));<br />
+<br />
+如果有文件名，我们就更新程序当前打开的文件列表变量recentFiles。我们调用removeAll()删除列表中所有文件名以避免重复。然后我们调用prepend()把该文件名添加到列表前端。更新列表后，我们调用私有函数updateRecentFileActions() 更新&ldquo;File&rdquo;菜单中的条目。<br />
+<br />
+void MainWindow::updateRecentFileActions()<br />
+{<br />
+&nbsp;   QMutableStringListIterator i(recentFiles);<br />
+&nbsp;   while (i.hasNext()) {<br />
+&nbsp;       if (!QFile::exists(i.next()))<br />
+&nbsp;           i.remove();<br />
+&nbsp;   }<br />
+&nbsp;   for (int j = 0; j &lt; MaxRecentFiles; ++j) {<br />
+&nbsp;       if (j &lt; recentFiles.count()) {<br />
+&nbsp;           QString text = tr(&quot;&amp;%1 %2&quot;)<br />
+&nbsp;                          .arg(j + 1)<br />
+&nbsp;                          .arg(strippedName(recentFiles[j]));<br />
+&nbsp;           recentFileActions[j]->setText(text);<br />
+&nbsp;           recentFileActions[j]->setData(recentFiles[j]);<br />
+&nbsp;           recentFileActions[j]->setVisible(true);<br />
+&nbsp;       } else {<br />
+&nbsp;           recentFileActions[j]->setVisible(false);<br />
+&nbsp;       }<br />
+&nbsp;   }<br />
+&nbsp;   separatorAction->setVisible(!recentFiles.isEmpty());<br />
+}<br />
+<br />
+我们首先使用一个类Java的迭代器删除已经不存在了的所有文件。一些文件可能是在上次会话中使用的，但已经被删除了。变量recentFiles是QStringList类型的(QString的列表)。我们将在第11章中详细解释像QStringList的容器类，展示他们与C++标准模板库(STL)的关系，以及Qt的类Java迭代器类。<br />
+然后我们再次遍历文件列表，这次使用数组风格的下标索引方式。对每个文件，我们创建一个由一个&ldquo;&amp;&rdquo;，一个数字(j+1)，一个空格和文件名(不含路径)组成的字符串我们。再设定相应的操作使用该字符串。例如，如果第一个文件的名字是C:My Documentstab04.sp，第一个操作的文本就是&quot;&amp;1 tab04.sp&quot;。<br />
+图3.11 带&ldquo;最近打开的文件&rdquo;的&ldquo;File&rdquo;菜单<br />
+<br />
+<br />
+每个操作都可以拥有一个QVariant类型的与之关联的&ldquo;数据&rdquo;项。QVariant类型能持有许多C++和Qt类型的值。它的介绍在第11章中。这里，我们把文件的完整路径存储在相应操作的&ldquo;数据&rdquo;项中，这样我们可在后面轻易的拿到它。另外还要把操作高为可见。<br />
+<br />
+如果文件操作多于最近的文件列表数，我们简单的把多余的隐藏。最后，如果有多于一个的最近打开的文件，就把前面提到的分隔条设置为可见。<br />
+<br />
+void MainWindow::openRecentFile()<br />
+{<br />
+&nbsp;   if (okToContinue()) {<br />
+&nbsp;       QAction *action = qobject_cast&lt;QAction *>(sender());<br />
+&nbsp;       if (action)<br />
+&nbsp;           loadFile(action->data().toString());<br />
+&nbsp;   }<br />
+}<br />
+<br />
+当用户选择一个最近的文件时openRecentFile()槽被调用。okToContinue()函数用于没有任何已修改的文件，用户没有取消操作的情况，我们使用QObject::sender()查找是哪个具体的操作调用了这个槽。<br />
+qobject_cast&lt;T>() 函数执行基于由moc生成的元信息的动态类型转换，其中moc是元对象编译器。它返回指针所需要QObject子类型的指针，或者在不能被转换到指定类型的时候则返回0。与标准C++的dynamic_cast&lt;T>()不同，Qt的qobject_cast&lt;T>() 能正常运行于动态库级别上。在我们的例子中，我们使用 qobject_cast&lt;T>() 把 QObject 指针转换为 QAction 指针。如果转换成功(应该成功)，我们就用从操作的&ldquo;数据&rdquo;项中取出的文件的完整路径调用loadFile()。<br />
+另外，因为我们知道发送都是一个QAction，即使使用 static_cast&lt;T> ()或者用古老的C风格的转换，这个程序也会正常运行。请参考附录B中&ldquo;类型转换&ldquo;一节中的C++不同方式的类型转换的概述。<br />
+<br />
+<br />
+&nbsp;</h3>
+</body>
+</html>

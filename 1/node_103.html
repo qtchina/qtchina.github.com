@@ -1,0 +1,21 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>3.15 ioctl函数</title>
+</head>
+<body>
+<p class="MsoNormal">ioctl函数是I/O操作的杂物箱。不能用本章中其他函数表示的I/O操作通常都能用ioctl</p>
+<p class="MsoNormal">表示。终端I/O是ioctl的最大使用方面（第18章将介绍POSIX.1已经用一些新函数代替ioctl 进行终端I/O操作）。</p>
+<p class="MsoNormal">&nbsp;<img width="554" height="97" src="http://book.csdn.net/BookFiles/418/img/image112.jpg" id="图片 373" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">ioctl函数只是Single UNIX Specification标准的一个扩展，以便处理STREAMS设备[Rago 1993]。但是，UNIX系统实现用它进行很多杂项设备操作。有些实现甚至将它扩展到用于普通文件。</p>
+<p class="MsoNormal">我们所示的原型对应于POSIX.1，FreeBSD 5.2.1和Mac OS X 10.3将第二个参数声明为unsigned long。因为第二个参数总是一个头文件中的defined名字，所以这种细节并没有什么影响。</p>
+<p class="MsoNormal">对于ISO C原型，它用省略号表示其余参数。但是，通常只有另外一个参数，它常常是指向一个变量或结构的指针。</p>
+<p class="MsoNormal">在此原型中，我们表示的只是ioctl函数本身所要求的头文件。通常，还要求另外的设备专用头文件。例如，除POSIX.1所说明的基本操作之外，终端I/O的ioctl命令都需要头文件&lt;termios.h&gt;。</p>
+<p class="MsoNormal">每个设备驱动程序都可以定义它自己专用的一组ioctl命令。系统则为不同种类的设备提供通用的ioctl命令。表3-6总结了FreeBSD所支持的通用ioctl命令的一些类别。</p>
+<p class="MsoNormal"><img width="540" height="187" src="http://book.csdn.net/BookFiles/418/img/image113.jpg" id="图片 376" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">磁带操作使我们可以在磁带上写一个文件结束标志、反绕磁带、越过指定个数的文件或记录等等，用本章中的其他函数（read、write、lseek等）都难以表示这些操作，所以，用ioctl是对这些设备进行操作的最容易方法。</p>
+<p class="MsoNormal">在14.4节中说明STREAMS系统、18.12节中获取和设置终端窗口大小以及19.7节中论及伪终端的高级功能时，都将使用ioctl函数。</p>
+</body>
+</html>

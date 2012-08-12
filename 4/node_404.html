@@ -1,0 +1,88 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>emacs muse 语法</title>
+</head>
+<body>
+<br>
+Muse的语法与wiki是一样的<br>
+<font size="4" style="font-weight: bold;"><br>
+directives<br>
+</font><font size="2">以'#'开头，前面不能有空白，具有的形式是 &quot;#directive   content of directive&quot;。它在写在任意的段落前，支持任意大小写组合。你可以任意定义，以下4个是常用的。<br>
+<br>
+<span style="color: rgb(255, 0, 0);">#title  标题</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">#author   作者</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">#desc  简单描述</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">#date   日期</span><br>
+<br>
+<font size="4"><span style="font-weight: bold;">段落</span></font><br>
+由至少一个空行分开的文本为一个段落<br>
+若某段由6个以上空格（包括tab）开头，则表示该段落中心对齐。也可以用&lt;center&gt;&lt;/center&gt;标记<br>
+若某段由空格开头，但少于6个，则表示该段是quote形，与&lt;quote&gt;&lt;/quote&gt;标记是等价的。  <br>
+还有两个标记常用：<br>
+<span style="color: rgb(255, 0, 0);">&lt;example&gt;</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">&lt;literal&gt;  </span>使用这个标记，表示对里面的内容不作任何解释，原封不动地保留。这样，你就可以在里面手工写上HTML代码输出到你的HTML类型的项目中。  <br>
+<br>
+<font size="4" style="font-weight: bold;">标题</font><br>
+分为4级，在新段落中，以一个或多个'*'开头，后面跟一个空格，就是标题。示例如下：<br>
+<span style="color: rgb(255, 0, 0);">* First level</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">** Second  level</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">*** Third level</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">**** Fourth  level</span><br>
+<br>
+4种常用的文本书写方式，可以在正文中的任何地方出现，如 <br>
+<span style="color: rgb(255, 0, 0);">*emphasis*</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">**strong  emphasis**</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">***very strong emphasis***</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">_underlined_</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">=verbatim and  monospace=</span> <br>
+其中'='也可以用&lt;code&gt;&lt;/code&gt;来代替。<br>
+<br>
+<font size="4" style="font-weight: bold;">列表</font><br>
+有3种方式：<br>
+以减号'-'表示  ，在减号前后都有空格。<br>
+<span style="color: rgb(255, 0, 0);">- bullet item one</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">- bullet item  two</span><br>
+<br>
+也可以用数字加上'.'表示，前后仍然有空格<br>
+<span style="color: rgb(255, 0, 0);">1.  Enum item one</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">2. Enum item two</span><br>
+<br>
+或者也可以用<br>
+<span style="color: rgb(255, 0, 0);">Term1 ::</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">This is a first definition</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">And it has two  lines;</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">no, make that three.</span><br style="color: rgb(255, 0, 0);">
+<br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">Term2 ::</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">This is a second definition</span><br>
+<br>
+<br>
+<font size="4" style="font-weight: bold;">表格</font> <br>
+实现是很简单的，它也只能实现简单的表格<br>
+<span style="color: rgb(255, 0, 0);">Double bars || Separate header fields<br>
+<br style="color: rgb(255, 0, 0);">
+</span><span style="color: rgb(255, 0, 0);">Single bars  | Separate body fields</span> <br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">Here are more | body fields</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);"><br>
+Triple bars  ||| Separate footer fields</span> <br>
+<br>
+<br>
+</font><font size="4" style="font-weight: bold;">链接</font><font size="2"><br>
+在文章中引入链接很简单<br>
+<span style="color: rgb(255, 0, 0);">[[link target][link description]]</span><br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">[[link target  without description]]</span><br style="color: rgb(255, 0, 0);">
+如<br>
+<span style="color: rgb(255, 0, 0);">[[<a href="http://ubuntu-fans.blogspot.xn--com%5D%5Blinux%5D-yx8vj74m/">http://ubuntu-fans.blogspot.com][我爱Linux]</a>]</span>  <br style="color: rgb(255, 0, 0);">
+<br>
+<font size="4"><span style="font-weight: bold;">锚</span></font><br>
+任何行，以'<span style="color: rgb(255, 0, 0);">#anchor</span>'开头，其中anchor可以是任意的不含空格的文本，都被当作是个锚，你可以  pages#anchor 的形式链接。 <br>
+<br>
+<font size="4"><span style="font-weight: bold;">水平线</span></font><br>
+多过4个'-'的段落就表示一条水平线，如<br>
+</font>
+<pre style="color: rgb(255, 0, 0);" class="example">----</pre>
+</body>
+</html>

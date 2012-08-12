@@ -1,0 +1,303 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>多文档界面</title>
+</head>
+<body>
+在一个主窗口中心区域提供多个文档界面的应用程序被称为多文档界面应用程序或者称为MDI应用程序，QT中一个MDI应用程序是利用Qworkspace类作为中心物件，每一个文档窗口作为Qworkspace子物件。
+对于MDI程序来说提供了一个包含用来管理窗口和窗口序列的窗口菜单是非常方便的。活动窗口是用一个选中标志来识别。用户可以在”窗口菜单”中点击相关项目来激活任意窗口。
+在这一部分，我们将要开发在图6.16中显示的MDI Editor应用程序来演示如何创建一个MDI应用程序及如何它的“窗口菜单”。
+	图6.16　MDI　Editor 应用程序
+
+这个应用程序包含两个类：MainWindow和 Editor.代码可以从CD中找到， 因为它的代码大部分与第一部分的Spreadsheet应用程序相同或相近，所以我们将只显示新的代码。
+
+图 6.17. The MDI Editor application's menus
+
+让我们从MainWindow类开始
+[code type="cpp-qt"]
+MainWindow::MainWindow()
+{
+    workspace = new QWorkspace;
+    setCentralWidget(workspace);
+    connect(workspace, SIGNAL(windowActivated(QWidget *)),
+            this, SLOT(updateMenus()));
+    createActions();
+    createMenus();
+    createToolBars();
+    createStatusBar();
+    setWindowTitle(tr("MDI Editor"));
+    setWindowIcon(QPixmap(":/images/icon.png"));
+}
+[/code]
+在MainWindow构造函数中，我们创建了一个Qworkspace物件，并把它作为中心物件。我们把Qworkspace的 windowActivated()信号链接到我们将用来保持窗口菜单更新的槽上。
+[code type="cpp-qt"]
+void MainWindow::newFile()
+{
+    Editor *editor = createEditor();
+    editor->newFile();
+    editor->show();
+}
+[/code]
+槽ewFile()和File|New菜单选项通信。它要依靠createEditor()私有函数来创建子Editor物件。
+[code type="cpp-qt"]
+Editor *MainWindow::createEditor()
+{
+    Editor *editor = new Editor;
+    connect(editor, SIGNAL(copyAvailable(bool)),
+            cutAction, SLOT(setEnabled(bool)));
+    connect(editor, SIGNAL(copyAvailable(bool)),
+            copyAction, SLOT(setEnabled(bool)));
+    workspace->addWindow(editor);
+    windowMenu->addAction(editor->windowMenuAction());
+    windowActionGroup->addAction(editor->windowMenuAction());
+    return editor;
+}
+[/code]
+createEditor()函数创建一个Editor物件并建立两个信号/槽连接。这两个连接根据是否有选中的文本来确保Edit|Cut和Edit|Copy是打开或关闭。
+因为我们用MDI，多个Editor物件可用是可能的。重要的是我们只响应从Editor窗口发出的copyAvailable(bool)信号，而不是从其它地方。但是这些信号只能由活动窗口发出，所以实际情况中是不存这一个问题。
+一旦我们创建了这个Editor，我们向窗口菜单添加一个Qaction以表示这一窗口。该操作由Editor 类提供，它将马上进行说明。我们还添加了该操作到一个QactionGroup对象。该QactionGroup保证同一时刻只有窗口菜单中的一个被选中。
+[code type="cpp-qt"]
+void MainWindow::open()
+{
+    Editor *editor = createEditor();
+    if (editor->open()) {
+        editor->show();
+    } else {
+        editor->close();
+    }
+}
+[/code]
+	Open()对应于File|Open菜单。它为每个新文档创建了一个Editor并调用该Editor的open()。在Editor类中实现文件操作比在MainWindow类中实现更有意义，因为每个Editor需要维护它自己独立的状态。
+	如果open()失败，我们简单的关闭该编辑器，因为用户应该已经看到了错误通知了。我们不必自己显式删除该Editor对象，这由于　Editor物件的Qt::WA_DeleteOnClose属性会自动完成，它在Editor的构造函数中被设置。
+[code type="cpp-qt"]
+void MainWindow::save()
+{
+    if (activeEditor())
+        activeEditor()->save();
+}
+[/code]
+	save()槽对一个活动的编辑器调用Editor::save()，如果有的话。执行这一实际工作的代码仍旧位于Editor类。
+[code type="cpp-qt"]
+Editor *MainWindow::activeEditor()
+{
+    return qobject_cast<Editor *>(workspace->activeWindow());
+}
+[/code]
+	activeEditor()私有函数返回一个活动子窗口的Editor指针，或者如果没有活动窗口则返回null。
+[code type="cpp-qt"]
+Editor *MainWindow::activeEditor()
+{
+    return qobject_cast<Editor *>(workspace->activeWindow());
+}
+[/code]
+	Cut()槽对一个活动窗口调用Editor::cut()。我们没有展示copy()和paste()槽，因为它们遵循与之相同的模式。
+[code type="cpp-qt"]
+void MainWindow::updateMenus()
+{
+    bool hasEditor = (activeEditor() != 0);
+    bool hasSelection = activeEditor()
+                        && activeEditor()->textCursor().hasSelection();
+    saveAction->setEnabled(hasEditor);
+    saveAsAction->setEnabled(hasEditor);
+    pasteAction->setEnabled(hasEditor);
+    cutAction->setEnabled(hasSelection);
+    copyAction->setEnabled(hasSelection);
+    closeAction->setEnabled(hasEditor);
+    closeAllAction->setEnabled(hasEditor);
+    tileAction->setEnabled(hasEditor);
+    cascadeAction->setEnabled(hasEditor);
+    nextAction->setEnabled(hasEditor);
+    previousAction->setEnabled(hasEditor);
+    separatorAction->setVisible(hasEditor);
+    if (activeEditor())
+        activeEditor()->windowMenuAction()->setChecked(true);
+}
+[/code]
+	当一个窗口被激活的时候（当最后一个窗口被关闭时）updateMenus()槽将被调用以更新菜单系统，这要归功于我们放在MainWindow构造函数中的信号/槽连接。
+	大多数菜单选项仅在有一个活动窗口时有意义，因此如果没有活动窗口我们就要禁用它们。最后，我们调用对表示当前活动窗口的Qaction调用setChecked()。多亏了QactionGroup，我们不需要显式的反选中之前的活动窗口。
+[code type="cpp-qt"]
+void MainWindow::createMenus()
+{
+    ...
+    windowMenu = menuBar()->addMenu(tr("&Window"));
+    windowMenu->addAction(closeAction);
+    windowMenu->addAction(closeAllAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(tileAction);
+    windowMenu->addAction(cascadeAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(nextAction);
+    windowMenu->addAction(previousAction);
+    windowMenu->addAction(separatorAction);
+    ...
+}
+[/code]
+	createMemus()使用操作填充窗口菜单。这些操作这些操作都是一些典型的菜单，并可使用Qworkspace的 closeActiveWindow(), closeAllWindows(), tile(), 和 cascade()槽非常容易的实现。每次用户打开一个新窗口时，它将被添加到窗口菜单的操作列表中。（这在第154页的createEditor()函数中实现）。当用户关闭一个编辑窗口的，它在窗口菜单中的操作项将被删除（因为该操作项属于是属于该编辑窗口的），因此该操作项也会被自动从窗口菜单中移除。
+[code type="cpp-qt"]
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    workspace->closeAllWindows();
+    if (activeEditor()) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
+}
+[/code]
+	closeEvent()函数被重新实现以关闭所有的子窗口，并导致每个子物件接收到一个关闭事件。如果这些子物件中的一个忽略了它的关闭事件（因为用户取消了一个“unsaved changes”消息框），我们也就忽略MainWindow的关闭事件，否则，我们接受它，并导致Qt关于整个窗口。如果我们不重新实现MainWindow中的closeEvent() ，用户就没有机会保存没有保存的修改。
+	我们现在已经完成了MainWindow的预览，因此我们可以跳到Editor的实现了。该Editor类表示一个子窗口。它继承自QTextEdit，而基类提供了文本编辑功能。就像任何Qt　物件可用作一个独立的窗口一样，任何Qt 物件也可用作MDI工作区内的一个子窗口。
+
+	下面是类的声明：
+[code type="cpp-qt"]
+class Editor : public QTextEdit
+{
+    Q_OBJECT
+public:
+    Editor(QWidget *parent = 0);
+    void newFile();
+    bool open();
+    bool openFile(const QString &fileName);
+    bool save();
+    bool saveAs();
+    QSize sizeHint() const;
+    QAction *windowMenuAction() const { return action; }
+protected:
+    void closeEvent(QCloseEvent *event);
+private slots:
+    void documentWasModified();
+private:
+    bool okToContinue();
+    bool saveFile(const QString &fileName);
+    void setCurrentFile(const QString &fileName);
+    bool readFile(const QString &fileName);
+    bool writeFile(const QString &fileName);
+    QString strippedName(const QString &fullFileName);
+    QString curFile;
+    bool isUntitled;
+    QString fileFilters;
+    QAction *action;
+};
+[/code]
+	有4个在Spreadsheet程序的MainWindow类中的私有函数也在Editor类中：okToContinue(), save-File(), setCurrentFile(), 和 strippedName()。
+[code type="cpp-qt"]
+Editor::Editor(QWidget *parent)
+    : QTextEdit(parent)
+{
+    action = new QAction(this);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered()), this, SLOT(show()));
+    connect(action, SIGNAL(triggered()), this, SLOT(setFocus()));
+    isUntitled = true;
+    fileFilters = tr("Text files (*.txt)\n"
+                     "All files (*)");
+    connect(document(), SIGNAL(contentsChanged()),
+            this, SLOT(documentWasModified()));
+    setWindowIcon(QPixmap(":/images/document.png"));
+    setAttribute(Qt::WA_DeleteOnClose);
+}
+[/code]
+	首选，我们创建一个Qaction以表示程序的窗口菜单中的编辑窗口，再把该操作连接到该类的show()和setFoucs()槽上。
+
+	因为我们允许用户创建任何数量的编辑窗口，我们必须为他们的命名做些准备，这样它们才可在第一次保存之前被区分开来。一种常用的处理它的方式是分配包含一个数字的名字（例如，document1.txt）。我们使用isUntitled变量来区分用户提供的名字和我们程序创建的名字。
+	我们把文本文档的contentsChanged()信号连接到私有槽documentWasModified()槽。这个槽简单的调用了setWindowModified(true)。
+	最后，我们调用窗口的Qt::WA_DeleteOnClose attribute属性以防止用户关闭一个Editor窗口时的内存泄。
+	在构造函数之后，我们期望或者newFile()被调用或者open()被调用。
+[code type="cpp-qt"]
+void Editor::newFile()
+{
+    static int documentNumber = 1;
+    curFile = tr("document%1.txt").arg(documentNumber);
+    setWindowTitle(curFile + "[*]");
+    action->setText(curFile);
+    isUntitled = true;
+    ++documentNumber;
+}
+[/code]
+	newFile()函数为新文档生成一个像document1.txt的名字。这些代码属于newFile() ，而不是构造函数，因为我们不想在一个新创建的Editor中调用open()打开一个已经存在的文档时浪费数字。因为documentNumber被声明为静态的，它在所有Editor 实例间共享。
+	在窗口的标题栏中的"[*]"标识符是在除Mac OS X平台外有没保存的文件时我们希望该星号出现的位置标识符。我们已经在第3章（第58页）提过它了。
+[code type="cpp-qt"]
+bool Editor::open()
+{
+    QString fileName =
+            QFileDialog::getOpenFileName(this, tr("Open"), ".",
+                                         fileFilters);
+    if (fileName.isEmpty())
+        return false;
+    return openFile(fileName);
+}
+[/code]
+	Open()函数试图使用openFile()打开一个已经存在的文件。
+[code type="cpp-qt"]
+bool Editor::save()
+{
+    if (isUntitled) {
+        return saveAs();
+    } else {
+        return saveFile(curFile);
+    }
+}
+[/code]
+	Save()函数使用isUntitled变量来决定是否它需要调用saveFile()或者saveAs()。
+[code type="cpp-qt"]
+void Editor::closeEvent(QCloseEvent *event)
+{
+    if (okToContinue()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+[/code]
+	closeEvent()函数被重新实现以便允许用户保存没有保存的修改。该逻辑的代码在okToContinue()函数中，它弹出一个显示“Do you want to save your changes?"的消息框。如果okToContinue()返回true，我们接受该关闭事件，否则，我们忽略它并保持窗口的当前状态不受影响。
+[code type="cpp-qt"]
+void Editor::setCurrentFile(const QString &fileName)
+{
+    curFile = fileName;
+    isUntitled = false;
+    action->setText(strippedName(curFile));
+
+    document()->setModified(false);
+    setWindowTitle(strippedName(curFile) + "[*]");
+    setWindowModified(false);
+}
+[/code]
+	setCurrentFile()函数被openFile()和saveFile()函数中调用以更新curFile和isUntitled变量，设置窗口的标题和操作文本，调用当前文件的“modified”标志为false。无论用户什么时候修改编辑窗口中的文本，底层的QtexTDocument将发射contentsChanged()信号并调用它内部的”mofified” 标志为true。
+[code type="cpp-qt"]
+QSize Editor::sizeHint() const
+{
+    return QSize(72 * fontMetrics().width('x'),
+                 25 * fontMetrics().lineSpacing());
+}
+[/code]
+	sizeHint()函数返回基于字母'x'的宽度和文本行高度的尺寸。QworkSpace使用该尺寸暗示来初始化窗口的尺寸。
+	下面是MDI Editor程序的main.cpp文件：
+[code type="cpp-qt"]
+#include <QApplication>
+#include "mainwindow.h"
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QStringList args = app.arguments();
+    MainWindow mainWin;
+    if (args.count() > 1) {
+        for (int i = 1; i < args.count(); ++i)
+            mainWin.openFile(args[i]);
+    } else {
+        mainWin.newFile();
+    }
+    mainWin.show();
+    return app.exec();
+}
+[/code]
+	如果用户在命令行指定了任何文件，我们试图加载它们。否则，我们以一个空文档启动。Qt相关命令参数，如-style和-font，将被在Qapplication构造函数中自动从参数列表中移除。因此如果我们在命令行写了
+mdieditor -style motif readme.txt
+，QApplication::arguments()将返回一个包含两个项（"mdieditor" and "readme.txt"）的QStringList，并且该MDI Editor程序启动并打开文件readme.txt。
+	MDI是一种同时处理多个文档的方式。在Mac OS X平台上，更好的方法是使用多顶级（multiple top-level）窗口。这种方法已在第3章的“多文档“中提及了。
+
+
+
+
+</body>
+</html>

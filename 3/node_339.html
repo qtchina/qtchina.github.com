@@ -1,0 +1,82 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用nginx做防盗链代理</title>
+</head>
+<body>
+nginx是一款高效精悍、功能强大的web server, 本篇实现的功能基于nginx两个功能模块，以及nginx的强大配置功能。
+
+用到的两个主要模块：
+upstream模块，http_referer模块。
+
+首先做一个代理配置，在nginx.conf的http段加入下面一段：
+    upstream backend_hack_link {
+        server 192.168.1.15 weight=3;
+    }
+这个定义了一个指向192.168.1.15的代理服务器。
+
+在server段添加配置代码:
+[code type="config"]
+    server {                        
+        listen       80;            
+        server_name  images.qtchina.net *.qtchina.net;
+
+        charset utf-8;
+
+        access_log  /data/log/qtchina.net.access.log;
+
+        location / {
+            # root   html;
+            # index  index.html index.htm;
+
+            valid_referers none blocked *.qtchina.net;
+            if ($invalid_referer){                                 
+           return  403;                                       
+            }                                                       
+                                                                    
+            ###impl this condition if ($http_referer = "" && $cookie_imqtchina != "1") { return 403; }
+            set $referer_and_cookie $http_referer/$cookie_inwm/$request_filename;
+            if ($referer_and_cookie ~ ^//(.+)\.mp3$) {
+               return 406;
+            }                                                                               
+
+            proxy_pass http://backend_hack_link/;
+            proxy_redirect off;                  
+            proxy_set_header X-Real-IP $remote_addr; # 将客户端的真实IP传给proxy后端
+            proxy_set_header X-Forwarded-For $remote_addr;                          
+            # proxy_set_header REMOTE_ADDR $remote_addr;                            
+            proxy_set_header Host $host;                                            
+            proxy_pass_request_headers on;                                          
+            proxy_pass_request_body on;                                             
+            set_real_ip_from 0.0.0.0;                                               
+            real_ip_header  xxxxx-remote_addr;                                      
+        }                                                                           
+    } 
+
+[/code]
+
+第一段验证
+valid_referers指定有效的refer来源，在这的含义是，如果是没有refer或者refer以qtchina.net结尾，则属于有效refer来源，直接到请求转到代理后端服务器192.168.1.15。
+如果非上述的refer，则返回403禁止访问。
+
+第二段验证
+当有cookie且来源为空，表示已经登陆过qtchina.net站点，可能通过。否则返回403禁止访问。
+这种方法的一个问题是使用了一个全站通用的cookie, 不过只需要在所有页面中加一行即可实现，也不太复杂。这种方法可以实现对多媒体数据，像mp3,flash等的防盗链功能。
+
+javascript代码：
+[code type="javascript"]
+ <script>
+        //
+        var sitewisemandomain='qtchina.net';
+        document.cookie="inqtchina=1;domain="+sitedomain+";path=/";
+ </script>
+[/javascript]
+
+上面的配置文件需要nginx支持realip模块。如果在项目中使用，请修改相应的域名及服务器信息。
+
+
+
+</body>
+</html>

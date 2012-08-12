@@ -1,0 +1,35 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux下网线接入状态检测</title>
+</head>
+<body>
+现在有两个工具软件包mii-tools和ethtool 中包含检测代码。
+
+mii-tools中的检测代码如下：
+
+[code type="c"]
+short get_flags(const char *dev)
+{
+        struct ifreq ifr;
+
+        bzero((char *)&ifr, sizeof(ifr));
+        strcpy(ifr.ifr_name, dev);
+
+        if (ioctl(ioctl_sockid,SIOCGIFFLAGS, (char *)&ifr) < 0)
+                return(0);
+        return(ifr.ifr_flags);
+}
+
+flags = get_flags(ifx->d_name);
+if ((flags & IFF_RUNNING) == 0)
+    没网线
+[/code]
+
+mii-tools下载： http://net-tools.berlios.de/
+ethtool下载： http://sourceforge.net/projects/gkernel/
+
+</body>
+</html>

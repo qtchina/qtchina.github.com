@@ -1,0 +1,73 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>grub2 开始支持开机密码功能</title>
+</head>
+<body>
+		<div id="post_message_2026505" style="overflow-x: hidden;"><a href="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477092" target="_blank">http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477092</a><br />
+<a href="http://grub.enbug.org/Authentication" target="_blank">http://grub.enbug.org/Authentication</a> 密码相关配置文件格式<br />
+<div style="margin:20px; margin-top:5px; ">
+	<div  class="smallfont" style="margin-bottom:2px">引用:</div>
+	<table cellpadding="4" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td class="alt2" style="border:1px inset">
+			
+				<font color="Red">Basic authentication support has been merged in SVN trunk revision 2529 (2009-08-25)</font> <br />
+Example grub.cfg snippet: <br />
+<br />
+<div style="margin:20px; margin-top:5px; margin-left:0px">
+	<div class="smallfont" style="margin-bottom:2px">代码:</div>
+	<pre class="alt2" style="margin:0px; padding:4px; border:#c6c6c6 1px solid; width:640px; height:226px; overflow:auto"><div dir="ltr" style="text-align:left;">set superusers=&quot;user1&quot;
+password user1 password1
+password user2 password2
+
+menuentry &quot;GNU/Linux&quot; {
+        set root=(hd0,1)
+        linux /vmlinuz
+}
+
+menuentry &quot;Windows&quot; --users user2 {
+        set root=(hd0,2)
+        chainloader +1
+}</div></pre>
+</div>Superusers must be set to enable authentication support. <br />
+Every superuser can go to commandline, edit menu entrys and execute all menu entrys. <br />
+GNU/Linux can be booted by any user. <br />
+Windows can be only booted by user2 and user1 who is a superuser. <br />
+password command only supports unencrypted plain text passwords.
+			
+		</td>
+	</tr>
+	</table>
+</div><a href="http://grub.enbug.org/" target="_blank">http://grub.enbug.org/</a><br />
+<div style="margin:20px; margin-top:5px; ">
+	<div  class="smallfont" style="margin-bottom:2px">引用:</div>
+	<table cellpadding="4" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td class="alt2" style="border:1px inset">
+			
+				<ul><li>2009-09-12 GRUB 1.97~beta3 was released. <a href="ftp://alpha.gnu.org/gnu/grub/grub-1.97%7Ebeta3.tar.gz" target="_blank">grub-1.97~beta3.tar.gz</a></li>
+<li>2009-09-04 GRUB 1.97~beta2 was released. <a href="ftp://alpha.gnu.org/gnu/grub/grub-1.97%7Ebeta2.tar.gz" target="_blank">grub-1.97~beta2.tar.gz</a></li>
+<li><font color="Red">2009-08-30</font> GRUB 1.97~beta1 was released. <a href="ftp://alpha.gnu.org/gnu/grub/grub-1.97%7Ebeta1.tar.gz" target="_blank">grub-1.97~beta1.tar.gz</a></li>
+</ul>
+			
+		</td>
+	</tr>
+	</table>
+</div><font color="Silver"><u>从时间上看当前版本 1.97~beta* 貌似已支持开机密码。<br />
+另一方面，ubuntu 那帮家伙忒猴急，把一个一个安全问题推送给他们的用户。</u></font><br />
+<br />
+用虚拟机试了下，配置中需要添加下面红色部分，<br />
+superusers=&quot;&quot;，引号可选，非必要，<br />
+使用明文密码，貌似暂不支持 grub 方式 md5 密码，<br />
+qemu 没问题，kvm 下键盘失效(可能是偶这里 kvm-70 版本太低所致)<br />
+<div style="margin:20px; margin-top:5px; margin-left:0px">
+	<div class="smallfont" style="margin-bottom:2px">代码:</div>
+	<pre class="alt2" style="margin:0px; padding:4px; border:#c6c6c6 1px solid; width:640px; height:66px; overflow:auto"><div dir="ltr" style="text-align:left;"><font color="Red">insmod password</font>
+set superusers=user1
+password user1 password1</div></pre>
+</div></div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>遇到一个奇怪的网络问题</title>
+</head>
+<body>
+连接到本地 localhost 网络不稳定，表现为telnet localhost 22, 随机出现connect timeout问题。
+当然前提确定openssh的22端口没有问题，并且即登陆其他端口也有这个问题。
+但是登陆其他外网，其他同网络的机器都没有这个问题,其他网络程序也没出现此问题。
+所以，用到这种通信模式的本地程序都出现了问题，无法使用。
+是路由设置问题？还是dns问题，还是什么问题呢。
+
+路由如下，感觉是没有问题，
+localhost ~ # route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.1.0     *               255.255.255.0   U     0      0        0 eth0
+loopback        localhost.local 255.0.0.0       UG    0      0        0 lo
+default         192.168.1.1     0.0.0.0         UG    0      0        0 eth0
+localhost ~ # 
+
+resove.conf如下， 
+localhost opera # more /etc/resolv.conf
+domain domain
+search domain
+
+nameserver 8.8.8.8
+localhost opera # 
+
+ifconfig结果：
+
+localhost opera # ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:24:7e:6f:f3:89  
+          inet addr:192.168.1.110  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::224:7eff:fe6f:f389/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:83482 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:72777 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:100389515 (95.7 MiB)  TX bytes:7621328 (7.2 MiB)
+          Interrupt:20 Memory:fc200000-fc220000 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:294 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:294 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:21216 (20.7 KiB)  TX bytes:21216 (20.7 KiB)
+
+teredo    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  
+          inet6 addr: 2001:0:53aa:64c:1404:b424:8ab0:9fd/32 Scope:Global
+          inet6 addr: fe80::ffff:ffff:ffff/64 Scope:Link
+          UP POINTOPOINT RUNNING NOARP MULTICAST  MTU:1280  Metric:1
+          RX packets:24 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:39 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:500 
+          RX bytes:2928 (2.8 KiB)  TX bytes:8883 (8.6 KiB)
+
+wlan0     Link encap:Ethernet  HWaddr 00:1e:65:a1:1c:7e  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+localhost opera #
+
+
+PS: 终于发现问题出在什么地方了，
+发现如果关闭/etc/init.d/wicd后，这个问题消失，
+现在的路由如下：
+localhost ~ # route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.1.0     *               255.255.255.0   U     0      0        0 eth0
+loopback        localhost.local 255.0.0.0       UG    0      0        0 lo
+default         192.168.1.1     0.0.0.0         UG    0      0        0 eth0
+localhost ~ # 
+与原来的一样，但不会出现连接不上的问题。
+
+PS2: 这样就是问题出的少点了，但依然没有完全解决，出问题比例基本1:4的概率。应该不会是rc内核的问题吧，到底问题出在哪呢。 
+换回2.6.34稳定内核，修改了/etc/hosts文件，注掉一行，
+# 127.0.0.1     localhost.localdomain   localhost
+这么测试了几回，没有问题了。再试用一段时间。
+
+</body>
+</html>

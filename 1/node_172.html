@@ -1,0 +1,72 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>自定义Qt物件</title>
+</head>
+<body>
+	在某些情况下，我们发现一个Qt物件需要比在Qt设计师中能设的属性或者通过调用它的函数更多的特征。一个简单和直接的解决方法是创建相差物件的子类并让它适应我们的需要。
+图5.1　HexSpinBox物件
+
+
+	在本节中，我们将开发一个十六进制spin box 以展示这是如何工作的。QSpinBox仅支持十进制整数，但通过继承使它接受并显示十六进制值是特别简单的。
+[code type="cpp-qt"]
+#ifndef HEXSPINBOX_H
+#define HEXSPINBOX_H
+#include <QSpinBox>
+class QRegExpValidator;
+class HexSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    HexSpinBox(QWidget *parent = 0);
+protected:
+    QValidator::State validate(QString &text, int &pos) const;
+    int valueFromText(const QString &text) const;
+    QString textFromValue(int value) const;
+private:
+    QRegExpValidator *validator;
+};
+#endif
+[/code]
+	HexSpinBox从QSpinBox继承了大多数功能。它提供一个典型的构造函数并重新实现了3个来自QSpinBox的虚函数。
+[code type="cpp-qt"]
+#include <QtGui>
+#include "hexspinbox.h"
+HexSpinBox::HexSpinBox(QWidget *parent)
+    : QSpinBox(parent)
+{
+    setRange(0, 255);
+    validator = new QRegExpValidator(QRegExp("[0-9A-Fa-f]{1,8}"), this);
+}
+[/code]
+	我们设置它的默认区间为0到255（0x00到0xFF），这对十六进制spin　box来说比QSpinBox的默认值0到99更合适。
+	用户可以通过点击Spin box的上下箭头或者在它的编辑框中输入值来修改spin　box的当前值。在下面的情况下，我们希望能严格控制用户的输入为合法的十六进制数字。为了达到这一目的，我们使用QregExpValidator接收1到8个字符，每个字符都必须是'0' 到 '9', 'A' 到 'F', 和 'a' 到 'f'其中的一个。
+[code type="cpp-qt"]
+QValidator::State HexSpinBox::validate(QString &text, int &pos) const
+{
+    return validator->validate(text, pos);
+}
+[/code]
+	这个函数被QSpinBox调用以查看到现在为止输入的文本是否有效。可能看有3种结果：无效（输入的文本与正则表达式不匹配），中间部分（输入的文本貌似有效值的一部分），可打接受的（输入的文本有效）。QregExpValidator有一个合适的validate()函数，因此我们简单的返回调用它的结果即可。理论上，当输入的值超出spin box的范围时我们应该返回无效或者中间值，但QSpinBox已经非常的精致并且能在没有任何帮助的情况检测到这种情况。
+[code type="cpp-qt"]
+QString HexSpinBox::textFromValue(int value) const
+{
+    return QString::number(value, 16).toUpper();
+}
+[/code]
+
+	textFromValue()函数用于把一个整数值转换为字符串。当用户按下spin box的上下箭头的时候，QSpinBox调用它更新spin box的框的值。我们使用静态函数QString::number()，并给它的第二个参数传递16来转换当前值为小写的十六进制形式，再调用QString::toUpper()把结果转换为大写形式。
+[code type="cpp-qt"]
+int HexSpinBox::valueFromText(const QString &text) const
+{
+    bool ok;
+    return text.toInt(&ok, 16);
+}
+[/code]
+	valueFromText()函数执行相反的操作，把一个字符串转换为整数值。当用户在spin box的编辑框中输入了一个值并按回车时它会被QSpinBox调用。我们调用QString::toInt()函数试着把当前的文本转换为一个整数值，并再一次使用了16进制。如果这个字符串不是有效的十六进制值，ok被设置成false，同时toInt()返回0。这里我们不需要考虑这一可能性，因为检测器只允许用户输入有效的十六进制字符串。我们也可以　传递一个null探针伤toInt()的第一个参数以代替传递给它一个临时变量的地址（ok）。
+	我们现在已经完成了十六进制的spin box的编写。自定义其他Qt物件遵循相同的模式：挑选一个适当的Qt物件，继承它，重新实现某些虑函数来改变它的行为。
+
+</body>
+</html>

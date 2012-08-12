@@ -1,0 +1,37 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>实现了一个简单的opera浏览器cookie文件解析库libo4f</title>
+</head>
+<body>
+库的名字叫opera 4 file formats library, 现在只能读取，不支持写入功能。
+测试opera版本 opera 10.52 for unix。
+适用于读取Opera7+的 cookies4.dat, vlink4.dat, dcache4.url三个配置文件。
+
+参考文档：
+
+1. 官方文档，（现在官方网站已经找不到了，存储在本地）
+    http://www.qtchina.net/?q=node/428
+
+2. 在另一个网站找到的一篇说明文档，虽然描述的没官方文档详细，但关键的几个文件格式中的值说明的比较清楚。
+     http://www.qtchina.net/?q=node/429
+
+结合这两篇文档，在解析cookies4.dat的时候基本没有问题，只有一个0x28编号的tag识别不出来，但可以忽略这个值，不影响解析其他的数据。
+
+源代码： http://nullget.svn.sourceforge.net/viewvc/nullget/vendor/libo4f/
+下载最新snapshot包：  http://nullget.svn.sourceforge.net/viewvc/nullget/vendor/libo4f.tar.gz?view=tar
+
+该库提供的API：
+[code type="c"]
+ libo4f_t *libo4f_open(const char *path);
+int libo4f_close(libo4f_t *o4f);
+int libo4f_file_type(libo4f_t *o4f);
+cookie_t *libo4f_get_cookie(libo4f_t *o4f, const char *name, const char *domain);
+// format is opera's alert(document.cookie): 
+// PREF=ID=f9557c2a82e32ccb:U=34b1f389b91cd77d:FF=2:NW=1:TM=1270620463:LM=1270651259:S=-OagB_stpJtDuZa8
+char *libo4f_get_cookie_string(libo4f_t *o4f, const char *domain);
+[/code]
+  
+</body>
+</html>

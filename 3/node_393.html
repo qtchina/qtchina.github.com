@@ -1,0 +1,52 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>支持microsoft project的跨平台project程序</title>
+</head>
+<body>
+主页： http://www.openproj.org
+开发语言，java
+开源，开源与商业双协议,功能上有少许不同。
+
+为gentoo写了一个简单的安装ebuild: <a href="http://nullfxp.googlecode.com/svn/vendor/portage/app-office/openproj/openproj-1.4.ebuild">app-office/openproj-1.4.ebuild</a>
+
+[code type="bash"]
+# Copyright 1999-2009 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+
+EAPI="2"
+inherit eutils
+
+DESCRIPTION="OpenProj is a desktop replacement of Microsoft Project"
+HOMEPAGE="http://www.openproj.org"
+SRC_URI="mirror://sourceforge/openproj/${P}.tar.gz"
+RESTRICT="fetch"
+
+LICENSE="CPAL"
+# LICENSE="GPL-2"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+IUSE=""
+
+# TODO add depend jdk section
+
+src_install() {
+        declare OPENPROJ_HOME=/opt/openproj
+
+        dodir ${OPENPROJ_HOME}
+        cp -R * "${D}"${OPENPROJ_HOME} || die "Unable to install openproj folder"
+
+        # Create openproj wrapper
+        make_wrapper openproj ./openproj.sh ${OPENPROJ_HOME} ${OPENPROJ_HOME}/lib:${OPENPROJ_HOME
+}
+        newicon "${FILESDIR}"/openproj.png ${PN}.png
+        make_desktop_entry openproj "Openproj" ${PN} "Office"
+}
+
+[/code]
+</body>
+</html>

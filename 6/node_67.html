@@ -1,0 +1,114 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>FreeBSD－5.2下安装ORACLE9i手记</title>
+</head>
+<body>
+<p>FreeBSD－5.2下安装ORACLE9i手记</p>
+<p>&nbsp;无可否认FreeBSD是最优秀的操作系统之一，但缺少大型商业数据库的支持阻碍了FreeBSD走向高端和企业应用，Oracle作为数据库的领头雁，如果能够在FreeBSD上安家，则是我等FreeBSD FANS的一个鼓舞。经过两天的努力并参考了一个俄文网站的关于在FreeBSD上安装ORACLE8i的介绍，成功地在FreeBSD5.2上安装的 ORACLE9i。以下是安装手记。 <br />
+一 内核配置 <br />
+# Add for oracle <br />
+options NBUF=2048 <br />
+options MAXDSIZ=&quot;(1024UL*1024*1024)&quot; <br />
+options MAXSSIZ=&quot;(1024UL*1024*1024)&quot; <br />
+options DFLDSIZ=&quot;(1024UL*1024*1024)&quot; <br />
+# <br />
+options SYSVSHM <br />
+options SHMMAXPGS=65536 <br />
+options SHMMIN=2 <br />
+options SHMMNI=256 <br />
+options SHMSEG=256 <br />
+# <br />
+options SYSVSEM <br />
+options SEMMAP=512 <br />
+options SEMMNI=512 <br />
+options SEMUME=512 <br />
+options SEMMNS=1024 <br />
+options SEMMNU=512 <br />
+options SEMMSL=256 <br />
+options SEMOPM=256 <br />
+# <br />
+options SYSVMSG #SYSV-stylmessage queues <br />
+options MSGMNB=8192 <br />
+options MSGMNI=256 <br />
+options MSGSEG=8192 <br />
+options MSGSSZ=16 <br />
+options MSGTQL=128 <br />
+# Add end <br />
+另外将maxusers设为512，我在定制内核时选择的是ULE调度器，现在ULE已经是默认的调度器了。 <br />
+二 系统配置 <br />
+1 SWAP分区大小为1G，RAM256M，ORACLE_HOME要求有5G以上空间。 <br />
+2 安装Linux仿真环境。 <br />
+必须安装linux_base-7.1和linux_devtools-7.1两个PKGS，但我在安装时发现从ports已经无法安装devtools -7.1了，所以被迫从一个安装了RH7.3的机器中根据两个ports的介绍将整个RH7.3系统CP到了FreeBSD中，如果需要我可以将这个目录?树打好一个tar包提供给和位。无论你如何构建/compat/linux目录树，必须保证在?抡真环境中有ar,as,ld,nm,tr,cpp, chmod,g++,printf,find,chgrp,chown等程序。 <br />
+3 调整Linux仿真环境 <br />
+a 在/compat/linux/etc中建立mtab到/etc/fstab的链接 <br />
+ln -s /etc/fstab /compat/linux/etc/mtab <br />
+b 在/compat/linux/bin中建立到awk,sed,chown的链接 <br />
+ln -s /compat/linux/usr/bin/awk /compat/linux/bin/awk <br />
+ln -s /compat/linux/usr/bin/sed /compat/linux/bin/sed <br />
+ln -s /usr/sbin/chown /compat/linux/bin/chown <br />
+以上配置是为了满足ORACLE9i在安装时的一些脚本的要求，我所知道的在运行root.sh时用到以上的配置，但也可以在运行前修改这个脚本，我安装时用的是后??，不知是不是这个原因导致了后面会讲的一个错误。 <br />
+c 在/compat/linux/bin中建立arch可执行文件 <br />
+内容为： <br />
+#!/compat/linux/bin/bash <br />
+echo i686 #根据你的机器是i586还是i486 <br />
+打上可执行标记： <br />
+chmod +x arch <br />
+4 打开linux仿真支持，修改rc.conf文件也可以kldload linux模块 <br />
+enable_linux=&quot;YES&quot; <br />
+5 mount linux proc文件系统 <br />
+mkdir /compat/linux/proc <br />
+mount -t linproc /dev/device /compat/linux/proc <br />
+第二步可以放入/etc/fstab文件中在开机时自动截入 <br />
+6 添加oracle用户组和用户 <br />
+pw groupadd -n dba -g 94 <br />
+pw groupadd -n oinstall -g 95 <br />
+pw useradd -n oracle -u 94 -c &quot;Oracle Daemon&quot; -d /home/oracle -s <br />
+/compat/linux/bin/bash -g dba -G oinstall,wheel <br />
+7 配置oracle用户环境 <br />
+mkdir /home/oracle <br />
+chown oracle:dba /home/oracle <br />
+cd /home/oracle <br />
+编辑.profile配置oracle用户环境： <br />
+PATH=/compat/linux/bin:/compat/linux/sbin:compat/linux/usr/bin:/compat/<br />
+linux/usr/sbin:/home/oracle/920/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/<br />
+local/sbin:/usr/local/bin:/usr/X11R6/bin; export PATH <br />
+ORACLE_BASE=/home/oracle; export ORACLE_BASE <br />
+#下面一个是安装oracle的目录 <br />
+ORACLE_HOME=/home/oracle/920; export ORACLE_HOME <br />
+LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH <br />
+ORACLE_SID=ORCL; export ORACLE_SID <br />
+ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data; export ORA_NLS33 <br />
+export DISPLAY=:0 <br />
+三 安装准备 <br />
+下载oracle9i(9.2.0) for linux的三个文件在一个足够大小(&gt;2G)空间解压缩最后得到三个目录：Disk1,Disk2,Disk3。 <br />
+四 安装 <br />
+1 以oracle用户登录 <br />
+2 进入X <br />
+startx <br />
+3 在X中打开一个终端窗口，在窗口中运行安装程序 <br />
+cd /path/Disk1 <br />
+./runInstaller <br />
+安装程序开始运行，出现界面后按提示选择进行安装，这与安装典型的 <br />
+windows程序一样，安装时默认的临时文件在/tmp目录中，此时进入/tmp可看见oracle9i的安装目录和一些临时文件。 <br />
+4 安装时的必须的手工干预 <br />
+a 在刚开始安装会有一个窗口提示运行一个脚本，这时可在另一个终端窗口中先以root身份在/compat/linux/etc中创建一个名为oraInst.loc的文件并将属主设为oracle <br />
+cd /compat/linux/etc <br />
+touch oraInst.loc <br />
+chown oracle:dba oraInst.loc <br />
+然后以oracle身份运行脚本，之后继续安装。 <br />
+b 在安装部分完成后在连接数据库的过程中有一个错误出现(与ins_ctx.mk有关)，此时可选忽略，不会引响数据库的基本功能，但在Agent配置时会出错，其它正常。我不知道是否每一次安装都会有这个错误，也不知道是什么原因造成了这个错误。 <br />
+　　　 c 最后一个无需手工干预的地方在数据库配置以前要以root身份运行$ORACLE_HOME/root.sh，此时观察其输出，不能有任何错误，如果有则是因为什么程序找不到造成的，可以修改这个脚本将指定所提示的程序的正确路径就可以了。 <br />
+　　5　安装后根据需要进行数据库配置，这与WINDOWS中是一样的。 <br />
+　五　安装后启动数据库 <br />
+　　1　重启系统 <br />
+　　2　以oracle身份登录 <br />
+　　3　启动数据库 <br />
+　　在初次启动数据库时，要先将initORCL.ora这个文件（在你指定的全局数据名所在的目录下的pfile目录中）复制到$ ORACLE_HOME/dbs目录中，并在dbs目录中将oraPW.（全局名）的一个文件复制一份名为oraPW,然后就可以正常启动数据库了。 <br />
+　六　总结 <br />
+　　从使用来看，直接在机器上使用sqlplus进行查询，感觉不到有什么不同，至于效率还未测试。不足之处请各位批评，并请高手修正安装中的错误。 <br />
+　　谢谢。</p>
+</body>
+</html>

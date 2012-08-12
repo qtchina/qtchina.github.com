@@ -1,0 +1,97 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>一次惊险的grub2-svn安装经历</title>
+</head>
+<body>
+起因：
+   gentoo linux 根文件系统从reiserfs切换到ext4, grub 0.9x系统不支持从ext4分区启动，只能升级到grub 1.9x才行，而1.9x至今没有一个稳定版本可用，大多数使用这个版本的人都在使用svn中的grub2。
+
+当前分区情况：
+
+hda   第一块硬盘，主硬盘
+   hda1    主分区，安装有 windows xp (历史遗留问题，还有几个fat32的分区中有许多数据）
+   hda2    主分区，NTFS格式
+   hda5-hda7  windows 逻辑分区， fat32类型文件系统，存储数据。
+   hda8    逻辑分区， ext4文件系统，gentoo linux 根分区
+   hda9    Linux swap 分区
+hdb   第二块硬盘
+   hdb1    主分区，装有FreeBSD 7.0
+   hdb2-hdb4  主分区， fat32格式，数据盘。
+
+目的： 在不破坏现在的引导系统的情况下，将grub2引导信息安装到hda8的引导扇区，并使用window的ntldr引导程序引导到grub2,再由grub2引导进入装在ext4文件系统中的linux系统。
+
+1. 首先在hda1的根分区装有grub4dos程序，在hda1/boot/目录装有能引导ext4分区的 gentoo linux 的内核，在未安装grub2之前，使用grub4dos引导这个内核进入到Linux。那么这个Linux怎么安装上的呢？使用的systemrescuecd 1.1.3-beta3, 这个启动盘基于gentoo install cd, 并且升级了其中的内核，支持ext4,reiserfs4这些新文件系统的管理工具。
+
+2. 安装grub2
+   从svn检出grub2源代码，
+svn co http://svn.savannah.gnu.org/svn/grub/trunk/grub2
+cd grub2
+./configure
+make
+make install
+
+  grub2软件安装完了，接下来第3步把grub2引导信息安装到hda8分区的启动扇区上。
+
+3. 执行命令，将 grub2的启动信息安装到启动扇区。
+   grub-install /dev/hda8
+    这一步并没有报错，可是把启动扇区中的数据拷贝出来查看，全是0,也就是并没有启动信息写入到启动扇区
+   dd if=/dev/hda8 of=grub2.boot ibs=512 count=1
+
+   重复试了几次，结果一样（这里可能因为我的分区信息比较乱，使用windows自带工具分区过，使用partition magic分区过，使用diskgen/diskman分区过）。现在怎么办？考虑试试能不能装到MBR中！！！
+
+4. 备份MBR的引导信息。
+
+   dd if=/dev/hda of=hda.mbr ibs=512 count=1
+
+   在完成下面的grub2安装测试后，可将此信息重新使用 dd命令写入到MBR 中。
+
+   再次执行 grub-install 命令：(注意参数有点变化）
+   grub-install /dev/hda
+ 
+   再将mbr拷贝出来：
+   dd if=/dev/hda of=grub2.mbr ibs=512 count=1
+
+   使用hex模式打开grub2.mbr文件，内容中包含grub字样，并且最后两个字节为55AA，这说明grub2引导信息已经成功安装到了mbr中了，而mbr已经存储到文件grub2.mbr中了，这就是grub2的引导信息，这个文件可用于windows ntldr程序了。
+
+   别忘了，现在将原来的mbr恢复回来：
+   dd if=hda.mbr of=/dev/hda ibs=512 count=1
+
+5. 将grub2.mbr拷贝到hda1/目录下，在hda1/boot.ini中添加一条记录：
+
+  C:\grub2.lnx="Grub2 OS Loader menus (For EXT4 )"
+
+  重启，出来了菜单 "Grub2 OS Loader menus (For EXT4 )"， 回车后，出来了grub控制台，上面显示版本号 1.96 ，这说明 grub2引导信息正确。
+
+6. 在grub2控制台使用命令（或者使用grub4dos)引导进入linux，修改hda8/boot/grub/grub.cfg如下：
+# Timeout for menu
+set timeout=10
+
+# Set default boot entry as Entry 0
+set default=0
+
+# Entry 0 - Load Linux kernel
+menuentry "My Linux Kernel 2.6.28 (ext4) on (hd0,8)" {
+    set root=(hd0,8)
+    linux /boot/kernel-genkernel-x86-2.6.28-rc6  root=/dev/hda8
+    initrd /boot/initramfs-genkernel-x86-2.6.28-rc6
+}
+
+# Entry 1 - Chainload another bootloader
+menuentry "Chainload my OS" {
+    set root=(hd0,1)
+    chainloader +1
+}
+
+重启，应该能看到 grub2的菜单了。回车后可以直接引导到linux系统。
+
+整个安装过程就成功完成了。
+
+这里的惊险主要是，在此过程可能会修改MBR，造成这几个系统都不能启动了。所以要注意备份mbr，恢复mbr这一步。到最后其实并没有把grub2的引导信息安装到hda8引导扇区中，不过我们的目的已经达到，其实即使将grub2引导信息写入到引导扇区，也还是要拷贝出来保存到一个512字节的文件中。现在如果你想安装，可以使用dd将grub2内容拷贝到hda8的引导扇区，也是没有问题的。
+
+对linux的dd命令，grub引导，ntldr引导，mbr，引导扇区不熟悉的人切勿随便模仿。
+
+</body>
+</html>

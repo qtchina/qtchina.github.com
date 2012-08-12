@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>CMake 安装手册</title>
+</head>
+<body>
+<p>有好几种安装CMake 的方法，因你所用的平台而异。</p>
+<p><br />
+<strong>Windows</strong><br />
+在<a href="http://www.cmake.org/HTML/Download.html" target="_blank" title="CMake 下载页面">CMake 下载页面</a> 上有已编译好的二进制包。它提供的是一个可执行的安装程序。你还可以下载源码包并从源码包编译CMake。CMake下载页面还提供了已释出的源码和访问CVS的指令。<br />
+<br />
+为了从源码树编译CMake，你必须先要安装最新的CMake二进制版本，因为要用它来编译源码树。一旦装好了二进制版本的CMake，你就可以像编译其他项目一样使用CMake编译CMake了。一般来说，这意思是你要选择CMake源码目录作为源目录，然后再指定编译出来的可执行程序结果的位置。</p>
+<p><br />
+<strong>Linux, Mac OSX, UNIX &amp; Cygwin</strong><br />
+在<a href="http://www.cmake.org/HTML/Download.html" target="_blank" title="CMake 下载页面">CMake 下载页面</a> 上有许多UNIX平台上已经编译好的二进制包。<br />
+<br />
+下面有几种从源码树编译CMake的方法：<br />
+<br />
+如果还没有安装CMake，源码树中提供了一个 bootstrap 脚本：<br />
+./bootstrap<br />
+make<br />
+make install<br />
+(注：make install 一步是可选的，CMake 可以在编译目录下运行。)<br />
+<br />
+一个已经安装了的CMake也可以用于编译新版本的CMake：<br />
+cmake .<br />
+make<br />
+make install<br />
+(注：make install 一步是可选的，CMake 可以在编译目录下运行。)<br />
+<br />
+在UNIX上，如果你不是使用的GNU C++编译器，你要告诉bootstrap 脚本你想用哪个编译器。这可以在运行configure命令前通过设置CC和CXX环境变量完成。例如，在一个带有7.3X编译器的SGI平台上，你可以像下面这样编译CMake：<br />
+(setenv CXX CC; setenv CC cc; ./bootstrap)<br />
+make<br />
+make install<br />
+要查看bootstrap脚本的详细参数，请执行 ./bootstrap &ndash;help</p>
+</body>
+</html>

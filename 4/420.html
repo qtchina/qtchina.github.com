@@ -1,0 +1,20 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>QProcess 关闭其管理的进程的两个方法比较</title>
+</head>
+<body>
+QProcess 是QT库中用于管理其他进程的类，它有两个关闭其管理的进程的方法，分别是，
+kill()
+terminate()
+
+这两个方法有一些区别，kill()更强势，在linux/mac下给进程发送SIGKILL，进程会无条件的退出，在windows下是使用terminateProcess函数实现，进程也会无条件退出。
+terminal()稍微好一些，在windows上可通知进程做最后的处理，也可能进程不处理这个消息。在linux/mac上给进程发送SIGTERM信号，进程也能做一些退出前的处理。
+
+一般情况下，这两个方法够用，但对其管理的进程的退出指令都不太友好。如果对管理的进程行为比较了解，可以使用能友好的方式，如，现在很多Linux/Unix程序都能处理特定的退出信号，如SIGINT, SIGQUIT, SIGUSR等，进程收到这些信号做完善处理后退出。
+
+这么做缺点要需要了解不同平台进程管理的调用，编写平台相关的代码。
+
+</body>
+</html>

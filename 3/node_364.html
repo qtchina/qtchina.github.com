@@ -1,0 +1,31 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用emacs的etags阅读源代码</title>
+</head>
+<body>
+在阅读代码的时候,经常需要在文件间,函数间跳转,跳转到某个函数,某个变量,这时候可以使用ctags方式实现这个功能.
+
+emacs自带一个叫etags的工具程序,用来生成一个给emacs用的TAGS索引文件,在emacs中实现函数文件间跳转,搜索的功能.
+
+1. 使用etags 创建TAGS索引文件.
+   搜索当前目录及子目录下.c,.cpp,.h等文件,并生成TAGS文件,放在当前目录下.
+   find . -type f -iname "*.[ch]*" | etags -
+
+2. 使用M-.键查找符号表
+`M-.’ (‘find-tag’) – find a tag, that is, use the Tags file to look up a definition
+`M-*’ (‘pop-tag-mark’) – jump back
+‘tags-search’ – regexp-search through the source files indexed by a tags file (a bit like ‘grep’)
+‘tags-query-replace’ – query-replace through the source files indexed by a tags file
+`M-,’ (‘tags-loop-continue’) – resume ‘tags-search’ or ‘tags-query-replace’ starting at point in a source file
+‘tags-apropos’ – list all tags in a tags file that match a regexp
+‘list-tags’ – list all tags defined in a source file
+
+其中比较重要的两个命令,M-. 查找, M-*返回
+
+3. 同时使用多个TAGS符号表文件
+
+</body>
+</html>

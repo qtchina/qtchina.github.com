@@ -1,0 +1,108 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>使用ffmpeg录音及桌面录像</title>
+</head>
+<body>
+仅录制声音：
+
+ffmpeg -f oss -ar 44100 -i /dev/dsp  -acodec mp2 -ab 128k test.mp3
+
+桌面录像：
+ffmpeg -f oss -i /dev/dsp  -f x11grab -r 30 -s 1024x768 -i :0.0 -acodec pcm_s16le -vcodec libx264 -vpre lossless_ultrafast -threads 0 output.mkv
+
+<div id="csdnblog_content">
+    <div class="gutter">
+        <div class="default_contents">
+            <div class="user_article">                 
+                <div class="blogstory">
+
+                    <h2>本系列文章导航</h2>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382429.aspx" target="_blank">Windows下FFmpeg快速入门</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382205.aspx" target="_blank">ffmpeg参数解释</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382407.aspx" target="_blank">mencoder和ffmpeg参数详解（Java处理视频）</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382158.aspx" target="_blank">Java 生成视频缩略图(ffmpeg)</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382385.aspx" target="_blank">使用ffmpeg进行视频文件转换成FLV整理</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382413.aspx" target="_blank">java 视频处理 mencoder</a></p>
+<p><a href="http://blog.csdn.net/hemingwang0902/archive/2009/07/26/4382342.aspx" target="_blank">java 视频处理 ffmped+mencoder</a></p>
+
+<p>例子：<span style="background-color: #ffff99;">ffmpeg -y -i "1.avi" -title "Test" -vcodec xvid -s 368x208 -r 29.97 -b 1500 -acodec aac -ac 2 -ar 24000 -ab 128 -vol 200 -f psp -muxvb 768 "output.wmv"<br></span><br>解释：以上命令可以在Dos命令行中输入，也可以创建到批处理文件中运行。不过，前提是：要在ffmpeg所在的目录中执行（转换君所在目录下面的cores子目录）。<br>参数：</p>
+<p>
+</p><table border="0">
+<tbody>
+<tr>
+<td><strong>-y</strong></td>
+<td>覆盖输出文件，即如果 output.wmv 文件已经存在的话，不经提示就覆盖掉</td>
+</tr>
+<tr>
+<td><strong>-i "1.avi"</strong></td>
+<td>输入文件是和ffmpeg在同一目录下的1.avi文件，可以自己加路径，改名字</td>
+</tr>
+<tr>
+<td><strong>-title "Test"</strong></td>
+<td>在PSP中显示的影片的标题</td>
+</tr>
+<tr>
+<td><strong>-vcodec xvid</strong></td>
+<td>使用XVID编码压缩视频，不能改的</td>
+</tr>
+<tr>
+<td><strong>-s 368x208</strong></td>
+<td>输出的分辨率为368x208，注意片源一定要是16:9的不然会变形</td>
+</tr>
+<tr>
+<td><strong>-r 29.97</strong></td>
+<td>帧数，一般就用这个吧</td>
+</tr>
+<tr>
+<td><strong>-b 1500</strong></td>
+<td>视频数据流量，用-b xxxx的指令则使用固定码率，数字随便改，1500以上没效果；还可以用动态码率如：-qscale 4和-qscale 6，4的质量比6高</td>
+</tr>
+<tr>
+<td><strong>-acodec aac</strong></td>
+<td>音频编码用AAC</td>
+</tr>
+<tr>
+<td><strong>-ac 2</strong></td>
+<td>声道数1或2</td>
+</tr>
+<tr>
+<td><strong>-ar 24000</strong></td>
+<td>声音的采样频率，好像PSP只能支持24000Hz</td>
+</tr>
+<tr>
+<td><strong>-ab 128</strong></td>
+<td>音频数据流量，一般选择32、64、96、128</td>
+</tr>
+<tr>
+<td><strong>-vol 200</strong></td>
+<td>200%的音量，自己改</td>
+</tr>
+<tr>
+<td><strong>-muxvb 768</strong></td>
+<td>好像是给PSP机器识别的码率，一般选择384、512和768，我改成1500，PSP就说文件损坏了</td>
+</tr>
+<tr>
+<td><strong>-f psp</strong></td>
+<td>输出psp专用格式</td>
+</tr>
+<tr>
+<td><strong>"output.wmv"</strong></td>
+<td>输出文件名，也可以加路径改文件名</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>示例1：<br>截取一张352x240尺寸大小的，格式为jpg的图片： <br>ffmpeg -i test.asf -y -f image2 -t 0.001 -s 352x240 a.jpg </p>
+<p>示例2：<br>把视频的前３０帧转换成一个Animated Gif ： <br>ffmpeg -i test.asf -vframes 30 -y -f gif a.gif </p>
+<p>示例3：<br>在视频的第8.01秒处截取 352*240 的缩略图<br>ffmpeg -i test2.asf -y -f image2 -ss 08.010 -t 0.001 -s 352x240 b.jpg <br>**************************************************************************************<br><span style="color: #ff0000;">a) 通用选项</span><br><br>-L license<br><br>-h 帮助<br><br>-fromats 显示可用的格式，编解码的，协议的。。。<br><br>-f fmt 强迫采用格式fmt<br><br>-I filename 输入文件<br><br>-y 覆盖输出文件<br><br>-t duration 设置纪录时间 hh:mm:ss[.xxx]格式的记录时间也支持<br><br>-ss position 搜索到指定的时间 [-]hh:mm:ss[.xxx]的格式也支持<br><br>-title string 设置标题<br><br>-author string 设置作者<br><br>-copyright string 设置版权<br><br>-comment string 设置评论<br><br>-target type 设置目标文件类型(vcd,svcd,dvd) 所有的格式选项（比特率，编解码以及缓冲区大小）自动设置 ，只需要输入如下的就可以了：<br>ffmpeg -i myfile.avi -target vcd /tmp/vcd.mpg<br><br>-hq 激活高质量设置<br><br>-itsoffset offset 设置以秒为基准的时间偏移，该选项影响所有后面的输入文件。该偏移被加到输入文件的时戳，定义一个正偏移意味着相应的流被延迟了 offset秒。 [-]hh:mm:ss[.xxx]的格式也支持<br><br><span style="color: #ff0000;">b) 视频选项</span><br><br>-b bitrate 设置比特率，缺省200kb/s<br><br>-r fps 设置帧频 缺省25<br><br>-s size 设置帧大小 格式为WXH 缺省160X128.下面的简写也可以直接使用：<br>Sqcif 128X96 qcif 176X144 cif 252X288 4cif 704X576<br><br>-aspect aspect 设置横纵比 4:3 16:9 或 1.3333 1.7777<br><br>-croptop size 设置顶部切除带大小 像素单位<br><br>-cropbottom size –cropleft size –cropright size<br><br>-padtop size 设置顶部补齐的大小 像素单位<br><br>-padbottom size –padleft size –padright size –padcolor color 设置补齐条颜色(hex,6个16进制的数，红:绿:兰排列，比如 000000代表黑色)<br><br>-vn 不做视频记录<br><br>-bt tolerance 设置视频码率容忍度kbit/s<br><br>-maxrate bitrate设置最大视频码率容忍度<br><br>-minrate bitreate 设置最小视频码率容忍度<br><br>-bufsize size 设置码率控制缓冲区大小<br><br>-vcodec codec 强制使用codec编解码方式。 如果用copy表示原始编解码数据必须被拷贝。<br><br>-sameq 使用同样视频质量作为源（VBR）<br><br>-pass n 选择处理遍数（1或者2）。两遍编码非常有用。第一遍生成统计信息，第二遍生成精确的请求的码率<br><br>-passlogfile file 选择两遍的纪录文件名为file<br><br><br><span style="color: #ff0000;">c)高级视频选项</span><br><br>-g gop_size 设置图像组大小<br><br>-intra 仅适用帧内编码<br><br>-qscale q 使用固定的视频量化标度(VBR)<br><br>-qmin q 最小视频量化标度(VBR)<br><br>-qmax q 最大视频量化标度(VBR)<br><br>-qdiff q 量化标度间最大偏差 (VBR)<br><br>-qblur blur 视频量化标度柔化(VBR)<br><br>-qcomp compression 视频量化标度压缩(VBR)<br><br>-rc_init_cplx complexity 一遍编码的初始复杂度<br><br>-b_qfactor factor 在p和b帧间的qp因子<br><br>-i_qfactor factor 在p和i帧间的qp因子<br><br>-b_qoffset offset 在p和b帧间的qp偏差<br><br>-i_qoffset offset 在p和i帧间的qp偏差<br><br>-rc_eq equation 设置码率控制方程 默认tex^qComp<br><br>-rc_override override 特定间隔下的速率控制重载<br><br>-me method 设置运动估计的方法 可用方法有 zero phods log x1 epzs(缺省) full<br><br>-dct_algo algo 设置dct的算法 可用的有 0 FF_DCT_AUTO 缺省的DCT 1 FF_DCT_FASTINT 2 FF_DCT_INT 3 FF_DCT_MMX 4 FF_DCT_MLIB 5 FF_DCT_ALTIVEC<br><br>-idct_algo algo 设置idct算法。可用的有 0 FF_IDCT_AUTO 缺省的IDCT 1 FF_IDCT_INT 2 FF_IDCT_SIMPLE 3 FF_IDCT_SIMPLEMMX 4 FF_IDCT_LIBMPEG2MMX 5 FF_IDCT_PS2 6 FF_IDCT_MLIB 7 FF_IDCT_ARM 8 FF_IDCT_ALTIVEC 9 FF_IDCT_SH4 10 FF_IDCT_SIMPLEARM<br><br>-er n 设置错误残留为n 1 FF_ER_CAREFULL 缺省 2 FF_ER_COMPLIANT 3 FF_ER_AGGRESSIVE 4 FF_ER_VERY_AGGRESSIVE<br><br>-ec bit_mask 设置错误掩蔽为bit_mask,该值为如下值的位掩码 1 FF_EC_GUESS_MVS (default=enabled) 2 FF_EC_DEBLOCK (default=enabled) <br><br>-bf frames 使用frames B 帧，支持mpeg1,mpeg2,mpeg4<br><br>-mbd mode 宏块决策 0 FF_MB_DECISION_SIMPLE 使用mb_cmp 1 FF_MB_DECISION_BITS 2 FF_MB_DECISION_RD<br><br>-4mv 使用4个运动矢量 仅用于mpeg4<br><br>-part 使用数据划分 仅用于mpeg4<br><br>-bug param 绕过没有被自动监测到编码器的问题<br><br>-strict strictness 跟标准的严格性<br><br>-aic 使能高级帧内编码 h263+<br><br>-umv 使能无限运动矢量 h263+<br><br>-deinterlace 不采用交织方法<br><br>-interlace 强迫交织法编码 仅对mpeg2和mpeg4有效。当你的输入是交织的并且你想要保持交织以最小图像损失的时候采用该选项。可选的方法是不交织，但是损失更大<br><br>-psnr 计算压缩帧的psnr<br><br>-vstats 输出视频编码统计到vstats_hhmmss.log<br><br>-vhook module 插入视频处理模块 module 包括了模块名和参数，用空格分开<br><br><span style="color: #ff0000;">d)音频选项</span><br><br>-ab bitrate 设置音频码率<br><br>-ar freq 设置音频采样率<br><br>-ac channels 设置通道 缺省为1<br><br>-an 不使能音频纪录<br><br>-acodec codec 使用codec编解码<br><br><span style="color: #ff0000;">e)音频/视频捕获选项</span><br><br>-vd device 设置视频捕获设备。比如/dev/video0<br><br>-vc channel 设置视频捕获通道 DV1394专用<br><br>-tvstd standard 设置电视标准 NTSC PAL(SECAM)<br><br>-dv1394 设置DV1394捕获<br><br>-av device 设置音频设备 比如/dev/dsp<br><br><br><span style="color: #ff0000;">f)高级选项</span><br><br>-map file:stream 设置输入流映射<br><br>-debug 打印特定调试信息<br><br>-benchmark 为基准测试加入时间<br><br>-hex 倾倒每一个输入包<br><br>-bitexact 仅使用位精确算法 用于编解码测试<br><br>-ps size 设置包大小，以bits为单位<br><br>-re 以本地帧频读数据，主要用于模拟捕获设备<br><br>-loop 循环输入流。只工作于图像流，用于ffserver测试</p>
+
+                    </div>
+                </div>
+            </div>
+ 
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,540 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Pascal Costanza 作品：极端片面的Lisp介绍</title>
+</head>
+<body>
+<p>1 &nbsp;背景知识<br />
+<br />
+1.1 &nbsp;我为什么写这样一个介绍材料？<br />
+<br />
+这份材料的初稿是在2002年八月完成的，所以其中的描述，并不完全反应我现在的情况的情况。但是为了保持最初的原味，我决定不去修改它们。<br />
+<br />
+我现在的情况是这样的：过去的7年里，如果项目所需要的Java扩展已经存在，我就使用 Java。更往前算，我主要使用Wirth家族的语言（主要是Modula-2和Oberon）。所以，一开始我对Java相对其他语言而言的优点感到非常满意。<br />
+<br />
+在过去的一年里，我逐渐意识到，Java依然是一种能力非常（实际上是极端）有限的语言，所以我开始寻找一个可能的替代方案。因为我参与了Feyerabend项目（<a href="http://www.dreamsongs.com/Feyerabend/Feyerabend.html" target="_blank">http://www.dreamsongs.com/Feyerabend/Feyerabend.html</a>）， Lisp自然的成为候选之一。（Richard Gabriel启动了Feyerabend项目，而他也是1980年代初期推动Common Lisp标准化进程的那群人中的一个。）<br />
+<br />
+虽 然，有很多非常漂亮的编程语言存在（比如，按照字母顺序：gbeta，Objective CAML, Python, Ruby）；但我很快得到这样的印象：某种程度上来说，Lisp是所有语言的源头。这样说的主要理由，是Lisp 通过统一了代码（code）和数据（data）形成了一套完成的计算理论（比''仅仅''图林完全更加强大。更多的信息，参见下面''Lisp的技术背景 ''一节）。这意味着（理论上），Lisp没有给你任何限制：如果你用其他任何一种语言可以完成某项工作，Lisp中也可以。更进一步，Lisp在运行期 检测所有类型，所以没有静态类型系统来碍你的事。<br />
+<br />
+总结这些观察，你能够得到这样的结论：Lisp的主旨就是：表达能力是语言唯一重要的属性。当你希望使用这种能力的时候，不应该有任何阻碍。编程语言不应该将自己对世界的看法强加给程序员。应当由程序员来让编程语言适应自己的需要，而不是通过其他的途径。<br />
+<br />
+这 对我有非常大的吸引力，所以我决定使用Lisp。然而，当你更认真的考察Lisp的时候，你会发现Lisp有一个缺陷：整个网络上没有对这门语言好的介绍 －至少我没有找到。当然，还是有一些介绍存在，但是他们或者太浅显，只针对非常初级的程序员；或者太学术，只涉及到一些理论上令人感兴趣的问题。而我希望 看到的，是提供足够的背景材料，能够尽快帮助入门的介绍（某种可以称为''给资深程序员的Lisp介绍''的东西）。<br />
+<br />
+因为我没有找到任何介绍，我不得不自己浏览所有能找到的资料。现在，我要呈现的，就是我自己的总结，希望对后来者有所帮助。<br />
+<br />
+为 什么把这篇介绍称为''极端片面''呢？Lisp是一门非常复杂的语言，或者可以成为一组语言。对于Lisp来说不可能存在一种''权威指南''这样的东 西。我在这里展现的，是我自己希望在最初就看到的。其他人可能会有不同的想法。而我并不准备写一篇适合于每一个人，涉及每一个细节的文章。我只是要想一些 人，比如我自己，提供一些有用的信息。因为这些资料对我来说有价值，我想它们对其他人应该也会有用。<br />
+<br />
+特别的，这不是一篇''21天精通Common Lisp''。你需要反复阅读这里或者别的地方提供的资料，直到你觉得自己''对Common Lisp有经验''了。（我不需要强调，掌握任何严肃的语言所需要的时间都远不止21天。）<br />
+<br />
+1.2 &nbsp;一般性介绍<br />
+<br />
+Lisp 拥有非常久远的历史。它最初被发明于1950年代，并在之后的岁月里不断发展进化。在不同的阶段中，Lisp产生了各种变体，所以Lisp实际上并不是某 一''个''语言，而是某一''种'' 语言的总称。（把C, C, Objective C, Java以及C#都看作某一种''类C语言''的话，Lisp的情形也差不多。）<br />
+<br />
+1980年代到1990年代之间，两种主要的变体被广泛 接受与使用，从而逐渐占据了主导地位： Common Lisp和Scheme。Scheme是1970年代，由Gerald Jay Sussman和Guy L. Steele发明的。他们发明Scheme的动机是试图理解面向对象，并将其引入Lisp。Scheme在概念层面上引入了lexical closures （作为对象的一种抽象）和continuations（作为对函数调用与消息传递的抽象）；在技术层面上引入了对tail calls和tail recursions的''极度''优化。Scheme的优点在于，它像一颗美丽的宝石，能够吸引那些寻找美与真理（例如，最小化和正交性）的学院派。然 而，它缺少许多你在日常编程中需要的实用的东西，这些东西如果引入则会破坏概念上的完美。<br />
+<br />
+如果你对以上提到的术语感兴趣，参见一下链接：<br />
+<br />
+&nbsp;&nbsp; 1. Lexical scope, dynamic scope, (lexical) closures: <a href="http://c2.com/cgi/wiki?ScopeAndClosures" target="_blank">http://c2.com/cgi/wiki?ScopeAndClosures</a><br />
+&nbsp;&nbsp; 2.Continuations: <a href="http://c2.com/cgi/wiki?CallWithCurrentContinuation" target="_blank">http://c2.com/cgi/wiki?CallWithCurrentContinuation</a><br />
+&nbsp;&nbsp; 3.Tail calls, tail recursion: <a href="http://c2.com/cgi/wiki?TailCallOptimization" target="_blank">http://c2.com/cgi/wiki?TailCallOptimization</a><br />
+<br />
+在1970 年代末的时候，若干种Lisp变种都在普遍使用。Common Lisp的产生是对当时分裂混乱状况的一种补救－综合当时流行的若干种Lisp的优点，避免它们的缺陷，形成一种统一的Lisp。进一步说， Common Lisp往前进了一大步，因为它采纳了从Scheme中得到的经验和教训。（Lexical Scope进入了Common Lisp。 Continuations因为实际使用太复杂而未被包括。Tail recursions的优化则被认为是一项自然纯粹的实现技术，没有必要被标准化）。<br />
+<br />
+这些信息提示你，如果你今天考虑准备使用Lisp， 你应该使用什么？如果你希望作一些实际的''现实生活''中的事，你应当选择Common Lisp。如果你主要做学术研究且，比如说，希望尝试contiuations，你可以选择Scheme。两种语言现在都依然被广泛使用，你能从它们的社 区中得到支持。（此外还有一些Lisp变种存在，例如Emacs Lisp和Lush，但是它们都是针对特定领域的，能力比较有限）。<br />
+<br />
+好几个理由促使我决定使用Common Lisp。其中的一些理由会在这份介绍中闪现。我不喜欢Scheme是因为它是一种''正确''的语言，非常强调事情应当如何完成。Common Lisp比起来比较自由。<br />
+<br />
+然而，许多关于Scheme的书或者描述，对于Common Lisp也是有意义的。比如，描述什么是lexical closures。所以下面的章节中，偶尔也会提到一些关于Scheme的参考材料。<br />
+<br />
+(我 的本意是：你选择Common Lisp或者Scheme无关紧要，这仅仅取决于你的特定的需要。让你的直觉来决定你该使用哪一种好了。事实上，两种语言都足够灵活，能够胜任任何研究或 者''现实生活''的工作。只是，我这里的介绍是针对Common Lisp的，如果你决定选用Scheme，你需要去别的地方找介绍材料。下面的''链接''一节中有一些这方面的指南。如果你觉得不喜欢Scheme或者 是Common Lisp的时候，别忘了尝试一下另一个。)<br />
+<br />
+顺带说明一下人们是怎么使用Lisp和Scheme这两个名字的。广义来说， Lisp一般指称整个语言家族，包括Common Lisp， Scheme，更古老的变体（已经不再流行）比如MacLisp，InterLisp，Franz Lisp，以及更新的比如Arc和Goo。狭义来说，Lisp现在只指Common Lisp，不包含Scheme！到底是使用Lisp广义的意思，还是狭义的意思，取决于什么人在什么语境下使用。甚至对广义的理解也是不同的：有一拨人的 看法是不包括Scheme的，而另一拨人甚至包含了 Python和Dylan。（我的个人看法，如果在特定场合下它很重要的话，那就不要采用这样模糊的说法。）<br />
+<br />
+关于如何阅读这份材料：我已经努力地让这份材料可以流畅得顺序读下来了。当然，你可以选择略过某一些章节，或者跳跃着读。后面的一些章节要求你至少能够了解一些Lisp的代码片断，为此文章中提供了足够了指南。<br />
+<br />
+1.3 &nbsp;Common Lisp总纲<br />
+<br />
+<a href="http://www.lisp.org/table/objects.htm" target="_blank">http://www.lisp.org/table/objects.htm</a> 是一篇仅有一页的材料，却非常好的回顾了Common Lisp提供的特性。这篇描述着力于CLOS的面向对象特性（Common Lisp Object System是Common Lisp的一部分），同时也对Common Lisp的函数性属性与命令性属性做了不错的总结。<br />
+<br />
+<a href="http://www.lispworks.com/products/lisp-overview.html" target="_blank">http://www.lispworks.com/products/lisp-overview.html</a> 是Xanalys公司写的The Common Lisp Language Overview。<br />
+<br />
+1.4 &nbsp;最初的障碍<br />
+<br />
+Lisp的历史和其他语言，特别是Algol和C这一系的语言，不同。因此，Lisp社区在各个层次上采用的表示法和术语都和其他语言有所不同。这里先要澄清一些容易出现混乱的地方。<br />
+<br />
+&nbsp;&nbsp; 1.有一些Lisp的内建函数取的名字看起来非常可笑。比如''car''被用来得到列表的第一个元素，''cdr''被用来得到列表中剩余的元素。列表使 用''cons''来构造。''mapcar''被用来遍历列表，等等。特别的， Algol或者Wirth家族语言的使用者会奇怪，为什么Lisp的设计者不采用更''自然''的名字，例如''first''，''rest''， ''foreach''等等呢？至少，这就是我面对以上那些名字时的第一反应（显然，我也不是唯一一个）。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;请尝试忘记你以前关于''自然''的概念－主要是历史原因，使得Lisp有完全不同的文化。就好像，你可以宣称英语比法语更加''自然''，但这只是因 为你本人只会说英语。实际上，习惯这样一套完全不同的标记法只需要一到两天的Lisp编程经历，那以后这些问题就不存在了。Common Lisp也提供了一些可选的名字，比如''first''和''rest'' 用来替换''car''和''cdr''，你也不是没有选择。不过你依然会常常读到那些使用传统名称的代码。<br />
+<br />
+&nbsp;&nbsp; 2.看起来Lisp使用了太多的括号。只要选择一个对Lisp的缩进风格支持良好的的编辑器，你很快就可以忘掉括号了。你几乎不用担心在Lisp中写错格 式。请记住，因为格式，如果你忘记了括号或者begin/end这样的关键字，如果你用错了控制指令（例如if，while，switch/case，等 等），C风格的语言和Pascal风格的语言一样会出错。然而，如果你是一个有经验的程序员，我猜你从来没遇到过这样的问题。使用Lisp也是如此。只是 一个适应的问题。<br />
+<br />
+&nbsp;&nbsp; 3.有些人依然认为Lisp只提供了列表这样一种数据结构。这种观点来自于他们对某种非常古老的Lisp变体的了解，或者是因为Lisp这个名字本身就是 ''List Processing''的缩写。事实上，Common Lisp提供了所有其他语言中能找到的有用的东西，比如structs（和C风格的structs很像），数组，真正的多维数组，对象（和 Smalltalk和Java中的那样，有成员数据和成员方法），字符串，等等。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;类似的，有些人依然认为Lisp是一种解释型语言。事实上，现在已经很少有哪一种Lisp实现是纯粹的解释执行系统了。所有正经的实现都包括了编译器， 能够直接产生机器代码。所以，Lisp一般区分编译器期和运行期。这种区别在某些情况下很重要，比如做宏编程的时候。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;但是这依然和所谓的''编译语言''，例如C和大部分Pascal变体，不同。大部分时间里，你不需要显式编译一个Lisp程序然后执行它。你只是和一 个Lisp开发环境进行交互，开发环境会自动编译Lisp代码。所以Lisp和那一些just-in-time语言很类似。Lisp 和某些语言一样有着交互的本质，比如Smalltalk（从某种意义上说，我们可以将Smalltalk归为某一种Lisp变体）。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;最重要的一点是，Lisp是非常高效的语言。Common Lisp厂商都努力来提高非常好的性能。（请注意，很多现代的 Java IDE，比如JBuilder, NetBeans, Eclipse等等，都在向Lisp和Smalltalk那样的交互环境发展－所以，这种交互属性即使在Algol风格和C风格的环境下也得到认可。）<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;近期有一篇比较Lisp和Java与C++性能方面的比较：Erann Gat, Lisp as an Alternative to Java，位于<a href="http://www.flownet.com/gat/papers/" target="_blank">http://www.flownet.com/gat/papers/</a>。（如果你对该论文中提到的Java程序员的编程经验有疑问，请看<a href="http://www.flownet.com/gat/papers/ljfaq.html" target="_blank">http://www.flownet.com/gat/papers/ljfaq.html</a>）。<br />
+<br />
+&nbsp;&nbsp; 4.描述Lisp时常用到''form''这个术语。Form是Lisp语言格式的基础。例如：<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(format t &quot;Hello, World&quot;)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;这个form在控制台打印''Hello, World''。（参数''t''在Common Lisp中表示标准的布尔值''truth''，对于format 函数来说，指待标准输出。）所以术语form相当于其他语言中的statements（语句）或者expressions（表达式）。一个Lisp 纯粹主义者会声称Lisp中不存在statements而只有expressions，不过这个对实践没什么差别。其他编程语言中， statements和expressions的差别，也因为存在所谓''expression statements''而变得模糊，这种''expression statements'' 的返回值被直接忽略了。在Lisp中你也可以这样做，Lisp甚至定义了没有值的表达式（或者被定义为''未定义值''）。所以实践中，Lisp和其他语 言一样，一样地区别两者，又一样的模糊两者的差异。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;Lisp中也存在所谓的''special forms''。要理解这一术语，你首先要理解Lisp中，函数怎么接受作为参数的 form。上面的例子中，函数''format''接受的参数是''t''和''Hello, World''。以下的例子中，函数''foo'' 的参数是''bar''和''goo''。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(foo bar goo)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;然而Lisp中也有一些form是不作为函数调用处理的。它们或者是宏，或者是''special forms''。''Special forms'' 指的是有限的一套内建操作。（他们被Common Lisp环境''特殊''处理了。但是要注意，内建函数和宏都不是''special forms''）。一般都可以直接从form的第一个元素来判断，是一个函数form，一个宏form还是一个special form。这些不同form之间的区别有一些理论和实践上的意义，不过你现在用不着担心他们。当这样的区别变得重要的时候，你会注意到他们，而且很容易处 理。<br />
+<br />
+&nbsp;&nbsp; 5.Lisp社区中曾经有过，实际上现在依然在继续着关于''小''语言还是''大''语言的讨论。对于其他社区的人来说着听起来很让人困惑（至少是对我）。到底问题是什么？<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;Lisp的优点之一就是它不区分内建函数和用户定义的函数。例如：<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(car mylist)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(cure mylist)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;函数car是Lisp预定义的；而cure不是，所以cure应当是一个用户定义的函数。重点在于你无法从形式上区别他们之间的不同。和下面这个Java的例子做一下比较:<br />
+<br />
+synchronized (lock) {<br />
+&nbsp;&nbsp;beginTransaction(...);<br />
+&nbsp;&nbsp;...<br />
+&nbsp;&nbsp;endTransaction(...);<br />
+}<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;Java中的synchronized语句是一个内建的特性，允许你将一个代码块保护起来，是对特定对象的访问序列化。这个例子中的事务处理函数也定义 了一个代码块，达到相同的事务语义，但你却一眼就能看出来它不是Java内建的特性。（是的，Lisp提供了面向块的语句－哦，不，是forms；而且， 你可以定义自己的面向块的form，并且保持和Lisp内建特性的相似性。）<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;现在，为了理解所谓小语言大语言的问题，你需要记住上述差异。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;这个问题对于Java或者类似的语言的标准化来说，意味着什么？你首先必须标准化语言本身，然后你至少必须标准化一些函数库。就像前面提到的那样，内建特性和函数库之间有很明显的差别，所以这是两件不同的任务。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;但是在Lisp世界中不是这样的。因为内建特性和函数库之间没有显著的差别，标准化函数库的过程是标准化语言的一部分（或者从某种程度上来说，反过来）。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;所以所谓的小语言和大语言之争，归根到底就是小规模函数库和大规模函数库之间的区别。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;总结起来，Scheme是一种小语言，因为它只提供了非常小的一套标准库；而Common Lisp 是一种大语言，因为它提供了很多有用且被标准化了的特性。然而，如果我们只关注语言最核心的部分，那么它们的大小实际上还是相当的。（进一步说，如果你查 看一个''严肃''的Scheme实现，你会发现它也提供了很多没有被标准化的函数库。）<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;虽然有概念上的差别，不过这对上述小大之争并无帮助。在Scheme和Common Lisp之间选择也不是仅仅因为语言的大小。<br />
+<br />
+&nbsp;&nbsp; 6.你也许听说过Scheme是''Lisp-1''的语言，而Common Lisp是''Lisp-2''的语言。另外一种说法是Scheme是one-cell的系统，而Common Lisp是two-cell的系统。人们谈论的是这样一个事实：变量的值和函数定义这两个方面，在Scheme是相同对待的，而Common Lisp中则不是。这并非出于实践上的理由，显然你用这两种语言都可以写出真正的程序。两种语言都提供了相应的方法，帮助解决作为一个''Lisp- 1''（或者''Lisp-2''）系统会面对的问题。你可以忽略这些细节，知道你真正遇到它们；而当你遇到它们的时候，你很容易发现如何正确处理。 ''Lisp-1''系统使得贯彻函数式编程的风格更加容易，而''Lisp-2''系统则使得宏编程更不容易出错。确切的细节有一点麻烦，如果你真的想 了解技术上的影响，你可以阅读以下论文。<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; 1.Richard P. Gabriel and Kent M. Pitman, Technical Issues of Separation in Function Cells and Value Cells <a href="http://www.dreamsongs.com/Separation.html" target="_blank">http://www.dreamsongs.com/Separation.html</a><br />
+<br />
+1.5 &nbsp;Lisp的历史<br />
+<br />
+有两篇出色的论文，提供了关于Lisp整个历史非常详细的信息，包括Common Lisp和Scheme，这是一件了不起的事情。某种角度看来，阅读这样两篇论文就像在读侦探小说，吐血推荐！<br />
+<br />
+&nbsp;&nbsp; 1.John McCarthy: History of Lisp (ACM SIGPLAN History of Programming Languages Conference, 1978) <a href="http://www-formal.stanford.edu/jmc/history/lisp.html" target="_blank">http://www-formal.stanford.edu/jmc/history/lisp.html</a><br />
+&nbsp;&nbsp; 2.Guy L. Steele Jr. and Richard P. Gabriel: The Evolution of Lisp (ACM Conference on the History of Programming Languages II, 1992) <a href="http://www.dreamsongs.com/Essays.html" target="_blank">http://www.dreamsongs.com/Essays.html</a><br />
+<br />
+后一篇论文同时也提供了关于Lisp的非常全面的引用线索。<br />
+<br />
+（如果读到Herbert Stoyan关于Lisp的论文，请不要被他搞糊涂了。我个人觉得他的文章很难读，而且推导出一些奇怪的结论。）<br />
+<br />
+1.6 &nbsp;Lisp的技术背景<br />
+<br />
+就 像我之前所说的那样，Lisp通过统一处理数据和代码，形成了一套完整的计算理论－－这也是让Lisp如此强大的原因。我这里推荐两篇论文，它们出色的解 释了这种计算理论到底是什么。（它们涉及到''meta-circular interpreters''的概念－－不过不要被术语吓倒，并不象听起来的那么难。）在我看来，你至少需要读第一篇，来真正了解Lisp的能力。<br />
+<br />
+&nbsp;&nbsp; 1.Paul Graham, The Roots of Lisp <a href="http://www.paulgraham.com/rootsoflisp.html" target="_blank">http://www.paulgraham.com/rootsoflisp.html</a><br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;顺便说一句，这篇文章也很好的描述了Lisp中的基础(primitive)forms。<br />
+<br />
+如 果你喜欢''The Roots of Lisp''，并且想知道更多关于''meta-circular interpreter''的情况，你可以阅读这一篇更深层次的讨论。你也会了解到lexical closures，dynamic binding等等的强大之处。<br />
+<br />
+&nbsp;&nbsp; 1.Guy L. Steele Jr. and Gerald Jay Sussman: The Art of the Interpreter or, the Modularity Complex (Parts Zero, One and Two), <a href="http://library.readscheme.org/page1.html" target="_blank">http://library.readscheme.org/page1.html</a><br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;（这篇论文看起来像是会有续集的样子，但是实际上没有。别费劲去找了，尝试着把结尾作为一个练习吧。）<br />
+<br />
+1.7 &nbsp;可用的实现<br />
+<br />
+你可以在<a href="http://alu.cliki.net/Implementation" target="_blank">http://alu.cliki.net/Implementation</a>上 找到一个 Common Lisp实现的列表。我只使用过其中的一小部分。许多Lisp程序员喜欢使用emacs或者xemacs作为它们的开发环境，不过我倾向于使用更现代化的 IDE，这很大程度上限制了我的尝试范围。（显然，这只是偏好的问题。如果你对将Emacs设置为一个Lisp IDE感兴趣，<a href="http://cl-cookbook.sourceforge.net/windows.html" target="_blank">http://cl-cookbook.sourceforge.net/windows.html</a>非常不错。）<br />
+<br />
+向Apple Machintosh(Mac OS X)的用户特别推荐：LispWorks for Machintosh是一个出色的IDE，个人版可以免费下载。 Macintosh Common Lisp也是一个免费的IDE，但是和Mac OS X环境的集成不如LispWorks做的好。Digitool可以让你免费使用MCL 30天。CLISP, ECL, OpenMCL以及SBCL在Mac OS X下都可以使用，但是没有IDE。Franz Inc准备为Allegro Common Lisp在Mac OS X上推出一个 IDE，但是还没有具体计划。<br />
+<br />
+我一般使用LispWorks for Machitosh和Machintosh Common Lisp。但是，这不是产品广告－请根据你自己的情况作出选择！<br />
+<br />
+2 &nbsp;精选自学指南<br />
+<br />
+这部分中，我会给一些建议和参考，以帮助你了解Common Lisp的若干方面。（主要是关于标准库的。）<br />
+<br />
+2.1 &nbsp;参考材料<br />
+<br />
+日常编程中，你一般需要一些参考材料，来查询函数定义，语法格式，等等。有的人喜欢看书，有的人则喜欢在线材料。<br />
+<br />
+现在的Common Lisp标准，是1995正式作为ANSI标准发布的，是Common Lisp的权威说明。但是，因为它只给了标准而没有提供原理说明，所以它的可读性比较差。<br />
+<br />
+在1990 年代初的时候，Guy L. Steele写了第二版''Common Lisp the Language''，来反应当时Common Lisp标准化的状况，那是已经非常接近最终标准了。（出版于1980年代的第一版，一般被称作CLtL，被CLtL2取代以后，没有再使用的必要。）虽 然CLtL2还是缺少一些ANSI Common Lisp中定义的特性，而且还有些特性和ANSI标准有出入，它还是被广泛推荐，作为入门材料，因为它的优势在于有非常详细的描述，而不仅仅是规范而已。 这帮助你理解材料。不过你手边还是需要一份ANSI标准，以便查得某一个定义的确切细节。进一步，ANSI文档包含了非常有用的术语表。<br />
+<br />
+幸运的是，ANSI Common Lisp和CLtL2都有在线的HTML和PDF/PS格式可以下载。这里是链接：<br />
+<br />
+&nbsp;&nbsp; 1.ANSI Common Lisp: <a href="http://www.lispworks.com/reference/HyperSpec/" target="_blank">http://www.lispworks.com/reference/HyperSpec/</a><br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;``HyperSpec''的编辑强调，这不是权威的规范，而仅仅是从标准ANSI规范的衍生物。然而，我猜测这仅仅是出于法律的原因。 HyperSpec是可以信赖的，实际上，两份文档是从同一份TeX生成的。<br />
+<br />
+&nbsp;&nbsp; 2.Franz, Inc.提供了一份不同风格的在线文档，<a href="http://www.franz.com/support/documentation/6.2/ansicl/ansicl.htm" target="_blank">http://www.franz.com/support/documentation/6.2/ansicl/ansicl.htm</a><br />
+<br />
+&nbsp;&nbsp; 3.CLtL2: <a href="http://www-2.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/cltl2.html" target="_blank">http://www-2.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/cltl2.html</a> 或者：<a href="http://oopweb.com/LISP/Documents/cltl/VolumeFrames.html" target="_blank">http://oopweb.com/LISP/Documents/cltl/VolumeFrames.html</a>上有一个带Frame的版本。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;注意：CLtL2的附录中有关于所谓的''Series''宏和''Generators and Gatherers''，可以实现lazy iterators。这些特性并未进入ANSI Common Lisp。我没有找到相关的理由，也无从了解为什么它出现在CLtL2中，却最终没有被收入进ANSI Common Lisp，我猜测是因为它们实验性太强。''Series''可以在<a href="http://series.sourceforge.net/" target="_blank">http://series.sourceforge.net</a>上找到。<br />
+<br />
+&nbsp;&nbsp; 4.一个关于CLtL2与ANSI Common Lisp之间差别的列表，位于 <a href="http://home.comcast.net/~bc19191/cltl2-ansi.htm" target="_blank">http://home.comcast.net/%7ebc19191/cltl2-ansi.htm</a>。<br />
+<br />
+如果你更喜欢印刷品的化，你得花费一些时间来获得。CLtL2看起来已经绝版了，但是你还是可以尝试着从Ebay上得到一本旧的。在Amazon这样的在线书市上也可以找到。你还可以尝试一下出版商的主页：<a href="http://www.bh.com/digitalpress" target="_blank">http://www.bh.com/digitalpress</a>。<br />
+<br />
+ANSI文档可以在<a href="http://global.ihs.com/" target="_blank">http://global.ihs.com/</a>上获得。不过我估计它既不方便也不有用，因为这本书超过1000页。而且价格将近$400，实在是太贵了。<br />
+<br />
+Paul Graham的''ANSI Common Lisp''是一本很好的书，不过我觉得拿它做参考并不合适。我一般还是倾向于把标准规范打印出来（例如Java语言规范），不过对于Common Lisp来说，电子版的就可以了。<br />
+<br />
+2.2 &nbsp;基础中的基础<br />
+<br />
+Paul Graham写了一本非常不错的关于ANSI Common Lisp的书，叫做''ANSI Common Lisp''。非常适合阅读，而且幸运的是，作者在他的主页上公开了最初两章。我特别推荐第二章，它让你很快就能对Common Lisp编程有一个概念。<br />
+<br />
+&nbsp;&nbsp; 1. Paul Graham, ANSI Common Lisp, <a href="http://www.paulgraham.com/acl.html" target="_blank">http://www.paulgraham.com/acl.html</a><br />
+<br />
+如果你喜欢他的风格，你可以考虑购买。<br />
+<br />
+那之后你需要的，只是查看CLtL2或者ANSI标准而已。下面是一些我个人认为比较难得到的信息。<br />
+<br />
+为了能够彻底理解以下的章节，你需要先阅读''The Roots of Lisp''(<a href="http://www.paulgraham.com/rootsoflisp.html" target="_blank">http://www.paulgraham.com/rootsoflisp.html</a>)或者是''ANSI Common Lisp Chapter 2''(<a href="http://www.paulgraham.com/lib/paulgraham/acl2.txt" target="_blank">http://www.paulgraham.com/lib/paulgraham/acl2.txt</a>)中的一篇，或者你至少已经能够理解Lisp的代码。<br />
+<br />
+2.3 &nbsp;基础的高级内容<br />
+<br />
+以下是一些你早晚会碰到的小问题。<br />
+<br />
+&nbsp;&nbsp; 1.Common Lisp允许在函数定义中包含可选参数(optional arguments)，剩余参数(rest arguments)，关键字参数(keyword arguments)，参数缺省值(arguments with default values)以及以上各种形式的组合。如何使用这些形式的确切规范可以在CLtL2的5.2.2（``Lambda Expressions''）和ANSI specs 3.4(``Ordinary Lambda Lists'')中找到。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(Lambda Expressions指未命名的函数。命名函数类似于其他编程语言中的过程(procedures)，函数(functions)以及方法 (methods)。未命名函数类似于Smalltalk中的blocks，从某种意义上说，Java中的anonymous inner classes。参见CLtL2 5.2(``Functions'')以及相关章节中的说明。)<br />
+<br />
+&nbsp;&nbsp; 2. Common Lisp中，标准输出一般使用'format'函数。这某种程度上类似于C语言中的printf(不过，我承认我不是printf的专家！)。我还没有在 任何文章中见到过关于'format'不错的论述，所以你不得不去研读CLtL2中的相关章节。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;CLtL2中，format是在22.3.3(``Formatted Ourput to Character Streams'')中描述的。对应的ANSI specs是22.3(``Formatted Output'')。<br />
+<br />
+&nbsp;&nbsp; 3.Common Lisp中的字符串有一点点复杂。首先是因为Common Lisp标准化在Unicode出现之前，它已经意识到ASCII或者其他一些有限的字符集是不够的。所以Common Lisp标准制定了处理字符串的一般方法，而把一些问题留给了具体的实现。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;一般来说，这个问题只有在你需要和其他编程语言开发的程序进行交互的时候，才会凸现出来。Allegro Common Lisp，CLISP以及LispWorks都提供了 Unicode支持，其他的实现就我所知还没有。(当然，你可以自己实现对Unicode的支持，Lisp处理起这些事情来是足够灵活的。;-)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;如果你想知道关于字符串的更多细节，参考CLtL2，ANSI specs以及你使用的Common Lisp实现自带的文档。<br />
+<br />
+&nbsp;&nbsp; 4.对于文件名字的处理，各个平台间是不同的。Common Lisp标准化了一个框架，以使得实现者可以根据具体操作系统的要求来填补框架中的留白。所以，又一次，你需要参考CLtL2，ANSI specs，以及你使用的Common Lisp实现自带的文档。<br />
+<br />
+2.4 &nbsp;宏<br />
+<br />
+Common Lisp的宏特性是这个语言的亮点之一-它是一种强大的方法，使得你可以书写自己的编程语言结构，而不仅仅是更多的函数而已。<br />
+<br />
+宏一般被认为是高级主题，因为它非常强大，且看起来很难掌握。然而，我发现宏的概念还是非常容易理解的，而写起来也比较容易的。<br />
+<br />
+你可以在Paul Graham的''On Lisp''中找到关于宏的非常好的描述，以及关于如何使用宏的说明。这本书已经绝版了，但是你可以免费从以下URL下载到电子版<br />
+<br />
+&nbsp;&nbsp; Paul Graham, On Lisp, <a href="http://www.paulgraham.com/onlisp.html" target="_blank">http://www.paulgraham.com/onlisp.html</a><br />
+<br />
+以下是我认为的一些注意事项：<br />
+<br />
+&nbsp;&nbsp; 1.Common Lisp中的宏和C中的宏并不相同！就我所知，C语言中的宏只是对字符序列的处理，并不关心所处理的程序结构。相反的，Common Lisp中的宏直接作用于程序结构。这完全是因为Lisp中将数据和代码一致处理，既然程序就是一个forms构成的列表，那么宏就可以像处理其他列表一 样地处理forms的列表。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;所以你看到术语''宏''的时候，请三思 - 特别是对于其他一些尚在发展中的编程语言。 ;-)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(因为我不会再讨论C语言中的宏，从现在开始，我提到''宏''的时候，都是指Lisp的宏。)<br />
+<br />
+&nbsp;&nbsp; 2.宏可以被理解为一种接受参数，产生新代码的函数。在编译过程中，每发现一个宏，都会把相应的form传递给宏，然后用得到的结果替换最初的form。然后编译过程继续处理新得到的form。这个过程被称为''宏展开''。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;下面这个例子定义''cure''为''car''。<br />
+<br />
+(defmacro cure (argument)<br />
+&nbsp;&nbsp; (list 'car argument))<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;所以，每当你看到(cure a)，其结果都是编译期的(car a) - 宏的结果表示在使用宏时 真正用到的代码。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(请注意这个例子只是用于展示概念。实际上它不是一个使用宏的好例子: ``cure''最好是被定义为一个函数。)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;你所看到的事实是，宏是Turing-complete的。所有Common Lisp的能力在编译期都可以使用，来帮助宏产生新的代码。宏可以包含其他的宏展开和函数，甚至包括迭代、递归，condition，等等等等。而且结果 中可以进一步包含其他的宏，这使得''宏展开''不断重复，直到最终结果中只包含纯粹的函数。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;举例来说，Common Lisp中的宏可以用来做和C++中template meta-programming一样的事情。特别的，它可以用来进行Generative Programming!(Generative Programming的基础是定义一种 domain-specific的语言，开发相应的编译器来将语言转化为general-purpose的编程语言。)<br />
+<br />
+&nbsp;&nbsp; 3. 一般介绍到宏的时候，都会提到''backquote''这种形式。我认为这种介绍方式使得事情无端变得复杂起来。事实上，当你理解前述的关于宏的 Turing-completeness特性时，你已经在概念层面上对宏有了全局认识。然而，宏和backquote的组合在实践中还是很有益处的。以下 我会介绍backquote的格式，以及它如何和宏进行配合。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;如前所述，Lisp中的大部分form都是函数。所以(car mylist)从mylist对应的列表中得到第一个元素。但有时候，你不希望对form进行求值(你不希望将这个form当作函数来处理)。比如，在 (car (a b c))中， (a b c)缺省不被认为是一个三元素组成的列表，而是函数a以及参数b与c。如果你想避免对(a b c)求值，你必须使用一个特别的 form，''quote''：(car (quote (a b c)))。现在，整个表达式的求值结果为''a''(列表(a b c)中的第一个元素。) 注意(quote ...)不是一个函数，而是一个特殊的form(Lisp的内建属性)。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;因为quote在Lisp使用是如此的频繁，我们发明它的简化形式: (car '(a b c))就可以表示(car (quote (a b c)))了。顺便说一句，quote也可以用来避免对一个变量求值。变量在Lisp中只是名字而已(和在其他编程语言中一样)，所以如果你写下，比如说， (car a)，得到的将会是变量a所引用的列表的第一个值。为了避免对变量求值，你可以写作(quote a)，或者'a，你可能已经猜到了。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;有时候，你需要对一些表达式或者变量求值，然后将结果组合成一个列表。Lisp中最简单的方式是： (list a (car b) c)，先后对a, (car b)以及c进行求值，并把各个结果拼接成一个列表。又有时候，你只需要对其中部分进行求值。这也难不到你：(list a (car b) 'c)，先后对 a和(car b)进行求值，这样就可以保证得到的结果中，列表的最后一个元素肯定是c。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;有时候，需要quoted(不求值)的表达式数量上要远远多余需要求值的表达式。这时，backquote就可以帮上忙了。它逆转了缺省的行为，使得缺 省的所有表达式都不被求值，需要被求值反而需要标记。以下例子中`(a b c ,(car d)) 和(list 'a 'b 'c (car d))完全一样，符号a，b以及c都没有被求值，而(car d)被求值了。在backquote 形式下，需要被求值的表达式需要用逗号标出。(注意，这和quote形式不同，在quote形式中，整个表达式都会被作为quoted处理，且不能使用逗 号来对其中的一部分进行求值。)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;所以，本质上，backquote形式只是一个简化，便于程序员临时改变求值与否的缺省行为。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;现在，我们回忆一下之前的例子。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(defmacro cure (argument) (list 'car argument))<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;从之前的讨论中，你可以推断出这和一下形式是等价的。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(defmacro cure (argument) `(car ,argument))<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;你现在已经可以理解，backquote形式对于宏来说为什么那么重要：宏定义本身和最终要产生的代码形式上更加接近了。（还记得嘛？(cure mylist) 在编译期会变成(car mylist)。）<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;顺便说一下，这里有一篇关于backquote形式历史的论文，非常不错。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; Alan Bawden, Quasiquotation in Lisp, <a href="http://citeseer.nj.nec.com/bawden99quasiquotation.html" target="_blank">http://citeseer.nj.nec.com/bawden99quasiquotation.html</a><br />
+<br />
+&nbsp;&nbsp; 4.宏也常常成为Common Lisp和Scheme两派人马之间论战的焦点。Common Lisp中的宏有可能意外的捕获宏定义周围代码中的变量名。这听起来很危险，但是实际上不是。请看Paul Graham的''On Lisp''一书中对这个问题的详细讨论 - 我在这里不准备讨论细节。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;Scheme提供了一种所谓''hygienic macros''的概念(简单的说，''hygiene'')，来避免捕获变量。我所看到的问题是，hygienic macros被简单的描述为对macros的发展。常见的说法是： ``Common Lisp的宏可能捕获变量名; hygiene避免了这一点，所以程序更安全了。''这种论点有一些正确，因为它在某些角度上延续lexical closures的概念。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;然而这并不是真相的全部。有时候，你确实需要捕获变量名，而hygiene使得这件美好的事情变得无谓的复杂。更进一步说，在Common Lisp中避免变量名捕获实际上也是非常容易的，Paul Graham在他的书中展示了这一点，所以解决它并没有实际价值。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;我的观点是，hygiene在Common Lisp中不是必须的(实际上也没有提供) ，因为写出安全的宏实际上很容易。除非你在理论层次上对这个问题感兴趣，你完全可以忽略hygienic macros这个概念。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(在Scheme中，情况略有不同，因为Scheme将变量和函数定义放在同一个名字空间里－－所谓的Lisp-1。这意味着意外捕获函数定义的情况在 Scheme中发生的可能性要远大于在Common Lisp中。因此，Scheme更迫切地要解决这个问题。有一篇非常好的文章描述了macro hygiene问题：<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Alan Bawden and Jonathan Rees, Syntactic Closures, <a href="http://citeseer.nj.nec.com/bawden88syntactic.html" target="_blank">http://citeseer.nj.nec.com/bawden88syntactic.html</a><br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;文章给出的例子，可以作为一个非常好的练习：为什么这些问题在''Lisp-2''中并不突出？在什么样的情况下你会需要捕获变量名。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;也可以参看上面提到的Gabriel和Pitman所写的关于隔离function和value名字空间的论文。 )<br />
+<br />
+2.5 &nbsp;面向对象(CLOS)<br />
+<br />
+Common Lisp对象系统(CLOS)是ANSI Common Lisp的一部分。然而，因为它很晚才被加入标准，有些厂商需要时间来实现标准。现在，绝大部分实现都提供了CLOS支持。(有些厂商将这一点作为自己产 品的特性进行宣传，我觉得很荒谬。严格来说，如果没有完全支持CLOS的话，这个Common Lisp 系统甚至不能宣称自己实现了ANSI标准。)<br />
+<br />
+CLOS提供了完全的面向对象支持，包括类，子类化，多继承，多方法(multi-methods)，以及before-, after- 以及around-等等。这已经超出了其他面向对象编程语言所提供的特性。<br />
+<br />
+更 进一步的，一个所谓''Meta-Object Protocol''(MOP)可以用来检测类的继承关系，以及运行时方法 dispatch的过程。Meta-Object Protocol不是ANSI Common Lisp的一部分，但是因为绝大多数CLOS/MOP实现都继承自同一套代码，所以它也成为了事实标准。(CLOS和MOP不是独立的两个东西，就像 Java语言和它的reflection API，但是MOP可以被认为是CLOS的一个超集。)<br />
+<br />
+关于CLOS和Meta-Object Protocol的概述可以在这篇文章中找到。<br />
+<br />
+&nbsp;&nbsp; Linda G. DeMichiel and Richard Gabriel, The Common Lisp Object System: An Overview, ECOOP '87, Springer LNCS 276, freely downloadable at the bottom of <a href="http://www.dreamsongs.com/Essays.html" target="_blank">http://www.dreamsongs.com/Essays.html</a> (thanks to Richard Gabriel for making this available on my request)<br />
+<br />
+关于CLOS设计原理的描述可以在这篇文章中看到。<br />
+<br />
+&nbsp;&nbsp; P. Gabriel, Jon L. White, and Daniel G. Bobrow, CLOS: integrating object-oriented and functional programming, Communications of the ACM, Volume 34, Issue 9, 9/1991, <a href="http://doi.acm.org/10.1145/114669.114671" target="_blank">http://doi.acm.org/10.1145/114669.114671</a><br />
+<br />
+Jeff Dalton提供了对CLOS(不包括MOP)的一个介绍，位于<a href="http://www.aiai.ed.ac.uk/jeff/clos-guide.html.">http://www.aiai.ed.ac.uk/jeff/clos-guide.html</a>. 针对MOP，有类似于ANSI HyperSpec的参考资料，位于<a href="http://www.lisp.org/mop/" target="_blank">http://www.lisp.org/mop/.</a> (这个页面上的大部分外部链接都失效了，但是这个参考材料本身倒是没出什么问题。)<br />
+<br />
+Barry Margolin在comp.lang.lisp上给出了一个不错的原则：<br />
+<br />
+有一些MOP相关的函数成功的打入了ANSI CL的内部，比如ADD-METHOD和ENSURE-GENERIC-FUNCTION，但数量并不多。<br />
+<br />
+区 别一个函数到底是CLOS的一部分抑或是MOP的一部分，可以观察它有没有参数必须是class, method或者generic-function objects。函数MAKE-INSTANCE和CHANGE-CLASS之流不受这个规则约束；虽然它们可以接受一个class object，它们也可以一个class name。MOP函数不提供这种便利。<br />
+<br />
+下面这篇文章中有一个精心打造(令人印象深刻)的例子，你可以从中了解Meta-Object Protocol的能力。<br />
+<br />
+&nbsp;&nbsp; Andreas Paepcke, User-Level Language Crafting - Introducing the CLOS Metaobject Protocol, in: Object-Oriented Programming: The CLOS Perspective, MIT Press, 1993, freely downloadable somewhere at the bottom of <a href="http://www-diglib.stanford.edu/paepcke/shared-documents/bibliography.html">http://www-diglib.stanford.edu/paepcke/shared-documents/bibliography.html</a><br />
+<br />
+一些说明：<br />
+<br />
+&nbsp;&nbsp; 1.多继承被一些人认为是一种糟糕的设计，因为它可能会导致一些难于处理的名字冲突。绝大多数编程语言都提供了一些缺省行为来处理这种冲突，但是这些措施的 结果一般都不令人满意。 Common Lisp也提供了一种缺省行为，通过程序员给出父类的顺序来确定一种拓扑顺序，以处理名字冲突。反对者很容易找出一个例子，使得缺省行为无法给出有用的结 果。看起来Common Lisp 的方案和其他编程语言的一样糟糕。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;然而，CLOS允许用户定义''method combinations''。程序员总可以根据不同情况显式指定方法如何dispatch。 (而且，这些都可以在运行时修改。)所以CLOS提供了非常高层次的灵活性来处理名字冲突。父类的拓扑排序可以理解为系统给出的建议。<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;理论上说起来，名字冲突不论在哪种语言中都很难处理。又一次，Common Lisp给程序员足够的自由，可以处理他可能遇到的各种问题。作为比较，如果在Java中，继承自不同interface中的名字导致冲突，你没有一点办法。<br />
+<br />
+&nbsp;&nbsp; 2.标准的method combinations和Meta-Object Protocol允许以aspect-oriented风格编程。这不是偶然的－－Gregor Kiczales， Aspect-Oriented Programming的发明人之一，也是CLOS的设计者之一。不用再等AspectJ了，所有你需要的都已经在Common Lisp里了！ ;-)<br />
+<br />
+2.6 &nbsp;LOOP<br />
+<br />
+所谓的LOOP，是Common Lisp的标准特性之一，使得程序员可以用类似Algol/Wirth的形式来写迭代。这里是loop的一个例子，它打印出十个'*'。<br />
+<br />
+(loop for i from 1 to 10 do (format t &quot;*&quot;))<br />
+<br />
+CLtL2 是非常好的信息来源。然而，你很快会发现，各种形式的组合实在是太多了。我的感觉是，学习所有细节没有什么意义，这太耗时间了。LOOP设计的目的显然是 为了支持用某种''自然''的，类似英语的方式表示迭代。某些情况下，LOOP确实使得代码容易理解了。(这也是嵌入Common Lisp中的一种domain-specific语言，专门处理迭代这个domain。)<br />
+<br />
+这里是另一个，更有趣的使用LOOP的例子。(Matthew Danish提出).<br />
+<br />
+(defun fibonacci (n) (loop for a = 1 then (+ a b) and b = 0 then a repeat n collect b))<br />
+<br />
+看起来，当初LOOP的发明者的意图，是鼓励程序员自己去''尝试''去表达迭代的方法。如果尝试失败，你可以查看CLtL2或者ANSI specs，或者回去使用更加Lisp化的方法来表达迭代和递归(使用do, dotimes, mapcar等等)。<br />
+<br />
+这只是我的猜测。我不知道当初LOOP的发明者的意图。(有人宣称其中细节很容易理解，但是我自己还没有尝试。)<br />
+<br />
+2.7 &nbsp;Conditions<br />
+<br />
+Conditions 类似于Java语言中的异常。然而，condition的能力更加强。例如， condition handlers可以命令Lisp运行环境在condition被抛出的地方继续执行执行。如果你已经习惯于异常处理，那么第一次听到这个也许有些奇怪。 异常不是意味着问题嘛？ Common Lisp中的condition即使没有错误也可以触发，例如，多线程代码需要同步，或者其他代码需要在特殊事件上被触发，或者其他什么你认为有用的情 况。更进一步，有些conditions代表的问题可以在运行过程中修复。或者是以交互方式，或者用代码。<br />
+<br />
+大部分Object-Oriented编程语言的模型只是CLOS的特殊形式，类似的Java的异常处理也只是Common Lisp的Condition系统的一个特殊形式。<br />
+<br />
+下面这篇文章出色地阐述了在Common Lisp中的如何进行condition handling，附带也有一些历史典故。<br />
+<br />
+&nbsp;&nbsp;&nbsp; Kent Pitman: Condition Handling in the Lisp Language Family, in: Advances in Exception Handling Techniques, 2001, Springer LNCS 2022, <a href="http://www.nhplace.com/kent/Papers/Condition-Handling-2001.html" target="_blank">http://www.nhplace.com/kent/Papers/Condition-Handling-2001.html</a><br />
+<br />
+一些说明：<br />
+<br />
+&nbsp;&nbsp; 1.Common Lisp提供了catch-和throw这样的结构，以支持从函数中跳出(non-local exits)。这和Java中的 try-catch-finally并不相同！对于try-catch，Common Lisp对应的是handler-case或者handler-bind这样的东西，而try-finally则对应Common Lisp中的unwind-protect结构。请参考上面的文章以获得详细说明。<br />
+<br />
+&nbsp;&nbsp; 2.顺便说一句，Condition也可以用来实现Aspect-Oriented Programming，这样你就不用和元数据(meta)打交道了。<br />
+<br />
+2.8 &nbsp;高级编程技巧<br />
+<br />
+我 在前面已经数次提到Paul Graham的''On Lisp''一书。这本书中还有很多其他Common Lisp 是用的高级技巧，比如创建工具函数，高阶函数，数据库存取，模仿Scheme中的continuations，多进程，非确定性计算，parsing，逻 辑计算，面向对象。(当然，这本书中的大部分内容还是关于宏的。)<br />
+<br />
+我再重复一遍这个链接<br />
+<br />
+&nbsp; Paul Graham, On Lisp, <a href="http://www.paulgraham.com/onlisp.html" target="_blank">http://www.paulgraham.com/onlisp.html</a><br />
+<br />
+2.9 &nbsp;Packages<br />
+<br />
+Java 有一个不错的module系统，允许你将classes绑定到packages中，以避免 classes相互之间的冲突。更棒的是，packages的结构反应了相应的文件目录结构。这样，简单的调整classpaths，就可以支使Java 运行环境就可以根据需要加载classes。<br />
+<br />
+Common Lisp也提供了一个package系统，也允许把定义(包括classes)绑定到package。然而，Common Lisp的package系统和文件目录结构之间不存在任何联系。 Common Lisp中的package系统只决定Lisp运行环境中的数据定义如何安排。<br />
+<br />
+事实上，Common Lisp的package系统的强大之处更在于它支持把符号(symbols) 绑定到packages中去。因为Common Lisp中的定义总是通过符号访问的，所以绑定定义实际上只是绑定符号的一部分。这里有一个Kent M. Pitman给出的漂亮例子，它展示了你可以用 Common Lisp的package做什么。(参见<a href="http://makeashorterlink.com/?E3B823F91" target="_blank">http://makeashorterlink.com/?E3B823F91</a>以获得完整的信息。)<br />
+<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;&quot;CL allows me, simply in the symbol data, to control whether I'm doing various kinds of sharing. For example, I can separate my spaces, as in:<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(in-package &quot;FLOWER&quot;)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(setf (get 'rose 'color) 'red) (setf (get 'daisy 'color) 'white)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(defun colors-among (things) (loop for thing in things when (get thing 'color) collect thing))<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(in-package &quot;PEOPLE&quot;)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(setf (get 'rose 'color) 'white)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(setf (get 'daisy 'color) 'black)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(defun colors-among (things) (loop for thing in things when (get thing 'color) collect thing))<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(in-package &quot;OTHER&quot;)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(flower:colors-among '(flower:rose people:rose flower:daisy)) =&gt; (FLOWER:RED FLOWER:WHITE)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(flower:colors-among '(flower:rose people:daisy people:rose)) =&gt; (FLOWER:RED)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(people:colors-among '(flower:rose people:rose flower:daisy)) =&gt; (PEOPLE:WHITE)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp;(people:colors-among '(flower:rose people:daisy people:rose)) =&gt; (PEOPLE:BLACK PEOPLE:WHITE)<br />
+<br />
+Common Lisp的Package支持对符号的绑定，而对定义进行绑定只是其中的一个部分。但是package系统并不支持搜索或者加载操作。Common Lisp术语中，后一个操作被成为''系统构建(system construction)''。<br />
+<br />
+总而言之，不要被两种语言之间的区别搞混了。Java和Common Lisp只是恰好都选用了package这个术语，而他们的目的是不同的(虽然有一些重叠)。<br />
+<br />
+Common Lisp对系统构建的支持很有限(函数''load''和''require'' - 参见CLtL2和ANSI specs)。关于这个问题，下一节有更详细的说明。<br />
+<br />
+2.10 &nbsp;缺点什么?<br />
+<br />
+ANSI Common Lisp标准于1994年定稿，1995出版。彼时Java还在角落里成长，并没有公开。 Internet也没有做商业推广。显然，过来的这7年里，编程语言在很多方面都有更进一步的要求了。遗憾的是，Common Lisp的官方标准没有与时俱进。ANSI Common Lisp中没有涵盖的一些东西，现在已经成了其他一些时髦编程语言中的必备的基础。比如：模块(系统构建)系统，Unicode支持，平台无关的GUI 库，socket和TCP/IP，XML，WebServices，等等。<br />
+<br />
+然而，Lisp世界并非停滞不前。ANSI Common Lisp标准中没有说明并不意味着客观上不存在。<br />
+<br />
+两个最广泛使用的系统构建软件是ASDF(<a href="http://www.cliki.net/asdf" target="_blank">http://www.cliki.net/asdf</a>) 和MK-DEFSYSTEM(<a href="http://www.cliki.net/mk-defsystem" target="_blank">http://www.cliki.net/mk-defsystem</a>)。 有些Common Lisp实现也有它们自己的系统构建支持。Allegro Common Lisp, LispWorks以及 CLISP支持Unicode。CLIM是一个平台无关的GUI库，它被若干家厂商支持，包括Franz, Xanalys以及 Digitool。绝大多数正经的Common Lisp实现都支持socket和其他高级网络特性。CLISP 支持fastcgi。CL-XML是一个可以用于处理XML的库。诸如此类。<br />
+<br />
+基本原则就是，如果你需要某一些功能，google一下，你也许就能找到合适的库。下面的链接也会有一些帮助。<br />
+<br />
+3 &nbsp;Links<br />
+<br />
+以下列出一些有用的站点，其中部分在前文已经提及。<br />
+<br />
+3.1 &nbsp;个人站点<br />
+<br />
+&nbsp;&nbsp; 1.Bill Clementson's homepage, <a href="http://home.comcast.net/" target="_blank">http://home.comcast.net/</a> bc19191/<br />
+<br />
+&nbsp;&nbsp; 2. Richard Gabriel's homepage, <a href="http://www.dreamsongs.com/" target="_blank">http://www.dreamsongs.com</a> - one of the fathers of Common Lisp, various interesting essays can be found at his homepage<br />
+<br />
+&nbsp;&nbsp; 3.Erann Gat's homepage, <a href="http://www.flownet.com/gat/" target="_blank">http://www.flownet.com/gat/</a> - he conducted the study that compared performance characteristics of Lisp, Java and C++<br />
+<br />
+&nbsp;&nbsp; 4.Paul Graham's homepage, <a href="http://www.paulgraham.com/" target="_blank">http://www.paulgraham.com</a> - author of the books &quot;ANSI Common Lisp&quot; and &quot;On Lisp&quot;, also offers various interesting articles<br />
+<br />
+&nbsp;&nbsp; 5.Rainer Joswig's homepage, <a href="http://lispm.dyndns.org/" target="_blank">http://lispm.dyndns.org/</a><br />
+<br />
+&nbsp;&nbsp; 6.David B. Lamkins' homepage, <a href="http://psg.com/" target="_blank">http://psg.com/</a> dlamkins/ - author of the freely available online tutorial &quot;Successful Lisp&quot;<br />
+<br />
+&nbsp;&nbsp; 7.John McCarthy's homepage, <a href="http://www-formal.stanford.edu/jmc/" target="_blank">http://www-formal.stanford.edu/jmc/</a> - he invented Lisp in the 1950's<br />
+<br />
+&nbsp;&nbsp; 8.Peter Norvig's homepage, <a href="http://www.norvig.com/" target="_blank">http://www.norvig.com</a><br />
+<br />
+&nbsp;&nbsp; 9.Andreas Paepcke's homepage, <a href="http://www-db.stanford.edu/" target="_blank">http://www-db.stanford.edu/</a> paepcke/<br />
+<br />
+&nbsp;&nbsp;10.Kent Pitman's homepage, <a href="http://www.nhplace.com/kent/" target="_blank">http://www.nhplace.com/kent/</a> - he was the project lead for the Lisp condition system<br />
+<br />
+&nbsp;&nbsp;11.Kevin Rosenberg's homepage, <a href="http://b9.com/" target="_blank">http://b9.com/</a><br />
+<br />
+&nbsp;&nbsp;12.Mark Watson's homepage, <a href="http://www.markwatson.com/" target="_blank">http://www.markwatson.com/</a> - author of the freely available book &quot;Loving Lisp - the Savy Programmer's Secret Weapon&quot;<br />
+<br />
+&nbsp;&nbsp;13.Edi Weitz's hompage, <a href="http://weitz.de/" target="_blank">http://weitz.de/</a><br />
+<br />
+3.2 &nbsp;Common Lisp参考<br />
+<br />
+&nbsp;&nbsp; 1.ANSI Common Lisp (a hyperlinked version of the standard), <a href="http://www.franz.com/support/documentation/6.2/ansicl/ansicl.htm" target="_blank">http://www.franz.com/support/documentation/6.2/ansicl/ansicl.htm</a><br />
+<br />
+&nbsp;&nbsp; 2.The Common Lisp HyperSpec, <a href="http://www.lispworks.com/reference/HyperSpec/" target="_blank">http://www.lispworks.com/reference/HyperSpec/</a><br />
+<br />
+&nbsp;&nbsp; 3.Common Lisp the Language, second edition, <a href="http://www-2.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/cltl2.html." target="_blank">http://www-2.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/cltl2.html.</a> See also <a href="http://oopweb.com/LISP/Documents/cltl/VolumeFrames.html" target="_blank">http://oopweb.com/LISP/Documents/cltl/VolumeFrames.html</a> for a framed version.<br />
+<br />
+&nbsp;&nbsp; 4.Converting CLtL2 to ANSI CL, <a href="http://home.comcast.net/" target="_blank">http://home.comcast.net/</a> bc19191/cltl2-ansi.htm<br />
+<br />
+&nbsp;&nbsp; 5.The Common Lisp Object System MetaObject Protocol, <a href="http://www.lisp.org/mop/" target="_blank">http://www.lisp.org/mop/</a> (not part of ANSI Common Lisp, but considered a de-facto standard)<br />
+<br />
+3.3 &nbsp;背景材料<br />
+<br />
+&nbsp;&nbsp; 1.Common Lisp - Myths and Legends, <a href="http://www.lispworks.com/products/myths_and_legends.html" target="_blank">http://www.lispworks.com/products/myths_and_legends.html</a><br />
+<br />
+&nbsp;&nbsp; 2.Continuations, <a href="http://c2.com/cgi/wiki?CallWithCurrentContinuation" target="_blank">http://c2.com/cgi/wiki?CallWithCurrentContinuation</a> - an explanation on the WikiWikiWeb (<a href="http://c2.com/cgi/wiki" target="_blank">http://c2.com/cgi/wiki</a>)<br />
+<br />
+&nbsp;&nbsp; 3.FAQ for comp.lang.lisp, <a href="http://www-jcsu.jesus.cam.ac.uk/" target="_blank">http://www-jcsu.jesus.cam.ac.uk/</a> csr21/lispfaq.html<br />
+<br />
+&nbsp;&nbsp; 4.The Feyerabend project, <a href="http://www.dreamsongs.com/Feyerabend/Feyerabend.html" target="_blank">http://www.dreamsongs.com/Feyerabend/Feyerabend.html</a><br />
+<br />
+&nbsp;&nbsp; 5.The original 'lambda papers' by Guy Steele and Gerald Jay Sussman, <a href="http://library.readscheme.org/page1.html" target="_blank">http://library.readscheme.org/page1.html</a> - these papers date back to the 1970's and discuss various aspects of and around Scheme; some of them are also of interest to Common Lispers<br />
+<br />
+&nbsp;&nbsp; 6. LISP 1.5 Programmer's Manual, <a href="http://green.iis.nsk.su/" target="_blank">http://green.iis.nsk.su/</a> vp/doc/lisp1.5/, for historically interested folks<br />
+<br />
+&nbsp;&nbsp; 7.Lexical scope, dynamic scope, (lexical) closures, <a href="http://c2.com/cgi/wiki?ScopeAndClosures" target="_blank">http://c2.com/cgi/wiki?ScopeAndClosures</a> - an explanation on the WikiWikiWeb (<a href="http://c2.com/cgi/wiki" target="_blank">http://c2.com/cgi/wiki</a>)<br />
+<br />
+&nbsp;&nbsp; 8.Lisp Scheme Differences, <a href="http://c2.com/cgi/wiki?LispSchemeDifferences" target="_blank">http://c2.com/cgi/wiki?LispSchemeDifferences</a> - a discussion that compares Common Lisp to Scheme on the WikiWikiWeb (<a href="http://c2.com/cgi/wiki" target="_blank">http://c2.com/cgi/wiki</a>)<br />
+<br />
+&nbsp;&nbsp; 9.Common Lisp/Scheme Comparison, <a href="http://makeashorterlink.com/?E2E9254F6" target="_blank">http://makeashorterlink.com/?E2E9254F6</a>, an excellent comparison by Ray Dillinger<br />
+<br />
+&nbsp;&nbsp;10.Meta Object Protocol, <a href="http://c2.com/cgi/wiki?MetaObjectProtocol" target="_blank">http://c2.com/cgi/wiki?MetaObjectProtocol</a> - a discussion about Common Lisp's MOP on the WikiWikiWeb (<a href="http://c2.com/cgi/wiki" target="_blank">http://c2.com/cgi/wiki</a>)<br />
+<br />
+&nbsp;&nbsp;11.Tail calls, tail recursion, <a href="http://c2.com/cgi/wiki?TailCallOptimization" target="_blank">http://c2.com/cgi/wiki?TailCallOptimization</a> - an explanation on the WikiWikiWeb (<a href="http://c2.com/cgi/wiki" target="_blank">http://c2.com/cgi/wiki</a>)<br />
+<br />
+3.4 &nbsp;Repositories, link collections, software<br />
+<br />
+&nbsp;&nbsp; 1.The ALU (Association of Lisp Users) Wiki, <a href="http://alu.cliki.net/" target="_blank">http://alu.cliki.net/</a>, the portal to the Common Lisp world, includes a list of Common Lisp implementations and much more<br />
+<br />
+&nbsp;&nbsp; 2.CLiki, <a href="http://www.cliki.net/" target="_blank">http://www.cliki.net/</a>, a collection of links to and resources for free software implemented in Common Lisp<br />
+<br />
+&nbsp;&nbsp; 3.Common-Lisp.net, <a href="http://common-lisp.net/" target="_blank">http://common-lisp.net/</a>, is to Common Lisp what SourceForge is to the rest of the world<br />
+<br />
+&nbsp;&nbsp; 4.The Common Lisp Cookbook, <a href="http://cl-cookbook.sourceforge.net/" target="_blank">http://cl-cookbook.sourceforge.net/</a><br />
+<br />
+&nbsp;&nbsp; 5.Common Lisp Hypermedia Server, <a href="http://www.ai.mit.edu/projects/iiip/doc/cl-http/home-page.html" target="_blank">http://www.ai.mit.edu/projects/iiip/doc/cl-http/home-page.html</a>, is a full-featured, open source web server implemented in Common Lisp<br />
+<br />
+&nbsp;&nbsp; 6.Common Lisp Open Code Collection, <a href="http://clocc.sourceforge.net/" target="_blank">http://clocc.sourceforge.net</a><br />
+<br />
+&nbsp;&nbsp; 7.The Common Lisp Open Source Center, <a href="http://opensource.franz.com/" target="_blank">http://opensource.franz.com/</a><br />
+<br />
+&nbsp;&nbsp; 8.setf.de Lisp Tools, <a href="http://www.setf.de/" target="_blank">http://www.setf.de/</a>, includes CL-XML, a bnf-based parser, java2lisp and several other tools<br />
+<br />
+&nbsp;&nbsp; 9.CLUnit, <a href="http://www.ancar.org/" target="_blank">http://www.ancar.org/</a>, a unit testing framework (similar to JUnit)<br />
+<br />
+&nbsp;&nbsp;10.JACOL, <a href="http://jacol.sourceforge.net/" target="_blank">http://jacol.sourceforge.net</a>, a framework for interaction between Java and Common Lisp via sockets<br />
+<br />
+&nbsp;&nbsp;11.UFFI, <a href="http://uffi.b9.com/" target="_blank">http://uffi.b9.com/</a>, a package to interface Common Lisp programs with C-language compatible libraries<br />
+<br />
+&nbsp;&nbsp;12.How to create dynamic websites with Lisp and Apache, <a href="http://lisp.t2100cdt.kippona.net/lispy/home" target="_blank">http://lisp.t2100cdt.kippona.net/lispy/home</a><br />
+<br />
+&nbsp;&nbsp;13.BioLisp.org, <a href="http://www.biolisp.org/" target="_blank">http://www.biolisp.org/</a>, intelligent applications in BioComputing<br />
+<br />
+&nbsp;&nbsp;14.ACL2, <a href="http://www.cs.utexas.edu/users/moore/acl2/" target="_blank">http://www.cs.utexas.edu/users/moore/acl2/</a>, a semi-automatic theorem prover for an applicative subset of Common Lisp<br />
+<br />
+&nbsp;&nbsp;15.Dynamic Learning Center, <a href="http://www.dynamiclearningcenter.com/" target="_blank">http://www.dynamiclearningcenter.com/</a>, a teachers' and students' on-line learning resources<br />
+<br />
+3.5 &nbsp;Scheme links<br />
+<br />
+&nbsp;&nbsp; 1.DrScheme, <a href="http://www.drscheme.org/" target="_blank">http://www.drscheme.org</a>, is an implementation of Scheme I have checked out and liked a lot. If I hadn't opted for Common Lisp, I would probably have stuck with this system.<br />
+<br />
+&nbsp;&nbsp; 2.Scheme FAQ, <a href="http://www.schemers.org/Documents/FAQ/" target="_blank">http://www.schemers.org/Documents/FAQ/</a><br />
+<br />
+3.6 &nbsp;Copyright issues<br />
+<br />
+* Copyright Quick-Start for Online Authors, by Gene Michael Stover, <a href="http://gms.freeshell.org/htdocs/copyright/copyright.html" target="_blank">http://gms.freeshell.org/htdocs/copyright/copyright.html</a><br />
+<br />
+4 &nbs
+</body>
+</html>

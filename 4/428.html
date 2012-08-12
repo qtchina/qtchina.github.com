@@ -1,0 +1,1022 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>opera file formats  文档格式说明</title>
+</head>
+<body>
+这个页面在opera网站上已经找不到了，好不容易在google的快照中找到的，现复制到本地了。
+原来的地址：http://www.opera.com/docs/fileformats/
+快照    http://74.125.153.132/search?q=cache:pjwwhNh2jUEJ:www.peeep.us/4899d1fa+opera+file+formats+cookies4&cd=5&hl=zh-CN&ct=clnk
+
+
+<h2><b style="color:black;background-color:#ffff66">Opera</b> <b style="color:black;background-color:#a0ffff">File</b> <b style="color:black;background-color:#99ff99">Formats</b></h2>
+
+<h3>Introduction</h3>
+
+<p>
+This document describes the new binary <b style="color:black;background-color:#a0ffff">file</b> <b style="color:black;background-color:#99ff99">formats</b> introduced with <b style="color:black;background-color:#ffff66">Opera</b> 
+version 5 for the various files used in the cache and cookie management.
+</p>
+
+<p>
+The new generic format that these files are based on is structured as a 
+sequence of tagged records with a given length. Each record may contain a 
+number of different data types such as strings and integers, as well as 
+arbitrary binary data, such as new records in this format.
+</p>
+
+<p>
+The generic format is NOT backwards compatible with <b style="color:black;background-color:#ffff66">Opera</b> 3.x and earlier, 
+but is intended to be reasonably backwards compatible for version 4.0 and 
+later. This means that if new fields are added by a future version, older 
+versions will still be able to read the information that they understand, 
+while ignoring the fields they do not understand.
+</p>
+
+<p>
+There are some limits, but they are mostly concerned with the number of
+significant bits in the integers that are used to indicate record lengths. 
+The <b style="color:black;background-color:#99ff99">formats</b> are presently used to store the disk cache index <b style="color:black;background-color:#a0ffff">file</b> 
+(dcache4.url), the visited links <b style="color:black;background-color:#a0ffff">file</b> (vlink4.dat), the download rescue 
+<b style="color:black;background-color:#a0ffff">file</b> (download.dat) and the cookie <b style="color:black;background-color:#a0ffff">file</b> (<b style="color:black;background-color:#ff9999">cookies4</b>.dat). The <b style="color:black;background-color:#99ff99">formats</b> are 
+described in the following sequence:
+</p>
+
+<ul>
+<li>The <a href="#generic">generic binary format</a> used in the new 
+    <b style="color:black;background-color:#99ff99">formats</b>.</li>
+<li>The special constants and data organizations used in the 
+    <a href="#urls">cache, visited links and download</a> <b style="color:black;background-color:#a0ffff">file</b> <b style="color:black;background-color:#99ff99">formats</b>.</li>
+<li>The special constants and data organizations used in the 
+    <a href="#cookies">cookie format</a>.</li>
+</ul>
+
+<p>
+The <b style="color:black;background-color:#99ff99">formats</b> for the windows history, news files and global history 
+files are the same as the ones used by <b style="color:black;background-color:#ffff66">Opera</b> v3.x and are outside 
+the scope of this document.
+</p>
+
+
+
+
+<h3 id="generic">The Generic Binary Format</h3>
+
+<h4>Data types</h4>
+
+<p>
+Integers used in the format are unsigned, and stored in 
+big-endian/network style (Most Significant Byte first). Integers 
+stored inside the records are also stored in the big-endian format, 
+but may be signed, and may be truncated.
+</p>
+
+<p>
+The following datatypes are used in this document:
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <td>int*</td>
+    <td>Signed integer of * bits</td>
+  </tr>
+  <tr>
+    <td>uint*</td>
+    <td>Unsigned integer of * bits</td>
+  </tr>
+  <tr>
+    <td>byte</td>
+    <td>8 bit unsigned value</td>
+  </tr>
+  <tr>
+    <td>string</td>
+    <td>Sequence of characters (not null terminated)</td>
+  </tr>
+  <tr>
+    <td>time_t</td>
+    <td>uint32 representing a time value in seconds since 00:00 Jan 1, 
+    1970 GMT. The representation may be increased past 32 bit in the 
+    future</td>
+  </tr>
+  <tr>
+    <td>tag_id_type</td>
+    <td>Unsigned integer whose size is selected by the idtag_length header 
+    field. The application must convert from this type to its internal 
+    unsigned integer representation, preferably uint32. For more 
+    information, see the <a href="#file-header"><b style="color:black;background-color:#a0ffff">file</b> header format</a>.</td>
+  </tr>
+  <tr>
+    <td>payload_length_type</td>
+    <td>Unsigned integer whose size is selected by the length_length header 
+    field. The application must convert from this type to its internal 
+    unsigned integer representation, preferably uint32. For more 
+    information, see the <a href="#file-header"><b style="color:black;background-color:#a0ffff">file</b> header format</a>.</td>
+  </tr>
+  <tr>
+    <td>record</td>
+    <td>Separately defined sequence of fields</td>
+  </tr>
+</table>
+
+
+<h4>Data records</h4>
+
+<p>
+The general record format has this form:
+</p>
+
+<div class="pre" id="ex">
+<pre>
+struct record
+{
+<span class="codecomment">// application specific tag to identify content type</span>
+tag_id_type tag_id;
+<span class="codecomment">// length of payload</span>
+payload_length_type length;
+<span class="codecomment">// Payload/content of the record</span>
+bytepayload[length];
+};
+</pre>
+</div>
+
+<p>
+<strong>NOTE:</strong> The number of bytes in tag and length may change, 
+see below.
+</p>
+
+<p>
+The fields of each record have the following meanings:
+</p>
+
+<dl>
+<dt>tag_id</dt>
+    <dd>
+    <p>
+    The identifier of the record. This value is application specific, 
+    and can be used to indicate the meaning of the payload content.
+    </p>
+
+    <p>
+    The actual content type of the record depends on the definitions used 
+    for the actual <b style="color:black;background-color:#a0ffff">file</b> or super-record.
+    </p>
+
+    <p>
+    Tag_id values in which the MSB (Most Significant Bit) is set to 1, are 
+    reserved for records with implicit no length. The tag_id field is 
+    NOT followed by a length field, nor a payload buffer. Such records are 
+    used as Boolean flags: True if present, False if not present.
+    </p>
+
+    <p>
+    In the binary storage of a <b style="color:black;background-color:#a0ffff">file</b> this means that the MSB of the internal 
+    storage integer must be stored as the MSB of the first byte in the tag 
+    field. This places a limit on how many tags can be used for a given 
+    tag_id integer length. When a <b style="color:black;background-color:#a0ffff">file</b> is read into a program, the program 
+    must take care to move the MSB of the binary stored tag to a common 
+    (internal) bit position, such as the MSB of the program's own 
+    unsigned integers.
+    </p>
+
+    <table summary="Hm" class="grid">
+      <tr>
+        <th>bytes</th>
+        <th>Max id available (excluding MSB)</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>0x7f</td>
+      </tr>
+
+      <tr>
+        <td>2</td>
+        <td>0x7fff</td>
+      </tr>
+
+      <tr>
+        <td>3</td>
+        <td>0x7fffff</td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>0x7fffffff</td>
+      </tr>
+    </table>
+
+    <p>
+    While it is <i>technically</i> possible to use the same tag id (without 
+    the MSB) for a normal record and a flag record (such as 0x0001 [16 bit 
+    tag] for the payload record and 0x8001 for the flag record), this is 
+    not encouraged.
+    </p>
+    </dd>
+
+<dt>length</dt>
+    <dd>This field is the number of bytes in the payload that immediately 
+    follow the field. It may be zero.</dd>
+
+<dt>payload</dt>
+    <dd>
+    <p>
+    The payload is a sequence of bytes of the length indicated by the 
+    length field.
+    </p>
+
+    <p>
+    The meaning of the contents is indicated by the definition for the 
+    given record or <b style="color:black;background-color:#a0ffff">file</b> structure. Examples of organization may be an 
+    array of records, unsigned integers, signed integers, or characters.
+    </p>
+
+    <p>
+    It is recommended that only records of the types described here are 
+    used if the type of the data varies, as variable (un-tagged) type 
+    <b style="color:black;background-color:#99ff99">formats</b> tend to be inflexible and difficult to maintain across versions, 
+    especially when compatibility with older versions is desired.
+    </p>
+
+    <p>
+    Single item integers (signed or unsigned) may be truncated (zero bytes 
+    removed), but arrays of integers must always use a fixed number of 
+    bytes to represent values and derive the number of items from the 
+    payload length. If the number of bytes needed to represent the values 
+    changes in a future version a new tag should be used.
+    </p>
+    </dd>
+</dl>
+
+
+
+
+<h3 id="file-header"><b style="color:black;background-color:#a0ffff">File</b> Format</h3>
+
+<p>
+These elements are not stored as records but directly in binary:
+</p>
+
+<div class="pre">
+<pre>
+uint32 file_version_number;
+uint32 app_version_number;
+<span class="codecomment">// number of bytes in the id tag, presently 1</span>
+uint16 idtag_length;   
+<span class="codecomment">// number of bytes in the length part of a record, presently 2</span>
+uint16 length_length;  
+<span class="codecomment">// array of records, number determined by length of <b style="color:black;background-color:#a0ffff">file</b></span>
+struct record items[]; 
+</pre>
+</div>
+
+<p>
+The present version number of the <b style="color:black;background-color:#a0ffff">file</b> format (file_version_number) is 
+0x00001000, where the lower 12 bits (bitmask 0x00000fff) represent the 
+minor version number, the rest is the major version number. Changes in the 
+minor version <em>must not</em> be used if the <b style="color:black;background-color:#a0ffff">file</b> format is changed in 
+such a manner that older versions of the software cannot read the <b style="color:black;background-color:#a0ffff">file</b> 
+successfully. If the major version number is newer (or older) than the 
+application can read, it <em>must not</em> read the <b style="color:black;background-color:#a0ffff">file</b>.
+</p>
+
+<p>
+The integer sizes are absolute for a given major version, and the integer 
+size for the <b style="color:black;background-color:#a0ffff">file</b> version number is fixed in <em>any</em> version.
+</p>
+
+<p>
+The "app_version_number" is the version number of the application and is 
+independent of the file_version_number. It may be used by the application 
+to determine necessary actions needed to provide forward or backward 
+compatibility that is outside the scope of the <b style="color:black;background-color:#a0ffff">file</b> <b style="color:black;background-color:#99ff99">formats</b>. The 
+interpretation of the application version number is application dependent.
+</p>
+
+<p>
+The "idtag_length" and "length_length" fields gives the number of bytes 
+used in the records for the idtags, as defined by the tag_id_type, and the 
+payload length fields, as defined by payload_length_type, respectively.
+</p>
+
+<p>
+Specifically, the values of these fields define tag_id_type and 
+payload_length_type as the following integer types:
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Value</th>
+    <th>tag_id_type</th>
+    <th>payload_length_type</th>
+  </tr>
+  <tr>
+    <td>in</td>
+    <td>idtag_length</td>
+    <td>length_length</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>uint8</td>
+    <td>uint8</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>uint16</td>
+    <td>uint16</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>uint24</td>
+    <td>uint24</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>uint32</td>
+    <td>uint32</td>
+  </tr>
+</table>
+
+<p>
+The application's internal representation of these types is not defined, 
+but uint32 is recommended. How an application should handle "idtag_length" 
+or "length_length" values larger than 4, or values larger than its internal 
+unsigned integer size, is not defined, but the application <em>should</em> 
+implement the rules specified in the <a href="#forwardcomp">forward 
+compatibility guide</a> for such situations.
+</p>
+
+<p>
+Present versions of <b style="color:black;background-color:#ffff66">Opera</b> 4.x uses idtag_length=1 (uint8) and 
+length_length=2 (uint16).
+</p>
+
+<p>
+After the header, only records follow. The organization of the records and 
+their interpretation is application specific.
+</p>
+
+
+
+
+<h3 id="forwardcomp">Forward Compatibility</h3>
+
+<p>
+An older version of an application using this <b style="color:black;background-color:#a0ffff">file</b> format that 
+is NOT able to use long integers should, regardless of this, try to 
+process the <b style="color:black;background-color:#a0ffff">file</b>, but should bypass the record if the tag of 
+the record's numerical value exceeds the version's own integer range, 
+i.e. the integer overflows. However, if the the length of the record 
+exceeds the application's limits on integers or buffer capabilities, 
+it <em>must not</em> continue to process the <b style="color:black;background-color:#a0ffff">file</b>.
+</p>
+
+<p>
+All applications <em>must</em> ignore tag values that they do not 
+understand.
+</p>
+
+<h3 id="urls">The Cache <b style="color:black;background-color:#a0ffff">File</b> <b style="color:black;background-color:#99ff99">Formats</b></h3>
+
+<p>
+This section details the record tags and <b style="color:black;background-color:#99ff99">formats</b> used for the visited 
+link <b style="color:black;background-color:#a0ffff">file</b> (vlink4.dat), the disk cache index <b style="color:black;background-color:#a0ffff">file</b> (dcache4.url) and the 
+download rescue <b style="color:black;background-color:#a0ffff">file</b> (download.dat). The present app_version_number of 
+these files is 0x00020000 (major version 2, minor 0).
+</p> 
+
+<p>
+These files use records (of different tag values) which contain a sequence 
+of records with tags from the same set of tag ids. The different files 
+use these tags for their records:
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th><b style="color:black;background-color:#a0ffff">File</b></th>
+    <th>Tag id</th>
+    <th>Version number</th>
+  </tr>
+  <tr>
+    <td>Disk cache</td>
+    <td>0x01</td>
+    <td>0x00020000</td>
+  </tr>
+  <tr>
+    <td>Visited Links</td>
+    <td>0x02</td>
+    <td>0x00020000</td>
+  </tr>
+  <tr>
+    <td>Download</td>
+    <td>0x41</td>
+    <td>0x00020000</td>
+  </tr>
+</table>
+
+<p>
+Each <b style="color:black;background-color:#a0ffff">file</b> consists of records of ONLY this type, with the exception 
+of the Disk cache index <b style="color:black;background-color:#a0ffff">file</b>, which also contains a single record with the 
+id 0x40, which contains a 5 character string used to find the next free 
+cache <b style="color:black;background-color:#a0ffff">file</b> number (oprXXXXX).
+</p> 
+
+<p>
+Each record is again a sequence of records with the same binary 
+representation format as the records in the <b style="color:black;background-color:#a0ffff">file</b>.
+</p>
+
+
+
+
+<h3>Common Elements Between All Files</h3>
+
+<p>
+These elements are used by all of the cache related files. In the case of 
+the visited links, these are the only fields presently used.
+</p>
+
+<p>
+<strong>NOTE:</strong> "(0x0001 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)" means that the most 
+significant bit in the local unsigned integer is to be set. If 32 bit 
+values are used, that means the tag's value is 0x80000001.
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0003</td>
+    <td>string</td>
+    <td>The name of the URL, fully qualified</td>
+  </tr>
+  <tr>
+    <td>0x0004</td>
+    <td>time_t</td>
+    <td>Last visited</td>
+  </tr>
+  <tr>
+    <td>(0x000b | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>The URL is a result of a form query</td>
+  </tr>
+  <tr>
+    <td>0x0022</td>
+    <td>record</td>
+    <td>Contains the name and last visited time of relative link in the 
+    document. May repeat</td>
+  </tr>
+</table>
+
+
+<h4>Content tags of relative link (tag 0x0022) records</h4>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0023</td>
+    <td>string</td>
+    <td>The name of the relative link</td>
+  </tr>
+  <tr>
+    <td>0x0024</td>
+    <td>time_t</td>
+    <td>Last visited</td>
+  </tr>
+</table>
+
+
+
+
+<h3>Fields Used by Disk Cache and Download Rescue Files</h3>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0005</td>
+    <td>time_t</td>
+    <td>Localtime, when the <b style="color:black;background-color:#a0ffff">file</b> was last loaded, not GMT</td>
+  </tr>
+  <tr>
+    <td>0x0007</td>
+    <td>uint8</td>
+    <td>
+    <p>
+    Status of load:
+    </p>
+    <dl style="display: compact">
+    <dt>2</dt>
+        <dd>Loaded</dd>
+    <dt>4</dt>
+        <dd>Loading aborted</dd>
+    <dt>5</dt>
+        <dd>Loading failed</dd>
+    </dl>
+    </td>
+  </tr>
+  <tr>
+    <td>0x0008</td>
+    <td>uint32</td>
+    <td>Content size</td>
+  </tr>
+  <tr>
+    <td>0x0009</td>
+    <td>string</td>
+    <td>MIME type of content</td>
+  </tr>
+  <tr>
+    <td>0x000a</td>
+    <td>string</td>
+    <td>Character set of content</td>
+  </tr>
+  <tr>
+    <td>(0x000c | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td><b style="color:black;background-color:#a0ffff">File</b> is downloaded and stored locally on user's disk, and is not 
+    part of the disk cache directory</td>
+  </tr>
+  <tr>
+    <td>0x000d</td>
+    <td>string</td>
+    <td>Name of <b style="color:black;background-color:#a0ffff">file</b> (cache files: only local to cache directory)</td>
+  </tr>
+  <tr>
+    <td>(0x000f | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>Always check if modified</td>
+  </tr>
+  <tr>
+    <td>0x0010</td>
+    <td>record</td>
+    <td>Contains the HTTP protocol specific information</td>
+  </tr>
+</table>
+
+
+<h4>Fields used only by the download rescuefile</h4>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0028</td>
+    <td>time_t</td>
+    <td>Identifies the time when the loading of the last/previous segment 
+    of the downloaded <b style="color:black;background-color:#a0ffff">file</b> started.</td>
+  </tr>
+  <tr>
+    <td>0x0029</td>
+    <td>time_t</td>
+    <td>Identifies the time when the loading of the last/previous segment 
+    of the downloaded <b style="color:black;background-color:#a0ffff">file</b> was stopped.</td>
+  </tr>
+  <tr>
+    <td>0x002A</td>
+    <td>uint32</td>
+    <td>How many bytes were in the previous segement of the <b style="color:black;background-color:#a0ffff">file</b> being 
+    downloaded. If the time the loading ended is not known, this value will 
+    be assumed to be zero (0) and the download speed set to zero 
+    (unknown).</td>
+  </tr>
+</table>
+
+
+<h4>Fields used in the HTTP protocol specific record</h4>
+
+<p>
+All methods are by default GET, at present it is not possible to cache 
+POST requests.
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0015</td>
+    <td>string</td>
+    <td>HTTP date header</td>
+  </tr>
+  <tr>
+    <td>0x0016</td>
+    <td>time_t</td>
+    <td>Expiry date</td>
+  </tr>
+  <tr>
+    <td>0x0017</td>
+    <td>string</td>
+    <td>Last modified date</td>
+  </tr>
+  <tr>
+    <td>0x0018</td>
+    <td>string</td>
+    <td>MIME type of document</td>
+  </tr>
+  <tr>
+    <td>0x0019</td>
+    <td>string</td>
+    <td>Entity tag</td>
+  </tr>
+  <tr>
+    <td>0x001A</td>
+    <td>string</td>
+    <td>Moved to URL (Location header)</td>
+  </tr>
+  <tr>
+    <td>0x001B</td>
+    <td>string</td>
+    <td>Response line text</td>
+  </tr>
+  <tr>
+    <td>0x001C</td>
+    <td>uint32</td>
+    <td>Response code</td>
+  </tr>
+  <tr>
+    <td>0x001D</td>
+    <td>string</td>
+    <td>Refresh URL</td>
+  </tr>
+  <tr>
+    <td>0x001E</td>
+    <td>uint32</td>
+    <td>Refresh delta time</td>
+  </tr>
+  <tr>
+    <td>0x001F</td>
+    <td>string</td>
+    <td>Suggested <b style="color:black;background-color:#a0ffff">file</b> name</td>
+  </tr>
+  <tr>
+    <td>0x0020</td>
+    <td>string</td>
+    <td>Content Encodings</td>
+  </tr>
+  <tr>
+    <td>0x0021</td>
+    <td>string</td>
+    <td>Content Location</td>
+  </tr>
+  <tr>
+    <td>0x0025</td>
+    <td>uint32</td>
+    <td>
+    <p>
+    Together with tag 0x0026 (both must be present) this identifies the 
+    User Agent string last used to load the resource. This value identifies 
+    the User Agent string.
+    </p>
+    <p>
+    This value is used internally, and should not be modified.
+    </p>
+    </td>
+  </tr>
+  <tr>
+    <td>0x0026</td>
+    <td>uint32</td>
+    <td>
+    <p>
+    Together with tag 0x0025 (both must be present) this identifies the 
+    User Agent string last used to load the resource. This value identifies 
+    the User Agent sub version.
+    </p>
+    <p>This value is used internally, and should not be modified.
+    </p>
+    </td>
+  </tr>
+  <tr>
+    <td>(0x0030 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>Reserved for future use</td>
+  </tr>
+  <tr>
+    <td>(0x0031 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>Reserved for future use</td>
+  </tr>
+</table>
+
+
+
+
+<h3 id="cookies">Cookie <b style="color:black;background-color:#a0ffff">File</b> format</h3>
+
+<p>
+This section describes the record tags and <b style="color:black;background-color:#99ff99">formats</b> used for the storage 
+of cookies (<b style="color:black;background-color:#ff9999">cookies4</b>.dat). The present app_version_number of this <b style="color:black;background-color:#a0ffff">file</b> 
+type is 0x00002000 (major version 2, minor 0).
+</p>
+
+<p>
+The cookie <b style="color:black;background-color:#a0ffff">file</b> is organized as a tree of domain name components, each 
+component then holds a tree of path components and each path component 
+may contain a number of cookies.
+</p>
+
+<p>
+<strong>NOTE:</strong> The components are a sequence of records, teminated 
+with a flag record, not a single record.
+</p>
+
+
+
+
+<h3>Structure</h3>
+
+<h4>Domain components</h4>
+
+<p>
+The domain components are used to organize the cookies for each server 
+and domain for which cookies or cookie filtering capabilities are defined.
+</p>
+
+<p>
+A domain component is started with a domain record, which holds the domain 
+name and some flags for that particular domain. It is then followed by a 
+path component holding the cookies and subdirectory path components (and 
+cookies), followed with a path component terminator and any number of 
+subdomain components before it is terminated by a domain-end flag record.
+</p>
+
+<p>
+E.g: cookies for the domain www.<b style="color:black;background-color:#ffff66">opera</b>.com will be stored in this manner:
+</p>
+
+<div class="pre">
+<pre>
+["com" record]
+  ["<b style="color:black;background-color:#ffff66">opera</b>" record]
+["www" record
+  [cookies]
+  [Path components]
+  [Path component terminator]
+  [other domains]
+[end of domain flag ("www")]
+  [end of domain flag ("<b style="color:black;background-color:#ffff66">opera</b>")]
+[end of domain flag ("com")]
+</pre>
+</div>
+
+<p>
+All names of domain components are non-dotted, except IP addresses, which 
+can only be stored with the complete IP address as a Quad dotted string, 
+e.g. "10.11.12.13", are stored at the top level, and cannot contain any 
+subdomains.
+</p>
+
+<p>
+A Domain Record uses the tag "0x01" and contains a sequence of these fields:
+</p> 
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x001E</td>
+    <td>string</td>
+    <td>The name of the domain part</td>
+  </tr>
+  <tr>
+    <td>0x001F</td>
+    <td>int8</td>
+    <td>
+    <p>
+    How cookies are filtered for this domain. If not present, the filtering 
+    of the parent domain is used.
+    </p>
+    <ol>
+    <li>All cookies from this domain are accepted.</li>
+    <li>No cookies from this domain are accepted.</li>
+    <li>All cookies from this server are accepted. Overrides 1 and 2 for 
+    higher level domains automatics.</li>
+    <li>No cookies from this server are accepted. Overrides 1 and 2 for 
+    higher level domains.</li>
+    </ol>
+    <p>
+    Domain settings apply to all subdomains, except those with a server 
+    specific selection.
+    </p>
+    </td>
+  </tr>
+  <tr>
+    <td>0x0021</td>
+    <td>int8</td>
+    <td>
+    Handling of cookies that have explicit paths which do not match the 
+    URL setting the cookies. If enabled in the privacy preferences the 
+    default is to warn the user, but when warning is enabled such cookies 
+    can be filtered by their domains: Value 1 indicates reject, and 2 is 
+    accept automatically.
+    </td>
+  </tr>
+  <tr>
+    <td>0x0025</td>
+    <td>int8</td>
+    <td>
+    <p>
+    While in the "Warn about third party cookies" mode, this field can be 
+    used to automatically filter such cookies.
+    </p>
+    <ol>
+    <li>All third party cookies from this domain are accepted.</li>
+    <li>No third party cookies from this domain are accepted.</li>
+    <li>All third party cookies from this server are accepted. Overrides 
+    1 and 2 for higher level domains automatics.</li>
+    <li>No third party cookies from this server are accepted. Overrides 
+    1 and 2 for higher level domains.</li>
+    </ol>
+    <p>
+    Domain settings apply to all subdomains, except those with a server 
+    specific selection.
+    </p>
+    </td>
+  </tr>
+</table>
+
+<p>
+This record can be followed by zero or more path components defining 
+toplevel paths on servers in the domain and <em>always</em> terminated by 
+a path component terminator record. Then zero or more domain components 
+may follow.
+</p>
+
+<p>
+A domain component is terminated by a <b>(0x0004 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</b> flag record.
+</p>
+
+
+<h4>Path Components</h4>
+
+<p>
+The path components organize the cookies defined for a given directory in 
+a given domain, as well any subdirectories of this directory that have 
+cookies defined.
+</p>
+
+<p>
+Except for the path component starting immediately <em>after</em> the 
+domain component record, each path component always starts with a path 
+record, and is then followed by any number of cookie records and 
+subdirectory path components.
+</p>
+
+<p>
+The path record uses the record id "0x0002" and the record has this field 
+record:
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x001D</td>
+    <td>string</td>
+    <td>The name of the path part</td>
+  </tr>
+</table>
+
+<p>
+The path component terminator is the <b>(0x0005 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</b> flag record.
+</p>
+
+
+<h4>Cookie Records</h4>
+
+<p>
+The cookie entries are stored in records of type "0x0003" and have the 
+following field records:
+</p>
+
+<table summary="Hm" class="grid">
+  <tr>
+    <th>Tag ID</th>
+    <th>Contents</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>0x0010</td>
+    <td>string</td>
+    <td>The name of the cookie</td>
+  </tr>
+  <tr>
+    <td>0x0011</td>
+    <td>string</td>
+    <td>The value of the cookie</td>
+  </tr>
+  <tr>
+    <td>0x0012</td>
+    <td>time_t</td>
+    <td>Expiry date</td>
+  </tr>
+  <tr>
+    <td>0x0013</td>
+    <td>time_t</td>
+    <td>Last used</td>
+  </tr>
+  <tr>
+    <td>0x0014</td>
+    <td>string</td>
+    <td>Comment/Description of use (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>0x0015</td>
+    <td>string</td>
+    <td>URL for Comment/Description of use (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>0x0016</td>
+    <td>string</td>
+    <td>The domain received with version=1 cookies (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>0x0017</td>
+    <td>string</td>
+    <td>The path received with version=1 cookies (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>0x0018</td>
+    <td>string</td>
+    <td>The port limitations received with version=1 cookies (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>(0x0019 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>The cookie will only be sent to HTTPS servers.</td>
+  </tr>
+  <tr>
+    <td>0x001A</td>
+    <td>int8+</td>
+    <td>Version number of cookie (RFC 2965)</td>
+  </tr>
+  <tr>
+    <td>(0x001B | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>This cookie will only be sent to the server that sent it.</td>
+  </tr>
+  <tr>
+    <td>(0x001C | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>Reserved for delete protection: Not yet implemented</td>
+  </tr>
+  <tr>
+    <td>(0x0020 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>This cookie will not be sent if the path is only a prefix of the 
+    URL. If the path is /foo, /foo/bar will match but not /foobar.</td>
+  </tr>
+  <tr>
+    <td>(0x0022 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>If true, this cookie was set as the result of a password login 
+    form, or by a URL that was retrieved using a cookie that can be 
+    tracked back to such a cookie.</td>
+  </tr>
+  <tr>
+    <td>(0x0023 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>If true, this cookie was set as the result of a HTTP authentication 
+    login, or by a URL that was retrieved using a cookie that can be 
+    tracked back to such a cookie.</td>
+  </tr>
+  <tr>
+    <td>(0x0024 | <b style="color:black;background-color:#ffff66">MSB_VALUE</b>)</td>
+    <td>flag</td>
+    <td>
+    <p>
+    In "Display Third party cookies" mode this flag will be set if 
+    the cookie was set by a third party server, and only these cookies 
+    will be sent if the URL is a third party. Cookies that were received 
+    when loading a URL from the server directly will not be sent to third 
+    party URLs in this mode. <em>The reverse is NOT true.</em>
+    </p>
+    <p>
+    <strong>NOTE:</strong> If a third party server redirects back to the 
+    first party server, the redirected URL is considered third party.
+    </p>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>另一篇关于opera file formats 文档格式的说明</title>
+</head>
+<body>
+原文地址：  http://users.westelcom.com/jsegur/O4FE.HTM
+
+<P><DIV ALIGN=CENTER><H4><A name= "tech">-- XV. Technical Stuff --</A></H4></DIV>
+
+<P><A name="TS1">(1) Opera File Formats --</A>
+<P>These are based on <A HREF="http://www.opera.com/docs/fileformats/">http://www.opera.com/docs/fileformats/</A> by Yngve Pettersen combined with my observations of the file contents. There may be significant items I've missed
+<P>All numerical data is stored most significant byte first, which makes it easy to read from a hex dump. Time values are currently in the 4 byte signed seconds after 1 Jan. 1970 00:00:00 GMT format which is supported on most platforms.
+<P>a. General format for cookies, cache index, and visited links
+<PRE>
+Header:
+  Hex  00001000
+  Hex  00002000=cookies, Hex 00020000=cache or visited links
+  Hex  0001     This indicates the size of tags (1 byte)
+  Hex  0002     This indicates the size of length fields (2 bytes)
+</PRE>
+<P>(The format allows for longer tags and/or length fields in the
+future. O4FE is not coded for that, so will reject any file
+with different values in the header.)
+<P>Body:
+<P>Each piece of data has a tag. There's one set of tag definitions for cookies, another common to the cache index and visited links. Most tags are followed by a length field, then the number of bytes of information indicated by that length. Other tags simply indicate a 'true if present' state and have no length field or content; such tags have their most significant bit set (hex 80 and above for the current single byte tags).
+<P>Some tags are record tags which form a container for one or more pieces of tagged data. The others contain only one piece of data with a specific type (string, unsigned, or signed numerical). In the descriptions I'll use indentation to indicate which tags may occur within specific record types. The tags will be in hexadecimal form expressed as 0xNN where NN are the actual hex digits.
+<P>&nbsp;
+<P>b. Cookies File (cookies4.dat)
+<P>The file represents a tree structure. Starting at the beginning the entries work from the root to the first leaf, then back to a branch and out to the second leaf, etc. The data closest to the root is the most basic part of the domain; .com, .net, etc.
+<P>O4FE's internal version of the file is split into a forest of single-leaf saplings, each having all elements back to the root. This allows easy deletion or addition of saplings, and the Save operation recombines them into the Opera tree format.
+<P>There are 3 basic record tags; one for domain elements, one for path elements, and one for the cookie contents. There are additional tags for the data within those records, and also tags to back down through the path and domain elements.
+<PRE>
+0x01  Domain entry (record).
+
+  0x1E  Domain element name (string).
+  0x1F  Cookie server accept flags. Content is a numerical value:
+         1 = Accept all from domain.          O4FE status '1'
+         2 = Refuse all from domain.          O4FE status '2'
+         3 = Accept all from server.          O4FE status '3'
+         4 = Refuse all from server.          O4FE status '4'
+  0x21  Cookie with path not matching: 
+         1 = Refuse.                          O4FE status '5'
+         2 = Accept automatically.            O4FE status '6'
+  0x25  Third party cookie handling:
+         1 = Accept all from domain.          O4FE status '7'
+         2 = Refuse all from domain.          O4FE status '8'
+         3 = Accept all from server.          O4FE status '9'
+         4 = Refuse all from server.          O4FE status 'A'
+
+0x02  Path entry (record).
+
+  0x1D  Path element name (string).
+
+0x03  Cookie content record.
+
+  0x10  Cookie Name (string).
+  0x11  Cookie Value (string).
+  0x12  Cookie expires (time).
+  0x13  Cookie last used (time).
+  0x14  Cookie2 Comment (string). (not seen yet)
+  0x15  Cookie2 Comment URL (string). (not seen yet)
+  0x16  Cookie2 Received Domain (string). (not seen yet)
+  0x17  Cookie2 Received Path (string). (not seen yet)
+  0x18  Cookie2 Portlist (string). (not seen yet)
+  0x99  Secure flag   (true if present).      O4FE status 's'
+  0x1A  Cookie Version (unsigned numerical)  (not seen yet)
+  0x9B  Server Only flag   (true if present)  O4FE status 'o'
+  0x9C  Protected flag   (true if present)    O4FE status 'p'
+  0xA0  Path prefix flag   (true if present)  O4FE status 't'
+  0xA2  Password flag (true if present)       O4FE status 'v'
+  0xA3  Authenticate flag (true if present)   O4FE status 'w'
+  0xA4  Third party flag (true if present)    O4FE status 'x'
+
+
+0x84  End of domain (true if present). This backs down one domain
+        level, and is used at the end of the file to back out of
+        the tree altogether.
+
+0x85  End of path (true if present). This backs down one path level,
+        and is used one more time than the number of path elements.
+        The one extra can be considered to stand for the '/' between
+        domain and path elements needed even when the path is
+        empty.
+</PRE>
+
+<P>&nbsp;
+<P>c. Cache Index file (dcache4.url)
+<P>The file body is a set of records, each record containing information about one file in the cache directory.
+<PRE>
+0x01  Cache File Entry (record).
+
+  0x03  URL Name (string).
+  0x04  Last Visited (time).
+  0x22  #Anchor (record).
+
+    0x23  #Anchor Name (string).
+    0x24  #Anchor VisitTime (time).
+
+  0x05  Local Time Loaded (time).
+  0x06  Security Status (unsigned numerical).
+  0x07  Status (unsigned numerical).
+  0x08  Content Size (unsigned numerical).
+  0x09  Content Type (string).
+  0x0A  Charset (string).
+  0x8B  Form Request (true if present).
+  0x8C  Cache Download File (true if present).
+  0x0D  Cache Filename (string).
+  0x8E  Proxy No Cache (true if present).
+  0x8F  Always Verify (true if present).
+  0x10  HTTP Protocol Data (record).
+
+    0x11  Send Content Type (string).
+    0x12  Send Data (string).
+    0x93  Send Only If Modified (true if present).
+    0x14  Send Referrer (string).
+    0x15  Keep Load Date (string).
+    0x16  Keep Expires (time).
+    0x17  Keep Last Modified (string).
+    0x18  Keep Mime Type (string).
+    0x19  Keep Entity (string).
+    0x1A  Moved To URL (string).
+    0x1B  Response Text (string).
+    0x1C  Response (unsigned numerical).
+    0x1D  Refresh URL (string).
+    0x1E  Refresh Interval (unsigned numerical).
+    0x1F  Suggested Name (string).
+    0x20  Content Encoding (string).
+    0x21  Content Location (string).
+    0x25  ?? (numerical).
+    0x26  ?? (numerical).
+    0xB0  Send Method GET (true if present).
+    0xB1  Send Method POST (true if present).
+
+
+0x40  Next Sequence (string). This is at the end of the cache index
+        file and contains the 5 character sequence which will be
+        used to form the filename for the next cached file.
+</PRE>
+<P>
+<P>&nbsp;
+<P>d. Visited Links (vlink4.dat)
+<P>The file body is a set of records, each record containing information about one URL.
+<PRE>
+0x02  Visited File Entry (record).
+
+  0x03  URL Name (string).
+  0x04  Last Visited (time).
+  0x22  #Anchor (record).
+
+    0x23  #Anchor Name (string).
+    0x24  #Anchor VisitTime (time).
+
+  0x8B  Form Request (true if present).
+</PRE>
+<P>&nbsp;
+<P>e. Global History file (global.dat)
+<P>There's no header in this file, just records.
+<PRE>
+Record:
+  ASCII Title, terminated with line feed.
+  ASCII URL, terminated with line feed.
+  ASCII decimal Date/Time, terminated with line feed.
+        (seconds after 1 Jan. 1970 00:00:00)
+</PRE>
+<P>&nbsp;
+<P><A name="TS2">(2) Netscape Cookie File format --</A>
+<P>This is my own analysis of the format, and describes what O4FE will currently accept.
+<P>The file is plain text, and each line ends with two carriage returns and a line feed.
+It begins with a header (between the lines):
+<PRE>
+------------------------------------------------------
+# Netscape HTTP Cookie File
+# http://www.netscape.com/newsref/std/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+------------------------------------------------------
+</PRE>
+<P>Cookies exported by IE to the Netscape format are similar, but end lines with two line feeds. The header is:
+<PRE>
+------------------------------------------------------
+#  Internet Explorer cookie file, exported for Netscape browsers.
+
+------------------------------------------------------
+</PRE>
+<P>O4FE starts by skipping any number of empty lines or lines beginning with a '#' character. Lines may be terminated by one or more carriage returns or line feeds in any combination.
+<P>The cookies data is seven fields per line, each field separated from the next by a single space character or a single tab. O4FE replaces all the spaces, tabs, carriage returns and line feeds with zeroes so the fields can be treated as null terminated strings. The seven fields are:<BR>
+ 1. Host or domain. If this contains only numerical characters and dots, O4FE stores it as a single string to match the Opera 3.5+ format for IP addresses. Otherwise it is broken into substrings by dots, and must have at least 2 substrings or O4FE outputs a File Parse Error and quits trying to read the file.<BR>
+ 2. Either "TRUE" or "FALSE", where TRUE means that field 1 was specified by the optional 'domain=' cookie attribute and FALSE means field 1 is the host which sent the cookie. Any other contents cause a File Parse Error.<BR>
+ 3. Path. This field may be empty if there was no 'path=' attribute, but usually has a '/' character and on rare occasions has multiple path elements strung together. If so, O4FE stores the path element substrings indicated by the slashes.<BR>
+ 4. Either "TRUE" or "FALSE", where TRUE means the cookie is secure, FALSE not. O4FE saves the status, or quits with a File Parse Error.<BR>
+ 5. Expiration Date/Time, expressed as seconds after 1 Jan. 1970 00:00:00 GMT. O4FE reduces this to a binary number, and adjusts it by the local standard time offset to match the way Opera does it.<BR>
+ 6. Cookie Name. O4FE just stores it unless it's empty or longer than 4096 bytes, either of which will cause O4FE to issue a File Parse Error.<BR>
+ 7. Cookie Value. O4FE just stores it unless it's empty or longer than 4096 bytes, either of which will cause O4FE to issue a File Parse Error.
+<P>After the seventh field O4FE steps over any extra zero bytes, then expects field 1 unless it has reached the end of the file.
+<P>&nbsp;
+<P><A name="TS3">(3) O4FE Custom Clipboard Formats --</A>
+<P>a. CF_OFEVLCAGH
+<P>This is the format used when copying from Visited Links, Cache index, or Global History.
+<PRE>
+DWORD    32 bit total length of clip (Intel format, LSB first)
+LONG     32 bit number of lines in clip (Intel format, LSB first)
+
+Each line has:
+  MWORD    16 bit length of Title (MSB first) This is 0 if copying from
+           Visited Links or Cache index
+  ASCII    Title (if any)
+  MWORD    16 bit length of URL (MSB first)
+  ASCII    URL
+  TIME     32 bit Date/Time, seconds since 1 Jan. 1970 00:00:00 (LSB first)
+</PRE>
+<P>Note: This format is identical to that used by OFE for this data, allowing you to Copy and Paste between O4FE and OFE.
+<P>&nbsp;
+<P>b. CF_O4FCOOKIE
+<P>This is the format used when copying from Cookies.
+<PRE>
+DWORD    32 bit total length of clip (Intel format, LSB first)
+LONG     32 bit number of lines in clip (Intel format, LSB first)
+</PRE>
+<P>Each line contains a cookie record in the same format as the Opera cookies4.dat file records but with all elements specified.
+<P>Note: This format differs from the CF_OFECOOKIE format used by OFE, so Copy and Paste of cookie information between the two programs is not currently possible.
+<P>&nbsp;
+<P><A name="TS4">(4) O4FE UTF-8 to CodePage translation --</A>
+<P>For each string which might contain UTF-8 codes, O4FE steps through the string skipping bytes with 0x00 to 0x7F values. When it finds a byte with an 0xC2 or greater value, it decodes the 2 or greater byte UTF-8 sequence. If it instead finds a byte in the 0x80 to 0xC1 range, it returns the remainder of that string without decoding; the likelihood that Opera will produce an invalid UTF-8 code is far less than the likelihood the user is looking at a file produced by Opera 5.12.
+<P>Decoding of UTF-8 sequences first checks whether the sequence corresponds to a valid UTF-16 code point; if not a '?' replaces the sequence. Valid UTF-16 codes are converted to the selected CodePage using a lookup table; the ###.bin external table or an internal table of the same form. If an identically numbered table is present both internally and as a file, O4FE uses the file.
+<P>The table format has 3 sections:
+<P>Section 1: Preamble<BR>
+This consists of two 16 bit words; the first word is the code page number (O4FE doesn't use this number, it's there to identify the file if it has been renamed), the second word is bit-coded for control. Currently only the last bit of that second word is used; when set it indicates a Double Byte Character Set (DBCS), when clear it indicates a Single Byte Character Set (SBCS).
+<P>Note: words are stored in Intel order; the low byte is first, followed by the high byte.
+<P>Section 2: Unicode table<BR>
+This consists of an ordered list of Ranges. Each Range consists of 3 words indicating a starting UTF-16 value, an ending UTF-16 value, and the byte offset from the beginning of the overall table/file to the Output code corresponding to the starting UTF-16 value. A lookup consists of searching for the first ending value greater than or equal to the desired value (O4FE uses a binary search for this; one of the DBCS tables has 1489 Ranges and a sequential search would be slow). If the value is also greater than or equal to the starting value for the Range, it lies in that Range, otherwise it is not in any Range and the UTF-8 code is replaced with a '?'. For an in-Range value the starting value is subtracted from the desired value, the difference is doubled for a DBCS table, and the result is added to the offset to find the location of the Output code. The last Range is always a guard which has starting and ending values of 0xFFFF.
+<P>Section 3: Output table<BR>
+This section simply lists the character code bytes (SBCS) or words (DBCS) in the same order as the Ranges. Within a Range, there may be up to 6 (SBCS) or 3 (DBCS) sequential '?' characters where the UTF-16 values don't have CodePage equivalents. This keeps the overall table size as small as possible - replacing 5 '?' bytes with a 6 byte Range entry wouldn't be efficient for instance. The 6 byte case could have been handled either way, but the lookup is slightly faster with fewer Ranges.
+</body>
+</html>
