@@ -1,0 +1,21 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Unix/Linux一个链接参数</title>
+</head>
+<body>
+在看代码的时候，发现一些代码的链接使用这个链接参数，-Wl,-z,noexecstack
+
+搜索查找，发现这是一个比较接近“hack"类的功能，与-shared参数差不多，链接一个不可执行的ELF，相当于动态链接库。
+
+还有一个工具叫execstack，可以对现有的ELF文件操作，添加或者去掉”执行“属性。
+
+这些工具现在默认在Unix/Linux都不带了，看到一些讨论，去掉的原因就是太接近"hack"功能了，并且有更简洁直接的替代方法，像在链接是选择使用-shared或者不使用。
+
+如果没有这个工具，如何对已有的ELF文件操作。
+
+
+</body>
+</html>

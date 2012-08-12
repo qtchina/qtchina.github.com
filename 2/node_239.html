@@ -1,0 +1,270 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>绘图器变换</title>
+</head>
+<body>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	对QPainter的默认坐标系统，点(0,0)位于绘图设备左上角，x坐标向右增长，y坐标向下增长。每个象素占据默认坐标系统中大小为1x1的区域。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	要明白的一个重要事件是一个象素的中心位于“半象素”的地方。例如，左上角象素覆盖的区域在点(0,0)和(1,1)之间，它的中心位于(0.5,0.5)。如果我们要QPainter在(100,100)处画一个象素，它将通过在两个方向平移+0.5个象素把结果进行近似取值，这将导致该点中心被画在(100.5,100.5)。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这个区别看上去首选是理论上的，但它在实际中也非常重要。首先，平移＋0.5仅发生在抗钜齿功能被禁用时（默认是这样的），如果抗钜齿功能是激活的并且我们试图在位置为(100,100)的地方画一个黑色象素，QPainter将把(99.5, 99.5), (99.5, 100.5), (100.5, 99.5), 和 (100.5, 100.5)四个象素将被设置浅灰色，以制造一种象素正好位于四个点汇合处理的假象。如果这种影响是不期望的，我们可以通过指定半象素坐标来避免，如，(100.5, 100.5)。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	当绘制像线，矩形和椭圆的时候，将套用相似的规则。图8.7展示drawRect(2,2,6,5)的结果在抗钜齿功能被禁用时是怎么受画笔的影响的。实际上，要重点注意的是使用宽度为1的画笔画一个6x5的矩形会占据一个7x6的区域。这与列老的工具箱不同，包含Qt的早期版本，但它使生成真实的可伸缩和分辨率无法的矢量图形成为可能必要因素。
+图8.7　绘制一个6x5的不带抗钜齿功能的矩形
+<img src="upfile/image/drawing.jpg" border="0">
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	既然我们已经理解了默认的坐标系统，我们就可以详细看一个如何使用QPainter的视口、窗口和世界矩阵修改它。（在当前上下文中，“窗口”不是指像一个顶级物件一样的窗口，“视口”也与QScrollArea的视无关）。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这里的视口和窗口是紧密相关的。该视口是在物理坐标系中一个任意矩形。该窗口也指的是相同的矩形，但是在逻辑坐标系中。当我们绘图的时候，我们指定在逻辑坐标系中的点，这些坐标被线性地转换成物理坐标，这种转换方式基于当前的窗口视点设置。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	默认情况下，该视点和窗口被设置为绘图设备的矩形。例如，如果该设备是一个320x200的物件，视口和窗口都是相同的320x200的矩形，它们的左上角也在点(0,0)。在这种情况下，逻辑坐标第与物理坐标系是一致的。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	窗口视口机制对编写与绘图设备无关的绘图代码非常有用。例如，如果我们希望该逻辑坐标系扩展为从(-50, -50) 到 (+50, +50)，把(0,0)作为中心，我们可以像下面这样设置该窗口：
+painter.setWindow(-50, -50, 100, 100);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	(-50, -50)指定了起始点，(100, 100)指定了宽度和高度。这意味着逻辑坐标(-50,-50)现在对应于物理坐标(0,0)，而逻辑坐标(+50,+50)对应于物理坐标(320,200)。在这个例子中，我们没有改变视口。
+图8.8　把逻辑坐标系转换为物理坐标系
+<img src="upfile/image/converting_logical.jpg" border="0">
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	现在看一个世界矩阵。该世界矩形是是一个除了窗口视口变换之外被应用的变换矩阵。它允许用户翻译、缩放、旋转或者裁剪我们在绘制的项。例如，如果我们以45° 角绘制文本，我们可以使用下面的代码：
+[code type="cpp-qt"]
+QMatrix matrix;
+matrix.rotate(45.0);
+painter.setMatrix(matrix);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们传递给drawText()的逻辑坐标是被世界矩阵转换过的，然后使用窗口视口设置转换为物理坐标。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果我们指定多个变换，他们以被给出的顺序应用。例如，如果我们希望使用点(10,20)作为旋转的支点，我们可以通过翻译窗口，执行旋转，把窗口翻译为它的原始位置：
+[code type="cpp-qt"]
+QMatrix matrix;
+matrix.translate(-10.0, -20.0);
+matrix.rotate(45.0);
+matrix.translate(+10.0, +20.0);
+painter.setMatrix(matrix);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个更简单的指定变换的方法是使用QPainter的translate(), scale(), rotate(), 和  shear()函数：
+
+[code type="cpp-qt"]
+painter.translate(-10.0, -20.0);
+painter.rotate(45.0);
+painter.translate(+10.0, +20.0);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	但是如果我们希望重复使用相同的变换，把它们存储在一个QMatrix对象并在任何需要该变换的时候为绘图器设置该世界矩阵是更有效。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	为了演示绘图器的变换，我们要预览一下图8.9中显示的OvenTimer物件的代码。该OvenTimer物件是对我们非常熟悉的烤箱的内建计时器。用户可以点击一个刻度来设置持续时间。轮盘将自动　反方向旋转直接到达0，在该点OvenTimer发射出timeout()信号。
+图8.9　OvenTimer物件
+<img src="upfile/image/oventimer.jpg" border="0">
+
+[code type="cpp-qt"]
+class OvenTimer : public QWidget
+{
+    Q_OBJECT
+public:
+    OvenTimer(QWidget *parent = 0);
+    void setDuration(int secs);
+    int duration() const;
+    void draw(QPainter *painter);
+signals:
+    void timeout();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+private:
+    QDateTime finishTime;
+    QTimer *updateTimer;
+    QTimer *finishTimer;
+};
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OvenTimer类继承自QWidget并实现了两个虚函数：paintEvent() 和 mousePressEvent()。
+
+[code type="cpp-qt"]
+const double DegreesPerMinute = 7.0;
+const double DegreesPerSecond = DegreesPerMinute / 60;
+const int MaxMinutes = 45;
+const int MaxSeconds = MaxMinutes * 60;
+const int UpdateInterval = 1;
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们以定义几个控制烤箱计时器的外观的常量开始。
+
+[code type="cpp-qt"]
+OvenTimer::OvenTimer(QWidget *parent)
+    : QWidget(parent)
+{
+    finishTime = QDateTime::currentDateTime();
+    updateTimer = new QTimer(this);
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+    finishTimer = new QTimer(this);
+    finishTimer->setSingleShot(true);
+    connect(finishTimer, SIGNAL(timeout()), this, SIGNAL(timeout()));
+    connect(finishTimer, SIGNAL(timeout()), updateTimer, SLOT(stop()));
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在构造函数中，我们创建了两个Qtimer对象：updateTimer用于每秒更新物件的外观，finishTimer在烤箱到达0时发射该物件的timeout()。finishTimer仅需要一次超时，因此我们调用setSingleShot(true)。默认情况下，计时器会重复直到他们被停止或者销毁。最后的connect()调用是一种当计时器不再活动时停止每秒对物件的更新的优化。
+
+[code type="cpp-qt"]
+void OvenTimer::setDuration(int secs)
+{
+    if (secs > MaxSeconds) {
+        secs = MaxSeconds;
+    } else if (secs <= 0) {
+        secs = 0;
+    }
+    finishTime = QDateTime::currentDateTime().addSecs(secs);
+    if (secs > 0) {
+        updateTimer->start(UpdateInterval * 1000);
+        finishTimer->start(secs * 1000);
+    } else {
+        updateTimer->stop();
+        finishTimer->stop();
+    }
+    update();
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	setDuration()函数把烤箱的持续时间设置为给定的秒数。我们通过把持续时间加到当前时间（由QDateTime::currentDateTime()获得）上计算结束时间，并把它存储在私有变量中finishTime。最后，我们使用新的持续时间调用update()来重绘物件。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	finishTime变量是QDateTime类型的。因为该变量持有日期和时间，当当前时间在午夜前而结束时间在午夜后的时候，我们能避免临界点bug。
+
+[code type="cpp-qt"]
+int OvenTimer::duration() const
+{
+    int secs = QDateTime::currentDateTime().secsTo(finishTime);
+    if (secs < 0)
+        secs = 0;
+    return secs;
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	duration()函数在计时器结束前返回剩余的秒数。如果计时器不再活动，我们就返回0。
+
+[code type="cpp-qt"]
+void OvenTimer::mousePressEvent(QMouseEvent *event)
+{
+    QPointF point = event->pos() - rect().center();
+    double theta = atan2(-point.x(), -point.y()) * 180 / 3.14159265359;
+    setDuration(duration() + int(theta / DegreesPerSecond));
+    update();
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果用户点击该物件，我们使用一种巧妙但很有效的数学公式找到最接近的刻度，我们使用该结果设置新的持续时间。然后我们调度一个重绘事件。用户点击的刻度现在应该在顶部，并且它将反方向旋转直接到达0。
+
+[code type="cpp-qt"]
+void OvenTimer::paintEvent(QPaintEvent * /* event */)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    int side = qMin(width(), height());
+    painter.setViewport((width() - side) / 2, (height() - side) / 2,
+                        side, side);
+    painter.setWindow(-50, -50, 100, 100);
+    draw(&painter);
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在paintEvent()中，我们设置视口为物件内可用的最大的正方形，设置窗口为矩形(-50, -50, 100, 100)，这就是说，该100 x 100的矩形从(-50, -50) 扩展到 (+50, +50)。qMin()模板函数返回它的两个参数中的较小者。然后我们调用draw()函数执行绘图操作。
+图8.10　 3种不同尺寸的OvenTimer物件
+<img src="upfile/image/oventimer1.jpg" border="0">
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果我们没有把视口设置为一个正方形，当物件被整为一个非正方形的矩形时，该烤箱计时器应该变成一个椭圆。为了避免这种变形，我们必须以相同的方向比率把视口和窗口设置为矩形。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	现在让我们来看一下绘图代码：
+
+[code type="cpp-qt"]
+void OvenTimer::draw(QPainter *painter)
+{
+    static const int triangle[3][2] = {
+        { -2, -49 }, { +2, -49 }, { 0, -47 }
+    };
+    QPen thickPen(palette().foreground(), 1.5);
+    QPen thinPen(palette().foreground(), 0.5);
+    QColor niceBlue(150, 150, 200);
+    painter->setPen(thinPen);
+    painter->setBrush(palette().foreground());
+    painter->drawPolygon(QPolygon(3, &triangle[0][0]));
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们以绘制一个在物件顶部用于表示0位置的三角形。该三角形被指定为3个硬编码的坐标，然后我们使用drawPolygon()来绘制它。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	容器视口机制的方便之处是我们能在绘图命令中硬编码这些坐标并能得到较好的尺寸调整行为。
+
+[code type="cpp-qt"]
+QConicalGradient coneGradient(0, 0, -90.0);
+coneGradient.setColorAt(0.0, Qt::darkGray);
+coneGradient.setColorAt(0.2, niceBlue);
+coneGradient.setColorAt(0.5, Qt::white);
+coneGradient.setColorAt(1.0, Qt::darkGray);
+painter->setBrush(coneGradient);
+painter->drawEllipse(-46, -46, 92, 92);
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们绘制外圆圈并使用一个圆锥梯度填充它。该梯度的中点位于(0,0)，角度是-90°。
+
+[code type="cpp-qt"]
+QRadialGradient haloGradient(0, 0, 20, 0, 0);
+haloGradient.setColorAt(0.0, Qt::lightGray);
+haloGradient.setColorAt(0.8, Qt::darkGray);
+haloGradient.setColorAt(0.9, Qt::white);
+haloGradient.setColorAt(1.0, Qt::black);
+painter->setPen(Qt::NoPen);
+painter->setBrush(haloGradient);
+painter->drawEllipse(-20, -20, 40, 40);
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们使用一个放射梯度填充内圆圈。梯度的中点和焦点都位于(0,0)。梯度的半径是20。
+
+[code type="cpp-qt"]
+    QLinearGradient knobGradient(-7, -25, 7, -25);
+    knobGradient.setColorAt(0.0, Qt::black);
+    knobGradient.setColorAt(0.2, niceBlue);
+    knobGradient.setColorAt(0.3, Qt::lightGray);
+    knobGradient.setColorAt(0.8, Qt::white);
+    knobGradient.setColorAt(1.0, Qt::black);
+    painter->rotate(duration() * DegreesPerSecond);
+    painter->setBrush(knobGradient);
+    painter->setPen(thinPen);
+    painter->drawRoundRect(-7, -25, 14, 50, 150, 50);
+    for (int i = 0; i <= MaxMinutes; ++i) {
+        if (i % 5 == 0) {
+            painter->setPen(thickPen);
+            painter->drawLine(0, -41, 0, -44);
+            painter->drawText(-15, -41, 30, 25,
+                              Qt::AlignHCenter | Qt::AlignTop,
+                              QString::number(i));
+        } else {
+            painter->setPen(thinPen);
+            painter->drawLine(0, -42, 0, -44);
+        }
+        painter->rotate(-DegreesPerMinute);
+    }
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们调用rotate()来旋转绘图器的坐标系统。在老的坐标系统，0分钟标记在顶部，而现在，0分钟标志被移动到剩余时间所处的合适位置。我们在旋转后绘制矩形旋钮手柄。因为它的方向取决于旋转角度。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在for循环中，我们沿着外圆圈的边缘绘制滴达标志和每隔5分钟的数字。该文本被画在滴达标志的后端的一个不可见矩形。在每次迭代的最后，我们顺时针旋转7°，这代码一分钟。再下一次我们绘制一个滴达标志时，它将出现在该圆圈周围的不同位置，甚至我们传递给drawLine()的坐标和drawText()调用总是一样的。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在for循环中的代码有一个小缺点，如果我们执行更多迭代的话它将更快地显示出来。每次我们调用rotate()，我们实际上使用一个旋转矩阵乘以当前的世界矩阵以生成一个新的世界矩阵。圆整错误与浮点数的算术加法相关，这将导致一个不断增长的错误的世界矩阵。下面是为避免这种情况重写代码的方法，对每次迭代使用save()和restore()来保存和重新加载原始变换矩阵：
+
+[code type="cpp-qt"]
+for (int i = 0; i <= MaxMinutes; ++i) {
+    painter->save();
+    painter->rotate(-i * DegreesPerMinute);
+    if (i % 5 == 0) {
+        painter->setPen(thickPen);
+        painter->drawLine(0, -41, 0, -44);
+        painter->drawText(-15, -41, 30, 25,
+                          Qt::AlignHCenter | Qt::AlignTop,
+                          QString::number(i));
+    } else {
+        painter->setPen(thinPen);
+        painter->drawLine(0, -42, 0, -44);
+    }
+    painter->restore();
+}
+[/code]
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	另一种实现烤箱计时器的方法是我们自己计算(x,y)的的位置，使用sin()和cos()计算沿圆圈周围的位置。但然后我们仍旧需要使用一个翻译和一个旋转来在某角度绘制文本。
+
+
+
+</body>
+</html>

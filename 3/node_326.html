@@ -1,0 +1,41 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>访问统计图</title>
+</head>
+<body>
+<?php
+
+echo <<<ALEXAGRAPH
+
+ <!-- Alexa Graph Widget from http://www.alexa.com/siteowners/widgets/graph -->
+
+<script type="text/javascript"
+    src="http://widgets.alexa.com/traffic/javascript/graph.js"></script>
+
+  <script type="text/javascript">/*
+  <![CDATA[*/
+
+     // USER-EDITABLE VARIABLES
+     // enter up to 3 domains, separated by a space
+     var sites      = ['www.qtchina.net', 'nullget.sourceforge.net'];
+     var opts = {
+        width:      380,  // width in pixels (max 400)
+        height:     300,  // height in pixels (max 300)
+        type:       'r',  // "r" Reach, "n" Rank, "p" Page Views
+        range:      '3m', // "7d", "1m", "3m", "6m", "1y", "3y", "5y", "max"
+        bgcolor:    'e6f3fc' // hex value without "#" char (usually "e6f3fc")
+     };
+     // END USER-EDITABLE VARIABLES
+     AGraphManager.add( new AGraph(sites, opts) );
+
+  //]]></script>
+
+  <!-- end Alexa Graph Widget -->
+
+ALEXAGRAPH;
+?>
+</body>
+</html>

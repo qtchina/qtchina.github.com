@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>HTTP 1.1中的Transfer-Encoding及Content-Encoding机制</title>
+</head>
+<body>
+Transfer-Encoding头字段是HTTP 1.1协议新加的字段之一，无论客户端是否指定接收这个头字段指定的值，只要客户端使用了HTTP/1.1协议，服务器端都可以响应这个字段并附带相应的值。
+这个字段是支持HTTP/1.1协议的所有客户端必须支持的。
+
+Transfer-Encoding的常见值为chunked，表示服务器传输过来的是分块的，这种情况下，服务器不再发送Content-Length:字段。
+
+这种方式的好处是，服务器在处理动态请求时，不需要缓存动态生成的结果页面，而是生成一段，发送一段，能让http服务器的效率更高些。
+
+当然，发送来的数据，是经过http服务器分块的数据，而不是原文，所以需要做的处理，才能得到实际响应的内容。
+
+chunked方式的响应格式：
+从内容开始的位位置，
+chunk1长度\r\nchunk1内容\r\nchunk2长度\r\nchunk2内容\r\n
+
+最后的结束chunk为0\r\n
+
+根据这个格式，可解析出实际原文。
+
+
+另外，还有一个头字段Content-Encoding，是HTTP 1.0和1.1都支持的，如果服务器响应头中有这个字段，表示响应头后面的内容是压缩数据，需要客户端解压。
+
+其优点是双向的，对服务器，减少带宽使用，客户端也是。像html这种数据，压缩率在70%以上。
+
+压缩算法有gzip有 deflate，以前都gzip比较常见。
+
+当服务器响应头中即有Content-Encoding，并且还有Transfer-Encoding的时候，说明响应头后面数据是分块的压缩数据，分块格式依旧和上面一样，只是chunk的内容部分是压缩的，把这部分解压，并把解压后的所有内容串联起来，这就是服务器响应的内容数据了。
+
+参与：http://en.wikipedia.org/wiki/Chunked_transfer_encoding
+
+
+</body>
+</html>

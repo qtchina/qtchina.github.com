@@ -1,0 +1,55 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>3.14 fcntl函数</title>
+</head>
+<body>
+<p class="MsoNormal">fcntl函数可以改变已打开的文件的性质。</p>
+<p class="MsoNormal">&nbsp;<img width="554" height="63" src="http://book.csdn.net/BookFiles/418/img/image103.jpg" id="图片 346" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">在本节的各实例中，第三个参数总是一个整数，与上面所示函数原型中的注释部分相对应。但是在14.3节说明记录锁时，第三个参数则是指向一个结构的指针。</p>
+<p class="MsoNormal">fcntl函数有5种功能：</p>
+<p class="MsoNormal">(1) 复制一个现有的描述符（cmd＝F_DUPFD）。</p>
+<p class="MsoNormal">(2) 获得/设置文件描述符标记（cmd = F_GETFD或F_SETFD）。</p>
+<p class="MsoNormal">(3) 获得/设置文件状态标志（cmd = F_GETFL或F_SETFL）。</p>
+<p class="MsoNormal">(4) 获得/设置异步I/O所有权（cmd = F_GETOWN或F_SETOWN）。</p>
+<p class="MsoNormal">(5) 获得/设置记录锁（cmd = F_GETLK、F_SETLK或F_SETLKW）。</p>
+<p class="MsoNormal">我们先说明这10种cmd值中的前7种（14.3节说明后3种，它们都与记录锁有关）。我们将涉及与进程表项中各文件描述符相关联的文件描述符标志，以及每个文件表项中的文件状态标志（见图3-1）。</p>
+<p class="MsoNormal">F_DUPFD：复制文件描述符filedes。新文件描述符作为函数值返回。它是尚未打开的各描述符中大于 或等于第三个参数值（取为整型值）中各值的最小值。新描述符与filedes共享同一文件表项（见图3-3）。但是，新描述符有它自己的一套文件描述符标 志，其FD_CLOEXEC文件描述符标志被清除（这表示该描述符在通过一个exec时仍保持有效，我们将在第8章对此进行讨论）。</p>
+<p class="MsoNormal">F_GETFD：对应于filedes的文件描述符标志作为函数值返回。当前只定义了一个文件描述符标志FD_CLOEXEC。</p>
+<p class="MsoNormal">F_SETFD：对于filedes设置文件描述符标志。新标志值按第三个参数（取为整型值）设置。</p>
+<p class="MsoNormal">应当了解很多现有的涉及文件描述符标志的程序并不使用常量FD_CLOEXEC，而是将此标志设置为0（系统默认，在exec时不关闭）或1（在exec时关闭）。</p>
+<p class="MsoNormal">F_GETFL：对应于filedes的文件状态标志作为函数值返回。在说明open函数时，已说明了文件状态标志。它们列于表3-3中。</p>
+<p class="MsoNormal"><img width="431" height="299" src="http://book.csdn.net/BookFiles/418/img/image104.jpg" id="图片 349" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">不幸的是，三个访问方式标志（O_RDONLY、O_WRONLY以及O_RDWR）并</p>
+<p class="MsoNormal">不各占1位（正如前述，这三种标志的值分别是0、1和2，由于历史原因。</p>
+<p class="MsoNormal">这三种值互斥&mdash;一个文件只能有这三种值之一）。因此首先必须用屏蔽字</p>
+<p class="MsoNormal">O_ACCMODE取得访问模式位，然后将结果与这三种值中的任一种作比较。</p>
+<p class="MsoNormal">F_SETFL  将文件状态标志设置为第三个参数的值（取为整型值）。可以更改的几个标志是：O_APPEND、O_NONBLOCK、O_SYNC、O_DSYNC、O_RSYNC、 O_FSYNC和O_ASYNC。</p>
+<p class="MsoNormal">F_GETOWN &nbsp;&nbsp;&nbsp; 取当前接收SIGIO和SIGURG信号的进程ID或进程组ID。14.6.2节将论述这两种异步I/O信号。</p>
+<p class="MsoNormal">F_SETOWN &nbsp;&nbsp;&nbsp;&nbsp; 设置接收SIGIO和SIGURG信号的进程ID或进程组ID。正的arg 指定一个进程ID，负的arg 表示等于arg 绝对值的一个进程组ID。</p>
+<p class="MsoNormal">fcntl的返回值与命令有关。如果出错，所有命令都返回-1，如果成功则返回某个其他值。下列四个命令有特 定返回值：F_DUPFD、F_GETFD、F_GETFL以及F_GETOWN。第一个返回新的文件描述符，接下来的两个返回相应标志，最后一个返回一 个正的进程ID或负的进程组ID。</p>
+<p class="MsoNormal">实例</p>
+<p class="MsoNormal">程序清单3-4中的程序的第一个参数指定文件描述符，并对于该描述符打印其所选择的文件标志说明。</p>
+<p class="MsoNormal"><img width="538" height="627" src="http://book.csdn.net/BookFiles/418/img/image105.jpg" id="图片 352" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" />注意，我们使用了功能测试宏_POSIX_C_SOURCE，并且条件编译了POSIX.1中没有定义的文件访问标志。下面显示了从bash（Bourne-again shell）调用该程序时的几种情况。当使用不同shell时，结果会发生变化。</p>
+<p class="MsoNormal">&nbsp;<img width="220" height="112" src="http://book.csdn.net/BookFiles/418/img/image106.jpg" id="图片 355" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal"><img width="194" height="36" src="http://book.csdn.net/BookFiles/418/img/image107.jpg" id="图片 358" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">子句5&lt;&gt;temp.foo表示在文件描述符5上打开文件temp.foo以供读和写。</p>
+<p class="MsoNormal">&nbsp;实例</p>
+<p class="MsoNormal">在修改文件描述符标志或文件状态标志时必须谨慎，先要取得现有的标志值，然后根据需要修改它，最后设置新标志值。不能只是执行F_SETFD或F_SETFL命令，这样会关闭以前设置的标志位。</p>
+<p class="MsoNormal">程序清单3-5显示了一个对一个文件描述符设置一个或多个文件状态标志的函数。</p>
+<p class="MsoNormal"><img width="521" height="294" src="http://book.csdn.net/BookFiles/418/img/image108.jpg" id="图片 361" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" />&nbsp;</p>
+<p class="MsoNormal">就构成另一个函数，我们称其为clr_fl，并将在后面某个例子中用到它。此语句使当前文件状态标志值val与flags的补码进行逻辑&ldquo;与&rdquo;运算。</p>
+<p class="MsoNormal">如果在程序清单3-5的开始处，加上下面一行以调用set_fl，则打开了同步写标志。</p>
+<p class="MsoNormal">&nbsp;<img width="256" height="31" src="http://book.csdn.net/BookFiles/418/img/image109.jpg" id="图片 364" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">这就使每次write都要等待，直至数据已写到磁盘上再返回。在UNIX系统中，通常write只是将数据排 入队列，而实际的写磁盘操作则可能在以后的某个时刻进行。数据库系统很可能需要使用O_SYNC，这样一来，当它从write返回时就知道数据已确实写到 了磁盘上，以免在系统崩溃时产生数据丢失。</p>
+<p class="MsoNormal">程序运行时，设置O_SYNC标志会增加时钟时间。为了测试这一点，运行程序清单3-3，它从一个磁盘文件中 将98.5 MB字节的数据复制到另一个文件。然后，在此程序中设置O_SYNC标志，使其完成上述同样的工作，以便将两者的结果进行比较。在使用ext2文件系统的 Linux系统上执行上述操作，得到的结果见表3-4。</p>
+<p class="MsoNormal">表3-4中的6行都是在BUFFSIZE为4096的情况下测量得到的。表3-2中的结果所测量的情况是读一 个磁盘文件，然后写到/dev/null，所以没有磁盘输出。表3-4中的第2行对应于读一个磁盘文件，然后写到另一个磁盘文件中。这就是为什么表3-4 中第1、2行有差别的原因。在写磁盘文件时，系统时间增加了，其原因是内核需要从进程中复制数据，并将数据排入队列以便由磁盘驱动器将其写到磁盘上。当写 至磁盘文件时，我们期望时钟时间也会增加，但在本测试中，它并未显著增加，这表明写操作将数据写到了系统高速缓存中，我们并没有测量将数据写到磁盘上的开 销。</p>
+<p class="MsoNormal"><img width="545" height="177" src="http://book.csdn.net/BookFiles/418/img/image110.jpg" id="图片 367" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p>
+<p class="MsoNormal">当支持同步写时，系统时间和时钟时间应当会显著增加。从第3行可见，同步写所用的时间与延迟写所用的时间几乎 相同。这意味着Linux ext2文件系统并未真正实现O_SYNC标志功能。第6行的时间值支持了我们的这种怀疑，其中显示，实施同步写，然后跟随fsync调用，这一操作序列 所用的时间与写文件（未设置同步标志），然后接着执行fsync调用这一序列所用的时间（第5行）几乎相同。在同步写一个文件后，我们期望fsync调用 不会产生影响。</p>
+<p class="MsoNormal">表3-5显示了在Mac OS X 10.3上运行同样的测试所得到的计时结果。注意该计时结果与我们的期望相符：同步写较延迟写所消耗的时间增加了很多，而且在同步写后再调用函数 fsync 并不会产生测量上的显著差别。还要引起注意的是，在延迟写后增加一个fsync函数调用也不产生可测量的差别。其原因很可能是，当写新数据到某个文件中 时，操作系统将以前写的数据冲洗到了磁盘上，所以在调用函数fsync时几乎就没有什么工作要做了。</p>
+<p class="MsoNormal"><img width="553" height="158" src="http://book.csdn.net/BookFiles/418/img/image111.jpg" id="图片 370" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" />比较fsync和fdatasync与O_SYNC标志，fsync和fdatasync在我们需要时更新文件内容，O_SYNC标志则在我们每次写至文件时更新文件内容。</p>
+<p class="MsoNormal">在本例中，我们看到了fcntl的必要性。我们的程序在一个描述符（标准输出）上进行操作，但是根本不知道由 shell打开的相应文件的文件名。因为这是shell打开的，于是不能在打开时，按我们的要求设置O_SYNC标志。fcntl则允许仅知道打开文件描 述符时可以修改其性质。在说明非阻塞管道时（15.2节），我们还将了解到，由于我们对管道所具有的知识只是其描述符，所以也需要使用fcntl的功能。</p>
+</body>
+</html>

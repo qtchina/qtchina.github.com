@@ -1,0 +1,145 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>(五) 静态库与动态库构建</title>
+</head>
+<body>
+<p><br />
+读者云，太能罗唆了，一个Hello World就折腾了两个大节。OK，从本节开始，我们不<br />
+再折腾Hello World了，我们来折腾Hello World的共享库。<br />
+本节的任务： <br />
+１，建立一个静态库和动态库，提供HelloFunc函数供其他程序编程使用，HelloFunc <br />
+向终端输出Hello World字符串。<br />
+２，安装头文件与共享库。</p>
+<h2>一，准备工作：</h2>
+<p>在/backup/cmake目录建立t3目录，用于存放本节涉及到的工程</p>
+<h2>二，建立共享库</h2>
+<p>cd /backup/cmake/t3 <br />
+mkdir lib <br />
+在t3目录下建立CMakeLists.txt，内容如下： <br />
+PROJECT(HELLOLIB) <br />
+ADD_SUBDIRECTORY(lib) <br />
+在lib目录下建立两个源文件hello.c与hello.h <br />
+hello.c内容如下： <br />
+#include &ldquo;hello.h&rdquo; <br />
+void HelloFunc() <br />
+{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(&ldquo;Hello Worldn&rdquo;); <br />
+}<br />
+hello.h内容如下： <br />
+#ifndef HELLO_H <br />
+#define HELLO_H <br />
+#include &lt;stdio.h&gt; <br />
+void HelloFunc(); <br />
+#endif <br />
+在lib目录下建立CMakeLists.txt，内容如下：<br />
+<br />
+SET(LIBHELLO_SRC hello.c) <br />
+ADD_LIBRARY(hello SHARED ${LIBHELLO_SRC})</p>
+<h2>三，编译共享库:</h2>
+<p>仍然采用out-of-source编译的方式，按照习惯，我们建立一个build目录，在build <br />
+目录中<br />
+cmake .. <br />
+make <br />
+这时，你就可以在lib目录得到一个libhello.so，这就是我们期望的共享库。<br />
+如果你要指定libhello.so生成的位置，可以通过在主工程文件CMakeLists.txt中修<br />
+改ADD_SUBDIRECTORY(lib)指令来指定一个编译输出位置或者<br />
+在lib/CMakeLists.txt中添加<br />
+SET(LIBRARY_OUTPUT_PATH &lt;路径&gt;)来指定一个新的位置。<br />
+这两者的区别我们上一节已经提到了，所以，这里不再赘述，下面，我们解释一下一个新的<br />
+指令ADD_LIBRARY <br />
+ADD_LIBRARY(libname [SHARED|STATIC|MODULE] <br />
+[EXCLUDE_FROM_ALL] <br />
+source1 source2 ... sourceN) <br />
+你不需要写全libhello.so，只需要填写hello即可，cmake系统会自动为你生成<br />
+libhello.X <br />
+类型有三种: <br />
+SHARED，动态库<br />
+STATIC，静态库<br />
+MODULE，在使用dyld的系统有效，如果不支持dyld，则被当作SHARED对待。<br />
+EXCLUDE_FROM_ALL参数的意思是这个库不会被默认构建，除非有其他的组件依赖或者手<br />
+工构建。</p>
+<h2>四，添加静态库：</h2>
+<p>同样使用上面的指令，我们在支持动态库的基础上再为工程添加一个静态库，按照一般的习<br />
+惯，静态库名字跟动态库名字应该是一致的，只不过后缀是.a罢了。<br />
+下面我们用这个指令再来添加静态库： <br />
+ADD_LIBRARY(hello STATIC ${LIBHELLO_SRC})<br />
+<br />
+然后再在build目录进行外部编译，我们会发现，静态库根本没有被构建，仍然只生成了<br />
+一个动态库。因为hello作为一个target是不能重名的，所以，静态库构建指令无效。<br />
+如果我们把上面的hello修改为hello_static: <br />
+ADD_LIBRARY(hello_static STATIC ${LIBHELLO_SRC}) <br />
+就可以构建一个libhello_static.a的静态库了。<br />
+这种结果显示不是我们想要的，我们需要的是名字相同的静态库和动态库，因为target名<br />
+称是唯一的，所以，我们肯定不能通过ADD_LIBRARY指令来实现了。这时候我们需要用到<br />
+另外一个指令： <br />
+SET_TARGET_PROPERTIES，其基本语法是： <br />
+SET_TARGET_PROPERTIES(target1 target2 ... <br />
+PROPERTIES prop1 value1 <br />
+prop2 value2 ...) <br />
+这条指令可以用来设置输出的名称，对于动态库，还可以用来指定动态库版本和API版本。<br />
+在本例中，我们需要作的是向lib/CMakeLists.txt中添加一条： <br />
+SET_TARGET_PROPERTIES(hello_static PROPERTIES OUTPUT_NAME &quot;hello&quot;) <br />
+这样，我们就可以同时得到libhello.so/libhello.a两个库了。<br />
+与他对应的指令是： <br />
+GET_TARGET_PROPERTY(VAR target property) <br />
+具体用法如下例，我们向lib/CMakeListst.txt中添加： <br />
+GET_TARGET_PROPERTY(OUTPUT_VALUE hello_static OUTPUT_NAME) <br />
+MESSAGE(STATUS &ldquo;This is the hello_static <br />
+OUTPUT_NAME:&rdquo;${OUTPUT_VALUE}) <br />
+如果没有这个属性定义，则返回NOTFOUND. <br />
+让我们来检查一下最终的构建结果，我们发现，libhello.a已经构建完成，位于<br />
+build/lib目录中，但是libhello.so去消失了。这个问题的原因是：cmake在构建一<br />
+<br />
+个新的target时，会尝试清理掉其他使用这个名字的库，因为，在构建libhello.a时， <br />
+就会清理掉libhello.so. <br />
+为了回避这个问题，比如再次使用SET_TARGET_PROPERTIES定义<br />
+CLEAN_DIRECT_OUTPUT属性。<br />
+向lib/CMakeLists.txt中添加: <br />
+SET_TARGET_PROPERTIES(hello PROPERTIES CLEAN_DIRECT_OUTPUT 1) <br />
+SET_TARGET_PROPERTIES(hello_static PROPERTIES CLEAN_DIRECT_OUTPUT <br />
+1) <br />
+这时候，我们再次进行构建，会发现build/lib目录中同时生成了libhello.so和<br />
+libhello.a</p>
+<h2>五，动态库版本号</h2>
+<p>按照规则，动态库是应该包含一个版本号的，我们可以看一下系统的动态库，一般情况是<br />
+libhello.so.1.2 <br />
+libhello.so -&gt;libhello.so.1 <br />
+libhello.so.1-&gt;libhello.so.1.2 <br />
+为了实现动态库版本号，我们仍然需要使用SET_TARGET_PROPERTIES指令。<br />
+具体使用方法如下： <br />
+SET_TARGET_PROPERTIES(hello PROPERTIES VERSION 1.2 SOVERSION 1) <br />
+VERSION指代动态库版本，SOVERSION指代API版本。<br />
+将上述指令加入lib/CMakeLists.txt中，重新构建看看结果。<br />
+在build/lib目录会生成： <br />
+libhello.so.1.2 <br />
+libhello.so.1-&gt;libhello.so.1.2 <br />
+libhello.so -&gt;libhello.so.1</p>
+<h2>六，安装共享库和头文件</h2>
+<p>以上面的例子，我们需要将libhello.a, libhello.so.x以及hello.h安装到系统目<br />
+录，才能真正让其他人开发使用，在本例中我们将hello的共享库安装到&lt;prefix&gt;/lib <br />
+目录，将hello.h安装到&lt;prefix&gt;/include/hello目录。<br />
+利用上一节了解到的INSTALL指令，我们向lib/CMakeLists.txt中添加如下指令： <br />
+INSTALL(TARGETS hello hello_static <br />
+<br />
+LIBRARY DESTINATION lib <br />
+ARCHIVE DESTINATION lib) <br />
+INSTALL(FILES hello.h DESTINATION include/hello) <br />
+注意，静态库要使用ARCHIVE关键字<br />
+通过: <br />
+cmake -DCMAKE_INSTALL_PREFIX=/usr .. <br />
+make <br />
+make install <br />
+我们就可以将头文件和共享库安装到系统目录/usr/lib和/usr/include/hello中了。</p>
+<h2>七，小结：</h2>
+<p>本小节，我们谈到了： <br />
+如何通过ADD_LIBRARY指令构建动态库和静态库。<br />
+如何通过SET_TARGET_PROPERTIES同时构建同名的动态库和静态库。<br />
+如何通过SET_TARGET_PROPERTIES控制动态库版本<br />
+最终使用上一节谈到的INSTALL指令来安装头文件和动态、静态库。<br />
+在下一节，我们需要编写另一个高级一点的Hello World来演示怎么使用我们已经构建的<br />
+构建的共享库libhello和外部头文件。</p>
+</body>
+</html>

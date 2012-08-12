@@ -1,0 +1,30 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>对数据库的VIEW机制的一点疑问</title>
+</head>
+<body>
+现在多数关系数据库都支持VIEW，但却对它们的实现机制有一点疑问。
+
+假如有一个表table_1，然后创建一个视图，view_1，
+create view as select * from table_1;
+
+那么在使用view的时候与使用table_1时完全没有区别，那么在效率上有否有区别呢？
+
+因为在使用view查询的时候，这个查询条件是给view的，view的处理有两种可能，
+
+一种是把这个where条件转给table_1，那么，查询的时候，不需要读取不符合条件的记录。这种情况下效率与直接查询原有理论上相同。但问题是是否view一定能把这个查询条件传递给它所用的查询SQL上去？
+
+第二种可能，相当于子查询方式使用给view的条件，
+差不多像这样，
+select * from (select * from table_1) where name='567';
+这种情况，任何数据库都会对子查询有所优化，但这种优化是否能达到直接查询table_1的效率呢？
+
+想到这个问题是因为像dblink和我之前写的mylink模块，从远程获取数据时，这两种情况应该有很大不同，需要考虑view在这种情况是否可用，使用的代价有多大。
+
+
+研究下这问题，也许不是个问题。
+</body>
+</html>

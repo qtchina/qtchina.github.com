@@ -1,0 +1,181 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>重新实现事件处理器</title>
+</head>
+<body>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在Qt中，一个事件是继承自QEvent的对象。Qt处理了100多种事件，每一种通过一个枚举值标识。例如，对于鼠标按键事件QEvent::type()返回QEvent::MouseButtonPress。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;许多事件类型需要比存储在普通QEvent对象中更多的信息。例如，鼠标事件需要存储是哪个按键触发的事件，以及在事件发现时鼠标的位置在哪。这些附加的信息被存储在专门的QEvent的子类中，如 QMouseEvent。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;事件通过他们的从 QObject继承来的event()函数通知给其他对象。在QWidget中的event()实现传递了大多数普通类型的事件给特定的事件处理器，如mousePressEvent(), keyPress-Event(), 和 paintEvent()。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在前面章节中实现MainWindow, IconEditor, 和 Plotter的时候，我们已经见过了许多事件处理器。在QEvent的参考手册中还列出了许多其他类型的事件，还可以创建自定义事件并自己分发这些事件。这里，我们将预览一个两个值得说明的常见事件：键盘事件和计时器事件。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;键盘事件通过重新实现keyPressEvent() 和 keyReleaseEvent()来处理的。Plotter物件重新实现了keyPressEvent()。正常情况下，我们仅需要重新实现keyPressEvent()，因为释放事件比较重要的是修饰键 Ctrl, Shift, 和 Alt，这可在keyPressEvent()中通过使用QKeyEvent::modifiers()来检测。例如，如果我们已经实现了一个CodeEditor物件，它用于区别Home和Ctrl+HOme的简化了的keyPressEvent()应该看上去如下：
+[code type="cpp-qt"]
+void CodeEditor::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Home:
+        if (event->modifiers() & Qt::ControlModifier) {
+            goToBeginningOfDocument();
+        } else {
+            goToBeginningOfLine();
+        }
+        break;
+    case Qt::Key_End:
+        ...
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tab和Backtab(Shift+Tab)键是个特例。它们在keyPressEvent()之前被QWidget::event()处理，其语义为把焦点传递到焦点链的下一个或者前一个物件上。这一行为通过正是我们希望的，但是在一个CodeEditor物件中，我们更希望Tab缩进一行。event()的重新实现看起来应该像下面这样：
+[code type="cpp-qt"]
+bool CodeEditor::event(QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Tab) {
+            insertAtCurrentPosition('\t');
+            return true;
+        }
+    }
+    return QWidget::event(event);
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果当前事件是一个键盘事件，我们把该QEvent对象转换为一个QKeyEvent并检测按下的是哪个键。如果该键是Tab，我们做些处理并返回true来告诉Qt我们已经处理了这一事件。如果我们返回false，Qt会把该事件传递到父物件中。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个高级的重新实现键盘的方法是使用一个QAction。例如，如果 goToBeginningOfLine() 和 goToBeginningOfDocument()是CodeEditor中的公胡槽，并且CodeEditor被当作MainWindow类的中央物件使用，我们就能使用下面的代码添加该键的绑定：
+[code type="cpp-qt"]
+MainWindow::MainWindow()
+{
+    editor = new CodeEditor;
+    setCentralWidget(editor);
+    goToBeginningOfLineAction =
+            new QAction(tr("Go to Beginning of Line"), this);
+    goToBeginningOfLineAction->setShortcut(tr("Home"));
+    connect(goToBeginningOfLineAction, SIGNAL(activated()),
+            editor, SLOT(goToBeginningOfLine()));
+    goToBeginningOfDocumentAction =
+            new QAction(tr("Go to Beginning of Document"), this);
+    goToBeginningOfDocumentAction->setShortcut(tr("Ctrl+Home"));
+    connect(goToBeginningOfDocumentAction, SIGNAL(activated()),
+            editor, SLOT(goToBeginningOfDocument()));
+    ...
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这使用向菜单或者工具栏上添加命令更简单，正如我们在第3章所见。如果该命令不能出现在用户界面中，该 QAction对象可以被一个QShortcut对象替代，这个类被QAction内部使用以支持键盘绑定。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	默认情况下，在一个物件上使用QAction或者QShortcut的键盘绑定集合是处于激活状态的，不管包含该物件的容器是不是激活状态的。这可通过使用QAction::setShortcutContext() 或者 QShortcut::setContext()来修改。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	另一个常用的事件类型是计时器事件。虽然大多数其他事件是用户行为的结果，但计时器事件允许程序以规律的时间间隔执行处理。计时器可被用于实现光标闪烁和其他动画或者简单的刷新显示。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	为了演示计时器事件，我们将实现一个Ticker物件。这物件显示一个每30毫秒向左党总支一个象素的文本横幅。如果物件比文本更宽，则文本会重复足够多的次数以填充整个物件。
+图7.1　Ticker物件
+
+
+下面是头文件：
+[code type="cpp-qt"]
+#ifndef TICKER_H
+#define TICKER_H
+#include <QWidget>
+class Ticker : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QString text READ text WRITE setText)
+public:
+    Ticker(QWidget *parent = 0);
+    void setText(const QString &newText);
+    QString text() const { return myText; }
+    QSize sizeHint() const;
+protected:
+    void paintEvent(QPaintEvent *event);
+    void timerEvent(QTimerEvent *event);
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+private:
+    QString myText;
+    int offset;
+    int myTimerId;
+};
+#endif
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Ticker中我们重新实现了4个事件处理函数，其中有3个我们以前没有见过的：timerEvent(), showEvent(), 和 hideEvent()。
+	现在让我们预览一下它的实现：
+[code type="cpp-qt"]
+#include <QtGui>
+#include "ticker.h"
+Ticker::Ticker(QWidget *parent)
+    : QWidget(parent)
+{
+    offset = 0;
+    myTimerId = 0;
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	构造函数把offset 变量初始化为0。文本被绘制的坐标x是从offset值计算出来的。计时器的ID总是非0值，因此我们使用0标记没有已经启动的计时器。
+[code type="cpp-qt"]
+void Ticker::setText(const QString &newText)
+{
+    myText = newText;
+    update();
+    updateGeometry();
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	setText()函数确保文本正常显示。它调用update()来请求一次重绘，调用updateGeometry()来通过任何对Tricker负责的而已管理器尺寸暗示的改变。
+[code type="cpp-qt"]
+QSize Ticker::sizeHint() const
+{
+    return fontMetrics().size(0, text());
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	sizeHint()函数返回物件理想尺寸所需要的空间。QWidget::fontMetrics()返回一个能查询并获取物件字体相关信息的QfontMetrics对象。这种情况下，我们使用给定的文本请求所需的尺寸。（QFontMetrics::size()的第一个参数是一个不必要的简单字符串标识，因此我们仅传递0即可）。
+[code type="cpp-qt"]
+void Ticker::paintEvent(QPaintEvent * /* event */)
+{
+    QPainter painter(this);
+    int textWidth = fontMetrics().width(text());
+    if (textWidth < 1)
+        return;
+    int x = -offset;
+    while (x < width()) {
+        painter.drawText(x, 0, textWidth, height(),
+                         Qt::AlignLeft | Qt::AlignVCenter, text());
+        x += textWidth;
+    }
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	paintEvent()函数调用QPainter::drawText()绘制该文本。它使用fontMetrics()来确定该文本需要多少水平空间，然后再绘制文本并重复足够多次以填满整个物件的宽度，其中针充分offset的值。
+[code type="cpp-qt"]
+void Ticker::showEvent(QShowEvent * /* event */)
+{
+    myTimerId = startTimer(30);
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	showEvent()函数启动一个计时器。QObject::startTimer()调用返回一个ID号，以后就能使用它标识计时器了。Qobject支持多个独立的计时器，每个都有它自己的时间间隔。在startTimer()调用之后，Qt大概每30毫秒生成一个计时器事件。实际精度依赖于所有的操作系统。
+	我们本应该在Ticker构造函数调用startTimer()，但我们让Qt仅在物件确实可见之后才生成物件以节省一些资源。
+[code type="cpp-qt"]
+void Ticker::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == myTimerId) {
+        ++offset;
+        if (offset >= fontMetrics().width(text()))
+            offset = 0;
+        scroll(-1, 0);
+    } else {
+        QWidget::timerEvent(event);
+    }
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	timerEvent()函数被系统间隔性的调用。它每次给把offset递增1来模拟移动，并以文本的长度不断轮回。接下来它把物件的内容用QWidget::scroll().向左滚动1象素。可能update() 调用代替 scroll()就足够了，但scroll()更有效率，因为它只简单的移动屏幕上的象素并仅对物件新显示出来的区域生成一个重绘事件（这里是一个1象素长条）。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果该计时器不是我们感兴趣的计时器，我们把它传递给基类。
+[code type="cpp-qt"]
+void Ticker::hideEvent(QHideEvent * /* event */)
+{
+    killTimer(myTimerId);
+}
+[/code]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	hideEvent()函数调用QObject::killTimer()停止一个计时器。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	计时器时间属于底层的，因此如果我们需要多个计时器时　，保存并跟踪所有的计时器ID是非常麻烦的。在这种情况下，通过是简单地为每个计时器创建一个QTimer对象。QTimer在每时间　间隔内都会发射timeout()信号。而且它还提供了一个方便的单次为计时接口（计时器仅超时一次）。
+
+</body>
+</html>

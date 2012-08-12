@@ -1,0 +1,40 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用zend framework注意事项</title>
+</head>
+<body>
+apache的rewrite一定得开启.
+
+在httpd.conf中设置 AllowOverride All
+
+Options FollowSymLinks or SymLinksIfOwnerMatch
+
+访问方式：怎么把这个写成完整方式呢？
+
+好象在zf2.0中，module名字无论如何都不会显示在url中了，需要在部署过程中通过设置把module隐藏掉。
+
+module名字只是一个namespace。
+
+http://202.108.15.6:8000/search/public/index/index
+
+index.php在public目录下，则public目录下的.htaccess内容：
+
+[gzleo@myhost mysearch-git]$ more public/.htaccess 
+SetEnv APPLICATION_ENV development
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
+[gzleo@myhost mysearch-git]$
+
+一旦完成这种设置，好像不能再使用index.php?controller=a&action=b的形式了？？？
+
+zf2加入了event及处理机制
+</body>
+</html>

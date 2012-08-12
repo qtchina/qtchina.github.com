@@ -1,0 +1,91 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>基于 pgpool-II 的 postgresql replication 安装配置</title>
+</head>
+<body>
+1. pgpool replication模式：
+基于语句的复制，即将insert,update,delete,create等更新语句分发到所有节点上执行，如果有一个执行失败，其他节点还可以回退到之前的状态。而select语句则选择其中一个节点上执行，并返回结果。
+这样做的结果应时更新的额外开销很大。
+
+2. 安装环境及软件版本：
+postgresql 84.
+pgpool-II 2.2.2
+两台linux, IP分别为：192.168.0.155, 192.168.0.151
+
+postgresql的安装不再说明，只说明pgpool的安装及postgresql的replication相关的设置。
+
+注意，postgresql要创建一个相同的账号/密码，并且都使用password认证方式。
+
+pgpool-II 安装在 192.168.0.155上。
+
+下载 pgpool-II
+./configure
+make
+make install
+
+默认在/usr/local/目录下
+
+3. 配置：
+pgpool的主要配置文件：pgpool.conf
+cd /usr/local/etc
+cp -v pgpool.conf.sample pgpool.conf
+
+修改pgpool中的参数
+修改设置
+listen_addresses = "*"
+replication_mode = true
+load_balance_mode = true
+
+添加backend主机：
+
+backend_hostname0 = '192.168.0.151'
+backend_port0 = 5432
+backend_weight0 = 1
+
+backend_hostname1 = '192.168.0.155'
+backend_port1 = 5432
+backend_weight1 = 1
+
+其他的参数保持默认
+
+启动pgpool
+
+/usr/local/bin/pgpool
+
+这时可以用netstat看到pgpool的监听端口，9999
+
+使用pgpool创建 数据库，在155上执行
+createdb -p 9999 -U yourname testrep
+
+4. 登陆、数据测试
+psql -p 9999 -U yourname testrep
+
+如果这一步可以登陆上，说明replication配置成功，可以分别看看两台backend已经创建了一个数据库testrep
+
+创建测试表，
+create table node (id serial, title text, body text);
+
+添加数据测试，
+> insert into node (title, body) values ('abcd', 'iojjjj');
+
+> select count(*) from node;
+
+这时分别查看两个库是否已经有一条记录，如果都有记录，那么一个完整的postgresql replication配置好了。
+
+使用repliation的结果是我们得到两台一样的数据库，在查询的时候就可以通过pgpool的负载均衡功能使用到两台不同的服务器了。
+
+
+5. 简单结果
+
+经过简单的测试，使用pgpool的replication是有相当大的额外开支，在插入记录，修改记录，删除记录的时候特别严重，在查询的时候稍微有一点。
+也许可以装另一个pgpool，它做只读取的工作可能会好些。
+
+
+
+
+
+</body>
+</html>

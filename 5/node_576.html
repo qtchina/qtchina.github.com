@@ -1,0 +1,11 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在比较新的linux平台上安装putty的gtk版本问题</title>
+</head>
+<body>
+<p>putty实现上支持gtk1，也支持gtk2，但下载的官方包在只有gtk2的系统上安装不上</p><p>今天又试了一下，发现只需要修改其源码目录下的unix/configure.ac，把那行关于搜索gtk1的指令注释掉</p><p>一切就ok了，</p><p># AM_PATH_GTK([1.2.0], [gtk=1], [gtk=none])</p><p></p>
+</body>
+</html>

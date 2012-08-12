@@ -1,0 +1,37 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>为ssh访问形式的不同git主机设置不同的密钥</title>
+</head>
+<body>
+打开 .ssh/config配置文件，
+
+针对每个主机设置对应的密钥，
+
+如，
+
+Host pl5.projectlocker.com
+  HostName pl5.projectlocker.com
+  User git-myname
+  IdentityFile /path/to/.ssh/id_rsa_pl
+
+Host github.com
+  HostName github.com
+  User myname
+  IdentityFile /path/to/.ssh/id_rsa_github
+
+测试方法，
+# ssh git-myname@pl5.projectlocker.com
+# PTY allocation request failed on channel 0
+# ERROR:gitosis.serve.main:Need SSH_ORIGINAL_COMMAND in # environment.
+# Connection to pl5.projectlocker.com closed.
+
+这样表示配置成功了，如果不成功的话，会要求输入密码。
+
+git一个使用点，git commit 后，还需要git push url branch命令才能真正把数据提交到服务器上。
+
+
+</body>
+</html>

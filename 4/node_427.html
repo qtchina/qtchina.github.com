@@ -1,0 +1,227 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>自己动手制作VC++2010绿色版</title>
+</head>
+<body>
+绿色版本需求：不需要安装即可使用，干净不带IDE，不带其他语言C#、F#开发工具，不带SqlServer相关开发工具，不带.NET4 SDK，
+整个包较原版安装包小，支持编译调试版本的程序，支持x86、x64、以及x86交叉编译x64应用程序。
+
+制作环境：
+  Windows 7 ultimate中文版本。
+  VS2010安装在默认的C:\Program Files (x86)\Microsoft Visual Studio 10.0\目录。
+  绿化环境在Z:\VC2010\目录。
+
+1. 到MicroSoft官方网站下载 MicroSoft Visual Studio 2010 retail 30天试用版本，安装时选择只安装VC++工具，
+  包括x64开发包，但不包括IA64开发包。
+  测试运行无误，准备完毕。这原版VC++2010战用磁盘5.5G左右。
+
+2. 创建VC++2010绿色版基础目录结构。
+    Z:\VC2010\bin\
+    Z:\VC2010\lib\
+    Z:\VC2010\include\
+    Z:\VC2010\atlmfc\
+    Z:\VC2010\crt\
+    Z:\VC2010\PlatformSDK\
+    Z:\VC2010\redist\
+    Z:\VC2010\system32
+    Z:\VC2010\SysWOW64\
+    Z:\VC2010\ide\
+    Z:\VC2010\scripts\
+
+3. 拷贝VC++2010基本包文件
+    注：下面的说明把C:\Program Files (x86)\Microsoft Visual Studio 10.0\简写为CPMS，
+           把C:\Program Files (x86)\ 简写为CPF86。
+    把CPMS\目录下的altmfc, include,bin,lib,crt,redist目录拷贝到Z:\VC2010\。
+    把CPF86\Microsoft SDKs\Windows\v7.0A\目录下的include,lib拷贝到Z:\VC2010\PlatformSDK\。
+    把CPF86\Microsoft SDKs\Windows\v7.0A\bin\目录下的mt.exe, mt.exe.config, rc.exe, rcdll.dll, midl.exe, midc.exe 六个文件拷贝到Z:\VC2010\PlatformSDK\bin\。
+    
+ 4. 拷贝VC++2010中用到的附加库及程序
+     把C:\Windows\SysWOW64\msvcr100_clr0400.dll 拷贝到Z:\VC2010\SysWOW64\。
+     把C:\Windows\System32\msvcr100_clr0400.dll 拷贝到Z:\VC2010\system32\。
+     这两个文件是编译过程中COFF文件格式转换工具cvtres.exe使用的，x86,x64两个平台下使用两个不同的版本。
+     
+      把CPMS\Common7\IDE\目录下的 msobj100.dll, mspdb100.dll, mspdbcore.dll, mspdbsrv.exe, mspdbst.dll 五个文件拷贝到Z:\VC2010\ide\。
+      这几个文件是编译调试版本的程序或者库时乃至的程序。
+
+5.   编写VC++运行环境变量脚本。
+     一共有4个要编写的脚本，分别为，
+      Z:\VC2010\vc2010.bat  运行环境启动入口脚本。
+      Z:\VC2010\scripts\vcvars32.bat   x86运行环境相关变量设置脚本。
+      Z:\VC2010\scripts\amd64\vcvars64.bat   x64运行环境相关变量设置脚本。
+      Z:\VC2010\scripts\x86_amd64\vcvarsx86_amd64.bat  在x86平台上交叉编译x64程序或者库运行环境相关变量设置脚本。
+
+      这四个脚本都有参考脚本，可在原版安装目录中找到。
+
+      a)  Z:\VC2010\vc2010.bat
+           主要是注册绿色版VC2010的安装目录，然后根据不同的参数确定不同的运行平台，调用下面对应平台上的环境设置脚本。
+[code type="bat"]
+set VCINSTALLDIR=Z:\VC2010
+
+@echo off
+if "%1" == "" goto x86
+if not "%2" == "" goto usage
+
+if /i %1 == x86       goto x86
+if /i %1 == amd64     goto amd64
+if /i %1 == x64       goto amd64
+if /i %1 == ia64      goto ia64
+if /i %1 == x86_amd64 goto x86_amd64
+if /i %1 == x86_ia64  goto x86_ia64
+goto usage
+
+:x86
+if not exist "%VCINSTALLDIR%\scripts\vcvars32.bat" goto missing
+call "%VCINSTALLDIR%\scripts\vcvars32.bat"
+goto :eof
+
+:amd64
+if not exist "%VCINSTALLDIR%\scripts\\amd64\vcvars64.bat" goto missing
+call "%VCINSTALLDIR%\scripts\\amd64\vcvars64.bat"
+goto :eof
+
+:ia64
+if not exist "%VCINSTALLDIR%\scripts\ia64\vcvars64.bat" goto missing
+call "%VCINSTALLDIR%\scripts\ia64\vcvars64.bat"
+goto :eof
+
+:x86_amd64
+if not exist "%VCINSTALLDIR%\scripts\x86_amd64\vcvarsx86_amd64.bat" goto missing
+call "%VCINSTALLDIR%\scripts\x86_amd64\vcvarsx86_amd64.bat"
+goto :eof
+
+:x86_ia64
+if not exist "%VCINSTALLDIR%\scripts\x86_ia64\vcvarsx86_ia64.bat" goto missing
+call "%VCINSTALLDIR%\scripts\x86_ia64\vcvarsx86_ia64.bat"
+goto :eof
+
+:usage
+echo Error in script usage. The correct usage is:
+echo     %0 [option]
+echo where [option] is: x86 ^| ia64 ^| amd64 ^| x86_amd64 ^| x86_ia64
+echo:
+echo For example:
+echo     %0 x86_ia64
+goto :eof
+
+:missing
+echo The specified configuration type is missing.  The tools for the
+echo configuration might not be installed.
+goto :eof
+
+:eof
+
+[/code]
+
+      b)  Z:\VC2010\scripts\vcvars32.bat
+[code type="bat"]
+@if "%VCINSTALLDIR%"=="" goto error_no_VCINSTALLDIR
+
+@echo Setting environment for using Microsoft Visual Studio 2010 x86 tools.
+
+@set PATH=%VCINSTALLDIR%\BIN;%VCINSTALLDIR%\PlatformSDK\bin;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\x86\Microsoft.VC100.CRT\;%VCINSTALLDIR%\SysWOW64;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\Debug_NonRedist\x86\Microsoft.VC100.DebugCRT;%VCINSTALLDIR%\ide;%PATH%
+@set INCLUDE=%VCINSTALLDIR%\ATLMFC\INCLUDE;%VCINSTALLDIR%\INCLUDE;%VCINSTALLDIR%\PlatformSDK\include;%INCLUDE%
+@set LIB=%VCINSTALLDIR%\ATLMFC\LIB;%VCINSTALLDIR%\LIB;%VCINSTALLDIR%\PlatformSDK\lib;%LIB%
+@set LIBPATH=%VCINSTALLDIR%\ATLMFC\LIB
+
+@goto end
+
+
+:error_no_VCINSTALLDIR
+@echo ERROR: VCINSTALLDIR variable is not set. 
+@goto end
+
+:end
+
+
+[/code]
+
+
+      c)  Z:\VC2010\scripts\amd64\vcvars64.bat
+
+[code type="bat"]
+@if "%VCINSTALLDIR%"=="" goto error_no_VCINSTALLDIR
+
+@echo Setting environment for using Microsoft Visual Studio 2010 x64 tools.
+
+@set PATH=%VCINSTALLDIR%\BIN\amd64;%VCINSTALLDIR%\PlatformSDK\bin\win64\amd64;%VCINSTALLDIR%\PlatformSDK\bin;%VCINSTALLDIR%\BIN;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\x64\Microsoft.VC100.CRT\;%VCINSTALLDIR%\System32;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\Debug_NonRedist\x64\Microsoft.VC100.DebugCRT;%VCINSTALLDIR%\ide;%PATH%
+@set INCLUDE=%VCINSTALLDIR%\ATLMFC\INCLUDE;%VCINSTALLDIR%\INCLUDE;%VCINSTALLDIR%\PlatformSDK\include;%INCLUDE%
+@set LIB=%VCINSTALLDIR%\ATLMFC\LIB\amd64;%VCINSTALLDIR%\LIB\amd64;%VCINSTALLDIR%\PlatformSDK\lib\x64;%LIB%
+
+@set LIBPATH=%VCINSTALLDIR%\ATLMFC\LIB\amd64;%LIBPATH%
+
+@goto end
+
+:error_no_VCINSTALLDIR
+@echo ERROR: VCINSTALLDIR variable is not set. 
+@goto end
+
+:end
+
+[/code]
+
+      d)  Z:\VC2010\scripts\x86_amd64\vcvarsx86_amd64.bat   
+
+[code type="bat"]
+@if "%VCINSTALLDIR%"=="" goto error_no_VCINSTALLDIR
+
+@echo Setting environment for using Microsoft Visual Studio 2010 x64 cross tools.
+
+@set PATH=%VCINSTALLDIR%\BIN\x86_amd64;%VCINSTALLDIR%\BIN;%VCINSTALLDIR%\PlatformSDK\bin;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\x86\Microsoft.VC100.CRT\;%VCINSTALLDIR%\SysWOW64;%PATH%
+@set PATH=%VCINSTALLDIR%\redist\Debug_NonRedist\x86\Microsoft.VC100.DebugCRT;%VCINSTALLDIR%\ide;%PATH%
+@set INCLUDE=%VCINSTALLDIR%\ATLMFC\INCLUDE;%VCINSTALLDIR%\INCLUDE;%VCINSTALLDIR%\PlatformSDK\include;%INCLUDE%
+@set LIB=%VCINSTALLDIR%\ATLMFC\LIB\amd64;%VCINSTALLDIR%\LIB\amd64;%VCINSTALLDIR%\PlatformSDK\lib\amd64;%LIB%
+
+@set LIBPATH=%VCINSTALLDIR%\ATLMFC\LIB\amd64;%LIBPATH%
+
+@goto end
+
+:error_no_VCINSTALLDIR
+@echo ERROR: VCINSTALLDIR variable is not set. 
+@goto end
+
+:end
+
+[/code]
+
+6.  创建启动快捷方式。
+     一共有3个，分别为：
+     VC++2010_x86.lnk
+     VC++2010_x64.lnk
+     VC++2010_x86-amd64.lnk
+
+     i) VC2010_x86.lnk 属性设置
+        设置目标：%comspec% /k ""Z:\VC2010\vc2010.bat"" x86
+        起始位置：Z:\VC2010
+
+      ii) VC2010_x64.lnk 属性设置
+        设置目标：%comspec% /k ""Z:\VC2010\vc2010.bat"" amd64
+        起始位置：Z:\VC2010
+
+      iii) VC2010_x86-amd64.lnk 属性设置
+        设置目标：%comspec% /k ""Z:\VC2010\vc2010.bat"" x86_amd64
+        起始位置：Z:\VC2010
+
+      需要注意的是，这几个快捷方式的字体属性指定为NSimsun，不要使用点阵字体，否则在其他语言版本的系统上有问题。
+
+现在需要使用不同环境的VC++2010只需要点击相应的启动快捷方式就可以进入对应环境的编译命令行了。
+
+附后：
+      如果需要设置自定义的一些环境变量，可以修改vc2010.bat入口脚本头几行，设置可生效。
+
+2011-09-28 遇到一个工程，需要使用msbuild.exe来编译的，为绿色包添加了msbuild工程编译功能。
+mkdir vc2010/msbuild
+cp -v C:/windows/system32/mscoree.dll msbuild/
+cp -v C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\msbuild.exe msbuild/
+不知道是否还有什么其他依赖，在没有安装过vc10的机器上是否能用。
+
+
+</body>
+</html>

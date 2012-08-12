@@ -1,0 +1,93 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>asterisk中自定义fd_set扩展select能处理的文件描述符个数的研究</title>
+</head>
+<body>
+asterisk中自定义fd_set与FD_ZERO,FD_SET几个量扩展select能处理的文件描述符个数的研究
+
+在asterisk中，仍旧使用select处理socket文件描述符的读写事件驱动，虽然有点老套，但这种方式的移植性更好，现在几乎所有的平台都支持这个函数。如果使用一些特定平台的功能，像linux的epoll或者BSD的kqueue，还有solaris的什么  方式，都需要做一个核心兼容这几种不同操作系统上的方式。
+
+由于进程可使用的文件描述符可使用ulimit -n 32768来设置，而系统自带的FD_SETSIZE却是固定的值，在/usr/include/bits/typesizes.h，目前我在使用的linux服务器系统上，这个值都定义为1024。对于像asterisk这样的服务，当然这个值太小了，不足以完全发挥asterisk和服务器硬件的功能。
+
+现在我们研究下它如何,在include/asterisk/select.h文件开头，有这么一个定义，
+
+typedef struct {
+  TYPEOF_FD_SET_FDS_BITS fds_bits[4096 / SIZEOF_FD_SET_FDS_BITS]; /* 32768 bits */
+} ast_fdset;
+
+这里有两个宏TYPEOF_FD_SET_FDS_BITS, SIZEOF_FD_SET_FDS_BITS，都是在configure一步检测出来的，这个检测结果，必须保证sizeof(ast_fdset)=32768/8，也就是asterisk希望select能支持32768个文件描述符。
+
+系统自的/usr/include/sys/select.h中定义的fd_set如下，
+
+typedef long int __fd_mask;
+
+#define __NFDBITS (8 * sizeof (__fd_mask))
+#define __FDELT(d) ((d) / __NFDBITS) #define __FDMASK(d) ((__fd_mask) 1 << ((d) % __NFDBITS))
+
+typedef struct
+{
+   __fd_mask __fds_bits[__FD_SETSIZE / __NFDBITS];
+# define __FDS_BITS(set) ((set)->__fds_bits)
+} fd_set;
+
+根据这几个宏的值，可以计算出系统自带的fd_set正好是1024位。
+
+现在来configure文件看是怎么检测出来的这两上宏的值，因为在不同的CPU上，不同的系统上，不同的架构上，这两个值都有所不同，需要十分小心，否则有可能导致在使用FD_SET,FD_ISSET是，可能覆盖某些fd使用的位，或者检测到错误的文件描述符状态。
+
+首先计算SIZEOF_FD_SET_FDS_BITS的值，方法如下，
+
+fd_set foo;
+
+SIZEOF_FD_SET_FDS_BITS = sizeof(foo.__fds_bits[0]);
+
+然后再推导TYPEOF_FD_SET_FDS_BITS
+
+if (sizeof(long) ==  SIZEOF_FD_SET_FDS_BITS)
+
+则#define TYPEOF_FD_SET_FDS_BITS  long
+
+if (sizeof(long long) ==  SIZEOF_FD_SET_FDS_BITS)
+
+则#define TYPEOF_FD_SET_FDS_BITS  long long
+
+......
+
+就这样实际上根据所要的size逆向推导出单位来罢了。
+
+实际测试，在x86和amd这种little-endian的CPU架构上，
+
+这几个固定的，例如，在x86 Linux系统上，
+
+SIZEOF_FD_SET_FDS_BITS = 4 = sizeof(long)
+
+#define TYPEOF_FD_SET_FDS_BITS  long
+
+则ast_fdset定义在预处理时生成这么一条语句，
+
+typedef struct {
+  long fds_bits[4096 / 4]; /* 32768 bits */
+} ast_fdset;
+
+在x86_64 Linux系统上，
+
+
+SIZEOF_FD_SET_FDS_BITS = 8 = sizeof(long)
+
+#define TYPEOF_FD_SET_FDS_BITS  long
+
+则ast_fdset定义在预处理时生成这么一条语句，
+
+typedef struct {
+  long fds_bits[4096 / 8]; /* 32768 bits */
+} ast_fdset;
+
+这样有了一个固定的能实现asterisk需要的32768位数据结构，再结合asterisk中自定义的FD_ZERO, FD_SET, FD_CLR, FD_ISSET宏，在其内部使用select时，就能够处理32768个文件描述符了，达到扩展系统select所能支持的功能的目的。
+
+当然，在自己的项目中，也可以使用这种方式改进系统负载容量。
+
+不过，如果可能，还是使用先进一些的epoll,kqueue这些，因为select在处理这么大的文件描述符时，效率上相比前者还是小一点。
+</body>
+</html>

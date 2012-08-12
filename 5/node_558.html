@@ -1,0 +1,20 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在asterisk中添加skype的SILK语音编码的进展</title>
+</head>
+<body>
+SILK语音编码/解码器本用于skype的语音聊天传输格式，在2009年底的时候开放源码，这是一种语音质量相当不错的语音编码，很多VOIP还始应用SILK。
+这在方面freeswitch反应能快速，在2010年中的时候就开始尝加入对silk的支持，到现在已经比较成熟，完全能用于生产环境了。
+而asterisk对此则稍微迟了一点，在2010年底，开始了asterisk-1.10版本的开发后才讨论把silk引入到asterisk中，目前在官方的svn主干中有silk的相关代码。经测试也可以使用，但这个开发版本的asterisk不能用于生产环境。
+现在如果要在asterisk上使用silk,必须把对 silk的支持backport到asterisk-1.8版本，这个工作目前进展不错，已经加入了silk 8kHz的支持。
+由于aterisk-1.8的语音编码架构的限制，作为一种能支持不同采样率的silk编码，它只能一次支持一种采样率，如果需要支持silk所有4种采样率，相当于对asterisk-1.8添加4种语音编码。
+分别为：silk8,silk12,silk16,silk24
+在asterisk最新的svn中，asterisk改进对这种支持多采样率的语音编码的架构支持，使用一种叫语音编码属性的属性值，标识这种编码支持不同采样率，或者其他的属性值。
+
+准备再经过一段时间的实际应用测试后，将把这个silk的backport版本开放出来。
+
+</body>
+</html>

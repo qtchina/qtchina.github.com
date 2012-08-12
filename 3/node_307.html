@@ -1,0 +1,26 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>MySQL的性能调优工具：比mysqlreport更方便的tuning-primer.sh</title>
+</head>
+<body>
+Sundry MySQL提供的脚本相比mysqlreport更进一步：除了报表还进一步提供了修改建议。安装和使用非常简单：
+
+    wget http://www.day32.com/MySQL/tuning-primer.sh
+    chmod +x tuning-primer.sh
+    ./tuning-primer.sh
+
+和mysqlreport一样，tuning-primer.sh也支持.my.cnf
+
+    [client]
+    user = USERNAME
+    password = PASSWORD
+    socket = /tmp/mysql.sock
+
+ 
+
+样例输出：在终端上按照问题重要程度分别用黄色/红色字符标记问题
+</body>
+</html>

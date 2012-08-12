@@ -1,0 +1,70 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>asterisk的realtime架构 - 数据库sip用户</title>
+</head>
+<body>
+asterisk自1.2开始就支持realtime架构，此架构支持把asterisk的配置信息或者sip用户信息存储在关系数据库中，在使用时实时从数据库读取，对于asterisk的配置管理非常有帮助。
+
+今天测试在数据库中存储sip用户验证信息，（用户名/密码），在sip客户注册用户时，asterisk会到数据库中检索数据认证用户是否是合法用户，并把用户的注册状态信息更新到数据库表中。
+
+asterisk默认开启realtime功能，没有开关关闭这功能，如需要停止此服务，在在modules.conf中禁止加载pbx_realtime.so， app_realtime.so，res_realtime.so模块。
+
+asterisk支持的realtime数据库引擎包括odbc,mysql,postgresql,sqlite,ldap。本次测试使用postgresql引擎，涉及的配置文件包括，sip.conf, extconfig.conf, res_pgsql.conf三个文件。
+
+首先，在res_pgsql.conf中正确设置postgresql数据库登陆信息，
+host=
+port=
+user=
+passwd=
+dbname=
+
+设置完成，重启动asterisk，可看到日志中显示连接到了postgresql数据库。
+
+2. 设置extconfig.conf文件
+
+设置不同功能的数据库表信息，实际测试了sippeers和sipregs两个表，这两个表分别存储用户认证数据（用户名/密码，类型）和用户注册状态信息（何时注册，注册地址，客户端）
+
+extconfig.conf:
+; syntax family => engine,dbname,tablename
+sippeers => pgsql,asterisk,sippeers
+sipregs => pgsql,asterisk,sipregs
+
+这两个表可包含许多字段，下面的表结构是一种最简单的结构：
+
+sippeers表结构，
+CREATE TABLE sippeers
+(
+  id bigserial NOT NULL,
+  "name" character varying(100),
+  secret character varying(100),
+  host character varying(20),
+  "type" character varying(10)
+);
+INSERT INTO sippeers (name,secret,host,type) VALUES ('abc','pw123','dynamic','friend');
+该表中存储的密码是明文密码。
+
+CREATE TABLE sipregs
+(
+  "name" character varying(100),
+  fullcontact character varying(500),
+  ipaddr character varying(100),
+  port integer,
+  regseconds bigint,
+  username character varying(100),
+  regserver character varying(100),
+  lastms bigint,
+  defaultuser character varying(100),
+  useragent character varying(500)
+);
+该表中比较重要的字段，name,lastms(peer端连接ping值，-1表示当前不在线）,regseconds(最近一次register时间）
+
+需要注意，sipregs表不能自动添加记录，asterisk默认情况只能update这个表。所以，需要事先在sippeers表中有新数据的时候，根据name字段复制到sipregs表中，也可以修改asterisk的res_config_pgsql模块，在更新时如果找不到记录，动态添加一条相应的记录。
+
+sipregs中的主键是name字段。
+
+
+</body>
+</html>

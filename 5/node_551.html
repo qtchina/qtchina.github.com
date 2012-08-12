@@ -1,0 +1,20 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>uxterm设置中文字体及中文字体间距</title>
+</head>
+<body>
+在.Xdefaults修改为这部分，中英文都能正常显示，中文输入法也ok：
+
+! TrueType font
+UXTerm*faceName:  DejaVu Sans Mono
+!UXTerm*faceNameDoublesize: WenQuanYi Bitmap Song
+UXTerm*faceNameDoublesize: WenQuanYi Zen Hei
+!UXTerm*faceSize: 12
+
+修改完后，xrdb .Xdefaults生效，
+启动uxterm，看显示了没有。
+</body>
+</html>

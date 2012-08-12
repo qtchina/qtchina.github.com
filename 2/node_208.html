@@ -1,0 +1,69 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>可停靠物件和工具栏</title>
+</head>
+<body>
+	可停靠物件是能停靠在QMainWindow边上或者悬浮为一个独立窗口的物件。QMainWindow提供四个可停靠物件区域：中央物件的上面，下面，左边，右边各一个。像Microsoft Visual Studio和Qt语言家等程序大量使用了可停靠物件以提供一个非常灵活的用户界面。在Qt中，可停靠物件是QDockWidget的实现。
+
+图6.13　一个带有一个可停靠物件的QMainWindow
+
+
+	每个可停靠物件都有自己的标题栏，甚至在它们停靠住也一样。用户可以拖动可停靠物件的标题栏把它从一个停靠区域移动到另一个停靠区域。它们还能通过把可停靠窗口拖离所有停靠区域使它从一个区域脱离出来并成为一个悬浮起来成为一个独立的窗口。自由浮动的可停靠窗口总是在他们　主窗口的上面。用户可以点击物件标题栏上的关闭按钮来关闭一个QDockWidget。所有这些功能的组合可通过调用QDockWidget::setFeatures()来禁止。
+	在Qt的早期版本中，工具栏被当然可停靠物件对待，并与之共享相同的停靠区域。从Qt 4 开始，工具栏占据中央物件周围的它们自己的区域（如图6.14所示），并且它们还不能被脱离开。如果需要一个浮动的工具栏，我们可以简单的把它放到一个QDockWindow里面即可。
+
+图6.14　QMainWindow的停靠区域和工具栏区域
+
+
+	用虚线表示的边角能属于两个相邻停靠区域中任何一个。例如，我们可以调用QMainWindow::setCorner(Qt::TopLeftCorner, Qt:: LeftDockWidgetArea)让左上角属于左侧可停靠区域。
+	下面的代码片断展示了如何把一个已存在的物件（这里是一个QTreeWidget）包装进QDockWidget中并把它插入到右侧停靠区域。
+[code type="cpp-qt"]
+QDockWidget *shapesDockWidget = new QDockWidget(tr("Shapes"));
+shapesDockWidget->setWidget(treeWidget);
+shapesDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea
+                                  | Qt::RightDockWidgetArea);
+addDockWidget(Qt::RightDockWidgetArea, shapesDockWidget);
+[/code]
+	setAllowedAreas()调用指定哪个停靠区域能接受该物件的约束。这里，我们仅允许用户拖动该可停靠物件到左侧或者右侧停靠区域，这儿有足够的垂直空间让它的显示更合理。如果没有显式描写被允许的区域，用户就能拖动该可停靠物件到4个区域中的任何一个。
+	下面是如何在QMainWindow的子类构造函数中创建包含了一个QComboBox, 一个 QSpinBox, 和几个 QtoolButton的代码：
+[code type="cpp-qt"]
+QToolBar *fontToolBar = new QToolBar(tr("Font"));
+fontToolBar->addWidget(familyComboBox);
+fontToolBar->addWidget(sizeSpinBox);
+fontToolBar->addAction(boldAction);
+fontToolBar->addAction(italicAction);
+fontToolBar->addAction(underlineAction);
+fontToolBar->setAllowedAreas(Qt::TopToolBarArea
+                             | Qt::BottomToolBarArea);
+addToolBar(fontToolBar);
+[/code]
+	如果我们希望保存所有可停靠物件和工具栏的位置以便我们能在程序下次运行时恢复它们，我们可以写一些类似于用来保存QSplitter状态的代码，使用了QMainWindow的saveState() 和 restoreState() 函数：
+[code type="cpp-qt"]
+void MainWindow::writeSettings()
+{
+    QSettings settings("Software Inc.", "Icon Editor");
+    settings.beginGroup("mainWindow");
+    settings.setValue("size", size());
+    settings.setValue("state", saveState());
+    settings.endGroup();
+}
+void MainWindow::readSettings()
+{
+    QSettings settings("Software Inc.", "Icon Editor");
+    settings.beginGroup("mainWindow");
+    resize(settings.value("size").toSize());
+    restoreState(settings.value("state").toByteArray());
+    settings.endGroup();
+}
+[/code]
+	最后，QMainWindow还提供了一个上下文菜单，它列出了所有可停靠窗口和工具栏。用户可使用这个菜单关闭、恢复可停靠窗口，隐藏、恢复工具栏。
+
+图　6.15 QMainWindow的上下文菜单
+
+
+
+
+</body>
+</html>

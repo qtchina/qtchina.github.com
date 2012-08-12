@@ -1,0 +1,11 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用grub4dos硬盘安装 archlinux</title>
+</head>
+<body>
+<p></p> <p>以前也用grub4dos安装过像redhat, ubuntu等linux发行版，虽然都有些相似之处，</p><p>但每一个发行版的硬盘安装都有些不同。</p><p>这是头一次使用硬盘安装方式在物理机器上安装ARCH Linux，特把过程记录一下，主要在与其他发行版不同之处。</p><p>在winxp上安装好grub4dos，重启动进入grub控制台：</p><p>在重启动前下载archboot.iso，注意这是我改名后的安装镜像文件名，放在Winxp 的C:盘中。</p><p>进入grub命令行，使用"c" 指令，</p> <p>map --heads=0 --sectors-per-track=0 --mem (hd0m0)/archboot.iso (0xff)</p> <p>这语句执行时间可能有1，2分钟，因为这步会把iso中的内容读取到内存。</p><p>其中map的--heads参数和--sectors-per-track参数对于arch安装盘是必须的，其他发行版不需要，在此处耽误一会时间。</p> <p>然后</p> <p>map --hook</p> <p>chainloader (0xff)</p> <p>之后出现了archlinux的安装菜单。</p><p>ARCH Linux新版本2010后，有LTS内核与非LTS内核之分，这个LTS指长期支持版本，其实也没有什么区别吧</p><p>安装完成后也都是能够通过设置改成一致。我此选项使用了非LTS内核版本。</p>
+</body>
+</html>

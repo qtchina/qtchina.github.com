@@ -1,0 +1,235 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>第二章 创建对话框 (快速对话框设计)</title>
+</head>
+<body>
+<p>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+<title></title>
+<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)"> 	 	 	<style type="text/css"><!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		H2 { margin-top: 0.46cm; margin-bottom: 0.46cm; line-height: 173%; page-break-inside: avoid }
+		H2.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H2.cjk { font-family: "黑体", "SimHei"; font-size: 16pt; font-style: normal }
+		H2.ctl { font-family: "Tahoma"; font-size: 16pt }
+		H5 { margin-top: 0.49cm; margin-bottom: 0.51cm; line-height: 156%; page-break-inside: avoid }
+		H5.western { font-family: "Times New Roman", serif; font-size: 14pt }
+		H5.cjk { font-family: "Tahoma"; font-size: 14pt; font-style: normal }
+		H5.ctl { font-family: "Tahoma"; font-size: 14pt }
+		P { margin-bottom: 0.21cm }
+		A:link { color: #0000ff }
+	--></style>    </meta>
+</meta>
+</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">相对于手写代码来说，</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">被设计的更人性化，更找人喜欢，它的与众不同在于它不需要程序员完全手写 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">代码来开发整个 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">应用程序。很多程序员更喜欢用可视化的方法来设计窗体，因为他们发现这样比手写代码更自然更高效，并且他们希望能够更快速更简单地试验和更改他们的设计，而不是手写代码来实现窗体。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer) </font></font><font size="3">通过提供一个可视化的设计能力扩展了程序员可用的选择。</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer) </font></font><font size="3">可以被用来开发所有或只是某些应用程序的窗体。用</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer) </font></font><font size="3">创建的窗体最终都将转化为 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">代码，所以 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer) </font></font><font size="3">可以被用作一个方便的工具并且不会给编译器增加任何要求。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在这部分，我们将用 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer) </font></font><font size="3">来创建<font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec3.html#ch02fig04%23ch02fig04">图</a></u></font></font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec3.html#ch02fig04%23ch02fig04">2.4</a></u></font></font></font><font size="3">显示的 </font><font face="宋体, SimSun"><font size="3">Go-to-Cell </font></font><font size="3">对话框。不管我们手写代码还是使用 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">设计器 </font><font face="宋体, SimSun"><font size="3">(Qt Designer)</font></font><font size="3">，创建一个对话框总是包含以下相同的基本步骤：</font></p>
+<ul>
+    <li>
+    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0cm; widows: 2; orphans: 2;"><font size="3">创建并初始化子物件。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font size="3">将子物件放到布局中。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font size="3">设置 	</font><font face="宋体, SimSun"><font size="3">tab </font></font><font size="3">顺序。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font size="3">建立信号</font><font face="宋体, SimSun"><font size="3">/</font></font><font size="3">槽连接。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">实现对话框自定义的槽。</font></p>
+    </li>
+</ul>
+<h5 align="center" class="cjk"><a name="ch02fig04"></a>图 <font face="Times New Roman, serif">2.4. The Go-to-Cell dialog</font></h5>
+<p align="center" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><input width="274" type="image" height="107" src="/upfile/image/gotocell.jpg" />&nbsp;</p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">要启动 </font><font face="宋体, SimSun"><font size="3">Qt Designer</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3">Windows </font></font><font size="3">系统单击开始菜单中的 </font><font face="宋体, SimSun"><font size="3">Qt by Trolltech v4.x.y|Designer </font></font><font size="3">，在 </font><font face="宋体, SimSun"><font size="3">Unix </font></font><font size="3">中则要在命令行下键入 </font><font face="宋体, SimSun"><font size="3">designer </font></font><font size="3">名令，或者在 </font><font face="宋体, SimSun"><font size="3">Mac OS X </font></font><font size="3">发现器 </font><font face="宋体, SimSun"><font size="3">(Finder) </font></font><font size="3">中双击 </font><font face="宋体, SimSun"><font size="3">designer</font></font><font size="3">。当 </font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">启动后，它会弹出一个模版列表。单击 </font><font face="宋体, SimSun"><font size="3">&quot;Widget&quot; </font></font><font size="3">模版，然后单击 </font><font face="宋体, SimSun"><font size="3">OK</font></font><font size="3">。</font><font face="宋体, SimSun"><font size="3">( &quot;Dialog with Buttons Bottom&quot; </font></font><font size="3">模版看起来不错，但是对于这个例子我们将手工创建 </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">按钮来显示它是怎样被完成的。</font><font face="宋体, SimSun"><font size="3">) </font></font><font size="3">现在你应该拥有了一个名为 </font><font face="宋体, SimSun"><font size="3">&quot;Untitled&quot; </font></font><font size="3">的窗口。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">默认 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer </span></font></font><font size="3">的用户界面是由几个顶级窗口组成。如果喜欢一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">MDI </span></font></font><font size="3">风格的界面，只有一个顶级窗口和一些子窗口，点击 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Edit</span></font></font><font size="3">｜</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">User Iterface Mode</span></font></font><font size="3">｜</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Docked Window</span></font></font><font size="3">。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">第一步创建子物件并把它们放到窗体中。创建一个标签，一个行编辑器，一个水平空间占位符</font><font face="宋体, SimSun"><font size="3">, </font></font><font size="3">和两个按钮。对于每个，从 </font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">的物件窗口拖拽它的名字或者图标并把它粗略的放在窗体合适的地方。在最终窗体中不可见的空白占位符在 </font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">中显示为一个蓝色的弹簧。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">&nbsp;</p>
+<h5 align="center" class="cjk"><a name="ch02fig05"></a><font face="Times New Roman, serif">Figure 2.5. Qt Designer in docked window mode on Windows</font></h5>
+<p align="center" style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/designer_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
+<p align="center" style="margin-bottom: 0cm;">&nbsp;<input width="500" type="image" height="319" src="/upfile/image/designer.jpg" /></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig06"></a> <font size="3">现在拖拽窗体的底部边框使它便短。这将创建一个如<a href="file:///mk:@MSITStore:E">图 </a></font><font face="宋体, SimSun"><font size="3"><a href="file:///mk:@MSITStore:E">2.6</a></font></font><font size="3">一样的窗体。不要在项目在窗口的放置上花费太多的时间；</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">的布局管理器会精确的布局它们。</font></p>
+<h5 align="center" class="cjk"><font face="Times New Roman, serif">Figure 2.6. The form with some widgets</font></h5>
+<p align="center" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">&nbsp;<input width="324" type="image" height="118" src="/upfile/image/gotocell1.jpg" /></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">用 </font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">属性编辑器设置每一个物件的属性：</font></p>
+<ol>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击 </font><font face="宋体, SimSun"><font size="3">text 	</font></font><font size="3">标签。确保它的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">objectName</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;label&quot; 	</font></font><font size="3">并设置 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Cell 	Location:&quot;</font></font><font size="3">。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击行编辑器。确保 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">objectName</span> 	</font></font><font size="3">的属性为 </font><font face="宋体, SimSun"><font size="3">&quot;lineEdit&quot;.</font></font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击第一个按钮。设置 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">objectName</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;okButton&quot;</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">enabled</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;false&quot;, 	 <span lang="zxx">text</span> </font></font><font size="3">属性为 	</font><font face="宋体, SimSun"><font size="3">&quot;OK&quot;,  	<span lang="zxx">default</span> </font></font><font size="3">属性 	</font><font face="宋体, SimSun"><font size="3">&quot;true&quot;</font></font><font size="3">。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击第二个按钮。设置 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">objectName</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;cancelButton&quot; 	</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;Cancel&quot;.</font></font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击窗体的背景选择窗体本身。设置 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">objectName</span> 	</font></font><font size="3">为 </font><font face="宋体, SimSun"><font size="3">&quot;GoToCellDialog&quot;</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">windowTitle 	</span></font></font><font size="3">为</font><font face="宋体, SimSun"><font size="3">&quot;Go 	to Cell&quot;</font></font><font size="3">。</font></p>
+    </li>
+</ol>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">所有的物件现在看起来好多了，除了显示 ＆</font><font face="宋体, SimSun"><font size="3">Cell Location</font></font><font size="3">的 </font><font face="宋体, SimSun"><font size="3">text </font></font><font size="3">标签。点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Buddies </font></font><font size="3">进入允许你设置</font><font face="宋体, SimSun"><font size="3">buddies</font></font><font size="3">的特殊模式。然后，点击标签并拖拽红色箭头线 <font face="宋体, SimSun">，接下来</font></font><font face="宋体, SimSun"><font size="3">, 点击此 label 并拖动红线到行编辑框，然后释放。此 label现在应该显示单元格位置并成为了行编辑器的伙伴了。点击 Edit|Edit 物件可以离开伴位模式。</font></font></p>
+<h5 align="center" class="cjk"><a name="ch02fig07"></a><font face="Times New Roman, serif">Figure 2.7. The form with properties set</font></h5>
+<p align="center" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><input width="324" type="image" height="118" src="/upfile/image/gotocell2.jpg" />&nbsp;</p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig08"></a><a name="ch02pro01"></a> <font size="3">下一步布局窗体中的物件：</font></p>
+<p style="margin-left: 0.31cm; text-indent: -0.31cm; margin-bottom: 0cm;"><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">1. </font></font></font><font size="3">点击</font><font size="3"> </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Cell Location </font></font></font><font size="3">标签，按住 </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Shift </font></font></font><font size="3">的同时点击 </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">line editor </font></font></font><font size="3">这样就可同时选中它们。点击 </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Form|Lay Out Horizontally</font></font></font><font size="3">，将它们水平对齐。</font></p>
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">2. </font></font></font><font size="3">点击空白占位符，然后按住</font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Shift</font></font></font><font size="3">同时选中</font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">OK</font></font></font><font size="3">和</font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Cancel</font></font></font><font size="3">按钮，点击</font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Form|Lay Out Horizontally</font></font></font><font size="3">。</font></p>
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">3. </font></font></font><font size="3">点击窗体的背景选择所有的选择项，然后点击</font><font size="3"> </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Form|Lay Out Vertically</font></font></font><font size="3">。</font></p>
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">4. </font></font></font><font size="3">点击</font><font size="3"> </font><font face="Times New Roman, serif"><font face="宋体, SimSun"><font size="3">Form|Adjust Size </font></font></font><font size="3">来调整窗体为完美大小。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">窗体中的红线显示了创建的布局。它们在程序运行时不现实。 </font></p>
+<h5 align="center" class="cjk"><font face="Times New Roman, serif">Figure 2.8. The form with the layouts</font></h5>
+<p align="center" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">&nbsp;<input width="250" type="image" height="107" src="/upfile/image/gotocell3.jpg" /></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Tab Order</font></font><font size="3">。在每个物件旁边将显示一个蓝色矩形中的数字接受焦点。点击依次按你想要接受焦点的每一个物件，然后点击 </font><font face="宋体, SimSun"><font size="3">click Edit|Edit Widgets </font></font><font size="3">退出</font><font face="宋体, SimSun"><font size="3">tab</font></font><font size="3">顺序模式。</font></p>
+<h5 align="center" class="cjk"><a name="ch02fig09"></a><font face="Times New Roman, serif">Figure 2.9. Setting the form's tab order</font></h5>
+<p align="center" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">&nbsp;<input width="250" type="image" height="107" src="/upfile/image/gotocell4.jpg" /></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">要预览对话框点击 </font><font face="宋体, SimSun"><font size="3">Form|Preview </font></font><font size="3">菜单选项。重复按 </font><font face="宋体, SimSun"><font size="3">Tab </font></font><font size="3">键检查 </font><font face="宋体, SimSun"><font size="3">tab </font></font><font size="3">顺序。用标题栏中的关闭按钮关闭对话框。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">用 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">gotocelldialog </span></font></font><font size="3">保存对话框</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">.ui</span> </font></font><font size="3">文件用 </font><font face="宋体, SimSun"><font size="3">gotocell </font></font><font size="3">命名后存放在一个目录中，并用文本编辑器创建一个相同目录下的 </font><font face="宋体, SimSun"><font size="3">main.cpp </font></font><font size="3">文件：</font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QApplication&gt;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QDialog&gt;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;ui_gotocelldialog.h&quot;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int main(int argc, char *argv[])</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QApplication app(argc, argv);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Ui::GoToCellDialog ui;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QDialog *dialog = new QDialog;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">ui.setupUi(dialog);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">dialog-&gt;show();</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">return app.exec();</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在运行 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">qmake</span> </font></font><font size="3">创建一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">.pro</span> </font></font><font size="3">文件和一个 </font><font face="宋体, SimSun"><font size="3">makefile (<span lang="zxx">qmake -project</span>; <span lang="zxx">qmake goto-cell.pro</span>)</font></font><font size="3">文件。</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">qmake</span> </font></font><font size="3">工具能够智能的探测到用户界面文件 </font><font face="宋体, SimSun"><font size="3">goto-celldialog.ui</font></font><font size="3">并能够生成合适 </font><font face="宋体, SimSun"><font size="3">makefile </font></font><font size="3">规则来调用 </font><font face="宋体, SimSun"><font size="3">uic </font></font><font size="3">－ </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">的用户界面编译器。</font><font face="宋体, SimSun"><font size="3">uic </font></font><font size="3">工具将 </font><font face="宋体, SimSun"><font size="3">gotocelldialog.ui</font></font><font size="3">转换成</font><font face="宋体, SimSun"><font size="3">C++</font></font><font size="3">并把结果放到 </font><font face="宋体, SimSun"><font size="3">ui-_gotocelldialog.h</font></font><font size="3">中。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">生成的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">ui_gotocelldialog.h</span> </font></font><font size="3">文件包含 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Ui::GoToCellDialog</span> </font></font><font size="3">类的定义， </font><font face="宋体, SimSun"><font size="3">which is a C++ equivalent of the <span lang="zxx">gotocelldialog.ui</span> file</font></font><font size="3">。类声明了存储窗体的子物件和布局的成员变量，和一个用来初始化窗体的 </font><font face="宋体, SimSun"><font size="3">setupUI() </font></font><font size="3">函数。生成的类象这样：</font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class Ui::GoToCellDialog</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QLabel *label;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QLineEdit *lineEdit;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QSpacerItem *spacerItem;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QPushButton *okButton;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QPushButton *cancelButton;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">...</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void setupUi(QWidget *widget) {</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">...</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">生成的类没有继承任何</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">类。当我们要将窗体应用到</font><font face="宋体, SimSun"><font size="3">main.cpp</font></font><font size="3">时，我们创建一个 </font><font face="宋体, SimSun"><font size="3">QDialog</font></font><font size="3">并把它传递给</font><font face="宋体, SimSun"><font size="3">setupUI()</font></font><font size="3">。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">如果你现在运行程序，对话框将会工作，但不像我们想象的那样完美：</font></p>
+<ul>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">按钮总是被禁用。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">按钮也不会做任何事情。</font></p>
+    </li>
+    <li>
+    <p align="left" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">行编辑器接受任何输入文本，而不是今接受合法的 	</font><font face="宋体, SimSun"><font size="3">cell locations.</font></font></p>
+    </li>
+</ul>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">我们可以写一些代码使得对话框更合适。最简洁的方式就是创建一个同时继承了</font><font face="宋体, SimSun"><font size="3">QDialog</font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3">UI::GoToCell-Dialog</font></font><font size="3">实现缺失的功能（）</font><font face="宋体, SimSun"><font size="3">(thus proving the adage that any software problem can be solved simply by adding another layer of indirection).</font></font><font size="3">我们的命名约定是给这个新类一个和</font><font face="宋体, SimSun"><font size="3">uic</font></font><font size="3">生成的类相同的名字，只是没有了</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Ui::</span></font></font><font size="3">前缀。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">打开一个文本编辑器，创建一个名为 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">gotocelldialog.h</span> </font></font><font size="3">包含以下代码的头文件：</font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#ifndef GOTOCELLDIALOG_H</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#define GOTOCELLDIALOG_H</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QDialog&gt;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;ui_gotocelldialog.h&quot;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class GoToCellDialog : public QDialog, public Ui::GoToCellDialog</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Q_OBJECT</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">GoToCellDialog(QWidget *parent = 0);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">private slots:</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void on_lineEdit_textChanged();</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#endif</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">The implementation belongs in <font face="宋体, SimSun"><font size="3">gotocelldialog.cpp</font></font>:</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QtGui&gt;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;gotocelldialog.h&quot;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">GoToCellDialog::GoToCellDialog(QWidget *parent)</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">: QDialog(parent)</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">setupUi(this);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QRegExp regExp(&quot;[A-Za-z][1-9][0-9]{0,2}&quot;);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">lineEdit-&gt;setValidator(new QRegExpValidator(regExp, this));</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void GoToCellDialog::on_lineEdit_textChanged()</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">okButton-&gt;setEnabled(lineEdit-&gt;hasAcceptableInput());</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在构造函数中，我们调用</font><font face="宋体, SimSun"><font size="3">setupUI()</font></font><font size="3">来初始化窗体。借助于多重继承，我们可以直接访问</font><font face="宋体, SimSun"><font size="3">Ui::GoToCellDialog</font></font><font size="3">的成员。</font>
+<meta content="text/html; charset=utf-8" http-equiv="CONTENT-TYPE" />
+<title></title>
+<meta content="OpenOffice.org 2.3  (Linux)" name="GENERATOR" /> 	<style type="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+	-->
+	</style>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">创建完用户界面后</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setupUi()</span></font></font><font size="3">将自动将所有 </font><font face="宋体, SimSun"><font size="3">on_</font></font><font size="3">对象名</font><font face="宋体, SimSun"><font size="3">_</font></font><font size="3">信号名</font><font face="宋体, SimSun"><font size="3">() </font></font><font size="3">格式的槽与对应的对象名的 </font><font face="宋体, SimSun"><font size="3">singalName() </font></font><font size="3">信息连接起来</font><font face="宋体, SimSun"><font size="3">,</font></font></p>
+<font face="宋体, SimSun"><font size="3"> </font></font><font size="3">在我们的例子中，这意味着</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setupUi()</span> </font></font><font size="3">将创建下面的信号／槽连接：</font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(lineEdit, SIGNAL(textChanged(const QString &amp;)),</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(on_lineEdit_textChanged()));</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">还是在构造函数中，我们创建一个验证器来严格定义输入范围。</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">提供了三个內建验证器类：</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QIntValidator</span>, <span lang="zxx">QDoubleValidator</span></font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QRegExpValidator</span></font></font><font size="3">。这里我们用一个</font><font face="宋体, SimSun"><font size="3">&quot;[A-Za-z][1-9][0-9]{0,2}&quot; </font></font><font size="3">正则表达式类</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QRegExpValidator</span></font></font><font size="3">：意思是允许包含</font>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+<title></title>
+<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)"> 	<style type="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+	-->
+	</style> </meta>
+</meta>
+</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">大小写字母，随后是一个</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">0-9</span></font></font><font size="3">的数字，然后是一个</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">0-3</span></font></font><font size="3">位，每位都在</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">0-9</span></font></font><font size="3">之间的数字。</font></p>
+<p><font face="宋体, SimSun"><font size="3">(</font></font><font size="3">关于正则表达式，可以看一下 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QRegExp</span> </font></font><font size="3">类的文档）</font></p>
+<p>&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+<title></title>
+<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)"> 	 	 	<style type="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+	-->
+	</style> </meta>
+</meta>
+</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">通过把它传递给 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QRegExpValidator</span> </font></font><font size="3">类的构造函数，把它变成了</font><font face="宋体, SimSun"><font size="3">GotoCellDialog</font></font><font size="3">对象的一个子对象。这样，我们不必担心以后再删除 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QRegExpValidator</span> ; </font></font><font size="3">它会在交对象被删除的时候自己删除。</font></p>
+<p>&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">的父子机制在 </font><font face="宋体, SimSun"><font size="3">QObject </font></font><font size="3">中实现。当我们创建一个具有父对象的对象 </font><font face="宋体, SimSun"><font size="3">(a widget, validator, or any other kind) </font></font><font size="3">，父对象将这个对象添加到他的子对象列表中。当父对象被删除时，它浏览它的子对象列表删除每个子对象。子对象本身删除他的子对象，依次递归直到全部删除。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">父子机制大大的简化了内存管理，减少了内存泄露的风险。我们唯一需要明确删除的就是我们用</font><font face="宋体, SimSun"><font size="3">new</font></font><font size="3">创建的和没有父类的对象。并且如果我们在删除父对象之前删除了子对象，</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">将自动从父对象的子对象列表中将这个对象删除。</font></p>
+<p style="margin-top: 0.17cm; margin-bottom: 0.17cm;"><font size="3">对于物件，父亲还有另外一个意义：子物件在父物件中显示。当我们删除父物件时，子物件不仅在内存消失，它还将从屏幕上消失。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在构造函数的末端，我们连接 </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">按钮到 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QDialog </span></font></font><font size="3">的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">accept()</span> </font></font><font size="3">槽上，</font><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">按钮到 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">reject()</span> </font></font><font size="3">槽上。两个按钮都将关闭对话框，但是 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">accept()</span> </font></font><font size="3">设置对话框的结果值到 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QDialog::Accepted</span> (which equals 1), </font></font><font size="3">而 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">reject()</span> </font></font><font size="3">则为 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QDialog::Rejected</span> (which equals 0)</font></font><font size="3">设置值。当我们用这个对话框，我们 </font><font face="宋体, SimSun"><font size="3">When we use this dialog, we can use the result value to see if the user clicked OK and act accordingly.</font></font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><span lang="zxx">on_lineEdit_textChanged()</span> </font></font><font size="3">槽开启或禁用 </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">按钮，根据行编辑器是否包含合法的 </font><font face="宋体, SimSun"><font size="3">cell location</font></font><font size="3">。</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QLineEdit::hasAcceptableInput()</span> </font></font><font size="3">使用我们在构造函数中设置的验证器。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">通过以上我们完善了对话框。现在我们可以用它重写 </font><font face="宋体, SimSun"><font size="3">main.cpp </font></font><font size="3">：</font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QApplication&gt;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;gotocelldialog.h&quot;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int main(int argc, char *argv[])</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp;&nbsp; QApplication app(argc, argv);</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp;&nbsp; GoToCellDialog *dialog = new GoToCellDialog;</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp;&nbsp; dialog-&gt;show();</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp;&nbsp; return app.exec();</font></font></p>
+<p align="left" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">重新编译应用程序 </font><font face="宋体, SimSun"><font size="3">(<span lang="zxx">qmake -project</span>; <span lang="zxx">qmake gotocell.pro</span>) </font></font><font size="3">并再次运行它。在行编辑器中键入 </font><font face="宋体, SimSun"><font size="3">&quot;A12&quot; </font></font><font size="3">，你会发现 </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">按钮变为可用。试着键入一些随机的文本看看验证器是如何工作的。点击 </font><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">对话况。</font></p>
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">的一个优点就是它允许程序员自由修改他们的窗体设计而不需要被迫改变源代码。如果你完全靠手写</font><font face="宋体, SimSun"><font size="3">C++</font></font><font size="3">代码来创建窗体，更改窗体设计将是非常耗时的。有了 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer</span></font></font><font size="3">，你将不再浪费时间，因为当窗体改变时</font><font face="宋体, SimSun"><font size="3">uic</font></font><font size="3">将重新生成它的源代码。对话框的用户界面被保存在</font><font face="宋体, SimSun"><font size="3">a.ui</font></font><font size="3">文件 </font><font face="宋体, SimSun"><font size="3">(一种基于XML的文件格式) </font></font><font size="3">中，而自定义的功能则通过继承uic生成的类来实现。</font></p>
+<p style="margin-bottom: 0cm;">&nbsp;</p>
+</body>
+</html>

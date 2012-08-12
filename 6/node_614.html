@@ -1,0 +1,32 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Opera右键添加用chromium，Firefox打开菜单  </title>
+</head>
+<body>
+Opera的定制性非常强，在这使用其中一点设置这一功能。
+由于在Opera中使用Flash插件非常耗资源，一般会禁止Opera的Flash插件，所以有时开视频时，还要拷贝/粘贴到其他浏览器中，有点麻烦。
+
+我这以linux平台为例子，
+在opera的"设置"->"高级“-》”工具栏“中创建一个菜单副本，这样会创建一个菜单设置文件.opera/menu/设置的名字.ini。
+
+打开这个文件，找到 [Link Popup Menu] 一节，在这节的最后，添加下面的项：
+--------------------
+Item, "【用Firefox開啟此頁面】"= Execute program, "/usr/bin/firefox", "%l"
+Item, "【用Chromium開啟此頁面】"= Execute program, "/usr/bin/chromium", "%l"
+
+这两个菜单能在右键点击在链接上时出现，%l参数表示打开的是按键下的链接的URL，而不是当前页面的URL。
+
+然后再找到 [Document Popup Menu] 一节，在这节的最后添加下面的项：
+--------------------
+Item, "【用Firefox開啟此頁面】"= Execute program, "/usr/bin/firefox", "%u"
+Item, "【用Chromium開啟此頁面】"= Execute program, "/usr/bin/chromium", "%u"
+
+这两个菜单会在点击当前页面非事件区域时出现，%u表示打开的是当前页面的URL。
+
+保存，重启动Opera，可以了吧。
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>部署postgresql数据库集群</title>
+</head>
+<body>
+可把任意一台作为主服务器，提供读写功能，其他的服务器提供读取服务器，作为热备服务器使用。
+
+如果主服务器有问题，可把其他任意一台从服务器转为主服务器
+
+或者新安装一台服务器，从从服务器同步数据过来，然后再作为主服务器使用运行。
+
+这种实现的是postgresql中的stream replication机制。属于异步复制，极端情况下可能丢失部分数据。
+
+使用版本，postgresql 9.1,
+
+pgbrounce-x.x.x
+
+参与资料，
+
+网络情况，
+
+A: 172.24.202.242
+
+B: 172.24.149.192
+
+A上的设置， wal_level = 'hot_standby'
+
+                     max_wal_senders = 5
+
+B上的设置，
+
+在data目录下创建一个recovery.conf
+
+设置如下参数，standby_mode = 'on'
+
+primary_conninfo = 'host=Aip port=5432 user=postgres password=123456'
+
+restore_command = 'true'
+
+archive_cleanup_command = 'true'
+
+修改B上的postgresql.conf配置文件，开启hot_standby = 'on'，这样，在同步过程，使得该从数据库可读取。但不能写入。
+
+这样一个简单的stream replication主从服务器就完成了。
+
+在从服务器的recovery.conf中，没有设置真实的restore_command，这要求，在该数据库启动时，数据已经与主服务器做了恢复了。
+
+经测试，主服务器数据表可读写，并且写入的数据即时同步到从服务器。从服务器可读取数据，但不能写入数据。
+
+这个简单测试与预期一致。
+
+如果在启动从服务器时，从服务器的数据与主服务器不一致，这可能会出现什么问题。
+
+再加一台从C服务器，测试一下。没有问题。
+</body>
+</html>

@@ -1,0 +1,122 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>我的第一个kde4程序</title>
+</head>
+<body>
+在使用bespin中的xbar kde4 plasma applet的时候，遇到一个自定义菜单的功能，希望在菜单中有一功能，能最小化所有的窗口，能恢复所有窗口功能。
+没有找到现成的工具或者方法，所以写了一个简单的使用kde4基础库的小工具来实现这一功能。另外这个小程序还有一个功能，可根据程序名字把其窗口提到最上层，展示给用户，这功能用于使用dolphin显示某些固定文件夹，如在已经开启的dolphin中显示文档目录，并把dolphin拉到最上层。
+
+刚开始写kde4的程序，只用了kde4基础库的三个类，代码：
+
+[code type="cpp"]
+
+#include <QtCore>
+
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <kwindowsystem.h>
+#include <kwindowinfo.h>
+#include <KDirWatch>
+#include <KIcon>
+#include <KStandardDirs>
+#include <KUriFilterData>
+#include <KRun>
+
+#include <KApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
+#include <KMessageBox>
+#include <KLocale>
+
+/*
+  minimizeall
+  unminimizeall
+  appname
+ */ 
+int main (int argc, char *argv[])
+{
+    if (argc != 2) {
+        qDebug()<<__FILE__<<__LINE__<<"arguments count error.";
+        return 1;
+    }
+    QString appname = argc > 1 ? QString(argv[1]) : QString();
+    
+    KAboutData aboutData(
+                         // The program name used internally.
+                         "tutorial1",
+                         // The message catalog name
+                         // If null, program name is used instead.
+                         0,
+                         // A displayable program name string.
+                         ki18n("Tutorial 1"),
+                         // The program version string.
+                         "1.0",
+                         // Short description of what the app does.
+                         ki18n("Displays a KMessageBox popup"),
+                         // The license this code is released under
+                         KAboutData::License_GPL,
+                         // Copyright Statement
+                         ki18n("(c) 2007"),
+                         // Optional text shown in the About box.
+                         // Can contain any information desired.
+                         ki18n("Some text..."),
+                         // The program homepage string.
+                         "http://example.com/",
+                         // The bug report email address
+                         "submit@bugs.kde.org");
+    argc = 1;
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
+
+
+    QWidget *w;
+    KWindowInfo info;
+    QString title;
+
+    if (appname == "minimizeall") {
+        foreach ( WId id, KWindowSystem::windows() ) {
+            KWindowSystem::minimizeWindow(id);
+            // KWindowSystem::unminimizeWindow(id);
+        }
+    } else if (appname == "unminimizeall") {
+        foreach ( WId id, KWindowSystem::windows() ) {
+            // KWindowSystem::minimizeWindow(id);
+            KWindowSystem::unminimizeWindow(id);
+        }
+    } else {
+        foreach ( WId id, KWindowSystem::windows() ) {
+            // w = QWidget::find(id);
+            info = KWindowInfo(id, NET::WMName | NET::WMVisibleName , 0);
+            qDebug()<<"wid: "<<id<<","<<info.name()<<info.visibleName()<<info.win();
+            title = info.name().toLower();
+            // KWindowSystem::minimizeWindow(id);
+            KWindowSystem::unminimizeWindow(id);
+            if (title.endsWith(appname)) {
+                // KWindowSystem::activateWindow(id);
+                // KWindowSystem::raiseWindow(id);
+                KWindowSystem::forceActiveWindow(id);
+                break;
+            }
+            // printf("wid: %d, %s\n", id, );
+        }
+    }
+
+    // KGuiItem yesButton( i18n( "Hello" ), QString(),
+    //                     i18n( "This is a tooltip" ),
+    //                     i18n( "This is a WhatsThis help text." ) );
+    // KMessageBox::questionYesNo( 0, i18n( "Hello World" ),
+    //                             i18n( "Hello" ), yesButton );
+    return 0;
+}
+
+[/code]
+
+编译命令，
+g++ -g kfocusapp.cpp -I/usr/include/qt4/ -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/qt -I/usr/include/KDE/ -L/usr/lib64/kde4 -lkdecore -lkdeui
+
+</body>
+</html>

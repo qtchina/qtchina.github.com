@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>gentoo 中 license mask的包解决办法</title>
+</head>
+<body>
+一些和license相关的协议问题,目前不需要怎么关心这个东西,所以可以根据portage机制,打开所有有限制协议的包
+
+portage 输出为:
+localhost virtualbox-bin # emerge -va virtualbox-bin
+^@
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+
+!!! All ebuilds that could satisfy "app-emulation/virtualbox-bin" have been masked.
+!!! One of the following masked packages is required to complete your request:
+- app-emulation/virtualbox-bin-3.0.10 (masked by: PUEL license(s))
+A copy of the 'PUEL' license is located at '/usr/portage/licenses/PUEL'.
+
+- app-emulation/virtualbox-bin-3.0.8 (masked by: PUEL license(s))
+- app-emulation/virtualbox-bin-3.0.6-r1 (masked by: PUEL license(s))
+- app-emulation/virtualbox-bin-3.0.6 (masked by: PUEL license(s))
+- app-emulation/virtualbox-bin-1.6.6 (masked by: PUEL license(s))
+
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+
+
+在make.conf中添加这么一行:
+ACCEPT_LICENSE="*"
+
+或者把*替换成要解禁的协议类型, 如PUEL(virtualbox-bin)等.
+如果使用*,则不受任何协议限制的emerge所有软件包.
+
+</body>
+</html>

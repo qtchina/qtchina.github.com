@@ -1,0 +1,30 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>postgresql 技巧</title>
+</head>
+<body>
+<p>将数组当结果集使用:&nbsp;&nbsp;</p>
+<p>SELECT arr[i]<br />
+&nbsp;&nbsp; FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; generate_series(1, 4) AS i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; string_to_array('1,6,3,4', ',') AS arr;</p>
+<p>&nbsp;</p>
+<p>用SQL获取postgreSQL表结构</p>
+<p>SELECT<br />
+attname,typname,adsrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FROM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pg_attribute<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INNER JOIN pg_class&nbsp; ON pg_attribute.attrelid = pg_class.oid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INNER JOIN pg_type&nbsp;&nbsp; ON pg_attribute.atttypid = pg_type.oid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LEFT OUTER JOIN pg_attrdef ON pg_attrdef.adrelid = pg_class.oid AND pg_attrdef.adnum = pg_attribute.attnum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LEFT OUTER JOIN pg_description ON pg_description.objoid = pg_class.oid AND pg_description.objsubid = pg_attribute.attnum<br />
+&nbsp;&nbsp;&nbsp;&nbsp; WHERE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pg_attribute.attnum &gt; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND attisdropped &lt;&gt; 't'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND pg_class.relname= 'cube_os'<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ORDER BY pg_attribute.attnum ;</p>
+</body>
+</html>

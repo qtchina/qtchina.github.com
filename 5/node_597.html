@@ -1,0 +1,25 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>git 的历史版本回溯问题</title>
+</head>
+<body>
+
+在svn中有svn up -r123可以回溯到任意一版本号为123的版本。
+
+而在git中，虽然用了也有段时间，却对这一点有点模糊。
+
+今天有一个需要回溯的问题，所以试用了一个，才发现那么一个不太明确的git命令完成此功能，
+
+先执行
+git reset commit-md5-str
+再执行
+git checkout .
+
+这样才能完成此功能，仅有第一句的话，应该处于一种修改状态，实际的文件还没有从git 库中把文件拉出来，执行第二句才把文件拉出来。
+
+感觉没有svn直观简单。
+</body>
+</html>

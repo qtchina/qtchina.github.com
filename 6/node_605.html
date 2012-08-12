@@ -1,0 +1,15 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux系统去掉带BOM的UTF8编码文件的BOM头</title>
+</head>
+<body>
+# awk '{if(NR==1)sub(/^\xef\xbb\xbf/,"");print}' text.txt
+
+或者
+
+# tail --bytes=+4 text.txt
+</body>
+</html>

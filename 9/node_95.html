@@ -1,0 +1,267 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>(八) cmake常用指令</title>
+</head>
+<body>
+<p><br />
+前面我们讲到了cmake常用的变量，相信&ldquo;cmake即编程&rdquo;的感觉会越来越明显，无论如何， <br />
+我们仍然可以看到cmake比autotools要简单很多。接下来我们就要集中的看一看<br />
+cmake所提供的常用指令。在前面的章节我们已经讨论了很多指令的用法，如<br />
+PROJECT，ADD_EXECUTABLE，INSTALL，ADD_SUBDIRECTORY，SUBDIRS，INCLUDE <br />
+_DIRECTORIES，LINK_DIRECTORIES，TARGET_LINK_LIBRARIES，SET等。<br />
+本节会引入更多的cmake指令，为了编写的方便，我们将按照cmake man page的顺序<br />
+来介绍各种指令，不再推荐使用的指令将不再介绍，INSTALL系列指令在安装部分已经做<br />
+了非常详细的说明，本节也不在提及。(你可以将本章理解成选择性翻译，但是会加入更多<br />
+的个人理解)</p>
+<h2>一，基本指令</h2>
+<p>1，ADD_DEFINITIONS <br />
+向C/C++编译器添加-D定义，比如: <br />
+ADD_DEFINITIONS(-DENABLE_DEBUG -DABC)，参数之间用空格分割。<br />
+如果你的代码中定义了#ifdef ENABLE_DEBUG #endif，这个代码块就会生效。<br />
+如果要添加其他的编译器开关，可以通过CMAKE_C_FLAGS变量和CMAKE_CXX_FLAGS变<br />
+量设置。<br />
+２，ADD_DEPENDENCIES <br />
+定义target依赖的其他target，确保在编译本target之前，其他的target已经被构<br />
+建。<br />
+ADD_DEPENDENCIES(target-name depend-target1 <br />
+depend-target2 ...) <br />
+３，ADD_EXECUTABLE、ADD_LIBRARY、ADD_SUBDIRECTORY前面已经介绍过了，这里<br />
+不再罗唆。<br />
+４，ADD_TEST与ENABLE_TESTING指令。<br />
+ENABLE_TESTING指令用来控制Makefile是否构建test目标，涉及工程所有目录。语<br />
+法很简单，没有任何参数，ENABLE_TESTING()，一般情况这个指令放在工程的主<br />
+CMakeLists.txt中. <br />
+ADD_TEST指令的语法是: <br />
+ADD_TEST(testname Exename arg1 arg2 ...) <br />
+testname是自定义的test名称，Exename可以是构建的目标文件也可以是外部脚本等<br />
+等。后面连接传递给可执行文件的参数。如果没有在同一个CMakeLists.txt中打开<br />
+ENABLE_TESTING()指令，任何ADD_TEST都是无效的。<br />
+<br />
+比如我们前面的Helloworld例子，可以在工程主CMakeLists.txt中添加<br />
+ADD_TEST(mytest ${PROJECT_BINARY_DIR}/bin/main) <br />
+ENABLE_TESTING() <br />
+生成Makefile后，就可以运行make test来执行测试了。<br />
+５，AUX_SOURCE_DIRECTORY <br />
+基本语法是： <br />
+AUX_SOURCE_DIRECTORY(dir VARIABLE) <br />
+作用是发现一个目录下所有的源代码文件并将列表存储在一个变量中，这个指令临时被用来<br />
+自动构建源文件列表。因为目前cmake还不能自动发现新添加的源文件。<br />
+比如<br />
+AUX_SOURCE_DIRECTORY(. SRC_LIST) <br />
+ADD_EXECUTABLE(main ${SRC_LIST}) <br />
+你也可以通过后面提到的FOREACH指令来处理这个LIST <br />
+6，CMAKE_MINIMUM_REQUIRED <br />
+其语法为CMAKE_MINIMUM_REQUIRED(VERSION versionNumber [FATAL_ERROR]) <br />
+比如CMAKE_MINIMUM_REQUIRED(VERSION 2.5 FATAL_ERROR) <br />
+如果cmake版本小与2.5，则出现严重错误，整个过程中止。<br />
+7，EXEC_PROGRAM <br />
+在CMakeLists.txt处理过程中执行命令，并不会在生成的Makefile中执行。具体语法<br />
+为： <br />
+EXEC_PROGRAM(Executable [directory in which to run] <br />
+[ARGS &lt;arguments to executable&gt;] <br />
+[OUTPUT_VARIABLE &lt;var&gt;] <br />
+[RETURN_VALUE &lt;var&gt;]) <br />
+用于在指定的目录运行某个程序，通过ARGS添加参数，如果要获取输出和返回值，可通过<br />
+OUTPUT_VARIABLE和RETURN_VALUE分别定义两个变量. <br />
+这个指令可以帮助你在CMakeLists.txt处理过程中支持任何命令，比如根据系统情况去<br />
+修改代码文件等等。<br />
+举个简单的例子，我们要在src目录执行ls命令，并把结果和返回值存下来。<br />
+<br />
+可以直接在src/CMakeLists.txt中添加： <br />
+EXEC_PROGRAM(ls ARGS &quot;*.c&quot; OUTPUT_VARIABLE LS_OUTPUT RETURN_VALUE <br />
+LS_RVALUE) <br />
+IF(not LS_RVALUE) <br />
+MESSAGE(STATUS &quot;ls result: &quot; ${LS_OUTPUT}) <br />
+ENDIF(not LS_RVALUE) <br />
+在cmake 生成Makefile的过程中，就会执行ls命令，如果返回0，则说明成功执行， <br />
+那么就输出ls *.c的结果。关于IF语句，后面的控制指令会提到。<br />
+8，FILE指令<br />
+文件操作指令，基本语法为: <br />
+FILE(WRITE filename &quot;message to write&quot;... ) <br />
+FILE(APPEND filename &quot;message to write&quot;... ) <br />
+FILE(READ filename variable) <br />
+FILE(GLOB variable [RELATIVE path] [globbing <br />
+expressions]...) <br />
+FILE(GLOB_RECURSE variable [RELATIVE path] <br />
+[globbing expressions]...) <br />
+FILE(REMOVE [directory]...) <br />
+FILE(REMOVE_RECURSE [directory]...) <br />
+FILE(MAKE_DIRECTORY [directory]...) <br />
+FILE(RELATIVE_PATH variable directory file) <br />
+FILE(TO_CMAKE_PATH path result) <br />
+FILE(TO_NATIVE_PATH path result) <br />
+这里的语法都比较简单，不在展开介绍了。<br />
+9，INCLUDE指令，用来载入CMakeLists.txt文件，也用于载入预定义的cmake模块. <br />
+INCLUDE(file1 [OPTIONAL]) <br />
+INCLUDE(module [OPTIONAL]) <br />
+OPTIONAL参数的作用是文件不存在也不会产生错误。<br />
+你可以指定载入一个文件，如果定义的是一个模块，那么将在CMAKE_MODULE_PATH中搜<br />
+索这个模块并载入。<br />
+载入的内容将在处理到INCLUDE语句是直接执行。</p>
+<h2>二，INSTALL指令</h2>
+<p>INSTALL系列指令已经在前面的章节有非常详细的说明，这里不在赘述，可参考前面的安<br />
+装部分。</p>
+<h2>三，FIND_指令</h2>
+<p>FIND_系列指令主要包含一下指令： <br />
+FIND_FILE(&lt;VAR&gt; name1 path1 path2 ...) <br />
+VAR变量代表找到的文件全路径，包含文件名<br />
+FIND_LIBRARY(&lt;VAR&gt; name1 path1 path2 ...) <br />
+VAR变量表示找到的库全路径，包含库文件名<br />
+FIND_PATH(&lt;VAR&gt; name1 path1 path2 ...) <br />
+VAR变量代表包含这个文件的路径。<br />
+FIND_PROGRAM(&lt;VAR&gt; name1 path1 path2 ...) <br />
+VAR变量代表包含这个程序的全路径。<br />
+FIND_PACKAGE(&lt;name&gt; [major.minor] [QUIET] [NO_MODULE] <br />
+[[REQUIRED|COMPONENTS] [componets...]]) <br />
+用来调用预定义在CMAKE_MODULE_PATH下的Find&lt;name&gt;.cmake模块，你也可以自己<br />
+定义Find&lt;name&gt;模块，通过SET(CMAKE_MODULE_PATH dir)将其放入工程的某个目录<br />
+中供工程使用，我们在后面的章节会详细介绍FIND_PACKAGE的使用方法和Find模块的<br />
+编写。<br />
+FIND_LIBRARY示例： <br />
+FIND_LIBRARY(libX X11 /usr/lib) <br />
+IF(NOT libX) <br />
+MESSAGE(FATAL_ERROR &ldquo;libX not found&rdquo;) <br />
+ENDIF(NOT libX)</p>
+<h2>四，控制指令：</h2>
+<p>1,IF指令，基本语法为： <br />
+IF(expression) <br />
+# THEN section. <br />
+COMMAND1(ARGS ...)<br />
+<br />
+COMMAND2(ARGS ...) <br />
+... <br />
+ELSE(expression) <br />
+# ELSE section. <br />
+COMMAND1(ARGS ...) <br />
+COMMAND2(ARGS ...) <br />
+... <br />
+ENDIF(expression) <br />
+另外一个指令是ELSEIF，总体把握一个原则，凡是出现IF的地方一定要有对应的<br />
+ENDIF.出现ELSEIF的地方，ENDIF是可选的。<br />
+表达式的使用方法如下: <br />
+IF(var)，如果变量不是：空，0，N, NO, OFF, FALSE, NOTFOUND或<br />
+&lt;var&gt;_NOTFOUND时，表达式为真。<br />
+IF(NOT var )，与上述条件相反。<br />
+IF(var1 AND var2)，当两个变量都为真是为真。<br />
+IF(var1 OR var2)，当两个变量其中一个为真时为真。<br />
+IF(COMMAND cmd)，当给定的cmd确实是命令并可以调用是为真。<br />
+IF(EXISTS dir)或者IF(EXISTS file)，当目录名或者文件名存在时为真。<br />
+IF(file1 IS_NEWER_THAN file2)，当file1比file2新，或者file1/file2其<br />
+中有一个不存在时为真，文件名请使用完整路径。<br />
+IF(IS_DIRECTORY dirname)，当dirname是目录时，为真。<br />
+IF(variable MATCHES regex) <br />
+IF(string MATCHES regex) <br />
+当给定的变量或者字符串能够匹配正则表达式regex时为真。比如： <br />
+IF(&quot;hello&quot; MATCHES &quot;ell&quot;) <br />
+MESSAGE(&quot;true&quot;) <br />
+ENDIF(&quot;hello&quot; MATCHES &quot;ell&quot;)<br />
+<br />
+IF(variable LESS number) <br />
+IF(string LESS number) <br />
+IF(variable GREATER number) <br />
+IF(string GREATER number) <br />
+IF(variable EQUAL number) <br />
+IF(string EQUAL number) <br />
+数字比较表达式<br />
+IF(variable STRLESS string) <br />
+IF(string STRLESS string) <br />
+IF(variable STRGREATER string) <br />
+IF(string STRGREATER string) <br />
+IF(variable STREQUAL string) <br />
+IF(string STREQUAL string) <br />
+按照字母序的排列进行比较. <br />
+IF(DEFINED variable)，如果变量被定义，为真。<br />
+一个小例子，用来判断平台差异： <br />
+IF(WIN32) <br />
+MESSAGE(STATUS &ldquo;This is windows.&rdquo;) <br />
+#作一些Windows相关的操作<br />
+ELSE(WIN32) <br />
+MESSAGE(STATUS &ldquo;This is not windows&rdquo;) <br />
+#作一些非Windows相关的操作<br />
+ENDIF(WIN32) <br />
+上述代码用来控制在不同的平台进行不同的控制，但是，阅读起来却并不是那么舒服， <br />
+ELSE(WIN32)之类的语句很容易引起歧义。<br />
+这就用到了我们在&ldquo;常用变量&rdquo;一节提到的 CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS开<br />
+关。<br />
+可以SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON) <br />
+这时候就可以写成: <br />
+IF(WIN32) <br />
+ELSE() <br />
+ENDIF()<br />
+<br />
+如果配合ELSEIF使用，可能的写法是这样: <br />
+IF(WIN32) <br />
+#do something related to WIN32 <br />
+ELSEIF(UNIX) <br />
+#do something related to UNIX <br />
+ELSEIF(APPLE) <br />
+#do something related to APPLE <br />
+ENDIF(WIN32) <br />
+2,WHILE <br />
+WHILE指令的语法是： <br />
+WHILE(condition) <br />
+COMMAND1(ARGS ...) <br />
+COMMAND2(ARGS ...) <br />
+... <br />
+ENDWHILE(condition) <br />
+其真假判断条件可以参考IF指令。<br />
+3,FOREACH <br />
+FOREACH指令的使用方法有三种形式： <br />
+1，列表 <br />
+FOREACH(loop_var arg1 arg2 ...) <br />
+COMMAND1(ARGS ...) <br />
+COMMAND2(ARGS ...) <br />
+... <br />
+ENDFOREACH(loop_var) <br />
+像我们前面使用的AUX_SOURCE_DIRECTORY的例子<br />
+AUX_SOURCE_DIRECTORY(. SRC_LIST) <br />
+FOREACH(F ${SRC_LIST}) <br />
+MESSAGE(${F}) <br />
+ENDFOREACH(F) <br />
+2，范围<br />
+FOREACH(loop_var RANGE total) <br />
+ENDFOREACH(loop_var) <br />
+从0到total以１为步进<br />
+<br />
+举例如下： <br />
+FOREACH(VAR RANGE 10) <br />
+MESSAGE(${VAR}) <br />
+ENDFOREACH(VAR) <br />
+最终得到的输出是： <br />
+0<br />
+1<br />
+2<br />
+3<br />
+4<br />
+5<br />
+6<br />
+7<br />
+8<br />
+9<br />
+10 <br />
+３，范围和步进<br />
+FOREACH(loop_var RANGE start stop [step]) <br />
+ENDFOREACH(loop_var) <br />
+从start开始到stop结束，以step为步进， <br />
+举例如下<br />
+FOREACH(A RANGE 5 15 3) <br />
+MESSAGE(${A}) <br />
+ENDFOREACH(A) <br />
+最终得到的结果是： <br />
+5<br />
+8<br />
+11 <br />
+14 <br />
+这个指令需要注意的是，知道遇到ENDFOREACH指令，整个语句块才会得到真正的执行。</p>
+<h2>小结：</h2>
+<p>本小节基本涵盖了常用的cmake指令，包括基本指令、查找指令、安装指令以及控制语句<br />
+等，特别需要注意的是，在控制语句条件中使用变量，不能用${}引用，而是直接应用变量<br />
+名。<br />
+<br />
+掌握了以上的各种控制指令，你应该完全可以通过cmake管理复杂的程序了，下一节，我<br />
+们将介绍一个比较复杂的例子，通过他来演示本章的一些指令，并介绍模块的概念。</p>
+</body>
+</html>

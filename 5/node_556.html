@@ -1,0 +1,31 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>简洁强大的pgbouncer</title>
+</head>
+<body>
+最近在项目上用到了postgresql数据库，并且需要的数据库连接数量相当大，需要达到1000个连接的数量级，甚至更多。如果直接在postgresql服务器上开这么多连接，会影响到它的性能吧。所以需要在应用与postgresql数据库之间添加一个代理。目前有两个比较好的代理，pgpool-2和pgbouncer，经过测试比较，发现只能pgbouncer 符合这个要求：能够模拟扩大数据库的最大连接数，如，pgsql开最大连接数为100,而pgbouncer开最大连接数为1000，那么在应用程序端看来，数据库提供了一个1000连接的功能。实际上，pgbouncer的1000个连接中，有些是共享pgsql连接的。
+
+安装pgbouncer非常简单，
+
+下载最新的pgbouncer-1.4版本，
+
+./configure
+
+make && make install
+
+配置文件位于，INSTALL_PREFIX/etc/
+
+另一个要注意的是，pgbouncer有一套自己的用户模式，需要自己设置。
+
+另外，特别注意，pool_mode的值，在这种扩大连接情况下，要使用transaction_mode或者statement_mode，而不能使用session_mode，否则，一量某一个应用程序连接使用了数据库，直到这个程序退出，它使用过的数据库连接才会返回给连接池，起不到扩大连接数的功能了。
+
+这一点也是pgbouncer和pgpool-2的其中一个区别，pgpool-2没有这个功能，所以无法配置成扩大连接功能，虽然两者有一部分功能重合，但对这一需求，可以说只能选择pgbouncer了。
+
+通过使用pgbouncer，还获得了一项功能，可屏蔽主库上的某些数据库，通过pgbouncer的连接只能访问某些库，对数据库的安全有所帮助。pgbouncer使用的用户认证机制相对于postgresql独立，也是这个组件的一大特点，具有非常大的灵活性，其功能是连接pgbouncer本身也需要认证，如果用户有什么不良使用行为，在这一步就能有效控制，不至于马上把攻击传递给后端数据库。
+
+ 参考：http://pgbouncer.projects.postgresql.org/doc/config.html
+</body>
+</html>

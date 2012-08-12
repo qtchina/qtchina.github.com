@@ -1,0 +1,411 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Gearman通信协议中文版</title>
+</head>
+<body>
+<pre>
+
+二进制数据包（Binary Packet）
+	请求和响应被封装成二进制包，该二进制数据包含一个非必须的数据头以及数据内容。
+
+文件头格式如下：文件头为12个Byte，分别有4 byte的Magic Code、4 byte的消息类型和4 byte的数据大小信息组成。
+
+	Magic Code分别为，"\0REQ"和"\0RES"，"\0REQ"代表请求，"\0RES"代表响应。
+	消息类型由包含枚举数据包的Big-endian (network-order) 整型表示，格式如下：
+
+#
+Name
+Magic
+Type
+1
+CAN_DO
+REQ
+Worker
+2
+CANT_DO
+REQ
+Worker
+3
+RESET_ABILITIES
+REQ
+Worker
+4
+PRE_SLEEP
+REQ
+Worker
+…
+…
+…
+…
+36
+SUBMIT
+JOB_EPOCH
+Client
+	
+数据大小信息在数据包头的最后位置，占4Byte，表示该数据的信息量大小。
+消息类型详细附表如下：
+
+详细消息类型表
+Client/Worker请求
+--------------------------
+客户端或执行端发送的请求类型：
+ECHO_REQ
+	当Job Server接收到该请求时，该Job Server会直接生成数据的ECHO_RES响应。这主要用来测试或者调试。
+	可选参数：响应返回数据是泛型（不透明的）
+   
+Client/Worker响应
+--------------------------
+这些响应类型可能会被发送到某个客户端或执行端。
+ECHO_RES
+	回应ECHO_REQ的请求，服务器不会查看或者修改数据参数，只是把该请求数据包转发回去。
+    可选参数：响应返回数据是泛型（不透明的）
+
+ERROR
+	这是当服务器遇到一个错误，并且需要通知Client或Worker时而发送的一个信息类型。
+    可选参数： 1.响应返回数据是泛型（不透明的）
+			   2.错误描述
+
+Client请求
+--------------------------
+仅由客户端发送的请求类型:
+
+SUBMIT_JOB, SUBMIT_JOB_BG,
+SUBMIT_JOB_HIGH, SUBMIT_JOB_HIGH_BG,
+SUBMIT_JOB_LOW, SUBMIT_JOB_LOW_BG
+
+	Client在有任务时发送分配请求，Job Server会为其分配一个任务句柄，并用JOB_CREATED包进行响应。
+	如果使用的是后台（BG）执行版本，客户端则在任务执行完成时不会同步更新状态或者立即得到响应，任务在后台异步进行。
+Gearman服务任务队列执行优先等级分3个层次：正常、高、低。
+	作业提交时，执行优先级为：高、正常、低。
+可选参数：
+-以NULL字节为终止符函数的名称
+-以NULL字节为终止符的唯一ID
+-作为一个参数的功能返回的数据是泛型（不透明的）
+
+SUBMIT_JOB_SCHED
+
+和SUBMIT_JOB_BG一样, 不同的是可根据计划定时发送任务，而不是直接提交任务，由于不常用，该功能可能被移除。
+	可选参数：
+-以NULL字节为终止符函数的名称
+-以NULL字节为终止符的唯一ID
+-以NULL字节为终止符的分钟（0-59）
+-以NULL字节为终止符的小时（0-23）
+-以NULL字节为终止符的日（1-31）
+-以NULL字节为终止符的月（1-12）
+-以NULL字节为终止符的星期号（0-6，0=星期一）
+-作为参数传递给函数的数据是泛型（不透明的）
+
+
+SUBMIT_JOB_EPOCH
+
+	和SUBMIT_JOB_BG一样, 不同的是可根据计划定时发送任务，而不是直接提交任务，由于不常用，该功能可能被移除。
+
+可选参数：
+-以NULL字节为终止符函数的名称
+-以NULL字节为终止符的唯一ID
+-以NULL字节为终止符函数的EPOCH时间
+-作为参数传递给函数的数据是泛型（不透明的）
+
+GET_STATUS
+    Client发送该请求获得已提交任务的状态信息。
+可选参数：
+-在JOB_CREATED 包中给出的工作句柄
+
+OPTION_REQ
+	Client发送该请求用以设置在Job Server的连接。
+	成功后返回一个OPTION_RES包，失败则返回一个ERROR包或失败信息。
+可选参数：
+-选项名称集合，格式如下：
+* "exceptions" -向Client返回的WORK_EXCEPTION数据包.
+
+
+Client 响应
+--------------------------
+仅Job Server向Client返回的响应类型:
+
+JOB_CREATED
+	这是请求SUBMIT_JOB*的响应之一。它标志着Job Server成功的收到任务并把该任务添加到任务队列准备分配worker去执行。
+    可选参数：
+-Job Server分配的任务句柄.
+
+WORK_DATA, WORK_WARNING, WORK_STATUS, WORK_COMPLETE,
+WORK_FAIL, WORK_EXCEPTION
+
+    对于非后台作业任务，Job Server负责代理Client与Worker直接的数据包。
+
+STATUS_RES
+
+	这是GET_STATUS请求的响应，已经提交后台作业任务的Client可通过该请求看到任务是否已经被完成，如果没有，显示完成百分比。
+可选参数：
+-以NULL字节为终止符任务句柄
+-以NULL字节为终止符的已知状态，分别为0 (false) or 1 (true)
+-以NULL字节为终止符的运行状态，分别为0 (false) or 1 (true)
+-完成百分比的分母
+
+OPTION_RES
+    这是OPTION_REQ 请求的成功响应。
+可选参数：
+-已设定的选项名称，可以看到OPTION_REQ的请求
+
+
+Worker 请求
+--------------------------
+
+仅由Worker发送的请求类型：
+
+CAN_DO
+	这将被发送到Job Server通知Job Server 该worker可以完成所需的功能。接着该worker被放到一个已唤醒worker列表中，一直监听等待Job Server接收该功能的任务请求。
+可选参数：
+-函数名称
+
+CAN_DO_TIMEOUT
+	和CAN_DO一样，但是有一个超时值限定任务作业执行的有效期。超过超时值后，Job Server将该任务标记该不可执行，同时通知所有与该函数有关的client。
+可选参数：
+-超时值
+
+
+CANT_DO
+	该请求被用来通知Job Server该worker不再完成所提交的功能。
+可选参数：
+-函数名称
+
+RESET_ABILITIES
+	这被用来通知Job Server该worker不再完成所有先前用CAN_D或CAN_DO_TIMEOUT注册过的功能。
+可选参数：
+-无
+
+PRE_SLEEP
+	该请求被用来通知Job Server该worker准备进入休眠状态，如果一个作业任务调用该worker可完成的功能，该worker可被NOOP包唤醒。
+可选参数：
+-无
+
+GRAB_JOB
+	向Job Server请求任务队列中所有可用的任务作业。Job Server根据是否有可用的任务返回NO_JOB 或 JOB_ASSIGN。
+可选参数：
+-无
+
+GRAB_JOB_UNIQ
+	和GRAB_JOB功能相似，当Job Server任务队列中有任务时，返回JOB_ASSIGN_UNIQ。
+可选参数：
+-无
+
+WORK_DATA
+	该请求用执行中的工作任务中的数据来更新client。一个worker在需要发送更新时候应该用到该请求，发送部分结果，或者在长时间执行的作业任务中刷新数据。
+	该请求可被用来拆散一个运算结果，所以该worker在发送WORK_COMPLETE包前不需要去缓冲整个数据结果。
+可选参数：
+-以NULL字节为终止符任务句柄
+-作为参数传递给函数的数据是泛型（不透明的）
+
+WORK_WARNING
+	该请求用来向client更新警告信息，它作为WORK_DATA的响应，但是该警告信息不应被当做正常响应信息的代替品。
+可选参数：
+-以NULL字节为终止符任务句柄
+-作为参数传递给函数的数据是泛型（不透明的）
+
+WORK_STATUS
+	该请求用来更新Job Server（以及所有监听的client）该worker的运行状态。该worker应定期发送当前作业任务的完成百分比。Job Server会存储该信息，所以一个client在分配一个后台命令后可能会用GET_STATUS请求取回该任务的处理情况。
+可选参数：
+-以NULL字节为终止符任务句柄
+-以NULL字节为终止符的完成百分比的分子
+-完成百分比的分母
+
+WORK_COMPLETE
+	该请求用来通知Job Server（以及所有监听的client）该worker处理的任务已经成功完成。
+可选参数：
+-以NULL字节为终止符任务句柄
+-以NULL字节为终止符的完成百分比的分子
+-完成百分比的分母
+-作为返回给client的数据是泛型（不透明的）
+
+WORK_FAIL
+该请求用来通知Job Server（以及所有监听的client）该worker处理的任务失败了。
+可选参数：
+-任务句柄
+
+WORK_EXCEPTION
+该请求用来通知Job Server（以及所有监听的client）该worker处理的任务失败了并给出异常原因。
+可选参数：
+-任务句柄    
+-作为返回给client的异常数据是泛型（不透明的）
+
+SET_CLIENT_ID
+	该请求可在一个Job Server中设置worker的ID，用以从众多的workers中监测和报告该唯一识别的wroker，获得该worker与Job Servers的不同连接信息。
+可选参数：
+-唯一标示worker实例的字符串
+
+
+ALL_YOURS
+	目前还没实现。这个看上去像是用来通知Job Server这只能连接这一个worker，因此一个作业任务直接就通过该JOB_ASSIGN分配给该worker，而不会有唤醒其他worker。
+可选参数：
+-无
+
+
+Worker 响应
+--------------------------
+仅由Job Server向Worker返回的响应类型：
+
+NOOP
+    该响应用来唤醒一个沉睡的worker，这样才可能抢到等待完成的任务。
+可选参数：
+-无
+
+NO_JOB
+	这是GRAB_JOB请求的返回响应，提示该worker没有要执行的任务。
+可选参数：
+-无
+
+JOB_ASSIGN
+	这是GRAB_JOB请求的响应，返回给worker执行任务所需要的信息。所有关于该任务（例如状态更新、完成返回）应该使用任务句柄，同时该worker应执行相应的带参数的功能。
+可选参数：
+-以NULL字节为终止符任务句柄
+-以NULL字节为终止符的函数名称
+-作为参数传递给函数的数据是泛型（不透明的）
+
+JOB_ASSIGN_UNIQ
+	这是GRAB_JOB_UNIQ请求的响应，和JOB_ASSIGN作用类似，但同时附带发送该任务的client的唯一ID。
+可选参数：
+-以NULL字节为终止符任务句柄
+-以NULL字节为终止符的函数名称
+-以NULL字节为终止符的唯一ID
+-作为参数传递给函数的数据是泛型（不透明的）
+
+基于文本的管理操作协议
+-----------------------
+Gearman的作业服务器也支持一个基于文本的协议用以获取任务消息来执行管理任务。
+该服务运行一个二进制协议的端口上，Job Server会去分辨请求包的首，如果是NULL（\ 0），则表示协议为Binary（二进制），如果是non-NULL，则视为文本命令协议，并用文本协议来尝试解析该命令。支持下列命令：
+
+workers
+	返回所有workers的列表，包括他们的文件描述符、IP地址、ID、已注册的可执行功能。
+列表以单行“.”为结束符。格式如下:
+FD IP-ADDRESS CLIENT-ID : FUNCTION ...
+可选参数:
+-无
+
+status
+	返回所有注册的功能列表。跟在每个功能后面的是相应任务队列的数量，运行任务的数量，可执行workers的数量。记录由“\”（Tab）分开，列表以单行“.”为结束符。格式如下：
+    FUNCTION\tTOTAL\tRUNNING\tAVAILABLE_WORKERS
+可选参数:
+-无.
+
+maxqueue
+
+    这个可以设置函数队列的最大值。如果该值没有给出，则默认队列长度无限制。请求成功后返回单行“OK”。
+可选参数:
+-方法名
+-可选的队列最大值
+
+shutdown
+	关闭Job Server。如果选项使用“graceful”参数，则关闭监听端口后结束全部已有的连接。
+可选参数:
+-“graceful”选项模式
+
+version
+    发送后返回版本信息。
+可选参数:
+-无
+
+Perl的版本也有一个' gladiator'命令使用了Perl的'Devel::Gladiator'模块用于调试。
+
+
+二进制协议示例
+-----------------------
+下面这个例子将从一个worker如何完成配置的“reverse”功能的简单通讯过程，逐步说明client如何向对应功能提交任务请求，worker如何完成该任务。每个步骤运行过程中的具体通讯字节情况展示如下：
+
+向服务器注册Worker:
+
+Worker -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 01                1            (Packet type: CAN_DO)
+00 00 00 07                7            (Packet length)
+72 65 76 65 72 73 65         reverse       (Function)
+
+
+Worker检查Job任务:
+
+Worker -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 09                9            (Packet type: GRAB_JOB)
+00 00 00 00                0            (Packet length)
+
+Job Server -> Worker
+00 52 45 53                \0RES        (Magic)
+00 00 00 0a                10           (Packet type: NO_JOB)
+00 00 00 00                0            (Packet length)
+
+Worker -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 04                4            (Packet type: PRE_SLEEP)
+00 00 00 00                0            (Packet length)
+
+
+Client 提交任务信息:
+
+Client -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 07                7            (Packet type: SUBMIT_JOB)
+00 00 00 0d                13           (Packet length)
+72 65 76 65 72 73 65 00    reverse\0        (Function)
+00                        \0           (Unique ID)
+74 65 73 74                test           (Workload)
+
+Job Server -> Client
+00 52 45 53                \0RES        (Magic)
+00 00 00 08                8            (Packet type: JOB_CREATED)
+00 00 00 07                7            (Packet length)
+48 3a 6c 61 70 3a 31        H:lap:1        (Job handle)
+
+
+Worker 唤醒:
+
+Job Server -> Worker
+00 52 45 53                \0RES        (Magic)
+00 00 00 06                6            (Packet type: NOOP)
+00 00 00 00                0            (Packet length)
+
+
+Worker检查Job任务:
+
+Worker -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 09                9            (Packet type: GRAB_JOB)
+00 00 00 00                0            (Packet length)
+
+Job Server -> Worker
+00 52 45 53                \0RES        (Magic)
+00 00 00 0b                11           (Packet type: JOB_ASSIGN)
+00 00 00 14                20           (Packet length)
+48 3a 6c 61 70 3a 31 00    H:lap:1\0        (Job handle)
+72 65 76 65 72 73 65 00    reverse\0        (Function)
+74 65 73 74                test           (Workload)
+
+
+Worker响应Job任务:
+
+Worker -> Job Server
+00 52 45 51                \0REQ        (Magic)
+00 00 00 0d                13           (Packet type: WORK_COMPLETE)
+00 00 00 0c                12           (Packet length)
+48 3a 6c 61 70 3a 31 00    H:lap:1\0        (Job handle)
+74 73 65 74                tset           (Response)
+
+
+Job server响应Client:
+
+Job Server -> Client
+00 52 45 53                \0RES        (Magic)
+00 00 00 0d                13           (Packet type: WORK_COMPLETE)
+00 00 00 0c                12           (Packet length)
+48 3a 6c 61 70 3a 31 00    H:lap:1\0        (Job handle)
+74 73 65 74                tset          (Response)
+
+	处于“等待工作”的Worker将请求处理更多的任务，客户端可以提交更多的任务。要注意的是，Client允许数据同时作双向传输，同一时间在同一单Socket上可以运行多个任务，因此结果数据包可能不会按任务提交的顺序去发送，其中会穿插其他任务的结果数据包。
+	部分数据中给出的参数以NULL字节分开，最后一个参数表示数据的大小。所有工作句柄参数包括NULL结束符在内不能长于64个字节。
+
+
+</pre>
+
+</body>
+</html>

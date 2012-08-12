@@ -1,0 +1,106 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>自动构建工具CMake简介</title>
+</head>
+<body>
+<h2><span class="mw-headline"> 简介</span></h2>
+<p>CMake读取脚本文件并且为它所运行的平台的本地构建系统产生输入文件。它可以生成GNU Makefiles、KDevelop的项目文件、XCode项目文件以及Visual Studio项目文件等多种文件格式。</p>
+<p>CMake是自由软件并且是在BSD协议下发布的。它是由<a href="http://www.kitware.com/" class="external text" title="http://www.kitware.com" rel="nofollow">Kitware公司</a>开发的。</p>
+<p>这些地方学习CMake挺不错的：</p>
+<ul>
+    <li><a href="http://www.cmake.org/HTML/Documentation.html" class="external text" title="http://www.cmake.org/HTML/Documentation.html" rel="nofollow">CMake手册</a></li>
+    <li><a href="http://www.cmake.org/Wiki/CMake" class="external text" title="http://www.cmake.org/Wiki/CMake" rel="nofollow">CMake Wiki</a></li>
+    <li><a href="http://www.cmake.org/Wiki/CMake_HowToDoPlatformChecks" class="external text" title="http://www.cmake.org/Wiki/CMake_HowToDoPlatformChecks" rel="nofollow">CMake系统检查</a></li>
+    <li><a href="http://www.cmake.org/Wiki/CMake_HowToFindInstalledSoftware" class="external text" title="http://www.cmake.org/Wiki/CMake_HowToFindInstalledSoftware" rel="nofollow">查找可替换的软件包</a></li>
+    <li><a href="http://www.cmake.org/Wiki/HowToBuildKDE4Software" class="external text" title="http://www.cmake.org/Wiki/HowToBuildKDE4Software" rel="nofollow">CMake Wiki上的KDE4指导</a></li>
+    <li><a href="http://www.cmake.org/Wiki/CMake_FAQ" class="external text" title="http://www.cmake.org/Wiki/CMake_FAQ" rel="nofollow">CMake FAQ</a></li>
+    <li><a href="http://mail.kde.org/pipermail/kde-buildsystem/" class="external text" title="http://mail.kde.org/pipermail/kde-buildsystem/" rel="nofollow">kde-buildsystem的邮件列表存档</a></li>
+</ul>
+<p>另外，还可以考虑加入<a href="http://www.cmake.org/mailman/listinfo/cmake" class="external text" title="http://www.cmake.org/mailman/listinfo/cmake" rel="nofollow">CMake邮件列表</a>。</p>
+<h2><span class="mw-headline"> 为什么使用CMake？</span></h2>
+<p>CMake和以前的构建工具automake和unsermake的主要技术不同点有：</p>
+<ul>
+    <li>编译时间更快，主要是因为没有再使用libtool。</li>
+    <li>构建文件更容易编写。</li>
+</ul>
+<h2><span class="mw-headline"> 获取和安装CMake</span></h2>
+<p>从<a href="http://www.cmake.org/HTML/Download.html" class="external autonumber" title="http://www.cmake.org/HTML/Download.html" rel="nofollow">[cmake 下面页面]</a>获得取回最新的CMake稳定版。</p>
+<p>下载完后，解压并安装：</p>
+<pre>$ mkdir cmake-build<br />$ cd cmake-build<br />$ ../bootstrap<br />$ make<br />$ make install</pre>
+<p>默认的，这将把CMake安装在/usr/local，因此，确定/usr/local/bin在的执行路径里。要改变安装路径，（例如debian中改为/usr），在bootstrap命令中加入'--prefix=PATH'选项。</p>
+<p>如果你想使用当前的开发版本，请遵循<a href="http://cmake.org/HTML/Download.html#cvs" class="external text" title="http://cmake.org/HTML/Download.html#cvs" rel="nofollow">这里</a>的指令。</p>
+<h2><span class="mw-headline"> 运行CMake</span></h2>
+<p>你必须运行CMake来为你的系统生成build文件。CMake支持in-source和out-of-source构建</p>
+<p>cd /path/to/cmakesupported/project</p>
+<p>cmake .</p>
+<p>这将在 当前目录下生成此项目的Makefile文件,当然如果项目包含子目录，cmake 也会自动处理。</p>
+<p>在Linux平台也可以生成 KDevelop 项目：</p>
+<p>cmake &nbsp; .&nbsp;&nbsp;&nbsp; -GKDevelop3</p>
+<p>您可以使用&ldquo;cmake -h&rdquo;来查看CMake支持那些生成器 （generators）及其他的选项。</p>
+<h2><span class="mw-headline"> CMake和Qt4</span></h2>
+<p>为了定位Qt 4，CMake会在你的执行路径中搜索qmake。CMake<em>不</em>会使用QTDIR这个环境变量。因此请确保在执行路径中寻找到的第一个qmake就是你希望使用的。</p>
+<h2><span class="mw-headline"> 更多细节</span></h2>
+<h4>&nbsp;</h4>
+<p>当CMake执行完成，它会生成一个叫&ldquo;CMakeCache.txt&rdquo;的文件。这个文件包含了CMake在你的系统上检测到的所有设置。如果你希望在其他生成器（generators)上运行CMake,或你希望CMake重新检测系统，请删除这个文件。</p>
+<p>如果有些东西你知道它存在，而CMake没有检测到，你可以手动的告诉CMake到哪里去找它。CMake通过变量来存储这些信息。这些变量缓存在前面提到的 CMakeCache.txt中。这里有3个选项来手工调整这些变量：</p>
+<ul>
+    <li>通过命令行告诉CMake现在的值: cmake . -DNAME_OF_THE_VARIABLE=value</li>
+    <li>使用ccmake，它提供了一个基于鼠标的GUI来调整CMake变量（运行: ccmake .) (ccmake 基于ncursor 的控制台GUI)</li>
+    <li>直接编辑CMakeCache.txt（不推荐）</li>
+</ul>
+<p>你应该最起码运行一次&ldquo;ccmake .这样你会对CMake使用了那些变量有个印象。按&ldquo;T&rdquo;来查看&ldquo;高级&rdquo;的变量。如果有些东西CMake没有找到，运行ccmake并手工调整它。</p>
+<p>一些你可能希望设置的变量：</p>
+<ul>
+    <li><strong>CMAKE_INSTALL_PREFIX</strong>: cmake . -DCMAKE_INSTALL_PREFIX=/opt/project 相当于./configure --prefix=/opt/project</li>
+    <li><strong>CMAKE_BUILD_TYPE</strong>: 决定你如何构建系统。你可以在&ldquo;debugfull&rdquo;、&ldquo;debug&rdquo;、&ldquo;profile&rdquo;、&ldquo;relwithdebinfo&rdquo;和&ldquo;release&rdquo;中进 行选择。默认的是&ldquo;relwithdebinfo&rdquo;(-O2 -g)。更多细节查看FindKDE4Internal.cmake。</li>
+    <li><strong>RPATH_STYLE</strong>: 这个不再有效了。默认情况下，一切都将在RPATH设置正确的情况下来构建。如果你不希望使用RPATH，将CMAKE_SKIP_RPATH设置为TRUE。</li>
+    <li><strong>WITH_FOO</strong>: 这里有一些选项，例如WITH_CUPS或WITH_Jasper。如果你将他们关闭，cmake甚至不会去尝试寻找这个包。如果将它激活，cmake将会尝试寻找这个包。如果这样做失败了，你还可以通过上面介绍的方法手工设置。</li>
+</ul>
+<h2><span class="mw-headline"> 环境变量 </span></h2>
+<p>如果你在CMake没法找到的非标准位置安装了头文件或库（ 例如Mac OSX下把fink安装到/sw），那么就请设置下面这些环境变量。尽管有相似的命名规则，这些设置在cmake的命令中并不会做为参数来工作。</p>
+<ul>
+    <li><strong>CMAKE_INCLUDE_PATH</strong>，例如export CMAKE_INCLUDE_PATH=/sw/include</li>
+    <li><strong>CMAKE_LIBRARY_PATH</strong>，例如export CMAKE_LIBRARY_PATH=/sw/lib</li>
+</ul>
+<p>关于变量的更多信息，请参考 <a rel="nofollow" title="http://www.cmake.org/Wiki/CMake_Useful_Variables" class="external text" href="http://www.cmake.org/Wiki/CMake_Useful_Variables">cmake.org wiki page</a>。</p>
+<h2><span class="mw-headline"> 更进一步 </span></h2>
+<p>如果cmake以&ldquo;Generating done&rdquo;结束，那表示没有错误，但如果以&ldquo;Configuring done&rdquo;结束，那表示有错误需要修正。当cmake成功结束，运行你的构建工具（如make、KDevelop、XCode或MSVC）来构建并等到它 结束。然后运行&ldquo;make install&rdquo;。</p>
+<p>如果你得到如下错误提示：</p>
+<pre>CMake Error: This project requires some variables to be set,<br />and cmake can not find them.<br />Please set the following variables:<br />X11_XTest_LIB (ADVANCED)</pre>
+<p>那表示你可能缺少库（或其他依赖包）。在cmake/modules目录中查找cmake无法找到的变量来确定是缺少哪个库文件。在上面的例子中，就是：</p>
+<pre>FIND_LIBRARY(X11_XTest_LIB Xtst ${X11_LIB_SEARCH_PATH})</pre>
+<p>这里缺失的库是Xtst。然后你找到这个库（也许是通过安装libXtst-devel）并再次运行cmake。</p>
+<h2><span class="mw-headline"> 在简单的应用中使用CMake </span></h2>
+<p>这是最简单的CMakeLists.txt：</p>
+<pre>add_executable(hello main.cpp)</pre>
+<p>这将从main.cpp源码文件创建一个叫&ldquo;hello&rdquo;（Windows下叫&ldquo;hello.exe&rdquo;）的可执行文件。你可以根据自己的需要将C和 C++文件混合。在同一个CMakeLists.txt可以有多个可执行文件和库。同一个源码文件可以用于不同的目的，源码可以从其他目标中为每个目的独 立的编译。CMake语言最重要的部分可能是变量：</p>
+<pre>SET( MY_SOURCES main.cpp widget.cpp)<br />MESSAGE(STATUS &quot;my sources: ${MY_SOURCES}&quot;)</pre>
+<p>使用SET()命令来为变量设置值。如果你列出了一个以上的字符串，变量将是串列表。列表是一列由分号隔开的字符串。如果只设置个一项，那么这项只有一个值。可以通过${VAR}获得变量的值。可以使用FOREACH()来迭代一份列表：</p>
+<pre>FOREACH(next_ITEM ${MY_SOURCES})<br />   MESSAGE(STATUS &quot;next item: ${next_ITEM}&quot;)<br />ENDFOREACH(next_ITEM ${MY_SOURCES})</pre>
+<p>CMake中的命令是大小写无关的。变量名和参数名是大小写相关的。</p>
+<p>还可以测试一些不同的东西：</p>
+<pre>IF (UNIX)<br />   MESSAGE(STATUS &quot;This is UNIX (including OS X and CygWin)&quot;)<br />ENDIF (UNIX)<br />&nbsp;<br />IF (MSVC)<br />   SET(MY_SRCS ${MY_SRCS} winextra.cpp)<br />ENDIF (MSVC)</pre>
+<p>在第二个例子中，你可以看到如何将项目附加到列表中。</p>
+<p>在cmake Wiki中有一份使用cmake构建KDE4软件的<a rel="nofollow" title="http://www.cmake.org/Wiki/HowToBuildKDE4Software" class="external text" href="http://www.cmake.org/Wiki/HowToBuildKDE4Software">指导</a>，推荐阅读。</p>
+<h2><span class="mw-headline"> 扩展CMake </span></h2>
+<p>CMake可以通过cmake脚本扩展，CMake带有大量的脚本，在UNIX下，这些脚本默认安装在 /usr/local/share/CMake/Modules/内。KDE库也在/apps/cmake/modules/安装了一些CMake模块。 这里的文件将被代替CMake的系统全局模块路径。FindFOO.cmake用来检测软件包， <a rel="nofollow" title="http://www.cmake.org/Wiki/CMake_HowToFindInstalledSoftware" class="external text" href="http://www.cmake.org/Wiki/CMake_HowToFindInstalledSoftware">这里</a>有更多信息。在CMake中也可以写宏文件，对于大多数的软件构建来说，他们足够强大了。这些宏不会做为通用语言来使用。</p>
+<p>你还可以在CMake中编写宏。他们非常强大，可以满足你编译的软件中所需要的所有事情，但是他们并不是被用作通用目的的编程语言。</p>
+<p>&nbsp;</p>
+<h2><span class="mw-headline"> 我如何让CMake创建noisy makefiles？我希望准确的看到make过程执行的命令。 </span></h2>
+<p>给make传递 VERBOSE 变量，例如：</p>
+<pre>% make VERBOSE=1</pre>
+<p>或者</p>
+<pre>% VERBOSE=1 make</pre>
+<p>更多细节请查看CMake wiki： <a rel="nofollow" title="http://www.cmake.org/Wiki/CMake_FAQ#Is_there_an_option_to_produce_more_.27verbose.27_compiling.3F" class="external text" href="http://www.cmake.org/Wiki/CMake_FAQ#Is_there_an_option_to_produce_more_.27verbose.27_compiling.3F">有没有选项可以产生更多的&ldquo;verbose&rdquo;编译？</a></p>
+<p>&nbsp;</p>
+<h2><span class="mw-headline"> 产生的Makefiles中没有&ldquo;make distclean&rdquo;标签。我如何才能清理包括cache文件在内的所有文件？ </span></h2>
+<p>只需删除构建目录，或目录里包含的内容。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>&nbsp;</h2>
+<p>&nbsp;</p>
+</body>
+</html>

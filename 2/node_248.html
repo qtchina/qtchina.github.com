@@ -1,0 +1,34 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>gentoo linux 桌面遇到的软件冲突</title>
+</head>
+<body>
+冲突相关的软件：
+
+vmware-workstation-5.5.7.91707 
+vmware-modules1.0.0.15-r1 
+dbus-1.2.3
+hal-0.5.11-r1
+gentoo-sources-2.6.25-r1
+
+现象：
+1) 启动vmware中的虚拟机导致死机，没有响应
+这时需要关闭hal服务。
+
+
+2) 关闭hal服务后，运行vmware-workstation报错。
+process 19298: Attempt to remove filter function 0xb6a982b0 user data 0x8801090, but no such filter has been added
+  D-Bus not built with -rdynamic so unable to print a backtrace
+process 19309: Attempt to remove filter function 0xb6ddc2b0 user data 0x87fd6d0, but no such filter has been added
+  D-Bus not built with -rdynamic so unable to print a backtrace
+关闭dbus服务。
+
+注：现在kde4会自动启动dbus，所以要让kde4找不到dbus，看来得在一个无 dbus的环境才能玩 vmware 了。
+
+这个问题应该报报告给谁，还是每个软件都报bug.
+
+</body>
+</html>

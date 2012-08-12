@@ -1,0 +1,69 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>试用Zend的phpcloud云</title>
+</head>
+<body>
+由于很早以前曾经在zend网站注册过，所以经常收到zend一些相关的新信息。前几天突然又收到一封关于phpcloud.com的更新信息，正好最近有点时间，试用了一下这个php云。
+
+总的来说，这个zend的php云看上去像一个PHP的托管主机一样，可以上传php程序，管理数据库，运行php网站。
+
+phpcloud.com还提供了git代码版本控制功能，为每个应用创建一个git代码仓库，并且这个代码仓库与发布的站点是有关联的，熟悉了它的目录结构后，可以很方便地管理线上代码，当代码提交后，会自动同步到代码发布目录。
+
+我在其上测试安装了一个最新版本的商城magento-1.6.1.0版本，并安装了中文包和演示数据，下面是安装步骤。
+
+在phpcloud.com的管理后台创建一个container: kitech,
+在其下创建一个空的PHP项目应用: shop
+
+创建应用后，为magento的安装准备演示数据，
+下载magento-samples-xxx.bz2，解压到任意目录，其中有一个.sql文件和一个media目录，现在通过phpcloud.com的phpmyadmin把这个sql文件导入。（如果导入到的时候碰到没有选择数据库的错误，则在这个sql的头上添加一个, use kitech;，这是phpcloud.com给的数据库）。
+导入成功后，可在phpmyadmin中查看到导入的数据。
+那个media目录需要放在web目录下，再后面的安装过程再说。
+
+之后使用git把其库checkout出来，
+git clone https://kitech@kitech.my.phpcloud.com/git/shop.git
+
+#cd shop
+#ls
+public
+
+这其中有一个public目录，在这个目录内的文件可通过http://方式访问到，在这之外的算是私有数据，不会分开到www上。
+
+转到public
+下载magento-1.6.1.0.tar.bz2并解压到此，
+添加到git中，
+#ls一下，能看到这些magento目录，
+app                           downloader   includes          js               LICENSE.txt     pkginfo            var
+cron.php                      errors       index.php         lib              mage            RELEASE_NOTES.txt
+cron.sh                       favicon.ico  index.php.sample  LICENSE_AFL.txt  media           shell
+default-container-index.html  get.php      install.php       LICENSE.html     php.ini.sample  skin
+
+现在把magento-samples中的media目录拷贝并覆盖当前的media目录，把这些文件加入到git中，提交,
+然后执行git push origin master 把数据推送到服务器上。
+
+程序文件都上传好了，现在还不能直接访问url安装，还需要设置一个几个目录的读写属性。
+
+使用sftp工具，把media, var app/etc三个目录递归设置为777属性，因为它们需要在执行过程存储生成的文件，即需要执行时apache的写入权限。
+
+现在可以通过访问http://kitech.my.phpcloud.com/shop/来安装了，我这安装过程没有遇到什么错误，所以也还不知道会有什么错误出现。由于magento系统本身成熟，如果中间过程的环境设置没有，也不应该会出现什么安装错误的。
+
+安装完成，可以访问magento的前台商品展示系统和后台管理系统了。
+
+下面开始安装中文语言包，
+下载  http://baolianu.com/wp-content/uploads/2011/09/zh_CN.zip 
+
+解压目录zh_CN放到app/locale/下，按照前面的步骤把这个新添加的目录加到git中，commit并push到服务器，然后登陆后台管理，选择简体中文-更新缓存. OK.
+
+装好了，看看吧。
+
+演示地址： http://kitech.my.phpcloud.com/shop/
+演示账号： test1/testabc
+
+后台地址： http://kitech.my.phpcloud.com/shop/index.php/admin
+这个就不能给账号了，想看的话自己安装一个版本再看吧。
+
+
+</body>
+</html>

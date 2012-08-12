@@ -1,0 +1,16 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>把openssh的私钥转为putty格式的私钥</title>
+</head>
+<body>
+
+假设openssh的私钥名为Identity
+则，在linux上，使用puttygen命令如下，
+puttygen Identity -o Identity.ppk -O private
+这样可以使用生成的.ppk文件登陆openssh服务器了。
+
+</body>
+</html>

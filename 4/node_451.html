@@ -1,0 +1,21 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>kde 4.5 beta2安装中的几个小问题</title>
+</head>
+<body>
+昨天<a href="http://kde.org/announcements/announce-4.5-beta2.php">kde 4.5 beta2发布</a>，在gentoo上开始安装该更新版本，虽然大多数包都顺利安装，但也遇到几个小问题。
+
+首先，kttsd模块已经改名了，现在叫jovie。所以在从以前的版本升级时，总是无法找到kttsd模块的源代码。解决方法，emerge -Ca kttsd卸载旧的版本，将kttsd-4.4.85.ebuild改名为jovie-4.4.85.ebuild, 放在新创建的jovie目录，使用ebuild jovie-4.4.85.ebuild digest 生成签名文件Manifest。现在emerge jovie 安装即可。不过，虽然这样安装上了，但jovie现在无法正常注册服务，经常提示：找不到服务 kttsd未启动。
+
+另外一个出现问题的是kdepim-runtime,这个包kde官方没有提供包，需要在trunk中svn://anonsvn.kde.org/home/kde/trunk/KDE/kdepim/runtime/获取代码，打包为kdepim-runtime-4.4.85.tar.bz2，重新给kdepim-runtime-4.4.85.ebuild更新签名文件Manifest。
+
+kde-l10n没有提供该版本的ebuild, 只需要简单复制以前版本的ebuild, 下载kde-l10n相关的包文件，做下签名。
+
+现在所有我需要的beta2包都可以正常升级了。
+
+kde 4 有一个服务管理界面，现在移动到自启动管理了。
+</body>
+</html>

@@ -1,0 +1,135 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在苹果系统  xcode 上打包  qt4 应用程序</title>
+</head>
+<body>
+  苹果系统安装包上带一个工具  本，macdeployqt, 它能够将  qt  库与程序打包成一个 dmg 文件，在苹果系统可以直接双打击安装使用，像一个虚拟磁盘镜像一样，非常方便。
+
+如果是自己编译安装的 qt  包，需要在配置参加数的时候指定安装这个工具才行，否则默认情况下不安装这个工具。
+
+还有一点有问题，如何把图片资源打到这个包中。研究一下这个工具和  qt 开发文档。
+
+liuguangzhaos-macbook-pro:nullfxp-2.0.1 gzleo$ /usr/local/Trolltech/Qt-4.5.1/bin/macdeployqt 
+Usage: macdeployqt app-bundle [options] 
+ 
+Options: 
+   -no-plugins: Skip plugin deployment 
+   -dmg       : Create a .dmg disk image 
+   -no-strip  : Don't run 'strip' on the binaries 
+ 
+macdeployqt takes an application bundle as input and makes it 
+self-contained by copying in the Qt frameworks and plugins that 
+the application uses. 
+ 
+Plugins related to a framework are copied in with the 
+framework. The accessibilty, image formats, and text codec 
+plugins are always copied, unless "-no-plugins" is specified. 
+ 
+See the "Deploying an Application on Qt/Mac" topic in the 
+documentation for more information about deployment on Mac OS X. 
+
+
+
+打包实例：
+
+[code typ="bash"]
+
+localhost:nullfxp-svn gzleo$ macdeployqt bin/nullfxp.app/ -verbose=3 -dmg
+Log: Argument found: "-dmg" 
+Log: Using otool: 
+Log:  inspecting "bin/nullfxp.app/Contents/MacOS/nullfxp" 
+Log: Adding framework: 
+Log: Framework name "QtSql.framework" 
+ Framework directory "/Library/Frameworks/" 
+ Framework path "/Library/Frameworks/QtSql.framework" 
+ Binary directory "Versions/4" 
+ Binary name "QtSql" 
+ Binary path "/Versions/4/QtSql" 
+ Version "4" 
+ Install name "QtSql.framework/Versions/4/QtSql" 
+ Deployed install name "@executable_path/../Frameworks/QtSql.framework/Versions/4/QtSql" 
+ Source file Path "/Library/Frameworks/QtSql.framework/Versions/4/QtSql" 
+ Deployed Directory (relative to bundle) "Contents/Frameworks/QtSql.framework/Versions/4" 
+ 
+Log: Adding framework: 
+Log: Framework name "QtGui.framework" 
+ Framework directory "/Library/Frameworks/" 
+ Framework path "/Library/Frameworks/QtGui.framework" 
+ Binary directory "Versions/4" 
+ Binary name "QtGui" 
+ Binary path "/Versions/4/QtGui" 
+ Version "4" 
+ Install name "QtGui.framework/Versions/4/QtGui" 
+ Deployed install name "@executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui" 
+ Source file Path "/Library/Frameworks/QtGui.framework/Versions/4/QtGui" 
+ Deployed Directory (relative to bundle) "Contents/Frameworks/QtGui.framework/Versions/4" 
+ 
+Log: Adding framework: 
+Log: Framework name "QtNetwork.framework" 
+ Framework directory "/Library/Frameworks/" 
+ Framework path "/Library/Frameworks/QtNetwork.framework" 
+ Binary directory "Versions/4" 
+ Binary name "QtNetwork" 
+ Binary path "/Versions/4/QtNetwork" 
+ Version "4" 
+ Install name "QtNetwork.framework/Versions/4/QtNetwork" 
+ Deployed install name "@executable_path/../Frameworks/QtNetwork.framework/Versions/4/QtNetwork" 
+ Source file Path "/Library/Frameworks/QtNetwork.framework/Versions/4/QtNetwork" 
+ Deployed Directory (relative to bundle) "Contents/Frameworks/QtNetwork.framework/Versions/4" 
+ 
+
+Log: Adding framework: 
+Log: Framework name "QtCore.framework" 
+ Framework directory "/Library/Frameworks/" 
+ Framework path "/Library/Frameworks/QtCore.framework" 
+ Binary directory "Versions/4" 
+ Binary name "QtCore" 
+ Binary path "/Versions/4/QtCore" 
+ Version "4" 
+ Install name "QtCore.framework/Versions/4/QtCore" 
+ Deployed install name "@executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore" 
+ Source file Path "/Library/Frameworks/QtCore.framework/Versions/4/QtCore" 
+ Deployed Directory (relative to bundle) "Contents/Frameworks/QtCore.framework/Versions/4" 
+ 
+Log: 
+Log: Deploying Qt frameworks found inside: "bin/nullfxp.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib" 
+Log: Using install_name_tool: 
+Log:  in "bin/nullfxp.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib" 
+Log:  change reference "QtSql.framework/Versions/4/QtSql" 
+Log:  to "@executable_path/../Frameworks/QtSql.framework/Versions/4/QtSql" 
+Log: Using install_name_tool: 
+Log:  in "bin/nullfxp.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib" 
+Log:  change reference "QtCore.framework/Versions/4/QtCore" 
+Log:  to "@executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore" 
+Log: Created configuration file: "bin/nullfxp.app/Contents/Resources/qt.conf" 
+Log: This file sets the plugin search path to "bin/nullfxp.app/Contents/PlugIns" 
+Log: 
+Log: Creating disk image (.dmg) for "bin/nullfxp.app" 
+localhost:nullfxp-svn gzleo$ ls
+AUTHORS			NEWS			nullfxp.pro
+CMakeLists.txt		README			nullfxp.xcodeproj
+COPYING			TODO			packages
+ChangeLog		bin			src
+Doxyfile		docs			tools
+INSTALL			install.pri
+Makefile		nullfxp.kdevelop
+localhost:nullfxp-svn gzleo$ ls bin/
+nullfxp.app	nullfxp.dmg	touch.exe	unitest.app
+localhost:nullfxp-svn gzleo$ ls bin/ -lh
+ls: -lh: No such file or directory
+bin/:
+nullfxp.app	nullfxp.dmg	touch.exe	unitest.app
+localhost:nullfxp-svn gzleo$ ls -lh bin/
+total 33832
+drwxr-xr-x  3 gzleo  staff   102B  3 30 11:29 nullfxp.app
+-rw-r--r--@ 1 gzleo  staff    16M  3 30 11:49 nullfxp.dmg
+-rw-r--r--  1 gzleo  staff    44K  3 27 22:44 touch.exe
+drwxr-xr-x  3 gzleo  staff   102B  3 30 11:43 unitest.app
+localhost:nullfxp-svn gzleo$ 
+
+[/code]
+</body>
+</html>

@@ -1,0 +1,44 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>GCC 4.7.0 发布，庆祝 GCC 25周年</title>
+</head>
+<body>
+<p><img src="http://www.linuxeden.com/upimg/allimg/120323/0QFaN9-0.png" alt="" /></p>
+<p>GCC 首个公开发布版本是在 1987 年由 Richard Stallman 发布的，到今天已经整整 25 年了。</p>
+<p>&nbsp;</p>
+<p>为了庆祝 25 周年，GCC 也相应发布了 GCC 4.7.0 版本，这是 GCC 一个全新的重要版本。</p>
+<p>&nbsp;</p>
+<p>GCC 4.7.0 带来了一组关于链接时优化 (LTO) 框架可提升伸缩性和降低内存使用，据开发者称，在 64 位系统上需要 8G 内存来对 Firefox 进行优化，而是用了 LTO 后只需 3G。</p>
+<p>&nbsp;</p>
+<p>此外就是体验的支持软件事务内存，支持更多 C++11 标准，包括原子性、C++11 内存模型，用户定义文字、别名声明、构造器委派和可扩展的语法等。</p>
+<p>&nbsp;</p>
+<p>GCC 4.7.0 还改进对 Fortran 的支持，支持 Google Go 1 等等多项改进。</p>
+<p>&nbsp;</p>
+<p>关于 GCC 4.7.0 的详细改进记录请看<a href="http://gcc.gnu.org/gcc-4.7/changes.html" target="_blank">这里</a>，你可以通过 FTP Servers 中的 gcc/gcc-4.7.0/ 下载。</p>
+<p>&nbsp;</p>
+
+C语系的改进：（C/C++都可有）
+试验支持“事务内存“机制，参数-fgnu-tm, 库libitm
+试验支持的”原子内存”机制， __atomic 替代 __sync
+
+
+C++改进
+支持-std=c++11, -std=gnu++11,   -Wc++11-compat 标准参数
+支持c++11的扩展友元类语法
+支持显式成员函数覆盖语法，关键字：override
+支持C++11的非静态成员变量初始化
+支持C++11 的 user-defined literals. （这个没看懂）
+支持 C++11 alias-declarations
+支持C++11的代理构造函数
+支持C++11的原子类型类。
+正确设置__cplusplus的值，   C++98/03标准的值为199711L, C++11的值为 201103L 
+重用临时对象的栈空间
+
+另外：
+libsdc++支持线程了？
+ 
+</body>
+</html>

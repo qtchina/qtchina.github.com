@@ -1,0 +1,127 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>centos6.2源码安装couchbase</title>
+</head>
+<body>
+首先，couchbase依赖的组件很多，一般的系统不会自动安装，
+
+并且许多依赖包都是官方repo中没有的，需要从第三方rpm下载站点下载安装。
+
+这些情况导致couchbase全编译比较麻烦，下面需要一步步仔细操作，
+
+预装包：
+
+pyrex
+
+repo-1.15版本
+
+snappy  数据压缩/解压缩库
+
+libtoolize
+
+libcurl, libcurl-devel
+
+erlang, 版本r14+
+
+v8, v8-devel, 版本为v8 3.8+
+
+icu, icu-devel
+
+python-2.x
+
+其中， erlang和snappy需要手动安装，无相应的rpm包。
+
+下载编译工作源代码：
+
+cd /serv/sources/
+
+git clone https://github.com/membase/manifest.git
+
+mkdir couchbase-git
+
+cd couchbase-git
+
+repo init -u ../manifest.git  -m branch-2.0.xml
+
+repo sync
+
+     同步以下几个子项目树(25个)：
+
+           git://github.com/couchbase/bucket_engine
+
+           git://github.com/couchbase/couchbase-examples
+
+           git://github.com/couchbase/couchbase-python-client
+
+           git://github.com/couchbase/couchdb
+
+           git://github.com/couchbase/couchdbx-app
+
+           git://github.com/couchbase/couchstore
+
+           git://github.com/couchbase/ep-engine
+
+           git://github.com/couchbase/geocouch
+
+           git://github.com/couchbase/gperftools
+
+           git://github.com/couchbase/libcbio
+
+           git://github.com/couchbase/libconflate
+
+           git://github.com/couchbase/libcouchbase
+
+           git://github.com/membase/libmemcached
+
+           git://github.com/couchbase/libvbucket
+
+           git://github.com/couchbase/mccouch
+
+           git://github.com/membase/membase-cli
+
+           git://github.com/membase/memcached
+
+           git://github.com/membase/memcachetest
+
+           git://github.com/couchbase/moxi
+
+           git://github.com/couchbase/portsigar
+
+           git://github.com/couchbase/sigar
+
+           git://github.com/couchbase/testrunner
+
+           git://github.com/couchbase/tlm
+
+           git://github.com/couchbase/workload-generator
+
+开始编译：
+
+make
+
+默认情况下，从源代码安装，所有包安装位置为$(pwd)/install
+
+编译参数为， --prefix=/root/couchbase-git/install
+
+可以定制化安装目录：
+
+make PREFIX=/opt/couchbase
+
+其他的couchbase编译变量，COUCHBASE_DEBUG_BUILD，COMPONETS，USE_TCMALLOC，
+
+PLEASE_BUILD_COUCH_DEPS，PLEASE_BUILD_COUCH_DEPS，couchdb_EXTRA_OPTIONS
+
+还可以通过设定环境变量CFLAGS, CPPFLAGS和LDFLAGS指定某些库的安装位置。
+
+竟然好不容易编译完成了，只在v8的一个enum选项值上有问题，
+
+可能是安装的v8版本与couchdb要求不一致造成的，看了一下couchbase的github上的v8项目，
+
+最新分支版本为3.8，所以应该使用接近v8 3.8的版本，而我安装的是v8 3.3.10版本。
+
+
+</body>
+</html>

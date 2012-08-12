@@ -1,0 +1,49 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>用clang-2.9编译qt 4.8 rc1</title>
+</head>
+<body>
+clang这个新兴的编译器，由于编译速度优势，得到越来越多的软件支持。
+
+qt 4.8开始试验性支持，在mkspec目录中加入了unsupported/linux-clang和unsupported/mac-clang，分别用于linux与 mac平台的qt编译配置。
+
+下载qt 4.8 rc1包，解压，
+
+编译脚本如下，
+
+$ cat ~/Downloads/qt-everywhere-opensource-src-4.8.0/clang_build.sh
+[code type="bash"]
+#!/bin/sh
+
+set -x
+# export QMAKESPEC=linux-clang
+./configure -prefix /opt/qtclang -platform unsupported/linux-clang -opensource -make "libs" -fast -release 
+
+time make 
+
+[/code]
+
+注意-platform参数，指定的是clang的配置文件路径。
+如需要，可修改其他的configure参数。
+
+用时：
+real    87m40.137s
+user    69m0.990s
+sys     4m55.514s
+phonon gstream模块编译错误了。
+
+
+顺便附带编译boost的相关命令参数
+下载boost 1.47.0，解压，
+./bootstrap.sh --toolset=clang
+./b2 toolset=clang
+这样就编译好了，非常简单方便。
+
+clang3即将发布，现在已经rc3了, http://llvm.org/pre-releases/3.0/
+
+
+</body>
+</html>

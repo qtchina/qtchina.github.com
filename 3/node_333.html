@@ -1,0 +1,255 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>GCC 使用摘记</title>
+</head>
+<body>
+      <div class="content">
+1. 几个子程序和说明<br />
+<table width="100%" cellspacing="1" cellpadding="1" border="1" align="left" summary="">
+ <tbody>
+  <tr>
+   <td>cc1</td>
+   <td>C 的实际编译程序</td>
+  </tr>
+  <tr>
+   <td>cc1plus</td>
+   <td>C++ 的实际编译程序</td>
+  </tr>
+  <tr>
+   <td>collect2</td>
+   <td>在不使用 GNU 连接程序的系统上，用来产生特定的全局初始化代码</td>
+  </tr>
+  <tr>
+   <td>crt0.o</td>
+   <td>为每个系统定制的初始化和结束代码</td>
+  </tr>
+  <tr>
+   <td>libgcc</td>
+   <td>默认连接的 gcc 例程库</td>
+  </tr>
+  <tr>
+   <td>libstdc++</td>
+   <td>默认连接的 g++ 例程库</td>
+  </tr>
+ </tbody>
+</table>
+<br />
+<br />
+2. 几个重要的和 GCC 协同工作的程序，主要来自 binutils 包。<br />
+<table width="100%" cellspacing="1" cellpadding="1" border="1" align="" summary="">
+ <tbody>
+  <tr>
+   <td>addr2line</td>
+   <td>将文件中的调试信息翻译成为源文件的对应行号</td>
+  </tr>
+  <tr>
+   <td>ar</td>
+   <td>用于维护目标代码的 archive，也就是创建库的程序</td>
+  </tr>
+  <tr>
+   <td>as</td>
+   <td>GNU 的汇编器</td>
+  </tr>
+  <tr>
+   <td>c++filt</td>
+   <td>用于完成 C++ 和 Java 的 mangling/demangling</td>
+  </tr>
+  <tr>
+   <td>gcov</td>
+   <td>gprof 的配置工具</td>
+  </tr>
+  <tr>
+   <td>gprof</td>
+   <td>报告各个函数的执行时间</td>
+  </tr>
+  <tr>
+   <td>ld</td>
+   <td>GNU 的连接程序</td>
+  </tr>
+  <tr>
+   <td>nm</td>
+   <td>列出目标文件中定义的符号</td>
+  </tr>
+  <tr>
+   <td valign="top">objcopy</td>
+   <td valign="top">完成目标代码的复制和翻译</td>
+  </tr>
+  <tr>
+   <td valign="top">objdump</td>
+   <td valign="top">显示目标文件的各种信息，包括代码的反汇编结果</td>
+  </tr>
+  <tr>
+   <td valign="top">ranlib</td>
+   <td valign="top">创建和添加 ar 创建的库文件的索引</td>
+  </tr>
+  <tr>
+   <td valign="top">readelf</td>
+   <td valign="top">获取 elf 文件信息</td>
+  </tr>
+  <tr>
+   <td valign="top">size</td>
+   <td valign="top">列出目标文件中每部分的尺寸</td>
+  </tr>
+  <tr>
+   <td valign="top">strings</td>
+   <td valign="top">从目标文件中析取可显示的字符串</td>
+  </tr>
+  <tr>
+   <td valign="top">strip</td>
+   <td valign="top">从目标文件/库中去掉符号表以及其它调试使用的信息</td>
+  </tr>
+ </tbody>
+</table>
+<br />
+<br />
+3. 预处理程序，最常见的 C 使用的预处理命令，如 #define 和 #undef，<br />
+#if #elif #else #endif，#ifdef 和 #ifndef，#include，##（连接字符） 就不多说了。<br />
+#error 会引起 cpp 的中断，而 #warning 仅仅给出警告而不中断。<br />
+#pragma 主要是用于定义编译器相关的一些命令，GCC 中可用的有<br />
+#pragma GCC dependency &quot;file&quot; warning information<br />
+定义了该文件对 file 的时间戳依赖关系，即如 file 较当前文件新则发出警告。<br />
+#pragma GCC poison function-name<br />
+如果使用了 function-name 则发出警告。与 #pragma 等价的有 _Pragma(&quot;&quot;)<br />
+表达，这是为了在 macro 内部也能使用该功能引入的。<br />
+<br />
+4. 预定义的宏<br />
+<table width="100%" cellspacing="1" cellpadding="1" border="1" align="" summary="">
+ <tbody>
+  <tr>
+   <td>__NASE_FILE__</td>
+   <td>源文件的完整路径名，和 __FILE__ 不同，被引用的文件仍然是原来文件名</td>
+  </tr>
+  <tr>
+   <td>__CHAR_UNSIGNED__</td>
+   <td>用于指定该机器上 char 是无符号类型</td>
+  </tr>
+  <tr>
+   <td>__cplusplus</td>
+   <td>使用 C++ 编译器编译</td>
+  </tr>
+  <tr>
+   <td valign="top">__DATE__</td>
+   <td valign="top">编译时的日期</td>
+  </tr>
+  <tr>
+   <td valign="top">__FILE__</td>
+   <td valign="top">编译文件名</td>
+  </tr>
+  <tr>
+   <td valign="top">__func__</td>
+   <td valign="top">同 __FUNCTION__</td>
+  </tr>
+  <tr>
+   <td valign="top">__GNUC__</td>
+   <td valign="top">GCC 的主版本号</td>
+  </tr>
+  <tr>
+   <td valign="top">__GNUC_MINOR__</td>
+   <td valign="top">GCC 的次版本号</td>
+  </tr>
+  <tr>
+   <td valign="top">__GNUC_PATCHLEVEL__</td>
+   <td valign="top">GCC 的修订号</td>
+  </tr>
+  <tr>
+   <td valign="top">__GNUG__</td>
+   <td valign="top">由 C++ 编译程序定义</td>
+  </tr>
+  <tr>
+   <td valign="top">__INCLUDE_LEVEL__</td>
+   <td valign="top">指 #include 的层次</td>
+  </tr>
+  <tr>
+   <td valign="top">__LINE__</td>
+   <td valign="top">当前行号</td>
+  </tr>
+  <tr>
+   <td valign="top">__NO_INLINE__</td>
+   <td valign="top">不允许 inline</td>
+  </tr>
+  <tr>
+   <td valign="top">__OPTIMIZE__</td>
+   <td valign="top">打开了优化选项</td>
+  </tr>
+  <tr>
+   <td valign="top">__OPTIMIZE_SIZE__</td>
+   <td valign="top">打开了对编译出文件尺寸的优化</td>
+  </tr>
+  <tr>
+   <td valign="top">__STDC__</td>
+   <td valign="top">表示该程序符合 ansi C 标准</td>
+  </tr>
+  <tr>
+   <td valign="top">__STDC_HOSTED__</td>
+   <td valign="top">表示宿主具有标准 C 的环境</td>
+  </tr>
+  <tr>
+   <td valign="top">__STDC_VERSION__</td>
+   <td valign="top">标准 C 制定时间</td>
+  </tr>
+  <tr>
+   <td valign="top">__TIME__</td>
+   <td valign="top">编译时系统时间</td>
+  </tr>
+  <tr>
+   <td valign="top">__VERSION__</td>
+   <td valign="top">GCC 版本号</td>
+  </tr>
+ </tbody>
+</table>
+<br />
+<br />
+5. 在 iso646.h 中为操作符定义了 C++ 对应的操作符名称，如 and，or 等<br />
+<br />
+6.产生依赖关系列表，gcc -E -M src<br />
+<br />
+7. GCC 对 C 的扩展主要有，__alignof__( typename ) 返回对齐信息，可以<br />
+使用参数变长数组（在函数里面定义），同时还可以把该数组作为参数传递，<br />
+void f( int length, char buf[length] )<br />
+如果需要倒着写，需要前向声明，用分号隔开<br />
+void f( int length; char buf[length], int length )<br />
+允许结构体最后一个成员为 0 长度数组，这样可以创建变长数组。<br />
+<br />
+通过 __attribute__ 可以给函数增加额外的信息便于优化，如 ((noreturn)) <br />
+表明没有返回值，又如 pure 表明不会修改全局变量，noinline 表示不会 inline，<br />
+align(n) 表示执行对齐，weak,alias 连用表示是别名，always_inline 表示<br />
+总会 inline，const 不访问全局内存便于优化，constructor 是比 main 更早调用<br />
+的函数，destructor 是在 exit() 之后调用的，deprecated 表示过时了编译时发出<br />
+警告，format( style, str-pos, var-pos ) 要求编译器检查是否为 style（如 printf 和 scanf）<br />
+的函数，str-pos 是字符串参数的位置，var-pos 是可变长度参数列表的开始位置。<br />
+类似的还有 format_arg。malloc 告诉编译器其返回指针和 malloc 一样对待，<br />
+no_intrument_function 不会进行 profiling，section(&quot;sec-name&quot;) 将代码放入指定段。<br />
+<br />
+类似的一些可以修饰变量，另有 mode（指定为 byte、word 或者 pointer），nocommon<br />
+（不会作为公共变量），packed（没有间隙），vector_size，类似数组。<br />
+<br />
+复合语句 {} 可以返回值，用 () 包裹之，但不适用于 C++。y? y : z 可简写为 y? : z。<br />
+可以对 enum 进行声明但不定义<br />
+<br />
+另有底层的三个函数，__builtin_apply_args()，__builtin_apply() 和 __builtin_return()<br />
+可以把当前函数的参数直接传递给后面的函数。<br />
+而 __builtin_return_address() 返回 ret 时应跳转的地址（frame 中第一个记录的 %ebp）<br />
+__builtin_frame_address( int ) 返回第几层的 frame 起始地址。<br />
+<br />
+允许函数嵌套定义，并且该函数地址可以传递。支持 $ 命名变量名，goto 的 label 可以用<br />
+&amp;&amp; 取址并赋值给变量进行 goto。__label__ 可以声明局部标识为 goto 使用。只要左值表<br />
+达式产生左值（地址）即可。<br />
+<br />
+可变参数宏，c99 标准为使用 ... 和 __VA_ARGS__。<br />
+<br />
+在 switch 中支持 case 1 ... 9 这种表达。支持 typedet typename=var，从而将某变量的类<br />
+型定义为需要的类型。typeof(var) 产生 var 的类型。<br />
+<br />
+8. C++ 里面另有 __PRETTY_FUNCTION__，而 #progma interface 和 #pragma implementation<br />
+可以表示类的性质，另有 &gt;? 和 &lt;? 表示返回较大较小的，并可以重载。C99 中 restruct 关键字<br />
+可以用 __restrict__。<br />
+<br />
+9. C++ 中调用 C 程序只需要 external &quot;C&quot; 声明即可。而 C 中调用 C++ 函数也是用 external &quot;c&quot;<br />
+声明函数并用 g++ 编译。
+
+      </div>
+</body>
+</html>

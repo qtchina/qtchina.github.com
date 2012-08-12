@@ -1,0 +1,181 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>为arora的gentoo ebuild打了个补丁</title>
+</head>
+<body>
+arora是一个基于qt-webkit的纯qt简单浏览器，现在只包含基本功能，外围的一些相关功能还不多。
+
+arora-0.6.ebuild的问题：
+1. 没有正确处理安装包的国际化问题。虽然原包中有中文翻译文件，但在中文平台仍旧显示英文界面。
+2. arora的tab显示在页面上部，我比较喜欢将这个tab放在页面下部，这样mouse的移动距离不用太大就能处理tab,像关闭，新建等。
+
+打了补丁的 ebuild 命名为 arora-0.6-r1.ebuild
+其中加了个src_unpack函数，来打上我的补丁。
+
+效果：能正确安装中文及其他国际化翻译文件。页面的tab条显示在页面下部。
+
+这是我对gentoo portage第一次做补丁，在此做个笔记。
+
+整个代码如下：
+
+<code type="bash">
+
+# Copyright 1999-2009 Gentoo Foundation                           
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/www-client/arora/arora-0.6-r1.ebuild,v 1.1 2009/04/01 05:46:05 yngwin Exp $
+
+EAPI=2
+inherit eutils qt4
+
+DESCRIPTION="A cross-platform Qt4 WebKit browser"
+HOMEPAGE="http://arora.googlecode.com/"          
+SRC_URI="http://arora.googlecode.com/files/${P}.tar.gz"
+
+LICENSE="|| ( GPL-3 GPL-2 )"
+SLOT="0"                    
+KEYWORDS="~amd64 ~x86"      
+IUSE="debug"                
+
+RDEPEND="x11-libs/qt-webkit:4"
+DEPEND="$RDEPEND"             
+
+ARORA_LANGS="es es_CR et_EE fr_CA gl ms nb_NO uk zh_CN"
+ARORA_NOLONGLANGS="cs_CZ da_DK de_DE fr_FR he_IL hu_HU it_IT ja_JP nl_NL pl_PL
+        ru_RU sk_SK tr_TR"                                                    
+
+for L in $ARORA_LANGS; do
+        IUSE="$IUSE linguas_$L"
+done                           
+for L in $ARORA_NOLONGLANGS; do
+        IUSE="$IUSE linguas_${L%_*}"
+done
+
+src_prepare() {
+        # process linguas
+        local langs=
+        for lingua in $LINGUAS; do
+                if has $lingua $ARORA_LANGS; then
+                        langs="$langs ${lingua}.ts"
+                else
+                        for a in $ARORA_NOLONGLANGS; do
+                                if [[ $lingua == ${a%_*} ]]; then
+                                        langs="$langs ${a}.ts"
+                                fi
+                        done
+                fi
+        done
+
+        # remove all translations, then add only the ones we want
+        sed -i '/ts/d' src/locale/locale.pri || die 'sed failed'
+        sed -i "/^TRANSLATIONS/s:\\\:${langs}:" src/locale/locale.pri \
+                || die 'sed failed'
+}
+src_unpack() {
+        unpack ${A}
+        cd "${S}"
+
+        epatch "${FILESDIR}"/tab_bottom.patch
+}
+src_configure() {
+        eqmake4 arora.pro PREFIX="${D}/usr"
+}
+
+src_compile() {
+        emake || die "make failed"
+
+        # don't pre-strip
+        sed -i "/strip/d" src/Makefile || die 'sed failed'
+}
+
+src_install() {
+        emake -j1 DESTDIR="${D}" install || die 'make install failed'
+        dodoc AUTHORS ChangeLog README
+}
+
+
+</code>
+
+<code type="diff">
+diff --git a/src/src.pri b/src/src.pri                               
+index a79e398..f22ac81 100644                                        
+--- a/src/src.pri                                                    
++++ b/src/src.pri                                                    
+@@ -132,8 +132,8 @@ mac {                                            
+ include(../webkittrunk.pri)                                         
+                                                                     
+ unix {                                                              
+-    DATADIR = $$PREFIX/share                                        
+-    PKGDATADIR = $$DATADIR/arora                                    
++    DATADIR = /usr/share                                            
++    PKGDATADIR = /usr/share/arora                                   
+     DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+ }                                                                       
+                                                                         
+diff --git a/src/src.pro b/src/src.pro                                   
+index 086b8dc..8890159 100644                                            
+--- a/src/src.pro                                                        
++++ b/src/src.pro                                                        
+@@ -21,31 +21,31 @@ include(locale/locale.pri)                           
+ unix {                                                                  
+     INSTALLS += translations desktop iconxpm iconsvg icon16 icon32 icon128 man man-compress
+                                                                                            
+-    translations.path = $$PKGDATADIR                                                       
++    translations.path = $$PREFIX/share/arora                                               
+     translations.files += .qm/locale                                                       
+                                                                                            
+-    desktop.path = $$DATADIR/applications                                                  
++    desktop.path = $$PREFIX/share/arora                                                    
+     desktop.files += arora.desktop
+
+-    iconxpm.path = $$DATADIR/pixmaps
++    iconxpm.path = $$PREFIX/share/pixmaps
+     iconxpm.files += data/arora.xpm
+
+-    iconsvg.path = $$DATADIR/icons/hicolor/scalable/apps
++    iconsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps
+     iconsvg.files += data/arora.svg
+
+-    icon16.path = $$DATADIR/icons/hicolor/16x16/apps
++    icon16.path = $$PREFIX/share/icons/hicolor/16x16/apps
+     icon16.files += data/16x16/arora.png
+
+-    icon32.path = $$DATADIR/icons/hicolor/32x32/apps
++    icon32.path = $$PREFIX/share/icons/hicolor/32x32/apps
+     icon32.files += data/32x32/arora.png
+
+-    icon128.path = $$DATADIR/icons/hicolor/128x128/apps
++    icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps
+     icon128.files += data/128x128/arora.png
+
+-    man.path = $$DATADIR/man/man1
++    man.path = $$PREFIX/share/man/man1
+     man.files += data/arora.1
+
+-    man-compress.path = $$DATADIR/man/man1
+-    man-compress.extra = "" "gzip -9 -f \$(INSTALL_ROOT)/$$DATADIR/man/man1/arora.1" ""
++    man-compress.path = $$PREFIX/share/man/man1
++    man-compress.extra = "" "gzip -9 -f \$(INSTALL_ROOT)/$$PREFIX/share/man/man1/arora.1" ""
+     man-compress.depends = install_man
+ }
+diff --git a/src/tabwidget.cpp b/src/tabwidget.cpp
+index 7e53363..fe4df06 100644
+--- a/src/tabwidget.cpp
++++ b/src/tabwidget.cpp
+@@ -120,6 +120,7 @@ TabWidget::TabWidget(QWidget *parent)
+     connect(m_tabBar, SIGNAL(tabMoveRequested(int, int)), this, SLOT(moveTab(int, int)));
+ #endif
+     setTabBar(m_tabBar);
++    setTabPosition(QTabWidget::South);
+ #if QT_VERSION >= 0x040500
+     setDocumentMode(true);
+     connect(m_tabBar, SIGNAL(tabMoved(int, int)),
+
+</code>
+
+参考文档： http://devmanual.gentoo.org/index.html
+
+</body>
+</html>

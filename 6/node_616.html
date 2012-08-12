@@ -1,0 +1,26 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>SILK标准阅读笔记</title>
+</head>
+<body>
+
+http://tools.ietf.org/html/draft-vos-silk-02#page-6
+
+Sampling Rate,采样率：
+  允许采样率实现变化
+Packet Rate,包率:
+  20ms,1-5,
+Bitrate,比特率：
+  6-40kbps
+FEC: 编码纠错：
+
+asterisk语音模块，如何编写支持多属性的模块，像SILK，根据编码率支持4种不同频率。
+使用ast_format_set的 扩展形式或者，ast_format_append函数，也可处理silk的多种不同采样率编码支持
+这样这个编码是可以声称支持多种属性了，但在模块中如何决定用哪一种呢。
+对于解码，会传递过来一个ast_frame，这里有属性值，可判断是哪个采样率。
+对于编码呢,使用pvt->explicit_dst这个格式的相关属性来确定使用哪种采样率。
+</body>
+</html>

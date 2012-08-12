@@ -1,0 +1,132 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>PostgreSQL 8.3 beta 4 数据库测试</title>
+</head>
+<body>
+<p>测试环境：centor OS 4.5&nbsp; kernel 2.6.9 4G内存，Intel(R) Xeon(TM) CPU 2.80GHz 双核双处理器</p>
+<p>配置文件postgresql.conf配置参数：(其实都是默认的）</p>
+<p>shared_buffers = 24MB                &nbsp;&nbsp;</p>
+<p>temp_buffers = 8MB</p>
+<p>一个包含6个字段的表，一个主键，一个varchar(255)的字符串，其他4个为int4类型</p>
+<p>数据记录180万。其中的字符串字段，记录是不同的随机的url，每个都不相同。</p>
+<p>没有其他索引等。测试过程中某些操作与mysql5.0.51作了对比，mysql数据的硬件与此测试使用的硬件完全相同，也是没有做个什么优化，都使用默认的配置参数。</p>
+<p>测试方向主要有count, sum, avg, order by, group by, like, limit xxx offset yyyy语句以及+、-、*、/、取余、取模的SELECT操作，插入记录操作的用时, 创建索引, 删除索引。</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<table width="600" border="1" cellpadding="1" cellspacing="1">
+    <tbody>
+        <tr>
+            <td>&nbsp;171万记录</td>
+            <td>PostgreSQL 8.3 beta 4</td>
+            <td>MySQL 5.0.51 InnoDB</td>
+        </tr>
+        <tr>
+            <td>&nbsp;count(*)</td>
+            <td>0.480 sec</td>
+            <td>常数时间，在0.01 sec 内</td>
+        </tr>
+        <tr>
+            <td>sum 一个字段</td>
+            <td>0.630 sec</td>
+            <td>2.45 sec</td>
+        </tr>
+        <tr>
+            <td>sum 两个字段</td>
+            <td>0.771 sec&nbsp; (多用时 22.38%)</td>
+            <td>2.73 sec&nbsp;(多用时 11.43%)</td>
+        </tr>
+        <tr>
+            <td>sum 三个字段</td>
+            <td>0.956 sec&nbsp;(多用时 51.75%)</td>
+            <td>2.95 sec&nbsp;(多用时 20.41%)</td>
+        </tr>
+        <tr>
+            <td>sum 四个字段</td>
+            <td>1.079 sec&nbsp;(多用时 70.63%)</td>
+            <td>3.24 sec&nbsp;(多用时 32.24%)</td>
+        </tr>
+        <tr>
+            <td>sum 五个字段</td>
+            <td>1.197 sec&nbsp;(多用时 90.00%)</td>
+            <td>3.53 sec&nbsp;(多用时 44.08%)</td>
+        </tr>
+        <tr>
+            <td>avg 一个字段</td>
+            <td>0.673 sec</td>
+            <td>2.45 sec</td>
+        </tr>
+        <tr>
+            <td>avg 两个字段</td>
+            <td>0.882 sec&nbsp; (多用时 31.05%)</td>
+            <td>2.74 sec&nbsp;(多用时 11.43%)</td>
+        </tr>
+        <tr>
+            <td>avg 三个字段</td>
+            <td>1.014 sec&nbsp;(多用时 50.67%)</td>
+            <td>3.03 sec&nbsp;(多用时 23.67%)</td>
+        </tr>
+        <tr>
+            <td>avg 四个字段</td>
+            <td>1.109 sec&nbsp;(多用时 67.78%)</td>
+            <td>3.28 sec&nbsp;(多用时 33.88%)</td>
+        </tr>
+        <tr>
+            <td>avg 五个字段</td>
+            <td>1.237 sec&nbsp;(多用时 83.80%)</td>
+            <td>3.61 sec&nbsp;(多用时 47.35%)</td>
+        </tr>
+        <tr>
+            <td>order by 唯一主键 (asc desc)</td>
+            <td>1.021 sec&nbsp; 第一次查询用时 10.328 sec</td>
+            <td>2 min 53.84 sec&nbsp; 第一次查询用时 4 min 47.20 sec</td>
+        </tr>
+        <tr>
+            <td>group by 整数字段</td>
+            <td>1.090 sec 首次查询4.882 sec</td>
+            <td>3.18 sec 首次查询 14.05 sec</td>
+        </tr>
+        <tr>
+            <td>group by 字符串字段（基本不同的随机url, 字段带索引)</td>
+            <td>2.176 sec</td>
+            <td>42.18 sec</td>
+        </tr>
+        <tr>
+            <td>like 字符串字段（基本不同的随机url,字段带索引)</td>
+            <td>0.912 sec (返回空结果集)</td>
+            <td>4.83 sec (返回空结果集)</td>
+        </tr>
+        <tr>
+            <td>like 字符串字段（基本不同的随机url,不带索引)</td>
+            <td>0.920 sec (返回空结果集)</td>
+            <td>4.82 sec (返回空结果集)</td>
+        </tr>
+        <tr>
+            <td>= 字符串字段（基本不同的随机url,不带索引)</td>
+            <td>0.617 sec (返回1结果集)</td>
+            <td>3.81 sec (返回1结果集)</td>
+        </tr>
+        <tr>
+            <td>创建索引 字符串字段（基本不同的随机url，平均长度100)</td>
+            <td>87.851 sec</td>
+            <td>47.41 sec</td>
+        </tr>
+        <tr>
+            <td>删除索引 字符串字段（基本不同的随机url，平均长度100)</td>
+            <td>0.049 sec</td>
+            <td>21.70 sec</td>
+        </tr>
+    </tbody>
+</table>
+<h3>注：</h3>
+<p>count(*) 操作 PostgreSQL需要扫描全表，而MySQL则有缓存表中记录数的机制，在写库的时候就已经算出来了，所以取完全的表记录数MySQL用时就为常数时间了。</p>
+<p>&nbsp;以上操作都是没有任何where条件限制，计算过程包括表中所有记录。</p>
+<h3>结论：</h3>
+<p>like 与对应字段上是否有索引没有关系;</p>
+<p>在没有索引的字符串字段上，=查找需要扫描全表，但PostgreSQL明显要快。有索引的=查找，MySQL在0.01 sec 内, PostgreSQL可达到0.002内。</p>
+<p>创建索引PostgreSQL慢于MySQL,是否可得出结论 INSERT 操作PostgreSQL 也同样慢于MySQL呢?</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

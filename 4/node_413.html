@@ -1,0 +1,66 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>nullfxp 2.0.xx在64位mac os x snow leopard 上的编编译注意事项</title>
+</head>
+<body>
+环境： Snow Leopard 10.6.2  开启了64位模式。
+ 
+             xcode 3.2.1 g++ 4.2.1
+
+             qt 4.6.2    32位库
+
+
+             nullfxp 2.0.xxx
+
+
+开始：
+          qmake -spec macx-g++ -r
+
+           注，这里要指定spec，否则会生成xcodeproj项目文件，还需要使用mac 开发ＩＤＥ编译项目。
+
+         现在出现一个问题，nullfxp 中包含的libssh2.pro生成的Makefile没有指定 -arch 选项，编译出来的为64位库libssh2.a。
+
+         而使用qt的界面部分指定了-arch i386(因为qt库是32位的），最后链接的时候出错：
+
+         libssh2.a:  file is not of required architecture
+
+
+        那么需要手动修改下libssh.pro中的Makefile, 指定-arch选项：
+CFLAGS        = -pipe -O2 -g -fPIC -arch i386 -Wall -W $(DEFINES)
+CXXFLAGS      = -pipe -O2 -g -fPIC -arch i386 -Wall -W $(DEFINES)
+
+
+
+      这样可以链接了。
+
+     还有一个问题，最后编译的时候，出现链接不到zlib库的问题： 
+alog.o obj/moc_taskqueuemodel.o obj/moc_taskqueueview.o obj/qrc_nullfxp.o   -F/Library/Frameworks -L/Library/Frameworks libssh2/src/libssh2.a -lssl -lcrypto  -framework QtSql -framework QtGui -framework QtNetwork -framework QtCore 
+Undefined symbols:
+  "_inflateEnd", referenced from:
+      _comp_method_zlib_dtor in libssh2.a(comp.o)
+  "_deflate", referenced from:
+      _comp_method_zlib_comp in libssh2.a(comp.o)
+      _comp_method_zlib_comp in libssh2.a(comp.o)
+  "_deflateEnd", referenced from:
+      _comp_method_zlib_dtor in libssh2.a(comp.o)
+  "_inflateInit_", referenced from:
+      _comp_method_zlib_init in libssh2.a(comp.o)
+  "_deflateInit_", referenced from:
+      _comp_method_zlib_init in libssh2.a(comp.o)
+  "_inflate", referenced from:
+      _comp_method_zlib_comp in libssh2.a(comp.o)
+      _comp_method_zlib_comp in libssh2.a(comp.o)
+ld: symbol(s) not found
+collect2: ld returned 1 exit status
+make[1]: *** [../bin/nullfxp.app/Contents/MacOS/nullfxp] Error 1
+make: *** [sub-src-make_default-ordered] Error 2
+
+       这需要修改nullfxp的Makefile文件，加上-lz指令，使其能链接zlib库。
+
+
+      至此，编译就能完成。
+</body>
+</html>

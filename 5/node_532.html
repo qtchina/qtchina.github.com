@@ -1,0 +1,105 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>kde4 类Mac全局菜单方案列表</title>
+</head>
+<body>
+* bespin + xbar方式
+
+* plasma-globalmenu-mod  
+  http://kde-apps.org/content/show.php/?content=129006
+
+* http://qt.gitorious.org/~agateau/qt/agateau-qt
+
+
+第一种比较成熟，使用了一段时间，它还有功能是kde程序外观功能，要比默认的kde cleanlook好看些。
+
+第二种准备测试
+
+突然想起来一问题，kde桌面的oxgen网络在系统设置项中怎么找不到了？？奇怪
+
+2010-12-30 我的全局菜单方案新进展
+还是使用bespin中的xbar，外加kde-misc/smooth-tasks（取代了daisy,这个放在plasma作为plasma mod时有问题），
+安装gnome-extra/gnome-globalmenu-0.7.10,让gtk程序也能在kde桌面显示全局菜单，需要一个环境变量export GTK_MODULES=globalmenu-plugin ， 需要写在.kde4/env/myenv.sh和.bashrc两个地方，这样从控制台启动的gtk程序和使用kde启动器启动的gtk程序都能用到全局菜单。
+
+给bespin打了个小补丁，加长xbar菜单的默认长度，
+
+cat /usr/local/portage/layman/kde/x11-themes/bespin/files/
+[code type="diff"]
+xbar_init_size_bigger.patch 
+Index: XBar/xbar.cpp
+===================================================================
+--- XBar/xbar.cpp       (revision 1315)
++++ XBar/xbar.cpp       (working copy)
+@@ -639,7 +639,7 @@
+     else
+     {
+         QAction *action = new QAction(myMainMenu);
+-        action->setText("Customizable menu, see http://CloudCity.SF.net/xbar.html");
++        action->setText("-----------------(Customizable menu, see http://CloudCity.SF.net/xbar.html)-----------------")
+;
+         action->setData("http://CloudCity.SF.net/xbar.html");
+         connect ( action, SIGNAL(triggered()), SLOT(runFromAction()) );
+         myMainMenu->addAction(action);
+[/code]
+
+当然还有一些问题，如xbar菜单长度不能自适应，对短菜单，会留有空白空间，对长菜单，可能与smooth-tasks区域重叠。
+
+看能不能再改改bespin让它能自适应不同长度的菜单。
+
+另一个问题有些gtk程序问题比较多，pidgin不但全局菜单上显示菜单，自已的窗口上还显示一个菜单。
+
+像libreoffice根本就不理全局菜单。
+
+一种基本能让xbar菜单长度自动适应长度的补丁，但只对菜单长度在900以内的管用，如果太长，仍旧会出问题，另外，xbar的长度会不断变长，现在还没有变短的机制，否则会让任务栏变动频繁，消耗比较多的CPU来重绘任务样部分。
+
+[code type="diff"]
+Index: XBar/xbar.cpp
+===================================================================
+--- XBar/xbar.cpp       (revision 1315)
++++ XBar/xbar.cpp       (working copy)
+@@ -640,6 +640,7 @@
+     {
+         QAction *action = new QAction(myMainMenu);
+         action->setText("Customizable menu, see http://CloudCity.SF.net/xbar.html");
++       action->setText("-----------------(Customizable menu, see http://CloudCity.SF.net/xbar.html)-----------------");
+         action->setData("http://CloudCity.SF.net/xbar.html");
+         connect ( action, SIGNAL(triggered()), SLOT(runFromAction()) );
+         myMainMenu->addAction(action);
+@@ -711,6 +712,15 @@
+     int dy = (contentsRect().height() - item->rect().height())/2;
+     item->setPos(contentsRect().x(), contentsRect().y()+dy);
+     item->show();
++
++    QSizeF csize = item->sizeHint(Qt::PreferredSize, QSizeF());
++    if (csize.width() < 500) {
++      
++    } else if (csize.width() > 900) {
++
++    } else {
++      this->updateConstraints(Plasma::SizeConstraint);
++    }
+ }
+ 
+ void
+[/code]
+
+图1,
+<a href="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850001.png" target="_blank">
+<img width='500' height='400' src="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850001.png">
+</a>
+
+图2,
+<a href="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850002.png" target="_blank">
+<img width='500' height='400' src="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850002.png">
+</a>
+
+图3,
+<a href="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850003.png" target="_blank">
+<img width='500' height='400' src="http://pic4.tomoimg.cn/0x0/455/830/130088818/201012/12936790850003.png">
+</a>
+
+</body>
+</html>

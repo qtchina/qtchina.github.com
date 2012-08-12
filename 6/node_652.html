@@ -1,0 +1,121 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>嵌入式数据库hamsterdb的android编译工程文件 </title>
+</head>
+<body>
+hamsterdb是一个采用C开发，非常快，轻量级的嵌入式数据库引擎。
+
+hamsterdb 包括的B +树变长密钥和记录。它支持内存中的数据库和字节独立的文件，数据库，游标，多个数据库在一个文件中， “记录”数据库，重复键。 hamsterdb是非常快速和高度可配置的。汇编和Unix平台上运行， Linux ，微软Windows ，和Windows CE 。
+
+嵌入式数据库 hamsterdb 2.x 正式版发布，该版本包含一个完全重新实现的事务处理，可支持无限制的并发事务处理数，集成 Java 和 .NET 的 客户端访问 API。
+
+由于在android项目中要使用，编写了一上使用android NDK编译hamsterdb的工程文件，还比较通用，发布出来，供开发者参考：
+项目中使用的是最新版本的hamsterdb-2.0.1
+
+在编译过程中，遇到一个basename函数找不到的问题，需要修改两个文件，添加一行
+#include <libgen.h>
+
+需要修改的文件是src/log.cc和src/journal.cc
+
+工程文件有两个，Application.mk和Android.mk，放在android项目的jni目录，使用android-build命令编译。
+
+文件一：
+[gzleo@myhost jni]$ more Application.mk 
+[code type='bash']
+# The ARMv7 is significanly faster due to the use of the hardware FPU
+# APP_ABI := armeabi armeabi-v7a
+APP_ABI := armeabi
+APP_PLATFORM := android-9
+APP_MODULES := hello-jni hamsterdb
+
+APP_STL := stlport_static # gnustl_static # stlport_static
+[/code]
+
+文件二：
+[gzleo@myhost jni]$ more Android.mk 
+
+LOCAL_PATH := $(call my-dir)
+                                                                                               
+include $(CLEAR_VARS)                                                                          
+                                                                                               
+# the ./ path is PROJECT/jni/                                                                  
+HAMDB_ROOT := ./../hamsterdb-2.0.1                                                             
+HAMDB_3RD := $(HAMDB_ROOT)/3rdparty                                                            
+HAMDB_SRC := $(HAMDB_ROOT)/src                                                                 
+LOCAL_MODULE    := hamsterdb                                                                   
+                                                                                               
+AES_SRC_FILES := $(HAMDB_3RD)/aes/aes.c                                                        
+ZLIB_SRC_FILES := $(HAMDB_3RD)/zlib/adler32.c \                                                
+                        $(HAMDB_3RD)/zlib/compress.c \
+        $(HAMDB_3RD)/zlib/crc32.c \
+        $(HAMDB_3RD)/zlib/gzio.c \
+        $(HAMDB_3RD)/zlib/uncompr.c \
+        $(HAMDB_3RD)/zlib/deflate.c \
+        $(HAMDB_3RD)/zlib/trees.c \
+        $(HAMDB_3RD)/zlib/zutil.c \
+        $(HAMDB_3RD)/zlib/inflate.c \
+        $(HAMDB_3RD)/zlib/infback.c \
+        $(HAMDB_3RD)/zlib/inftrees.c \
+        $(HAMDB_3RD)/zlib/inffast.c
+
+
+LOCAL_CPP_EXTENSION := .cxx .cpp .cc
+HAMDB_SRC_FILES := $(HAMDB_SRC)/log.cc \
+        $(HAMDB_SRC)/blob.cc \
+        $(HAMDB_SRC)/btree.cc \
+        $(HAMDB_SRC)/btree_check.cc \
+        $(HAMDB_SRC)/btree_cursor.cc \
+        $(HAMDB_SRC)/btree_enum.cc \
+        $(HAMDB_SRC)/btree_erase.cc \
+        $(HAMDB_SRC)/btree_find.cc \
+        $(HAMDB_SRC)/btree_insert.cc \
+        $(HAMDB_SRC)/btree_key.cc \
+        $(HAMDB_SRC)/btree_stats.cc \
+        $(HAMDB_SRC)/cache.cc \
+        $(HAMDB_SRC)/changeset.cc \
+        $(HAMDB_SRC)/cursor.cc \
+        $(HAMDB_SRC)/db.cc \
+        $(HAMDB_SRC)/device.cc \
+        $(HAMDB_SRC)/env.cc \
+        $(HAMDB_SRC)/error.cc \
+        $(HAMDB_SRC)/extkeys.cc \
+        $(HAMDB_SRC)/freelist.cc \
+        $(HAMDB_SRC)/freelist_statistics.cc \
+        $(HAMDB_SRC)/freelist_v2.cc \
+        $(HAMDB_SRC)/hamsterdb.cc \
+        $(HAMDB_SRC)/journal.cc \
+        $(HAMDB_SRC)/mem.cc \
+        $(HAMDB_SRC)/os_posix.cc \
+        $(HAMDB_SRC)/page.cc \
+        $(HAMDB_SRC)/remote.cc \
+        $(HAMDB_SRC)/txn.cc \
+        $(HAMDB_SRC)/txn_cursor.cc \
+        $(HAMDB_SRC)/util.cc  
+
+
+# $(ZLIB_SRC_FILES) 
+LOCAL_SRC_FILES := $(AES_SRC_FILES)  $(HAMDB_SRC_FILES) 
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include $(LOCAL_PATH)/$(HAMDB_ROOT)/include  $(LOCAL_PATH)
+/../../platforms/android-9/arch-arm/usr/include/ /opt/android-ndk/sources/cxx-stl/stlport/stlpo
+rt/
+LOCAL_CFLAGS += $(LOCAL_C_INCLUDES:%=-I%) -DHAM_LITTLE_ENDIAN -DHAM_ENABLE_COMPRESSION -DHAM_EN
+ABLE_ENCRYPTION -DHAVE_WRITEV -D__ssize_t_defined -D_STLP_USE_SIMPLE_NODE_ALLOC -D_STLP_USE_NEW
+ALLOC -D_STLP_NO_EXCEPTIONS
+# LOCAL_CFLAGS += $(LOCAL_C_INCLUDES:%=-I%) -DHAM_LITTLE_ENDIAN -DHAM_DISABLE_COMPRESSION -DHAM
+_DISABLE_ENCRYPTION
+LOCAL_LDLIBS := -lz -lstlport_static -L/opt/android-ndk/sources/cxx-stl/stlport/libs/armeabi/ -
+lstdc++ -lsupc++ -L/opt/android-ndk/sources/cxx-stl/gnu-libstdc++/libs/armeabi/ /opt/android-nd
+k/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libsupc++.a
+LOCAL_CPP_FEATURES :=  #rtti # exceptions # rtti
+#LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
+
+include $(BUILD_SHARED_LIBRARY)
+################################
+
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用postgreSQL搭建比lucene方便N倍的全文搜索 第一部分</title>
+</head>
+<body>
+[文章作者：陈臻 本文版本：v1.1 最后修改：2009.4.13 转载请注明原文链接：http://www.54chen.com/c/601 ]
+
+所有用到到包有：
+
+cmake-2.6.4.tar.gz (编nlpbamboo用)
+
+CRF++-0.53.tar.gz(同上)
+
+nlpbamboo-1.1.1.tar.bz2（分词用）
+
+postgreSQL-8.3.3.tar.gz（索引用）
+
+安装pgsql
+
+tar -zxvf postgreSQL-8.3.3.tar.gz
+
+cd postgre-8.3.3
+./configure –prefix=/opt/pgsql
+make
+make install
+
+useradd postgre
+
+chown -R postgre.postgre /opt/pgsql
+su - postgre
+vi ~postgre/.bash_profile
+添加
+export PATH
+PGLIB=/opt/pgsql/lib
+PGDATA=/data/PGSearch
+PATH=$PATH:/opt/pgsql/bin
+MANPATH=$MANPATH:/opt/pgsql/man
+export PGLIB PGDATA PATH MANPATH
+
+# mkdir -p /data/PGSearch
+
+# chown -R postgre.postgre /data/PGSearch
+
+# chown -R postgre.postgre /opt/pgsql
+
+#sudo -u postgre /opt/pgsql/bin/initdb –locale=zh_CN.UTF-8 –encoding=utf8 -D /data/PGSearch
+#sudo -u postgre /opt/pgsql/bin/postmaster -i -D /data/PGSearch &  //允许网络访问
+#sudo -u postgre /opt/pgsql/bin/createdb kxgroup
+# vim /data/PGSearch/pg_hba.conf  如下增加可访问的机器：
+
+host    all         all         10.2.19.178 255.255.255.0               trust
+
+#su - postgre
+
+$pg_ctl stop
+
+$postmaster -i -D /data/PGSearch &
+安装中文分词（Cmake CRF++ bamboo)
+Cmake是为了编译bamboo,CRF++是bamboo依赖的。
+
+tar -zxvf cmake-2.6.4.tar.gz
+
+cd cmake-2.6.4
+./configure
+gmake
+make install
+
+tar -zxvf CRF++-0.53.tar.gz
+cd CRF++-0.53
+./configure
+make
+make install
+
+tar -jxvf nlpbamboo-1.1.1.tar.bz2
+cd nlpbamboo-1.1.1
+mkdir build
+cd build/
+cmake .. -DCMAKE_BUILD_TYPE=release
+make all
+make install
+
+cp index.tar.bz2 /opt/bamboo/
+cd /opt/bamboo/
+tar -jxvf index.tar.bz2
+
+#/opt/bamboo/bin/bamboo
+
+如果出现：
+
+ERROR: libcrfpp.so.0: cannot open shared object file: No such file or directory
+
+就执行：
+
+ln -s /usr/local/lib/libcrfpp.so.* /usr/lib/
+ldconfig
+
+增加上中文分词扩展到pgsql
+
+#vim /root/.bash_profile 也增加：
+
+PGLIB=/opt/pgsql/lib
+PGDATA=/data/PGSearch
+PATH=$PATH:/opt/pgsql/bin
+MANPATH=$MANPATH:/opt/pgsql/man
+export PGLIB PGDATA PATH MANPATH
+
+#source ~/.bash_profile
+
+cd /opt/bamboo/exts/postgres/chinese_parser/
+make
+make install
+
+su - postgre
+cd /opt/pgsql/share/contrib/
+touch /opt/pgsql/share/tsearch_data/chinese_utf8.stop
+psql kxgroup
+\i chinese_parser.sql 导入
+
+再执行下面的sql，已经可以将一段话分词了：
+
+SELECT to_tsvector(’chinesecfg’, ‘结果在命令行下执行bamboo才知道’);
+
+先到这里，下一部分讲述对TEXT字段进行索引和查询，完整构造一整个搜索引擎。
+</body>
+</html>

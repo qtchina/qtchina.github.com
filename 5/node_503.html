@@ -1,0 +1,141 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Sphinx 1.10-beta 测试版 新功能介绍</title>
+</head>
+<body>
+	<div id="NewsPostDetailSummary">
+		<strong>
+			2010年7月19日，Sphinx 1.10-beta版本发布，增加了很多新功能，主要亮点如下：<br><br>
+<ul>
+<li>实时索引支持
+<li>字符串字段值存储
+<li>MPM模式支持
+<li>外部文本文件索引
+<li>searchd直接支持MySQL协议
+<li>SphinxQL接口查询完善
+</ul>
+		</strong>
+	</div>
+<div id="NewsPostDetailContent">
+	<h3>新增功能列表：</h3>
+<ul type="disc">
+<li>实时索引：added RT indexes support (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#rt-indexes" title="Chapter&nbsp;4.&nbsp;Real-time indexes">Chapter&nbsp;4, <i>Real-time indexes</i></a>)</li>
+<li>MPM模式支持：fork、prefork、threads；added prefork and threads support (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-workers" title="11.4.27.&nbsp;workers">workers</a> directives)</li>
+<li>本地分布式搜索支持多线程；added multi-threaded local searches in distributed indexes (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-dist-threads" title="11.4.28.&nbsp;dist_threads">dist_threads</a> directive)</li>
+<li>AddQuery()子查询缓存added common subquery cache (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-subtree-docs-cache" title="11.4.25.&nbsp;subtree_docs_cache">subtree_docs_cache</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-subtree-hits-cache" title="11.4.26.&nbsp;subtree_hits_cache">subtree_hits_cache</a> directives)</li>
+<li>文本字段信息存储及返回；added string attributes support (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-attr-string" title="11.1.24.&nbsp;sql_attr_string">sql_attr_string</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-field-string" title="11.1.26.&nbsp;sql_field_string">sql_field_string</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-xmlpipe-attr-string" title="11.1.43.&nbsp;xmlpipe_attr_string">xml_attr_string</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-xmlpipe-field-string" title="11.1.35.&nbsp;xmlpipe_field_string">xml_field_string</a> directives)</li>
+<li>索引时词汇数统计；added indexing-time word counter (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-attr-str2wordcount" title="11.1.25.&nbsp;sql_attr_str2wordcount">sql_attr_str2wordcount</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-field-str2wordcount" title="11.1.27.&nbsp;sql_field_str2wordcount">sql_field_str2wordcount</a> directives)</li>
+<li>SphinxQL模式支持高亮调用和分词结果调用；added <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#sphinxql-call-snippets" title="7.9.&nbsp;CALL SNIPPETS syntax">CALL SNIPPETS()</a>,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#sphinxql-call-keywords" title="7.10.&nbsp;CALL KEYWORDS syntax">CALL KEYWORDS()</a> SphinxQL statements</li>
+<li>SphinxQL模式支持字段权重和索引权重设置；added <code class="option">field_weights</code>, <code class="option">index_weights</code> options to
+	SphinxQL <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#sphinxql-select" title="7.1.&nbsp;SELECT syntax">SELECT</a> statement</li>
+<li>SphinxQL模式支持SphinxSE（仅insert数据）；added insert-only SphinxQL-talking tables to SphinxSE (connection='sphinxql://host[:port]/index')</li>
+<li>SphinxSE查询中支持select计算；added <code class="option">select</code> option to SphinxSE queries</li>
+<li>增加searchd崩溃coredump文件设置；added backtrace on crash to <code class="filename">searchd</code></li>
+<li>支持从SQL字段属性值调入外部文本文件索引；added SQL+FS indexing, aka loading files by names fetched from SQL
+	(<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-file-field" title="11.1.28.&nbsp;sql_file_field">sql_file_field</a> directive)</li>
+<li>多线程模式时支持watchdog守护；added a watchdog in threads mode to <code class="filename">searchd</code></li>
+<li>索引合并时自动消除脏数据；added automatic row phantoms elimination to index merge</li>
+<li>不记录词汇在文档的位置（可减小索引大小和提高性能）；added hitless indexing support (hitless_words directive)</li>
+<li>indextool增加参数：added --check, --strip-path, --htmlstrip, --dumphitlist ... --wordid switches to <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#ref-indextool" title="6.5.&nbsp;indextool command reference">indextool</a></li>
+<li>searchd增加参数--stopwait提升退出时保存信息的能力，--logdebug设定调试信息输出；added --stopwait, --logdebug switches to <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#ref-searchd" title="6.2.&nbsp;searchd command reference">searchd</a></li>
+<li>indexer增加参数--dump-rows用以输出所有读取到的数据，--verbose用以输出详细的问题信息；added --dump-rows, --verbose switches to <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#ref-indexer" title="6.1.&nbsp;indexer command reference">indexer</a></li>
+<li>混合字符设置（AT&T可被所分解为AT&T、AT、T）；added "blended" characters indexing support (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-blend-chars" title="11.2.44.&nbsp;blend_chars">blend_chars</a> directive)</li>
+<li>增加sql_joined_field，用于支持类似SQL的GROUP_CONCAT处理，以及对SPH_RANK_PROXIMITY_BM25下评分值的控制；added joined/payload field indexing (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-sql-joined-field" title="11.1.13.&nbsp;sql_joined_field">sql_joined_field</a> directive)</li>
+<li>增加FlushAttributes()接口用于将内存信息保存到磁盘；added <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#api-func-flushattributes" title="8.7.6.&nbsp;FlushAttributes">FlushAttributes() API call</a></li>
+<li>BuildExcerpts增加多项处理参数；added query_mode, force_all_words, limit_passages, limit_words, start_passage_id, load_files, html_strip_mode,
+	allow_empty options, and %PASSAGE_ID% macro in before_match, after_match options
+	to <a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#api-func-buildexcerpts" title="8.7.1.&nbsp;BuildExcerpts">BuildExcerpts()</a> API call</li>
+<li>SELECT支持获取@groupby/@count/@distinct信息；added @groupby/@count/@distinct columns support to SELECT (but not to expressions)</li>
+<li>查询时自动展开词汇（可能会降低性能）；added query-time keyword expansion support (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-expand-keywords" title="11.2.43.&nbsp;expand_keywords">expand_keywords</a> directive,
+	<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#api-func-setrankingmode" title="8.3.2.&nbsp;SetRankingMode">SPH_RANK_SPH04</a> ranker)</li>
+<li>批量查询数目限制；added query batch size limit option (<a target="_blank" href="http://www.sphinxsearch.com/docs/current.html#conf-max-batch-queries" title="11.4.24.&nbsp;max_batch_queries">max_batch_queries</a> directive; was hardcoded)</li>
+<li>增加SINT()函数用于正确解析32位整数到64位；added SINT() function to expressions</li>
+</ul>
+
+<h3>新功能说明：</h3>
+<ul>
+<li>因为目前新增功能较多，相关功能还在监测和完善中，部分功能可能存在不可预知的问题，暂时请不要使用到正式场合！
+<li>实时索引：目前限制较多，尚不太稳定，已知问题请查看<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#rt-caveats">问题列表</a>
+<li>字符串值存储：单字符串4MB大小限制，不要存储大量的数据，尚未优化更好的存储方式
+<li>详细变更列表：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#changelog">查看</a>
+</ul>
+
+<h3>测试版文档：</h3>
+<ul>
+<li>英文使用手册：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html">查看Sphinx Manual</a>
+<li>中文使用手册：翻译中
+<li>实时索引文档：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#rt-indexes">查看Real Time Index文档</a>
+<li>字符串值存储文档：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#conf-sql-attr-string">查看String attribute文档</a>
+<li>MySQL协议支持文档：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#sphinxql">查看MySQL protocol文档</a>
+<li>SphinxQL文档：<a target="_blank" href="http://www.sphinxsearch.com/docs/manual-1.10.html#sphinxql-reference">查看SphinxQL文档</a>
+</ul>
+
+<h3>测试版下载：</h3>
+<ul>
+<table width="100%" cellspacing="0" cellpadding="3" border="0">
+<tr><td colspan="3">
+<b>Sphinx 1.10-beta</b> <sup><font color=red>新！</font></sup> (r2420; 2010-07-19)
+</td></tr><tr bgcolor="#f8f8f8" id="r1">
+	<td width="60%">Source tarball (tar.gz)</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">1.4M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r2">
+	<td width="60%">Win32 binaries w/MySQL support</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.1M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r3">
+	<td width="60%">Win32 binaries w/MySQL+PostgreSQL support</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">4.6M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r4">
+	<td width="60%">Win32 binaries w/MySQL+PgSQL+libstemmer+id64 support</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">4.9M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r5">
+	<td width="60%">RHEL 5.x x86_64 RPM</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.1M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r6">
+	<td width="60%">RHEL 5.x i386 RPM</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.6M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r7">
+	<td width="60%">RHEL 4.x i386 RPM</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.5M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r8">
+	<td width="60%">RHEL 5.x x86_64 binaries</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.1M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r9">
+	<td width="60%">RHEL 5.x i386 binaries</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.6M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr><tr bgcolor="#f8f8f8" id="r10">
+	<td width="60%">RHEL 4.x i386 binaries</td>
+	<td width="15%">1.10-beta</td>
+	<td width="15%">3.5M</td>
+	<td width="10%"><a target="_blank" href="http://www.sphinxsearch.com/downloads.html" >下载</a></td>
+</tr></table>
+</ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>CLISP实践，编写unix常用命令cat</title>
+</head>
+<body>
+用到了clisp中的几个变量，*args*, *standard-output*, *standard-input*，
+
+文件打开函数，文件读取函数，文件写入函数。
+
+为了练习clisp而实现，效率没有考虑，比如一个字符一个字符读写，效率就非常低，但cat命令的基本的显示文件内容功能实现了。
+
+这个风格是否符合lisp程序的风格，感觉还是像写C程序的风格。
+
+./cat.lisp cat.lisp
+
+[code type="lisp"]
+#!/usr/bin/clisp -E UTF-8
+
+; (print (length *args*))
+; (print *args*)
+; checking option
+(if (not (= 1 (length *args*)))
+    (progn (print "need a file path as args. cat <filename>.") (quit))
+  )
+; (setq fname "/home/gzleo/xorg.conf")
+(setq fname (first *args*))
+
+; open first
+(setq fp
+      (open fname :element-type 'base-char :direction :input  :external-format :default)
+)
+; (print fp)
+
+(setq *stdout* *standard-output*)
+(setq *stdin* *standard-input*)
+;(setq *stderr* *standard-error*)
+
+(do ((c (read-char fp) (read-char fp nil 'the-end)))
+    ((not (characterp c)))
+  (write-char c *stdout*)
+  )
+
+(close fp)
+; (print fp)
+[/code]
+</body>
+</html>

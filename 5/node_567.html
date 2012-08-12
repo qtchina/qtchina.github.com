@@ -1,0 +1,32 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>C++0x中的表达式类型自动推导</title>
+</head>
+<body>
+最近C++最新标准C++2011正式发布了，几乎同时，作为*nix平台标准编译器的GCC 4.6版本也正式发布。
+对于想尝鲜的已经可以使用了。
+今天遇到一个比较复杂的类型，与模板相关的，写了几次，都说变量的定义不对，想起来C++中有类型推导，翻了一下资料，找到了typeof(exp)这个东西，用起来方便多了。
+但是正测试 -std=c++0x的时候又出了问题，再一查，原来有新的方式实现，
+typedef decltype(exp) TmpType;
+TmpType a;
+...
+由于要在不同环境下编译，新的方式在老的编译器环境不能用，老的方式在新的环境下不能，只好找了C的#if指令处理，
+
+#if ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)) && __GXX_EXPERIMENTAL_CXX0X__)
+// typedef decltype(exp) 方式
+#else
+// typeof(exp) 方式。
+#endif
+
+这样，在gcc版本足够高，并且在命令行使用-std=c++0x时，使用新的方式，其他情况都使用老的方式。
+
+还有一种gcc扩展的方式__typeof__(exp)，能很好的兼容这些不同的版本的问题，但这种方式不好看出来是使用的C++0x还是其他的，容易自己都不清楚，择机选用。
+
+另外发现使用-std=c++0x时，同样的代码，编译出来的程序大一些。
+测试环境，gcc 4.6, gcc 4.3
+
+</body>
+</html>

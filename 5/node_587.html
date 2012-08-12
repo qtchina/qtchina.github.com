@@ -1,0 +1,11 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>nullfxp中的ssh反向端口代理功能模块说明</title>
+</head>
+<body>
+ssh的反向代理功能，可以实现基于ssh连接的安全地端口转发功能。还可用于把内网机器端口安全转接到外网服务器。<div><br></div><div>nullfxp是ssh/sftp客户端，实现ssh反向代理功能是一种对基本功能的良好补充。</div><div><br></div><div>nullfxp中的反向代理模块目前还比较独立，但也不是完全脱离基本功能，需要使用会话管理模块及ssh连接管理模块。</div><div><br></div><div>模块中可设置多个反向代理会话，每个反向代理会话都与一个sftp连接会话对应。一个sftp连接会话可与多个反向代理会话对应。</div><div><br></div><div>所有反向代理会话，如果没有端口冲突，则可以同时启用。</div><div><br></div><div>运行期，每个一反向代理会话都有一个ssh连接。每个反向代理话支持建立多个并发连接。</div><div><br></div><div>涉及的主机信息及端口信息说明，</div><div><br></div><div>把提供ssh服务的主机称为远程主机， remote_host_name, remote_port</div><div><br></div><div>本地主机，运行ssh客户端， local_host_name, local_port</div><div><br></div><div>第三方服务主机，称为目的主机，可以为本地主机，或者任何本地主机可以访问的主机+端口。dest_host_name, dest_port</div><div><br></div><div>其中，remote_host是一个socket server端口，在连接到ssh主机后，ssh server打开这么一个端口并执行监听。</div><div><br></div><div>local_port均为客户端socket端口，由系统随机产生，不需要任何设置。</div><div><br></div><div>目的主机端口dest_port是第三方服务的端口，如www.google.com:80端口，或者localhost:8080端口等。</div><div><br></div><div>目的主机端口可以设置为多个，作为dest_ports, 新连接来的时候，使用随机或者按速度等规则选择一个端口，连接之。</div><div><br></div><div>如，设置remote_port=1234，则在访问remote_host_name:1234时，相当于访问www.google.com:80，那么访问它的客户端必须是一个浏览器，而不能是其他的客户端软件。</div><div><br></div><div><br></div><div><br></div><div><br></div>
+</body>
+</html>

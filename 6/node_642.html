@@ -1,0 +1,72 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>简单nginx负载均衡配置</title>
+</head>
+<body>
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+error_log  logs/error.log  info;
+
+pid        logs/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    upstream ups.pubtest {
+        server 10.207.0.245:80;
+        server 10.207.0.245:80;
+        server 10.207.0.246:80;
+        server 10.207.0.247:80;
+    }
+    upstream ups.devtest {
+        server 10.207.180.120:80;
+    }
+
+    server {
+        listen 80;
+        server_name photo.qtchina.net;
+        location / {
+                proxy_pass http://ups.devtest; 
+                 proxy_set_header Host $host; 
+                 proxy_set_header X-Real-IP $remote_addr; 
+                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        log_format  photo '$remote_addr - $remote_user [$time_local] $request '
+                                 '"$status" $body_bytes_sent "$http_referer" '
+                                 '"$http_user_agent" "$http_x_forwarded_for"';
+        access_log  /data1/logs/access.log  photo;
+        error_log   /data1/logs/error.log ;
+    }
+
+}
+
+两组负载集群，据情景使用。
+
+</body>
+</html>

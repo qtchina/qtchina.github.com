@@ -1,0 +1,118 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>写出一个超强的lighttpd模块</title>
+</head>
+<body>
+终于找到问题了
+在我的代码里有这么一段,
+char * str ; str = …………………………..;
+…
+…
+…
+char * k = malloc( strlen( k ) + 1 )
+strcpy( k , str )
+
+而这段代码是在一个动态链接库中的 xxx.so
+这样一来，那个strcpy之后，程序的 堆 全被写乱套了，程序就会出来下面这些乱七八糟的错误了。
+<!--break-->
+######################
+
+*** glibc detected *** /serv/lighttpd1418/sbin/lighttpd: free(): invalid next size (fast): 0×080a27d8 ***
+======= Backtrace: =========
+/lib/libc.so.6[0xb7e72312]
+/lib/libc.so.6(cfree+0×89)[0xb7e739c9]
+/serv/lighttpd1418//lib/mod_stats.so(hash_walk_func+0×360)[0xb7dda210]
+/serv/lighttpd1418//lib/mod_stats.so(hash_table_map+0×3d)[0xb7ddaf3d]
+/serv/lighttpd1418//lib/mod_stats.so(stat_table_dump_thread+0×129)[0xb7dd9de9]
+/lib/libpthread.so.0[0xb7b38e5a]
+/lib/libc.so.6(clone+0×5e)[0xb7ecc91e]
+======= Memory map: ========
+08048000-0806d000 r-xp 00000000 08:08 163125 /serv/lighttpd1418/sbin/lighttpd
+0806d000-0806e000 rw-p 00024000 08:08 163125 /serv/lighttpd1418/sbin/lighttpd
+0806e000-080b0000 rw-p 0806e000 00:00 0 [heap]
+b7100000-b7121000 rw-p b7100000 00:00 0
+b7121000-b7200000 —p b7121000 00:00 0
+b72b6000-b72b7000 —p b72b6000 00:00 0
+b72b7000-b7ab6000 rw-p b72b7000 00:00 0
+b7ab6000-b7ac9000 r-xp 00000000 08:08 7996 /usr/lib/libz.so.1.2.3
+b7ac9000-b7aca000 rw-p 00012000 08:08 7996 /usr/lib/libz.so.1.2.3
+b7aca000-b7aee000 r-xp 00000000 08:08 2241 /lib/libm-2.5.so
+b7aee000-b7af0000 rw-p 00023000 08:08 2241 /lib/libm-2.5.so
+b7af0000-b7b02000 r-xp 00000000 08:08 2248 /lib/libnsl-2.5.so
+b7b02000-b7b04000 rw-p 00011000 08:08 2248 /lib/libnsl-2.5.so
+b7b04000-b7b06000 rw-p b7b04000 00:00 0
+b7b06000-b7b0b000 r-xp 00000000 08:08 2222 /lib/libcrypt-2.5.so
+b7b0b000-b7b0d000 rw-p 00004000 08:08 2222 /lib/libcrypt-2.5.so
+b7b0d000-b7b34000 rw-p b7b0d000 00:00 0
+b7b34000-b7b47000 r-xp 00000000 08:08 2280 /lib/libpthread-2.5.so
+b7b47000-b7b49000 rw-p 00012000 08:08 2280 /lib/libpthread-2.5.so
+b7b49000-b7b4b000 rw-p b7b49000 00:00 0
+b7b4b000-b7ce9000 r-xp 00000000 08:08 129653 /usr/lib/libmysqlclient_r.so.15.0.0
+b7ce9000-b7d2d000 rw-p 0019e000 08:08 129653 /usr/lib/libmysqlclient_r.so.15.0.0
+b7d2d000-b7d2e000 rw-p b7d2d000 00:00 0
+b7d2e000-b7dc2000 r-xp 00000000 08:08 7538 /usr/lib/libglib-2.0.so.0.1200.11
+b7dc2000-b7dc3000 rw-p 00093000 08:08 7538 /usr/lib/libglib-2.0.so.0.1200.11
+b7dc3000-b7dce000 r-xp 00000000 08:08 2235 /lib/libgcc_s.so.1
+b7dce000-b7dcf000 rw-p 0000a000 08:08 2235 /lib/libgcc_s.so.1
+b7dcf000-b7dd1000 r-xp 00000000 08:08 163049 /serv/lighttpd1418/lib/mod_staticfile.so
+b7dd1000-b7dd2000 rw-p 00002000 08:08 163049 /serv/lighttpd1418/lib/mod_staticfile.so
+b7dd2000-b7dd6000 r-xp 00000000 08:08 163051 /serv/lighttpd1418/lib/mod_dirlisting.so
+b7dd6000-b7dd7000 rw-p 00003000 08:08 163051 /serv/lighttpd1418/lib/mod_dirlisting.so
+b7dd7000-b7e0c000 r-xp 00000000 08:08 163119 /serv/lighttpd1418/lib/mod_stats.so
+b7e0c000-b7e0d000 rw-p 00034000 08:08 163119 /serv/lighttpd1418/lib/mod_stats.so
+b7e0d000-b7e0e000 rw-p b7e0d000 00:00 0
+b7e0e000-b7f34000 r-xp 00000000 08:08 2210 /lib/libc-2.5.so
+b7f34000-b7f35000 r–p 00125000 08:08 2210 /lib/libc-2.5.so
+b7f35000-b7f37000 rw-p 00126000 08:08 2210 /lib/libc-2.5.so
+b7f37000-b7f3a000 rw-p b7f37000 00:00 0
+b7f3a000-b7f3c000 r-xp 00000000 08:08 2229 /lib/libdl-2.5.so
+b7f3c000-b7f3e000 rw-p 00001000 08:08 2229 /lib/libdl-2.5.so
+b7f3f000-b7f45000 r-xp 00000000 08:08 2286 /lib/librt-2.5.so
+b7f45000-b7f47000 rw-p 00006000 08:08 2286 /lib/librt-2.5.so
+b7f47000-b7f4b000 r-xp 00000000 08:08 7646 /usr/lib/libgthread-2.0.so.0.1200.11
+b7f4b000-b7f4c000 rw-p 00003000 08:08 7646 /usr/lib/libgthread-2.0.so.0.1200.11
+b7f4c000-b7f4d000 r-xp 00000000 08:08 163098 /serv/lighttpd1418/lib/mod_rewrite.so
+b7f4d000-b7f4e000 rw-p 00000000 08:08 163098 /serv/lighttpd1418/lib/mod_rewrite.so
+b7f4e000-b7f4f000 r-xp 00000000 08:08 163084 /serv/lighttpd1418/lib/mod_access.so
+b7f4f000-b7f50000 rw-p 00000000 08:08 163084 /serv/lighttpd1418/lib/mod_access.so
+b7f50000-b7f51000 r-xp 00000000 08:08 123783 /serv/lighttpd1418/lib/mod_indexfile.so
+b7f51000-b7f52000 rw-p 00001000 08:08 123783 /s忽略 (core dumped)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+*** glibc detected *** /serv/lighttpd1418/sbin/lighttpd: malloc(): memory corruption (fast): 0×080a6c58 ***
+
+======= Backtrace: =========
+
+/lib/libc.so.6[0xb7ed5312]
+
+/lib/libc.so.6[0xb7ed7637]
+
+/lib/libc.so.6(__libc_malloc+0×85)[0xb7ed8d35]
+
+/serv/lighttpd1418//lib/mod_stats.so(counter_incr+0×99)[0xb7e3d2b9]
+
+/serv/lighttpd1418//lib/mod_stats.so(counter_incr_matchtable+0×57)[0xb7e3d347]
+
+/serv/lighttpd1418//lib/mod_stats.so(counter_process_browsers+0×53)[0xb7e3d3c3]
+
+/serv/lighttpd1418//lib/mod_stats.so[0xb7e3db65]
+
+/serv/lighttpd1418/sbin/lighttpd(plugins_call_handle_uri_clean+0×5a)[0×805fe2a]
+
+/serv/lighttpd1418/sbin/lighttpd(http_response_prepare+0×2ff)[0×804fdaf]
+
+/serv/lighttpd1418/sbin/lighttpd(connection_state_machine+0×2f1)[0×8052b11]
+
+/serv/lighttpd1418/sbin/lighttpd(main+0×10a0)[0×804e760]
+
+/lib/libc.so.6(__libc_start_main+0xdc)[0xb7e86ebc]
+
+/serv/lighttpd1418/sbin/lighttpd[0×804d331]
+
+在网上没找到一点关于这个问题的解释。
+</body>
+</html>

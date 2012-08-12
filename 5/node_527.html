@@ -1,0 +1,28 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>关于QModelIndexList的应用，在64位win上有问题</title>
+</head>
+<body>
+一般使用方法，
+QItemSelectionModel *ism = someview->selectionModel();
+QModelIndexList mil = ism->selectedIndexes();
+
+这样在32位win32及linux-32/64平台都不会有问题，而拿到win64平台后，则出现程序必会崩溃的问题。
+
+不知道这个是不是qt本身的bug呢。
+
+先找其他办法解决这个问题，实现完整的win64位程序。
+
+
+一个替换方法，通过使用ism->currentIndex()找到选定行的第一个cell的QModelIndex
+如，
+QModelIndex idx,cidx;
+cidx = ism->currentIndex();
+idx = ism->model()->index(cidx.row(), 0, cidx.parent());
+
+那么这里的idx就是我们要找到的行首的QModelIndex();
+</body>
+</html>

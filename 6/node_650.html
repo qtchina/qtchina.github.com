@@ -1,0 +1,46 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>android Linux 开发环境</title>
+</head>
+<body>
+这是一个开发环境搭建及环境维护文档。
+
+我使用的是arch linux，一般都保持比较新的状态。
+
+桌面环境KDE 4。
+
+相关包：
+sudo pacman -S swt lib32-sdl lib32-libstdc++5 lib32-openal libmtp
+AUR包: 
+     android-sdk
+     android-ndk
+     android-sdk-platform-tools
+     android-apktool
+     android-udev
+     
+安装完android-udev后，需要把你开发用的用户添加到adbusers组中，这个组是安装该包时添加的。
+
+gpasswd -a USERNAME adbusers
+
+android platforms版本及下载：
+http://dl-ssl.google.com/android/repository/android-15_r03.zip
+
+开发工具IDE：
+* eclipse
+*Android Tools - Lightweight IDE for Android          http://fieldbird.sourceforge.net/AndroidTools/InstallAndroidTools.html
+
+安装包离线下载：
+#!/bin/sh
+sudo echo 1024 > /proc/sys/dev/hpet/max-user-freq
+wget http://dl-ssl.google.com/android/repository/android-15_r03.zip
+wget http://dl-ssl.google.com/android/repository/platform-tools_r11-linux.zip
+wget http://dl.google.com/android/android-sdk_r18-linux.tgz
+wget http://mirror.bjtu.edu.cn/eclipse/webtools/downloads/drops/R3.3.2/R-3.3.2-20120210195245/wtp-R-3.3.2-20120210195245.zip
+wget https://dl-ssl.google.com/android/ndk/android-ndk-r7c-linux-x86.tar.bz2
+
+
+</body>
+</html>
