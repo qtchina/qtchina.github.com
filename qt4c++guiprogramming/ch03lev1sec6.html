@@ -1,0 +1,70 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Storing Settings</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch03lev1sec6"></a>
+
+<h3 id="title-IDAG1CNO" class="docSection1Title">Storing Settings</h3>
+<p class="docText"><a name="iddle1010"></a><a name="iddle1168"></a><a name="iddle1269"></a><a name="iddle1575"></a><a name="iddle1717"></a><a name="iddle2141"></a><a name="iddle3240"></a><a name="iddle3255"></a><a name="iddle3793"></a><a name="iddle4839"></a><a name="iddle4844"></a><a name="iddle4846"></a><a name="iddle4847"></a><a name="iddle4848"></a><a name="iddle4849"></a><a name="iddle5707"></a><a name="iddle5763"></a><a name="iddle6215"></a><a name="iddle6245"></a><a name="iddle6351"></a><a name="iddle6670"></a><a name="iddle7094"></a><a name="iddle7303"></a><a name="iddle7325"></a>In the <tt>MainWindow</tt> constructor, we called <tt>readSettings()</tt> to load the application's stored settings. Similarly, in <tt>closeEvent()</tt>, we called <tt>writeSettings()</tt> to save the settings. These two functions are the last <tt>MainWindow</tt> member functions that need to be implemented.</p>
+<div class="docText"><pre>
+void MainWindow::writeSettings()
+{
+    QSettings settings("Software Inc.", "Spreadsheet");
+    settings.setValue("geometry", geometry());
+    settings.setValue("recentFiles", recentFiles);
+    settings.setValue("showGrid", showGridAction-&gt;isChecked());
+    settings.setValue("autoRecalc", autoRecalcAction-&gt;isChecked());
+}
+</pre></div><br>
+<p class="docText">The <tt>writeSettings()</tt> function saves the main window's geometry (position and size), the list of recently opened files, and the Show Grid and Auto-Recalculate options.</p>
+<p class="docText">By default, <tt>QSettings</tt> stores the application's settings in platform-specific locations. On Windows, it uses the system registry; on Unix, it stores the data in text files; on Mac OS X, it uses the Core Foundation Preferences API.</p>
+<p class="docText">The constructor arguments specify the organization's name and the application's name. This information is used in a platform-specific way to find a location for the settings.</p>
+<p class="docText"><tt>QSettings</tt> stores settings as <span class="docEmphasis">key</span><span class="docEmphasis">value</span> pairs. The <span class="docEmphasis">key</span> is similar to a file system path. Subkeys can be specified using a path-like syntax (for example, <tt>findDialog/matchCase</tt>) or using <tt>beginGroup()</tt> and <tt>endGroup()</tt>:</p>
+<div class="docText"><pre>
+settings.beginGroup("findDialog");
+settings.setValue("matchCase", caseCheckBox-&gt;isChecked());
+settings.setValue("searchBackward", backwardCheckBox-&gt;isChecked());
+settings.endGroup();
+</pre></div><br>
+<p class="docText">The <span class="docEmphasis">value</span> can be an <tt>int</tt>, a <tt>bool</tt>, a <tt>double</tt>, a <tt>QString</tt>, a <tt>QStringList</tt>, or any other type supported by <tt>QVariant</tt>, including registered custom types.</p>
+<div class="docText"><pre>
+void MainWindow::readSettings()
+{
+    QSettings settings("Software Inc.", "Spreadsheet");
+    QRect rect = settings.value("geometry",
+                                QRect(200, 200, 400, 400)).toRect();
+    move(rect.topLeft());
+    resize(rect.size());
+    recentFiles = settings.value("recentFiles").toStringList();
+    updateRecentFileActions();
+    bool showGrid = settings.value("showGrid", true).toBool();
+    showGridAction-&gt;setChecked(showGrid);
+
+    bool autoRecalc = settings.value("autoRecalc", true).toBool();
+    autoRecalcAction-&gt;setChecked(autoRecalc);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1898"></a><a name="iddle3192"></a><a name="iddle3258"></a><a name="iddle3439"></a><a name="iddle3483"></a><a name="iddle5562"></a><a name="iddle6101"></a><a name="iddle6495"></a>The <tt>readSettings()</tt> function loads the settings that were saved by <tt>writeSettings()</tt>. The second argument to the <tt>value()</tt> function specifies a default value, in case there are no settings available. The default values are used the first time the application is run. Since no second argument is given for the recent files list, it will be set to an empty list on the first run.</p>
+<p class="docText">Qt provides a <tt>QWidget::setGeometry()</tt> function to complement <tt>QWidget::geometry()</tt>, but it doesn't always work as we would expect on X11 because of limitations in many window managers. For that reason, we use <tt>move()</tt> and <tt>resize()</tt> instead. (See <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/geometry.html">http://doc.trolltech.com/4.1/geometry.html</a> for a detailed explanation.)</p>
+<p class="docText">The arrangement we opted for in <tt>MainWindow</tt>, with all the <tt>QSettings</tt>-related code in <tt>readSettings()</tt> and <tt>writeSettings()</tt>, is just one of many possible approaches. A <tt>QSettings</tt> object can be created to query or modify some setting at any time during the execution of the application and from anywhere in the code.</P>
+<p class="docText">We have now completed the Spreadsheet's <tt>MainWindow</tt> implementation. In the following sections, we will discuss how the Spreadsheet application can be modified to handle multiple documents and how to implement a splash screen. We will complete its functionality, including handling formulas and sorting, in the next chapter.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec7.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

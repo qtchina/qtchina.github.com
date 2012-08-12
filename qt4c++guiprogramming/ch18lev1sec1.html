@@ -1,0 +1,154 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Creating Threads</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch18lev1sec1"></a>
+<h3 id="title-IDANTQ5L" class="docSection1Title">Creating Threads</h3>
+<p class="docText">Providing multiple threads in a Qt application is straightforward: We just subclass <tt>QThread</tt> and reimplement its <tt>run()</tt> function. To show how this works, we will start by reviewing the code for a very simple <tt>QThread</tt> subclass that repeatedly prints a given string on a console.</p>
+<div class="docText"><pre>
+class Thread : public QThread
+{
+    Q_OBJECT
+public:
+    Thread();
+    void setMessage(const QString &amp;message);
+    void stop();
+protected:
+    void run();
+private:
+    QString messageStr;
+    volatile bool stopped;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1219"></a><a name="iddle5331"></a><a name="iddle5339"></a><a name="iddle5899"></a><a name="iddle5900"></a><a name="iddle5906"></a><a name="iddle6578"></a><a name="iddle6712"></a><a name="iddle6776"></a><a name="iddle6777"></a><a name="iddle6779"></a><a name="iddle7168"></a>The <tt>Thread</tt> class inherits from <tt>QThread</tt> and reimplements the <tt>run()</tt> function. It provides two additional functions: <tt>setMessage()</tt> and <tt>stop()</tt>.</p>
+<p class="docText">The <tt>stopped</tt> variable is declared volatile because it is accessed from different threads and we want to be sure that it is freshly read every time it is needed. If we omitted the <tt>volatile</tt> keyword, the compiler might optimize access to the variable, possibly leading to incorrect results.</p>
+<div class="docText"><pre>
+Thread::Thread()
+{
+    stopped = false;
+}
+</pre></div><br>
+<p class="docText">We set <tt>stopped</tt> to <tt>false</tt> in the constructor.</p>
+<div class="docText"><pre>
+void Thread::run()
+{
+    while (!stopped)
+        cerr &lt;&lt; qPrintable(messageStr);
+    stopped = false;
+    cerr &lt;&lt; endl;
+}
+</pre></div><BR>
+<p class="docText">The <tt>run()</tt> function is called to start executing the thread. As long as the <tt>stopped</tt> variable is <tt>false</tt>, the function keeps printing the given message to the console. The thread terminates when control leaves the <tt>run()</tt> function.</p>
+<div class="docText"><pre>
+void Thread::stop()
+{
+    stopped = true;
+}
+</pre></div><br>
+<p class="docText">The <tt>stop()</tt> function sets the <tt>stopped</tt> variable to <tt>true</tt>, thereby telling <tt>run()</tt> to stop printing text to the console. This function can be called from any thread at any time. For the purposes of this example, we assume that assignment to a <tt>bool</tt> is an atomic operation. This is a reasonable assumption, considering that a <tt>bool</tt> can only have two states. We will see later in this section how to use <tt>QMutex</tt> to guarantee that assigning to a variable is an atomic operation.</P>
+<p class="docText"><tt>QThread</tt> provides a <tt>terminate()</tt> function that terminates the execution of a thread while it is still running. Using <tt>terminate()</tt> is not recommended, since <a name="iddle6781"></a><a name="iddle6782"></a><a name="iddle6783"></a>it can stop the thread at any point and does not give the thread any chance to clean up after itself. It is always safer to use a <tt>stopped</tt> variable and a <tt>stop()</tt> function as we did here.</P>
+<a name="ch18fig01"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 18.1. The Threads application</H5>
+
+<p class="docText">
+<img border="0" alt="" width="273" height="81" SRC="images/threads.jpg"></p>
+
+</center></p><BR>
+<p class="docText">We will now see how to use the <tt>THRead</tt> class in a small Qt application that uses two threads, A and B, in addition to the main thread.</P>
+<div class="docText"><pre>
+class ThreadDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    ThreadDialog(QWidget *parent = 0);
+protected:
+    void closeEvent(QCloseEvent *event);
+private slots:
+    void startOrStopThreadA();
+    void startOrStopThreadB();
+private:
+    Thread threadA;
+    Thread threadB;
+    QPushButton *threadAButton;
+    QPushButton *threadBButton;
+    QPushButton *quitButton;
+};
+</pre></div><br>
+<p class="docText">The <tt>ThreadDialog</tt> class declares two variables of type <tt>Thread</tt> and some buttons to provide a basic user interface.</P>
+<div class="docText"><pre>
+ThreadDialog::ThreadDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    threadA.setMessage("A");
+    threadB.setMessage("B");
+    threadAButton = new QPushButton(tr("Start A"));
+    threadBButton = new QPushButton(tr("Start B"));
+    quitButton = new QPushButton(tr("Quit"));
+    quitButton-&gt;setDefault(true);
+    connect(threadAButton, SIGNAL(clicked()),
+            this, SLOT(startOrStopThreadA()));
+    connect(threadBButton, SIGNAL(clicked()),
+            this, SLOT(startOrStopThreadB()));
+    ...
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1055"></a><a name="iddle1499"></a><a name="iddle2217"></a><a name="iddle4121"></a><a name="iddle4262"></a><a name="iddle5338"></a><a name="iddle5340"></a><a name="iddle5489"></a><a name="iddle6517"></a><a name="iddle6525"></a><a name="iddle6526"></a><a name="iddle6784"></a><a name="iddle6785"></a><a name="iddle6786"></a><a name="iddle7178"></a><a name="iddle7179"></a>In the constructor, we call <tt>setMessage()</tt> to make the first thread repeatedly print 'A's and the second thread 'B's.</p>
+<div class="docText"><pre>
+void ThreadDialog::startOrStopThreadA()
+{
+    if (threadA.isRunning()) {
+        threadA.stop();
+        threadAButton-&gt;setText(tr("Start A"));
+    } else {
+        threadA.start();
+        threadAButton-&gt;setText(tr("Stop A"));
+    }
+}
+</pre></div><BR>
+<p class="docText">When the user clicks the button for thread A, <tt>startOrStopThreadA()</tt> stops the thread if it was running and starts it otherwise. It also updates the button's text.</P>
+<div class="docText"><pre>
+void ThreadDialog::startOrStopThreadB()
+{
+    if (threadB.isRunning()) {
+        threadB.stop();
+        threadBButton-&gt;setText(tr("Start B"));
+    } else {
+        threadB.start();
+        threadBButton-&gt;setText(tr("Stop B"));
+    }
+}
+</pre></div><br>
+<p class="docText">The code for <tt>startOrStopThreadB()</tt> is very similar.</p>
+<div class="docText"><pre>
+void ThreadDialog::closeEvent(QCloseEvent *event)
+{
+    threadA.stop();
+    threadB.stop();
+    threadA.wait();
+    threadB.wait();
+    event-&gt;accept();
+}
+</pre></div><br>
+<p class="docText">If the user clicks Quit or closes the window, we stop any running threads and wait for them to finish (using <tt>QThread::wait()</tt>) before we call <tt>QCloseEvent::accept()</tt>. This ensures that the application exits in a clean state, although it doesn't really matter in this example.</P>
+<p class="docText">If you run the application and click Start A, the console will be filled with 'A's. If you click Start B, it will now fill with alternating sequences of 'A's and 'B's. Click Stop A, and now it will only print 'B's.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

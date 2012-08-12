@@ -1,0 +1,243 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Connecting and Querying</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch13lev1sec1"></a>
+<h3 id="title-IDALM0X" class="docSection1Title">Connecting and Querying</h3>
+<p class="docText">To execute SQL queries, we must first establish a connection with a database. Typically, database connections are set up in a separate function that we call at application startup. For example:</p>
+<div class="docText"><pre>
+bool createConnection()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("mozart.konkordia.edu");
+    db.setDatabaseName("musicdb");
+    db.setUserName("gbatstone");
+    db.setPassword("T17aV44");
+    if (!db.open()) {
+        QMessageBox::critical(0, QObject::tr("Database Error"),
+                              db.lastError().text());
+        return false;
+    }
+    return true;
+}
+</pre></div><br>
+<p class="docText">First, we call <tt>QSqlDatabase::addDatabase()</tt> to create a <tt>QSqlDatabase</tt> object. The first argument to <tt>addDatabase()</tt> specifies which database driver Qt must use to access the database. In this case, we use MySQL.</p>
+<p class="docText">Next, we set the database host name, the database name, the user name, and the password, and we open the connection. If <tt>open()</tt> fails, we show an error message.</p>
+<p class="docText">Typically, we would call <tt>createConnection()</tt> in <tt>main()</tt>:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    if (!createConnection())
+        return 1;
+    ...
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">Once a connection is established, we can use <tt>QSqlQuery</tt> to execute any SQL statement that the underlying database supports. For example, here's how to execute a <tt>SELECT</tt> statement:</p>
+<div class="docText"><pre>
+QSqlQuery query;
+query.exec("SELECT title, year FROM cd WHERE year &gt;= 1998");
+</pre></div><br>
+<p class="docText"><a name="iddle1661"></a><a name="iddle1850"></a><a name="iddle1853"></a><a name="iddle2438"></a><a name="iddle2843"></a><a name="iddle2911"></a><a name="iddle3033"></a><a name="iddle3505"></a><a name="iddle3536"></a><a name="iddle3715"></a><a name="iddle3801"></a><a name="iddle3809"></a><a name="iddle4917"></a><a name="iddle4918"></a><a name="iddle4919"></a><a name="iddle4920"></a><a name="iddle4921"></a><a name="iddle4922"></a><a name="iddle4923"></a><a name="iddle4924"></a><a name="iddle4925"></a><a name="iddle4926"></a><a name="iddle5439"></a><a name="iddle5847"></a><a name="iddle5962"></a><a name="iddle6099"></a><a name="iddle7095"></a><a name="iddle7099"></a><a name="iddle7114"></a>After the <tt>exec()</tt> call, we can navigate through the query's result set:</p>
+<div class="docText"><pre>
+while (query.next()) {
+    QString title = query.value(0).toString();
+    int year = query.value(1).toInt();
+    cerr &lt;&lt; qPrintable(title) &lt;&lt; ": " &lt;&lt; year &lt;&lt; endl;
+}
+</pre></div><br>
+<p class="docText">We call <tt>next()</tt> once to position the <tt>QSqlQuery</tt> on the <span class="docEmphasis">first</span> record of the result set. Subsequent calls to <tt>next()</tt> advance the record pointer by one record each time, until the end is reached, at which point <tt>next()</tt> returns <tt>false</tt>. If the result set is empty (or if the query failed), the first call to <tt>next()</tt> will return <tt>false</tt>.</P>
+<p class="docText">The <tt>value()</tt> function returns the value of a field as a <tt>QVariant</tt>. The fields are numbered from 0 in the order given in the <tt>SELECT</tt> statement. The <tt>QVariant</tt> class can hold many C++ and Qt types, including <tt>int</tt> and <tt>QString</tt>. The different types of data that can be stored in a database are mapped into the corresponding C++ and Qt types and stored in <tt>QVariant</tt>s. For example, a <tt>VARCHAR</tt> is represented as a <tt>QString</tt> and a <tt>DATETIME</tt> as a <tt>QDateTime</tt>.</p>
+<p class="docText"><tt>QSqlQuery</tt> provides some other functions to navigate through the result set: <tt>first()</tt>, <tt>last()</tt>, <tt>previous()</tt>, and <tt>seek()</tt>. These functions are convenient, but for some databases they can be slower and more memory-hungry than <tt>next()</tt>. For an easy optimization when operating on large data sets, we can call <tt>QSqlQuery::setForwardOnly(true)</tt> before calling <tt>exec()</tt>, and then only use <tt>next()</tt> for navigating the result set.</p>
+<p class="docText">Earlier we specified the SQL query as an argument to <tt>QSqlQuery::exec()</tt>, but we can also pass it directly to the constructor, which executes it immediately:</p>
+<div class="docText"><pre>
+QSqlQuery query("SELECT title, year FROM cd WHERE year &gt;= 1998");
+</pre></div><BR>
+<p class="docText">We can check for an error by calling <tt>isActive()</tt> on the query:</p>
+<div class="docText"><pre>
+if (!query.isActive())
+    QMessageBox::warning(this, tr("Database Error"),
+                         query.lastError().text());
+</pre></div><BR>
+<p class="docText">If no error occurs, the query will become &quot;active&quot; and we can use <tt>next()</tt> to navigate through the result set.</P>
+<p class="docText">Doing an <tt>INSERT</tt> is almost as easy as performing a <tt>SELECT</tt>:</p>
+<div class="docText"><pre>
+QSqlQuery query("INSERT INTO cd (id, artistid, title, year) "
+                "VALUES (203, 102, 'Living in America', 2002)");
+</pre></div><BR>
+<p class="docText">After this, <tt>numRowsAffected()</tt> returns the number of rows that were affected by the SQL statement (or -1 on error).</p>
+<p class="docText">If we need to insert a lot of records, or if we want to avoid converting values to strings (and escaping them correctly), we can use <tt>prepare()</tt> to specify a query that contains placeholders and then bind the values we want to insert. Qt supports both the Oracle-style and the ODBC-style syntax for placeholders for all databases, using native support where it is available and simulating it otherwise. <a name="iddle1081"></a><a name="iddle1201"></a><a name="iddle1287"></a><a name="iddle1552"></a><a name="iddle1594"></a><a name="iddle1849"></a><a name="iddle1852"></a><a name="iddle2063"></a><a name="iddle2488"></a><a name="iddle2616"></a><a name="iddle2934"></a><a name="iddle3035"></a><a name="iddle4901"></a><a name="iddle4903"></a><a name="iddle4904"></a><a name="iddle4909"></a><a name="iddle4910"></a><a name="iddle4914"></a><a name="iddle4915"></a><a name="iddle5878"></a><a name="iddle6910"></a><a name="iddle7010"></a>Here's an example that uses the Oracle-style syntax with named placeholders:</p>
+<div class="docText"><pre>
+QSqlQuery query;
+query.prepare("INSERT INTO cd (id, artistid, title, year) "
+              "VALUES (:id, :artistid, :title, :year)");
+query.bindValue(":id", 203);
+query.bindValue(":artistid", 102);
+query.bindValue(":title", "Living in America");
+query.bindValue(":year", 2002);
+query.exec();
+</pre></div><BR>
+<p class="docText">Here's the same example using ODBC-style positional placeholders:</P>
+<div class="docText"><pre>
+QSqlQuery query;
+query.prepare("INSERT INTO cd (id, artistid, title, year) "
+              "VALUES (?, ?, ?, ?)");
+query.addBindValue(203);
+query.addBindValue(102);
+query.addBindValue("Living in America");
+query.addBindValue(2002);
+query.exec();
+</pre></div><BR>
+<p class="docText">After the call to <tt>exec()</tt>, we can call <tt>bindValue()</tt> or <tt>addBindValue()</tt> to bind new values, then call <tt>exec()</tt> again to execute the query with the new values.</p>
+<p class="docText">Placeholders are often used to specify binary data or strings that contain non-ASCII or non-Latin-1 characters. Behind the scenes, Qt uses Unicode with those databases that support Unicode, and for those that don't, Qt transparently converts strings to the appropriate encoding.</p>
+<p class="docText">Qt supports SQL transactions on databases where they are available. To start a transaction, we call <tt>transaction()</tt> on the <tt>QSqlDatabase</tt> object that represents the database connection. To finish the transaction, we call either <tt>commit()</tt> or <tt>rollback()</tt>. For example, here's how we would look up a foreign key and execute an <tt>INSERT</tt> statement inside a transaction:</P>
+<div class="docText"><pre>
+QSqlDatabase::database().transaction();
+QSqlQuery query;
+query.exec("SELECT id FROM artist WHERE name = 'Gluecifer'");
+if (query.next()) {
+    int artistId = query.value(0).toInt();
+    query.exec("INSERT INTO cd (id, artistid, title, year) "
+               "VALUES (201, " + QString::number(artistId)
+               + ", 'Riding the Tiger', 1997)");
+}
+QSqlDatabase::database().commit();
+</pre></div><br>
+<p class="docText">The <tt>QSqlDatabase::database()</tt> function returns a <tt>QSqlDatabase</tt> object representing the connection we created in <tt>createConnection()</tt>. If a transaction cannot be started, <tt>QSqlDatabase::transaction()</tt> returns <tt>false</tt>. Some databases don't support transactions. For those, the <tt>transaction()</tt>, <tt>commit()</tt>, and <tt>rollback()</tt> functions do nothing. We can test whether a database supports transactions using <tt>hasFeature()</tt> on the <tt>QSqlDriver</tt> associated with the database:</P>
+<div class="docText"><pre>
+QSqlDriver *driver = QSqlDatabase::database().driver();
+if (driver-&gt;hasFeature(QSqlDriver::Transactions))
+    ...
+</pre></div><BR>
+<p class="docText"><a name="iddle1085"></a><a name="iddle1291"></a><a name="iddle1844"></a><a name="iddle1851"></a><a name="iddle1877"></a><a name="iddle3435"></a><a name="iddle3469"></a><a name="iddle4900"></a><a name="iddle4902"></a><a name="iddle4942"></a><a name="iddle4946"></a><a name="iddle4951"></a><a name="iddle4952"></a><a name="iddle4954"></a><a name="iddle5730"></a><a name="iddle5848"></a><a name="iddle5964"></a><a name="iddle6085"></a><a name="iddle6194"></a><a name="iddle7096"></a>Several other database features can be tested for, including whether the database supports BLOBs (Binary Large Objects), Unicode, and prepared queries.</p>
+<p class="docText">In the examples so far, we have assumed that the application is using a single database connection. If we want to create multiple connections, we can pass a name as second argument to <tt>addDatabase()</tt>. For example:</p>
+<div class="docText"><pre>
+QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "OTHER");
+db.setHostName("saturn.mcmanamy.edu");
+db.setDatabaseName("starsdb");
+db.setUserName("hilbert");
+db.setPassword("ixtapa7");
+</pre></div><br>
+<p class="docText">We can then retrieve a pointer to the <tt>QSqlDatabase</tt> object by passing the name to <tt>QSqlDatabase::database()</tt>:</p>
+<div class="docText"><pre>
+QSqlDatabase db = QSqlDatabase::database("OTHER");
+</pre></div><BR>
+<p class="docText">To execute queries using the other connection, we pass the <tt>QSqlDatabase</tt> object to the <tt>QSqlQuery</tt> constructor:</p>
+<div class="docText"><pre>
+QSqlQuery query(db);
+query.exec("SELECT id FROM artist WHERE name = 'Mando Diao'");
+</pre></div><br>
+<p class="docText">Multiple connections are useful if we want to perform more than one transaction at a time, since each connection can only handle a single active transaction. When we use multiple database connections, we can still have one unnamed connection, and <tt>QSqlQuery</tt> will use that connection if none is spec-ified.</P>
+<p class="docText">In addition to <tt>QSqlQuery</tt>, Qt provides the <tt>QSqlTableModel</tt> class as a higher-level interface, allowing us to avoid using raw SQL for performing the most common SQL operations (<tt>SELECT</tt>, <tt>INSERT</tt>, <tt>UPDATE</tt>, and <tt>DELETE</tt>). The class can be used stand-alone to manipulate a database without any GUI involvement, or it can be used as a data source for <tt>QListView</tt> or <tt>QTableView</tt>.</p>
+<p class="docText">Here's an example that uses <tt>QSqlTableModel</tt> to perform a <tt>SELECT</tt>:</P>
+<div class="docText"><pre>
+QSqlTableModel model;
+model.setTable("cd");
+model.setFilter("year &gt;= 1998");
+model.select();
+</pre></div><br>
+<p class="docText">This is equivalent to the query</p>
+<div class="docText"><pre>
+SELECT * FROM cd WHERE year &gt;= 1998
+</pre></div><br>
+<p class="docText">Navigating through the result set is done by retrieving a given record using <tt>QSqlTableModel::record()</tt> and by accessing individual fields using <tt>value()</tt>:</p>
+<div class="docText"><pre>
+for (int i = 0; i &lt; model.rowCount(); ++i) {
+    QSqlRecord record = model.record(i);
+    QString title = record.value("title").toString();
+    int year = record.value("year").toInt();
+    cerr &lt;&lt; qPrintable(title) &lt;&lt; ": " &lt;&lt; year &lt;&lt; endl;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2847"></a><a name="iddle4941"></a><a name="iddle4947"></a><a name="iddle4949"></a><a name="iddle4953"></a><a name="iddle5965"></a><a name="iddle6060"></a><a name="iddle6660"></a>The <tt>QSqlRecord::value()</tt> function takes either a field name or a field index. When operating on large data sets, it is recommended that fields are specified by their indexes. For example:</p>
+<div class="docText"><pre>
+int titleIndex = model.record().indexOf("title");
+int yearIndex = model.record().indexOf("year");
+for (int i = 0; i &lt; model.rowCount(); ++i) {
+    QSqlRecord record = model.record(i);
+    QString title = record.value(titleIndex).toString();
+    int year = record.value(yearIndex).toInt();
+    cerr &lt;&lt; qPrintable(title) &lt;&lt; ": " &lt;&lt; year &lt;&lt; endl;
+}
+</pre></div><br>
+<p class="docText">To insert a record into a database table, we use the same approach as we would inserting into any two-dimensional model: First, we call <tt>insertRow()</tt> to create a new empty row (record), and then we use <tt>setData()</tt> to set the values of each column (field).</p>
+<div class="docText"><pre>
+QSqlTableModel model;
+model.setTable("cd");
+int row = 0;
+model.insertRows(row, 1);
+model.setData(model.index(row, 0), 113);
+model.setData(model.index(row, 1), "Shanghai My Heart");
+model.setData(model.index(row, 2), 224);
+model.setData(model.index(row, 3), 2003);
+model.submitAll();
+</pre></div><br>
+<p class="docText">After the call to <tt>submitAll()</tt>, the record might be moved to a different row position, depending on how the table is ordered. The <tt>submitAll()</tt> call will return <tt>false</tt> if the insertion failed.</p>
+<p class="docText">An important difference between an SQL model and a standard model is that for an SQL model we must call <tt>submitAll()</tt> to have any changes written to the database.</p>
+<p class="docText">To update a record, we must first position the <tt>QSqlTableModel</tt> on the record we want to modify (for example, using <tt>select()</tt>). We then extract the record, update the fields we want to change, and write our changes back to the database:</p>
+<div class="docText"><pre>
+QSqlTableModel model;
+model.setTable("cd");
+model.setFilter("id = 125");
+model.select();
+if (model.rowCount() == 1) {
+    QSqlRecord record = model.record(0);
+    record.setValue("title", "Melody A.M.");
+    record.setValue("year", record.value("year").toInt() + 1);
+    model.setRecord(0, record);
+    model.submitAll();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1369"></a><a name="iddle2281"></a><a name="iddle4945"></a><a name="iddle4950"></a><a name="iddle5796"></a><a name="iddle6061"></a>If there is a record that matches the specified filter, we retrieve it using <tt>QSqlTableModel::record()</tt>. We apply our changes and overwrite the original record with our modified record.</p>
+<p class="docText">It is also possible to perform an update using <tt>setData()</tt>, just as we would do for a non-SQL model. The model indexes that we retrieve are for a given row and column:</p>
+<div class="docText"><pre>
+model.select();
+if (model.rowCount() == 1) {
+    model.setData(model.index(0, 1), "Melody A.M.");
+    model.setData(model.index(0, 3),
+                  model.data(model.index(0, 3)).toInt() + 1);
+    model.submitAll();
+}
+</pre></div><BR>
+<p class="docText">Deleting a record is similar to updating:</p>
+<div class="docText"><pre>
+model.setTable("cd");
+model.setFilter("id = 125");
+model.select();
+if (model.rowCount() == 1) {
+    model.removeRows(0, 1);
+    model.submitAll();
+}
+</pre></div><br>
+<p class="docText">The <tt>removeRows()</tt> call takes the row number of the first record to delete and the number of records to delete. The next example deletes all the records that match the filter:</p>
+<div class="docText"><pre>
+model.setTable("cd");
+model.setFilter("year &lt; 1990");
+model.select();
+if (model.rowCount() &gt; 0) {
+    model.removeRows(0, model.rowCount());
+    model.submitAll();
+}
+</pre></div><BR>
+<p class="docText">The <tt>QSqlQuery</tt> and <tt>QSqlTableModel</tt> classes provide an interface between Qt and an SQL database. Using these classes, we can create forms that present data to users and that let them insert, update, and delete records.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

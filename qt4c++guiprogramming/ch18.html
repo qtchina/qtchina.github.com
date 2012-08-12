@@ -1,0 +1,42 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 18.&nbsp; Multithreading</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch18"></a>
+
+<h2 id="title-IDAX3DMN" class="docChapterTitle">Chapter 18. Multithreading</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="166" height="108" SRC="images/381fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle2326"></a><a name="iddle2643"></a><a name="iddle2855"></a><a name="iddle3445"></a><a name="iddle5325"></a><a name="iddle5326"></a><a name="iddle6644"></a><a name="iddle6774"></a><a name="iddle6775"></a><a name="iddle6791"></a><span class="docEmphasis"><a class="docLink" href="ch18lev1sec1.html#ch18lev1sec1">Creating Threads</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch18lev1sec2.html#ch18lev1sec2">Synchronizing Threads</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch18lev1sec3.html#ch18lev1sec3">Communicating with the Main Thread</a></span></p></LI><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch18lev1sec4.html#ch18lev1sec4">Using Qt's Classes in Secondary Threads</a></span></p></li></UL>
+<p class="docText">Conventional GUI applications have one thread of execution and perform one operation at a time. If the user invokes a time-consuming operation from the user interface, the interface typically freezes while the operation is in progress. <a class="docLink" href="ch07.html#ch07">Chapter 7</a> (Event Processing) presents some solutions to this problem. Multi-threading is another solution.</p>
+<p class="docText">In a multithreaded application, the GUI runs in its own thread and the processing takes place in one or more other threads. This results in applications that have responsive GUIs even during intensive processing. Another benefit of multithreading is that multiprocessor systems can execute several threads simultaneously on different processors, resulting in better performance.</P>
+<p class="docText">In this chapter, we will start by showing how to subclass <tt>QTHRead</tt> and how to use <tt>QMutex</tt>, <tt>QSemaphore</tt>, and <tt>QWaitCondition</tt> to synchronize threads. Then we will see how to communicate with the main thread from secondary threads while the event loop is running. Finally, we round off with a review of which Qt classes can be used in secondary threads and which cannot.</p>
+<p class="docText">Multithreading is a large topic with many books devoted exclusively to the subject. Here it is assumed that you already understand the fundamentals of multithreaded programming, so the focus is on explaining how to develop multithreaded Qt applications rather than on the subject of threading itself.</P>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

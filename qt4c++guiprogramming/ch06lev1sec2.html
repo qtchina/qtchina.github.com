@@ -1,0 +1,67 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Stacked Layouts</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch06lev1sec2"></a>
+<h3 id="title-IDAWWALW" class="docSection1Title">Stacked Layouts</h3>
+<p class="docText">The <tt>QStackedLayout</tt> class lays out a set of child widgets, or &quot;pages&quot;, and shows only one at a time, hiding the others from the user. The <tt>QStackedLayout</tt> itself is invisible and provides no intrinsic means for the user to change page. The small arrows and the dark gray frame in <a class="docLink" href="#ch06fig05">Figure 6.5</a> are provided by <span class="docEmphasis">Qt Designer</span> to make the layout easier to design with. For convenience, Qt also includes <tt>QStackedWidget</tt>, which provides a <tt>QWidget</tt> with a built-in <tt>QStackedLayout</tt>.</p>
+<a name="ch06fig05"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.5. <tt>QStackedLayout</tt></h5>
+
+<p class="docText">
+<img border="0" alt="" width="199" height="133" SRC="images/qstackedlayout.jpg"></p>
+
+</center></p><br>
+<p class="docText">The pages are numbered from 0. To make a specific child widget visible, we can call <tt>setCurrentIndex()</tt> with a page number. The page number for a child widget is available using <tt>indexOf()</tt>.</p>
+<p class="docText"><a name="iddle1108"></a><a name="iddle1777"></a><a name="iddle2310"></a><a name="iddle3116"></a><a name="iddle3792"></a><a name="iddle3797"></a><a name="iddle4471"></a><a name="iddle4472"></a><a name="iddle4959"></a><a name="iddle4962"></a><a name="iddle5143"></a><a name="iddle6047"></a><a name="iddle6051"></a><a name="iddle6711"></a>The Preferences dialog shown in <a class="docLink" href="#ch06fig06">Figure 6.6</a> is an example that uses <tt>QStacked-Layout</tt>. The dialog consists of a <tt>QListWidget</tt> on the left and a <tt>QStackedLayout</tt> on the right. Each item in the <tt>QListWidget</tt> corresponds to a different page in the <tt>QStackedLayout</tt>. Here's the relevant code from the dialog's constructor:</p>
+<div class="docText"><pre>
+PreferenceDialog::PreferenceDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    listWidget = new QListWidget;
+    listWidget-&gt;addItem(tr("Appearance"));
+    listWidget-&gt;addItem(tr("Web Browser"));
+    listWidget-&gt;addItem(tr("Mail &amp; News"));
+    listWidget-&gt;addItem(tr("Advanced"));
+    stackedLayout = new QStackedLayout;
+    stackedLayout-&gt;addWidget(appearancePage);
+    stackedLayout-&gt;addWidget(webBrowserPage);
+    stackedLayout-&gt;addWidget(mailAndNewsPage);
+    stackedLayout-&gt;addWidget(advancedPage);
+    connect(listWidget, SIGNAL(currentRowChanged(int)),
+            stackedLayout, SLOT(setCurrentIndex(int)));
+    ...
+    listWidget-&gt;setCurrentRow(0);
+}
+</pre></div><br>
+<a name="ch06fig06"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 6.6. Two pages of the Preferences dialog</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/preferences2_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="209" SRC="images/preferences2.jpg"></P>
+</center></P><BR>
+<p class="docText">We create a <tt>QListWidget</tt> and populate it with the page names. Then we create a <tt>QStackedLayout</tt> and call <tt>addWidget()</tt> for each page. We connect the list widget's <tt>currentRowChanged(int)</tt> signal to the stacked layout's <tt>setCurrentIndex(int)</tt> to implement the page switching and call <tt>setCurrentRow()</tt> on the list widget at the end of the constructor to start on page 0.</p>
+<p class="docText">Forms like this are also very easy to create using <span class="docEmphasis">Qt Designer</span>:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">Create a new form based on the &quot;Dialog&quot; or the &quot;Widget&quot; template.</p></div></li><li><div style="font-weight:normal"><p class="docList">Add a <tt>QListWidget</tt> and a <tt>QStackedWidget</tt> to the form.</p></div></li><li><div style="font-weight:normal"><p class="docList">Fill each page with child widgets and layouts.</p><p class="docList"><a name="iddle1107"></a><a name="iddle2320"></a><a name="iddle3805"></a><a name="iddle4890"></a><a name="iddle4892"></a><a name="iddle4963"></a><a name="iddle5139"></a><a name="iddle5286"></a><a name="iddle6048"></a><a name="iddle6154"></a><a name="iddle6438"></a><a name="iddle6440"></a>(To create a new page, right-click and choose Insert Page; to switch pages, click the tiny left or right arrow located at the top-right of the <tt>QStackedWidget</tt>.)</p></div></li><LI><div style="font-weight:normal"><p class="docList">Lay the widgets out side by side using a horizontal layout.</p></div></li><LI><div style="font-weight:normal"><p class="docList">Connect the list widget's <tt>currentRowChanged(int)</tt> signal to the stacked widget's <tt>setCurrentIndex(int)</tt> slot.</P></div></li><li><div style="font-weight:normal"><p class="docList">Set the value of the list widget's <tt>currentRow</tt> property to 0.</p></div></li></ol></div>
+<p class="docText">Since we have implemented page switching using predefined signals and slots, the dialog will exhibit the correct behavior when previewed in <span class="docEmphasis">Qt Designer</span>.</P>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

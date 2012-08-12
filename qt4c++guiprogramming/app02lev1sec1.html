@@ -1,0 +1,114 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Getting Started with C++</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="app02lev1sec1"></a>
+<h3 id="570594-831" class="docSection1Title">Getting Started with C++</h3>
+<p class="docText">A C++ program consists of one or more <span class="docEmphasis">compilation units</span>. Each compilation unit is a separate source code file, typically with a <tt>.cpp</tt> extension (other common extensions are <tt>.cc</tt> and <tt>.cxx</tt>) that the compiler processes in one run. For each compilation unit, the compiler generates an <span class="docEmphasis">object file</span>, with the extension <tt>.obj</tt> (on Windows) or <tt>.o</tt> (on Unix and Mac OS X). The object file is a binary file that contains machine code for the architecture on which the program will run.</p>
+<p class="docText">Once all the <tt>.cpp</tt> files have been compiled, we can combine the object files together to create an executable using a special program called the <span class="docEmphasis">linker</span>. The linker concatenates the object files and resolves the memory addresses of functions and other symbols referenced in the compilation units.</p>
+<a name="app02fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Exhibit B.1. The C++ compilation process (on Windows)</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084199" width="350" height="114" SRC="images/compilation_process.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle1186"></a><a name="iddle1394"></a><a name="iddle1547"></a><a name="iddle1721"></a><a name="iddle2571"></a><a name="iddle2813"></a><a name="iddle3181"></a><a name="iddle3184"></a><a name="iddle6491"></a><a name="iddle6553"></a><a name="iddle6558"></a><a name="iddle6569"></a><a name="iddle6601"></a>When building a program, exactly one compilation unit must contain a <tt>main()</tt> function that serves as the program's entry point. This function doesn't belong to any class; it is a <span class="docEmphasis">global function</span>.</p>
+<p class="docText">Unlike Java, where each source file must contain exactly one class, C++ lets us organize the compilation units as we want. We can implement several classes in the same <tt>.cpp</tt> file, or spread the implementation of a class across several <tt>.cpp</tt> files, and we can give the source files any names we like. When we make a change in one particular <tt>.cpp</tt> file, we only need to recompile that file and then relink the application to create a new executable.</p>
+<p class="docText">Before we go further, let's quickly review the source code of a trivial C++ program that computes the square of an integer. The program consists of two compilation units: <tt>main.cpp</tt> and <tt>square.cpp</tt>.</P>
+<p class="docText">Here's <tt>square.cpp</tt>:</p>
+<div class="docText"><pre>
+ 1 double square(double n)
+ 2 {
+ 3     return n * n;
+ 4 }
+</pre></div><br>
+<p class="docText">This file simply contains a global function called <tt>square()</tt> that returns the square of its parameter.</p>
+<p class="docText">Here's <tt>main.cpp</tt>:</P>
+<div class="docText"><pre>
+ 1 #include &lt;cstdlib&gt;
+ 2 #include &lt;iostream&gt;
+ 3 using namespace std;
+ 4 double square(double);
+ 5 int main(int argc, char *argv[])
+ 6 {
+ 7     if (argc != 2) {
+ 8         cerr &lt;&lt; "Usage: square &lt;number&gt;" &lt;&lt; endl;
+ 9         return 1;
+10     }
+11     double n = strtod(argv[1], 0);
+12     cout &lt;&lt; "The square of " &lt;&lt; argv[1] &lt;&lt; " is " &lt;&lt; square(n) &lt;&lt; endl;
+13     return 0;
+14 }
+</pre></div><br>
+<p class="docText">The <tt>main.cpp</tt> source file contains the <tt>main()</tt> function's definition. In C++, this function takes an <tt>int</tt> and a <tt>char *</tt> array (an array of character strings) as parameters. The program's name is available as <tt>argv[0]</tt> and the command-line arguments as <tt>argv[1]</tt>, <tt>argv[2]</tt>, &#8230;, <tt>argv[argc - 1]</tt>. The parameter names <tt>argc</tt> (&quot;argument count&quot;) and <tt>argv</tt> (&quot;argument values&quot;) are conventional. If the program doesn't access the command-line arguments, we can define <tt>main()</tt> with no parameters.</P>
+<p class="docText"><a name="iddle1015"></a><a name="iddle1026"></a><a name="iddle1308"></a><a name="iddle1561"></a><a name="iddle1563"></a><a name="iddle2150"></a><a name="iddle2527"></a><a name="iddle2635"></a><a name="iddle3103"></a><a name="iddle3470"></a><a name="iddle3471"></a><a name="iddle3897"></a><a name="iddle3898"></a><a name="iddle5910"></a><a name="iddle6503"></a><a name="iddle6547"></a><a name="iddle6559"></a><a name="iddle7072"></a>The <tt>main()</tt> function uses <tt>strtod()</tt> (&quot;string to <tt>double</tt>&quot;), <tt>cout</tt> (C++'s standard output stream), and <tt>cerr</tt> (C++'s standard error stream) from the Standard C++ library to convert the command-line argument to a <tt>double</tt> and to print text to the console. Strings, numbers, and end-of-line markers (<tt>endl</tt>) are output using the <tt>&lt;&lt;</tt> operator, which is also used for bit-shifting. To access this standard functionality, we need the <tt>#include</tt> directives on lines 1 and 2.</P>
+<p class="docText">The <tt>using namespace</tt> directive on line 3 tells the compiler that we want to import all identifiers declared in the <tt>std</tt> namespace into the global namespace. This enables us to write <tt>strtod()</tt>, <tt>cout</tt>, <tt>cerr</tt>, and <tt>endl</tt> instead of the fully-qualified <tt>std::strtod()</tt>, <tt>std::cout</tt>, <tt>std::cerr</tt>, and <tt>std::endl</tt>. In C++, the <tt>::</tt> operator separates the components of a complex name.</p>
+<p class="docText">The declaration on line 4 is a <span class="docEmphasis">function prototype</span>. It tells the compiler that a function exists with the given parameters and return value. The actual function can be located in the same compilation unit or in another compilation unit. Without the function prototype, the compiler wouldn't let us call the function on line 12. Parameter names in function prototypes are optional.</P>
+<p class="docText">The procedure to compile the program varies from platform to platform. For example, to compile on Solaris with the Sun C++ compiler, we would type the following commands:</p>
+<div class="docText"><pre>
+CC -c main.cpp
+CC -c square.cpp
+ld main.o square.o -o square
+</pre></div><br>
+<p class="docText">The first two lines invoke the compiler to generate <tt>.o</tt> files for the <tt>.cpp</tt> files. The third line invokes the linker and generates an executable called <tt>square</tt>, which we can invoke as follows:</P>
+<div class="docText"><pre>
+./square 64
+</pre></div><BR>
+<p class="docText">The program outputs the following message to the console:</P>
+<div class="docText"><pre>
+The square of 64 is 4096
+</pre></div><br>
+<p class="docText">To compile the program, you probably want to get help from your local C++ guru. Failing this, you can still read the rest of this appendix without compiling anything and follow the instructions in <a class="docLink" href="ch01.html#ch01">Chapter 1</a> to compile your first C++/Qt application. Qt provides tools that make it easy to build applications on all platforms.</p>
+<p class="docText">Back to our program: In a real-world application, we would normally put the <tt>square()</tt> function prototype in a separate file and include that file in all the compilation units where we need to call the function. Such a file is called a <span class="docEmphasis">header file</span> and usually has a <tt>.h</tt> extension (<tt>.hh</tt>, <tt>.hpp</tt>, and <tt>.hxx</tt> are also common). If we redo our example using the header file approach, we would create a file called <tt>square.h</tt> with the following contents:</p>
+<div class="docText"><pre>
+1 #ifndef SQUARE_H
+2 #define SQUARE_H
+3 double square(double);
+4 #endif
+</pre></div><BR>
+<p class="docText"><a name="iddle1749"></a><a name="iddle1880"></a><a name="iddle2148"></a><a name="iddle2770"></a><a name="iddle2814"></a><a name="iddle2905"></a><a name="iddle3802"></a><a name="iddle6504"></a>The header file is bracketed by three preprocessor directives (<tt>#ifndef</tt>, <tt>#define</tt>, and <tt>#endif</tt>). These directives ensure that the header file is processed only once, even if the header file is included several times in the same compilation unit (a situation that can arise when header files include other header files). By convention, the preprocessor symbol used to accomplish this is derived from the file name (in our example, <tt>SQUARE_H</tt>). We will come back to the preprocessor later in this appendix.</p>
+<p class="docText">The new <tt>main.cpp</tt> file looks like this:</p>
+<div class="docText"><pre>
+ 1 #include &lt;cstdlib&gt;
+ 2 #include &lt;iostream&gt;
+ 3 #include "square.h"
+ 4 using namespace std;
+ 5 int main(int argc, char *argv[])
+ 6 {
+ 7     if (argc != 2) {
+ 8         cerr &lt;&lt; "Usage: square &lt;number&gt;" &lt;&lt; endl;
+ 9         return 1;
+10     }
+11     double n = strtod(argv[1], 0);
+12     cout &lt;&lt; "The square of " &lt;&lt; argv[1] &lt;&lt; " is " &lt;&lt; square(n) &lt;&lt; endl;
+13     return 0;
+14 }
+</pre></div><BR>
+<p class="docText">The <tt>#include</tt> directive on line 3 expands to the contents of the file <tt>square.h</tt>. Directives that start with a <tt>#</tt> are picked up by the C++ preprocessor before the compilation proper takes place. In the old days, the preprocessor was a separate program that the programmer invoked manually before running the compiler. Modern compilers handle the preprocessor step implicitly.</P>
+<p class="docText">The <tt>#include</tt> directives on lines 1 and 2 expand to the contents of the <tt>cstdlib</tt> and <tt>iostream</tt> header files, which are part of the Standard C++ library. Standard header files have no <tt>.h</tt> suffix. The angle brackets around the file names indicate that the header files are located in a standard location on the system, while double quotes tell the compiler to look in the current directory. Includes are normally gathered at the top of a <tt>.cpp</tt> file.</p>
+<p class="docText">Unlike <tt>.cpp</tt> files, header files are not compilation units in their own right and do not result in any object files. They may only contain declarations that enable different compilation units to communicate with each other. Consequently, it would be inappropriate to put the <tt>square()</tt> function's implementation in a header file. If we did so in our example, nothing bad would happen, because we include <tt>square.h</tt> only once, but if we included <tt>square.h</tt> from several <tt>.cpp</tt> files, we would get multiple implementations of the <tt>square()</tt> function (one per <tt>.cpp</tt> <a name="iddle1035"></a><a name="iddle1971"></a><a name="iddle2088"></a><a name="iddle2339"></a><a name="iddle3086"></a><a name="iddle3098"></a><a name="iddle3810"></a><a name="iddle6265"></a><a name="iddle6505"></a><a name="iddle6534"></a><a name="iddle6707"></a><a name="iddle7027"></a><a name="iddle7031"></a>file that includes it). The linker would then complain about multiple (identical) definitions of <tt>square()</tt> and refuse to generate an executable. Inversely, if we declare a function but never implement it, the linker complains about an &quot;unresolved symbol&quot;.</p>
+<p class="docText">So far, we have assumed that an executable only consists of object files. In practice, they often also link against libraries that implement ready-made functionality. There are two main types of library:</p>
+<ul><LI><p class="docList"><span class="docEmphasis">Static libraries</span> are put directly into the executable, as if they were object files. This ensures that the library cannot get lost but increases the size of the executable.</p></li><LI><p class="docList"><span class="docEmphasis">Dynamic libraries</span> (also called shared libraries or DLLs) are located at a standard location on the user's machine and are automatically loaded at application startup.</p></LI></ul>
+<p class="docText">For the <tt>square</tt> program, we link against the Standard C++ library, which is implemented as a dynamic library on most platforms. Qt itself is a collection of libraries that can be built either as static or as dynamic libraries (the default is dynamic).</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

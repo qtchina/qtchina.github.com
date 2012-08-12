@@ -1,0 +1,121 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Splitters</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch06lev1sec3"></a>
+<h3 id="title-IDAY5A4F" class="docSection1Title">Splitters</h3>
+<p class="docText">A <tt>QSplitter</tt> is a widget that contains other widgets. The widgets in a splitter are separated by splitter handles. Users can change the sizes of a splitter's child widgets by dragging the handles. Splitters can often be used as an alternative to layout managers, to give more control to the user.</p>
+<p class="docText">The child widgets of a <tt>QSplitter</tt> are automatically placed side by side (or one below the other) in the order in which they are created, with splitter bars between adjacent widgets. Here's the code for creating the window depicted in <a class="docLink" href="#ch06fig07">Figure 6.7</a>:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QTextEdit *editor1 = new QTextEdit;
+    QTextEdit *editor2 = new QTextEdit;
+    QTextEdit *editor3 = new QTextEdit;
+    QSplitter splitter(Qt::Horizontal);
+    splitter.addWidget(editor1);
+    splitter.addWidget(editor2);
+    splitter.addWidget(editor3);
+    ...
+    splitter.show();
+    return app.exec();
+}
+</pre></div><br>
+<a name="ch06fig07"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.7. The Splitter application</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/splitter_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="123" SRC="images/splitter.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle2305"></a><a name="iddle2974"></a><a name="iddle3176"></a><a name="iddle3177"></a><a name="iddle3479"></a><a name="iddle4891"></a>The example consists of three <tt>QTextEdit</tt>s laid out horizontally by a <tt>QSplitter</tt> widget. Unlike layout managers, which simply lay out a form's child widgets and have no visual representation, <tt>QSplitter</tt> inherits from <tt>QWidget</tt> and can be used like any other widget.</p>
+<a name="ch06fig08"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 6.8. The Splitter application's widgets</H5>
+
+<p class="docText">
+<img border="0" alt="" width="350" height="134" SRC="images/splitter_application_s.jpg"></P>
+
+</center></P><BR>
+<p class="docText">Complex layouts can be achieved by nesting horizontal and vertical <tt>QSplitter</tt>s. For example, the Mail Client application shown in <a class="docLink" href="#ch06fig09">Figure 6.9</a> consists of a horizontal <tt>QSplitter</tt> that contains a vertical <tt>QSplitter</tt> on its right side.</p>
+<a name="ch06fig09"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.9. The Mail Client application on Mac OS X</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/mailclient1_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="346" SRC="images/mailclient1.jpg"></p>
+</center></p><br>
+<p class="docText">Here's the code in the constructor of the Mail Client application's <tt>QMainWindow</tt> subclass:</p>
+<div class="docText"><pre>
+MailClient::MailClient()
+{
+    ...
+
+    rightSplitter = new QSplitter(Qt::Vertical);
+    rightSplitter-&gt;addWidget(messagesTreeWidget);
+    rightSplitter-&gt;addWidget(textEdit);
+    rightSplitter-&gt;setStretchFactor(1, 1);
+    mainSplitter = new QSplitter(Qt::Horizontal);
+    mainSplitter-&gt;addWidget(foldersTreeWidget);
+    mainSplitter-&gt;addWidget(rightSplitter);
+    mainSplitter-&gt;setStretchFactor(1, 1);
+    setCentralWidget(mainSplitter);
+    setWindowTitle(tr("Mail Client"));
+    readSettings();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1389"></a><a name="iddle4494"></a><a name="iddle4895"></a><a name="iddle4896"></a><a name="iddle6184"></a><a name="iddle6190"></a><a name="iddle6590"></a>After creating the three widgets that we want to display, we create a vertical splitter, <tt>rightSplitter</tt>, and add the two widgets we want on the right. Then we create a horizontal splitter, <tt>mainSplitter</tt>, and add the widget we want it to display on the left and <tt>rightSplitter</tt> whose widgets we want shown on the right. We make <tt>mainSplitter</tt> the <tt>QMainWindow</tt>'s central widget.</p>
+<p class="docText">When the user resizes a window, <tt>QSplitter</tt> normally distributes the space so that the relative sizes of the child widgets stay the same. In the Mail Client example, we don't want this behavior; instead, we want the <tt>QtreeWidget</tt> and the <tt>QTableWidget</tt> to keep their sizes and we want to give any extra space to the <tt>QTextEdit</tt>. This is achieved by the two <tt>setStretchFactor()</tt> calls. The first argument is the 0-based index of the splitter's child widget, and the second argument is the stretch factor we want to set; the default is 0.</p>
+<a name="ch06fig10"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 6.10. The Mail Client's splitter indexing</h5>
+
+<p class="docText">
+<img border="0" alt="" width="381" height="199" SRC="images/client_s_splitter.jpg"></P>
+
+</center></P><br>
+<p class="docText">The first <tt>setStretchFactor()</tt> call is on <tt>rightSplitter</tt>, and it sets the widget at position 1 (<tt>textEdit</tt>) to have a stretch factor of 1. The second <tt>setStretchFactor()</tt> call is on <tt>mainSplitter</tt>, and it sets the widget at position 1 (<tt>rightSplitter</tt>) to have a stretch factor of 1. This ensures that the <tt>textEdit</tt> will get any additional space that is available.</p>
+<p class="docText">When the application is started, <tt>QSplitter</tt> gives the child widgets appropriate sizes based on their initial sizes (or based on their size hint if no initial size is specified). We can move the splitter handles programmatically by calling <tt>QSplitter::setSizes()</tt>. The <tt>QSplitter</tt> class also provides a means of saving and <a name="iddle1169"></a><a name="iddle2692"></a><a name="iddle3794"></a><a name="iddle4814"></a><a name="iddle4815"></a><a name="iddle4817"></a><a name="iddle4822"></a><a name="iddle4823"></a><a name="iddle4827"></a><a name="iddle4842"></a><a name="iddle4893"></a><a name="iddle4894"></a><a name="iddle5140"></a><a name="iddle5705"></a><a name="iddle5706"></a><a name="iddle5845"></a><a name="iddle5929"></a><a name="iddle5954"></a><a name="iddle6246"></a><a name="iddle7136"></a><a name="iddle7145"></a><a name="iddle7323"></a><a name="iddle7324"></a>restoring its state the next time the application is run. Here's the <tt>writeSettings()</tt> function that saves the Mail Client's settings:</p>
+<div class="docText"><pre>
+void MailClient::writeSettings()
+{
+    QSettings settings("Software Inc.", "Mail Client");
+    settings.beginGroup("mainWindow");
+    settings.setValue("size", size());
+    settings.setValue("mainSplitter", mainSplitter-&gt;saveState());
+    settings.setValue("rightSplitter", rightSplitter-&gt;saveState());
+    settings.endGroup();
+}
+</pre></div><br>
+<p class="docText">Here's the corresponding <tt>readSettings()</tt> function:</P>
+<div class="docText"><pre>
+void MailClient::readSettings()
+{
+    QSettings settings("Software Inc.", "Mail Client");
+    settings.beginGroup("mainWindow");
+    resize(settings.value("size", QSize(480, 360)).toSize());
+    mainSplitter-&gt;restoreState(
+            settings.value("mainSplitter").toByteArray());
+    rightSplitter-&gt;restoreState(
+            settings.value("rightSplitter").toByteArray());
+    settings.endGroup();
+}
+</pre></div><br>
+<p class="docText"><tt>QSplitter</tt> is fully supported by <span class="docEmphasis">Qt Designer</span>. To put widgets into a splitter, place the child widgets approximately in their desired positions, select them, and click Form|Lay Out Horizontally in Splitter or Form|Lay Out Vertically in Splitter.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

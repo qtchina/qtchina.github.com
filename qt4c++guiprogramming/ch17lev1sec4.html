@@ -1,0 +1,87 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Translating Applications</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch17lev1sec4"></a>
+<h3 id="title-IDAMVUCL" class="docSection1Title">Translating Applications</h3>
+<p class="docText">Translating a Qt application that contains <tt>tr()</tt> calls is a three-step process:</p>
+<a name="ch17pro01"></a>
+
+
+
+<table border="0" class="docText"><tr><td width="25" valign="top"><div class="docText"><b>1. </b></div></td><td><div class="docText">Run <tt>lupdate</tt> to extract all the user-visible strings from the application's source code.<br><br>
+</div></td></TR><tr><td></td><TD></td></TR><TR><td width="25" valign="top"><div class="docText"><B>2. </b></div></td><td><div class="docText"><a name="iddle1505"></a><a name="iddle3158"></a><a name="iddle3846"></a><a name="iddle4487"></a><a name="iddle4634"></a><a name="iddle5160"></a><a name="iddle6892"></a><a name="iddle6931"></a><a name="iddle6974"></a><a name="iddle6997"></a><a name="iddle7354"></a>Translate the application using <span class="docEmphasis">Qt Linguist</span>.<BR><BR>
+</div></TD></tr><tr><td width="25" valign="top"><div class="docText"><B>3. </b></div></td><td><div class="docText">Run <tt>lrelease</tt> to generate binary <tt>.qm</tt> files that the application can load using <tt>QTRanslator</tt>.<BR><br>
+</div></td></tr></table>
+<p class="docText">Steps 1 and 3 are performed by application developers. Step 2 is handled by translators. This cycle can be repeated as often as necessary during the application's development and lifetime.</p>
+<p class="docText">As an example, we will show how to translate the Spreadsheet application of <a class="docLink" href="ch03.html#ch03">Chapter 3</a>. The application already contains <tt>TR()</tt> calls around every user-visible string.</p>
+<p class="docText">First, we must modify the application's <tt>.pro</tt> file slightly to specify which languages we want to support. For example, if we want to support German and French in addition to English, we would add the following <tt>trANSLATIONS</tt> enTRy to <tt>spreadsheet.pro</tt>:</p>
+<div class="docText"><pre>
+TRANSLATIONS  = spreadsheet_de.ts \
+                spreadsheet_fr.ts
+</pre></div><BR>
+<p class="docText">Here, we specify two translation files: one for German and one for French. These files will be created the first time we run <tt>lupdate</tt> and are updated every time we subsequently run <tt>lupdate</tt>.</p>
+<p class="docText">These files normally have a <tt>.ts</tt> extension. They are in a straightforward XML format and are not as compact as the binary <tt>.qm</tt> files understood by <tt>Qtranslator</tt>. It is <tt>lrelease</tt>'s job to convert human-readable <tt>.ts</tt> files into machine-efficient <tt>.qm</tt> files. For the curious, <tt>.ts</tt> stands for &quot;translation source&quot; and <tt>.qm</tt> for &quot;Qt message&quot; file.</p>
+<p class="docText">Assuming that we are located in the directory that contains the Spreadsheet application's source code, we can run <tt>lupdate</tt> on <tt>spreadsheet.pro</tt> from the command line as follows:</p>
+<div class="docText"><pre>
+lupdate -verbose spreadsheet.pro
+</pre></div><br>
+<p class="docText">The <tt>-verbose</tt> option tells <tt>lupdate</tt> to provide more feedback than usual. Here's the expected output:</p>
+<div class="docText"><pre>
+Updating 'spreadsheet_de.ts'...
+    Found 98 source texts (98 new and 0 already existing)
+Updating 'spreadsheet_fr.ts'...
+    Found 98 source texts (98 new and 0 already existing)
+</pre></div><br>
+<p class="docText">Every string that appears within a <tt>tr()</tt> call in the application's source code is stored in the <tt>.ts</tt> files, along with an empty translation. Strings that appear in the application's <tt>.ui</tt> files are also included.</p>
+<p class="docText">The <tt>lupdate</tt> tool assumes by default that the arguments to <tt>tr()</tt> are Latin-1 strings. If this isn't the case, we must add a <tt>CODECFORTR</tt> entry to the <tt>.pro</tt> file. For example:</p>
+<div class="docText"><pre>
+CODECFORTR    = EUC-JP
+</pre></div><br>
+<p class="docText"><a name="iddle1509"></a><a name="iddle5267"></a><a name="iddle6026"></a>This must be done in addition to calling <tt>QTextCodec::setCodecForTr()</tt> from the application's <tt>main()</tt> function.</p>
+<p class="docText">Translations then need to be added to the <tt>spreadsheet_de.ts</tt> and <tt>spreadsheet_fr.ts</tt> files using <span class="docEmphasis">Qt Linguist</span>.</p>
+<p class="docText">To run <span class="docEmphasis">Qt Linguist</span>, click Qt by Trolltech v4.x.y|Linguist in the Start menu on Windows, type <tt>linguist</tt> on the command line on Unix, or double-click Linguist in the Mac OS X Finder. To start adding translations to a <tt>.ts</tt> file, click File|Open and choose the file to translate.</P>
+<p class="docText">The left-hand side of <span class="docEmphasis">Qt Linguist</span>'s main window shows the list of contexts for the application being translated. For the Spreadsheet application, the contexts are &quot;FindDialog&quot;, &quot;GoToCellDialog&quot;, &quot;MainWindow&quot;, &quot;SortDialog&quot;, and &quot;Spreadsheet&quot;. The top-right area is the list of source texts for the current context. Each source text is shown along with a translation and a Done flag. The middle-right area is where we can enter a translation for the current source item. The bottom-right area is a list of suggestions automatically provided by <span class="docEmphasis">Qt Linguist</span>.</p>
+<p class="docText">Once we have a translated <tt>.ts</tt> file, we need to convert it to a binary <tt>.qm</tt> file for it to be usable by <tt>Qtranslator</tt>. To do this from within <span class="docEmphasis">Qt Linguist</span>, click File|Release. Typically, we would start by translating only a few strings and run the application with the <tt>.qm</tt> file to make sure that everything works properly.</p>
+<a name="ch17fig02"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 17.2. <span class="docEmphasis">Qt Linguist</span> in action</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/linguist_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="325" SRC="images/linguist.jpg"></P>
+</center></p><BR>
+<p class="docText">If we want to regenerate the <tt>.qm</tt> files for all <tt>.ts</tt> files, we can use the <tt>lrelease</tt> tool as follows:</p>
+<div class="docText"><pre>
+lrelease -verbose spreadsheet.pro
+</pre></div><br>
+<p class="docText">Assuming that we translated 19 strings to French and clicked the Done flag for 17 of them, <tt>lrelease</tt> produces the following output:</P>
+<div class="docText"><pre>
+Updating 'spreadsheet_de.qm'...
+    Generated 0 translations (0 finished and 0 unfinished)
+    Ignored 98 untranslated source texts
+Updating 'spreadsheet_fr.qm'...
+    Generated 19 translations (17 finished and 2 unfinished)
+    Ignored 79 untranslated source texts
+</pre></div><BR>
+<p class="docText">Untranslated strings are shown in the original languages when running the application. The Done flag is ignored by <tt>lrelease</tt>; it can be used by translators to identify which translations are finished and which ones must be revisited.</P>
+<p class="docText">When we modify the source code of the application, the translation files may become out of date. The solution is to run <tt>lupdate</tt> again, provide translations for the new strings, and regenerate the <tt>.qm</tt> files. Some development teams find it useful to run <tt>lupdate</tt> frequently, while others prefer to wait until the application is almost ready to release.</p>
+<p class="docText">The <tt>lupdate</tt> and <span class="docEmphasis">Qt Linguist</span> tools are quite smart. Translations that are no longer used are kept in the <tt>.ts</tt> files in case they are needed in later releases. When updating <tt>.ts</tt> files, <tt>lupdate</tt> uses an intelligent merging algorithm that can save translators considerable time with text that is the same or similar in different contexts.</p>
+<p class="docText">For more information about <span class="docEmphasis">Qt Linguist</span>, <tt>lupdate</tt>, and <tt>lrelease</tt>, refer to the <span class="docEmphasis">Qt Linguist</span> manual at <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/linguist-manual.html">http://doc.trolltech.com/4.1/linguist-manual.html</a>. The manual contains a full explanation of <span class="docEmphasis">Qt Linguist</span>'s user interface and a step-by-step tutorial for programmers.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,122 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Writing HTTP Clients</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch14lev1sec2"></a>
+<h3 id="570594-982" class="docSection1Title">Writing HTTP Clients</h3>
+<p class="docText">The <tt>QHttp</tt> class implements the client side of the HTTP protocol in Qt. It provides various functions to perform the most common HTTP operations, including <tt>get()</tt> and <tt>post()</tt>, and provides a means of sending arbitrary HTTP requests. If you have read the previous section about <tt>QFtp</tt>, you will find that there are many similarities between <tt>QFtp</tt> and <tt>QHttp</tt>.</p>
+<p class="docText">The <tt>QHttp</tt> class works asynchronously. When we call a function like <tt>get()</tt> or <tt>post()</tt>, the function returns immediately, and the data transfer occurs later, when control returns to Qt's event loop. This ensures that the application's user interface remains responsive while HTTP requests are being processed.</p>
+<p class="docText">We will review a console application example called <tt>httpget</tt> that shows how to download a file using the HTTP protocol. It is very similar to the <tt>ftpget</tt> example from the previous section, both in functionality and implementation, so we will not show the header file.</p>
+<div class="docText"><pre>
+HttpGet::HttpGet(QObject *parent)
+    : QObject(parent)
+{
+    connect(&amp;http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+}
+</pre></div><br>
+<p class="docText">In the constructor, we connect the <tt>QHttp</tt> object's <tt>done(bool)</tt> signal to the private <tt>httpDone(bool)</tt> slot.</p>
+<div class="docText"><pre>
+bool HttpGet::getFile(const QUrl &amp;url)
+{
+    if (!url.isValid()) {
+        cerr &lt;&lt; "Error: Invalid URL" &lt;&lt; endl;
+        return false;
+    }
+    if (url.scheme() != "http") {
+        cerr &lt;&lt; "Error: URL must start with 'http:'" &lt;&lt; endl;
+        return false;
+    }
+    if (url.path().isEmpty()) {
+        cerr &lt;&lt; "Error: URL has no path" &lt;&lt; endl;
+        return false;
+    }
+    QString localFileName = QFileInfo(url.path()).fileName();
+    if (localFileName.isEmpty())
+        localFileName = "httpget.out";
+    file.setFileName(localFileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        cerr &lt;&lt; "Error: Cannot open " &lt;&lt; qPrintable(file.fileName())
+             &lt;&lt; " for writing: " &lt;&lt; qPrintable(file.errorString())
+             &lt;&lt; endl;
+        return false;
+    }
+    http.setHost(url.host(), url.port(80));
+    http.get(url.path(), &amp;file);
+    http.close();
+    return true;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1483"></a><a name="iddle2553"></a><a name="iddle2711"></a><a name="iddle2715"></a><a name="iddle2896"></a><a name="iddle4371"></a><a name="iddle4373"></a><a name="iddle4383"></a><a name="iddle6105"></a>The <tt>getFile()</tt> function performs the same kind of error checks as the <tt>FtpGet::getFile()</tt> shown earlier and uses the same approach to giving the file a local name. When retrieving from web sites, no login is necessary, so we simply set the host and port (using the default HTTP port 80 if none is specified in the URL) and download the data into the file, since the second argument to <tt>QHttp::get()</tt> specifies the output I/O device.</p>
+<p class="docText">The HTTP requests are queued and executed asynchronously in Qt's event loop. The completion of the requests is indicated by <tt>QHttp</tt>'s <tt>done(bool)</tt> signal, which we connected to <tt>httpDone(bool)</tt> in the constructor.</p>
+<div class="docText"><pre>
+void HttpGet::httpDone(bool error)
+{
+    if (error) {
+        cerr &lt;&lt; "Error: " &lt;&lt; qPrintable(http.errorString()) &lt;&lt; endl;
+    } else {
+        cerr &lt;&lt; "File downloaded as " &lt;&lt; qPrintable(file.fileName())
+             &lt;&lt; endl;
+    }
+    file.close();
+    emit done();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1396"></a><a name="iddle2554"></a><a name="iddle2626"></a><a name="iddle2627"></a><a name="iddle2762"></a><a name="iddle2872"></a><a name="iddle3784"></a><a name="iddle4374"></a><a name="iddle4375"></a><a name="iddle4376"></a><a name="iddle4380"></a><a name="iddle4381"></a><a name="iddle4382"></a><a name="iddle4384"></a><a name="iddle4385"></a><a name="iddle5167"></a><a name="iddle5399"></a><a name="iddle5812"></a><a name="iddle5813"></a><a name="iddle5815"></a><a name="iddle6106"></a><a name="iddle6208"></a><a name="iddle6494"></a>Once the HTTP requests are finished, we close the file, notifying the user if an error occurred.</p>
+<p class="docText">The <tt>main()</tt> function is very similar to the one used by <tt>ftpget</tt>:</P>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    QStringList args = app.arguments();
+    if (args.count() != 2) {
+        cerr &lt;&lt; "Usage: httpget url" &lt;&lt; endl
+             &lt;&lt; "Example:" &lt;&lt; endl
+             &lt;&lt; "    httpget http://doc.trolltech.com/qq/index.html"
+             &lt;&lt; endl;
+        return 1;
+    }
+    HttpGet getter;
+    if (!getter.getFile(QUrl(args[1])))
+        return 1;
+    QObject::connect(&amp;getter, SIGNAL(done()), &amp;app, SLOT(quit()));
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">The <tt>QHttp</tt> class provides many operations, including <tt>setHost()</tt>, <tt>get()</tt>, <tt>post()</tt>, and <tt>head()</tt>. If a site requires authentication, <tt>setUser()</tt> can be used to supply a user name and password. <tt>QHttp</tt> can use a socket supplied by the programmer rather than its own internal <tt>QTcpSocket</tt>. This makes it possible to use a secure <tt>QtSslSocket</tt>, provided as a Qt Solution from Trolltech, to achieve HTTP over SSL.</p>
+<p class="docText">To send a list of &quot;<span class="docEmphasis">name</span> =<span class="docEmphasis">value</span>&quot; pairs to a CGI script, we can use <tt>post()</tt>:</p>
+<div class="docText"><pre>
+http.setHost("www.example.com");
+http.post("/cgi/somescript.py", "x=200&amp;y=320", &amp;file);
+</pre></div><BR>
+<p class="docText">We can pass the data either as an 8-bit string or by passing an open <tt>QIODevice</tt>, such as a <tt>QFile</tt>. For more control, we can use the <tt>request()</tt> function, which accepts an arbitrary HTTP header and data. For example:</p>
+<div class="docText"><pre>
+QHttpRequestHeader header("POST", "/search.html");
+header.setValue("Host", "www.trolltech.com");
+header.setContentType("application/x-www-form-urlencoded");
+http.setHost("www.trolltech.com");
+http.request(header, "qt-interest=on&amp;search=opengl");
+</pre></div><BR>
+<p class="docText"><tt>QHttp</tt> emits the <tt>requestStarted(int)</tt> signal when it starts executing a request, and it emits the <tt>requestFinished(int, bool)</tt> signal when the request has finished. The <tt>int</tt> parameter is an ID number that identifies a request. If we are interested in the fate of individual requests, we can store the ID numbers when we schedule the requests. Keeping track of the ID numbers allows us to provide detailed feedback to the user.</P>
+<p class="docText"><a name="iddle1283"></a><a name="iddle1292"></a><a name="iddle1465"></a><a name="iddle2331"></a><a name="iddle2332"></a><a name="iddle2388"></a><a name="iddle2868"></a><a name="iddle2873"></a><a name="iddle2892"></a><a name="iddle2897"></a><a name="iddle3092"></a><a name="iddle3896"></a><a name="iddle4151"></a><a name="iddle4377"></a><a name="iddle4378"></a><a name="iddle4379"></a><a name="iddle5226"></a><a name="iddle5229"></a><a name="iddle5293"></a><a name="iddle5684"></a><a name="iddle5687"></a><a name="iddle5717"></a><a name="iddle6698"></a><a name="iddle6767"></a><a name="iddle6963"></a><a name="iddle6968"></a>In most applications, we only want to know whether the entire sequence of requests completed successfully or not. This is easily achieved by connecting to the <tt>done(bool)</tt> signal, which is emitted when the request queue becomes empty.</p>
+<p class="docText">When an error occurs, the request queue is automatically cleared. But if we schedule new requests after the error has occurred using the same <tt>QHttp</tt> object, these requests will be queued and sent as usual.</P>
+<p class="docText">Like <tt>QFtp</tt>, <tt>QHttp</tt> provides a <tt>readyRead()</tt> signal as well as the <tt>read()</tt> and <tt>readAll()</tt> functions that we can use instead of specifying an I/O device.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

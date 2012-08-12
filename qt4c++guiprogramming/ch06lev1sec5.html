@@ -1,0 +1,92 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Dock Widgets and Toolbars</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch06lev1sec5"></a>
+<h3 id="title-IDANZTKW" class="docSection1Title">Dock Widgets and Toolbars</h3>
+<p class="docText">Dock widgets are widgets that can be docked inside a <tt>QMainWindow</tt> or floated as independent windows. <tt>QMainWindow</tt> provides four dock widget areas: one above, one below, one to the left, and one to the right of the central widget. Applications like Microsoft Visual Studio and <span class="docEmphasis">Qt Linguist</span> make extensive use of dock windows to provide a very flexible user interface. In Qt, dock widgets are instances of <tt>QDockWidget</tt>.</p>
+<a name="ch06fig13"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.13. A <tt>QMainWindow</tt> with a dock widget</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/dockwidgets_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="393" SRC="images/dockwidgets.jpg"></p>
+</center></p><br>
+<p class="docText">Every dock widget has its own title bar, even when it is docked. Users can move dock windows from one dock area to another by dragging the title bar. They can also detach a dock window from an area and let the dock window float as an independent window by dragging the dock window outside of any dock area. Free-floating dock windows are always &quot;on top&quot; of their main window. Users can close a <tt>QDockWidget</tt> by clicking the close button in the widget's title bar. Any combination of these features can be disabled by calling <tt>QDockWidget::setFeatures()</tt>.</p>
+<p class="docText">In earlier versions of Qt, toolbars were treated like dock widgets and shared the same dock areas. Starting with Qt 4, toolbars occupy their own areas <a name="iddle4504"></a><a name="iddle6006"></a><a name="iddle6039"></a><a name="iddle6228"></a><a name="iddle6229"></a>around the central widget (as shown in <a class="docLink" href="#ch06fig14">Figure 6.14</a>) and can't be undocked. If a floating toolbar is required, we can simply put it inside a <tt>QDockWindow</tt>.</p>
+<a name="ch06fig14"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.14. <tt>QMainWindow</tt>'s dock and toolbar areas</H5>
+
+<p class="docText">
+<img border="0" alt="" width="450" height="476" SRC="images/qmainwindows.jpg"></P>
+
+</center></P><BR>
+<p class="docText">The corners indicated with dotted lines can belong to either of their two adjoining dock areas. For example, we could make the top-left corner belong to the left dock area by calling <tt>QMainWindow::setCorner(Qt::TopLeftCorner, Qt:: LeftDockWidgetArea)</tt>.</P>
+<p class="docText">The following code snippet shows how to wrap an existing widget (in this case, a <tt>QtreeWidget</tt>) in a <tt>QDockWidget</tt> and insert it into the right dock area:</p>
+<div class="docText"><pre>
+QDockWidget *shapesDockWidget = new QDockWidget(tr("Shapes"));
+shapesDockWidget-&gt;setWidget(treeWidget);
+shapesDockWidget-&gt;setAllowedAreas(Qt::LeftDockWidgetArea
+                                  | Qt::RightDockWidgetArea);
+addDockWidget(Qt::RightDockWidgetArea, shapesDockWidget);
+</pre></div><br>
+<p class="docText">The <tt>setAllowedAreas()</tt> call specifies constraints on which dock areas can accept the dock window. Here, we only allow the user to drag the dock widget into the left and right dock areas, where there is enough vertical space for it to be displayed sensibly. If no allowed areas are explicitly set, the user can drag the dock widget to any of the four areas.</p>
+<p class="docText">Here's how to create a toolbar containing a <tt>QComboBox</tt>, a <tt>QSpinBox</tt>, and a few <tt>QToolButton</tt>s from a <tt>QMainWindow</tt> subclass's constructor:</p>
+<div class="docText"><pre>
+QToolBar *fontToolBar = new QToolBar(tr("Font"));
+fontToolBar-&gt;addWidget(familyComboBox);
+fontToolBar-&gt;addWidget(sizeSpinBox);
+fontToolBar-&gt;addAction(boldAction);
+fontToolBar-&gt;addAction(italicAction);
+fontToolBar-&gt;addAction(underlineAction);
+fontToolBar-&gt;setAllowedAreas(Qt::TopToolBarArea
+                             | Qt::BottomToolBarArea);
+addToolBar(fontToolBar);
+</pre></div><br>
+<p class="docText"><a name="iddle1170"></a><a name="iddle1676"></a><a name="iddle3241"></a><a name="iddle3256"></a><a name="iddle3284"></a><a name="iddle3300"></a><a name="iddle3438"></a><a name="iddle3795"></a><a name="iddle4501"></a><a name="iddle4502"></a><a name="iddle4841"></a><a name="iddle5625"></a><a name="iddle5708"></a><a name="iddle5843"></a><a name="iddle5844"></a><a name="iddle5928"></a><a name="iddle6247"></a><a name="iddle7326"></a>If we want to save the position of all the dock widgets and toolbars so that we can restore them the next time the application is run, we can write code that is similar to the code we used to save a <tt>QSplitter</tt>'s state, using <tt>QMainWindow</tt>'s <tt>saveState()</tt> and <tt>restoreState()</tt> functions:</p>
+<div class="docText"><pre>
+void MainWindow::writeSettings()
+{
+    QSettings settings("Software Inc.", "Icon Editor");
+    settings.beginGroup("mainWindow");
+    settings.setValue("size", size());
+    settings.setValue("state", saveState());
+    settings.endGroup();
+}
+void MainWindow::readSettings()
+{
+    QSettings settings("Software Inc.", "Icon Editor");
+    settings.beginGroup("mainWindow");
+    resize(settings.value("size").toSize());
+    restoreState(settings.value("state").toByteArray());
+    settings.endGroup();
+}
+</pre></div><br>
+<p class="docText">Finally, <tt>QMainWindow</tt> provides a context menu that lists all the dock windows and toolbars. The user can close and restore dock windows and hide and restore toolbars using this menu.</p>
+<a name="ch06fig15"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.15. A <tt>QMainWindow</tt> context menu</h5>
+
+<p class="docText">
+<img border="0" alt="" width="100" height="118" SRC="images/qmainwindow.jpg"></P>
+
+</center></p><br>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

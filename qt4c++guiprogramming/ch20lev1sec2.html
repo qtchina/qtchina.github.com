@@ -1,0 +1,429 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using ActiveX on Windows</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch20lev1sec2"></a>
+<h3 id="title-IDANLPKL" class="docSection1Title">Using ActiveX on Windows</h3>
+<p class="docText">Microsoft'sActiveX technology allows applicationsto incorporate user interface components provided by other applications or libraries. It is built on Microsoft COM and defines one set of interfaces for applications that use components and another set of interfaces for applications and libraries that provide components.</p>
+<p class="docText">The Qt/Windows Desktop Edition provides the ActiveQt framework to seam-lessly combine ActiveX and Qt. ActiveQt consists of two modules:</p>
+<ul><li><p class="docList">The <span class="docEmphasis">QAxContainer</span> module allows us to use COM objects and to embed ActiveX controls in Qt applications.</p></li><li><p class="docList">The <span class="docEmphasis">QAxServer</span> module allows us to export custom COM objects and ActiveX controls written using Qt.</p></li></ul>
+<p class="docText">Our first example will embed the Windows Media Player in a Qt application using the <span class="docEmphasis">QAxContainer</span> module. The Qt application adds an Open button, a Play/Pause button, a Stop button, and a slider to the Windows Media Player ActiveX control.</P>
+<a name="ch20fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 20.3. The Media Player application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="267" height="300" SRC="images/mediaplayer.jpg"></P>
+
+</center></p><BR>
+<p class="docText"><a name="iddle2756"></a><a name="iddle2757"></a><a name="iddle3720"></a><a name="iddle3721"></a><a name="iddle3722"></a><a name="iddle3918"></a><a name="iddle4069"></a><a name="iddle4081"></a><a name="iddle4087"></a><a name="iddle6038"></a><a name="iddle6307"></a><a name="iddle6372"></a>The application's main window is of type <tt>PlayerWindow</tt>:</P>
+<div class="docText"><pre>
+class PlayerWindow : public QWidget
+{
+    Q_OBJECT
+    Q_ENUMS(ReadyStateConstants)
+public:
+    enum PlayStateConstants { Stopped = 0, Paused = 1, Playing = 2 };
+    enum ReadyStateConstants { Uninitialized = 0, Loading = 1,
+                               Interactive = 3, Complete = 4 };
+    PlayerWindow();
+protected:
+    void timerEvent(QTimerEvent *event);
+private slots:
+    void onPlayStateChange(int oldState, int newState);
+    void onReadyStateChange(ReadyStateConstants readyState);
+    void onPositionChange(double oldPos, double newPos);
+    void sliderValueChanged(int newValue);
+    void openFile();
+private:
+    QAxWidget *wmp;
+    QToolButton *openButton;
+    QToolButton *playPauseButton;
+    QToolButton *stopButton;
+    QSlider *seekSlider;
+    QString fileFilters;
+    int updateTimer;
+};
+</pre></div><br>
+<p class="docText">The <tt>PlayerWindow</tt> class inherits from <tt>QWidget</tt>. The <tt>Q_ENUMS()</tt> macro (just below <tt>Q_OBJECT</tt>) is necessary to tell <tt>moc</tt> that the <tt>ReadyStateConstants</tt> type used in the <tt>onReadyStateChange()</tt> slot is an enum type. In the private section, we declare a <tt>QAxWidget *</tt> data member.</P>
+<div class="docText"><pre>
+PlayerWindow::PlayerWindow()
+{
+    wmp = new QAxWidget;
+    wmp-&gt;setControl("{22D6F312-B0F6-11D0-94AB-0080C74C7E95}");
+</pre></div><br>
+<p class="docText">In the constructor, we start by creating a <tt>QAxWidget</tt> object to encapsulate the Windows Media Player ActiveX control. The <span class="docEmphasis">QAxContainer</span> module consists of three classes: <tt>QAxObject</tt> encapsulates a COM object, <tt>QAxWidget</tt> encapsulates an ActiveX control, and <tt>QAxBase</tt> implements the core COM functionality for <tt>QAxObject</tt> and <tt>QAxWidget</tt>.</p>
+<p class="docText">We call <tt>setControl()</tt> on the <tt>QAxWidget</tt> with the class ID of the Windows Media Player 6.4 control. This will create an instance of the required component. From then on, all the properties, events, and methods of the ActiveX control are available as Qt properties, signals, and slots through the <tt>QAxWidget</tt> object.</P>
+
+<p class="docText"></P><a name="ch20fig04"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 20.4. Inheritance tree for the <span class="docEmphasis">QAxContainer</span> module</h5>
+
+<p class="docText">
+<img border="0" alt="" width="300" height="112" SRC="images/qaxcontainer.jpg"></p>
+
+</center></P><br>
+<p class="docText"><a name="iddle1303"></a><a name="iddle1815"></a><a name="iddle1855"></a><a name="iddle2079"></a><a name="iddle2537"></a><a name="iddle2772"></a><a name="iddle2910"></a><a name="iddle3567"></a><a name="iddle4071"></a><a name="iddle5914"></a><a name="iddle7109"></a><a name="iddle7110"></a>The COM data types are automatically converted into the corresponding Qt types, as summarized in <a class="docLink" href="#ch20fig05">Figure 20.5</a>. For example, an in-parameter of type <tt>VARIANT_BOOL</tt> becomes a <tt>bool</tt>, and an out-parameter of type <tt>VARIANT_BOOL</tt> becomes a <tt>bool &amp;</tt>. If the resulting type is a Qt class (<tt>QString</tt>, <tt>QDateTime</tt>, etc.), the in-parameter is a const reference (for example, <tt>const QString &amp;</tt>).</p>
+<a name="ch20fig05"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 20.5. Relationship between COM types and Qt types</h5>
+<p><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="200"><col width="100"></colgroup><thead><tr><th class="thead" scope="col" align="center" valign="top"><p class="docText">COM types</p></th><th class="thead" scope="col" align="center" valign="top"><p class="docText">Qt types</P></th></tr></thead><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">VARIANT_BOOL</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">bool</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>char</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>int</tt></p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>unsigned char</tt>, <tt>unsigned short</tt>, <tt>unsigned int</tt>, <tt>unsigned long</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>uint</tt></p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>float</tt>, <tt>double</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>double</tt></p></td></TR><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>CY</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>qlonglong</tt>, <tt>qulonglong</tt></P></td></tr><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>BSTR</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QString</tt></p></TD></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>DATE</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QDateTime</tt>, <tt>QDate</tt>, <tt>QTime</tt></p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>OLE_COLOR</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QColor</tt></p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>SAFEARRAY(VARIANT)</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QList&lt;QVariant&gt;</tt></p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>SAFEARRAY(BSTR)</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>QStringList</tt></p></td></TR><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>SAFEARRAY(BYTE)</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QByteArray</tt></P></td></tr><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>VARIANT</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QVariant</tt></p></TD></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>IFontDisp *</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QFont</tt></p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>IPictureDisp *</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QPixmap</tt></p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">User defined type</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QRect</tt>, <tt>QSize</tt>, <tt>QPoint</tt></p></td></TR></table></p><BR>
+</center></P><br>
+<p class="docText">To obtain the list of all the properties, signals, and slots available in a <tt>QAxObject</tt> or <tt>QAxWidget</tt> with their Qt data types, call <tt>QAxBase::generateDocumentation()</tt> or use Qt's <tt>dumpdoc</tt> command-line tool, located in Qt's <tt>tools\activeqt\dumpdoc</tt> directory.</P>
+<p class="docText">Let's continue with the <tt>PlayerWindow</tt> constructor:</p>
+<div class="docText"><pre>
+wmp-&gt;setProperty("ShowControls", false);
+wmp-&gt;setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+connect(wmp, SIGNAL(PlayStateChange(int, int)),
+        this, SLOT(onPlayStateChange(int, int)));
+connect(wmp, SIGNAL(ReadyStateChange(ReadyStateConstants)),
+        this, SLOT(onReadyStateChange(ReadyStateConstants)));
+connect(wmp, SIGNAL(PositionChange(double, double)),
+        this, SLOT(onPositionChange(double, double)));
+</pre></div><br>
+<p class="docText"><a name="iddle1662"></a><a name="iddle2273"></a><a name="iddle3553"></a><a name="iddle3723"></a><a name="iddle3839"></a><a name="iddle3889"></a><a name="iddle3891"></a><a name="iddle4619"></a><a name="iddle4623"></a><a name="iddle4627"></a><a name="iddle5443"></a><a name="iddle5573"></a><a name="iddle6157"></a><a name="iddle6183"></a><a name="iddle6823"></a><a name="iddle6824"></a><a name="iddle6827"></a><a name="iddle7115"></a><a name="iddle7239"></a>After calling <tt>QAxWidget::setControl()</tt>, we call <tt>QObject::setProperty()</tt> to set the <tt>ShowControls</tt> property of the Windows Media Player to <tt>false</tt>, since we provide our own buttons to manipulate the component. <tt>QObject::setProperty()</tt> can be used both for COM properties and for normal Qt properties. Its second parameter is of type <tt>QVariant</tt>.</P>
+<p class="docText">Next, we call <tt>setSizePolicy()</tt> to make the ActiveX control take all the available space in the layout, and we connect three ActiveX events from the COM component to three slots.</P>
+<div class="docText"><pre>
+    ...
+    stopButton = new QToolButton;
+    stopButton-&gt;setText(tr("&amp;Stop"));
+    stopButton-&gt;setEnabled(false);
+    connect(stopButton, SIGNAL(clicked()), wmp, SLOT(Stop()));
+    ...
+}
+</pre></div><BR>
+<p class="docText">The rest of the <tt>PlayerWindow</tt> constructor follows the usual pattern, except that we connect some Qt signals to slots provided by the COM object (<tt>Play()</tt>, <tt>Pause()</tt>, and <tt>Stop()</tt>). Since the buttons are similar, we have only shown the Stop button's implementation here.</p>
+<p class="docText">Let's leave the constructor and look at the <tt>timerEvent()</tt> function:</p>
+<div class="docText"><pre>
+void PlayerWindow::timerEvent(QTimerEvent *event)
+{
+    if (event-&gt;timerId() == updateTimer) {
+        double curPos = wmp-&gt;property("CurrentPosition").toDouble();
+        onPositionChange(-1, curPos);
+    } else {
+        QWidget::timerEvent(event);
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>timerEvent()</tt> function is called at regular intervals while a media clip is playing. We use it to advance the slider. This is done by calling <tt>property()</tt> on the ActiveX control to obtain the value of the <tt>CurrentPosition</tt> property as a <tt>QVariant</tt> and calling <tt>toDouble()</tt> to convert it to a <tt>double</tt>. We then call <tt>onPositionChange()</tt> to perform the update.</P>
+<p class="docText">We will not review the rest of the code because most of it isn't directly relevant to ActiveX and doesn't show anything that we haven't covered already. The code is included on the CD.</p>
+<p class="docText">In the <tt>.pro</tt> file, we need this entry to link with the <span class="docEmphasis">QAxContainer</span> module:</p>
+<div class="docText"><pre>
+CONFIG     += qaxcontainer
+</pre></div><BR>
+<p class="docText"><a name="iddle1230"></a><a name="iddle1231"></a><a name="iddle1296"></a><a name="iddle1572"></a><a name="iddle1800"></a><a name="iddle2082"></a><a name="iddle2280"></a><a name="iddle2764"></a><a name="iddle2859"></a><a name="iddle2867"></a><a name="iddle2956"></a><a name="iddle3320"></a><a name="iddle4070"></a><a name="iddle4072"></a><a name="iddle4073"></a><a name="iddle4074"></a><a name="iddle4082"></a><a name="iddle4084"></a><a name="iddle4088"></a><a name="iddle5414"></a><a name="iddle5415"></a><a name="iddle5777"></a><a name="iddle6304"></a><a name="iddle6369"></a><a name="iddle6620"></a><a name="iddle6621"></a><a name="iddle6622"></a>One frequent need when dealing with COM objects is to be able to call a COM method directly (as opposed to connecting it to a Qt signal). The easiest way to do this is to invoke <tt>QAxBase::dynamicCall()</tt> with the name and signature of the method as first parameter and the arguments to the method as additional parameters. For example:</P>
+<div class="docText"><pre>
+wmp-&gt;dynamicCall("TitlePlay(uint)", 6);
+</pre></div><br>
+<p class="docText">The <tt>dynamicCall()</tt> function takes up to eight parameters of type <tt>QVariant</tt> and returns a <tt>QVariant</tt>. If we need to pass an <tt>IDispatch *</tt> or an <tt>IUnknown *</tt> this way, we can encapsulate the component in a <tt>QAxObject</tt> and call <tt>asVariant()</tt> on it to convert it to a <tt>QVariant</tt>. If we need to call a COM method that returns an <tt>IDispatch *</tt> or an <tt>IUnknown *</tt>, or if we need to access a COM property of one of those types, we can use <tt>querySubObject()</tt> instead:</p>
+<div class="docText"><pre>
+QAxObject *session = outlook.querySubObject("Session");
+QAxObject *defaultContacts =
+        session-&gt;querySubObject("GetDefaultFolder(OlDefaultFolders)",
+                                "olFolderContacts");
+</pre></div><br>
+<p class="docText">If we want to call methods that have unsupported data types in their parameter list, we can use <tt>QAxBase::queryInterface()</tt> to retrieve the COM interface and call the method directly. As usual with COM, we must call <tt>Release()</tt> when we have finished using the interface. If we often need to call such methods, we can subclass <tt>QAxObject</tt> or <tt>QAxWidget</tt> and provide member functions that encapsulate the COM interface calls. Be aware that <tt>QAxObject</tt> and <tt>QAxWidget</tt> subclasses cannot define their own properties, signals, or slots.</p>
+<p class="docText">We will now review the <span class="docEmphasis">QAxServer</span> module. This module enables us to turn a standard Qt program into an ActiveX server. The server can either be a shared library or a stand-alone application. Servers built as shared libraries are often called in-process servers; stand-alone applications are called out-of-process servers.</P>
+<p class="docText">Our first <span class="docEmphasis">QAxServer</span> example is an in-process server that provides a widget that shows a ball bouncing left and right. We will also see how to embed the widget in Internet Explorer.</p>
+<p class="docText">Here's the beginning of the class definition of the <tt>AxBouncer</tt> widget:</p>
+<div class="docText"><pre>
+class AxBouncer : public QWidget, public QAxBindable
+{
+    Q_OBJECT
+    Q_ENUMS(SpeedValue)
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+    Q_PROPERTY(SpeedValue speed READ speed WRITE setSpeed)
+    Q_PROPERTY(int radius READ radius WRITE setRadius)
+    Q_PROPERTY(bool running READ isRunning)
+</pre></div><BR>
+<p class="docText"><tt>AxBouncer</tt> inherits from both <tt>QWidget</tt> and <tt>QAxBindable</tt>. The <tt>QAxBindable</tt> class provides an interface between the widget and an ActiveX client. Any <tt>QWidget</tt> <a name="iddle3315"></a><a name="iddle3366"></a><a name="iddle3443"></a><a name="iddle3919"></a><a name="iddle6308"></a><a name="iddle6373"></a>can be exported as an ActiveX control, but by subclassing <tt>QAxBindable</tt> we can notify the client when a property's value changes, and we can implement COM interfaces to supplement those already implemented by <span class="docEmphasis">QAxServer</span>.</p>
+<a name="ch20fig06"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 20.6. The <tt>AxBouncer</tt> widget in Internet Explorer</h5>
+
+<p class="docText">
+<img border="0" alt="" width="446" height="468" SRC="images/bouncer.jpg"></p>
+
+</center></p><br>
+<p class="docText">When doing multiple inheritance involving a <tt>QObject</tt>-derived class, we must always put the <tt>QObject</tt>-derived class first so that <tt>moc</tt> can pick it up.</p>
+<p class="docText">We declare three read-write properties and one read-only property. The <tt>Q_ENUMS()</tt> macro is necessary to tell <tt>moc</tt> that the <tt>SpeedValue</tt> type is an enum type. The enum is declared in the public section of the class:</p>
+<div class="docText"><pre>
+public:
+    enum SpeedValue { Slow, Normal, Fast };
+    AxBouncer(QWidget *parent = 0);
+    void setSpeed(SpeedValue newSpeed);
+    SpeedValue speed() const { return ballSpeed; }
+    void setRadius(int newRadius);
+    int radius() const { return ballRadius; }
+    void setColor(const QColor &amp;newColor);
+    QColor color() const { return ballColor; }
+    bool isRunning() const { return myTimerId != 0; }
+    QSize sizeHint() const;
+    QAxAggregated *createAggregate();
+public slots:
+    void start();
+    void stop();
+signals:
+    void bouncing();
+</pre></div><br>
+<p class="docText"><a name="iddle1232"></a><a name="iddle1234"></a><a name="iddle2359"></a><a name="iddle2360"></a><a name="iddle3554"></a><a name="iddle3890"></a><a name="iddle3892"></a><a name="iddle4062"></a><a name="iddle4076"></a><a name="iddle4077"></a><a name="iddle5814"></a><a name="iddle6027"></a><a name="iddle7240"></a>The <tt>AxBouncer</tt> constructor is a standard constructor for a widget, with a <tt>parent</tt> parameter. The <tt>QAXFACTORY_DEFAULT()</tt> macro, which we will use to export the component, expects a constructor with this signature.</p>
+<p class="docText">The <tt>createAggregate()</tt> function is reimplemented from <tt>QAxBindable</tt>. We will explain it in a moment.</p>
+<div class="docText"><pre>
+protected:
+    void paintEvent(QPaintEvent *event);
+    void timerEvent(QTimerEvent *event);
+private:
+    int intervalInMilliseconds() const;
+    QColor ballColor;
+    SpeedValue ballSpeed;
+    int ballRadius;
+    int myTimerId;
+    int x;
+    int delta;
+};
+</pre></div><br>
+<p class="docText">The protected and private sections of the class are the same as those we would have if this was a standard Qt widget.</p>
+<div class="docText"><pre>
+AxBouncer::AxBouncer(QWidget *parent)
+    : QWidget(parent)
+{
+    ballColor = Qt::blue;
+    ballSpeed = Normal;
+    ballRadius = 15;
+    myTimerId = 0;
+    x = 20;
+    delta = 2;
+}
+</pre></div><br>
+<p class="docText">The <tt>AxBouncer</tt> constructor initializes the class's private variables.</p>
+<div class="docText"><pre>
+void AxBouncer::setColor(const QColor &amp;newColor)
+{
+    if (newColor != ballColor &amp;&amp; requestPropertyChange("color")) {
+        ballColor = newColor;
+        update();
+        propertyChanged("color");
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>setColor()</tt> function sets the value of the <tt>color</tt> property. It calls <tt>update()</tt> to repaint the widget.</P>
+<p class="docText"><a name="iddle1093"></a><a name="iddle1233"></a><a name="iddle1235"></a><a name="iddle1236"></a><a name="iddle1237"></a><a name="iddle1238"></a><a name="iddle1681"></a><a name="iddle1730"></a><a name="iddle2860"></a><a name="iddle2901"></a><a name="iddle2957"></a><a name="iddle3542"></a><a name="iddle4059"></a><a name="iddle4068"></a><a name="iddle4075"></a><a name="iddle5411"></a><a name="iddle5412"></a><a name="iddle5413"></a><a name="iddle5778"></a><a name="iddle6158"></a><a name="iddle6188"></a><a name="iddle6512"></a><a name="iddle6513"></a><a name="iddle6576"></a><a name="iddle6577"></a><a name="iddle6603"></a><a name="iddle6614"></a><a name="iddle6619"></a>The unusual part is the <tt>requestPropertyChange()</tt> and <tt>propertyChanged()</tt> calls. These functions are inherited from <tt>QAxBindable</tt> and should ideally be called whenever we change a property. The <tt>requestPropertyChange()</tt> asks the client's permission to change a property, and returns <tt>true</tt> if the client allows the change. The <tt>propertyChanged()</tt> function notifies the client that the property has been changed.</p>
+<p class="docText">The <tt>setSpeed()</tt> and <tt>setRadius()</tt> property setters also follow this pattern, and so do the <tt>start()</tt> and <tt>stop()</tt> slots, since they change the value of the <tt>running</tt> property.</p>
+<p class="docText">There is one interesting <tt>AxBouncer</tt> member function left:</P>
+<div class="docText"><pre>
+QAxAggregated *AxBouncer::createAggregate()
+{
+    return new ObjectSafetyImpl;
+}
+</pre></div><br>
+<p class="docText">The <tt>createAggregate()</tt> function is reimplemented from <tt>QAxBindable</tt>. It allows us to implement COM interfaces that the <span class="docEmphasis">QAxServer</span> module doesn't already implement or to bypass <span class="docEmphasis">QAxServer</span>'s default COM interfaces. Here, we do it to provide the <tt>IObjectSafety</tt> interface, which is used by Internet Explorer to access a component's safety options. This is the standard trick to get rid of Internet Explorer's infamous &quot;Object not safe for scripting&quot; error message.</P>
+<p class="docText">Here's the definition of the class that implements the <tt>IObjectSafety</tt> interface:</P>
+<div class="docText"><pre>
+class ObjectSafetyImpl : public QAxAggregated, public IObjectSafety
+{
+public:
+    long queryInterface(const QUuid &amp;iid, void **iface);
+    QAXAGG_IUNKNOWN
+    HRESULT WINAPI GetInterfaceSafetyOptions(REFIID riid,
+            DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
+    HRESULT WINAPI SetInterfaceSafetyOptions(REFIID riid,
+            DWORD pdwSupportedOptions, DWORD pdwEnabledOptions);
+};
+</pre></div><br>
+<p class="docText">The <tt>ObjectSafetyImpl</tt> class inherits both <tt>QAxAggregated</tt> and <tt>IObjectSafety</tt>. The <tt>QAxAggregated</tt> class is an abstract base class for implementations of additional COM interfaces. The COM object that the <tt>QAxAggregated</tt> extends is accessible through <tt>controllingUnknown()</tt>. This COM object is created behind the scenes by the <span class="docEmphasis">QAxServer</span> module.</P>
+<p class="docText">The <tt>QAXAGG_IUNKNOWN</tt> macro provides standard implementations of <tt>QueryInter-face()</tt>, <tt>AddRef()</tt>, and <tt>Release()</tt>. These implementations simply call the same functions on the controlling COM object.</p>
+<div class="docText"><pre>
+long ObjectSafetyImpl::queryInterface(const QUuid &amp;iid, void **iface)
+{
+    *iface = 0;
+    if (iid == IID_IObjectSafety) {
+        *iface = static_cast&lt;IObjectSafety *&gt;(this);
+    } else {
+        return E_NOINTERFACE;
+    }
+    AddRef();
+    return S_OK;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2361"></a><a name="iddle2563"></a><a name="iddle2758"></a><a name="iddle3182"></a><a name="iddle4063"></a><a name="iddle6118"></a>The <tt>queryInterface()</tt> function is a pure virtual function of <tt>QAxAggregated</tt>. It is called by the controlling COM object to give access to the interfaces provided by the <tt>QAxAggregated</tt> subclass. We must return <tt>E_NOINTERFACE</tt> for interfaces that we don't implement and for <tt>IUnknown</tt>.</P>
+<div class="docText"><pre>
+HRESULT WINAPI ObjectSafetyImpl::GetInterfaceSafetyOptions(
+        REFIID /* riid */, DWORD *pdwSupportedOptions,
+        DWORD *pdwEnabledOptions)
+{
+    *pdwSupportedOptions = INTERFACESAFE_FOR_UNTRUSTED_DATA
+                           | INTERFACESAFE_FOR_UNTRUSTED_CALLER;
+    *pdwEnabledOptions = *pdwSupportedOptions;
+    return S_OK;
+}
+HRESULT WINAPI ObjectSafetyImpl::SetInterfaceSafetyOptions(
+        REFIID /* riid */, DWORD /* pdwSupportedOptions */,
+        DWORD /* pdwEnabledOptions */)
+{
+    return S_OK;
+}
+</pre></div><BR>
+<p class="docText">The <tt>GetInterfaceSafetyOptions()</tt> and <tt>SetInterfaceSafetyOptions()</tt> functions are declared in <tt>IObjectSafety</tt>. We implement them to tell the world that our object is safe for scripting.</P>
+<p class="docText">Let's now review <tt>main.cpp</tt>:</p>
+<div class="docText"><pre>
+#include &lt;QAxFactory&gt;
+#include "axbouncer.h"
+QAXFACTORY_DEFAULT(AxBouncer,
+                   "{5e2461aa-a3e8-4f7a-8b04-307459a4c08c}",
+                   "{533af11f-4899-43de-8b7f-2ddf588d1015}",
+                   "{772c14a5-a840-4023-b79d-19549ece0cd9}",
+                   "{dbce1e56-70dd-4f74-85e0-95c65d86254d}",
+                   "{3f3db5e0-78ff-4e35-8a5d-3d3b96c83e09}")
+</pre></div><br>
+<p class="docText">The <tt>QAXFACTORY_DEFAULT()</tt> macro exports an ActiveX control. We can use it for ActiveX servers that export only one control. The next example in this section will show how to export many ActiveX controls.</p>
+<p class="docText">The first argument to <tt>QAXFACTORY_DEFAULT()</tt> is the name of the Qt class to export. This is also the name under which the control is exported. The other five arguments are the class ID, the interface ID, the event interface ID, the type library ID, and the application ID. We can use standard tools like <tt>guidgen</tt> <a name="iddle1110"></a><a name="iddle1111"></a><a name="iddle1573"></a><a name="iddle1867"></a><a name="iddle2275"></a><a name="iddle2276"></a><a name="iddle2707"></a><a name="iddle2962"></a><a name="iddle3263"></a><a name="iddle3322"></a><a name="iddle3840"></a><a name="iddle3867"></a><a name="iddle3915"></a><a name="iddle4498"></a><a name="iddle4511"></a><a name="iddle5678"></a><a name="iddle5765"></a><a name="iddle5915"></a><a name="iddle6633"></a><a name="iddle7157"></a>or <tt>uuidgen</tt> to generate these identifiers. Because the server is a library, we don't need a <tt>main()</tt> function.</P>
+<p class="docText">Here's the <tt>.pro</tt> file for our in-process ActiveX server:</p>
+<div class="docText"><pre>
+TEMPLATE     = lib
+CONFIG      += dll qaxserver
+HEADERS      = axbouncer.h \
+               objectsafetyimpl.h
+SOURCES      = axbouncer.cpp \
+               main.cpp \
+               objectsafetyimpl.cpp
+RC_FILE      = qaxserver.rc
+DEF_FILE     = qaxserver.def
+</pre></div><br>
+<p class="docText">The <tt>qaxserver.rc</tt> and <tt>qaxserver.def</tt> files referred to in the <tt>.pro</tt> file are standard files that can be copied from Qt's <tt>src\activeqt\control</tt> directory.</P>
+<p class="docText">The makefile or Visual C++ project file generated by <tt>qmake</tt> contains rules to register the server in the Windows registry. To register the server on end-user machines, we can use the <tt>regsvr32</tt> tool available on all Windows systems.</P>
+<p class="docText">We can then include the Bouncer component in an HTML page using the <tt>&lt;object&gt;</tt> tag:</p>
+<div class="docText"><pre>
+&lt;object id="AxBouncer"
+        classid="clsid:5e2461aa-a3e8-4f7a-8b04-307459a4c08c"&gt;
+&lt;b&gt;The ActiveX control is not available. Make sure you have built and
+registered the component server.&lt;/b&gt;
+&lt;/object&gt;
+</pre></div><br>
+<p class="docText">We can create buttons that invoke slots:</p>
+<div class="docText"><pre>
+&lt;input type="button" value="Start" onClick="AxBouncer.start()"&gt;
+&lt;input type="button" value="Stop" onClick="AxBouncer.stop()"&gt;
+</pre></div><br>
+<p class="docText">We can manipulate the widget using JavaScript or VBScript just like any other ActiveX control. See the <tt>demo.html</tt> file on the CD for a rudimentary page that uses the ActiveX server.</P>
+<p class="docText">Our last example is a scriptable Address Book application. The application can serve as a standard Qt/Windows application or an out-of-process ActiveX server. The latter possibility allows us to script the application using, say, Visual Basic.</p>
+<div class="docText"><pre>
+class AddressBook : public QMainWindow
+{
+    Q_OBJECT
+    Q_PROPERTY(int count READ count)
+    Q_CLASSINFO("ClassID", "{588141ef-110d-4beb-95ab-ee6a478b576d}")
+    Q_CLASSINFO("InterfaceID", "{718780ec-b30c-4d88-83b3-79b3d9e78502}")
+    Q_CLASSINFO("ToSuperClass", "AddressBook")
+public:
+    AddressBook(QWidget *parent = 0);
+    ~AddressBook();
+    int count() const;
+public slots:
+    ABItem *createEntry(const QString &amp;contact);
+    ABItem *findEntry(const QString &amp;contact) const;
+    ABItem *entryAt(int index) const;
+private slots:
+    void addEntry();
+    void editEntry();
+    void deleteEntry();
+private:
+    void createActions();
+    void createMenus();
+    QTreeWidget *treeWidget;
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    QAction *exitAction;
+    QAction *addEntryAction;
+    QAction *editEntryAction;
+    QAction *deleteEntryAction;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle2362"></a><a name="iddle4060"></a><a name="iddle4064"></a><a name="iddle4065"></a><a name="iddle4067"></a><a name="iddle4078"></a><a name="iddle4085"></a>The <tt>AddressBook</tt> widget is the application's main window. The property and the slots it provides will be available for scripting. The <tt>Q_CLASSINFO()</tt> macro is used to specify the class and interface IDs associated with the class. These were generated using a tool such as <tt>guid</tt> or <tt>uuid</tt>.</P>
+<p class="docText">In the previous example, we specified the class and interface IDs when we exported the <tt>QAxBouncer</tt> class using the <tt>QAXFACTORY_DEFAULT()</tt> macro. In this example, we want to export several classes, so we cannot use <tt>QAXFACTORY_DEFAULT()</tt>. There are two options available to us:</p>
+<UL><li><p class="docList">We can subclass <tt>QAxFactory</tt>, reimplement its virtual functions to provide information about the types we want to export, and use the <tt>QAXFACTORY_EXPORT()</tt> macro to register the factory.</p></li><li><p class="docList">We can use the <tt>QAXFACTORY_BEGIN()</tt>, <tt>QAXFACTORY_END()</tt>, <tt>QAXCLASS()</tt>, and <tt>QAX-TYPE()</tt> macros to declare and register the factory. This approach requires us to specify the class and interface IDs using <tt>Q_CLASSINFO()</tt>.</p></li></ul>
+<p class="docText">Back to the <tt>AddressBook</tt> class definition: The third occurrence of <tt>Q_CLASSINFO()</tt> may seem a bit mysterious. By default, ActiveX controls expose not only their own properties, signals, and slots to clients, but also those of their superclasses up to <tt>QWidget</tt>. The <tt>ToSuperClass</tt> attribute lets us specify the highest superclass (in the inheritance tree) that we want to expose. Here, we specify the class name of the component (<tt>AddressBook</tt>) as the highest superclass to export, meaning that properties, signals, and slots defined in <tt>AddressBook</tt>'s superclasses will not be exported.</p>
+<div class="docText"><pre>
+class ABItem : public QObject, public QTreeWidgetItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QString contact READ contact WRITE setContact)
+    Q_PROPERTY(QString address READ address WRITE setAddress)
+    Q_PROPERTY(QString phoneNumber READ phoneNumber WRITE setPhoneNumber)
+    Q_CLASSINFO("ClassID", "{bc82730e-5f39-4e5c-96be-461c2cd0d282}")
+    Q_CLASSINFO("InterfaceID", "{c8bc1656-870e-48a9-9937-fbe1ceff8b2e}")
+    Q_CLASSINFO("ToSuperClass", "ABItem")
+public:
+    ABItem(QTreeWidget *treeWidget);
+    void setContact(const QString &amp;contact);
+    QString contact() const { return text(0); }
+    void setAddress(const QString &amp;address);
+    QString address() const { return text(1); }
+    void setPhoneNumber(const QString &amp;number);
+    QString phoneNumber() const { return text(2); }
+public slots:
+    void remove();
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1040"></a><a name="iddle1076"></a><a name="iddle1541"></a><a name="iddle1542"></a><a name="iddle2080"></a><a name="iddle2765"></a><a name="iddle2856"></a><a name="iddle3183"></a><a name="iddle4597"></a><a name="iddle5392"></a><a name="iddle5764"></a><a name="iddle6636"></a><a name="iddle6646"></a><a name="iddle7025"></a>The <tt>ABItem</tt> class represents one entry in the address book. It inherits from <tt>QtreeWidgetItem</tt> so that it can be shown in a <tt>QtreeWidget</tt> and from <tt>QObject</tt> so that it can be exported as a COM object.</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    if (!QAxFactory::isServer()) {
+        AddressBook addressBook;
+        addressBook.show();
+        return app.exec();
+    }
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">In <tt>main()</tt>, we check whether the application is being run stand-alone or as a server. The <tt>-activex</tt> command-line option is recognized by <tt>QApplication</tt> and makes the application run as a server. If the application isn't run as a server, we create the main widget and show it as we would normally do in any stand-alone Qt application.</p>
+<p class="docText">In addition to <tt>-activex</tt>, ActiveX servers understand the following command-line options:</p>
+<UL><li><p class="docList"><tt>-regserver</tt> registers the server in the system registry.</p></li><LI><p class="docList"><tt>-unregserver</tt> unregisters the server from the system registry.</p></LI><LI><p class="docList"><tt>-dumpidl file</tt> writes the server's IDL to the specified file.</p></LI></ul>
+<p class="docText">When the application is run as a server, we must export the <tt>AddressBook</tt> and <tt>ABItem</tt> classes as COM components:</p>
+<div class="docText"><pre>
+QAXFACTORY_BEGIN("{2b2b6f3e-86cf-4c49-9df5-80483b47f17b}",
+                 "{8e827b25-148b-4307-ba7d-23f275244818}")
+QAXCLASS(AddressBook)
+QAXTYPE(ABItem)
+QAXFACTORY_END()
+</pre></div><BR>
+<p class="docText"><a name="iddle1574"></a><a name="iddle2363"></a><a name="iddle3841"></a><a name="iddle4045"></a><a name="iddle4061"></a><a name="iddle4066"></a><a name="iddle4079"></a><a name="iddle4086"></a><a name="iddle5679"></a><a name="iddle5925"></a><a name="iddle5926"></a><a name="iddle6002"></a><a name="iddle7274"></a><a name="iddle7334"></a>The above macros export a factory for creating COM objects. Since we want to export two types of COM objects, we cannot simply use <tt>QAXFACTORY_DEFAULT()</tt> as we did in the previous example.</P>
+<p class="docText">The first argument to <tt>QAXFACTORY_BEGIN()</tt> is the type library ID; the second argument is the application ID. Between <tt>QAXFACTORY_BEGIN()</tt> and <tt>QAXFACTORY_END()</tt>, we specify all the classes that can be instantiated and all the data types that we want to make accessible as COM objects.</P>
+<p class="docText">This is the <tt>.pro</tt> file for our out-of-process ActiveX server:</p>
+<div class="docText"><pre>
+TEMPLATE     = app
+CONFIG      += qaxserver
+HEADERS      = abitem.h \
+               addressbook.h \
+               editdialog.h
+SOURCES      = abitem.cpp \
+               addressbook.cpp \
+               editdialog.cpp \
+               main.cpp
+FORMS        = editdialog.ui
+RC_FILE      = qaxserver.rc
+</pre></div><br>
+<p class="docText">The <tt>qaxserver.rc</tt> file referred to in the <tt>.pro</tt> file is a standard file that can be copied from Qt's <tt>src\activeqt\control</tt> directory.</p>
+<p class="docText">Look in the example's <tt>vb</tt> directory for a Visual Basic project that uses the Address Book server.</P>
+<p class="docText">This completes our overview of the ActiveQt framework. The Qt distribution includes additional examples, and the documentation contains information about how to build the <span class="docEmphasis">QAxContainer</span> and <span class="docEmphasis">QAxServer</span> modules and how to solve common interoperability issues.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

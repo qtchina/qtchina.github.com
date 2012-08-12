@@ -1,0 +1,44 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Clipboard Handling</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch09lev1sec3"></a>
+<h3 id="507906-956" class="docSection1Title">Clipboard Handling</h3>
+<p class="docText"><a name="iddle1324"></a><a name="iddle1475"></a><a name="iddle1478"></a><a name="iddle1706"></a><a name="iddle1707"></a><a name="iddle1813"></a><a name="iddle1840"></a><a name="iddle2255"></a><a name="iddle2778"></a><a name="iddle2779"></a><a name="iddle3331"></a><a name="iddle3333"></a><a name="iddle3334"></a><a name="iddle3399"></a><a name="iddle3421"></a><a name="iddle3686"></a><a name="iddle3687"></a><a name="iddle3712"></a><a name="iddle4024"></a><a name="iddle4115"></a><a name="iddle4540"></a><a name="iddle5281"></a><a name="iddle5283"></a><a name="iddle5285"></a><a name="iddle5533"></a><a name="iddle5976"></a><a name="iddle6113"></a><a name="iddle6114"></a><a name="iddle6130"></a><a name="iddle6150"></a><a name="iddle6151"></a><a name="iddle6198"></a><a name="iddle6662"></a><a name="iddle6727"></a><a name="iddle6792"></a><a name="iddle7333"></a>Most applications make use of Qt's built-in clipboard handling in one way or another. For example, the <tt>QTextEdit</tt> class provides <tt>cut()</tt>, <tt>copy()</tt>, and <tt>paste()</tt> slots as well as keyboard shortcuts, so little or no additional code is required.</p>
+<p class="docText">When writing our own classes, we can access the clipboard through <tt>QApplication::clipboard()</tt>, which returns a pointer to the application's <tt>QClipboard</tt> object. Handling the system clipboard is easy: Call <tt>setText()</tt>, <tt>setImage()</tt>, or <tt>setPixmap()</tt> to put data onto the clipboard, and call <tt>text()</tt>, <tt>image()</tt>, or <tt>pixmap()</tt> to retrieve data from the clipboard. We have already seen examples of clipboard use in the Spreadsheet application from <a class="docLink" href="ch04.html#ch04">Chapter 4</a>.</p>
+<p class="docText">For some applications, the built-in functionality might not be sufficient. For example, we might want to provide data that isn't just text or an image, or we might want to provide data in many different formats for maximum interoperability with other applications. The issue is very similar to what we encountered earlier with drag and drop, and the answer is also similar: We can subclass <tt>QMimeData</tt> and reimplement a few virtual functions.</p>
+<p class="docText">If our application supports drag and drop through a custom <tt>QMimeData</tt> subclass, we can simply reuse the <tt>QMimeData</tt> subclass and put it on the clipboard using the <tt>setMimeData()</tt> function. To retrieve the data, we can call <tt>mimeData()</tt> on the clipboard.</p>
+<p class="docText">On X11, it is usually possible to paste a selection by clicking the middle button of a three-button mouse. This is done using a separate &quot;selection&quot; clipboard. If you want your widgets to support this kind of clipboard as well as the standard one, you must pass <tt>QClipboard::Selection</tt> as an additional argument to the various clipboard calls. For example, here's how we would reimplement <tt>mouseReleaseEvent()</tt> in a text editor to support pasting using the middle mouse button:</p>
+<div class="docText"><pre>
+void MyTextEditor::mouseReleaseEvent(QMouseEvent *event)
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    if (event-&gt;button() == Qt::MidButton
+            &amp;&amp; clipboard-&gt;supportsSelection()) {
+        QString text = clipboard-&gt;text(QClipboard::Selection);
+        pasteText(text);
+    }
+}
+</pre></div><br>
+<p class="docText">On X11, the <tt>supportsSelection()</tt> function returns <tt>true</tt>. On other platforms, it returns <tt>false</tt>.</p>
+<p class="docText">If we want to be notified whenever the clipboard's contents change, we can connect the <tt>QClipboard::dataChanged()</tt> signal to a custom slot.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

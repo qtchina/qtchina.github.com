@@ -1,0 +1,73 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using the Reference Documentation</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch01lev1sec4"></a>
+<h3 id="507906-897" class="docSection1Title">Using the Reference Documentation</h3>
+<p class="docText">Qt's reference documentation is an essential tool for any Qt developer, since it covers every class and function in Qt. This book makes use of many Qt classes and functions, but it does not cover all of them, nor does it provide every detail of those that are mentioned. To get the most benefit from Qt, you should familiarize yourself with the Qt reference documentation as quickly as possible.</p>
+<p class="docText">The documentation is available in HTML format in Qt's <tt>doc/html</tt> directory and can be read using any web browser. You can also use <span class="docEmphasis">Qt Assistant</span>, the Qt help browser, which has powerful searching and indexing features that make it quicker and easier to use than a web browser. To launch <span class="docEmphasis">Qt Assistant</span>, click <a name="iddle5467"></a>Qt by Trolltech v4.x.y|Assistant in the Start menu on Windows, type <tt>assistant</tt> on the command line on Unix, or double-click Assistant in the Mac OS X Finder.</p>
+<p class="docText">The links in the &quot;API Reference&quot; section on the home page provide different ways of navigating Qt's classes. The &quot;All Classes&quot; page lists every class in Qt's API. The &quot;Main Classes&quot; page lists only the most commonly used Qt classes. As an exercise, you might want to look up the classes and functions that we have used in this chapter.</p>
+<a name="ch01fig07"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 1.7. Qt's documentation in <span class="docEmphasis">Qt Assistant</span> on Mac OS X</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/assistant_alt.jpg">[View full size image]</a></div><img border="0" alt="" id="195131084202" width="500" height="346" SRC="images/assistant.jpg"></p>
+</center></p><br>
+<p class="docText">Note that inherited functions are documented in the base class; for example, <tt>QPushButton</tt> has no <tt>show()</tt> function of its own, but it inherits one from its ancestor <tt>QWidget</tt>. <a class="docLink" href="#ch01fig08">Figure 1.8</a> shows how the classes we have seen so far relate to each other.</p>
+<a name="ch01fig08"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 1.8. Inheritance tree for the Qt classes seen so far</H5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="500" height="186" SRC="images/inheritan_tree.jpg"></P>
+
+</center></P><BR>
+<p class="docText"><a name="iddle1117"></a><a name="iddle1370"></a><a name="iddle1545"></a><a name="iddle2128"></a><a name="iddle2278"></a><a name="iddle3154"></a><a name="iddle3170"></a><a name="iddle3392"></a><a name="iddle3501"></a><a name="iddle3716"></a><a name="iddle5164"></a><a name="iddle6606"></a><a name="iddle6608"></a><a name="iddle6771"></a><a name="iddle7254"></a><a name="iddle7297"></a><a name="iddle7305"></a><a name="iddle7360"></a>The reference documentation for the current version of Qt and for some earlier versions is available online at <a class="docLink" target="_blank" href="http://doc.trolltech.com/">http://doc.trolltech.com/</a>. This site also has selected articles from <span class="docEmphasis">Qt Quarterly</span>, the Qt programmers' newsletter sent to all commercial licensees.</p>
+<a name="ch01sb01"></a><p><table cellspacing="0" width="90%" border="1" cellpadding="5"><tr><td>
+
+<h2 class="docSidebarTitle">Widget Styles</h2>
+<p class="docText">The screenshots we have seen so far have been taken on Linux, but Qt applications look native on every supported platform. Qt achieves this by emulating the platform's look and feel, rather than wrapping a particular platform or toolkit's widget set.</p>
+<a name="ch01fig09"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 1.9. Styles available everywhere</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="500" height="201" SRC="images/widget_styels.jpg"></p>
+
+</center></p><BR>
+<p class="docText">With Qt/X11 and Qtopia Core, the default style is Plastique, which uses gradients and anti-aliasing to provide a modern look and feel. Qt application users can override the default style by using the <tt>-style</tt> command-line option. For example, to launch the Age application using the Motif style on X11, simply type</p>
+<div class="docText"><pre>
+./age -style motif
+</pre></div><br>
+<p class="docText">on the command line.</P>
+<a name="ch01fig10"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 1.10. Platform-specific styles</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="500" height="102" SRC="images/windowsxp_style.jpg"></p>
+
+</center></p><BR>
+<p class="docText">Unlike the other styles, the Windows XP and Mac styles are only available on their native platforms, since they rely on the platforms' theme engines.</p>
+</td></tr></table></p><BR>
+<p class="docText">This chapter has introduced the key concepts of signalslot connections and layouts. It has also begun to reveal Qt's consistent and fully object-oriented approach to the construction and use of widgets. If you browse through Qt's documentation, you will find a uniformity of approach that makes it straightforward to learn how to use new widgets, and you will also find that Qt's carefully chosen names for functions, parameters, enums, and so on, make programming in Qt surprisingly pleasant and easy.</P>
+<p class="docText">The following chapters of <a class="docLink" href="part01.html#part01">Part I</a> build on the fundamentals covered here, showing how to create complete GUI applications with menus, toolbars, document windows, a status bar, and dialogs, along with the underlying functionality to read, process, and write files.</P>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

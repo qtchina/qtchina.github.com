@@ -1,0 +1,117 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Writing Application Plugins</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch19lev1sec3"></a>
+<h3 id="570594-993" class="docSection1Title">Writing Application Plugins</h3>
+<p class="docText">An application plugin is a subclass of <tt>QObject</tt> and of the interfaces it wants to provide. The CD that accompanies this book includes two plugins for the Text Art application presented in the previous section, to show that the application correctly handles multiple plugins.</p>
+<p class="docText">Here, we will only review the code for one of them, the Basic Effects Plugin. We will assume that the plugin's source code is located in a directory called <tt>basiceffectsplugin</tt> and that the Text Art application is located in a parallel directory called <tt>textart</tt>. Here's the declaration of the plugin class:</p>
+<div class="docText"><pre>
+class BasicEffectsPlugin : public QObject, public TextArtInterface
+{
+    Q_OBJECT
+    Q_INTERFACES(TextArtInterface)
+public:
+    QStringList effects() const;
+    QPixmap applyEffect(const QString &amp;effect, const QString &amp;text,
+                        const QFont &amp;font, const QSize &amp;size,
+                        const QPen &amp;pen, const QBrush &amp;brush);
+};
+</pre></div><br>
+<p class="docText">The plugin implements only one interface, <tt>TextArtInterface</tt>. In addition to <tt>Q_OBJECT</tt>, we must use the <tt>Q_INTERFACES()</tt> macro for each of the interfaces that are subclassed to ensure smooth cooperation between <tt>moc</tt> and <tt>qobject_cast&lt;T&gt;()</tt>.</p>
+<div class="docText"><pre>
+QStringList BasicEffectsPlugin::effects() const
+{
+    return QStringList() &lt;&lt; "Plain" &lt;&lt; "Outline" &lt;&lt; "Shadow";
+}
+</pre></div><br>
+<p class="docText">The <tt>effects()</tt> function returns a list of text effects supported by the plugin. This plugin supports three effects, so we just return a list containing the name of each one.</p>
+<p class="docText">The <tt>applyEffect()</tt> function provides the plugin's functionality and is slightly involved, so we will review it in pieces.</p>
+<div class="docText"><pre>
+QPixmap BasicEffectsPlugin::applyEffect(const QString &amp;effect,
+        const QString &amp;text, const QFont &amp;font, const QSize &amp;size,
+        const QPen &amp;pen, const QBrush &amp;brush)
+{
+QFont myFont = font;
+QFontMetrics metrics(myFont);
+while ((metrics.width(text) &gt; size.width()
+        || metrics.height() &gt; size.height())
+        &amp;&amp; myFont.pointSize() &gt; 9) {
+    myFont.setPointSize(myFont.pointSize() - 1);
+    metrics = QFontMetrics(myFont);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1156"></a><a name="iddle2480"></a><a name="iddle3317"></a><a name="iddle4302"></a><a name="iddle4652"></a><a name="iddle4653"></a><a name="iddle4706"></a><a name="iddle4713"></a><a name="iddle5801"></a><a name="iddle6169"></a><a name="iddle6382"></a><a name="iddle6741"></a>We want to ensure that the given text will fit in the specified size if possible. For this reason, we use the font's metrics to see if the text is too large to fit, and if it is we enter a loop where we reduce the point size until we find a size that will fit, or until we reach 9 points, our fixed minimum size.</p>
+<div class="docText"><pre>
+QPixmap pixmap(size);
+QPainter painter(&amp;pixmap);
+painter.setFont(myFont);
+painter.setPen(pen);
+painter.setBrush(brush);
+painter.setRenderHint(QPainter::Antialiasing, true);
+painter.setRenderHint(QPainter::TextAntialiasing, true);
+painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+painter.eraseRect(pixmap.rect());
+</pre></div><br>
+<p class="docText">We create a pixmap of the required size and a painter to paint onto the pixmap. We also set some render hints to ensure the smoothest possible results. The call to <tt>eraseRect()</tt> clears the pixmap with the background color.</P>
+<div class="docText"><pre>
+if (effect == "Plain") {
+    painter.setPen(Qt::NoPen);
+} else if (effect == "Outline") {
+    QPen pen(Qt::black);
+    pen.setWidthF(2.5);
+    painter.setPen(pen);
+} else if (effect == "Shadow") {
+    QPainterPath path;
+    painter.setBrush(Qt::darkGray);
+    path.addText(((size.width() - metrics.width(text)) / 2) + 3,
+                 (size.height() - metrics.descent()) + 3, myFont,
+                 text);
+    painter.drawPath(path);
+    painter.setBrush(brush);
+}
+</pre></div><br>
+<p class="docText">For the &quot;Plain&quot; effect, no outline is required. For the &quot;Outline&quot; effect, we ignore the original pen and create our own black pen with a 2.5-pixel width. For the &quot;Shadow&quot; effect, we need to draw the shadow first, so that the text can be painted on top of it.</p>
+<div class="docText"><pre>
+QPainterPath path;
+path.addText((size.width() - metrics.width(text)) / 2,
+             size.height() - metrics.descent(), myFont, text);
+    painter.drawPath(path);
+    return pixmap;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2039"></a><a name="iddle2366"></a><a name="iddle3755"></a><a name="iddle3842"></a><a name="iddle3922"></a><a name="iddle4666"></a>We now have the pen and brushes set appropriately for each text effect, and in the &quot;Shadow&quot; effect case have drawn the shadow. We are now ready to render the text. The text is horizontally centered and drawn far enough above the bottom of the pixmap to allow room for descenders.</P>
+<div class="docText"><pre>
+Q_EXPORT_PLUGIN2(basiceffectsplugin, BasicEffectsPlugin)
+</pre></div><br>
+<p class="docText">At the end of the <tt>.cpp</tt> file, we use the <tt>Q_EXPORT_PLUGIN2()</tt> macro to make the plugin available to Qt.</P>
+<p class="docText">The <tt>.pro</tt> file is similar to the one we used for the Windows cursor plugin earlier in this chapter (p. 408):</P>
+<div class="docText"><pre>
+TEMPLATE     = lib
+CONFIG      += plugin
+HEADERS      = ../textart/textartinterface.h \
+               basiceffectsplugin.h
+SOURCES      = basiceffectsplugin.cpp
+DESTDIR      = ../textart/plugins
+</pre></div><br>
+<p class="docText">If this chapter has whet your appetite for application plugins, you might like to study the more advanced Plug &amp; Paint example provided with Qt. The application supports three different interfaces and includes a useful Plugin Information dialog that lists the plugins and interfaces that are available to the application.</P>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

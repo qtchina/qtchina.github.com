@@ -1,0 +1,124 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using QTextBrowser as a Simple Help Engine</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch16lev1sec2"></a>
+<h3 id="title-IDA2CDOP" class="docSection1Title">Using QTextBrowser as a Simple Help Engine</h3>
+<p class="docText">Large applications may require more online help than tooltips, status tips, and &quot;What's This?&quot; help can reasonably show. A simple solution to this is to provide a help browser. Applications that include a help browser typically have a Help entry in the main window's Help menu and a Help button in every dialog.</p>
+<p class="docText">In this section, we present the simple help browser shown in <a class="docLink" href="#ch16fig03">Figure 16.3</a> and explain how it can be used within an application. The window uses a <tt>QTextBrowser</tt> to display help pages that are marked up with an HTML-based syntax. <tt>QTextBrowser</tt> can handle a lot of HTML tags, so it is ideal for this purpose.</p>
+<a name="ch16fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 16.3. The <tt>HelpBrowser</tt> widget</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/helpbrowser_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="391" SRC="images/helpbrowser.jpg"></p>
+</center></p><br>
+<p class="docText">We begin with the header file:</p>
+<div class="docText"><pre>
+#include &lt;QWidget&gt;
+class QPushButton;
+class QTextBrowser;
+class HelpBrowser : public QWidget
+{
+    Q_OBJECT
+public:
+    HelpBrowser(const QString &amp;path, const QString &amp;page,
+                QWidget *parent = 0);
+    static void showPage(const QString &amp;page);
+private slots:
+    void updateWindowTitle();
+private:
+    QTextBrowser *textBrowser;
+    QPushButton *homeButton;
+    QPushButton *backButton;
+    QPushButton *closeButton;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle2653"></a>The <tt>HelpBrowser</tt> provides a static function that can be called from anywhere in the application. This function creates a <tt>HelpBrowser</tt> window and shows the given page.</P>
+<p class="docText">Here's the beginning of the implementation:</p>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "helpbrowser.h"
+HelpBrowser::HelpBrowser(const QString &amp;path, const QString &amp;page,
+                         QWidget *parent)
+    : QWidget(parent)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
+    setAttribute(Qt::WA_GroupLeader);
+    textBrowser = new QTextBrowser;
+    homeButton = new QPushButton(tr("&amp;Home"));
+    backButton = new QPushButton(tr("&amp;Back"));
+    closeButton = new QPushButton(tr("Close"));
+    closeButton-&gt;setShortcut(tr("Esc"));
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout-&gt;addWidget(homeButton);
+    buttonLayout-&gt;addWidget(backButton);
+    buttonLayout-&gt;addStretch();
+    buttonLayout-&gt;addWidget(closeButton);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout-&gt;addLayout(buttonLayout);
+    mainLayout-&gt;addWidget(textBrowser);
+    setLayout(mainLayout);
+    connect(homeButton, SIGNAL(clicked()), textBrowser, SLOT(home()));
+    connect(backButton, SIGNAL(clicked()),
+            textBrowser, SLOT(backward()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(textBrowser, SIGNAL(sourceChanged(const QUrl &amp;)),
+            this, SLOT(updateWindowTitle()));
+    textBrowser-&gt;setSearchPaths(QStringList() &lt;&lt; path &lt;&lt; ":/images");
+    textBrowser-&gt;setSource(page);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1014"></a><a name="iddle1513"></a><a name="iddle1934"></a><a name="iddle1938"></a><a name="iddle1979"></a><a name="iddle2654"></a><a name="iddle2656"></a><a name="iddle3368"></a><a name="iddle5118"></a><a name="iddle5260"></a><a name="iddle6282"></a><a name="iddle7052"></a><a name="iddle7174"></a>We set the <tt>Qt::WA_GroupLeader</tt> attribute because we want to pop up <tt>HelpBrowser</tt> windows from modal dialogs in addition to the main window. Modal dialogs normally prevent the user from interacting with any other window in the application. However, after requesting help, the user must obviously be allowed to interact with both the modal dialog and with the help browser. Setting the <tt>Qt::WA_GroupLeader</tt> attribute makes this interaction possible.</p>
+<p class="docText">We provide two search paths, the first a path in the file system that contains the application's documentation, and the second the location of the image resources. The HTML can include references to images in the file system in the normal way and also references to image resources by using a path that begins with <tt>:/</tt> (colon slash). The <tt>page</tt> parameter is the name of the documentation file, with an optional HTML anchor.</P>
+<div class="docText"><pre>
+void HelpBrowser::updateWindowTitle()
+{
+    setWindowTitle(tr("Help: %1").arg(textBrowser-&gt;documentTitle()));
+}
+</pre></div><br>
+<p class="docText">Whenever the source page changes, the <tt>updateWindowTitle()</tt> slot is called. The <tt>documentTitle()</tt> function returns the text specified in the page's <tt>&lt;title&gt;</tt> tag.</P>
+<div class="docText"><pre>
+void HelpBrowser::showPage(const QString &amp;page)
+{
+    QString path = QApplication::applicationDirPath() + "/doc";
+    HelpBrowser *browser = new HelpBrowser(path, page);
+    browser-&gt;resize(500, 400);
+    browser-&gt;show();
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1570"></a><a name="iddle2652"></a><a name="iddle3851"></a><a name="iddle5117"></a><a name="iddle5129"></a><a name="iddle7173"></a>In the <tt>showPage()</tt> static function, we create the <tt>HelpBrowser</tt> window and then show it. The window will be destroyed automatically when the user closes it, since we set the <tt>Qt::WA_DeleteOnClose</tt> attribute in the <tt>HelpBrowser</tt> constructor.</p>
+<p class="docText">For this example, we assume that the documentation is located in the <tt>doc</tt> subdirectory of the directory containing the application's executable. All the pages passed to the <tt>showPage()</tt> function will be taken from this subdirectory.</P>
+<p class="docText">Now we are ready to invoke the help browser from the application. In the application's main window, we would create a Help action and connect it to a <tt>help()</tt> slot that could look like this:</p>
+<div class="docText"><pre>
+void MainWindow::help()
+{
+    HelpBrowser::showPage("index.html");
+}
+</pre></div><br>
+<p class="docText">This assumes that the main help file is called <tt>index.html</tt>. For dialogs, we would connect the Help button to a <tt>help()</tt> slot that might look like this:</P>
+<div class="docText"><pre>
+void EntryDialog::help()
+{
+    HelpBrowser::showPage("forms.html#editing");
+}
+</pre></div><BR>
+<p class="docText">Here we look in a different help file, <tt>forms.html</tt>, and scroll the <tt>QTextBrowser</tt> to the <tt>editing</tt> anchor.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

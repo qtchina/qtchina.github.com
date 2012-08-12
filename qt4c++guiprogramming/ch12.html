@@ -1,0 +1,45 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 12.&nbsp; Input/Output</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch12"></a>
+
+<h2 id="title-IDA2BW5O" class="docChapterTitle">Chapter 12. Input/Output</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="198" height="128" SRC="images/273fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle4097"></a><a name="iddle4101"></a><a name="iddle4270"></a><a name="iddle4420"></a><a name="iddle4428"></a><a name="iddle4749"></a><a name="iddle5228"></a><a name="iddle5256"></a><a name="iddle5403"></a><a name="iddle5958"></a><a name="iddle5959"></a><a name="iddle6383"></a><span class="docEmphasis"><a class="docLink" href="ch12lev1sec1.html#ch12lev1sec1">Reading and Writing Binary Data</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch12lev1sec2.html#ch12lev1sec2">Reading and Writing Text</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch12lev1sec3.html#ch12lev1sec3">Traversing Directories</a></span></p></LI><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch12lev1sec4.html#ch12lev1sec4">Embedding Resources</a></span></p></li><LI><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch12lev1sec5.html#ch12lev1sec5">Inter-Process Communication</a></span></p></LI></UL>
+<p class="docText">The need to read from or write to files or other devices is common to almost every application. Qt provides excellent support for I/O through <tt>QIODevice</tt>, a powerful abstraction that encapsulates &quot;devices&quot; capable of reading and writing blocks of bytes. Qt includes the following <tt>QIODevice</tt> subclasses:</p>
+<P><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="150"><col width="350"></colgroup><thead></thead><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QFile</tt></P></TD><TD class="docTableCell" align="left" valign="top"><p class="docText">Accesses files in the local file system and in embedded resources</p></td></tr><TR><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QTemporaryFile</tt></p></TD><TD class="docTableCell" align="left" valign="top"><p class="docText">Creates and accesses temporary files in the local file system</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>QBuffer</tt></p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">Reads data from or writes data to a <tt>QByteArray</tt></p></TD></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QProcess</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Runs external programs and handles inter-process communication</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QTcpSocket</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Transfers a stream of data over the network using TCP</p></TD></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QUdpSocket</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText">Sends or receives UDP datagrams over the network</P></td></TR></table></p><br>
+<p class="docText"><tt>QProcess</tt>, <tt>QTcpSocket</tt>, and <tt>QUdpSocket</tt> are sequential devices, meaning that the data can only be accessed once, starting from the first byte and progressing serially to the last byte. <tt>QFile</tt>, <tt>QTemporaryFile</tt>, and <tt>QBuffer</tt> are random-access devices, so bytes can be read any number of times from any position; they provide the <tt>QIODevice::seek()</tt> function for repositioning the file pointer.</P>
+<p class="docText">In addition to the device classes, Qt also provides two higher-level stream classes that we can use to read from and write to any I/O device: <tt>QDataStream</tt> for binary data and <tt>QTextStream</tt> for text. These classes take care of issues such as byte ordering and text encodings, ensuring that Qt applications running on different platforms or in different countries can read and write each other's files. This makes Qt's I/O classes much more convenient than the corresponding Standard C++ classes, which leave these issues to the application programmer.</P>
+<p class="docText"><tt>QFile</tt> makes it easy to access individual files, whether they are in the file system or embedded in the application's executable as resources. For applications that need to identify whole sets of files to work on, Qt provides the <tt>QDir</tt> and <a name="iddle1023"></a><a name="iddle1281"></a><a name="iddle1391"></a><a name="iddle1431"></a><a name="iddle1719"></a><a name="iddle2387"></a><a name="iddle2891"></a><a name="iddle2903"></a><a name="iddle3587"></a><a name="iddle4146"></a><a name="iddle4153"></a><a name="iddle4163"></a><a name="iddle4283"></a><a name="iddle4424"></a><a name="iddle4741"></a><a name="iddle5026"></a><a name="iddle6218"></a><a name="iddle6550"></a><a name="iddle6554"></a><a name="iddle6556"></a><a name="iddle6568"></a><a name="iddle6585"></a><a name="iddle6593"></a><a name="iddle6858"></a><a name="iddle7122"></a><a name="iddle7321"></a><tt>QFileInfo</tt> classes, which handle directories and provide information about the files inside them.</P>
+<p class="docText">The <tt>QProcess</tt> class allows us to launch external programs and to communicate with them through their standard input, standard output, and standard error channels (<tt>cin</tt>, <tt>cout</tt>, and <tt>cerr</tt>). We can set the environment variables and working directory that the external application will use. By default, communication with the process is asynchronous (non-blocking), but it is also possible to block on certain operations.</p>
+<p class="docText">Networking and reading and writing XML are such substantial topics that they are covered separately in their own dedicated chapters (<a class="docLink" href="ch14.html#ch14">Chapter 14</a> and <a class="docLink" href="ch15.html#ch15">Chapter 15</a>).</p>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

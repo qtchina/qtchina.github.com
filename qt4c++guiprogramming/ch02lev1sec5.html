@@ -1,0 +1,49 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Dynamic Dialogs</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch02lev1sec5"></a>
+<h3 id="title-IDACMMRT" class="docSection1Title">Dynamic Dialogs</h3>
+<p class="docText">Dynamic dialogs are dialogs that are created from <span class="docEmphasis">Qt Designer</span> <tt>.ui</tt> files at run-time. Instead of converting the <tt>.ui</tt> file to C++ code using <tt>uic</tt>, we can load the file at run-time using the <tt>QUiLoader</tt> class:</p>
+<div class="docText"><pre>
+QUiLoader uiLoader;
+QFile file("sortdialog.ui");
+QWidget *sortDialog = uiLoader.load(&amp;file);
+if (sortDialog) {
+    ...
+}
+</pre></div><br>
+<p class="docText">We can access the form's child widgets using <tt>QObject::findChild&lt;T&gt;()</tt>:</p>
+<div class="docText"><pre>
+QComboBox *primaryColumnCombo =
+        sortDialog-&gt;findChild&lt;QComboBox *&gt;("primaryColumnCombo");
+if (primaryColumnCombo) {
+    ...
+}
+</pre></div><br>
+<p class="docText">The <tt>findChild&lt;T&gt;()</tt> function is a template member function that returns the child object that matches the given name and type. Because of a compiler limitation, it is not available for MSVC 6. If you need to use the MSVC 6 compiler, call the <tt>qFindChild&lt;T&gt;()</tt> global function instead, which works exactly the same way.</p>
+<p class="docText">The <tt>QUiLoader</tt> class is located in a separate library. To use <tt>QUiLoader</tt> from a Qt application, we must add this line to the application's <tt>.pro</tt> file:</p>
+<div class="docText"><pre>
+CONFIG         += uitools
+</pre></div><br>
+<p class="docText">Dynamic dialogs make it possible to change the layout of a form without recompiling the application. They can also be used to create thin-client applications, where the executable merely has a front-end form built-in and all other forms are created as required.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

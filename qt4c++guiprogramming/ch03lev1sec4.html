@@ -1,0 +1,241 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Implementing the File Menu</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch03lev1sec4"></a>
+<h3 id="title-IDAZRHYN" class="docSection1Title">Implementing the File Menu</h3>
+<p class="docText">In this section, we will implement the slots and private functions necessary to make the File menu options work and to manage the recently opened files list.</p>
+<div class="docText"><pre>
+void MainWindow::newFile()
+{
+    if (okToContinue()) {
+        spreadsheet-&gt;clear();
+        setCurrentFile("");
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>newFile()</tt> slot is called when the user clicks the File|New menu option or clicks the New toolbar button. The <tt>okToContinue()</tt> private function asks the user &quot;Do you want to save your changes?&quot; if there are unsaved changes. It returns <tt>true</tt> if the user chooses either Yes or No (saving the document on Yes), and it returns <tt>false</tt> if the user chooses Cancel. The <tt>Spreadsheet::clear()</tt> function clears all the spreadsheet's cells and formulas. The <tt>setCurrentFile()</tt> private function updates the window title to indicate that an untitled document is being edited, in addition to setting the <tt>curFile</tt> private variable and updating the recently opened files list.</p>
+
+<div class="docText"><pre>
+bool MainWindow::okToContinue()
+{
+    if (isWindowModified()) {
+        int r = QMessageBox::warning(this, tr("Spreadsheet"),
+                        tr("The document has been modified.\n"
+                           "Do you want to save your changes?"),
+                        QMessageBox::Yes | QMessageBox::Default,
+                        QMessageBox::No,
+                        QMessageBox::Cancel | QMessageBox::Escape);
+        if (r == QMessageBox::Yes) {
+            return save();
+        } else if (r == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1746"></a><a name="iddle1868"></a><a name="iddle1871"></a><a name="iddle2186"></a><a name="iddle2188"></a><a name="iddle2752"></a><a name="iddle2802"></a><a name="iddle2823"></a><a name="iddle3005"></a><a name="iddle3236"></a><a name="iddle3237"></a><a name="iddle3307"></a><a name="iddle3566"></a><a name="iddle3583"></a><a name="iddle4528"></a><a name="iddle4530"></a><a name="iddle4531"></a><a name="iddle4533"></a><a name="iddle4534"></a><a name="iddle4535"></a><a name="iddle4536"></a><a name="iddle5416"></a><a name="iddle5474"></a><a name="iddle7190"></a><a name="iddle7279"></a>In <tt>okToContinue()</tt>, we check the state of the <tt>windowModified</tt> property. If it is <tt>true</tt>, we display the message box shown in <a class="docLink" href="#ch03fig09">Figure 3.9</a>. The message box has a Yes, a No, and a Cancel button. The <tt>QMessageBox::Default</tt> modifier makes Yes the default button. The <tt>QMessageBox::Escape</tt> modifier makes the Esc key a synonym for Cancel.</p>
+<a name="ch03fig09"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.9. &quot;Do you want to save your changes?&quot;</h5>
+
+<p class="docText">
+<img border="0" alt="" width="309" height="138" SRC="images/wanna_save.jpg"></p>
+
+</center></P><BR>
+<p class="docText">The call to <tt>warning()</tt> may look a bit intimidating at first sight, but the general syntax is straightforward:</P>
+<div class="docText"><pre>
+QMessageBox::warning(parent, title, message, button0, button1, ...);
+</pre></div><BR>
+<p class="docText"><tt>QMessageBox</tt> also provides <tt>information()</tt>, <tt>question()</tt>, and <tt>critical()</tt>, each of which has its own particular icon.</P>
+<a name="ch03fig10"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.10. Message box icons</h5>
+
+<p class="docText">
+<img border="0" alt="" width="286" height="52" SRC="images/information.jpg"></p>
+
+</center></p><br>
+<div class="docText"><pre>
+void MainWindow::open()
+{
+    if (okToContinue()) {
+        QString fileName = QFileDialog::getOpenFileName(this,
+                                   tr("Open Spreadsheet"), ".",
+                                   tr("Spreadsheet files (*.sp)"));
+        if (!fileName.isEmpty())
+            loadFile(fileName);
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1418"></a><a name="iddle1936"></a><a name="iddle1940"></a><a name="iddle2379"></a><a name="iddle2392"></a><a name="iddle2408"></a><a name="iddle2564"></a><a name="iddle3131"></a><a name="iddle3232"></a><a name="iddle3660"></a><a name="iddle3661"></a><a name="iddle4288"></a><a name="iddle4969"></a><a name="iddle6281"></a><a name="iddle6695"></a><a name="iddle6837"></a><a name="iddle7260"></a><a name="iddle7293"></a>The <tt>open()</tt> slot corresponds to File|Open. Like <tt>newFile()</tt>, it first calls <tt>okToContinue()</tt> to handle any unsaved changes. Then it uses the static convenience function <tt>QFileDialog::getOpenFileName()</tt> to obtain a new file name from the user. The function pops up a file dialog, lets the user choose a file, and returns the file nameor an empty string if the user clicked Cancel.</p>
+<p class="docText">The first argument to <tt>QFileDialog::getOpenFileName()</tt> is the parent widget. The parentchild relationship doesn't mean the same thing for dialogs as for other widgets. A dialog is always a window in its own right, but if it has a parent, it is centered on top of the parent by default. A child dialog also shares its parent's taskbar entry.</p>
+<p class="docText">The second argument is the title the dialog should use. The third argument tells it which directory it should start from, in our case the current directory.</p>
+<p class="docText">The fourth argument specifies the file filters. A file filter consists of a descriptive text and a wildcard pattern. Had we supported comma-separated values files and Lotus 1-2-3 files in addition to Spreadsheet's native file format, we would have used the following filter:</p>
+<div class="docText"><pre>
+tr("Spreadsheet files (*.sp)\n"
+   "Comma-separated values files (*.csv)\n"
+   "Lotus 1-2-3 files (*.wk1 *.wks)")
+</pre></div><br>
+<p class="docText">The <tt>loadFile()</tt> private function was called in <tt>open()</tt> to load the file. We make it an independent function because we will need the same functionality to load recently opened files:</P>
+<div class="docText"><pre>
+bool MainWindow::loadFile(const QString &amp;fileName)
+{
+    if (!spreadsheet-&gt;readFile(fileName)) {
+        statusBar()-&gt;showMessage(tr("Loading canceled"), 2000);
+        return false;
+    }
+    setCurrentFile(fileName);
+    statusBar()-&gt;showMessage(tr("File loaded"), 2000);
+    return true;
+}
+</pre></div><br>
+<p class="docText">We use <tt>Spreadsheet::readFile()</tt> to read the file from disk. If loading is successful, we call <tt>setCurrentFile()</tt> to update the window title; otherwise, <tt>Spread-sheet::readFile()</tt> will have already notified the user of the problem through a message box. In general, it is good practice to let the lower-level components <a name="iddle1497"></a><a name="iddle1998"></a><a name="iddle2214"></a><a name="iddle2568"></a><a name="iddle3216"></a><a name="iddle3243"></a><a name="iddle3245"></a><a name="iddle3246"></a><a name="iddle4287"></a><a name="iddle4291"></a><a name="iddle5486"></a><a name="iddle5918"></a><a name="iddle5923"></a><a name="iddle5924"></a>issue error messages, since they can provide the precise details of what went wrong.</p>
+<p class="docText">In both cases, we display a message in the status bar for 2 seconds (2000 milliseconds) to keep the user informed about what the application is doing.</P>
+<div class="docText"><pre>
+bool MainWindow::save()
+{
+    if (curFile.isEmpty()) {
+        return saveAs();
+    } else {
+        return saveFile(curFile);
+    }
+}
+bool MainWindow::saveFile(const QString &amp;fileName)
+{
+    if (!spreadsheet-&gt;writeFile(fileName)) {
+        statusBar()-&gt;showMessage(tr("Saving canceled"), 2000);
+        return false;
+    }
+    setCurrentFile(fileName);
+    statusBar()-&gt;showMessage(tr("File saved"), 2000);
+    return true;
+}
+</pre></div><BR>
+<p class="docText">The <tt>save()</tt> slot corresponds to File|Save. If the file already has a name because it was opened before or has already been saved, <tt>save()</tt> calls <tt>saveFile()</tt> with that name; otherwise, it simply calls <tt>saveAs()</tt>.</p>
+<div class="docText"><pre>
+bool MainWindow::saveAs()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+                               tr("Save Spreadsheet"), ".",
+                               tr("Spreadsheet files (*.sp)"));
+    if (fileName.isEmpty())
+        return false;
+    return saveFile(fileName);
+}
+</pre></div><br>
+<p class="docText">The <tt>saveAs()</tt> slot corresponds to File|Save As. We call <tt>QFileDialog::getSaveFile-Name()</tt> to obtain a file name from the user. If the user clicks Cancel, we return <tt>false</tt>, which is propagated up to its caller (<tt>save()</tt> or <tt>okToContinue()</tt>).</p>
+<p class="docText">If the file already exists, the <tt>getSaveFileName()</tt> function will ask the user to confirm that they want to overwrite. This behavior can be changed by passing <tt>QFileDialog::DontConfirmOverwrite</tt> as an additional argument to <tt>getSaveFile-Name()</tt>.</p>
+<div class="docText"><pre>
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (okToContinue()) {
+        writeSettings();
+        event-&gt;accept();
+    } else {
+        event-&gt;ignore();
+    }
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1051"></a><a name="iddle1488"></a><a name="iddle2383"></a><a name="iddle2773"></a><a name="iddle3247"></a><a name="iddle3250"></a><a name="iddle3381"></a><a name="iddle4018"></a><a name="iddle4040"></a><a name="iddle4118"></a><a name="iddle4259"></a><a name="iddle4263"></a><a name="iddle4292"></a><a name="iddle5422"></a><a name="iddle5424"></a><a name="iddle5475"></a><a name="iddle5484"></a><a name="iddle5585"></a><a name="iddle6044"></a><a name="iddle6240"></a><a name="iddle6597"></a><a name="iddle7280"></a>When the user clicks File|Exit or clicks the close button in the window's title bar, the <tt>QWidget::close()</tt> slot is called. This sends a &quot;close&quot; event to the widget. By reimplementing <tt>QWidget::closeEvent()</tt>, we can intercept attempts to close the main window and decide whether we want the window to actually close or not.</p>
+<p class="docText">If there are unsaved changes and the user chooses Cancel, we &quot;ignore&quot; the event and leave the window unaffected by it. In the normal case, we accept the event, resulting in Qt hiding the window. We also call the private function <tt>writeSettings()</tt> to save the application's current settings.</p>
+<p class="docText">When the last window is closed, the application terminates. If needed, we can disable this behavior by setting <tt>QApplication</tt>'s <tt>quitOnLastWindowClosed</tt> property to <tt>false</tt>, in which case the application keeps running until we call <tt>QApplication::quit()</tt>.</p>
+<div class="docText"><pre>
+void MainWindow::setCurrentFile(const QString &amp;fileName)
+{
+    curFile = fileName;
+    setWindowModified(false);
+    QString shownName = "Untitled";
+    if (!curFile.isEmpty()) {
+        shownName = strippedName(curFile);
+        recentFiles.removeAll(curFile);
+        recentFiles.prepend(curFile);
+        updateRecentFileActions();
+    }
+    setWindowTitle(tr("%1[*] - %2").arg(shownName)
+                                   .arg(tr("Spreadsheet")));
+}
+QString MainWindow::strippedName(const QString &amp;fullFileName)
+{
+    return QFileInfo(fullFileName).fileName();
+}
+</pre></div><br>
+<p class="docText">In <tt>setCurrentFile()</tt>, we set the <tt>curFile</tt> private variable that stores the name of the file being edited. Before we show the file name in the title bar, we remove the file's path with <tt>strippedName()</tt> to make it more user-friendly.</P>
+<p class="docText">Every <tt>QWidget</tt> has a <tt>windowModified</tt> property that should be set to <tt>TRue</tt> if the window's document has unsaved changes, and to <tt>false</tt> otherwise. On Mac OS X, unsaved documents are indicated by a dot in the close button of the window's title bar; on other platforms, they are indicated by an asterisk following the file name. Qt takes care of this behavior automatically, as long as we <a name="iddle1001"></a><a name="iddle1176"></a><a name="iddle2091"></a><a name="iddle2396"></a><a name="iddle3253"></a><a name="iddle3303"></a><a name="iddle3390"></a><a name="iddle3704"></a><a name="iddle4006"></a><a name="iddle4580"></a><a name="iddle4979"></a><a name="iddle5031"></a><a name="iddle5035"></a><a name="iddle5729"></a><a name="iddle5791"></a><a name="iddle6225"></a><a name="iddle7048"></a>keep the <tt>windowModified</tt> property up-to-date and place the marker &quot;[*]&quot; in the window title where we want the asterisk to appear when it is required.</P>
+<p class="docText">The text we passed to the <tt>setWindowTitle()</tt> function was</p>
+<div class="docText"><pre>
+tr("%1[*] - %2").arg(shownName)
+                .arg(tr("Spreadsheet"))
+</pre></div><br>
+<p class="docText">The <tt>QString::arg()</tt> function replaces the lowest-numbered &quot;%<span class="docEmphasis">n</span>&quot; parameter with its argument and returns the resulting string. In this case, <tt>arg()</tt> is used with two &quot;%<span class="docEmphasis">n</span>&quot; parameters. The first call to <tt>arg()</tt> replaces &quot;%1&quot;; the second call replaces &quot;%2&quot;. If the file name is &quot;budget.sp&quot; and no translation file is loaded, the resulting string would be &quot;budget.sp[*] - Spreadsheet&quot;.It would have been easier to write</p>
+<div class="docText"><pre>
+setWindowTitle(shownName + tr("[*] - Spreadsheet"));
+</pre></div><br>
+<p class="docText">but using <tt>arg()</tt> provides more flexibility for translators.</p>
+<p class="docText">If there is a file name, we update <tt>recentFiles</tt>, the application's recently opened files list. We call <tt>removeAll()</tt> to remove any occurrences of the file name in the list, to avoid duplicates; then we call <tt>prepend()</tt> to add the file name as the first item. After updating the list, we call the private function <tt>updateRecentFileActions()</tt> to update the entries in the File menu.</p>
+<div class="docText"><pre>
+void MainWindow::updateRecentFileActions()
+{
+    QMutableStringListIterator i(recentFiles);
+    while (i.hasNext()) {
+        if (!QFile::exists(i.next()))
+            i.remove();
+    }
+    for (int j = 0; j &lt; MaxRecentFiles; ++j) {
+        if (j &lt; recentFiles.count()) {
+            QString text = tr("&amp;%1 %2")
+                           .arg(j + 1)
+                           .arg(strippedName(recentFiles[j]));
+            recentFileActions[j]-&gt;setText(text);
+            recentFileActions[j]-&gt;setData(recentFiles[j]);
+            recentFileActions[j]-&gt;setVisible(true);
+        } else {
+            recentFileActions[j]-&gt;setVisible(false);
+        }
+    }
+    separatorAction-&gt;setVisible(!recentFiles.isEmpty());
+}
+</pre></div><br>
+<p class="docText">We begin by removing any files that no longer exist using a Java-style iterator. Some files might have been used in a previous session, but have since been deleted. The <tt>recentFiles</tt> variable is of type <tt>QStringList</tt> (list of <tt>QString</tt>s). <a class="docLink" href="ch11.html#ch11">Chapter 11</a> explains container classes such as <tt>QStringList</tt> in detail, showing how they relate to the C++ Standard Template Library (STL), and the use of Qt's Java-style iterator classes.</p>
+<p class="docText"><a name="iddle1343"></a><a name="iddle1658"></a><a name="iddle2083"></a><a name="iddle2086"></a><a name="iddle3239"></a><a name="iddle3312"></a><a name="iddle3363"></a><a name="iddle3497"></a><a name="iddle3543"></a><a name="iddle3544"></a><a name="iddle3591"></a><a name="iddle4592"></a><a name="iddle4621"></a><a name="iddle4635"></a><a name="iddle5438"></a><a name="iddle5986"></a><a name="iddle7111"></a>We then go through the list of files again, this time using array-style indexing. For each file, we create a string consisting of an ampersand, a digit (<tt>j</tt> + 1), a space, and the file name (without its path). We set the corresponding action to use this text. For example, if the first file was <tt>C:\My Documents\tab04.sp</tt>, the first action's text would be &quot;&amp;1 tab04.sp&quot;.</p>
+<a name="ch03fig11"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.11. File menu with recently opened files</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/recentfiles_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="246" SRC="images/recentfiles.jpg"></p>
+</center></p><BR>
+<p class="docText">Every action can have an associated &quot;data&quot; item of type <tt>QVariant</tt>. The <tt>QVariant</tt> type can hold values of many C++ and Qt types; it is covered in <a class="docLink" href="ch11.html#ch11">Chapter 11</a>. Here, we store the full name of the file in the action's &quot;data&quot; item so that we can easily retrieve it later. We also set the action to be visible.</P>
+<p class="docText">If there are more file actions than recent files, we simply hide the extra actions. Finally, if there is at least one recent file, we set the separator to be visible.</P>
+<div class="docText"><pre>
+void MainWindow::openRecentFile()
+{
+    if (okToContinue()) {
+        QAction *action = qobject_cast&lt;QAction *&gt;(sender());
+        if (action)
+            loadFile(action-&gt;data().toString());
+    }
+}
+</pre></div><BR>
+<p class="docText">When the user chooses a recent file, the <tt>openRecentFile()</tt> slot is called. The <tt>okToContinue()</tt> function is used in case there are any unsaved changes, and providing the user did not cancel, we find out which particular action invoked the slot using <tt>QObject::sender()</tt>.</P>
+<p class="docText">The <tt>qobject_cast&lt;T&gt;()</tt> function performs a dynamic cast based on the meta-information generated by <tt>moc</tt>, Qt's meta-object compiler. It returns a pointer of the requested <tt>QObject</tt> subclass, or 0 if the object cannot be cast to that type. Unlike the Standard C++ <tt>dynamic_cast&lt;T&gt;()</tt>, Qt's <tt>qobject_cast&lt;T&gt;()</tt> works correctly across dynamic library boundaries. In our example, we use <tt>qobject_cast&lt;T&gt;()</tt> to cast a <tt>QObject</tt> pointer to a <tt>QAction</tt> pointer. If the cast is successful <a name="iddle1065"></a><a name="iddle1935"></a><a name="iddle1937"></a><a name="iddle2290"></a><a name="iddle2412"></a><a name="iddle2413"></a><a name="iddle2416"></a><a name="iddle2421"></a><a name="iddle3230"></a><a name="iddle3377"></a><a name="iddle5477"></a><a name="iddle5588"></a><a name="iddle6276"></a>(it should be), we call <tt>loadFile()</tt> with the full file name that we extract from the action's data.</p>
+<p class="docText">Incidentally, since we know that the sender is a <tt>QAction</tt>, the program would still work if we used <tt>static_cast&lt;T&gt;()</tt> or a traditional C-style cast instead. Refer to the &quot;Type Conversions&quot; section of <a class="docLink" href="app02.html#app02">Appendix B</a> for an overview of the different C++ casts.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

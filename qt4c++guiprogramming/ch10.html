@@ -1,0 +1,61 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 10.&nbsp; Item View Classes</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch10"></a>
+
+<h2 id="title-IDA5KQJS" class="docChapterTitle">Chapter 10. Item View Classes</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" width="200" height="118" SRC="images/217fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle1680"></a><a name="iddle1890"></a><a name="iddle3369"></a><a name="iddle3374"></a><a name="iddle3458"></a><a name="iddle6379"></a><a name="iddle7064"></a><a name="iddle7147"></a><span class="docEmphasis"><a class="docLink" href="ch10lev1sec1.html#ch10lev1sec1">Using the Item View Convenience Classes</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch10lev1sec2.html#ch10lev1sec2">Using Predefined Models</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch10lev1sec3.html#ch10lev1sec3">Implementing Custom Models</a></span></p></li><LI><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch10lev1sec4.html#ch10lev1sec4">Implementing Custom Delegates</a></span></P></LI></UL>
+<p class="docText">Many applications let the user search, view, and edit individual items that belong to a data set. The data might be held in files or accessed from a database or a network server. The standard approach to dealing with data sets like this is to use Qt's item view classes.</P>
+<p class="docText">In earlier versions of Qt, the item view widgets were populated with the entire contents of a data set; the users would perform all their searches and edits on the data held in the widget, and at some point the changes would be written back to the data source. Although simple to understand and use, this approach doesn't scale well to very large data sets and doesn't lend itself to situations where we want to display the same data set in two or more different widgets.</p>
+<p class="docText">The Smalltalk language popularized a flexible approach to visualizing large data sets: modelviewcontroller (MVC). In the MVC approach, the <span class="docEmphasis">model</span> represents the data set and is responsible for fetching the data that is needed for viewing and for writing back any changes. Each type of data set has its own model, but the API that the models provide to the views is uniform no matter what the underlying data set. The <span class="docEmphasis">view</span> presents the data to the user. With any large data set only a limited amount of data will be visible at any one time, so that is the only data that the view asks for. The <span class="docEmphasis">controller</span> mediates between the user and the view, converting user actions into requests to navigate or edit data, which the view then transmits to the model as necessary.</p>
+<a name="ch10fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.1. Qt's model/view architecture</h5>
+
+<p class="docText">
+<img border="0" alt="" width="330" height="101" SRC="images/qtmodel.jpg"></p>
+
+</center></p><br>
+<p class="docText">Qt provides a model/view architecture inspired by the MVC approach. In Qt, the model behaves the same as it does for classic MVC. But instead of a controller, Qt uses a slightly different abstraction: the <span class="docEmphasis">delegate</span>. The delegate <a name="iddle1683"></a><a name="iddle1891"></a><a name="iddle3113"></a><a name="iddle3118"></a><a name="iddle4464"></a><a name="iddle4468"></a><a name="iddle5174"></a><a name="iddle5178"></a><a name="iddle5379"></a><a name="iddle5385"></a><a name="iddle6684"></a><a name="iddle6688"></a><a name="iddle6940"></a><a name="iddle6944"></a>is used to provide fine control over how items are rendered and edited. Qt provides a default delegate for every type of view. This is sufficient for most applications, so we usually don't need to care about it.</p>
+<p class="docText">Using Qt's model/view architecture, we can use models that only fetch the data that is actually needed for display in the view. This makes handling very large data sets much faster and less memory hungry than reading all the data. And by registering a model with two or more views, we can give the user the opportunity of viewing and interacting with the data in different ways, with little overhead. Qt automatically keeps multiple views in sync, reflecting changes to one in all the others. An additional benefit of the model/view architecture is that if we decide to change how the underlying data set is stored, we just need to change the model; the views will continue to behave correctly.</p>
+<a name="ch10fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.2. One model can serve multiple views</H5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="138" SRC="images/onemodel.jpg"></p>
+
+</center></p><BR>
+<p class="docText">In many situations, we only need to present relatively small numbers of items to the user. In these common cases, we can use Qt's convenience item view classes (<tt>QListWidget</tt>, <tt>QTableWidget</tt>, and <tt>QTReeWidget</tt>) and populate them with items directly. These classes behave in a similar way to the item view classes provided by earlier versions of Qt. They store their data in &quot;items&quot; (for example, a <tt>QTableWidget</tt> contains <tt>QTableWidgetItem</tt>s). Internally, the convenience classes use custom models that make the items visible to the views.</p>
+<p class="docText">For large data sets, duplicating the data is often not an option. In these cases, we can use Qt's views (<tt>QListView</tt>, <tt>QTableView</tt>, and <tt>QtreeView</tt>), in conjunction with a data model, which can be a custom model or one of Qt's predefined models. For example, if the data set is held in a database, we can combine a <tt>QTableView</tt> with a <tt>QSqlTableModel</tt>.</p>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

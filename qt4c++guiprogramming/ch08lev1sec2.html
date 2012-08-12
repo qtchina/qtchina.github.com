@@ -1,0 +1,279 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Painter Transformations</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch08lev1sec2"></a>
+<h3 id="title-IDAQ451M" class="docSection1Title">Painter Transformations</h3>
+<p class="docText">With <tt>QPainter</tt>'s default coordinate system, the point (0, 0) is located at the top-left corner of the paint device;<span class="docEmphasis">x</span> coordinates increase rightward and <span class="docEmphasis">y</span> coordinates increase downward. Each pixel occupies an area of size 1 x 1 in the default coordinate system.</p>
+<p class="docText">One important thing to understand is that the center of a pixel lies on &quot;half-pixel&quot; coordinates. For example, the top-left pixel covers the area between points (0, 0) and (1, 1), and its center is located at (0.5, 0.5). If we ask <tt>QPainter</tt> to draw a pixel at, say, (100, 100), it will approximate the result by <a name="iddle1153"></a><a name="iddle2054"></a><a name="iddle4678"></a><a name="iddle7140"></a><a name="iddle7270"></a>shifting the coordinate by +0.5 in both directions, resulting in the pixel centered at (100.5, 100.5) being drawn.</p>
+<p class="docText">This distinction may seem rather academic at first, but it has important consequences in practice. First, the shifting by +0.5 only occurs if antialiasing is disabled (the default); if antialiasing is enabled and we try to draw a pixel at (100, 100) in black, <tt>QPainter</tt> will actually color the four pixels (99.5, 99.5), (99.5, 100.5), (100.5, 99.5), and (100.5, 100.5) light gray, to give the impression of a pixel lying exactly at the meeting point of the four pixels. If this effect is undesirable, we can avoid it by specifying half-pixel coordinates, for example, (100.5, 100.5).</p>
+<p class="docText">When drawing shapes such as lines, rectangles, and ellipses, similar rules apply. <a class="docLink" href="#ch08fig07">Figure 8.7</a> shows how the result of a <tt>drawRect(2, 2, 6, 5)</tt> call varies according to the pen's width, when antialiasing is off. In particular, it is important to notice that a 6 x 5 rectangle drawn with a pen width of 1 effectively covers an area of size 7 x 6. This is different from older toolkits, including earlier versions of Qt, but it is essential for making truly scalable, resolution-independent vector graphics possible.</p>
+<a name="ch08fig07"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.7. Drawing a 6 x 5 rectangle with no antialiasing</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="130" SRC="images/drawing.jpg"></p>
+
+</center></p><br>
+<p class="docText">Now that we understand the default coordinate system, we can take a closer look at how it can be changed using <tt>QPainter</tt>'s viewport, window, and world matrix. (In this context, the term &quot;window&quot; does not refer to a window in the sense of a top-level widget, and the &quot;viewport&quot; has nothing to do with <tt>QScrollArea</tt>'s viewport.)</p>
+<p class="docText">The viewport and the window are tightly bound. The viewport is an arbitrary rectangle specified in physical coordinates. The window specifies the same rectangle, but in logical coordinates. When we do the painting, we specify points in logical coordinates, and those coordinates are converted into physical coordinates in a linear algebraic manner, based on the current windowviewport settings.</P>
+<p class="docText">By default, the viewport and the window are set to the device's rectangle. For example, if the device is a 320 x 200 widget, both the viewport and the window are the same 320 x 200 rectangle with its top-left corner at position (0, 0). In this case, the logical and physical coordinate systems are the same.</P>
+<p class="docText"><a name="iddle1150"></a><a name="iddle2060"></a><a name="iddle4516"></a><a name="iddle4684"></a><a name="iddle4701"></a><a name="iddle4708"></a><a name="iddle5825"></a><a name="iddle5880"></a><a name="iddle5881"></a><a name="iddle6129"></a><a name="iddle6232"></a><a name="iddle6922"></a><a name="iddle6925"></a><a name="iddle7310"></a>The windowviewport mechanism is useful to make the drawing code independent of the size or resolution of the paint device. For example, if we want the logical coordinates to extend from (-50, -50) to (+50, +50), with (0, 0) in the middle, we can set the window as follows:</P>
+<div class="docText"><pre>
+painter.setWindow(-50, -50, 100, 100);
+</pre></div><BR>
+<p class="docText">The (-50, -50) pair specifies the origin, and the (100, 100) pair specifies the width and height. This means that the logical coordinates (-50, -50) now correspond to the physical coordinates (0, 0), and the logical coordinates (+50, +50) correspond to the physical coordinates (320, 200). In this example, we didn't change the viewport.</P>
+<a name="ch08fig08"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.8. Converting logical coordinates into physical coordinates</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="136" SRC="images/converting_logical.jpg"></p>
+
+</center></p><br>
+<p class="docText">Now comes the world matrix. The world matrix is a transformation matrix that is applied in addition to the windowviewport conversion. It allows us to translate, scale, rotate, or shear the items we are drawing. For example, if we wanted to draw text at a 45&#176; angle, we would use this code:</p>
+<div class="docText"><pre>
+QMatrix matrix;
+matrix.rotate(45.0);
+painter.setMatrix(matrix);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+</pre></div><br>
+<p class="docText">The logical coordinates we pass to <tt>drawText()</tt> are transformed by the world matrix, then mapped to physical coordinates using the windowviewport settings.</p>
+<p class="docText">If we specify multiple transformations, they are applied in the order in which they are given. For example, if we want to use the point (10, 20) as the rotation's pivot point, we can do so by translating the window, performing the rotation, and then translating the window back to its original position:</p>
+<div class="docText"><pre>
+QMatrix matrix;
+matrix.translate(-10.0, -20.0);
+matrix.rotate(45.0);
+matrix.translate(+10.0, +20.0);
+painter.setMatrix(matrix);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+</pre></div><br>
+<p class="docText"><a name="iddle2308"></a><a name="iddle3616"></a><a name="iddle3617"></a><a name="iddle3625"></a><a name="iddle3626"></a><a name="iddle4692"></a><a name="iddle4696"></a><a name="iddle4710"></a><a name="iddle4711"></a><a name="iddle5472"></a><a name="iddle5882"></a><a name="iddle5942"></a><a name="iddle6266"></a><a name="iddle6650"></a><a name="iddle6818"></a><a name="iddle6819"></a><a name="iddle6926"></a>A simpler way to specify transformations is to use <tt>QPainter</tt>'s <tt>translate()</tt>, <tt>scale()</tt>, <tt>rotate()</tt>, and <tt>shear()</tt> convenience functions:</P>
+<div class="docText"><pre>
+painter.translate(-10.0, -20.0);
+painter.rotate(45.0);
+painter.translate(+10.0, +20.0);
+painter.drawText(rect, Qt::AlignCenter, tr("Revenue"));
+</pre></div><br>
+<p class="docText">But if we want to use the same transformations repeatedly, it's more efficient to store them in a <tt>QMatrix</tt> object and set the world matrix on the painter whenever the transformations are needed.</p>
+<p class="docText">To illustrate painter transformations, we will review the code of the <tt>OvenTimer</tt> widget shown in <a class="docLink" href="#ch08fig09">Figure 8.9</a>. The <tt>OvenTimer</tt> widget is modeled after the kitchen timers that were used before it was common to have ovens with clocks built-in. The user can click a notch to set the duration. The wheel automatically turns counterclockwise until 0 is reached, at which point <tt>OvenTimer</tt> emits the <tt>timeout()</tt> signal.</P>
+<a name="ch08fig09"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 8.9. The <tt>OvenTimer</tt> widget</h5>
+
+<p class="docText">
+<img border="0" alt="" width="200" height="200" SRC="images/oventimer.jpg"></p>
+
+</center></p><BR>
+<div class="docText"><pre>
+class OvenTimer : public QWidget
+{
+    Q_OBJECT
+public:
+    OvenTimer(QWidget *parent = 0);
+    void setDuration(int secs);
+    int duration() const;
+    void draw(QPainter *painter);
+signals:
+    void timeout();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+private:
+    QDateTime finishTime;
+    QTimer *updateTimer;
+    QTimer *finishTimer;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle3619"></a><a name="iddle3624"></a><a name="iddle5351"></a><a name="iddle5352"></a><a name="iddle5355"></a><a name="iddle6071"></a><a name="iddle6178"></a><a name="iddle6317"></a><a name="iddle6821"></a><a name="iddle6833"></a>The <tt>OvenTimer</tt> class inherits <tt>QWidget</tt> and reimplements two virtual functions: <tt>paintEvent()</tt> and <tt>mousePressEvent()</tt>.</p>
+<div class="docText"><pre>
+const double DegreesPerMinute = 7.0;
+const double DegreesPerSecond = DegreesPerMinute / 60;
+const int MaxMinutes = 45;
+const int MaxSeconds = MaxMinutes * 60;
+const int UpdateInterval = 1;
+</pre></div><br>
+<p class="docText">We start by defining a few constants that control the oven timer's look and feel.</p>
+<div class="docText"><pre>
+OvenTimer::OvenTimer(QWidget *parent)
+    : QWidget(parent)
+{
+    finishTime = QDateTime::currentDateTime();
+    updateTimer = new QTimer(this);
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+    finishTimer = new QTimer(this);
+    finishTimer-&gt;setSingleShot(true);
+    connect(finishTimer, SIGNAL(timeout()), this, SIGNAL(timeout()));
+    connect(finishTimer, SIGNAL(timeout()), updateTimer, SLOT(stop()));
+}
+</pre></div><BR>
+<p class="docText">In the constructor, we create two <tt>QTimer</tt> objects: <tt>updateTimer</tt> is used to refresh the appearance of the widget every second, and <tt>finishTimer</tt> emits the widget's <tt>timeout()</tt> signal when the oven timer reaches 0. The <tt>finishTimer</tt> only needs to timeout once, so we call <tt>setSingleShot(true)</tt>; by default, timers fire repeatedly until they are stopped or destroyed. The last <tt>connect()</tt> call is an optimization to stop updating the widget every second when the timer is inactive.</P>
+<div class="docText"><pre>
+void OvenTimer::setDuration(int secs)
+{
+    if (secs &gt; MaxSeconds) {
+        secs = MaxSeconds;
+    } else if (secs &lt;= 0) {
+        secs = 0;
+    }
+    finishTime = QDateTime::currentDateTime().addSecs(secs);
+    if (secs &gt; 0) {
+        updateTimer-&gt;start(UpdateInterval * 1000);
+        finishTimer-&gt;start(secs * 1000);
+    } else {
+        updateTimer-&gt;stop();
+        finishTimer-&gt;stop();
+    }
+    update();
+}
+</pre></div><BR>
+<p class="docText">The <tt>setDuration()</tt> function sets the duration of the oven timer to the given number of seconds. We compute the finish time by adding the duration to the <a name="iddle1770"></a><a name="iddle1854"></a><a name="iddle2081"></a><a name="iddle2251"></a><a name="iddle2259"></a><a name="iddle3414"></a><a name="iddle3621"></a><a name="iddle3622"></a><a name="iddle3623"></a><a name="iddle3642"></a><a name="iddle3647"></a><a name="iddle4171"></a><a name="iddle4560"></a><a name="iddle4705"></a><a name="iddle4707"></a><a name="iddle4709"></a><a name="iddle5527"></a><a name="iddle5537"></a><a name="iddle5611"></a><a name="iddle6168"></a><a name="iddle6222"></a><a name="iddle6233"></a><a name="iddle6815"></a><a name="iddle7041"></a><a name="iddle7141"></a><a name="iddle7271"></a>current time (obtained from <tt>QDateTime::currentDateTime()</tt>) and store it in the <tt>finishTime</tt> private variable. At the end, we call <tt>update()</tt> to redraw the widget with the new duration.</p>
+<p class="docText">The <tt>finishTime</tt> variable is of type <tt>QDateTime</tt>. Since the variable holds both a date and a time, we avoid a wrap-around bug when the current time is before midnight and the finish time is after midnight.</p>
+<div class="docText"><pre>
+int OvenTimer::duration() const
+{
+    int secs = QDateTime::currentDateTime().secsTo(finishTime);
+    if (secs &lt; 0)
+        secs = 0;
+    return secs;
+}
+</pre></div><br>
+<p class="docText">The <tt>duration()</tt> function returns the number of seconds left before the timer is due to finish. If the timer is inactive, we return 0.</p>
+<div class="docText"><pre>
+void OvenTimer::mousePressEvent(QMouseEvent *event)
+{
+    QPointF point = event-&gt;pos() - rect().center();
+    double theta = atan2(-point.x(), -point.y()) * 180 / 3.14159265359;
+    setDuration(duration() + int(theta / DegreesPerSecond));
+    update();
+}
+</pre></div><br>
+<p class="docText">If the user clicks the widget, we find the closest notch using a subtle but effective mathematical formula, and we use the result to set the new duration. Then we schedule a repaint. The notch that the user clicked will now be at the top and will move counterclockwise as time passes until 0 is reached.</p>
+<div class="docText"><pre>
+void OvenTimer::paintEvent(QPaintEvent * /* event */)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    int side = qMin(width(), height());
+    painter.setViewport((width() - side) / 2, (height() - side) / 2,
+                        side, side);
+    painter.setWindow(-50, -50, 100, 100);
+    draw(&amp;painter);
+}
+</pre></div><br>
+<p class="docText">In <tt>paintEvent()</tt>, we set the viewport to be the largest square area that fits inside the widget, and we set the window to be the rectangle (-50, -50, 100, 100), that is, the 100 x 100 rectangle extending from (-50, -50) to (+50, +50). The <tt>qMin()</tt> template function returns the lowest of its two arguments. Then we call the <tt>draw()</tt> function to actually perform the drawing.</p>
+
+<p class="docText"></p><a name="ch08fig10"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.10. The <tt>OvenTimer</tt> widget at three different sizes</h5>
+
+<p class="docText">
+<img border="0" alt="" width="352" height="310" SRC="images/oventimer1.jpg"></p>
+
+</center></p><BR>
+<p class="docText"><a name="iddle1204"></a><a name="iddle2020"></a><a name="iddle2031"></a><a name="iddle2047"></a><a name="iddle2589"></a><a name="iddle3620"></a><a name="iddle3772"></a><a name="iddle4134"></a><a name="iddle4660"></a><a name="iddle4674"></a><a name="iddle6029"></a>If we had not set the viewport to be a square, the oven timer would be an ellipse when the widget is resized to a non-square rectangle. To avoid such deformations, we must set the viewport and the window to rectangles with the same aspect ratio.</P>
+<p class="docText">Now let's look at the drawing code:</P>
+<div class="docText"><pre>
+void OvenTimer::draw(QPainter *painter)
+{
+    static const int triangle[3][2] = {
+        { -2, -49 }, { +2, -49 }, { 0, -47 }
+    };
+    QPen thickPen(palette().foreground(), 1.5);
+    QPen thinPen(palette().foreground(), 0.5);
+    QColor niceBlue(150, 150, 200);
+    painter-&gt;setPen(thinPen);
+    painter-&gt;setBrush(palette().foreground());
+    painter-&gt;drawPolygon(QPolygon(3, &amp;triangle[0][0]));
+</pre></div><BR>
+<p class="docText">We start by drawing the tiny triangle that marks the 0 position at the top of the widget. The triangle is specified by three hard-coded coordinates, and we use <tt>drawPolygon()</tt> to render it.</P>
+<p class="docText">What is so convenient about the windowviewport mechanism is that we can hard-code the coordinates we use in the draw commands and still get good resizing behavior.</p>
+<div class="docText"><pre>
+QConicalGradient coneGradient(0, 0, -90.0);
+coneGradient.setColorAt(0.0, Qt::darkGray);
+coneGradient.setColorAt(0.2, niceBlue);
+coneGradient.setColorAt(0.5, Qt::white);
+coneGradient.setColorAt(1.0, Qt::darkGray);
+painter-&gt;setBrush(coneGradient);
+painter-&gt;drawEllipse(-46, -46, 92, 92);
+</pre></div><br>
+<p class="docText"><a name="iddle1579"></a><a name="iddle2036"></a><a name="iddle2056"></a><a name="iddle2061"></a><a name="iddle3095"></a><a name="iddle4458"></a><a name="iddle4663"></a><a name="iddle4680"></a><a name="iddle4685"></a><a name="iddle4693"></a><a name="iddle4782"></a><a name="iddle5673"></a><a name="iddle5883"></a>We draw the outer circle and fill it using a conical gradient. The gradient's center point is located at (0, 0), and the angle is -90&#176;.</p>
+<div class="docText"><pre>
+QRadialGradient haloGradient(0, 0, 20, 0, 0);
+haloGradient.setColorAt(0.0, Qt::lightGray);
+haloGradient.setColorAt(0.8, Qt::darkGray);
+haloGradient.setColorAt(0.9, Qt::white);
+haloGradient.setColorAt(1.0, Qt::black);
+painter-&gt;setPen(Qt::NoPen);
+painter-&gt;setBrush(haloGradient);
+painter-&gt;drawEllipse(-20, -20, 40, 40);
+</pre></div><br>
+<p class="docText">We fill the inner circle using a radial gradient. The center point and the focal point of the gradient are located at (0, 0). The radius of the gradient is 20.</p>
+<div class="docText"><pre>
+    QLinearGradient knobGradient(-7, -25, 7, -25);
+    knobGradient.setColorAt(0.0, Qt::black);
+    knobGradient.setColorAt(0.2, niceBlue);
+    knobGradient.setColorAt(0.3, Qt::lightGray);
+    knobGradient.setColorAt(0.8, Qt::white);
+    knobGradient.setColorAt(1.0, Qt::black);
+    painter-&gt;rotate(duration() * DegreesPerSecond);
+    painter-&gt;setBrush(knobGradient);
+    painter-&gt;setPen(thinPen);
+    painter-&gt;drawRoundRect(-7, -25, 14, 50, 150, 50);
+    for (int i = 0; i &lt;= MaxMinutes; ++i) {
+        if (i % 5 == 0) {
+            painter-&gt;setPen(thickPen);
+            painter-&gt;drawLine(0, -41, 0, -44);
+            painter-&gt;drawText(-15, -41, 30, 25,
+                              Qt::AlignHCenter | Qt::AlignTop,
+                              QString::number(i));
+        } else {
+            painter-&gt;setPen(thinPen);
+            painter-&gt;drawLine(0, -42, 0, -44);
+        }
+        painter-&gt;rotate(-DegreesPerMinute);
+    }
+}
+</pre></div><br>
+<p class="docText">We call <tt>rotate()</tt> to rotate the painter's coordinate system. In the old coordinate system, the 0-minute mark was on top; now, the 0-minute mark is moved to the place that is appropriate for the time left. We draw the rectangular knob handle after the rotation, since its orientation depends on the rotation angle.</p>
+<p class="docText">In the <tt>for</tt> loop, we draw the tick marks along the outer circle's edge and the numbers for each multiple of 5 minutes. The text is drawn in an invisible rectangle underneath the tick mark. At the end of each iteration, we rotate the painter clockwise by 7&#176;, which corresponds to one minute. The next time we draw a tick mark, it will be at a different position around the circle, even <a name="iddle1154"></a><a name="iddle4392"></a><a name="iddle4691"></a><a name="iddle4695"></a><a name="iddle5840"></a><a name="iddle5922"></a><a name="iddle7328"></a>though the coordinates we pass to the <tt>drawLine()</tt> and <tt>drawText()</tt> calls are always the same.</p>
+<p class="docText">The code in the <tt>for</tt> loop suffers from a minor flaw, which would quickly become apparent if we performed more iterations. Each time we call <tt>rotate()</tt>, we effectively multiply the current world matrix with a rotation matrix, producing a new world matrix. The rounding errors associated with floating-point arithmetic add up, resulting in an increasingly inaccurate world matrix. Here's one way to rewrite the code to avoid this issue, using <tt>save()</tt> and <tt>restore()</tt> to save and reload the original transformation matrix for each iteration:</p>
+<div class="docText"><pre>
+for (int i = 0; i &lt;= MaxMinutes; ++i) {
+    painter-&gt;save();
+    painter-&gt;rotate(-i * DegreesPerMinute);
+    if (i % 5 == 0) {
+        painter-&gt;setPen(thickPen);
+        painter-&gt;drawLine(0, -41, 0, -44);
+        painter-&gt;drawText(-15, -41, 30, 25,
+                          Qt::AlignHCenter | Qt::AlignTop,
+                          QString::number(i));
+    } else {
+        painter-&gt;setPen(thinPen);
+        painter-&gt;drawLine(0, -42, 0, -44);
+    }
+    painter-&gt;restore();
+}
+</pre></div><br>
+<p class="docText">Another way of implementing an oven timer would have been to compute the (<span class="docEmphasis">x, y</span>) positions ourselves, using <tt>sin()</tt> and <tt>cos()</tt> to find the positions along the circle. But then we would still need to use a translation and a rotation to draw the text at an angle.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

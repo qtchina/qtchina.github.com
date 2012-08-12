@@ -1,0 +1,222 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Strings, Byte Arrays, and Variants</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch11lev1sec4"></a>
+<h3 id="title-IDARROWU" class="docSection1Title">Strings, Byte Arrays, and Variants</h3>
+<p class="docText"><tt>QString</tt>, <tt>QByteArray</tt>, and <tt>QVariant</tt> are three classes that have many things in common with containers and that can be used as alternatives to containers in some contexts. Also, like the containers, these classes use implicit sharing as a memory and speed optimization.</p>
+<p class="docText">We will start with <tt>QString</tt>. Strings are used by every GUI program, not only for the user interface but often also as data structures. C++ natively provides two kinds of strings: traditional C-style '\0'-terminated character arrays and the <tt>std::string</tt> class. Unlike these, <tt>QString</tt> holds 16-bit Unicode values. Unicode contains ASCII and Latin-1 as a subset, with their usual numeric values. But since <tt>QString</tt> is 16-bit, it can represent thousands of other characters for writing most of the world's languages. See <a class="docLink" href="ch17.html#ch17">Chapter 17</a> for more information about Unicode.</p>
+<p class="docText">When using <tt>QString</tt>, we don't need to worry about such arcane details as allocating enough memory or ensuring that the data is '\0'-terminated. Conceptually, <tt>QString</tt>s can be thought of as a vector of <tt>QChar</tt>s. A <tt>QString</tt> can embed '\0' characters. The <tt>length()</tt> function returns the size of the entire string, including embedded '\0' characters.</p>
+<p class="docText"><tt>QString</tt> provides a binary <tt>+</tt> operator to concatenate two strings and a <tt>+=</tt> operator to append one string to another. Because <tt>QString</tt> automatically preallocates memory at the end of the string data, building up a string by repeatedly appending characters is very fast. Here's an example that combines <tt>+</tt> and <tt>+=</tt>:</p>
+<div class="docText"><pre>
+QString str = "User: ";
+str += userName + "\n";
+</pre></div><br>
+<p class="docText">There is also a <tt>QString::append()</tt> function that does the same thing as the  <tt>+=</tt> operator:</p>
+<div class="docText"><pre>
+str = "User: ";
+str.append(userName);
+str.append("\n");
+</pre></div><br>
+<p class="docText">A completely different way of combining strings is to use <tt>QString</tt>'s <tt>sprintf()</tt> function:</p>
+<div class="docText"><pre>
+str.sprintf("%s %.1f%%", "perfect competition", 100.0);
+</pre></div><br>
+<p class="docText">This function supports the same format specifiers as the C++ library's <tt>sprintf()</tt> function. In the example above, <tt>str</tt> is assigned &quot;perfect competition 100.0%&quot;.</p>
+<p class="docText">Yet another way of building a string from other strings or from numbers is to use <tt>arg()</tt>:</P>
+<div class="docText"><pre>
+str = QString("%1 %2 (%3s-%4s)")
+      .arg("permissive").arg("society").arg(1950).arg(1970);
+</pre></div><br>
+<p class="docText"><a name="iddle1021"></a><a name="iddle3077"></a><a name="iddle3330"></a><a name="iddle3539"></a><a name="iddle4175"></a><a name="iddle4990"></a><a name="iddle4997"></a><a name="iddle5000"></a><a name="iddle5006"></a><a name="iddle5008"></a><a name="iddle5017"></a><a name="iddle5020"></a><a name="iddle5023"></a><a name="iddle5130"></a><a name="iddle5867"></a><a name="iddle6140"></a><a name="iddle6845"></a><a name="iddle6850"></a><a name="iddle6855"></a>In this example, &quot;%1&quot; is replaced by &quot;permissive&quot;, &quot;%2&quot; is replaced by &quot;society&quot;, &quot;%3&quot; is replaced by &quot;1950&quot;, and &quot;%4&quot; is replaced by &quot;1970&quot;. The result is &quot;permissive society (1950s-1970s)&quot;. There are <tt>arg()</tt> overloads to handle various data types. Some overloads have extra parameters for controlling the field width, the numerical base, or the floating-point precision. In general, <tt>arg()</tt> is a much better solution than <tt>sprintf()</tt>, because it is type-safe, fully supports Unicode, and allows translators to reorder the &quot;%<span class="docEmphasis">n</span>&quot; parameters.</p>
+<p class="docText"><tt>QString</tt> can convert numbers into strings using the <tt>QString::number()</tt> static function:</p>
+<div class="docText"><pre>
+str = QString::number(59.6);
+</pre></div><BR>
+<p class="docText">Or using the <tt>setNum()</tt> function:</p>
+<div class="docText"><pre>
+str.setNum(59.6);
+</pre></div><BR>
+<p class="docText">The reverse conversion, from a string to a number, is achieved using <tt>toInt()</tt>, <tt>toLongLong()</tt>, <tt>toDouble()</tt>, and so on. For example:</P>
+<div class="docText"><pre>
+bool ok;
+double d = str.toDouble(&amp;ok);
+</pre></div><br>
+<p class="docText">These functions accept an optional pointer to a <tt>bool</tt> variable and set the variable to <tt>TRue</tt> or <tt>false</tt> depending on the success of the conversion. If the conversion fails, these functions return zero.</p>
+<p class="docText">Once we have a string, we often want to extract parts of it. The <tt>mid()</tt> function returns the substring starting at a given position (the first argument) and of up to a given length (the second argument). For example, the following code prints &quot;pays&quot; to the console:<sup class="docFootnote"><a class="docLink" href="#ch11fn1">[*]</a></sup></p><blockquote><p class="docFootnote"><sup><a name="ch11fn1">[*]</a></sup> The convenient <tt>qDebug() &lt;&lt; arg</tt> syntax used here requires the inclusion of the <tt>&lt;QtDebug&gt;</tt> header file, while the <tt>qDebug("...", arg)</tt> syntax is available in any file that includes at least one Qt header.</P></blockquote>
+<div class="docText"><pre>
+QString str = "polluter pays principle";
+qDebug() &lt;&lt; str.mid(9, 4);
+</pre></div><BR>
+<p class="docText">If we omit the second argument, <tt>mid()</tt> returns the substring starting at the given position and ending at the end of the string. For example, the following code prints &quot;pays principle&quot; to the console:</P>
+<div class="docText"><pre>
+QString str = "polluter pays principle";
+qDebug() &lt;&lt; str.mid(9);
+</pre></div><br>
+<p class="docText">There are also <tt>left()</tt> and <tt>right()</tt> functions that perform a similar job. Both accept a number of characters,<span class="docEmphasis">n</span>, and return the first or last <span class="docEmphasis">n</span> characters of the string. For example, the following code prints &quot;polluter principle&quot; to the console:</p>
+<div class="docText"><pre>
+QString str = "polluter pays principle";
+</pre></div><br>
+<div class="docText"><pre>
+qDebug() &lt;&lt; str.left(8) &lt;&lt; " " &lt;&lt; str.right(9);
+</pre></div><BR>
+<p class="docText"><a name="iddle1362"></a><a name="iddle2151"></a><a name="iddle2822"></a><a name="iddle2841"></a><a name="iddle3078"></a><a name="iddle3139"></a><a name="iddle4974"></a><a name="iddle4984"></a><a name="iddle4987"></a><a name="iddle4988"></a><a name="iddle4991"></a><a name="iddle4994"></a><a name="iddle5003"></a><a name="iddle5005"></a><a name="iddle5007"></a><a name="iddle5014"></a><a name="iddle5025"></a><a name="iddle5028"></a><a name="iddle5029"></a><a name="iddle5790"></a><a name="iddle5811"></a><a name="iddle5868"></a><a name="iddle6413"></a><a name="iddle6528"></a><a name="iddle6857"></a><a name="iddle6867"></a><a name="iddle6952"></a><a name="iddle7205"></a>If we want to find out if a string contains a particular character, substring, or regular expression, we can use one of <tt>QString</tt>'s <tt>indexOf()</tt> functions:</p>
+<div class="docText"><pre>
+QString str = "the middle bit";
+int i = str.indexOf("middle");
+</pre></div><br>
+<p class="docText">This will set <tt>i</tt> to 4. The <tt>indexOf()</tt> function returns -1 on failure, and accepts an optional start position and case-sensitivity flag.</P>
+<p class="docText">If we just want to check whether a string starts or ends with something, we can use the <tt>startsWith()</tt> and <tt>endsWith()</tt> functions:</P>
+<div class="docText"><pre>
+if (url.startsWith("http:") &amp;&amp; url.endsWith(".png"))
+    ...
+</pre></div><br>
+<p class="docText">This is both simpler and faster than this:</p>
+<div class="docText"><pre>
+if (url.left(5) == "http:" &amp;&amp; url.right(4) == ".png")
+...
+</pre></div><br>
+<p class="docText">String comparison with the <tt>==</tt> operator is case sensitive. If we are comparing user-visible strings, <tt>localeAwareCompare()</tt> is usually the right choice, and if we want to make the comparisons case-insensitive, we can use <tt>toUpper()</tt> or <tt>toLower()</tt>. For example:</p>
+<div class="docText"><pre>
+if (fileName.toLower() == "readme.txt")
+    ...
+</pre></div><BR>
+<p class="docText">If we want to replace a certain part of a string by another string, we can use <tt>replace()</tt>:</p>
+<div class="docText"><pre>
+QString str = "a cloudy day";
+str.replace(2, 6, "sunny");
+</pre></div><br>
+<p class="docText">The result is &quot;a sunny day&quot;. The code can be rewritten to use <tt>remove()</tt> and <tt>insert()</tt>:</P>
+<div class="docText"><pre>
+str.remove(2, 6);
+str.insert(2, "sunny");
+</pre></div><br>
+<p class="docText">First, we remove six characters starting at position 2, resulting in the string &quot;a day&quot; (with two spaces), then we insert &quot;sunny&quot; at position 2.</P>
+<p class="docText">There are overloaded versions of <tt>replace()</tt> that replace all occurrences of their first argument with their second argument. For example, here's how to replace all occurrences of &quot;&amp;&quot; with &quot;&amp;amp;&quot; in a string:</p>
+<div class="docText"><pre>
+str.replace("&amp;", "&amp;amp;");
+</pre></div><br>
+<p class="docText">One very frequent need is to strip the whitespace (such as spaces, tabs, and newlines) from a string. <tt>QString</tt> has a function that eliminates whitespace from both ends of a string:</p>
+<div class="docText"><pre>
+QString str = "   BOB \t  THE   \nDOG  \n";
+</pre></div><br>
+<div class="docText"><pre>
+qDebug() &lt;&lt; str.trimmed();
+</pre></div><br>
+<p class="docText"><a name="iddle2507"></a><a name="iddle2508"></a><a name="iddle2916"></a><a name="iddle2966"></a><a name="iddle3084"></a><a name="iddle4975"></a><a name="iddle4985"></a><a name="iddle4986"></a><a name="iddle4989"></a><a name="iddle4993"></a><a name="iddle5009"></a><a name="iddle5011"></a><a name="iddle5033"></a><a name="iddle6314"></a><a name="iddle6436"></a>String <tt>str</tt> can be depicted as</p>
+
+<p class="docText">
+<img border="0" alt="" width="402" height="23" SRC="images/268fig1.jpg"></p>
+
+
+<p class="docText">The string returned by <tt>trimmed()</tt> is</p>
+
+<p class="docText">
+<img border="0" alt="" width="277" height="21" SRC="images/268fig2.jpg"></p>
+
+
+<p class="docText">When handling user input, we often also want to replace every sequence of one or more internal whitespace characters with single spaces, in addition to stripping whitespace from both ends. This is what the <tt>simplified()</tt> function does:</p>
+<div class="docText"><pre>
+QString str = " BOB \t THE \nDOG \n";
+qDebug() &lt;&lt; str.simplified();
+</pre></div><br>
+<p class="docText">The string returned by <tt>simplified()</tt> is</p>
+
+<p class="docText">
+<img border="0" alt="" width="202" height="21" SRC="images/268fig3.jpg"></p>
+
+
+<p class="docText">A string can be split into a <tt>QStringList</tt> of substrings using <tt>QString::split()</tt>:</p>
+<div class="docText"><pre>
+QString str = "polluter pays principle";
+QStringList words = str.split(" ");
+</pre></div><BR>
+<p class="docText">In the example above, we split the string &quot;polluter pays principle&quot; into three substrings: &quot;polluter&quot;, &quot;pays&quot;, and &quot;principle&quot;. The <tt>split()</tt> function has an optional third argument that specifies whether empty substrings should be kept (the default) or discarded.</p>
+<p class="docText">The items in a <tt>QStringList</tt> can be joined to form a single string using <tt>join()</tt>. The argument to <tt>join()</tt> is inserted between each pair of joined strings. For example, here's how to create a single string that is composed of all the strings contained in a <tt>QStringList</tt> sorted into alphabetical order and separated by newlines:</p>
+<div class="docText"><pre>
+words.sort();
+str = words.join("\n");
+</pre></div><br>
+<p class="docText">When dealing with strings, we often need to determine whether a string is empty or not. This is done by calling <tt>isEmpty()</tt> or by checking whether <tt>length()</tt> is 0.</P>
+<p class="docText">The conversion from <tt>const char *</tt> strings to <tt>QString</tt> is automatic in most cases, for example:</p>
+<div class="docText"><pre>
+str += " (1870)";
+</pre></div><BR>
+<p class="docText">Here we add a <tt>const char *</tt> to a <tt>QString</tt> without formality. To explicitly convert a <tt>const char *</tt> to a <tt>QString</tt>, simply use a <tt>QString</tt> cast, or call <tt>fromAscii()</tt> or <tt>fromLatin1()</tt>. (See <a class="docLink" href="ch17.html#ch17">Chapter 17</a> for an explanation of handling literal strings in other encodings.)</P>
+<p class="docText"><a name="iddle1332"></a><a name="iddle1603"></a><a name="iddle1632"></a><a name="iddle1660"></a><a name="iddle1829"></a><a name="iddle4100"></a><a name="iddle4103"></a><a name="iddle4104"></a><a name="iddle4740"></a><a name="iddle4845"></a><a name="iddle5015"></a><a name="iddle5022"></a><a name="iddle5437"></a><a name="iddle6841"></a><a name="iddle6854"></a><a name="iddle7113"></a>To convert a <tt>QString</tt> to a <tt>const char *</tt>, use <tt>toAscii()</tt> or <tt>toLatin1()</tt>. These functions return a <tt>QByteArray</tt>, which can be converted into a <tt>const char *</tt> using <tt>QByteArray::data()</tt> or <tt>QByteArray::constData()</tt>. For example:</p>
+<div class="docText"><pre>
+printf("User: %s\n", str.toAscii().data());
+</pre></div><BR>
+<p class="docText">For convenience, Qt provides the <tt>qPrintable()</tt> macro that performs the same as the sequence <tt>toAscii().constData()</tt>:</p>
+<div class="docText"><pre>
+printf("User: %s\n", qPrintable(str));
+</pre></div><br>
+<p class="docText">When we call <tt>data()</tt> or <tt>constData()</tt> on a <tt>QByteArray</tt>, the returned string is owned by the <tt>QByteArray</tt> object. This means that we don't need to worry about memory leaks; Qt will reclaim the memory for us. On the other hand, we must be careful not to use the pointer for too long. If the <tt>QByteArray</tt> is not stored in a variable, it will be automatically deleted at the end of the statement.</P>
+<p class="docText">The <tt>QByteArray</tt> class has a very similar API to <tt>QString</tt>. Functions like <tt>left()</tt>, <tt>right()</tt>, <tt>mid()</tt>, <tt>toLower()</tt>, <tt>toUpper()</tt>, <tt>TRimmed()</tt>, and <tt>simplified()</tt> exist in <tt>QByteArray</tt> with the same semantics as their <tt>QString</tt> counterparts. <tt>QByteArray</tt> is useful for storing raw binary data and 8-bit encoded text strings. In general, we recommend using <tt>QString</tt> for storing text rather than <tt>QByteArray</tt> because <tt>QString</tt> supports Unicode.</P>
+<p class="docText">For convenience, <tt>QByteArray</tt> automatically ensures that the &quot;one past the last&quot; byte is always '\0', making it easy to pass a <tt>QByteArray</tt> to a function taking a <tt>const char *</tt>. <tt>QByteArray</tt> also supports embedded '\0' characters, allowing us to use it to store arbitrary binary data.</p>
+<p class="docText">In some situations, we need to store data of different types in the same variable. One approach is to encode the data as a <tt>QByteArray</tt> or a <tt>QString</tt>. For example, a string could hold a textual value or a numeric value in string form. These approaches give complete flexibility, but do away with some of C++'s benefits, in particular type safety and efficiency. Qt provides a much cleaner way of handling variables that can hold different types: <tt>QVariant</tt>.</p>
+<p class="docText">The <tt>QVariant</tt> class can hold values of many Qt types, including <tt>QBrush</tt>, <tt>QColor</tt>, <tt>QCursor</tt>, <tt>QDateTime</tt>, <tt>QFont</tt>, <tt>QKeySequence</tt>, <tt>QPalette</tt>, <tt>QPen</tt>, <tt>QPixmap</tt>, <tt>QPoint</tt>, <tt>QRect</tt>, <tt>QRegion</tt>, <tt>QSize</tt>, and <tt>QString</tt>, as well as basic C++ numeric types like <tt>double</tt> and <tt>int</tt>. The <tt>QVariant</tt> class can also hold containers: <tt>QMap&lt;QString,QVariant&gt;</tt>, <tt>QStringList</tt>, and <tt>QList&lt;QVariant&gt;</tt>.</p>
+<p class="docText">Variants are used extensively by the item view classes, the database module, and <tt>QSettings</tt>, allowing us to read and write item data, database data, and user preferences for any <tt>QVariant</tt>-compatible type. We have already seen an example of this in <a class="docLink" href="ch03.html#ch03">Chapter 3</a>, where we passed a <tt>QRect</tt>, a <tt>QStringList</tt>, and a couple of <tt>bool</tt>s as variants to <tt>QSettings::setValue()</tt>, and retrieved them later as variants.</P>
+<p class="docText">It is possible to create arbitrarily complex data structures using <tt>QVariant</tt> by nesting values of container types:</p>
+<div class="docText"><pre>
+QMap&lt;QString, QVariant&gt; pearMap;
+pearMap["Standard"] = 1.95;
+pearMap["Organic"] = 2.25;
+QMap&lt;QString, QVariant&gt; fruitMap;
+fruitMap["Orange"] = 2.10;
+fruitMap["Pineapple"] = 3.85;
+fruitMap["Pear"] = pearMap;
+</pre></div><br>
+<p class="docText"><a name="iddle1348"></a><a name="iddle1618"></a><a name="iddle1622"></a><a name="iddle1714"></a><a name="iddle1874"></a><a name="iddle2510"></a><a name="iddle3917"></a><a name="iddle4387"></a><a name="iddle5224"></a><a name="iddle5323"></a><a name="iddle6840"></a><a name="iddle6983"></a><a name="iddle7098"></a>Here we have created a map with string keys (product names) and values that are either floating-point numbers (prices) or maps. The top-level map contains three keys: &quot;Orange&quot;, &quot;Pear&quot;, and &quot;Pineapple&quot;. The value associated with the &quot;Pear&quot; key is a map that contains two keys (&quot;Standard&quot; and &quot;Organic&quot;). When iterating over a map that holds variant values, we need to use <tt>type()</tt> to check the type that a variant holds so that we can respond appropriately.</P>
+<p class="docText">Creating data structures like this can be very seductive since we can organize the data in any way we like. But the convenience of <tt>QVariant</tt> comes at the expense of efficiency and readability. As a rule, it is usually worth defining a proper C++ class to store our data whenever possible.</P>
+<p class="docText"><tt>QVariant</tt> is used by Qt's meta-object system and is therefore part of the <span class="docEmphasis">QtCore</span> module. Nonetheless, when we link against the <span class="docEmphasis">QtGui</span> module, <tt>QVariant</tt> can store GUI-related types such as <tt>QColor</tt>, <tt>QFont</tt>, <tt>QIcon</tt>, <tt>QImage</tt>, and <tt>QPixmap</tt>:</p>
+<div class="docText"><pre>
+QIcon icon("open.png");
+QVariant variant = icon;
+</pre></div><br>
+<p class="docText">To retrieve the value of a GUI-related type from a <tt>QVariant</tt>, we can use the <tt>QVariant::value&lt;T&gt;()</tt> template member function as follows:</p>
+<div class="docText"><pre>
+QIcon icon = variant.value&lt;QIcon&gt;();
+</pre></div><br>
+<p class="docText">The <tt>value&lt;T&gt;()</tt> function also works for converting between non-GUI data types and <tt>QVariant</tt>, but in practice we normally use the <tt>to...()</tt> conversion functions (for example, <tt>toString()</tt>) for non-GUI types.</P>
+<p class="docText"><tt>QVariant</tt> can also be used to store custom data types, assuming they provide a default constructor and a copy constructor. For this to work, we must first register the type using the <tt>Q_DECLARE_METATYPE()</tt> macro, typically in a header file below the class definition:q</p>
+<div class="docText"><pre>
+Q_DECLARE_METATYPE(BusinessCard)
+</pre></div><br>
+<p class="docText">This enables us to write code like this:</P>
+<div class="docText"><pre>
+BusinessCard businessCard;
+QVariant variant = QVariant::fromValue(businessCard);
+...
+if (variant.canConvert&lt;BusinessCard&gt;()) {
+    BusinessCard card = variant.value&lt;BusinessCard&gt;();
+    ...
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1022"></a><a name="iddle1032"></a><a name="iddle1123"></a><a name="iddle1288"></a><a name="iddle1631"></a><a name="iddle1647"></a><a name="iddle1657"></a><a name="iddle2543"></a><a name="iddle3326"></a><a name="iddle3656"></a><a name="iddle4090"></a><a name="iddle4149"></a><a name="iddle4715"></a><a name="iddle4805"></a><a name="iddle5436"></a><a name="iddle5446"></a><a name="iddle5447"></a><a name="iddle5448"></a><a name="iddle6565"></a><a name="iddle7108"></a><a name="iddle7161"></a>Because of a compiler limitation, these template member functions are not available for MSVC 6. If you need to use this compiler, use the <tt>qVariantFromValue()</tt>, <tt>qVariantValue&lt;T&gt;()</tt>, and <tt>qVariantCanConvert&lt;T&gt;()</tt> global functions instead.</P>
+<p class="docText">If the custom data type has <tt>&lt;&lt;</tt> and <tt>&gt;&gt;</tt> operators for writing to and reading from a <tt>QDataStream</tt>, we can register them using <tt>qRegisterMetaTypeStreamOperators&lt;T&gt;()</tt>. This makes it possible to store preferences of custom data types using <tt>QSettings</tt>, among other things. For example:</p>
+<div class="docText"><pre>
+qRegisterMetaTypeStreamOperators&lt;BusinessCard&gt;("BusinessCard");
+</pre></div><br>
+<p class="docText">This chapter has focused on the Qt containers, as well as on <tt>QString</tt>, <tt>QByteArray</tt>, and <tt>QVariant</tt>. In addition to these classes, Qt also provides a few other containers. One is <tt>QPair&lt;T1, T2&gt;</tt>, which simply stores two values and is similar to <tt>std::pair&lt;T1, T2&gt;</tt>. Another is <tt>QBitArray</tt>, which we will use in the first section of <a class="docLink" href="ch19.html#ch19">Chapter 19</a>. Finally, there is <tt>QVarLengthArray&lt;T,Prealloc&gt;</tt>, a low-level alternative to <tt>QVector&lt;T&gt;</tt>. Because it preallocates memory on the stack and isn't implicitly shared, its overhead is less than that of <tt>QVector&lt;T&gt;</tt>, making it more appropriate for tight loops.</p>
+<p class="docText">Qt's algorithms, including a few not covered here such as <tt>qCopyBackward()</tt> and <tt>qEqual()</tt>, are described in Qt's documentation at <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/algorithms.html">http://doc.trolltech.com/4.1/algorithms.html</a>. And for more details of Qt's containers, including information on their time complexity and growth strategies, see <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/containers.html">http://doc.trolltech.com/4.1/containers.html</a>.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

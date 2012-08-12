@@ -1,0 +1,198 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Reimplementing Event Handlers</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch07lev1sec1"></a>
+<h3 id="title-IDAVHHKH" class="docSection1Title"><span class="docEmphStrong">Reimplementing Event Handlers</span></h3>
+<p class="docText">In Qt, an event is an object that inherits <tt>QEvent</tt>. Qt handles more than a hundred types of event, each identified by an enum value. For example, <tt>QEvent::type()</tt> returns <tt>QEvent::MouseButtonPress</tt> for mouse press events.</p>
+<p class="docText">Many event types require more information than can be stored in a plain <tt>QEvent</tt> object; for example, mouse press events need to store which mouse button triggered the event as well as where the mouse pointer was positioned when the event occurred. This additional information is stored in dedicated <tt>QEvent</tt> subclasses, such as <tt>QMouseEvent</tt>.</p>
+<p class="docText"><a name="iddle1142"></a><a name="iddle1247"></a><a name="iddle1502"></a><a name="iddle1753"></a><a name="iddle2200"></a><a name="iddle2232"></a><a name="iddle2236"></a><a name="iddle2238"></a><a name="iddle2240"></a><a name="iddle2460"></a><a name="iddle2684"></a><a name="iddle2978"></a><a name="iddle2981"></a><a name="iddle2982"></a><a name="iddle2983"></a><a name="iddle2987"></a><a name="iddle2988"></a><a name="iddle3000"></a><a name="iddle3001"></a><a name="iddle3003"></a><a name="iddle3009"></a><a name="iddle3011"></a><a name="iddle3014"></a><a name="iddle3385"></a><a name="iddle4267"></a><a name="iddle4439"></a><a name="iddle4609"></a><a name="iddle5512"></a><a name="iddle5514"></a><a name="iddle6268"></a><a name="iddle6672"></a><a name="iddle6675"></a><a name="iddle6982"></a>Events are notified to objects through their <tt>event()</tt> function, inherited from <tt>QObject</tt>. The <tt>event()</tt> implementation in <tt>QWidget</tt> forwards the most common types of event to specific event handlers, such as <tt>mousePressEvent()</tt>, <tt>keyPress-Event()</tt>, and <tt>paintEvent()</tt>.</p>
+<p class="docText">We have already seen many event handlers when implementing <tt>MainWindow</tt>, <tt>IconEditor</tt>, and <tt>Plotter</tt> in earlier chapters. There are many other types of event listed in the <tt>QEvent</tt> reference documentation, and it is also possible to create custom event types and to dispatch events ourselves. Here, we will review two common event types that deserve more explanation: key events and timer events.</p>
+<p class="docText">Key events are handled by reimplementing <tt>keyPressEvent()</tt> and <tt>keyRelease-Event()</tt>. The <tt>Plotter</tt> widget reimplements <tt>keyPressEvent()</tt>. Normally, we only need to reimplement <tt>keyPressEvent()</tt> since the only keys for which release is important are the modifier keys Ctrl, Shift, and Alt, and these can be checked for in a <tt>keyPressEvent()</tt> using <tt>QKeyEvent::modifiers()</tt>. For example, if we were implementing a <tt>CodeEditor</tt> widget, its stripped-down <tt>keyPressEvent()</tt> that distinguishes between Home and Ctrl+Home would look like this:</p>
+<div class="docText"><pre>
+void CodeEditor::keyPressEvent(QKeyEvent *event)
+{
+    switch (event-&gt;key()) {
+    case Qt::Key_Home:
+        if (event-&gt;modifiers() &amp; Qt::ControlModifier) {
+            goToBeginningOfDocument();
+        } else {
+            goToBeginningOfLine();
+        }
+        break;
+    case Qt::Key_End:
+        ...
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
+</pre></div><br>
+<p class="docText">The Tab and Backtab (Shift+Tab) keys are special cases. They are handled by <tt>QWidget::event()</tt> before it calls <tt>keyPressEvent()</tt>, with the semantic of passing the focus to the next or previous widget in the focus chain. This behavior is usually what we want, but in a <tt>CodeEditor</tt> widget, we might prefer to make Tab indent a line. The <tt>event()</tt> reimplementation would then look like this:</p>
+<div class="docText"><pre>
+bool CodeEditor::event(QEvent *event)
+{
+    if (event-&gt;type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast&lt;QKeyEvent *&gt;(event);
+        if (keyEvent-&gt;key() == Qt::Key_Tab) {
+            insertAtCurrentPosition('\t');
+            return true;
+        }
+    }
+    return QWidget::event(event);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1151"></a><a name="iddle2264"></a><a name="iddle2270"></a><a name="iddle2328"></a><a name="iddle2996"></a><a name="iddle3883"></a><a name="iddle3998"></a><a name="iddle4002"></a><a name="iddle4852"></a><a name="iddle6036"></a><a name="iddle6176"></a><a name="iddle6273"></a><a name="iddle6812"></a><a name="iddle6829"></a>If the event is a key press, we cast the <tt>QEvent</tt> object to a <tt>QKeyEvent</tt> and check which key was pressed. If the key is Tab, we do some processing and return <tt>true</tt> to tell Qt that we have handled the event. If we returned <tt>false</tt>, Qt would propagate the event to the parent widget.</p>
+<p class="docText">A higher-level approach for implementing key bindings is to use a <tt>QAction</tt>. For example, if <tt>goToBeginningOfLine()</tt> and <tt>goToBeginningOfDocument()</tt> are public slots in the <tt>CodeEditor</tt> widget, and the <tt>CodeEditor</tt> is used as the central widget in a <tt>MainWindow</tt> class, we could add the key bindings with the following code:</p>
+<div class="docText"><pre>
+MainWindow::MainWindow()
+{
+    editor = new CodeEditor;
+    setCentralWidget(editor);
+    goToBeginningOfLineAction =
+            new QAction(tr("Go to Beginning of Line"), this);
+    goToBeginningOfLineAction-&gt;setShortcut(tr("Home"));
+    connect(goToBeginningOfLineAction, SIGNAL(activated()),
+            editor, SLOT(goToBeginningOfLine()));
+    goToBeginningOfDocumentAction =
+            new QAction(tr("Go to Beginning of Document"), this);
+    goToBeginningOfDocumentAction-&gt;setShortcut(tr("Ctrl+Home"));
+    connect(goToBeginningOfDocumentAction, SIGNAL(activated()),
+            editor, SLOT(goToBeginningOfDocument()));
+    ...
+}
+</pre></div><BR>
+<p class="docText">This makes it easy to add the commands to a menu or a toolbar, as we saw in <a class="docLink" href="ch03.html#ch03">Chapter 3</a>. If the commands don't appear in the user interface, the <tt>QAction</tt> objects could be replaced with a <tt>QShortcut</tt> object, the class used by <tt>QAction</tt> internally to support key bindings.</P>
+<p class="docText">By default, key bindings set using <tt>QAction</tt> or <tt>QShortcut</tt> on a widget are enabled whenever the window that contains the widget is active. This can be changed using <tt>QAction::setShortcutContext()</tt> or <tt>QShortcut::setContext()</tt>.</P>
+<p class="docText">Another common type of event is the timer event. While most other event types occur as a result of a user action, timer events allow applications to perform processing at regular time intervals. Timer events can be used to implement blinking cursors and other animations, or simply to refresh the display.</P>
+<p class="docText">To demonstrate timer events, we will implement a <tt>Ticker</tt> widget. This widget shows a text banner that scrolls left by one pixel every 30 milliseconds. If the widget is wider than the text, the text is repeated as often as necessary to fill the entire width of the widget.</P>
+
+<p class="docText"></p><a name="ch07fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 7.1. The <tt>Ticker</tt> widget</h5>
+
+<p class="docText">
+<img border="0" alt="" width="348" height="28" SRC="images/ticker.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle5342"></a><a name="iddle5471"></a><a name="iddle6649"></a><a name="iddle6735"></a><a name="iddle6803"></a><a name="iddle6804"></a><a name="iddle6805"></a>Here's the header file:</p>
+<div class="docText"><pre>
+#ifndef TICKER_H
+#define TICKER_H
+#include &lt;QWidget&gt;
+class Ticker : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QString text READ text WRITE setText)
+public:
+    Ticker(QWidget *parent = 0);
+    void setText(const QString &amp;newText);
+    QString text() const { return myText; }
+    QSize sizeHint() const;
+protected:
+    void paintEvent(QPaintEvent *event);
+    void timerEvent(QTimerEvent *event);
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+private:
+    QString myText;
+    int offset;
+    int myTimerId;
+};
+#endif
+</pre></div><br>
+<p class="docText">We reimplement four event handlers in <tt>Ticker</tt>, three of which we have not seen before: <tt>timerEvent()</tt>, <tt>showEvent()</tt>, and <tt>hideEvent()</tt>.</p>
+<p class="docText">Now let's review the implementation:</p>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "ticker.h"
+Ticker::Ticker(QWidget *parent)
+    : QWidget(parent)
+{
+    offset = 0;
+    myTimerId = 0;
+}
+</pre></div><BR>
+<p class="docText">The constructor initializes the <tt>offset</tt> variable to 0. The <span class="docEmphasis">x</span> coordinate at which the text is drawn is derived from the <tt>offset</tt> value. Timer IDs are always non-zero, so we use 0 to indicate that no timer has been started.</p>
+<div class="docText"><pre>
+void Ticker::setText(const QString &amp;newText)
+{
+    myText = newText;
+    update();
+    updateGeometry();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2058"></a><a name="iddle2258"></a><a name="iddle2269"></a><a name="iddle2472"></a><a name="iddle2477"></a><a name="iddle2759"></a><a name="iddle3316"></a><a name="iddle3646"></a><a name="iddle3650"></a><a name="iddle4301"></a><a name="iddle4624"></a><a name="iddle4682"></a><a name="iddle5504"></a><a name="iddle5536"></a><a name="iddle5591"></a><a name="iddle5599"></a><a name="iddle5609"></a><a name="iddle5613"></a><a name="iddle6204"></a><a name="iddle6280"></a><a name="iddle6321"></a><a name="iddle6334"></a><a name="iddle6335"></a><a name="iddle6527"></a><a name="iddle6807"></a><a name="iddle6808"></a><a name="iddle6809"></a><a name="iddle6810"></a><a name="iddle7039"></a><a name="iddle7043"></a>The <tt>setText()</tt> function sets the text to display. It calls <tt>update()</tt> to request a repaint and <tt>updateGeometry()</tt> to notify any layout manager responsible for the <tt>Ticker</tt> widget about a size hint change.</P>
+<div class="docText"><pre>
+QSize Ticker::sizeHint() const
+{
+    return fontMetrics().size(0, text());
+}
+</pre></div><BR>
+<p class="docText">The <tt>sizeHint()</tt> function returns the space needed by the text as the widget's ideal size. <tt>QWidget::fontMetrics()</tt> returns a <tt>QFontMetrics</tt> object that can be queried to obtain information relating to the widget's font. In this case, we ask for the size required by the given text. (The first argument to <tt>QFontMetrics::size()</tt> is a flag that isn't needed for simple strings, so we just pass 0.)</p>
+<div class="docText"><pre>
+void Ticker::paintEvent(QPaintEvent * /* event */)
+{
+    QPainter painter(this);
+    int textWidth = fontMetrics().width(text());
+    if (textWidth &lt; 1)
+        return;
+    int x = -offset;
+    while (x &lt; width()) {
+        painter.drawText(x, 0, textWidth, height(),
+                         Qt::AlignLeft | Qt::AlignVCenter, text());
+        x += textWidth;
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>paintEvent()</tt> function draws the text using <tt>QPainter::drawText()</tt>. It uses <tt>fontMetrics()</tt> to ascertain how much horizontal space the text requires, and then draws the text as many times as necessary to fill the entire width of the widget, taking <tt>offset</tt> into account.</p>
+<div class="docText"><pre>
+void Ticker::showEvent(QShowEvent * /* event */)
+{
+    myTimerId = startTimer(30);
+}
+</pre></div><br>
+<p class="docText">The <tt>showEvent()</tt> function starts a timer. The call to <tt>QObject::startTimer()</tt> returns an ID number, which we can use later to identify the timer. <tt>QObject</tt> supports multiple independent timers, each with its own time interval. After the call to <tt>startTimer()</tt>, Qt will generate a timer event approximately every 30 milliseconds; the accuracy depends on the underlying operating system.</P>
+<p class="docText"><a name="iddle2229"></a><a name="iddle2235"></a><a name="iddle2271"></a><a name="iddle2405"></a><a name="iddle2406"></a><a name="iddle2682"></a><a name="iddle3012"></a><a name="iddle3020"></a><a name="iddle3387"></a><a name="iddle3573"></a><a name="iddle4616"></a><a name="iddle4625"></a><a name="iddle5348"></a><a name="iddle5349"></a><a name="iddle5350"></a><a name="iddle5354"></a><a name="iddle5510"></a><a name="iddle5546"></a><a name="iddle5610"></a><a name="iddle5948"></a><a name="iddle6316"></a><a name="iddle6408"></a><a name="iddle6806"></a><a name="iddle6811"></a><a name="iddle6820"></a><a name="iddle6825"></a><a name="iddle6828"></a><a name="iddle6832"></a><a name="iddle6834"></a><a name="iddle7040"></a>We could have called <tt>startTimer()</tt> in the <tt>Ticker</tt> constructor, but we save some resources by having Qt generate timer events only when the widget is actually visible.</p>
+<div class="docText"><pre>
+void Ticker::timerEvent(QTimerEvent *event)
+{
+    if (event-&gt;timerId() == myTimerId) {
+        ++offset;
+        if (offset &gt;= fontMetrics().width(text()))
+            offset = 0;
+        scroll(-1, 0);
+    } else {
+        QWidget::timerEvent(event);
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>timerEvent()</tt> function is called at intervals by the system. It increments <tt>offset</tt> by 1 to simulate movement, wrapping at the width of the text. Then it scrolls the contents of the widget one pixel to the left using <tt>QWidget::scroll()</tt>. It would have been sufficient to call <tt>update()</tt> instead of <tt>scroll()</tt>, but <tt>scroll()</tt> is more efficient because it simply moves the existing pixels on screen and only generates a paint event for the widget's newly revealed area (a 1-pixel-wide strip in this case).</p>
+<p class="docText">If the timer event isn't for the timer we are interested in, we pass it on to our base class.</p>
+<div class="docText"><pre>
+void Ticker::hideEvent(QHideEvent * /* event */)
+{
+    killTimer(myTimerId);
+}
+</pre></div><BR>
+<p class="docText">The <tt>hideEvent()</tt> function calls <tt>QObject::killTimer()</tt> to stop the timer.</P>
+<p class="docText">Timer events are low level, and if we need multiple timers, it can become cumbersome to keep track of all the timer IDs. In such situations, it is usually easier to create a <tt>QTimer</tt> object for each timer. <tt>QTimer</tt> emits the <tt>timeout()</tt> signal at each time interval. <tt>QTimer</tt> also provides a convenient interface for single-shot timers (timers that time out just once).</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

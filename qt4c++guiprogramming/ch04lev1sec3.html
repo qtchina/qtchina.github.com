@@ -1,0 +1,113 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Loading and Saving</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch04lev1sec3"></a>
+<h3 id="title-IDAKGNXAB" class="docSection1Title">Loading and Saving</h3>
+<p class="docText">We will now implement the loading and saving of Spreadsheet files using a custom binary format. We will do this using <tt>QFile</tt> and <tt>QDataStream</tt>, which together provide platform-independent binary I/O.</p>
+<p class="docText">We will start with writing a Spreadsheet file:</p>
+<div class="docText"><pre>
+bool Spreadsheet::writeFile(const QString &amp;fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, tr("Spreadsheet"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(file.fileName())
+                             .arg(file.errorString()));
+        return false;
+    }
+    QDataStream out(&amp;file);
+    out.setVersion(QDataStream::Qt_4_1);
+    out &lt;&lt; quint32(MagicNumber);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    for (int row = 0; row &lt; RowCount; ++row) {
+        for (int column = 0; column &lt; ColumnCount; ++column) {
+            QString str = formula(row, column);
+            if (!str.isEmpty())
+                out &lt;&lt; quint16(row) &lt;&lt; quint16(column) &lt;&lt; str;
+        }
+    }
+    QApplication::restoreOverrideCursor();
+    return true;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1019"></a><a name="iddle1031"></a><a name="iddle1275"></a><a name="iddle1314"></a><a name="iddle1333"></a><a name="iddle1779"></a><a name="iddle2142"></a><a name="iddle2695"></a><a name="iddle2902"></a><a name="iddle3175"></a><a name="iddle3400"></a><a name="iddle3585"></a><a name="iddle3629"></a><a name="iddle4144"></a><a name="iddle4145"></a><a name="iddle4154"></a><a name="iddle4155"></a><a name="iddle4157"></a><a name="iddle4162"></a><a name="iddle4281"></a><a name="iddle4418"></a><a name="iddle5123"></a><a name="iddle5419"></a><a name="iddle6217"></a><a name="iddle6447"></a><a name="iddle6584"></a><a name="iddle7121"></a><a name="iddle7128"></a><a name="iddle7183"></a>The <tt>writeFile()</tt> function is called from <tt>MainWindow::saveFile()</tt> to write the file to disk. It returns <tt>true</tt> on success, <tt>false</tt> on error.</p>
+<p class="docText">We create a <tt>QFile</tt> object with the given file name and call <tt>open()</tt> to open the file for writing. We also create a <tt>QDataStream</tt> object that operates on the <tt>QFile</tt> and use it to write out the data.</p>
+<p class="docText">Just before we write the data, we change the application's cursor to the standard wait cursor (usually an hourglass) and restore the normal cursor once all the data is written. At the end of the function, the file is automatically closed by <tt>QFile</tt>'s destructor.</p>
+<p class="docText"><tt>QDataStream</tt> supports basic C++ types as well as many of Qt's types. The syntax is modeled after the Standard C++ <tt>&lt;iostream&gt;</tt> classes. For example,</p>
+<div class="docText"><pre>
+out &lt;&lt; x &lt;&lt; y &lt;&lt; z;
+</pre></div><br>
+<p class="docText">writes the variables <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> to a stream, and</p>
+<div class="docText"><pre>
+in &gt;&gt; x &gt;&gt; y &gt;&gt; z;
+</pre></div><br>
+<p class="docText">reads them from a stream. Because the C++ basic types <tt>char</tt>, <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, and <tt>long long</tt> may have different sizes on different platforms, it is safest to cast these values to one of <tt>qint8</tt>, <tt>quint8</tt>, <tt>qint16</tt>, <tt>quint16</tt>, <tt>qint32</tt>, <tt>quint32</tt>, <tt>qint64</tt>, and <tt>quint64</tt>, which are guaranteed to be of the size they advertise (in bits).</P>
+<p class="docText">The Spreadsheet application's file format is fairly simple. A Spreadsheet file starts with a 32-bit number that identifies the file format (<tt>MagicNumber</tt>, defined as <tt>0x7F51C883</tt> in <tt>spreadsheet.h</tt>, an arbitrary random number.) Then comes a series of blocks, each of which contains a single cell's row, column, and formula. To save space, we don't write out empty cells.</P>
+<a name="ch04fig03"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 4.3. The Spreadsheet file format</H5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="400" height="32" SRC="images/spreadsheet_file_format.jpg"></p>
+
+</center></p><br>
+<p class="docText">The precise binary representation of the data types is determined by <tt>QData-Stream</tt>. For example, a <tt>quint16</tt> is stored as two bytes in big-endian order, and a <tt>QString</tt> as the string's length followed by the Unicode characters.</p>
+<p class="docText">The binary representation of Qt types has evolved quite a lot since Qt 1.0. It is likely to continue evolving in future Qt releases to keep pace with the evolution of existing types and to allow for new Qt types. By default, <tt>QDataStream</tt> uses the most recent version of the binary format (version 7 in Qt 4.1), but it can be set to read older versions. To avoid any compatibility problems if the application is recompiled later using a newer Qt release, we explicitly tell <tt>QDataStream</tt> to use version 7 irrespective of the version of Qt we are compiling against. (<tt>QDataStream::Qt_4_1</tt> is a convenience constant that equals 7.)</p>
+<p class="docText"><a name="iddle2184"></a><a name="iddle2893"></a><a name="iddle3586"></a><a name="iddle4279"></a><a name="iddle4282"></a><a name="iddle4422"></a><a name="iddle5287"></a><a name="iddle5694"></a><a name="iddle5700"></a><a name="iddle6465"></a><tt>QDataStream</tt> is very versatile. It can be used on a <tt>QFile</tt>, and also on a <tt>QBuffer</tt>, a <tt>QProcess</tt>, a <tt>QTcpSocket</tt>, or a <tt>QUdpSocket</tt>. Qt also offers a <tt>QTextStream</tt> class that can be used instead of <tt>QDataStream</tt> for reading and writing text files. <a class="docLink" href="ch12.html#ch12">Chapter 12</a> explains these classes in depth, and also describes various approaches to handling different <tt>QDataStream</tt> versions.</p>
+<div class="docText"><pre>
+bool Spreadsheet::readFile(const QString &amp;fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, tr("Spreadsheet"),
+                             tr("Cannot read file %1:\n%2.")
+                             .arg(file.fileName())
+                             .arg(file.errorString()));
+        return false;
+    }
+    QDataStream in(&amp;file);
+    in.setVersion(QDataStream::Qt_4_1);
+    quint32 magic;
+    in &gt;&gt; magic;
+    if (magic != MagicNumber) {
+        QMessageBox::warning(this, tr("Spreadsheet"),
+                             tr("The file is not a Spreadsheet file."));
+        return false;
+    }
+    clear();
+    quint16 row;
+    quint16 column;
+    QString str;
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    while (!in.atEnd()) {
+        in &gt;&gt; row &gt;&gt; column &gt;&gt; str;
+        setFormula(row, column, str);
+    }
+    QApplication::restoreOverrideCursor();
+    return true;
+}
+</pre></div><br>
+<p class="docText">The <tt>readFile()</tt> function is very similar to <tt>writeFile()</tt>. We use <tt>QFile</tt> to read in the file, but this time using the <tt>QIODevice::ReadOnly</tt> flag rather than <tt>QIODevice:: WriteOnly</tt>. Then we set the <tt>QDataStream</tt> version to 7. The format for reading must always be the same as for writing.</p>
+<p class="docText">If the file has the correct magic number at the beginning, we call <tt>clear()</tt> to blank out all the cells in the spreadsheet, and we read in the cell data. Since the file only contains the data for non-empty cells, and it is very unlikely that every cell in the spreadsheet will be set, we must ensure that all cells are cleared before reading.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

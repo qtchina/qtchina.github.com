@@ -1,0 +1,118 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Painting with QPainter</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch08lev1sec1"></a>
+<h3 id="title-IDAL1WRT" class="docSection1Title">Painting with QPainter</h3>
+<p class="docText">To start painting to a paint device (typically a widget), we simply create a <tt>QPainter</tt> and pass a pointer to the device. For example:</p>
+<div class="docText"><pre>
+void MyWidget::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    ...
+}
+</pre></div><br>
+<p class="docText">We can draw various shapes using <tt>QPainter</tt>'s <tt>draw...()</tt> functions. <a class="docLink" href="#ch08fig01">Figure 8.1</a> lists the most important ones. The way the drawing is performed is influenced by <tt>QPainter</tt>'s settings. Some of these are adopted from the device, others are initialized to default values. The three main painter settings are the pen, the brush, and the font:</p>
+<ul><li><p class="docList"><a name="iddle1175"></a><a name="iddle1272"></a><a name="iddle1302"></a><a name="iddle1430"></a><a name="iddle1435"></a><a name="iddle2024"></a><a name="iddle2025"></a><a name="iddle2026"></a><a name="iddle2029"></a><a name="iddle2035"></a><a name="iddle2037"></a><a name="iddle2038"></a><a name="iddle2040"></a><a name="iddle2043"></a><a name="iddle2044"></a><a name="iddle2045"></a><a name="iddle2046"></a><a name="iddle2049"></a><a name="iddle2053"></a><a name="iddle2055"></a><a name="iddle2059"></a><a name="iddle2120"></a><a name="iddle2402"></a><a name="iddle2478"></a><a name="iddle2545"></a><a name="iddle3702"></a><a name="iddle3708"></a><a name="iddle3771"></a><a name="iddle3774"></a><a name="iddle4096"></a><a name="iddle4298"></a><a name="iddle4655"></a><a name="iddle4656"></a><a name="iddle4657"></a><a name="iddle4658"></a><a name="iddle4662"></a><a name="iddle4664"></a><a name="iddle4665"></a><a name="iddle4667"></a><a name="iddle4670"></a><a name="iddle4671"></a><a name="iddle4672"></a><a name="iddle4673"></a><a name="iddle4676"></a><a name="iddle4677"></a><a name="iddle4679"></a><a name="iddle4683"></a><a name="iddle4697"></a><a name="iddle4700"></a><a name="iddle4703"></a><a name="iddle4717"></a><a name="iddle5886"></a><a name="iddle6014"></a><a name="iddle6093"></a><a name="iddle6147"></a><a name="iddle6433"></a>The <span class="docEmphasis">pen</span> is used for drawing lines and shape outlines. It consists of a color, a width, a line style, a cap style, and a join style.</p></li><li><p class="docList">The <span class="docEmphasis">brush</span> is the pattern used for filling geometric shapes. It normally consists of a color and a style, but can also be a texture (a pixmap that is repeated infinitely) or a gradient.</p></li><li><p class="docList">The <span class="docEmphasis">font</span> is used for drawing text. A font has many attributes, including a family and a point size.</P></LI></UL>
+<a name="ch08fig01"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 8.1. <tt>QPainter</tt>'s most frequently used <tt>draw...()</tt> functions</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="619" SRC="images/frequently_used_draw.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle1257"></a><a name="iddle1271"></a><a name="iddle1352"></a><a name="iddle1748"></a><a name="iddle1818"></a><a name="iddle1819"></a><a name="iddle1820"></a><a name="iddle1910"></a><a name="iddle1911"></a><a name="iddle1928"></a><a name="iddle1999"></a><a name="iddle2377"></a><a name="iddle2445"></a><a name="iddle2686"></a><a name="iddle2968"></a><a name="iddle3356"></a><a name="iddle3511"></a><a name="iddle3527"></a><a name="iddle3703"></a><a name="iddle5054"></a><a name="iddle5055"></a><a name="iddle5057"></a><a name="iddle5058"></a><a name="iddle5059"></a><a name="iddle5060"></a><a name="iddle5061"></a><a name="iddle5062"></a><a name="iddle5069"></a><a name="iddle5079"></a><a name="iddle5080"></a><a name="iddle5083"></a><a name="iddle5091"></a><a name="iddle5093"></a><a name="iddle5094"></a><a name="iddle5096"></a><a name="iddle5097"></a><a name="iddle5099"></a><a name="iddle5100"></a><a name="iddle5101"></a><a name="iddle5113"></a><a name="iddle5884"></a><a name="iddle5885"></a><a name="iddle6384"></a><a name="iddle6385"></a><a name="iddle6492"></a><a name="iddle7120"></a>These settings can be modified at any time by calling <tt>setPen()</tt>, <tt>setBrush()</tt>, and <tt>setFont()</tt> with a <tt>QPen</tt>, <tt>QBrush</tt>, or <tt>QFont</tt> object.</p>
+
+<p class="docText"></p><a name="ch08fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.2. Cap and join styles</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="277" SRC="images/cap_and_join_styles.jpg"></p>
+
+</center></p><br>
+<a name="ch08fig03"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 8.3. Pen styles</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="153" SRC="images/pen_styles.jpg"></P>
+
+</center></P><br>
+<a name="ch08fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.4. Predefined brush styles</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/brush_styles_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="242" SRC="images/brush_styles.jpg"></P>
+</center></p><br>
+<p class="docText"><a name="iddle1125"></a><a name="iddle1148"></a><a name="iddle1152"></a><a name="iddle1273"></a><a name="iddle1886"></a><a name="iddle2030"></a><a name="iddle2041"></a><a name="iddle2121"></a><a name="iddle3653"></a><a name="iddle3693"></a><a name="iddle3709"></a><a name="iddle4659"></a><a name="iddle4668"></a><a name="iddle4704"></a><a name="iddle4712"></a><a name="iddle5800"></a><a name="iddle6167"></a><a name="iddle6434"></a><a name="iddle7117"></a>Let's see a few examples in practice. Here's the code to draw the ellipse shown in <a class="docLink" href="#ch08fig05">Figure 8.5</a> (a):</p>
+<div class="docText"><pre>
+QPainter painter(this);
+painter.setRenderHint(QPainter::Antialiasing, true);
+painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
+painter.setBrush(QBrush(Qt::green, Qt::SolidPattern));
+painter.drawEllipse(80, 80, 400, 240);
+</pre></div><br>
+<a name="ch08fig05"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 8.5. Geometric shape examples</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/geometric_shape_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="128" SRC="images/geometric_shape.jpg"></p>
+</center></p><br>
+<p class="docText">The <tt>setRenderHint()</tt> call enables antialiasing, telling <tt>QPainter</tt> to use different color intensities on the edges to reduce the visual distortion that normally occurs when the edges of a shape are converted into pixels. The result is smoother edges on platforms and devices that support this feature.</p>
+<p class="docText">Here's the code to draw the pie segment shown in <a class="docLink" href="#ch08fig05">Figure 8.5</a> (b):</p>
+<div class="docText"><pre>
+QPainter painter(this);
+painter.setRenderHint(QPainter::Antialiasing, true);
+painter.setPen(QPen(Qt::black, 15, Qt::SolidLine, Qt::RoundCap,
+                    Qt::MiterJoin));
+painter.setBrush(QBrush(Qt::blue, Qt::DiagCrossPattern));
+painter.drawPie(80, 80, 400, 240, 60 * 16, 270 * 16);
+</pre></div><br>
+<p class="docText">The last two arguments to <tt>drawPie()</tt> are expressed in sixteenths of a degree.</p>
+<p class="docText">Here's the code to draw the cubic B&eacute;zier curve shown in <a class="docLink" href="#ch08fig05">Figure 8.5</a> (c):</p>
+<div class="docText"><pre>
+QPainter painter(this);
+painter.setRenderHint(QPainter::Antialiasing, true);
+QPainterPath path;
+path.moveTo(80, 320);
+path.cubicTo(200, 80, 320, 80, 480, 320);
+painter.setPen(QPen(Qt::black, 8));
+painter.drawPath(path);
+</pre></div><br>
+<p class="docText">The <tt>QPainterPath</tt> class can specify arbitrary vector shapes by connecting basic graphical elements together: straight lines, ellipses, polygons, arcs, quadratic and cubic B&eacute;zier curves, and other painter paths. Painter paths are the ultimate drawing primitive in the sense that any shape or combination of shapes can be expressed as a path.</p>
+<p class="docText"><a name="iddle1521"></a><a name="iddle2588"></a><a name="iddle3094"></a><a name="iddle3718"></a><a name="iddle4350"></a><a name="iddle6028"></a>A path specifies an outline, and the area described by the outline can be filled using a brush. In the example of <a class="docLink" href="#ch08fig05">Figure 8.5</a> (c), we didn't set a brush, so only the outline is drawn.</p>
+<p class="docText">The three examples above use built-in brush patterns (<tt>Qt::SolidPattern</tt>, <tt>Qt:: DiagCrossPattern</tt>, and <tt>Qt::NoBrush</tt>). In modern applications, gradient fills are a popular alternative to monochrome fill patterns. Gradients rely on color interpolation to obtain smooth transitions between two or more colors. They are frequently used to produce 3D effects; for example, the Plastique style uses gradients to render <tt>QPushButton</tt>s.</p>
+<p class="docText">Qt supports three types of gradients: linear, conical, and radial. The Oven Timer example in the next section combines all three types of gradients in a single widget to make it look like the real thing.</p>
+<ul><LI><p class="docList"><span class="docEmphasis">Linear gradients</span> are defined by two control points and by a series of &quot;color stops&quot; on the line that connects these two points. For example, the linear gradient of <a class="docLink" href="#ch08fig06">Figure 8.6</a> is created using the following code:</P><div class="docText"><pre>
+QLinearGradient gradient(50, 100, 300, 350);
+gradient.setColorAt(0.0, Qt::white);
+gradient.setColorAt(0.2, Qt::green);
+gradient.setColorAt(1.0, Qt::black);
+</pre></div><a name="ch08fig06"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 8.6. <tt>QPainter</tt>'s gradient brushes</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/gradient_brushes_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="345" SRC="images/gradient_brushes.jpg"></p>
+</center></p><p class="docList">We specify three colors at three different positions between the two control points. Positions are specified as floating-point values between 0 and 1, <a name="iddle1149"></a><a name="iddle1242"></a><a name="iddle1290"></a><a name="iddle1473"></a><a name="iddle1578"></a><a name="iddle1702"></a><a name="iddle1926"></a><a name="iddle2607"></a><a name="iddle3148"></a><a name="iddle3580"></a><a name="iddle3652"></a><a name="iddle3706"></a><a name="iddle4650"></a><a name="iddle4690"></a><a name="iddle4694"></a><a name="iddle5095"></a><a name="iddle5111"></a><a name="iddle5672"></a><a name="iddle5839"></a><a name="iddle5921"></a><a name="iddle6935"></a><a name="iddle7138"></a><a name="iddle7139"></a><a name="iddle7269"></a><a name="iddle7309"></a>where 0 corresponds to the first control point and 1 to the second control point. Colors between the specified stops are interpolated.</p></li><li><p class="docList"><span class="docEmphasis">Radial gradients</span> are defined by a center point (<span class="docEmphasis">x</span><sub>c</sub>,<span class="docEmphasis">y</span><sub>c</sub>), a radius <span class="docEmphasis">r</span>, and a focal point (<span class="docEmphasis">x</span><sub>f</sub>,<span class="docEmphasis">y</span><sub>f</sub>), in addition to the color stops. The center point and the radius specify a circle. The colors spread outward from the focal point, which can be the center point or any other point inside the circle.</p></li><li><p class="docList"><span class="docEmphasis">Conical gradients</span> are defined by a center point (<span class="docEmphasis">x</span><sub>c</sub>,<span class="docEmphasis">y</span><sub>c</sub>) and an angle <font face="symbol">a</font>. The colors spread around the center point like the sweep of a watch's seconds hand.</p></li></ul>
+<p class="docText">So far we have mentioned <tt>QPainter</tt>'s pen, brush, and font settings. In addition to these, <tt>QPainter</tt> has other settings that influence the way shapes and text are drawn:</p>
+<UL><li><p class="docList">The <span class="docEmphasis">background brush</span> is used to fill the background of geometric shapes (underneath the brush pattern), text, or bitmaps when the <span class="docEmphasis">background mode</span> is <tt>Qt::OpaqueMode</tt> (the default is <tt>Qt::transparentMode</tt>).</P></LI><li><p class="docList">The <span class="docEmphasis">brush origin</span> is the starting point for brush patterns, normally the top-left corner of the widget.</p></li><li><p class="docList">The <span class="docEmphasis">clip region</span> is the area of the device that can be painted. Painting outside the clip region has no effect.</P></li><li><p class="docList">The <span class="docEmphasis">viewport, window</span>, and <span class="docEmphasis">world matrix</span> determine how logical <tt>QPainter</tt> coordinates map to physical paint device coordinates. By default, these are set up so that the logical and physical coordinate systems coincide. Coordinate systems are covered in the next section.</p></li><LI><p class="docList">The <span class="docEmphasis">composition mode</span> specifies how the newly drawn pixels should interact with the pixels already present on the paint device. The default is &quot;source over&quot;, where drawn pixels are drawn on top of existing pixels. This is supported only on certain devices and is covered later in this chapter.</P></LI></ul>
+<p class="docText">At any time, we can save the current state of a painter on an internal stack by calling <tt>save()</tt> and restore it later on by calling <tt>restore()</tt>. This can be useful if we want to temporarily change some painter settings and then reset them to their previous values, as we will see in the next section.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

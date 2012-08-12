@@ -1,0 +1,175 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Reading and Writing Text</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch12lev1sec2"></a>
+<h3 id="title-IDAU00EP" class="docSection1Title">Reading and Writing Text</h3>
+<p class="docText">While binary file formats are typically more compact than text-based formats, they are not human-readable or human-editable. In cases where this is an issue, we can use text formats instead. Qt provides the <tt>QTextStream</tt> class for reading and writing plain text files and for files using other text formats, such as HTML, XML, and source code. Handling XML files is covered separately in <a class="docLink" href="ch15.html#ch15">Chapter 15</a>.</p>
+<p class="docText"><tt>QTextStream</tt> takes care of converting between Unicode and the system's local encoding or any other encoding, and transparently handles the different line-ending conventions used by different operating systems (&quot;\r\n&quot; on Windows, &quot;\n&quot; on Unix and Mac OS X). <tt>QTextStream</tt> uses the 16-bit <tt>QChar</tt> type as its fundamental unit of data. In addition to characters and strings, <tt>QTextStream</tt> supports <a name="iddle1025"></a><a name="iddle1034"></a><a name="iddle1200"></a><a name="iddle1407"></a><a name="iddle1506"></a><a name="iddle2133"></a><a name="iddle2657"></a><a name="iddle2668"></a><a name="iddle2904"></a><a name="iddle3268"></a><a name="iddle3588"></a><a name="iddle3602"></a><a name="iddle3605"></a><a name="iddle3683"></a><a name="iddle4284"></a><a name="iddle5292"></a><a name="iddle5295"></a><a name="iddle5308"></a><a name="iddle5309"></a><a name="iddle5312"></a><a name="iddle5689"></a><a name="iddle5698"></a><a name="iddle6022"></a><a name="iddle6284"></a><a name="iddle6581"></a><a name="iddle6759"></a><a name="iddle7009"></a><a name="iddle7055"></a><a name="iddle7075"></a>C++'s basic numeric types, which it converts to and from strings. For example, the following code writes &quot;Thomas M. Disch: 334\n&quot; to the file <tt>sf-book.txt</tt>:</p>
+<div class="docText"><pre>
+QFile file("sf-book.txt");
+if (!file.open(QIODevice::WriteOnly)) {
+    cerr &lt;&lt; "Cannot open file for writing: "
+         &lt;&lt; qPrintable(file.errorString()) &lt;&lt; endl;
+    return;
+}
+QTextStream out(&amp;file);
+out &lt;&lt; "Thomas M. Disch: " &lt;&lt; 334 &lt;&lt; endl;
+</pre></div><br>
+<p class="docText">Writing text is very easy, but reading text can be challenging, because textual data (unlike binary data written using <tt>QDataStream</tt>) is fundamentally ambiguous. Let's consider the following example:</p>
+<div class="docText"><pre>
+out &lt;&lt; "Norway" &lt;&lt; "Sweden";
+</pre></div><br>
+<p class="docText">If <tt>out</tt> is a <tt>QTextStream</tt>, the data that actually gets written is the string &quot;NorwaySweden&quot;. We can't really expect the following code to read back the data correctly:</p>
+<div class="docText"><pre>
+in &gt;&gt; str1 &gt;&gt; str2;
+</pre></div><br>
+<p class="docText">In fact, what happens is that <tt>str1</tt> gets the whole word &quot;NorwaySweden&quot;, and <tt>str2</tt> gets nothing. This problem doesn't occur with <tt>QDataStream</tt> because it stores the length of each string in front of the character data.</p>
+<p class="docText">For complex file formats, a full-blown parser might be required. Such a parser might work by reading the data character-by-character using <tt>&gt;&gt;</tt> on a <tt>QChar</tt>, or line by line using <tt>QTextStream::readLine()</tt>. At the end of this section, we present two small examples, one that reads an input file line by line, and another that reads it character by character. For parsers that work on an entire text, we could read the complete file in one go using <tt>QTextStream::readAll()</tt> if we are not concerned about memory usage, or if we know the file will be small.</p>
+<p class="docText">By default, <tt>QTextStream</tt> uses the system's local encoding (for example, ISO 8859-1 or ISO 8859-15 in America and much of Europe) for reading and writing. This can be changed using <tt>setCodec()</tt> as follows:</p>
+<div class="docText"><pre>
+stream.setCodec("UTF-8");
+</pre></div><BR>
+<p class="docText">The UTF-8 encoding used in the example is a popular ASCII-compatible encoding that can represent the entire Unicode character set. For more information about Unicode and <tt>QTextStream</tt>'s support for encodings, see <a class="docLink" href="ch17.html#ch17">Chapter 17</a> (Inter-nationalization).</p>
+<p class="docText"><tt>QTextStream</tt> has various options modeled after those offered by <tt>&lt;iostream&gt;</tt>. These can be set by passing special objects, called <span class="docEmphasis">stream manipulators</span>, on the stream to alter its state. The following example sets the <tt>showbase</tt>, <tt>upper-casedigits</tt>, and <tt>hex</tt> options before it outputs the integer 12345678, producing the text &quot;0xBC614E&quot;:</p>
+<div class="docText"><pre>
+out &lt;&lt; showbase &lt;&lt; uppercasedigits &lt;&lt; hex &lt;&lt; 12345678;
+</pre></div><br>
+<p class="docText"><a name="iddle1126"></a><a name="iddle1127"></a><a name="iddle1129"></a><a name="iddle1130"></a><a name="iddle1135"></a><a name="iddle1250"></a><a name="iddle1251"></a><a name="iddle1253"></a><a name="iddle1284"></a><a name="iddle2441"></a><a name="iddle2482"></a><a name="iddle2483"></a><a name="iddle2669"></a><a name="iddle3561"></a><a name="iddle5296"></a><a name="iddle5297"></a><a name="iddle5298"></a><a name="iddle5299"></a><a name="iddle5300"></a><a name="iddle5301"></a><a name="iddle5302"></a><a name="iddle5303"></a><a name="iddle5304"></a><a name="iddle5305"></a><a name="iddle5306"></a><a name="iddle5307"></a><a name="iddle5314"></a><a name="iddle5315"></a><a name="iddle5317"></a><a name="iddle5318"></a><a name="iddle5319"></a><a name="iddle5320"></a><a name="iddle5321"></a><a name="iddle5943"></a><a name="iddle6083"></a><a name="iddle6084"></a><a name="iddle6117"></a><a name="iddle6141"></a><a name="iddle6144"></a><a name="iddle6163"></a><a name="iddle6164"></a><a name="iddle6279"></a><a name="iddle6380"></a><a name="iddle7053"></a><a name="iddle7054"></a>Options can also be set using member functions:</P>
+<div class="docText"><pre>
+out.setNumberFlags(QTextStream::ShowBase
+                   | QTextStream::UppercaseDigits);
+out.setIntegerBase(16);
+out &lt;&lt; 12345678;
+</pre></div><br>
+<a name="ch12fig01"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 12.1. Functions to set <tt>QTextStream</tt>'s options</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/12fig01_alt.jpg">[View full size image]</a></div><img border="0" alt="" id="195131084202" width="500" height="609" SRC="images/12fig01.jpg"></P>
+</center></p><br>
+<p class="docText"><a name="iddle2967"></a><a name="iddle5012"></a><a name="iddle5034"></a><a name="iddle5036"></a><a name="iddle5294"></a><a name="iddle5310"></a><a name="iddle5699"></a><a name="iddle6437"></a><a name="iddle6478"></a><a name="iddle6693"></a><a name="iddle7319"></a>Like <tt>QDataStream</tt>, <tt>QTextStream</tt> operates on a <tt>QIODevice</tt> subclass, which can be a <tt>QFile</tt>, a <tt>QTemporaryFile</tt>, a <tt>QBuffer</tt>, a <tt>QProcess</tt>, a <tt>QTcpSocket</tt>, or a <tt>QUdpSocket</tt>. In addition, it can be used directly on a <tt>QString</tt>. For example:</P>
+<div class="docText"><pre>
+QString str;
+QTextStream(&amp;str) &lt;&lt; oct &lt;&lt; 31 &lt;&lt; " " &lt;&lt; dec &lt;&lt; 25 &lt;&lt; endl;
+</pre></div><BR>
+<p class="docText">This makes the contents of <tt>str</tt> &quot;37 25\ n&quot;, since the decimal number 31 is expressed as 37 in octal. In this case, we don't need to set an encoding on the stream, since <tt>QString</tt> is always Unicode.</P>
+<p class="docText">Let's look at a simple example of a text-based file format. In the Spreadsheet application described in <a class="docLink" href="part01.html#part01">Part I</a>, we used a binary format for storing Spreadsheet data. The data consisted of a sequence of (<span class="docEmphasis">row, column, formula</span>) triples, one for every non-empty cell. Writing the data as text is straightforward; here is an extract from a revised version of <tt>Spreadsheet::writeFile()</tt>:</p>
+<div class="docText"><pre>
+QTextStream out(&amp;file);
+for (int row = 0; row &lt; RowCount; ++row) {
+    for (int column = 0; column &lt; ColumnCount; ++column) {
+        QString str = formula(row, column);
+        if (!str.isEmpty())
+            out &lt;&lt; row &lt;&lt; " " &lt;&lt; column &lt;&lt; " " &lt;&lt; str &lt;&lt; endl;
+    }
+}
+</pre></div><br>
+<p class="docText">We have used a simple format, with each line representing one cell and with spaces between the row and the column and between the column and the formula. The formula can contain spaces, but we can assume that it contains no '\n' (which we use to terminate lines). Now let's look at the corresponding reading code:</p>
+<div class="docText"><pre>
+QTextStream in(&amp;file);
+while (!in.atEnd()) {
+    QString line = in.readLine();
+    QStringList fields = line.split(' ');
+    if (fields.size() &gt;= 3) {
+        int row = fields.takeFirst().toInt();
+        int column = fields.takeFirst().toInt();
+        setFormula(row, column, fields.join(' '));
+    }
+}
+</pre></div><BR>
+<p class="docText">We read in the Spreadsheet data one line at a time. The <tt>readLine()</tt> function removes the trailing '\n'. <tt>QString::split()</tt> returns a string list, having split its string wherever the separator it is given appears. For example, the line &quot;5 19 Total value&quot; results in the four-item list [&quot;5&quot;, &quot;19&quot;, &quot;Total&quot;, &quot;value&quot;].</p>
+<p class="docText">If we have at least three fields, we are ready to extract the data. The <tt>QStringList::takeFirst()</tt> function removes the first item in a list and returns the removed item. We use it to extract the row and column numbers. We don't perform any error checking; if we read a non-integer row or column value, <a name="iddle2329"></a><a name="iddle5021"></a><a name="iddle6098"></a><a name="iddle6414"></a><a name="iddle6472"></a><a name="iddle6813"></a><a name="iddle6851"></a><tt>QString::toInt()</tt> will return 0. When we call <tt>setFormula()</tt>, we must concatenate the remaining fields back into a single string.</p>
+<p class="docText">In our second <tt>QTextStream</tt> example, we will use a character by character approach to implement a program that reads in a text file and outputs the same text but with trailing spaces removed from lines and all tabs replaced by spaces. The program's work is done by the <tt>tidyFile()</tt> function:</P>
+<div class="docText"><pre>
+void tidyFile(QIODevice *inDevice, QIODevice *outDevice)
+{
+    QTextStream in(inDevice);
+    QTextStream out(outDevice);
+    const int TabSize = 8;
+    int endlCount = 0;
+    int spaceCount = 0;
+    int column = 0;
+    QChar ch;
+    while (!in.atEnd()) {
+        in &gt;&gt; ch;
+        if (ch == '\n') {
+            ++endlCount;
+            spaceCount = 0;
+            column = 0;
+        } else if (ch == '\t') {
+            int size = TabSize - (column % TabSize);
+            spaceCount += size;
+            column += size;
+        } else if (ch == ' ') {
+            ++spaceCount;
+            ++column;
+        } else {
+            while (endlCount &gt; 0) {
+                out &lt;&lt; endl;
+                --endlCount;
+                column = 0;
+            }
+            while (spaceCount &gt; 0) {
+                out &lt;&lt; ' ';
+                --spaceCount;
+                ++column;
+            }
+            out &lt;&lt; ch;
+            ++column;
+        }
+    }
+    out &lt;&lt; endl;
+}
+</pre></div><BR>
+<p class="docText">We create an input and an output <tt>QTextStream</tt> based on the <tt>QIODevice</tt>s that are passed to the function. We maintain three elements of state: one counting newlines, one counting spaces, and one marking the current column position in the current line (for converting the tabs to the correct number of spaces).</p>
+<p class="docText"><a name="iddle1432"></a><a name="iddle1597"></a><a name="iddle1720"></a><a name="iddle3843"></a><a name="iddle4017"></a><a name="iddle5150"></a><a name="iddle5225"></a><a name="iddle6555"></a><a name="iddle6557"></a>The parsing is done in a <tt>while</tt> loop that iterates over every character in the input file, one at a time. The code is a bit subtle in places. For example, although we set <tt>TabSize</tt> to 8, we replace tabs with precisely enough spaces to pad to the next tab boundary, rather than crudely replacing each tab with eight spaces. If we get a newline, tab, or space, we simply update the state data. Only when we get another kind of character do we produce any output, and before writing the character we write any pending newlines and spaces (to respect blank lines and to preserve indentation) and update the state.</p>
+<div class="docText"><pre>
+int main()
+{
+    QFile inFile;
+    QFile outFile;
+    inFile.open(stdin, QFile::ReadOnly);
+    outFile.open(stdout, QFile::WriteOnly);
+    tidyFile(&amp;inFile, &amp;outFile);
+    return 0;
+}
+</pre></div><br>
+<p class="docText">For this example, we don't need a <tt>QApplication</tt> object, because we are only using Qt's tool classes. See <tt><a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/tools.html">http://doc.trolltech.com/4.1/tools.html</a></tt> for the list of all tool classes. We have assumed that the program is used as a filter, for example:</p>
+<div class="docText"><pre>
+tidy &lt; cool.cpp &gt; cooler.cpp
+</pre></div><BR>
+<p class="docText">It would be easy to extend it to be able to handle file names given on the command line if they are given, and to filter <tt>cin</tt> to <tt>cout</tt> otherwise.</p>
+<p class="docText">Since this is a console application, it has a slightly different <tt>.pro</tt> file from those we have seen for GUI applications:</p>
+<div class="docText"><pre>
+TEMPLATE      = app
+QT            = core
+CONFIG       += console
+CONFIG       -= app_bundle
+SOURCES       = tidy.cpp
+</pre></div><BR>
+<p class="docText">We only link against <span class="docEmphasis">QtCore</span> since we don't use any GUI functionality. Then we specify that we want to enable console output on Windows and that we don't want the application to live in a bundle on Mac OS X.</p>
+<p class="docText">For reading and writing plain ASCII files or ISO 8859-1 (Latin-1) files, it is possible to use <tt>QIODevice</tt>'s API directly instead of using a <tt>QTextStream</tt>. It is rarely wise to do this since most applications need support for other encodings at some point or other, and only <tt>QTextStream</tt> provides seamless support for these. If you still want to write text directly to a <tt>QIODevice</tt>, you must explicitly specify the <tt>QIODevice::Text</tt> flag to the <tt>open()</tt> function, for example:</P>
+<div class="docText"><pre>
+file.open(QIODevice::WriteOnly | QIODevice::Text);
+</pre></div><br>
+<p class="docText"><a name="iddle1358"></a><a name="iddle1598"></a><a name="iddle1943"></a><a name="iddle2157"></a><a name="iddle2304"></a><a name="iddle2384"></a><a name="iddle2385"></a><a name="iddle2393"></a><a name="iddle2399"></a><a name="iddle2409"></a><a name="iddle2468"></a><a name="iddle2786"></a><a name="iddle2806"></a><a name="iddle3091"></a><a name="iddle3500"></a><a name="iddle4210"></a><a name="iddle4214"></a><a name="iddle4293"></a><a name="iddle6937"></a><a name="iddle7262"></a>When writing, this flag tells <tt>QIODevice</tt> to convert '\n' characters into &quot;\r\n&quot; sequences on Windows. When reading, this flag tells the device to ignore '\r' characters on all platforms. We can then assume that the end of each line is signified with a '\n' newline character regardless of the line-ending convention used by the operating system.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

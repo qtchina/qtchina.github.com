@@ -1,0 +1,321 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Multiple Document Interface</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch06lev1sec6"></a>
+<h3 id="title-IDAD0TKW" class="docSection1Title">Multiple Document Interface</h3>
+<p class="docText">Applications that provide multiple documents within the main window's central area are called multiple document interface applications, or MDI applications. In Qt, an MDI application is created by using the <tt>QWorkspace</tt> class <a name="iddle1390"></a><a name="iddle1426"></a><a name="iddle2306"></a><a name="iddle3285"></a><a name="iddle4495"></a><a name="iddle7276"></a><a name="iddle7290"></a>as the central widget and by making each document window a child of the <tt>QWorkspace</tt>.</p>
+<p class="docText">It is conventional for MDI applications to provide a Window menu that includes some commands for managing the windows and the list of windows. The active window is identified with a checkmark. The user can make any window active by clicking its entry in the Window menu.</p>
+<p class="docText">In this section, we will develop the MDI Editor application shown in <a class="docLink" href="#ch06fig16">Figure 6.16</a> to demonstrate how to create an MDI application and how to implement its Window menu.</p>
+<a name="ch06fig16"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.16. The MDI Editor application</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/mid_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="405" SRC="images/mid.jpg"></p>
+</center></p><br>
+<p class="docText">The application consists of two classes: <tt>MainWindow</tt> and <tt>Editor</tt>. The code is on the CD, and since most of it is the same or similar to the Spreadsheet application from <a class="docLink" href="part01.html#part01">Part I</a>, we will only present the new code.</p>
+<a name="ch06fig17"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 6.17. The MDI Editor application's menus</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/mdi_editor_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="176" SRC="images/mdi_editor.jpg"></P>
+</center></P><BR>
+<p class="docText"><a name="iddle1072"></a><a name="iddle1477"></a><a name="iddle1710"></a><a name="iddle1734"></a><a name="iddle1735"></a><a name="iddle3212"></a><a name="iddle3222"></a><a name="iddle3235"></a><a name="iddle3493"></a><a name="iddle5282"></a><a name="iddle5631"></a><a name="iddle7273"></a><a name="iddle7285"></a>Let's start with the <tt>MainWindow</tt> class.</p>
+<div class="docText"><pre>
+MainWindow::MainWindow()
+{
+    workspace = new QWorkspace;
+    setCentralWidget(workspace);
+    connect(workspace, SIGNAL(windowActivated(QWidget *)),
+            this, SLOT(updateMenus()));
+    createActions();
+    createMenus();
+    createToolBars();
+    createStatusBar();
+    setWindowTitle(tr("MDI Editor"));
+    setWindowIcon(QPixmap(":/images/icon.png"));
+}
+</pre></div><br>
+<p class="docText">In the <tt>MainWindow</tt> constructor, we create a <tt>QWorkspace</tt> widget and make it the central widget. We connect the <tt>QWorkspace</tt>'s <tt>windowActivated()</tt> signal to the slot we will use to keep the window menu up to date.</p>
+<div class="docText"><pre>
+void MainWindow::newFile()
+{
+    Editor *editor = createEditor();
+    editor-&gt;newFile();
+    editor-&gt;show();
+}
+</pre></div><br>
+<p class="docText">The <tt>newFile()</tt> slot corresponds to the File|New menu option. It depends on the <tt>createEditor()</tt> private function to create a child <tt>Editor</tt> widget.</p>
+<div class="docText"><pre>
+Editor *MainWindow::createEditor()
+{
+    Editor *editor = new Editor;
+    connect(editor, SIGNAL(copyAvailable(bool)),
+            cutAction, SLOT(setEnabled(bool)));
+    connect(editor, SIGNAL(copyAvailable(bool)),
+            copyAction, SLOT(setEnabled(bool)));
+    workspace-&gt;addWindow(editor);
+    windowMenu-&gt;addAction(editor-&gt;windowMenuAction());
+    windowActionGroup-&gt;addAction(editor-&gt;windowMenuAction());
+    return editor;
+}
+</pre></div><br>
+<p class="docText">The <tt>createEditor()</tt> function creates an <tt>Editor</tt> widget and sets up two signalslot connections. These connections ensure that Edit|Cut and Edit|Copy are enabled or disabled depending on whether there is any selected text.</p>
+<p class="docText">Because we are using MDI, it is possible that there will be multiple <tt>Editor</tt> widgets in use. This is a concern since we are only interested in responding to the <tt>copyAvailable(bool)</tt> signal from the active <tt>Editor</tt> window, not from the others. But these signals can only ever be emitted by the active window, so this isn't a problem in practice.</p>
+<p class="docText"><a name="iddle1067"></a><a name="iddle1073"></a><a name="iddle1074"></a><a name="iddle1811"></a><a name="iddle1812"></a><a name="iddle3215"></a><a name="iddle3229"></a><a name="iddle3238"></a><a name="iddle3244"></a><a name="iddle3252"></a><a name="iddle3584"></a><a name="iddle4010"></a><a name="iddle5115"></a><a name="iddle5626"></a><a name="iddle5919"></a><a name="iddle7046"></a><a name="iddle7171"></a>Once we have set up the <tt>Editor</tt>, we add a <tt>QAction</tt> representing the window to the Window menu. The action is provided by the <tt>Editor</tt> class, which we will cover in a moment. We also add the action to a <tt>QActionGroup</tt> object. The <tt>QActionGroup</tt> ensures that only one Window menu item is checked at a time.</p>
+<div class="docText"><pre>
+void MainWindow::open()
+{
+    Editor *editor = createEditor();
+    if (editor-&gt;open()) {
+        editor-&gt;show();
+    } else {
+        editor-&gt;close();
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>open()</tt> function corresponds to File|Open. It creates an <tt>Editor</tt> for the new document and calls <tt>open()</tt> on the <tt>Editor</tt>. It makes more sense to implement the file operations in the <tt>Editor</tt> class than in the <tt>MainWindow</tt> class, because each <tt>Editor</tt> needs to maintain its own independent state.</p>
+<p class="docText">If the <tt>open()</tt> fails, we simply close the editor since the user will have already been notified of the error. We don't need to explicitly delete the <tt>Editor</tt> object ourselves; this is done automatically by <tt>Editor</tt> through the <tt>Qt::WA_DeleteOn-Close</tt> widget attribute, which is set in the <tt>Editor</tt> constructor.</P>
+<div class="docText"><pre>
+void MainWindow::save()
+{
+    if (activeEditor())
+        activeEditor()-&gt;save();
+}
+</pre></div><br>
+<p class="docText">The <tt>save()</tt> slot calls <tt>Editor::save()</tt> on the active editor, if there is one. Again, the code that performs the real work is located in the <tt>Editor</tt> class.</p>
+<div class="docText"><pre>
+Editor *MainWindow::activeEditor()
+{
+    return qobject_cast&lt;Editor *&gt;(workspace-&gt;activeWindow());
+}
+</pre></div><BR>
+<p class="docText">The <tt>activeEditor()</tt> private function returns the active child window as an <tt>Editor</tt> pointer, or a null pointer if there isn't one.</P>
+<div class="docText"><pre>
+void MainWindow::cut()
+{
+    if (activeEditor())
+        activeEditor()-&gt;cut();
+}
+</pre></div><br>
+<p class="docText">The <tt>cut()</tt> slot calls <tt>Editor::cut()</tt> on the active editor. We don't show the <tt>copy()</tt> and <tt>paste()</tt> slots because they follow the same pattern.</p>
+<div class="docText"><pre>
+void MainWindow::updateMenus()
+{
+    bool hasEditor = (activeEditor() != 0);
+    bool hasSelection = activeEditor()
+                        &amp;&amp; activeEditor()-&gt;textCursor().hasSelection();
+    saveAction-&gt;setEnabled(hasEditor);
+    saveAsAction-&gt;setEnabled(hasEditor);
+    pasteAction-&gt;setEnabled(hasEditor);
+    cutAction-&gt;setEnabled(hasSelection);
+    copyAction-&gt;setEnabled(hasSelection);
+    closeAction-&gt;setEnabled(hasEditor);
+    closeAllAction-&gt;setEnabled(hasEditor);
+    tileAction-&gt;setEnabled(hasEditor);
+    cascadeAction-&gt;setEnabled(hasEditor);
+    nextAction-&gt;setEnabled(hasEditor);
+    previousAction-&gt;setEnabled(hasEditor);
+    separatorAction-&gt;setVisible(hasEditor);
+    if (activeEditor())
+        activeEditor()-&gt;windowMenuAction()-&gt;setChecked(true);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1063"></a><a name="iddle1360"></a><a name="iddle1489"></a><a name="iddle1492"></a><a name="iddle1741"></a><a name="iddle1947"></a><a name="iddle2092"></a><a name="iddle3225"></a><a name="iddle3302"></a><a name="iddle3304"></a><a name="iddle4000"></a><a name="iddle4001"></a><a name="iddle4011"></a><a name="iddle5627"></a><a name="iddle5628"></a><a name="iddle5629"></a><a name="iddle5630"></a><a name="iddle6019"></a><a name="iddle6076"></a><a name="iddle6077"></a><a name="iddle6814"></a><a name="iddle7277"></a>The <tt>updateMenus()</tt> slot is called whenever a window is activated (and when the last window is closed) to update the menu system, due to the signalslot connection we put in the <tt>MainWindow</tt> constructor.</p>
+<p class="docText">Most menu options only make sense if there is an active window, so we disable them if there isn't one. At the end, we call <tt>setChecked()</tt> on the <tt>QAction</tt> representing the active window. Thanks to the <tt>QActionGroup</tt>, we don't need to explicitly uncheck the previously active window.</P>
+<div class="docText"><pre>
+void MainWindow::createMenus()
+{
+    ...
+    windowMenu = menuBar()-&gt;addMenu(tr("&amp;Window"));
+    windowMenu-&gt;addAction(closeAction);
+    windowMenu-&gt;addAction(closeAllAction);
+    windowMenu-&gt;addSeparator();
+    windowMenu-&gt;addAction(tileAction);
+    windowMenu-&gt;addAction(cascadeAction);
+    windowMenu-&gt;addSeparator();
+    windowMenu-&gt;addAction(nextAction);
+    windowMenu-&gt;addAction(previousAction);
+    windowMenu-&gt;addAction(separatorAction);
+    ...
+}
+</pre></div><br>
+<p class="docText">The <tt>createMenus()</tt> private function fills the Window menu with actions. The actions are all typical of such menus and are easily implemented using <tt>QWorkspace</tt>'s <tt>closeActiveWindow()</tt>, <tt>closeAllWindows()</tt>, <tt>tile()</tt>, and <tt>cascade()</tt> slots. Every time the user opens a new window, it is added to the Window menu's list of actions. (This is done in the <tt>createEditor()</tt> function that we saw on page 154.) When the user closes an editor window, its action in the Window menu is deleted (since the action is owned by the editor window), and so the action is automatically removed from the Window menu.</p>
+<div class="docText"><pre>
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    workspace-&gt;closeAllWindows();
+    if (activeEditor()) {
+        event-&gt;ignore();
+    } else {
+        event-&gt;accept();
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1052"></a><a name="iddle1498"></a><a name="iddle2106"></a><a name="iddle2107"></a><a name="iddle2116"></a><a name="iddle2215"></a><a name="iddle2774"></a><a name="iddle3217"></a><a name="iddle4119"></a><a name="iddle4260"></a><a name="iddle4264"></a><a name="iddle5278"></a><a name="iddle5279"></a><a name="iddle5487"></a><a name="iddle6643"></a><a name="iddle7275"></a>The <tt>closeEvent()</tt> function is reimplemented to close all child windows, causing each child to receive a close event. If one of the child widgets &quot;ignores&quot; its close event (because the user canceled an &quot;unsaved changes&quot; message box), we ignore the close event for the <tt>MainWindow</tt>; otherwise, we accept it, resulting in Qt closing the entire window. If we didn't reimplement <tt>closeEvent()</tt> in <tt>MainWindow</tt>, the user would not be given the opportunity to save unsaved changes.</p>
+<p class="docText">We have now finished our review of <tt>MainWindow</tt>, so we can move on to the <tt>Editor</tt> implementation. The <tt>Editor</tt> class represents one child window. It inherits <tt>QTextEdit</tt>, which provides the text editing functionality. Just as any Qt widget can be used as a stand-alone window, any Qt widget can be used as a child window in an MDI workspace.</P>
+<p class="docText">Here's the class definition:</P>
+<div class="docText"><pre>
+class Editor : public QTextEdit
+{
+    Q_OBJECT
+public:
+    Editor(QWidget *parent = 0);
+    void newFile();
+    bool open();
+    bool openFile(const QString &amp;fileName);
+    bool save();
+    bool saveAs();
+    QSize sizeHint() const;
+    QAction *windowMenuAction() const { return action; }
+protected:
+    void closeEvent(QCloseEvent *event);
+private slots:
+    void documentWasModified();
+private:
+    bool okToContinue();
+    bool saveFile(const QString &amp;fileName);
+    void setCurrentFile(const QString &amp;fileName);
+    bool readFile(const QString &amp;fileName);
+    bool writeFile(const QString &amp;fileName);
+    QString strippedName(const QString &amp;fullFileName);
+    QString curFile;
+    bool isUntitled;
+    QString fileFilters;
+    QAction *action;
+};
+</pre></div><BR>
+<p class="docText"><a name="iddle1672"></a><a name="iddle1977"></a><a name="iddle2108"></a><a name="iddle2110"></a><a name="iddle3489"></a><a name="iddle3490"></a><a name="iddle5116"></a><a name="iddle5272"></a><a name="iddle5284"></a><a name="iddle5476"></a><a name="iddle5560"></a><a name="iddle5581"></a><a name="iddle6091"></a><a name="iddle6236"></a><a name="iddle7032"></a><a name="iddle7172"></a><a name="iddle7281"></a>Four of the private functions that were in the Spreadsheet application's <tt>Main-Window</tt> class (p. 57) are also present in the <tt>Editor</tt> class: <tt>okToContinue()</tt>, <tt>save-File()</tt>, <tt>setCurrentFile()</tt>, and <tt>strippedName()</tt>.</p>
+<div class="docText"><pre>
+Editor::Editor(QWidget *parent)
+    : QTextEdit(parent)
+{
+    action = new QAction(this);
+    action-&gt;setCheckable(true);
+    connect(action, SIGNAL(triggered()), this, SLOT(show()));
+    connect(action, SIGNAL(triggered()), this, SLOT(setFocus()));
+    isUntitled = true;
+    fileFilters = tr("Text files (*.txt)\n"
+                     "All files (*)");
+    connect(document(), SIGNAL(contentsChanged()),
+            this, SLOT(documentWasModified()));
+    setWindowIcon(QPixmap(":/images/document.png"));
+    setAttribute(Qt::WA_DeleteOnClose);
+}
+</pre></div><br>
+<p class="docText">First, we create a <tt>QAction</tt> representing the editor in the application's Window menu and connect that action to the <tt>show()</tt> and <tt>setFocus()</tt> slots.</p>
+<p class="docText">Since we allow users to create any number of editor windows, we must make some provision for naming them so that they can be distinguished before they have been saved for the first time. One common way of handling this is to allocate names that include a number (for example, <tt>document1.txt</tt>). We use the <tt>isUntitled</tt> variable to distinguish between names supplied by the user and names we have created programmatically.</p>
+<p class="docText">We connect the text document's <tt>contentsChanged()</tt> signal to the private <tt>documentWasModified()</tt> slot. This slot simply calls <tt>setWindowModified(true)</tt>.</p>
+<p class="docText">Finally, we set the <tt>Qt::WA_DeleteOnClose</tt> attribute to prevent memory leaks when the user closes an <tt>Editor</tt> window.</p>
+<p class="docText">After the constructor, we expect either <tt>newFile()</tt> or <tt>open()</tt> to be called.</p>
+<div class="docText"><pre>
+void Editor::newFile()
+{
+    static int documentNumber = 1;
+    curFile = tr("document%1.txt").arg(documentNumber);
+    setWindowTitle(curFile + "[*]");
+    action-&gt;setText(curFile);
+    isUntitled = true;
+    ++documentNumber;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1053"></a><a name="iddle1495"></a><a name="iddle1496"></a><a name="iddle2109"></a><a name="iddle2111"></a><a name="iddle2112"></a><a name="iddle2113"></a><a name="iddle2114"></a><a name="iddle2216"></a><a name="iddle2565"></a><a name="iddle2775"></a><a name="iddle3382"></a><a name="iddle3564"></a><a name="iddle3565"></a><a name="iddle3581"></a><a name="iddle3582"></a><a name="iddle4120"></a><a name="iddle4261"></a><a name="iddle4265"></a><a name="iddle4289"></a><a name="iddle5488"></a><a name="iddle5916"></a><a name="iddle5917"></a><a name="iddle6042"></a><a name="iddle6043"></a>The <tt>newFile()</tt> function generates a name like <tt>document1.txt</tt> for the new document. The code belongs in <tt>newFile()</tt>, rather than the constructor, because we don't want to consume numbers when we call <tt>open()</tt> to open an existing document in a newly created <tt>Editor</tt>. Since <tt>documentNumber</tt> is declared static, it is shared across all <tt>Editor</tt> instances.</p>
+<p class="docText">The &quot;[*]&quot; marker in the window title is a place marker for where we want the asterisk to appear when the file has unsaved changes on platforms other than Mac OS X. We covered this place marker in <a class="docLink" href="ch03.html#ch03">Chapter 3</a> (p. 58).</p>
+<div class="docText"><pre>
+bool Editor::open()
+{
+    QString fileName =
+            QFileDialog::getOpenFileName(this, tr("Open"), ".",
+                                         fileFilters);
+    if (fileName.isEmpty())
+        return false;
+    return openFile(fileName);
+}
+</pre></div><br>
+<p class="docText">The <tt>open()</tt> function tries to open an existing file using <tt>openFile()</tt>.</p>
+<div class="docText"><pre>
+bool Editor::save()
+{
+    if (isUntitled) {
+        return saveAs();
+    } else {
+        return saveFile(curFile);
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>save()</tt> function uses the <tt>isUntitled</tt> variable to determine whether it should call <tt>saveFile()</tt> or <tt>saveAs()</tt>.</p>
+<div class="docText"><pre>
+void Editor::closeEvent(QCloseEvent *event)
+{
+    if (okToContinue()) {
+        event-&gt;accept();
+    } else {
+        event-&gt;ignore();
+    }
+}
+</pre></div><BR>
+<p class="docText">The <tt>closeEvent()</tt> function is reimplemented to allow the user to save unsaved changes. The logic is coded in the <tt>okToContinue()</tt> function, which pops up a message box that asks, &quot;Do you want to save your changes?&quot; If <tt>okToContinue()</tt> returns <tt>TRue</tt>, we accept the close event; otherwise, we &quot;ignore&quot; it and leave the window unaffected by it.</P>
+<div class="docText"><pre>
+void Editor::setCurrentFile(const QString &amp;fileName)
+{
+    curFile = fileName;
+    isUntitled = false;
+    action-&gt;setText(strippedName(curFile));
+
+    document()-&gt;setModified(false);
+    setWindowTitle(strippedName(curFile) + "[*]");
+    setWindowModified(false);
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1184"></a><a name="iddle1187"></a><a name="iddle1546"></a><a name="iddle1673"></a><a name="iddle2115"></a><a name="iddle2471"></a><a name="iddle3180"></a><a name="iddle3188"></a><a name="iddle3383"></a><a name="iddle4021"></a><a name="iddle5270"></a><a name="iddle5273"></a><a name="iddle5276"></a><a name="iddle5503"></a><a name="iddle5582"></a><a name="iddle5586"></a><a name="iddle5598"></a><a name="iddle6138"></a><a name="iddle6237"></a><a name="iddle6241"></a><a name="iddle6323"></a><a name="iddle6324"></a><a name="iddle6333"></a><a name="iddle6607"></a>The <tt>setCurrentFile()</tt> function is called from <tt>openFile()</tt> and <tt>saveFile()</tt> to update the <tt>curFile</tt> and <tt>isUntitled</tt> variables, to set the window title and action text, and to set the document's &quot;modified&quot; flag to <tt>false</tt>. Whenever the user modifies the text in the editor, the underlying <tt>QTexTDocument</tt> emits the <tt>contents-Changed()</tt> signal and sets its internal &quot;modified&quot; flag to <tt>true</tt>.</p>
+<div class="docText"><pre>
+QSize Editor::sizeHint() const
+{
+    return QSize(72 * fontMetrics().width('x'),
+                 25 * fontMetrics().lineSpacing());
+}
+</pre></div><br>
+<p class="docText">The <tt>sizeHint()</tt> function returns a size based on the width of the letter 'x' and the height of a text line. <tt>QWorkspace</tt> uses the size hint to give an initial size to the window.</p>
+<p class="docText">Here's the MDI Editor application's <tt>main.cpp</tt> file:</p>
+<div class="docText"><pre>
+#include &lt;QApplication&gt;
+#include "mainwindow.h"
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QStringList args = app.arguments();
+    MainWindow mainWin;
+    if (args.count() &gt; 1) {
+        for (int i = 1; i &lt; args.count(); ++i)
+            mainWin.openFile(args[i]);
+    } else {
+        mainWin.newFile();
+    }
+    mainWin.show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">If the user specifies any files on the command line, we attempt to load them. Otherwise, we start with an empty document. Qt-specific command-line options, such as <tt>-style</tt> and <tt>-font</tt>, are automatically removed from the argument list by the <tt>QApplication</tt> constructor. So if we write</p>
+<div class="docText"><pre>
+mdieditor -style motif readme.txt
+</pre></div><br>
+<p class="docText">on the command line, <tt>QApplication::arguments()</tt> returns a <tt>QStringList</tt> containing two items (&quot;mdieditor&quot; and &quot;readme.txt&quot;), and the MDI Editor application starts up with the document <tt>readme.txt</tt>.</p>
+<p class="docText">MDI is one way of handling multiple documents simultaneously. On Mac OS X, the preferred approach is to use multiple top-level windows. This approach is covered in the &quot;<a class="docLink" href="ch03lev1sec7.html#ch03lev1sec7">Multiple Documents</a>&quot; section of <a class="docLink" href="ch03.html#ch03">Chapter 3</a>.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

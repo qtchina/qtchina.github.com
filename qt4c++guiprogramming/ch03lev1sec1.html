@@ -1,0 +1,159 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Subclassing QMainWindow</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch03lev1sec1"></a>
+
+<h3 id="title-IDAO1MRT" class="docSection1Title">Subclassing QMainWindow</h3>
+<p class="docText"><a name="iddle2213"></a><a name="iddle3207"></a><a name="iddle3208"></a><a name="iddle3257"></a><a name="iddle3930"></a><a name="iddle4489"></a><a name="iddle4497"></a><a name="iddle5133"></a><a name="iddle5485"></a><a name="iddle6632"></a>An application's main window is created by subclassing <tt>QMainWindow</tt>. Many of the techniques we saw in <a class="docLink" href="ch02.html#ch02">Chapter 2</a> for creating dialogs are also relevant for creating main windows, since both <tt>QDialog</tt> and <tt>QMainWindow</tt> inherit from <tt>QWidget</tt>.</p>
+<p class="docText">Main windows can be created using <span class="docEmphasis">Qt Designer</span>, but in this chapter we will do everything in code to demonstrate how it's done. If you prefer the more visual approach, see the &quot;Creating Main Windows in <span class="docEmphasis">Qt Designer</span>&quot; chapter in <span class="docEmphasis">Qt Designer</span>'s online manual.</p>
+<p class="docText">The source code for the Spreadsheet application's main window is spread across <tt>mainwindow.h</tt> and <tt>mainwindow.cpp</tt>. Let's start with the header file:</p>
+<div class="docText"><pre>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+#include &lt;QMainWindow&gt;
+class QAction;
+class QLabel;
+class FindDialog;
+class Spreadsheet;
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+public:
+    MainWindow();
+protected:
+    void closeEvent(QCloseEvent *event);
+</pre></div><br>
+<p class="docText">We define the class <tt>MainWindow</tt> as a subclass of <tt>QMainWindow</tt>. It contains the <tt>Q_OBJECT</tt> macro since it provides its own signals and slots.</p>
+<p class="docText">The <tt>closeEvent()</tt> function is a virtual function in <tt>QWidget</tt> that is automatically called when the user closes the window. It is reimplemented in <tt>MainWindow</tt> so that we can ask the user the standard question &quot;Do you want to save your changes?&quot; and to save user preferences to disk.</p>
+<div class="docText"><pre>
+private slots:
+    void newFile();
+    void open();
+    bool save();
+    bool saveAs();
+    void find();
+    void goToCell();
+    void sort();
+    void about();
+</pre></div><br>
+<p class="docText">Some menu options, like File|New and Help|About, are implemented as private slots in <tt>MainWindow</tt>. Most slots have <tt>void</tt> as their return value, but <tt>save()</tt> and <a name="iddle6309"></a><a name="iddle6374"></a><tt>saveAs()</tt> return a <tt>bool</tt>. The return value is ignored when a slot is executed in response to a signal, but when we call a slot as a function the return value is available to us just as it is when we call any ordinary C++ function.</p>
+<div class="docText"><pre>
+    void openRecentFile();
+    void updateStatusBar();
+    void spreadsheetModified();
+private:
+    void createActions();
+    void createMenus();
+    void createContextMenu();
+    void createToolBars();
+    void createStatusBar();
+    void readSettings();
+    void writeSettings();
+    bool okToContinue();
+    bool loadFile(const QString &amp;fileName);
+    bool saveFile(const QString &amp;fileName);
+    void setCurrentFile(const QString &amp;fileName);
+    void updateRecentFileActions();
+    QString strippedName(const QString &amp;fullFileName);
+</pre></div><br>
+<p class="docText">The main window needs some more private slots and several private functions to support the user interface.</p>
+<div class="docText"><pre>
+    Spreadsheet *spreadsheet;
+    FindDialog *findDialog;
+    QLabel *locationLabel;
+    QLabel *formulaLabel;
+    QStringList recentFiles;
+    QString curFile;
+    enum { MaxRecentFiles = 5 };
+    QAction *recentFileActions[MaxRecentFiles];
+    QAction *separatorAction;
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    ...
+    QToolBar *fileToolBar;
+    QToolBar *editToolBar;
+    QAction *newAction;
+    QAction *openAction;
+    ...
+    QAction *aboutQtAction;
+};
+#endif
+</pre></div><br>
+<p class="docText">In addition to its private slots and private functions, <tt>MainWindow</tt> also has lots of private variables. All of these will be explained as we use them.</P>
+<p class="docText">We will now review the implementation:</P>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "finddialog.h"
+#include "gotocelldialog.h"
+#include "mainwindow.h"
+#include "sortdialog.h"
+#include "spreadsheet.h"
+</pre></div><BR>
+<p class="docText"><a name="iddle1295"></a><a name="iddle1387"></a><a name="iddle1543"></a><a name="iddle1577"></a><a name="iddle1973"></a><a name="iddle2391"></a><a name="iddle2570"></a><a name="iddle2750"></a><a name="iddle2799"></a><a name="iddle2800"></a><a name="iddle2970"></a><a name="iddle3210"></a><a name="iddle3295"></a><a name="iddle3296"></a><a name="iddle3760"></a><a name="iddle3761"></a><a name="iddle3780"></a><a name="iddle4492"></a><a name="iddle4503"></a><a name="iddle5156"></a><a name="iddle5579"></a><a name="iddle6017"></a><a name="iddle6234"></a><a name="iddle6538"></a><a name="iddle7289"></a><a name="iddle7344"></a><a name="iddle7362"></a>We include the <tt>&lt;QtGui&gt;</tt> header file, which contains the definition of all the Qt classes used in our subclass. We also include some custom header files, notably <tt>finddialog.h</tt>, <tt>gotocelldialog.h</tt>, and <tt>sortdialog.h</tt> from <a class="docLink" href="ch02.html#ch02">Chapter 2</a>.</P>
+<div class="docText"><pre>
+MainWindow::MainWindow()
+{
+    spreadsheet = new Spreadsheet;
+    setCentralWidget(spreadsheet);
+    createActions();
+    createMenus();
+    createContextMenu();
+    createToolBars();
+    createStatusBar();
+    readSettings();
+    findDialog = 0;
+    setWindowIcon(QIcon(":/images/icon.png"));
+    setCurrentFile("");
+}
+</pre></div><BR>
+<p class="docText">In the constructor, we begin by creating a <tt>Spreadsheet</tt> widget and setting it to be the main window's central widget. The central widget occupies the middle of the main window (see <a class="docLink" href="#ch03fig02">Figure 3.2</a>). The <tt>Spreadsheet</tt> class is a <tt>QTableWidget</tt> subclass with some spreadsheet capabilities, such as support for spreadsheet formulas. We will implement it in <a class="docLink" href="ch04.html#ch04">Chapter 4</a>.</p>
+<a name="ch03fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.2. <tt>QMainWindow</tt>'s areas</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="228" height="203" SRC="images/qmainwndow_s.jpg"></p>
+
+</center></p><br>
+<p class="docText">We call the private functions <tt>createActions()</tt>, <tt>createMenus()</tt>, <tt>createContext-Menu()</tt>, <tt>createToolBars()</tt>, and <tt>createStatusBar()</tt> to set up the rest of the main window. We also call the private function <tt>readSettings()</tt> to read the application's stored settings.</p>
+<p class="docText">We initialize the <tt>findDialog</tt> pointer to be a null pointer; the first time <tt>MainWindow::find()</tt> is called, we will create the <tt>FindDialog</tt> object.</p>
+<p class="docText">At the end of the constructor, we set the window's icon to <tt>icon.png</tt>, a PNG file. Qt supports many image formats, including BMP, GIF,<sup class="docFootnote"><a class="docLink" href="#ch03fn1">[*]</a></sup> JPEG, PNG, PNM, XBM, and XPM. Calling <tt>QWidget::setWindowIcon()</tt> sets the icon shown in the top-left corner of the window. Unfortunately, there is no platform-independent way of setting the application icon that appears on the desktop. Platform-specific procedures are explained at <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/appicon.html">http://doc.trolltech.com/4.1/appicon.html</a>.</p><blockquote><p class="docFootnote"><sup><a name="ch03fn1">[*]</a></sup> GIF support is disabled in Qt by default because the decompression algorithm used by GIF files was patented in some countries where software patents are recognized. We believe that this patent has now expired worldwide. To enable GIF support in Qt, pass the <tt>-qt-gif</tt> command-line option to the <tt>configure</tt> script or set the appropriate option in the Qt installer.</p></blockquote>
+<p class="docText"><a name="iddle1975"></a><a name="iddle2125"></a><a name="iddle2798"></a><a name="iddle3856"></a><a name="iddle4491"></a><a name="iddle4784"></a><a name="iddle5827"></a><a name="iddle5829"></a><a name="iddle5834"></a><a name="iddle6876"></a><a name="iddle7350"></a><a name="iddle7363"></a>GUI applications generally use many images. There are several methods for providing images to the application. The most common are:</p>
+<UL><li><p class="docList">Storing images in files and loading them at run-time.</p></LI><LI><p class="docList">Including XPM files in the source code. (This works because XPM files are also valid C++ files.)</p></li><li><p class="docList">Using Qt's resource mechanism.</p></LI></ul>
+<p class="docText">Here we use Qt's resource mechanism because it is more convenient than loading files at run-time, and it works with any supported image file format. We have chosen to store the images in the source tree in a subdirectory called <tt>images</tt>.</p>
+<p class="docText">To make use of Qt's resource system, we must create a resource file and add a line to the <tt>.pro</tt> file that identifies the resource file. In this example, we have called the resource file <tt>spreadsheet.qrc</tt>, so we put the following line in the <tt>.pro</tt> file:</p>
+<div class="docText"><pre>
+RESOURCES     = spreadsheet.qrc
+</pre></div><br>
+<p class="docText">The resource file itself uses a simple XML format. Here's an extract from the one we have used:</P>
+<div class="docText"><pre>
+&lt;!DOCTYPE RCC&gt;&lt;RCC version="1.0"&gt;
+&lt;qresource&gt;
+    &lt;file&gt;images/icon.png&lt;/file&gt;
+    ...
+    &lt;file&gt;images/gotocell.png&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;/RCC&gt;
+</pre></div><BR>
+<p class="docText"><a name="iddle1012"></a><a name="iddle1046"></a><a name="iddle1062"></a><a name="iddle1511"></a><a name="iddle1727"></a><a name="iddle2751"></a><a name="iddle2801"></a><a name="iddle2989"></a><a name="iddle2995"></a><a name="iddle3218"></a><a name="iddle3997"></a><a name="iddle4008"></a><a name="iddle6272"></a><a name="iddle6543"></a><a name="iddle6949"></a><a name="iddle6950"></a>Resource files are compiled into the application's executable, so they can't get lost. When we refer to resources, we use the path prefix <tt>:/</tt> (colon slash), which is why the icon is specified as <tt>:/images/icon.png</tt>. Resources can be any kind of file (not just images), and we can use them in most places where Qt expects a file name. They are covered in more detail in <a class="docLink" href="ch12.html#ch12">Chapter 12</a>.</P>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

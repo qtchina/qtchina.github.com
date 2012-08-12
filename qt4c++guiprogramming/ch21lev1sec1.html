@@ -1,0 +1,56 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Getting Started with Qtopia</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch21.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch21lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch21lev1sec1"></a>
+
+<h3 id="title-IDA5ZOVO" class="docSection1Title">Getting Started with Qtopia</h3>
+<p class="docText"><a name="iddle1471"></a><a name="iddle1576"></a><a name="iddle2124"></a><a name="iddle2503"></a><a name="iddle2533"></a><a name="iddle2575"></a><a name="iddle4135"></a><a name="iddle4156"></a><a name="iddle5646"></a><a name="iddle5727"></a><a name="iddle5983"></a><a name="iddle5996"></a>Qtopia Core applications can be developed on any platform equipped with a multi-platform tool chain. The most common option is to build a GNU C++ cross-compiler on a Unix system. This process is simplified by a script and a set of patches provided by Dan Kegel at <a class="docLink" target="_blank" href="http://kegel.com/crosstool/">http://kegel.com/crosstool/</a>. Since Qtopia Core contains the Qt API, it is usually possible to use a desktop version of Qt, such as Qt/X11 or Qt/Windows, for most of the development.</p>
+<p class="docText">Qtopia Core's configuration system supports cross-compilers, through the <tt>configure</tt> script's <tt>-embedded</tt> option. For example, to build for the ARM architecture we would type</p>
+<div class="docText"><pre>
+./configure -embedded arm
+</pre></div><br>
+<p class="docText">We can create custom configurations by adding new files to Qt's <tt>mkspecs/qws</tt> directory.</p>
+<p class="docText">Qtopia Core draws directly to the Linux frame buffer (the memory area associated with the video display). To access the frame buffer, you might need to grant write permissions to the <tt>/dev/fb0</tt> device.</p>
+<p class="docText">To run Qtopia Core applications, we must first start one process to act as a server. The server is responsible for allocating screen regions to clients and for generating mouse and keyboard events. Any Qtopia Core application can become a server by specifying <tt>-qws</tt> on its command line or by passing <tt>QApplication:: GuiServer</tt> as the third parameter to the <tt>QApplication</tt> constructor.</p>
+<p class="docText">Client applications communicate with the Qtopia Core server using shared memory. Behind the scenes, the clients draw themselves into shared memory and are responsible for painting their own window decorations. This keeps communication between the clients and the server to a minimum, resulting in a snappy user interface. Qtopia Core applications normally use <tt>QPainter</tt> to draw themselves, but they can also access the video hardware directly using <tt>QDirectPainter</tt>.</p>
+<p class="docText">Clients can communicate with each other using the QCOP procotol. A client can listen on a named channel by creating a <tt>QCopChannel</tt> object and connecting to its <tt>received()</tt> signal. For example:</p>
+<div class="docText"><pre>
+QCopChannel *channel = new QCopChannel("System", this);
+connect(channel, SIGNAL(received(const QString &amp;, const QByteArray &amp;)),
+        this, SLOT(received(const QString &amp;, const QByteArray &amp;)));
+</pre></div><br>
+<p class="docText">A QCOP message consists of a name and an optional <tt>QByteArray</tt>. The static <tt>QCopChannel::send()</tt> broadcasts a message on a channel. For example:</p>
+<div class="docText"><pre>
+QByteArray data;
+QDataStream out(&amp;data, QIODevice::WriteOnly);
+out &lt;&lt; QDateTime::currentDateTime();
+QCopChannel::send("System", "clockSkew(QDateTime)", data);
+</pre></div><BR>
+<p class="docText"><a name="iddle1548"></a><a name="iddle1960"></a><a name="iddle2067"></a><a name="iddle2069"></a><a name="iddle2167"></a><a name="iddle2168"></a><a name="iddle2170"></a><a name="iddle2172"></a><a name="iddle2990"></a><a name="iddle3404"></a><a name="iddle4133"></a><a name="iddle5155"></a><a name="iddle5163"></a><a name="iddle5373"></a><a name="iddle5459"></a><a name="iddle5460"></a><a name="iddle5633"></a><a name="iddle5635"></a><a name="iddle5637"></a><a name="iddle5639"></a><a name="iddle7149"></a><a name="iddle7164"></a>The previous example illustrates a common idiom: We use <tt>QDataStream</tt> to encode the data, and to ensure that the <tt>QByteArray</tt> is interpreted correctly by the receiver, we mangle the data format in the message name as if it were a C++ function.</p>
+<p class="docText">Various environment variables affect Qtopia Core applications. The most important ones are <tt>QWS_MOUSE_PROTO</tt> and <tt>QWS_KEYBOARD</tt>, which specify the mouse device and the keyboard type. See <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/emb-envvars.html">http://doc.trolltech.com/4.1/emb-envvars.html</a> for a complete list of environment variables.</p>
+<p class="docText">If we use Unix as our development platform, we can test the application using the Qtopia virtual frame buffer (<tt>qvfb</tt>), an X11 application that simulates, pixel for pixel, the actual frame buffer. This accelerates the development cycle considerably. To enable virtual buffer support in Qtopia Core, pass the <tt>-qvfb</tt> option to the <tt>configure</tt> script. Be aware that this option is not intended for production use. The virtual frame buffer application is located in <tt>tools/qvfb</tt> and can be invoked as follows:</p>
+<div class="docText"><pre>
+qvfb -width 320 -height 480 -depth 32
+</pre></div><BR>
+<p class="docText">Another option that works on most platforms is to use VNC (Virtual Network Computing) to run the applications remotely. To enable VNC support in Qtopia Core, pass the <tt>-qt-gfx-vnc</tt> option to <tt>configure</tt>. Then launch your Qtopia Core applications with the <tt>-display VNC:0</tt> command-line option and run a VNC client pointing at the host on which your applications are running. The display size and bit depth can be specified by setting the <tt>QWS_SIZE</tt> and <tt>QWS_DEPTH</tt> environment variables on the host that runs the Qtopia Core applications (for example, <tt>QWS_SIZE=320x480</tt> and <tt>QWS_DEPTH=32</tt>).</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch21.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch21lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

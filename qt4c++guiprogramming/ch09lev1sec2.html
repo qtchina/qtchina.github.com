@@ -1,0 +1,204 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Supporting Custom Drag Types</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch09lev1sec2"></a>
+<h3 id="title-IDA4BE4H" class="docSection1Title">Supporting Custom Drag Types</h3>
+<p class="docText">In the examples so far, we have relied on <tt>QMimeData</tt>'s support for common MIME types. Thus, we called <tt>QMimeData::setText()</tt> to create a text drag, and we used <tt>QMimeData:urls()</tt> to retrieve the contents of a <tt>text/uri-list</tt> drag. If we want to drag plain text, HTML text, images, URLs, or colors, we can use <tt>QMimeData</tt> without formality. But if we want to drag custom data, we must choose between the following alternatives:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">We can provide arbitrary data as a <tt>QByteArray</tt> using <tt>QMimeData::setData()</tt> and extract it later using <tt>QMimeData::data()</tt>.</p></div></li><li><div style="font-weight:normal"><p class="docList">We can subclass <tt>QMimeData</tt> and reimplement <tt>formats()</tt> and <tt>retrieveData()</tt> to handle our custom data types.</p></div></li><li><div style="font-weight:normal"><p class="docList">For drag and drop operations within a single application, we can subclass <tt>QMimeData</tt> and store the data using any data structure we want.</p></div></li></ol></div>
+<p class="docText">The first approach does not involve any subclassing, but does have some drawbacks: We need to convert our data structure to a <tt>QByteArray</tt> even if the drag is not ultimately accepted, and if we want to provide several MIME types to interact nicely with a wide range of applications, we need to store the data several times (once per MIME type). If the data is large, this can slow down the application needlessly. The second and third approaches can avoid or minimize these problems. They give us complete control and can be used together.</p>
+<p class="docText"><a name="iddle2190"></a><a name="iddle2702"></a><a name="iddle3408"></a><a name="iddle3464"></a><a name="iddle3465"></a><a name="iddle3466"></a><a name="iddle3467"></a><a name="iddle4553"></a><a name="iddle4554"></a><a name="iddle4555"></a><a name="iddle5076"></a><a name="iddle5181"></a><a name="iddle5524"></a><a name="iddle5600"></a><a name="iddle6064"></a><a name="iddle6108"></a><a name="iddle6109"></a><a name="iddle6201"></a><a name="iddle6520"></a><a name="iddle6521"></a><a name="iddle6843"></a><a name="iddle6847"></a>To show how these approaches work, we will show how to add drag and drop capabilities to a <tt>QTableWidget</tt>. The drag will support the following MIME types: <tt>text/plain</tt>, <tt>text/html</tt>, and <tt>text/csv</tt>. Using the first approach, starting a drag looks like this:</P>
+<div class="docText"><pre>
+void MyTableWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event-&gt;buttons() &amp; Qt::LeftButton) {
+        int distance = (event-&gt;pos() - startPos).manhattanLength();
+        if (distance &gt;= QApplication::startDragDistance())
+            startDrag();
+    }
+    QTableWidget::mouseMoveEvent(event);
+}
+void MyTableWidget::startDrag()
+{
+    QString plainText = selectionAsPlainText();
+    if (plainText.isEmpty())
+        return;
+    QMimeData *mimeData = new QMimeData;
+    mimeData-&gt;setText(plainText);
+    mimeData-&gt;setHtml(toHtml(plainText));
+    mimeData-&gt;setData("text/csv", toCsv(plainText).toUtf8());
+    QDrag *drag = new QDrag(this);
+    drag-&gt;setMimeData(mimeData);
+    if (drag-&gt;start(Qt::CopyAction | Qt::MoveAction) == Qt::MoveAction)
+        deleteSelection();
+}
+</pre></div><BR>
+<p class="docText">The <tt>startDrag()</tt> private function is called from <tt>mouseMoveEvent()</tt> to start dragging a rectangular selection. We set the <tt>text/plain</tt> and <tt>text/html</tt> MIME types using <tt>setText()</tt> and <tt>setHtml()</tt>, and we set the <tt>text/csv</tt> type using <tt>set-Data()</tt>, which takes an arbitrary MIME type and a <tt>QByteArray</tt>. The code for the <tt>selectionAsString()</tt> is more or less the same as the <tt>Spreadsheet::copy()</tt> function from <a class="docLink" href="ch04.html#ch04">Chapter 4</a> (p. 83).</P>
+<div class="docText"><pre>
+QString MyTableWidget::toCsv(const QString &amp;plainText)
+{
+    QString result = plainText;
+    result.replace("\\", "\\\\");
+    result.replace("\"", "\\\"");
+    result.replace("\t", "\", \"");
+    result.replace("\n", "\"\n\"");
+    result.prepend("\"");
+    result.append("\"");
+    return result;
+}
+QString MyTableWidget::toHtml(const QString &amp;plainText)
+{
+    QString result = Qt::escape(plainText);
+    result.replace("\t", "&lt;td&gt;");
+
+    result.replace("\n", "\n&lt;tr&gt;&lt;td&gt;");
+    result.prepend("&lt;table&gt;\n&lt;tr&gt;&lt;td&gt;");
+    result.append("\n&lt;/table&gt;");
+    return result;
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1539"></a><a name="iddle1679"></a><a name="iddle1751"></a><a name="iddle2073"></a><a name="iddle2074"></a><a name="iddle2078"></a><a name="iddle2191"></a><a name="iddle2703"></a><a name="iddle3462"></a><a name="iddle3463"></a><a name="iddle3975"></a><a name="iddle4541"></a><a name="iddle5004"></a><a name="iddle5077"></a><a name="iddle5201"></a><a name="iddle5499"></a><a name="iddle5549"></a><a name="iddle5810"></a><a name="iddle6005"></a><a name="iddle6172"></a><a name="iddle6173"></a><a name="iddle6175"></a><a name="iddle6634"></a><a name="iddle6679"></a><a name="iddle6691"></a>The <tt>toCsv()</tt> and <tt>toHtml()</tt> functions convert a &quot;tabs and newlines&quot; string into a CSV (comma-separated values) or an HTML string. For example, the data</P>
+<div class="docText"><pre>
+Red     Green     Blue
+Cyan    Yellow    Magenta
+</pre></div><br>
+<p class="docText">is converted to</p>
+<div class="docText"><pre>
+"Red",  "Green",  "Blue"
+"Cyan",  "Yellow",  "Magenta"
+</pre></div><br>
+<p class="docText">or to</p>
+<div class="docText"><pre>
+&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Red&lt;td&gt;Green&lt;td&gt;Blue
+&lt;tr&gt;&lt;td&gt;Cyan&lt;td&gt;Yellow&lt;td&gt;Magenta
+&lt;/table&gt;
+</pre></div><br>
+<p class="docText">The conversion is performed in the simplest way possible, using <tt>QString::replace()</tt>. To escape HTML special characters, we use <tt>Qt::escape()</tt>.</p>
+<div class="docText"><pre>
+void MyTableWidget::dropEvent(QDropEvent *event)
+{
+    if (event-&gt;mimeData()-&gt;hasFormat("text/csv")) {
+        QByteArray csvData = event-&gt;mimeData()-&gt;data("text/csv");
+        QString csvText = QString::fromUtf8(csvData);
+        ...
+        event-&gt;acceptProposedAction();
+    } else if (event-&gt;mimeData()-&gt;hasFormat("text/plain")) {
+        QString plainText = event-&gt;mimeData()-&gt;text();
+        ...
+        event-&gt;acceptProposedAction();
+    }
+}
+</pre></div><br>
+<p class="docText">Although we provide the data in three different formats, we only accept two of them in <tt>dropEvent()</tt>. If the user drags cells from a <tt>QTableWidget</tt> to an HTML editor, we want the cells to be converted into an HTML table. But if the user drags arbitrary HTML into a <tt>QTableWidget</tt>, we don't want to accept it.</p>
+<p class="docText">To make this example work, we also need to call <tt>setAcceptDrops(true)</tt> and <tt>setSelectionMode(ContiguousSelection)</tt> in the <tt>MyTableWidget</tt> constructor.</p>
+<p class="docText">We will now redo the example, but this time we will subclass <tt>QMimeData</tt> to postpone or avoid the (potentially expensive) conversions between <tt>QTableWidget-Item</tt>s and <tt>QByteArray</tt>. Here's the definition of our subclass:</p>
+<div class="docText"><pre>
+class TableMimeData : public QMimeData
+{
+    Q_OBJECT
+public:
+    TableMimeData(const QTableWidget *tableWidget,
+                  const QTableWidgetSelectionRange &amp;range);
+    const QTableWidget *tableWidget() const { return myTableWidget; }
+    QTableWidgetSelectionRange range() const { return myRange; }
+    QStringList formats() const;
+protected:
+    QVariant retrieveData(const QString &amp;format,
+                          QVariant::Type preferredType) const;
+private:
+    static QString toHtml(const QString &amp;plainText);
+    static QString toCsv(const QString &amp;plainText);
+    QString text(int row, int column) const;
+    QString rangeAsPlainText() const;
+    const QTableWidget *myTableWidget;
+    QTableWidgetSelectionRange myRange;
+    QStringList myFormats;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle2495"></a><a name="iddle2496"></a><a name="iddle4546"></a><a name="iddle4551"></a><a name="iddle5222"></a><a name="iddle5855"></a><a name="iddle5856"></a><a name="iddle6678"></a><a name="iddle6680"></a><a name="iddle6681"></a>Instead of storing actual data, we store a <tt>QTableWidgetSelectionRange</tt> that spec-ifies which cells are being dragged and keep a pointer to the <tt>QTableWidget</tt>. The <tt>formats()</tt> and <tt>retrieveData()</tt> functions are reimplemented from <tt>QMimeData</tt>.</p>
+<div class="docText"><pre>
+TableMimeData::TableMimeData(const QTableWidget *tableWidget,
+                             const QTableWidgetSelectionRange &amp;range)
+{
+    myTableWidget = tableWidget;
+    myRange = range;
+    myFormats &lt;&lt; "text/csv" &lt;&lt; "text/html" &lt;&lt; "text/plain";
+}
+</pre></div><BR>
+<p class="docText">In the constructor, we initialize the private variables.</p>
+<div class="docText"><pre>
+QStringList TableMimeData::formats() const
+{
+    return myFormats;
+}
+</pre></div><br>
+<p class="docText">The <tt>formats()</tt> function returns a list of MIME types provided by the MIME data object. The precise order of the formats is usually irrelevant, but it's good practice to put the &quot;best&quot; formats first. Applications that support many formats will sometimes use the first one that matches.</P>
+<div class="docText"><pre>
+QVariant TableMimeData::retrieveData(const QString &amp;format,
+                                     QVariant::Type preferredType) const
+{
+    if (format == "text/plain") {
+        return rangeAsPlainText();
+    } else if (format == "text/csv") {
+        return toCsv(rangeAsPlainText());
+    } else if (format == "text/html") {
+        return toHtml(rangeAsPlainText());
+    } else {
+        return QMimeData::retrieveData(format, preferredType);
+    }
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1405"></a><a name="iddle1514"></a><a name="iddle1832"></a><a name="iddle2131"></a><a name="iddle2708"></a><a name="iddle2783"></a><a name="iddle4542"></a><a name="iddle4544"></a><a name="iddle4548"></a><a name="iddle4549"></a><a name="iddle4557"></a><a name="iddle4559"></a><a name="iddle4638"></a><a name="iddle5440"></a><a name="iddle6730"></a><a name="iddle6757"></a><a name="iddle7061"></a><a name="iddle7074"></a>The <tt>retrieveData()</tt> function returns the data for a given MIME type as a <tt>QVariant</tt>. The value of the <tt>format</tt> parameter is normally one of the strings returned by <tt>formats()</tt>, but we cannot assume that, since not all applications check the MIME type against <tt>formats()</tt>. The getter functions <tt>text()</tt>, <tt>html()</tt>, <tt>urls()</tt>, <tt>image-Data()</tt>, <tt>colorData()</tt>, and <tt>data()</tt> provided by <tt>QMimeData</tt> are implemented in terms of <tt>retrieveData()</tt>.</p>
+<p class="docText">The <tt>preferredType</tt> parameter gives us a hint about which type we should put in the <tt>QVariant</tt>. Here, we ignore it and trust <tt>QMimeData</tt> to convert the return value into the desired type, if necessary.</p>
+<div class="docText"><pre>
+void MyTableWidget::dropEvent(QDropEvent *event)
+{
+    const TableMimeData *tableData =
+            qobject_cast&lt;const TableMimeData *&gt;(event-&gt;mimeData());
+    if (tableData) {
+        const QTableWidget *otherTable = tableData-&gt;tableWidget();
+        QTableWidgetSelectionRange otherRange = tableData-&gt;range();
+        ...
+        event-&gt;acceptProposedAction();
+    } else if (event-&gt;mimeData()-&gt;hasFormat("text/csv")) {
+        QByteArray csvData = event-&gt;mimeData()-&gt;data("text/csv");
+        QString csvText = QString::fromUtf8(csvData);
+        ...
+        event-&gt;acceptProposedAction();
+    } else if (event-&gt;mimeData()-&gt;hasFormat("text/plain")) {
+        QString plainText = event-&gt;mimeData()-&gt;text();
+        ...
+        event-&gt;acceptProposedAction();
+    }
+    QTableWidget::mouseMoveEvent(event);
+}
+</pre></div><br>
+<p class="docText">The <tt>dropEvent()</tt> function is similar to the one we had earlier in this section, but this time we optimize it by checking first if we can safely cast the <tt>QMimeData</tt> object to a <tt>TableMimeData</tt>. If the <tt>qobject_cast&lt;T&gt;()</tt> works, this means the drag was originated by a <tt>MyTableWidget</tt> in the same application, and we can directly access the table data instead of going through <tt>QMimeData</tt>'s API. If the cast fails, we extract the data the standard way.</p>
+<p class="docText">In this example, we encoded the CSV text using the UTF-8 encoding. If we want to be certain of using the right encoding, we could use the <tt>charset</tt> parameter of the <tt>text/plain</tt> MIME type to specify an explicit encoding. Here are a few examples:</P>
+<div class="docText"><pre>
+text/plain;charset=US-ASCII
+text/plain;charset=ISO-8859-1
+text/plain;charset=Shift_JIS
+text/plain;charset=UTF-8
+</pre></div><br>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

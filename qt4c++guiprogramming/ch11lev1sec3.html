@@ -1,0 +1,91 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Generic Algorithms</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch11lev1sec3"></a>
+<h3 id="title-IDAIRJKN" class="docSection1Title">Generic Algorithms</h3>
+<p class="docText">The <tt>&lt;QtAlgorithms&gt;</tt> header declares a set of global template functions that implement basic algorithms on containers. Most of these functions operate on STL-style iterators.</p>
+<p class="docText">The STL <tt>&lt;algorithm&gt;</tt> header provides a more complete set of generic algorithms. These algorithms can be used on Qt containers as well as STL containers. If STL implementations are available on all your platforms, there is probably no reason to avoid using the STL algorithms when Qt lacks an equivalent algorithm. Here, we will introduce the most important Qt algorithms.</p>
+<p class="docText">The <tt>qFind()</tt> algorithm searches for a particular value in a container. It takes a &quot;begin&quot; and an &quot;end&quot; iterator and returns an iterator pointing to the first item that matches, or &quot;end&quot; if there is no match. In the following example, <tt>i</tt> is set to <tt>list.begin()</tt> + 1, whereas <tt>j</tt> is set to <tt>list.end()</tt>.</p>
+<div class="docText"><pre>
+QStringList list;
+list &lt;&lt; "Emma" &lt;&lt; "Karl" &lt;&lt; "James" &lt;&lt; "Mariette";
+QStringList::iterator i = qFind(list.begin(), list.end(), "Karl");
+QStringList::iterator j = qFind(list.begin(), list.end(), "Petra");
+</pre></div><br>
+<p class="docText">The <tt>qBinaryFind()</tt> algorithm performs a search just like <tt>qFind()</tt>, except that it assumes that the items are sorted in ascending order and uses fast binary searching rather than <tt>qFind()</tt>'s linear searching.</p>
+<p class="docText">The <tt>qFill()</tt> algorithm populates a container with a particular value:</p>
+<div class="docText"><pre>
+QLinkedList&lt;int&gt; list(10);
+qFill(list.begin(), list.end(), 1009);
+</pre></div><br>
+<p class="docText">Like the other iterator-based algorithms, we can also use <tt>qFill()</tt> on a portion of the container by varying the arguments. The following code snippet initializes the first five items of a vector to 1009 and the last five items to 2013:</p>
+<div class="docText"><pre>
+QVector&lt;int&gt; vect(10);
+qFill(vect.begin(), vect.begin() + 5, 1009);
+qFill(vect.end() - 5, vect.end(), 2013);
+</pre></div><br>
+<p class="docText"><a name="iddle1361"></a><a name="iddle1456"></a><a name="iddle1901"></a><a name="iddle4136"></a><a name="iddle4179"></a><a name="iddle4351"></a><a name="iddle4872"></a><a name="iddle4956"></a><a name="iddle4973"></a><a name="iddle5024"></a><a name="iddle5048"></a><a name="iddle6856"></a>The <tt>qCopy()</tt> algorithm copies values from one container to another:</p>
+<div class="docText"><pre>
+QVector&lt;int&gt; vect(list.count());
+qCopy(list.begin(), list.end(), vect.begin());
+</pre></div><BR>
+<p class="docText"><tt>qCopy()</tt> can also be used to copy values within the same container, as long as the source range and the target range don't overlap. In the next code snippet, we use it to overwrite the last two items of a list with the first two items:</p>
+<div class="docText"><pre>
+qCopy(list.begin(), list.begin() + 2, list.end() - 2);
+</pre></div><br>
+<p class="docText">The <tt>qSort()</tt> algorithm sorts the container's items into ascending order:</p>
+<div class="docText"><pre>
+qSort(list.begin(), list.end());
+</pre></div><BR>
+<p class="docText">By default, <tt>qSort()</tt> uses the <tt>&lt;</tt> operator to compare the items. To sort items in descending order, pass <tt>qGreater&lt;T&gt;()</tt> as the third argument (where <tt>T</tt> is the container's value type), as follows:</p>
+<div class="docText"><pre>
+qSort(list.begin(), list.end(), qGreater&lt;int&gt;());
+</pre></div><BR>
+<p class="docText">We can use the third parameter to define custom sort criteria. For example, here's a &quot;less than&quot; comparison function that compares <tt>QString</tt>s in a case-insensitive way:</P>
+<div class="docText"><pre>
+bool insensitiveLessThan(const QString &amp;str1, const QString &amp;str2)
+{
+    return str1.toLower() &lt; str2.toLower();
+}
+</pre></div><br>
+<p class="docText">The call to <tt>qSort()</tt> then becomes</P>
+<div class="docText"><pre>
+QStringList list;
+...
+qSort(list.begin(), list.end(), insensitiveLessThan);
+</pre></div><br>
+<p class="docText">The <tt>qStableSort()</tt> algorithm is similar to <tt>qSort()</tt>, except it guarantees that items that compare equal appear in the same order after the sort as before. This is useful if the sort criterion only takes into account parts of the value and the results are visible to the user. We used <tt>qStableSort()</tt> in <a class="docLink" href="ch04.html#ch04">Chapter 4</a> to implement sorting in the Spreadsheet application (p. 88).</p>
+<p class="docText">The <tt>qDeleteAll()</tt> algorithm calls <tt>delete</tt> on every pointer stored in a container. It only makes sense on containers whose value type is a pointer type. After the call, the items are still present <tt>clear()</tt> on the container. For example:</P>
+<div class="docText"><pre>
+qDeleteAll(list);
+list.clear();
+</pre></div><BR>
+<p class="docText">The <tt>qSwap()</tt> algorithm exchanges the value of two variables. For example:</P>
+<div class="docText"><pre>
+int x1 = line.x1();
+int x2 = line.x2();
+if (x1 &gt; x2)
+    qSwap(x1, x2);
+</pre></div><br>
+<p class="docText"><a name="iddle1002"></a><a name="iddle1161"></a><a name="iddle1178"></a><a name="iddle1199"></a><a name="iddle1410"></a><a name="iddle1656"></a><a name="iddle2933"></a><a name="iddle3034"></a><a name="iddle3083"></a><a name="iddle3596"></a><a name="iddle3598"></a><a name="iddle3705"></a><a name="iddle3938"></a><a name="iddle4107"></a><a name="iddle4517"></a><a name="iddle4561"></a><a name="iddle4976"></a><a name="iddle4978"></a><a name="iddle4981"></a><a name="iddle4992"></a><a name="iddle5001"></a><a name="iddle5002"></a><a name="iddle5013"></a><a name="iddle5157"></a><a name="iddle6485"></a><a name="iddle6567"></a><a name="iddle6592"></a><a name="iddle6595"></a><a name="iddle7007"></a>Finally, the <tt>&lt;QtGlobal&gt;</tt> header, which is included by every other Qt header, provides several useful definitions, including the <tt>qAbs()</tt> function, that returns the absolute value of its argument, and the <tt>qMin()</tt> and <tt>qMax()</tt> functions, that return the minimum or maximum of two values.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

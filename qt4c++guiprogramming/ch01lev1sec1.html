@@ -1,0 +1,90 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Hello Qt</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch01lev1sec1"></a>
+<h3 id="title-IDA22GHP" class="docSection1Title">Hello Qt</h3>
+<p class="docText">Let's start with a very simple Qt program. We will first study it line by line, then we will see how to compile and run it.</p>
+<div class="docText"><pre>
+1 #include &lt;QApplication&gt;
+2 #include &lt;QLabel&gt;
+3 int main(int argc, char *argv[])
+4 {
+5     QApplication app(argc, argv);
+6     QLabel *label = new QLabel("Hello Qt!");
+7     label-&gt;show();
+8     return app.exec();
+9 }
+</pre></div><br>
+<p class="docText">Lines 1 and 2 include the definitions of the <tt>QApplication</tt> and <tt>QLabel</tt> classes. For every Qt class, there is a header file with the same name (and capitalization) as the class that contains the class's definition.</p>
+<p class="docText">Line 5 creates a <tt>QApplication</tt> object to manage application-wide resources. The <tt>QApplication</tt> constructor requires <tt>argc</tt> and <tt>argv</tt> because Qt supports a few command-line arguments of its own.</p>
+<p class="docText">Line 6 creates a <tt>QLabel</tt> widget that displays &quot;Hello Qt!&quot;. In Qt and Unix terminology, a <span class="docEmphasis">widget</span> is a visual element in a user interface. The term stems from <a name="iddle1307"></a><a name="iddle1562"></a><a name="iddle1665"></a><a name="iddle1895"></a><a name="iddle2160"></a><a name="iddle2161"></a><a name="iddle2204"></a><a name="iddle2212"></a><a name="iddle2446"></a><a name="iddle2674"></a><a name="iddle2883"></a><a name="iddle3261"></a><a name="iddle3290"></a><a name="iddle3308"></a><a name="iddle3689"></a><a name="iddle3835"></a><a name="iddle3836"></a><a name="iddle3872"></a><a name="iddle4506"></a><a name="iddle5909"></a><a name="iddle6884"></a><a name="iddle7126"></a><a name="iddle7154"></a><a name="iddle7225"></a><a name="iddle7282"></a>&quot;window gadget&quot; and is the equivalent of both &quot;control&quot; and &quot;container&quot; in Windows terminology. Buttons, menus, scroll bars, and frames are all examples of widgets. Widgets can contain other widgets; for example, an application window is usually a widget that contains a <tt>QMenuBar</tt>, a few <tt>QToolBar</tt>s, a <tt>QStatusBar</tt>, and some other widgets. Most applications use a <tt>QMainWindow</tt> or a <tt>QDialog</tt> as the application window, but Qt is so flexible that any widget can be a window. In this example, the <tt>QLabel</tt> widget is the application window.</p>
+<p class="docText">Line 7 makes the label visible. Widgets are always created hidden, so that we can customize them before showing them, thereby avoiding flicker.</p>
+<p class="docText">Line 8 passes control of the application on to Qt. At this point, the program enters the event loop. This is a kind of stand-by mode where the program waits for user actions such as mouse clicks and key presses. User actions generate <span class="docEmphasis">events</span> (also called &quot;messages&quot;) to which the program can respond, usually by executing one or more functions. For example, when the user clicks a widget, a &quot;mouse press&quot; and a &quot;mouse release&quot; event are generated. In this respect, GUI applications differ drastically from conventional batch programs, which typically process input, produce results, and terminate without human intervention.</p>
+<p class="docText">For simplicity, we don't bother calling <tt>delete</tt> on the <tt>QLabel</tt> object at the end of the <tt>main()</tt> function. This memory leak is harmless in such a small program, since the memory will be reclaimed by the operating system when the program terminates.</p>
+<a name="ch01fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 1.1. Hello on Linux</h5>
+
+<p class="docText">
+<img border="0" alt="" width="102" height="53" SRC="images/hello.jpg"></P>
+
+</center></P><BR>
+<p class="docText">It is now possible to try the program on your own machine. First, you will need to install Qt 4.1.1 (or a later Qt 4 release), a process that is explained in <a class="docLink" href="app01.html#app01">Appendix A</a>. From now on, we will assume that you have a correctly installed copy of Qt 4 and that Qt's <tt>bin</tt> directory is in your <tt>PATH</tt> environment variable. (On Windows, this is done automatically by the Qt installation program.) You will also need the program's source code in a file called <tt>hello.cpp</tt> in a directory called <tt>hello</tt>. You can type in <tt>hello.cpp</tt> yourself, or copy it from the CD provided with this book, where it is available as <tt>/examples/chap01/hello/hello.cpp</tt>.</P>
+<p class="docText">From a command prompt, change the directory to <tt>hello</tt>, then type</P>
+<div class="docText"><pre>
+qmake -project
+</pre></div><br>
+<p class="docText">to create a platform-independent project file (<tt>hello.pro</tt>), then type</p>
+<div class="docText"><pre>
+qmake hello.pro
+</pre></div><br>
+<p class="docText">to create a platform-specific makefile from the project file.</p>
+<p class="docText"><a name="iddle1325"></a><a name="iddle1522"></a><a name="iddle2698"></a><a name="iddle3323"></a><a name="iddle3328"></a><a name="iddle3339"></a><a name="iddle3510"></a><a name="iddle3908"></a><a name="iddle4772"></a><a name="iddle7062"></a><a name="iddle7127"></a><a name="iddle7158"></a><a name="iddle7163"></a><a name="iddle7286"></a><a name="iddle7345"></a>Type <tt>make</tt> to build the program.<sup class="docFootnote"><a class="docLink" href="#ch01fn1">[*]</a></sup> Run it by typing <tt>hello</tt> on Windows, <tt>./hello</tt> on Unix, and <tt>open hello.app</tt> on Mac OS X. To terminate the program, click the close button in the window's title bar.</p><blockquote><p class="docFootnote"><sup><a name="ch01fn1">[*]</a></sup> If you get a compiler error on the <tt>&lt;QApplication&gt;</tt> include, it probably means that you are using an older version of Qt. Make sure that you are using Qt 4.1.1 or a later Qt 4 release.</p></blockquote>
+<p class="docText">If you are using Windows and have installed the Qt Open Source Edition and the MinGW compiler, you will have a shortcut to a DOS Prompt window that has all the environment variables correctly set up for Qt. If you start this window, you can compile Qt applications within it using <tt>qmake</tt> and <tt>make</tt> as described above. The executables produced are put in the application's <tt>debug</tt> or <tt>release</tt> folder, for example, <tt>C:\qt-book\hello\release\hello.exe</tt>.</p>
+<p class="docText">If you are using Microsoft Visual C++, you will need to run <tt>nmake</tt> instead of <tt>make</tt>. Alternatively, you can create a Visual Studio project file from <tt>hello.pro</tt> by typing</p>
+<div class="docText"><pre>
+qmake -tp vc hello.pro
+</pre></div><br>
+<p class="docText">and then build the program in Visual Studio. If you are using Xcode on Mac OS X, you can generate an Xcode project using the command</p>
+<div class="docText"><pre>
+qmake -spec macx-xcode
+</pre></div><br>
+<a name="ch01fig02"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 1.2. A label with basic HTML formatting</h5>
+
+<p class="docText">
+<img border="0" alt="" width="134" height="58" SRC="images/hello2.jpg"></p>
+
+</center></P><BR>
+<p class="docText">Before we go on to the next example, let's have some fun: Replace the line</p>
+<div class="docText"><pre>
+QLabel *label = new QLabel("Hello Qt!");
+</pre></div><br>
+<p class="docText">with</p>
+<div class="docText"><pre>
+QLabel *label = new QLabel("&lt;h2&gt;&lt;i&gt;Hello&lt;/i&gt; "
+                           "&lt;font color=red&gt;Qt!&lt;/font&gt;&lt;/h2&gt;");
+</pre></div><br>
+<p class="docText">and rebuild the application. As the example illustrates, it's easy to brighten up a Qt application's user interface using some simple HTML-style formatting.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

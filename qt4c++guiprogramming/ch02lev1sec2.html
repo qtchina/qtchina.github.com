@@ -1,0 +1,96 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Signals and Slots in Depth</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch02lev1sec2"></a>
+<h3 id="title-IDA3YPIW" class="docSection1Title">Signals and Slots in Depth</h3>
+<p class="docText">The signals and slots mechanism is fundamental to Qt programming. It enables the application programmer to bind objects together without the objects knowing anything about each other. We have already connected some signals and slots together, declared our own signals and slots, implemented our own slots, and emitted our own signals. Let's take a moment to look at the mechanism more closely.</p>
+<p class="docText">Slots are almost identical to ordinary C++ member functions. They can be virtual; they can be overloaded; they can be public; protected, or private, they can be directly invoked like any other C++ member functions; and their parameters can be of any types. The difference is that a slot can also be connected to a signal, in which case it is automatically called each time the signal is emitted.</p>
+<p class="docText">The <tt>connect()</tt> statement looks like this:</p>
+<div class="docText"><pre>
+connect(sender, SIGNAL(signal), receiver, SLOT(slot));
+</pre></div><br>
+<p class="docText">where <tt>sender</tt> and <tt>receiver</tt> are pointers to <tt>QObject</tt>s and where <tt>signal</tt> and <tt>slot</tt> are function signatures without parameter names. The <tt>SIGNAL()</tt> and <tt>SLOT()</tt> macros essentially convert their argument to a string.</p>
+<p class="docText">In the examples we have seen so far, we have always connected different signals to different slots. There are other possibilities to consider.</p>
+<ul><li><p class="docList"><span class="docEmphStrong">One signal can be connected to many slots:</span></p><div class="docText"><pre>
+connect(slider, SIGNAL(valueChanged(int)),
+        spinBox, SLOT(setValue(int)));
+connect(slider, SIGNAL(valueChanged(int)),
+        this, SLOT(updateStatusBarIndicator(int)));
+</pre></div><p class="docList">When the signal is emitted, the slots are called one after the other, in an unspecified order.</p></li><LI><p class="docList"><span class="docEmphStrong">Many signals can be connected to the same slot:</span></P><div class="docText"><pre>
+connect(lcd, SIGNAL(overflow()),
+        this, SLOT(handleMathError()));
+connect(calculator, SIGNAL(divisionByZero()),
+        this, SLOT(handleMathError()));
+</pre></div><p class="docList">When either signal is emitted, the slot is called.</P></LI><LI><p class="docList"><a name="iddle1860"></a><a name="iddle1952"></a><a name="iddle2127"></a><a name="iddle3929"></a><a name="iddle4590"></a><a name="iddle4596"></a><a name="iddle4606"></a><a name="iddle6294"></a><a name="iddle6298"></a><a name="iddle6306"></a><a name="iddle6313"></a><a name="iddle6360"></a><a name="iddle6364"></a><a name="iddle6371"></a><a name="iddle6378"></a><a name="iddle6635"></a><span class="docEmphStrong">A signal can be connected to another signal:</span></p><div class="docText"><pre>
+connect(lineEdit, SIGNAL(textChanged(const QString &amp;)),
+        this, SIGNAL(updateRecord(const QString &amp;)));
+</pre></div><p class="docList">When the first signal is emitted, the second signal is emitted as well. Apart from that, signalsignal connections are indistinguishable from signalslot connections.</p></li><li><p class="docList"><span class="docEmphStrong">Connections can be removed:</span></p><div class="docText"><pre>
+disconnect(lcd, SIGNAL(overflow()),
+           this, SLOT(handleMathError()));
+</pre></div><p class="docList">This is rarely needed, because Qt automatically removes all connections involving an object when that object is deleted.</p></li></ul>
+<p class="docText">To successfully connect a signal to a slot (or to another signal), they must have the same parameter types in the same order:</p>
+<div class="docText"><pre>
+connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),
+        this, SLOT(processReply(int, const QString &amp;)));
+</pre></div><br>
+<p class="docText">Exceptionally, if a signal has more parameters than the slot it is connected to, the additional parameters are simply ignored:</p>
+<div class="docText"><pre>
+connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),
+         this, SLOT(checkErrorCode(int)));
+</pre></div><br>
+<p class="docText">If the parameter types are incompatible, or if the signal or the slot doesn't exist, Qt will issue a warning at run-time if the application is built in debug mode. Similarly, Qt will give a warning if parameter names are included in the signal or slot signatures.</P>
+<p class="docText">So far, we have only used signals and slots with widgets. But the mechanism itself is implemented in <tt>QObject</tt> and isn't limited to GUI programming. The mechanism can be used by any <tt>QObject</tt> subclass:</p>
+<div class="docText"><pre>
+class Employee : public QObject
+{
+    Q_OBJECT
+public:
+    Employee() { mySalary = 0; }
+    int salary() const { return mySalary; }
+public slots:
+    void setSalary(int newSalary);
+signals:
+    void salaryChanged(int newSalary);
+private:
+    int mySalary;
+};
+void Employee::setSalary(int newSalary)
+{
+    if (newSalary != mySalary) {
+        mySalary = newSalary;
+        emit salaryChanged(mySalary);
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1817"></a><a name="iddle1953"></a><a name="iddle2876"></a><a name="iddle3309"></a><a name="iddle3311"></a><a name="iddle3362"></a><a name="iddle3547"></a><a name="iddle3550"></a><a name="iddle3886"></a><a name="iddle3925"></a><a name="iddle3926"></a><a name="iddle4508"></a><a name="iddle4591"></a><a name="iddle4607"></a><a name="iddle4617"></a><a name="iddle4620"></a><a name="iddle4629"></a><a name="iddle4811"></a><a name="iddle5161"></a><a name="iddle5166"></a><a name="iddle6303"></a><a name="iddle6368"></a><a name="iddle6887"></a><a name="iddle7236"></a>Notice how the <tt>setSalary()</tt> slot is implemented. We only emit the <tt>salary-Changed()</tt> signal if <tt>newSalary != mySalary</tt>. This ensures that cyclic connections don't lead to infinite loops.</P>
+<a name="ch02sb01"></a><P><table cellspacing="0" width="90%" border="1" cellpadding="5"><tr><td>
+
+<h2 class="docSidebarTitle">Qt's Meta-Object System</h2>
+<p class="docText">One of Qt's major achievements has been the extension of C++ with a mechanism for creating independent software components that can be bound together without any component knowing anything about the other components it is connected to.</P>
+<p class="docText">The mechanism is called the <span class="docEmphasis">meta-object system</span>, and it provides two key services: signalsslots and introspection. The introspection functionality is necessary for implementing signals and slots, and allows application programmers to obtain &quot;meta-information&quot; about <tt>QObject</tt> subclasses at run-time, including the list of signals and slots supported by the object and its class name. The mechanism also supports properties (for <span class="docEmphasis">Qt Designer</span>) and text translation (for internationalization), and it lays the foundation for Qt Script for Applications (QSA).</p>
+<p class="docText">Standard C++ doesn't provide support for the dynamic meta-information needed by Qt's meta-object system. Qt solves this problem by providing a separate tool, <tt>moc</tt>, that parses <tt>Q_OBJECT</tt> class definitions and makes the information available through C++ functions. Since <tt>moc</tt> implements all its functionality using pure C++, Qt's meta-object system works with any C++ compiler.</p>
+<p class="docText">The mechanism works as follows:</p>
+<ul><LI><p class="docList">The <tt>Q_OBJECT</tt> macro declares some introspection functions that must be implemented in every <tt>QObject</tt> subclass: <tt>metaObject()</tt>, <tt>TR()</tt>, <tt>qt_metacall()</tt>, and a few more.</P></li><li><p class="docList">Qt's <tt>moc</tt> tool generates implementations for the functions declared by <tt>Q_OBJECT</tt> and for all the signals.</p></li><li><p class="docList"><tt>QObject</tt> member functions such as <tt>connect()</tt> and <tt>disconnect()</tt> use the introspection functions to do their work.</p></li></ul>
+<p class="docText">All of this is handled automatically by <tt>qmake</tt>, <tt>moc</tt>, and <tt>QObject</tt>, so you rarely need to think about it. But if you are curious, you can check out the <tt>QMetaObject</tt> class documentation and have a look at the C++ source files generated by <tt>moc</tt> to see how the implementation works.</p>
+</td></tr></table></p><br>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

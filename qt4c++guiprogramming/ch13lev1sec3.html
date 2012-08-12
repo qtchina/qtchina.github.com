@@ -1,0 +1,263 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Implementing MasterDetail Forms</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch13lev1sec3"></a>
+<h3 id="title-IDAOVWKN" class="docSection1Title">Implementing MasterDetail Forms</h3>
+<p class="docText">We will now review the main form which takes a masterdetail approach. The master view is a list of CDs. The detail view is a list of tracks for the current CD. This form is the main window of the CD Collection application as shown in <a class="docLink" href="ch13lev1sec2.html#ch13fig01">Figure 13.1</a> (p. 300).</p>
+<div class="docText"><pre>
+class MainForm : public QWidget
+{
+    Q_OBJECT
+public:
+    MainForm();
+private slots:
+    void addCd();
+    void deleteCd();
+    void addTrack();
+    void deleteTrack();
+    void editArtists();
+    void currentCdChanged(const QModelIndex &amp;index);
+    void beforeInsertCd(QSqlRecord &amp;record);
+    void beforeInsertTrack(QSqlRecord &amp;record);
+    void refreshTrackViewHeader();
+private:
+    enum {
+        Cd_Id = 0,
+        Cd_Title = 1,
+        Cd_ArtistId = 2,
+        Cd_Year = 3
+    };
+    enum {
+        Track_Id = 0,
+        Track_Title = 1,
+        Track_Duration = 2,
+        Track_CdId = 3
+    };
+    QSqlRelationalTableModel *cdModel;
+    QSqlTableModel *trackModel;
+    QTableView *cdTableView;
+    QTableView *trackTableView;
+    QPushButton *addCdButton;
+    QPushButton *deleteCdButton;
+    QPushButton *addTrackButton;
+    QPushButton *deleteTrackButton;
+    QPushButton *editArtistsButton;
+    QPushButton *quitButton;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1538"></a><a name="iddle1894"></a><a name="iddle2374"></a><a name="iddle2490"></a><a name="iddle3008"></a><a name="iddle3195"></a><a name="iddle4928"></a><a name="iddle4929"></a><a name="iddle4932"></a><a name="iddle5176"></a><a name="iddle6165"></a><a name="iddle6686"></a>We use a <tt>QSqlRelationalTableModel</tt> for the <tt>cd</tt> table rather than a plain <tt>QSqlTableModel</tt> because we need to handle foreign keys. We will now review each function in turn, beginning with the constructor, which we will look at in sections because it is quite long.</p>
+<div class="docText"><pre>
+MainForm::MainForm()
+{
+    cdModel = new QSqlRelationalTableModel(this);
+    cdModel-&gt;setTable("cd");
+    cdModel-&gt;setRelation(Cd_ArtistId,
+                         QSqlRelation("artist", "id", "name"));
+    cdModel-&gt;setSort(Cd_Title, Qt::AscendingOrder);
+    cdModel-&gt;setHeaderData(Cd_Title, Qt::Horizontal, tr("Title"));
+    cdModel-&gt;setHeaderData(Cd_ArtistId, Qt::Horizontal, tr("Artist"));
+    cdModel-&gt;setHeaderData(Cd_Year, Qt::Horizontal, tr("Year"));
+    cdModel-&gt;select();
+</pre></div><br>
+<p class="docText">The constructor begins by setting up the <tt>QSqlRelationalTableModel</tt> that handles the <tt>cd</tt> table. The <tt>setRelation()</tt> call tells the model that its <tt>artistid</tt> field (whose field index is held by <tt>Cd_ArtistId</tt>) holds the <tt>id</tt> foreign key from the <tt>artist</tt> table, and that it should display the corresponding <tt>name</tt> field's contents instead of IDs. If the user chooses to edit this field (for example, by pressing F2), the model will automatically present a combobox with the names of all the artists, and if the user chooses a different artist, will update the <tt>cd</tt> table.</p>
+<div class="docText"><pre>
+cdTableView = new QTableView;
+cdTableView-&gt;setModel(cdModel);
+cdTableView-&gt;setItemDelegate(new QSqlRelationalDelegate(this));
+cdTableView-&gt;setSelectionMode(QAbstractItemView::SingleSelection);
+cdTableView-&gt;setSelectionBehavior(QAbstractItemView::SelectRows);
+cdTableView-&gt;setColumnHidden(Cd_Id, true);
+cdTableView-&gt;resizeColumnsToContents();
+</pre></div><br>
+<p class="docText">Setting up the view for the <tt>cd</tt> table is again similar to what we have already seen. The only significant difference is that instead of using the view's default delegate we use <tt>QSqlRelationalDelegate</tt>. It is this delegate that does the foreign key handling.</p>
+<div class="docText"><pre>
+trackModel = new QSqlTableModel(this);
+trackModel-&gt;setTable("track");
+trackModel-&gt;setHeaderData(Track_Title, Qt::Horizontal, tr("Title"));
+trackModel-&gt;setHeaderData(Track_Duration, Qt::Horizontal,
+                          tr("Duration"));
+trackTableView = new QTableView;
+trackTableView-&gt;setModel(trackModel);
+trackTableView-&gt;setItemDelegate(
+        new TrackDelegate(Track_Duration, this));
+trackTableView-&gt;setSelectionMode(
+        QAbstractItemView::SingleSelection);
+trackTableView-&gt;setSelectionBehavior(QAbstractItemView::SelectRows);
+</pre></div><br>
+<p class="docText"><a name="iddle1260"></a><a name="iddle1757"></a><a name="iddle1769"></a><a name="iddle1802"></a><a name="iddle1839"></a><a name="iddle3200"></a><a name="iddle3957"></a><a name="iddle3979"></a><a name="iddle4436"></a><a name="iddle4937"></a><a name="iddle4939"></a><a name="iddle5977"></a><a name="iddle6896"></a>For tracks, we are only going to show their names and durations, so a <tt>QSqlTableModel</tt> is sufficient. (The <tt>id</tt> and <tt>cdid</tt> field's are hidden in the <tt>currentCd-Changed()</tt> slot shown later.) The only notable aspect of this part of the code is that we use the <tt>trackDelegate</tt> developed in <a class="docLink" href="ch10.html#ch10">Chapter 10</a> to show track times as &quot;<span class="docEmphasis">minutes:seconds</span>&quot; and to allow them to be edited using a suitable <tt>QTimeEdit</tt>.</p>
+<p class="docText">The creation, connecting, and laying out of the views and buttons holds no surprises, so the only other part of the constructor that we will show are a few non-obvious connections.</P>
+<div class="docText"><pre>
+    ...
+    connect(cdTableView-&gt;selectionModel(),
+            SIGNAL(currentRowChanged(const QModelIndex &amp;,
+                                     const QModelIndex &amp;)),
+            this, SLOT(currentCdChanged(const QModelIndex &amp;)));
+    connect(cdModel, SIGNAL(beforeInsert(QSqlRecord &amp;)),
+            this, SLOT(beforeInsertCd(QSqlRecord &amp;)));
+    connect(trackModel, SIGNAL(beforeInsert(QSqlRecord &amp;)),
+            this, SLOT(beforeInsertTrack(QSqlRecord &amp;)));
+    connect(trackModel, SIGNAL(rowsInserted(const QModelIndex &amp;, int,
+                                            int)),
+            this, SLOT(refreshTrackViewHeader()));
+    ...
+}
+</pre></div><br>
+<p class="docText">The first connection is unusual since instead of connecting a widget, we connect to a selection model. The <tt>QItemSelectionModel</tt> class is used to keep track of selections in views. By being connected to the table view's selection model, our <tt>currentCdChanged()</tt> slot will be called whenever the user navigates from one record to another.</p>
+<div class="docText"><pre>
+void MainForm::currentCdChanged(const QModelIndex &amp;index)
+{
+    if (index.isValid()) {
+        QSqlRecord record = cdModel-&gt;record(index.row());
+        int id = record.value("id").toInt();
+        trackModel-&gt;setFilter(QString("cdid = %1").arg(id));
+    } else {
+        trackModel-&gt;setFilter("cdid = -1");
+    }
+    trackModel-&gt;select();
+    refreshTrackViewHeader();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1082"></a><a name="iddle1261"></a><a name="iddle1263"></a><a name="iddle1905"></a><a name="iddle3196"></a><a name="iddle3198"></a><a name="iddle3201"></a><a name="iddle4933"></a><a name="iddle4940"></a><a name="iddle6166"></a>This slot is called whenever the current CD changes. This occurs when the user navigates to another CD (by clicking or by using the Up and Down keys). If the CD is invalid (for example, if there are no CDs or a new one is being inserted, or the current one has just been deleted), we set the <tt>TRack</tt> table's <tt>cdid</tt> to -1 (an invalid ID that we know will match no records).</p>
+<p class="docText">Then, having set the filter, we select the matching track records. The <tt>refresh-TrackViewHeader()</tt> function will be explained in a moment.</P>
+<div class="docText"><pre>
+void MainForm::addCd()
+{
+    int row = 0;
+    if (cdTableView-&gt;currentIndex().isValid())
+        row = cdTableView-&gt;currentIndex().row();
+     cdModel-&gt;insertRow(row);
+     cdModel-&gt;setData(cdModel-&gt;index(row, Cd_Year),
+                      QDate::currentDate().year());
+    QModelIndex index = cdModel-&gt;index(row, Cd_Title);
+    cdTableView-&gt;setCurrentIndex(index);
+    cdTableView-&gt;edit(index);
+}
+</pre></div><BR>
+<p class="docText">When the user clicks the Add CD button, a new blank row is inserted in the <tt>cdTableView</tt> and we enter edit mode. We also set a default value for the <tt>year</tt> field. At this point, the user can edit the record, filling in the blank fields and selecting an artist from the artist combobox that is automatically provided by the <tt>QSqlRelationalTableModel</tt> because of the <tt>setRelation()</tt> call, and edit the year if the default was not appropriate. If the user confirms the insertion by pressing Enter, the record is inserted. The user can cancel by pressing Esc.</p>
+<div class="docText"><pre>
+void MainForm::beforeInsertCd(QSqlRecord &amp;record)
+{
+    record.setValue("id", generateId("cd"));
+}
+</pre></div><BR>
+<p class="docText">This slot is called when the <tt>cdModel</tt> emits its <tt>beforeInsert()</tt> signal. We use it to populate the <tt>id</tt> field just as we did for inserting new artists, and the same caveat applies: It should be done within the scope of a transaction, and ideally the database-specific means of creating IDs (for example, auto-generated IDs) should be used instead.</p>
+<div class="docText"><pre>
+void MainForm::deleteCd()
+{
+    QModelIndex index = cdTableView-&gt;currentIndex();
+    if (!index.isValid())
+        return;
+    QSqlDatabase db = QSqlDatabase::database();
+    db.transaction();
+    QSqlRecord record = cdModel-&gt;record(index.row());
+    int id = record.value(Cd_Id).toInt();
+    int tracks = 0;
+    QSqlQuery query;
+    query.exec(QString("SELECT COUNT(*) FROM track WHERE cdid = %1")
+               .arg(id));
+    if (query.next())
+        tracks = query.value(0).toInt();
+    if (tracks &gt; 0) {
+        int r = QMessageBox::question(this, tr("Delete CD"),
+                        tr("Delete \"%1\" and all its tracks?")
+                        .arg(record.value(Cd_ArtistId).toString()),
+                        QMessageBox::Yes | QMessageBox::Default,
+                        QMessageBox::No | QMessageBox::Escape);
+        if (r == QMessageBox::No) {
+            db.rollback();
+            return;
+        }
+        query.exec(QString("DELETE FROM track WHERE cdid = %1")
+                   .arg(id));
+    }
+    cdModel-&gt;removeRow(index.row());
+    cdModel-&gt;submitAll();
+    db.commit();
+    currentCdChanged(QModelIndex());
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1100"></a><a name="iddle3197"></a>If the user clicks the Delete CD button, this slot is called. If there is a current CD we find out how many tracks it has. If there are no tracks we simply delete the CD's record. If there is at least one track we ask the user to confirm the deletion, and if they click Yes, we delete all the track records, and then the CD's record. All this is done within the scope of a transaction, so the cascade deletion will either fail as a whole or succeed as a wholeassuming that the underlying database supports transactions.</P>
+<p class="docText">Handling the track data is very similar to handling CD data. Updates can be performed simply by the user editing cells. In the case of track durations, our <tt>TRackDelegate</tt> ensures that times are shown in a nice format and are easily edited using a <tt>QTimeEdit</tt>.</P>
+<div class="docText"><pre>
+void MainForm::addTrack()
+{
+    if (!cdTableView-&gt;currentIndex().isValid())
+        return;
+    int row = 0;
+    if (trackTableView-&gt;currentIndex().isValid())
+        row = trackTableView-&gt;currentIndex().row();
+    trackModel-&gt;insertRow(row);
+    QModelIndex index = trackModel-&gt;index(row, Track_Title);
+    trackTableView-&gt;setCurrentIndex(index);
+    trackTableView-&gt;edit(index);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1264"></a><a name="iddle1908"></a><a name="iddle2062"></a><a name="iddle2094"></a><a name="iddle3199"></a><a name="iddle3202"></a><a name="iddle3203"></a><a name="iddle3204"></a><a name="iddle4943"></a><a name="iddle5731"></a><a name="iddle5745"></a>This works in the same way as <tt>addCd()</tt>, with a new blank row being inserted into the view.</p>
+<div class="docText"><pre>
+void MainForm::beforeInsertTrack(QSqlRecord &amp;record)
+{
+    QSqlRecord cdRecord = cdModel-&gt;record(cdTableView-&gt;currentIndex()
+                                          .row());
+    record.setValue("id", generateId("track"));
+    record.setValue("cdid", cdRecord.value(Cd_Id).toInt());
+}
+</pre></div><br>
+<p class="docText">If the user confirms the insertion initiated by <tt>addTrack()</tt>, this function is called to populate the <tt>id</tt> and <tt>cdid</tt> fields. The caveats mentioned earlier still apply of course.</P>
+<div class="docText"><pre>
+void MainForm::deleteTrack()
+{
+    trackModel-&gt;removeRow(trackTableView-&gt;currentIndex().row());
+    if (trackModel-&gt;rowCount() == 0)
+        trackTableView-&gt;horizontalHeader()-&gt;setVisible(false);
+}
+</pre></div><br>
+<p class="docText">If the user clicks the Delete Track button, we delete the track without formality. It would be easy to use a Yes/No message box if we preferred deletions to be confirmed.</p>
+<div class="docText"><pre>
+void MainForm::refreshTrackViewHeader()
+{
+    trackTableView-&gt;horizontalHeader()-&gt;setVisible(
+            trackModel-&gt;rowCount() &gt; 0);
+    trackTableView-&gt;setColumnHidden(Track_Id, true);
+    trackTableView-&gt;setColumnHidden(Track_CdId, true);
+    trackTableView-&gt;resizeColumnsToContents();
+}
+</pre></div><BR>
+<p class="docText">The <tt>refreshTrackViewHeader()</tt> slot is invoked from various places to ensure that the horizontal header of the track view is shown if and only if there are tracks to show. It also hides the <tt>id</tt> and <tt>cdid</tt> fields and resizes the visible table columns based on the current contents of the table.</P>
+<div class="docText"><pre>
+void MainForm::editArtists()
+{
+    QSqlRecord record = cdModel-&gt;record(cdTableView-&gt;currentIndex()
+                                        .row());
+    ArtistForm artistForm(record.value(Cd_ArtistId).toString(), this);
+    artistForm.exec();
+    cdModel-&gt;select();
+}
+</pre></div><br>
+<p class="docText">This slot is called if the user clicks the Edit Artists button. It provides drill-down on the current CD's artist, invoking the <tt>ArtistForm</tt> covered in the previous section and selecting the appropriate artist. If there is no current record, a safe empty record is returned by <tt>record()</tt>, and this will harmlessly not match (and therefore not select) any artist in the artists form. What actually happens is that when we call <tt>record.value(Cd_ArtistId)</tt>, because we are using a <tt>QSqlRelationalTableModel</tt> <a name="iddle3844"></a><a name="iddle5151"></a>that maps artist IDs to artist names, the value that is returned is the artist's name (which will be an empty string if the record is empty). At the end, we get the <tt>cdModel</tt> to re-select its data, which causes the <tt>cdTableView</tt> to refresh its visible cells. This is done to ensure that the artist names are shown correctly since some could have been changed by the user in the <tt>ArtistForm</tt> dialog.</p>
+<p class="docText">For projects that use the SQL classes, we must add the line</p>
+<div class="docText"><pre>
+QT         += sql
+</pre></div><br>
+<p class="docText">to the <tt>.pro</tt> files; this will ensure that the application is linked against the <span class="docEmphasis">QtSql</span> library.</P>
+<p class="docText">This chapter has shown that Qt's model/view classes make viewing and editing data in SQL databases as easy as possible. In cases where foreign keys refer to tables with lots of records (say, thousands or more), it is probably best to create our own delegate and use it to present a &quot;list of values&quot; form with a search capability rather than relying on <tt>QSqlRelationalTableModel</tt>'s default comboboxes. And in situations where we want to present records using a form view, we must handle this ourselves: by using a <tt>QSqlQuery</tt> or <tt>QSqlTableModel</tt> to handle the database interaction, and mapping the contents of the user interface widgets we want to use for presenting and editing the data to the underlying database in our own code.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

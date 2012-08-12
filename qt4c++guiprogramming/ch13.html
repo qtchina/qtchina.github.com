@@ -1,0 +1,44 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 13.&nbsp; Databases</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch13"></a>
+
+<h2 id="title-IDAB2W5O" class="docChapterTitle">Chapter 13. Databases</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="150" height="163" SRC="images/293fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle1845"></a><a name="iddle1846"></a><a name="iddle1858"></a><a name="iddle2064"></a><a name="iddle2065"></a><a name="iddle2720"></a><a name="iddle2812"></a><a name="iddle3321"></a><a name="iddle3372"></a><a name="iddle3461"></a><a name="iddle3562"></a><a name="iddle3612"></a><a name="iddle3788"></a><a name="iddle4931"></a><a name="iddle4935"></a><a name="iddle5397"></a><a name="iddle6487"></a><a name="iddle6488"></a><a name="iddle6664"></a><a name="iddle6699"></a><span class="docEmphasis"><a class="docLink" href="ch13lev1sec1.html#ch13lev1sec1">Connecting and Querying</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch13lev1sec2.html#ch13lev1sec2">Presenting Data in Tabular Form</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch13lev1sec3.html#ch13lev1sec3">Implementing MasterDetail Forms</a></span></p></LI></ul>
+<p class="docText">The <span class="docEmphasis">QtSql</span> module provides a platform- and database-independent interface for accessing SQL databases. This interface is supported by a set of classes that use Qt's model/view architecture to provide database integration with the user interface. This chapter assumes familiarity with Qt's model/view classes, covered in <a class="docLink" href="ch10.html#ch10">Chapter 10</a>.</p>
+<p class="docText">A database connection is represented by a <tt>QSqlDatabase</tt> object. Qt uses drivers to communicate with the various database APIs. The Qt Desktop Edition includes the following drivers:</p>
+<P><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="150"><col width="200"></colgroup><thead><tr><th class="thead" scope="col" align="left" valign="top"><p class="docText">Driver</P></th><th class="thead" scope="col" align="left" valign="top"><p class="docText">Database</P></th></tr></thead><TR><td class="docTableCell" align="left" valign="top"><p class="docText">QDB2</p></TD><TD class="docTableCell" align="left" valign="top"><p class="docText">IBM DB2 version 7.1and later</P></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">QIBASE</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">Borland InterBase</P></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QMYSQL</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">MySQL</P></td></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QOCI</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Oracle (Oracle Call Interface)</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QODBC</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">ODBC (includes Microsoft SQL Server)</p></td></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QPSQL</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">PostgreSQL versions 6.x and 7.x</P></TD></tr><TR><td class="docTableCell" align="left" valign="top"><p class="docText">QSQLITE</p></TD><TD class="docTableCell" align="left" valign="top"><p class="docText">SQLite version 3 and later</P></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">QSQLITE2</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">SQLite version 2</P></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QTDS</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">Sybase Adaptive Server</P></td></TR></table></p><br>
+<p class="docText">Due to license restrictions, not all of the drivers are provided with the Qt Open Source Edition. When configuring Qt, we can choose between including the SQL drivers inside Qt itself and building them as plugins. Qt is supplied with the SQLite database, a public domain in-process database.</p>
+<p class="docText">For users who are comfortable with SQL syntax, the <tt>QSqlQuery</tt> class provides a means of directly executing arbitrary SQL statements and handling their results. For users who prefer a higher-level database interface that avoids SQL syntax, <tt>QSqlTableModel</tt> and <tt>QSqlRelationalTableModel</tt> provide suitable abstractions. These classes represent an SQL table in the same way as Qt's other model classes (covered in <a class="docLink" href="ch10.html#ch10">Chapter 10</a>). They can be used stand-alone to <a name="iddle1084"></a><a name="iddle1593"></a><a name="iddle1731"></a><a name="iddle1848"></a><a name="iddle2349"></a><a name="iddle3186"></a><a name="iddle4898"></a><a name="iddle4899"></a><a name="iddle4905"></a><a name="iddle4906"></a><a name="iddle4907"></a><a name="iddle4908"></a><a name="iddle4913"></a><a name="iddle4916"></a><a name="iddle5410"></a><a name="iddle5967"></a><a name="iddle6065"></a><a name="iddle6107"></a><a name="iddle6145"></a><a name="iddle6209"></a>traverse and edit data in code, or they can be attached to views through which end-users can view and edit the data themselves.</p>
+<p class="docText">Qt also makes it straightforward to program the common database idioms, such as masterdetail and drill-down, as some of the examples in this chapter will demonstrate.</p>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

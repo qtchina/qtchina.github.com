@@ -1,0 +1,151 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Laying Out Widgets on a Form</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch06lev1sec1"></a>
+<h3 id="title-IDAELCSY" class="docSection1Title">Laying Out Widgets on a Form</h3>
+<p class="docText">There are three basic ways of managing the layout of child widgets on a form: absolute positioning,manual layout, and layout managers. We will look at each of these approaches in turn, using the Find File dialog shown in <a class="docLink" href="#ch06fig01">Figure 6.1</a> as our example.</p>
+
+<p class="docText"></p><a name="ch06fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.1. The Find File dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="386" height="284" SRC="images/findfile1.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle1045"></a><a name="iddle2546"></a><a name="iddle3044"></a><a name="iddle5559"></a><a name="iddle5563"></a><a name="iddle6090"></a><a name="iddle6102"></a><a name="iddle7224"></a>Absolute positioning is the crudest way of laying out widgets. It is achieved by assigning hard-coded sizes and positions to the form's child widgets and a fixed size to the form. Here's what the <tt>FindFileDialog</tt> constructor looks like using absolute positioning:</p>
+<div class="docText"><pre>
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    namedLabel-&gt;setGeometry(9, 9, 50, 25);
+    namedLineEdit-&gt;setGeometry(65, 9, 200, 25);
+    lookInLabel-&gt;setGeometry(9, 40, 50, 25);
+    lookInLineEdit-&gt;setGeometry(65, 40, 200, 25);
+    subfoldersCheckBox-&gt;setGeometry(9, 71, 256, 23);
+    tableWidget-&gt;setGeometry(9, 100, 256, 100);
+    messageLabel-&gt;setGeometry(9, 206, 256, 25);
+    findButton-&gt;setGeometry(271, 9, 85, 32);
+    stopButton-&gt;setGeometry(271, 47, 85, 32);
+    closeButton-&gt;setGeometry(271, 84, 85, 32);
+    helpButton-&gt;setGeometry(271, 199, 85, 32);
+    setWindowTitle(tr("Find Files or Folders"));
+    setFixedSize(365, 240);
+}
+</pre></div><br>
+<p class="docText">Absolute positioning has many disadvantages:</p>
+<UL><LI><p class="docList">The user cannot resize the window.</P></LI><LI><p class="docList">Some text may be truncated if the user chooses an unusually large font or if the application is translated into another language.</p></li><li><p class="docList">The widgets might have inappropriate sizes for some styles.</p></li><li><p class="docList">The positions and sizes must be calculated manually. This is tedious and error-prone, and makes maintenance painful.</p></li></ul>
+<p class="docText"><a name="iddle2268"></a><a name="iddle3272"></a><a name="iddle3893"></a><a name="iddle5543"></a><a name="iddle5545"></a><a name="iddle5568"></a><a name="iddle5818"></a><a name="iddle5820"></a><a name="iddle5824"></a><a name="iddle6133"></a>An alternative to absolute positioning is manual layout. With manual layout, the widgets are still given absolute positions, but their sizes are made proportional to the size of the window rather than being entirely hard-coded. This can be achieved by reimplementing the form's <tt>resizeEvent()</tt> function to set its child widgets' geometries:</p>
+<div class="docText"><pre>
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    setMinimumSize(265, 190);
+    resize(365, 240);
+}
+void FindFileDialog::resizeEvent(QResizeEvent * /* event */)
+{
+    int extraWidth = width() - minimumWidth();
+    int extraHeight = height() - minimumHeight();
+    namedLabel-&gt;setGeometry(9, 9, 50, 25);
+    namedLineEdit-&gt;setGeometry(65, 9, 100 + extraWidth, 25);
+    lookInLabel-&gt;setGeometry(9, 40, 50, 25);
+    lookInLineEdit-&gt;setGeometry(65, 40, 100 + extraWidth, 25);
+    subfoldersCheckBox-&gt;setGeometry(9, 71, 156 + extraWidth, 23);
+    tableWidget-&gt;setGeometry(9, 100, 156 + extraWidth,
+                             50 + extraHeight);
+    messageLabel-&gt;setGeometry(9, 156 + extraHeight, 156 + extraWidth,
+                              25);
+    findButton-&gt;setGeometry(171 + extraWidth, 9, 85, 32);
+    stopButton-&gt;setGeometry(171 + extraWidth, 47, 85, 32);
+    closeButton-&gt;setGeometry(171 + extraWidth, 84, 85, 32);
+    helpButton-&gt;setGeometry(171 + extraWidth, 149 + extraHeight, 85,
+                            32);
+}
+</pre></div><br>
+<p class="docText">In the <tt>FindFileDialog</tt> constructor, we set the form's minimum size to 265 x 190 and the initial size to 365 x 240. In the <tt>resizeEvent()</tt> handler, we give any extra space to the widgets that we want to grow. This ensures that the form scales smoothly when the user resizes it.</p>
+<a name="ch06fig02"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 6.2. Resizing a resizable dialog</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/resizing_a_resizable_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="166" SRC="images/resizing_a_resizable.jpg"></P>
+</center></P><br>
+<p class="docText"><a name="iddle1300"></a><a name="iddle1420"></a><a name="iddle2476"></a><a name="iddle2598"></a><a name="iddle2690"></a><a name="iddle3042"></a><a name="iddle3048"></a><a name="iddle3053"></a><a name="iddle3055"></a><a name="iddle3066"></a><a name="iddle3276"></a><a name="iddle3280"></a><a name="iddle3347"></a><a name="iddle3478"></a><a name="iddle4355"></a><a name="iddle4362"></a><a name="iddle4445"></a><a name="iddle4447"></a><a name="iddle4449"></a><a name="iddle5451"></a><a name="iddle6128"></a><a name="iddle6187"></a><a name="iddle6341"></a><a name="iddle6415"></a><a name="iddle6658"></a><a name="iddle7134"></a><a name="iddle7229"></a><a name="iddle7249"></a>Just like absolute positioning, manual layout requires a lot of hard-coded constants to be calculated by the programmer. Writing code like this is tiresome, especially if the design changes. And there is still the risk of text truncation. We can avoid this risk by taking account of the child widgets' size hints, but that would complicate the code even further.</p>
+<p class="docText">The most convenient solution for laying out widgets on a form is to use Qt's layout managers. The layout managers provide sensible defaults for every type of widget and take into account each widget's size hint, which in turn typically depends on the widget's font, style, and contents. Layout managers also respect minimum and maximum sizes, and automatically adjust the layout in response to font changes, content changes, and window resizing.</p>
+<p class="docText">The three most important layout managers are <tt>QHBoxLayout</tt>, <tt>QVBoxLayout</tt>, and <tt>QGridLayout</tt>. These classes inherit <tt>QLayout</tt>, which provides the basic framework for layouts. All three classes are fully supported by <span class="docEmphasis">Qt Designer</span> and can also be used directly in code.</p>
+<p class="docText">Here's the <tt>FindFileDialog</tt> code using layout managers:</P>
+<div class="docText"><pre>
+FindFileDialog::FindFileDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    QGridLayout *leftLayout = new QGridLayout;
+    leftLayout-&gt;addWidget(namedLabel, 0, 0);
+    leftLayout-&gt;addWidget(namedLineEdit, 0, 1);
+    leftLayout-&gt;addWidget(lookInLabel, 1, 0);
+    leftLayout-&gt;addWidget(lookInLineEdit, 1, 1);
+    leftLayout-&gt;addWidget(subfoldersCheckBox, 2, 0, 1, 2);
+    leftLayout-&gt;addWidget(tableWidget, 3, 0, 1, 2);
+    leftLayout-&gt;addWidget(messageLabel, 4, 0, 1, 2);
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout-&gt;addWidget(findButton);
+    rightLayout-&gt;addWidget(stopButton);
+    rightLayout-&gt;addWidget(closeButton);
+    rightLayout-&gt;addStretch();
+    rightLayout-&gt;addWidget(helpButton);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout-&gt;addLayout(leftLayout);
+    mainLayout-&gt;addLayout(rightLayout);
+    setLayout(mainLayout);
+    setWindowTitle(tr("Find Files or Folders"));
+}
+</pre></div><br>
+<p class="docText">The layout is handled by one <tt>QHBoxLayout</tt>, one <tt>QGridLayout</tt>, and one <tt>QVBoxLayout</tt>. The <tt>QGridLayout</tt> on the left and the <tt>QVBoxLayout</tt> on the right are placed side by side by the outer <tt>QHBoxLayout</tt>. The margin around the dialog and the spacing between the child widgets are set to default values based on the current widget style; they can be changed using <tt>QLayout::setMargin()</tt> and <tt>QLayout::setSpacing()</tt>.</p>
+<p class="docText"><a name="iddle1099"></a><a name="iddle1106"></a><a name="iddle3052"></a><a name="iddle3073"></a><a name="iddle4356"></a><a name="iddle5453"></a><a name="iddle6412"></a>The same dialog could be created visually in <span class="docEmphasis">Qt Designer</span> by placing the child widgets in their approximate positions; selecting those that need to be laid out together; and clicking Form|Lay Out Horizontally, Form|Lay Out Vertically, or Form|Lay Out in a Grid. We used this approach in <a class="docLink" href="ch02.html#ch02">Chapter 2</a> for creating the Spreadsheet application's Go-to-Cell and Sort dialogs.</p>
+<a name="ch06fig03"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 6.3. The Find File dialog's layout</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/dialog_s_layout_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="279" SRC="images/dialog_s_layout.jpg"></P>
+</center></p><br>
+<p class="docText">Using <tt>QHBoxLayout</tt> and <tt>QVBoxLayout</tt> is fairly straightforward, but using <tt>QGrid-Layout</tt> is a bit more involved. <tt>QGridLayout</tt> works on a two-dimensional grid of cells. The <tt>QLabel</tt> in the top-left corner of the layout is at position (0, 0), and the corresponding <tt>QLineEdit</tt> is at position (0, 1). The <tt>QCheckBox</tt> spans two columns; it occupies the cells in positions (2, 0) and (2, 1). The <tt>QtreeWidget</tt> and the <tt>QLabel</tt> beneath it also span two columns. The calls to <tt>addWidget()</tt> have the following syntax:</p>
+<div class="docText"><pre>
+layout-&gt;addWidget(widget, row, column, rowSpan, columnSpan);
+</pre></div><br>
+<p class="docText">Here, <tt>widget</tt> is the child widget to insert into the layout, (<tt>row</tt>, <tt>column</tt>) is the top-left cell occupied by the widget, <tt>rowSpan</tt> is the number of rows occupied by the widget, and <tt>columnSpan</tt> is the number of columns occupied by the widget. If omitted, the <tt>rowSpan</tt> and <tt>columnSpan</tt> parameters default to 1.</p>
+<p class="docText">The <tt>addStretch()</tt> call tells the layout manager to consume space at that point in the layout. By adding a stretch item, we have told the layout manager to put any excess space between the Close button and the Help button. In <span class="docEmphasis">Qt Designer</span>, we can achieve the same effect by inserting a spacer. Spacers appear in <span class="docEmphasis">Qt Designer</span> as blue &quot;springs&quot;.</p>
+<p class="docText"><a name="iddle2357"></a><a name="iddle2440"></a><a name="iddle2677"></a><a name="iddle2680"></a><a name="iddle2886"></a><a name="iddle3067"></a><a name="iddle3070"></a><a name="iddle3278"></a><a name="iddle3342"></a><a name="iddle3799"></a><a name="iddle4854"></a><a name="iddle4857"></a><a name="iddle4858"></a><a name="iddle4860"></a><a name="iddle4862"></a><a name="iddle4865"></a><a name="iddle5508"></a><a name="iddle5590"></a><a name="iddle6278"></a><a name="iddle6342"></a><a name="iddle6345"></a><a name="iddle7227"></a><a name="iddle7250"></a><a name="iddle7253"></a>Using layout managers provides additional benefits to those we have discussed so far. If we add a widget to a layout or remove a widget from a layout, the layout will automatically adapt to the new situation. The same applies if we call <tt>hide()</tt> or <tt>show()</tt> on a child widget. If a child widget's size hint changes, the layout will be automatically redone, taking into account the new size hint. Also, layout managers automatically set a minimum size for the form as a whole, based on the form's child widgets' minimum sizes and size hints.</p>
+<p class="docText">In the examples presented so far, we have simply put widgets into layouts and used spacer items (stretches) to consume any excess space. In some cases, this isn't sufficient to make the layout look exactly the way we want. In these situations, we can adjust the layout by changing the size policies and size hints of the widgets being laid out.</p>
+<p class="docText">A widget's size policy tells the layout system how it should stretch or shrink. Qt provides sensible default size policies for all its built-in widgets, but since no single default can account for every possible layout, it is still common for developers to change the size policies for one or two widgets on a form. A <tt>QSizePolicy</tt> has both a horizontal and a vertical component. Here are the most useful values:</p>
+<ul><li><p class="docList"><tt>Fixed</tt> means that the widget cannot grow or shrink. The widget always stays at the size of its size hint.</p></li><LI><p class="docList"><tt>Minimum</tt> means that the widget's size hint is its minimum size. The widget cannot shrink below the size hint, but it can grow to fill available space if necessary.</P></LI><LI><p class="docList"><tt>Maximum</tt> means that the widget's size hint is its maximum size. The widget can be shrunk down to its minimum size hint.</P></li><li><p class="docList"><tt>Preferred</tt> means that the widget's size hint is its preferred size, but that the widget can still shrink or grow if necessary.</p></li><li><p class="docList"><tt>Expanding</tt> means that the widget can shrink or grow and that it is especially willing to grow.</p></li></ul>
+<p class="docText"><a class="docLink" href="#ch06fig04">Figure 6.4</a> summarizes the meaning of the different size policies, using a <tt>QLabel</tt> showing the text &quot;Some Text&quot; as an example.</p>
+<a name="ch06fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 6.4. The meaning of the different size policies</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/the_different_size_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="201" SRC="images/the_different_size.jpg"></P>
+</center></p><br>
+<p class="docText"><a name="iddle2443"></a><a name="iddle2777"></a><a name="iddle2820"></a><a name="iddle2821"></a><a name="iddle3074"></a><a name="iddle3281"></a><a name="iddle3343"></a><a name="iddle3348"></a><a name="iddle3353"></a><a name="iddle4855"></a><a name="iddle4859"></a><a name="iddle4863"></a><a name="iddle4958"></a><a name="iddle4960"></a><a name="iddle4961"></a><a name="iddle4965"></a><a name="iddle5518"></a><a name="iddle5597"></a><a name="iddle6045"></a><a name="iddle6046"></a><a name="iddle6332"></a><a name="iddle6498"></a><a name="iddle6500"></a><a name="iddle6589"></a><a name="iddle7222"></a><a name="iddle7230"></a>In the figure, <tt>Preferred</tt> and <tt>Expanding</tt> are depicted the same way. So what is the difference? When a form that contains both <tt>Preferred</tt> and <tt>Expanding</tt> widgets is resized, extra space is given to the <tt>Expanding</tt> widgets, while the <tt>Preferred</tt> widgets stay at their size hint.</P>
+<p class="docText">There are two other size policies: <tt>MinimumExpanding</tt> and <tt>Ignored</tt>. The former was necessary in a few rare cases in older versions of Qt, but it isn't useful anymore; the preferred approach is to use <tt>Expanding</tt> and reimplement <tt>minimumSizeHint()</tt> appropriately. The latter is similar to <tt>Expanding</tt>, except that it ignores the widget's size hint and minimum size hint.</P>
+<p class="docText">In addition to the size policy's horizontal and vertical components,the <tt>QSizePolicy</tt> class stores a horizontal and a vertical stretch factor. These stretch factors can be used to indicate that different child widgets should grow at different rates when the form expands. For example, if we have a <tt>QtreeWidget</tt> above a <tt>QTextEdit</tt> and we want the <tt>QTextEdit</tt> to be twice as tall as the <tt>QtreeWidget</tt>, we can set the <tt>QTextEdit</tt>'s vertical stretch factor to 2 and the <tt>QtreeWidget</tt>'s vertical stretch factor to 1.</p>
+<p class="docText">Yet another way of influencing a layout is to set a minimum size, a maximum size, or a fixed size on the child widgets. The layout manager will respect these constraints when laying out the widgets. And if this isn't sufficient, we can always derive from the child widget's class and reimplement <tt>sizeHint()</tt> to obtain the size hint we need.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch06lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

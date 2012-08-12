@@ -1,0 +1,1027 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Main Language Differences</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="app02lev1sec2"></a>
+<h3 id="title-IDA35SFW" class="docSection1Title">Main Language Differences</h3>
+<p class="docText">We will now take a more structured look at the areas where C++ differs from Java and C#. Many of the language differences are due to C++'s compiled nature and commitment to performance. Thus, C++ does not check array bounds at run-time, and there is no garbage collector to reclaim unused dynamically allocated memory.</p>
+<p class="docText">For the sake of brevity, C++ constructs that are nearly identical to their Java and C# counterparts are not reviewed. In addition, some C++ topics are not covered here because they are not necessary when programming using Qt. Among these are defining template classes and functions, defining union types, and using exceptions. For the whole story, refer to a book such as <span class="docEmphasis">The C++ Programming Language</span> by Bjarne Stroustrup or <span class="docEmphasis">C++ for Java Programmers</span> by Mark Allen Weiss.</p>
+<a name="app02lev2sec1"></a>
+<h4 id="title-IDASATFW" class="docSection2Title">Primitive Data Types</h4>
+<p class="docText">The primitive data types offered by the C++ language are similar to those found in Java or C#. <a class="docLink" href="#app02fig02">Figure B.2</a> lists C++'s primitive types and their definition on the platforms supported by Qt 4.</p>
+<p class="docText">By default, the <tt>short</tt>, <tt>int</tt>, <tt>long</tt>, and <tt>long long</tt> data types are signed, meaning that they can hold negative values as well as positive values. If we only need to store nonnegative integers, we can put the <tt>unsigned</tt> keyword in front of the type. While a <tt>short</tt> can hold any value between -32,768 and +32,767, an <tt>unsigned short</tt> goes from 0 to 65,535. The right-shift operator <tt>&gt;&gt;</tt> has unsigned (&quot;fill with 0s&quot;) semantics if one of the operands is unsigned.</p>
+
+<p class="docText"></p><a name="app02fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure B.2. Primitive C++ types</h5>
+<P><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="100"><col width="200"></colgroup><thead><tr><th class="thead" scope="col" align="center" valign="top"><p class="docText"><a name="iddle1278"></a><a name="iddle1337"></a><a name="iddle1402"></a><a name="iddle2145"></a><a name="iddle2853"></a><a name="iddle3124"></a><a name="iddle3790"></a><a name="iddle3906"></a><a name="iddle5676"></a><a name="iddle6418"></a><a name="iddle7081"></a>C++ type</p></th><th class="thead" scope="col" align="center" valign="top"><p class="docText">Description</p></th></TR></thead><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>bool</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText">Boolean value</p></td></TR><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>char</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">8-bit integer</P></td></tr><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>short</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">16-bit integer</p></TD></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>int</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">32-bit integer</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>long</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">32-bit or 64-bit integer</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>long long</tt><sup class="docFootnote"><a class="docLink" href="#app02fn1">[*]</a></sup></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">64-bit integer</p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>float</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText">32-bit floating-point value (IEEE 754)</p></td></TR><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>double</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">64-bit floating-point value (IEEE 754)</P></td></tr></table></P><BR><blockquote><p class="docFootnote"><sup><a name="app02fn1">[*]</a></sup> Microsoft calls the <tt>long long</tt> type <tt>__int64</tt>. In Qt programs, <tt>qlonglong</tt> is available as an alternative that works on all Qt platforms.</p></blockquote>
+</center></p><br>
+<p class="docText">The <tt>bool</tt> type can take the values <tt>true</tt> and <tt>false</tt>. In addition, numeric types can be used where a <tt>bool</tt> is expected, with the rule that 0 means <tt>false</tt> and any non-zero value means <tt>TRue</tt>.</p>
+<p class="docText">The <tt>char</tt> type is used both for storing ASCII characters and 8-bit integers (bytes). When used as an integer, it can be signed or unsigned, depending on the platform. The types <tt>signed char</tt> and <tt>unsigned char</tt> are available as unambiguous alternatives to <tt>char</tt>. Qt provides a <tt>QChar</tt> type that stores 16-bit Unicode characters.</p>
+<p class="docText">Instances of built-in types are not initialized by default. When we create an <tt>int</tt> variable, its value could conceivably be 0, but could just as likely be -209,486,515. Fortunately, most compilers warn us when we attempt to read the contents of an uninitialized variable, and we can use tools like Rational PurifyPlus and Valgrind to detect unitialized memory accesses and other memory-related problems at run-time.</P>
+<p class="docText">In memory, the numeric types (except <tt>long</tt>) have identical sizes on the different platforms supported by Qt, but their representation varies depending on the system's byte order. On big-endian architectures (such as PowerPC and SPARC), the 32-bit value <tt>0x12345678</tt> is stored as the four bytes <tt>0x12 0x34 0x56 0x78</tt>, whereas on little-endian architectures (such as Intel x86), the byte sequence is reversed. This makes a difference in programs that copy memory areas onto disk or that send binary data over the network. Qt's <tt>QDataStream</tt> class, presented in <a class="docLink" href="ch12.html#ch12">Chapter 12</a> (Input/Output), can be used to store binary data in a platform-independent way.</p>
+
+<a name="app02lev2sec2"></a>
+
+<H4 id="title-IDAMKTFW" class="docSection2Title">Class Definitions</h4>
+<p class="docText"><a name="iddle1450"></a><a name="iddle1608"></a><a name="iddle1613"></a><a name="iddle1614"></a><a name="iddle1623"></a><a name="iddle1875"></a><a name="iddle2528"></a><a name="iddle2831"></a><a name="iddle3764"></a><a name="iddle3766"></a><a name="iddle3834"></a><a name="iddle3895"></a><a name="iddle3899"></a><a name="iddle3903"></a><a name="iddle6602"></a>Class definitions in C++ are similar to those in Java and C#, but there are several differences to be aware of. We will study these differences using a series of examples. Let's start with a class that represent an (<span class="docEmphasis">x, y</span>) coordinate pair:</p>
+<div class="docText"><pre>
+#ifndef POINT2D_H
+#define POINT2D_H
+class Point2D
+{
+public:
+    Point2D() {
+        xVal = 0;
+        yVal = 0;
+    }
+    Point2D(double x, double y) {
+        xVal = x;
+        yVal = y;
+    }
+    void setX(double x) { xVal = x; }
+    void setY(double y) { yVal = y; }
+    double x() const { return xVal; }
+    double y() const { return yVal; }
+private:
+    double xVal;
+    double yVal;
+};
+#endif
+</pre></div><br>
+<p class="docText">The above class definition would appear in a header file, typically called <tt>point2d.h</tt>. The example exhibits the following C++ idiosyncrasies:</p>
+<ul><li><p class="docList">A class definition is divided in public, protected, and private sections, and ends with a semicolon. If no section is specified, the default is private. (For compatibility with C, C++ provides a <tt>struct</tt> keyword that is identical to <tt>class</tt> except that the default is public if no section is specified.)</p></li><li><p class="docList">The class has two constructors (one that has no parameters and one that has two). If we declared no constructor, C++ would automatically supply one with no parameters and an empty body.</p></li><li><p class="docList">The getter functions <tt>x()</tt> and <tt>y()</tt> are declared to be const. This means that they don't (and can't) modify the member variables or call non-const member functions (such as <tt>setX()</tt> and <tt>setY()</tt>).</p></li></ul>
+<p class="docText">The functions above were implemented inline, as part of the class definition. An alternative is to provide only function prototypes in the header file and to implement the functions in a <tt>.cpp</tt> file. Using this approach, the header file would look like this:</P>
+<div class="docText"><pre>
+#ifndef POINT2D_H
+#define POINT2D_H
+class Point2D
+{
+public:
+    Point2D();
+    Point2D(double x, double y);
+    void setX(double x);
+    void setY(double y);
+    double x() const;
+    double y() const;
+private:
+    double xVal;
+    double yVal;
+};
+#endif
+</pre></div><br>
+<p class="docText">The functions would then be implemented in <tt>point2d.cpp</tt>:</p>
+<div class="docText"><pre>
+#include "point2d.h"
+Point2D::Point2D()
+{
+    xVal = 0.0;
+    yVal = 0.0;
+}
+Point2D::Point2D(double x, double y)
+{
+    xVal = x;
+    yVal = y;
+}
+void Point2D::setX(double x)
+{
+    xVal = x;
+}
+void Point2D::setY(double y)
+{
+    yVal = y;
+}
+double Point2D::x() const
+{
+    return xVal;
+}
+double Point2D::y() const
+{
+    return yVal;
+}
+</pre></div><br>
+<p class="docText">We start by including <tt>point2d.h</tt> because the compiler needs the class definition before it can parse member function implementations. Then we implement <a name="iddle1007"></a><a name="iddle1016"></a><a name="iddle1624"></a><a name="iddle1876"></a><a name="iddle3099"></a><a name="iddle3484"></a><a name="iddle3767"></a><a name="iddle3775"></a><a name="iddle6257"></a><a name="iddle6613"></a><a name="iddle7028"></a>the functions, prefixing the function name with the class name using the <tt>::</tt> operator.</P>
+<p class="docText">We have seen how to implement a function inline and now how to implement it in a <tt>.cpp</tt> file. The two approaches are semantically equivalent, but when we call a function that is declared inline, most compilers simply expand the function's body instead of generating an actual function call. This normally leads to faster code, but might increase the size of your application. For this reason, only very short functions should be implemented inline; longer functions should always be implemented in a <tt>.cpp</tt> file. In addition, if we forget to implement a function and try to call it, the linker will complain about an unresolved symbol.</p>
+<p class="docText">Now, let's try to use the class.</P>
+<div class="docText"><pre>
+#include "point2d.h"
+int main()
+{
+    Point2D alpha;
+    Point2D beta(0.666, 0.875);
+    alpha.setX(beta.y());
+    beta.setY(alpha.x());
+    return 0;
+}
+</pre></div><BR>
+<p class="docText">In C++, variables of any types can be declared directly without using <tt>new</tt>. The first variable is initialized using the default <tt>Point2D</tt> constructor (the constructor that has no parameters). The second variable is initialized using the second constructor. Access to an object's member is performed using the <tt>.</tt> (dot) operator.</p>
+<p class="docText">Variables declared this way behave like Java/C# primitive types such as <tt>int</tt> and <tt>double</tt>. For example, when we use the assignment operator, the contents of the variable is copiednot just a reference to an object. And if we modify a variable later on, any other variables that were assigned from it are left unchanged.</P>
+<p class="docText">As an object-oriented language, C++ supports inheritance and polymorphism. To illustrate how it works, we will review the example of a <tt>Shape</tt> abstract base class and a subclass called <tt>Circle</tt>. Let's start with the base class:</p>
+<div class="docText"><pre>
+#ifndef SHAPE_H
+#define SHAPE_H
+#include "point2d.h"
+class Shape
+{
+public:
+    Shape(Point2D center) { myCenter = center; }
+    virtual void draw() = 0;
+protected:
+    Point2D myCenter;
+};
+#endif
+</pre></div><br>
+<p class="docText"><a name="iddle1433"></a><a name="iddle2021"></a><a name="iddle2861"></a><a name="iddle3540"></a><a name="iddle3833"></a><a name="iddle3894"></a><a name="iddle3902"></a><a name="iddle3905"></a><a name="iddle7152"></a>The definition appears in a header file called <tt>shape.h</tt>. Since the class definition refers to the <tt>Point2D</tt> class, we include <tt>point2d.h</tt>.</P>
+<p class="docText">The <tt>Shape</tt> class has no base class. Unlike Java and C#, C++ doesn't provide a generic <tt>Object</tt> class from which all classes inherit. Qt provides <tt>QObject</tt> as a natural base class for all kinds of objects.</P>
+<p class="docText">The <tt>draw()</tt> function declaration has two interesting features: It contains the <tt>virtual</tt> keyword, and it ends with <tt>= 0</tt>. The <tt>virtual</tt> keyword indicates that the function may be reimplemented in subclasses. Like in C#, C++ member functions aren't reimplementable by default. The bizarre <tt>= 0</tt> syntax indicates that the function is a <span class="docEmphasis">pure virtual function</span>a function that has no default implementation and that must be implemented in subclasses. The concept of an &quot;interface&quot; in Java and C# maps to a class with only pure virtual functions in C++.</P>
+<p class="docText">Here's the definition of the <tt>Circle</tt> subclass:</p>
+<div class="docText"><pre>
+#ifndef CIRCLE_H
+#define CIRCLE_H
+#include "shape.h"
+class Circle : public Shape
+{
+public:
+    Circle(Point2D center, double radius = 0.5)
+        : Shape(center) {
+        myRadius = radius;
+    }
+    void draw() {
+        // do something here
+    }
+private:
+    double myRadius;
+};
+#endif
+</pre></div><br>
+<p class="docText">The <tt>Circle</tt> class inherits publicly from <tt>Shape</tt>, meaning that all public members of <tt>Shape</tt> remain public in <tt>Circle</tt>. C++ also supports protected and private inheritance, which restrict the access of the base class's public and protected members.</p>
+<p class="docText">The constructor takes two parameters. The second parameter is optional and takes the value 0.5 if not specified. The constructor passes the <tt>center</tt> <a name="iddle1017"></a><a name="iddle1249"></a><a name="iddle1434"></a><a name="iddle2017"></a><a name="iddle2018"></a><a name="iddle2019"></a><a name="iddle2022"></a><a name="iddle3025"></a><a name="iddle3444"></a><a name="iddle3631"></a><a name="iddle6536"></a><a name="iddle6661"></a><a name="iddle6970"></a>parameter to the base class's constructor using a special syntax between the function signature and the function body. In the body, we initialize the <tt>myRadius</tt> member variable. We could also have initialized the variable on the same line as the base class constructor initialization:</P>
+<div class="docText"><pre>
+    Circle(Point2D center, double radius = 0.5)
+        : Shape(center), myRadius(radius) { }
+</pre></div><br>
+<p class="docText">On the other hand, C++ doesn't allow us to initialize a member variable in the class definition, so the following code is wrong:</p>
+<div class="docText"><pre>
+// WON'T COMPILE
+private:
+    double myRadius = 0.5;
+};
+</pre></div><BR>
+<p class="docText">The <tt>draw()</tt> function has the same signature as the virtual <tt>draw()</tt> function declared in <tt>Shape</tt>. It is a reimplementation and it will be invoked polymorphically when <tt>draw()</tt> is called on a <tt>Circle</tt> instance through a <tt>Shape</tt> reference or pointer. C++ has no <tt>override</tt> keyword like in C#. Nor does C++ have a <tt>super</tt> or <tt>base</tt> keyword that refers to the base class. If we need to call the base implementation of a function, we can prefix the function name with the base class name and the <tt>::</tt> operator. For example:</P>
+<div class="docText"><pre>
+class LabeledCircle : public Circle
+{
+public:
+    void draw() {
+        Circle::draw();
+        drawLabel();
+    }
+    ...
+};
+</pre></div><br>
+<p class="docText">C++ supports multiple inheritance, meaning that a class can derive from several classes at the same time. The syntax is as follows:</p>
+<div class="docText"><pre>
+class DerivedClass : public BaseClass1, public BaseClass2, ...,
+                     public BaseClassN
+{
+    ...
+};
+</pre></div><br>
+<p class="docText">By default, functions and variables declared in a class are associated with instances of that class. We can also declare static member functions and static member variables, which can be used without an instance. For example:</p>
+<div class="docText"><pre>
+#ifndef TRUCK_H
+#define TRUCK_H
+class Truck
+{
+public:
+    Truck() { ++counter; }
+    ~Truck() { --counter; }
+    static int instanceCount() { return counter; }
+private:
+    static int counter;
+};
+#endif
+</pre></div><BR>
+<p class="docText"><a name="iddle1924"></a><a name="iddle2411"></a><a name="iddle3100"></a><a name="iddle3768"></a><a name="iddle5742"></a><a name="iddle6531"></a><a name="iddle7029"></a>The static member variable <tt>counter</tt> keeps track of how many <tt>truck</tt> instances exist at any time. The <tt>truck</tt> constructor increments it. The destructor, recognizable by the <tt>~</tt> prefix, decrements it. In C++, the destructor is automatically invoked when a statically allocated variable goes out of scope or when a variable allocated using <tt>new</tt> is deleted. This is similar to the <tt>finalize()</tt> method in Java, except that we can rely on it being called at a specific point in time.</P>
+<p class="docText">A static member variable has a single existence in a class: Such variables are &quot;class variables&quot; rather than &quot;instance variables&quot;. Each static member variable must be defined in a <tt>.cpp</tt> file (but without repeating the <tt>static</tt> keyword). For example:</p>
+<div class="docText"><pre>
+#include "truck.h"
+int Truck::counter = 0;
+</pre></div><BR>
+<p class="docText">Failing to do this would result in an &quot;unresolved symbol&quot; error at link time. The <tt>instanceCount()</tt> static function can be accessed from outside the class, prefixed by the class name. For example:</p>
+<div class="docText"><pre>
+#include &lt;iostream&gt;
+#include "truck.h"
+using namespace std;
+int main()
+{
+    Truck truck1;
+    Truck truck2;
+    cout &lt;&lt; Truck::instanceCount() &lt;&lt; " equals 2" &lt;&lt; endl;
+    return 0;
+}
+</pre></div><br>
+
+<a name="app02lev2sec3"></a>
+<h4 id="title-IDAO5TFW" class="docSection2Title">Pointers</h4>
+<p class="docText">A <span class="docEmphasis">pointer</span> in C++ is a variable that stores the memory address of an object (instead of storing the object directly). Java and C# have a similar concept, that of a &quot;reference&quot;, but the syntax is different. We will start by studying a contrived example that illustrates pointers in action:</p>
+<div class="docText"><pre>
+ 1 #include "point2d.h"
+ 2 int main()
+ 3 {
+ 4 Point2D alpha;
+ 5 Point2D beta;
+ 6 Point2D *ptr;
+ 7 ptr = &amp;alpha;
+ 8 ptr-&gt;setX(1.0);
+ 9 ptr-&gt;setY(2.5);
+10 ptr = &amp;beta;
+11 ptr-&gt;setX(4.0);
+12 ptr-&gt;setY(4.5);
+13 ptr = 0;
+14 return 0;
+15 }
+</pre></div><br>
+<p class="docText"><a name="iddle1004"></a><a name="iddle1005"></a><a name="iddle1008"></a><a name="iddle1313"></a><a name="iddle2535"></a><a name="iddle3137"></a><a name="iddle3288"></a><a name="iddle3293"></a><a name="iddle3485"></a><a name="iddle3534"></a><a name="iddle5963"></a><a name="iddle6496"></a>The example relies on the <tt>Point2D</tt> class from the previous subsection. Lines 4 and 5 define two objects of type <tt>Point2D</tt>. These objects are initialized to (0, 0) by the default <tt>Point2D</tt> constructor.</p>
+<p class="docText">Line 6 defines a pointer to a <tt>Point2D</tt> object. The syntax for pointers uses an asterisk in front of the variable name. Since we did not initialize the pointer, it contains a random memory address. This is solved on line 7 by assigning <tt>alpha</tt>'s address to the pointer. The unary <tt>&amp;</tt> operator returns the memory address of an object. An address is typically a 32-bit or a 64-bit integer value specifying the offset of an object in memory.</p>
+<p class="docText">On lines 8 and 9, we access the <tt>alpha</tt> object through the <tt>ptr</tt> pointer. Because <tt>ptr</tt> is a pointer and not an object, we must use the <tt>-&gt;</tt> (arrow) operator instead of the <tt>.</tt> (dot) operator.</p>
+<p class="docText">On line 10, we assign <tt>beta</tt>'s address to the pointer. From then on, any operation we perform through the pointer will affect the <tt>beta</tt> object.</p>
+<p class="docText">Line 13 sets the pointer to be a null pointer. C++ has no keyword for representing a pointer that does not point to an object; instead, we use the value 0 (or the symbolic constant <tt>NULL</tt>, which expands to 0). Trying to use a null pointer results in a crash with an error message such as &quot;Segmentation fault&quot;, &quot;General protection fault&quot;, or &quot;Bus error&quot;. Using a debugger, we can find out which line of code caused the crash.</p>
+<p class="docText">At the end of the function, the <tt>alpha</tt> object holds the coordinate pair (1.0, 2.5), whereas <tt>beta</tt> holds (4.0, 4.5).</p>
+<p class="docText">Pointers are often used to store objects allocated dynamically using <tt>new</tt>. In C++ jargon, we say that these objects are allocated on the &quot;heap&quot;, whereas local variables (variables defined inside a function) are stored on the &quot;stack&quot;.</p>
+<p class="docText">Here's a code snippet that illustrates dynamic memory allocation using <tt>new</tt>:</p>
+<div class="docText"><pre>
+#include "point2d.h"
+int main()
+{
+    Point2D *point = new Point2D;
+    point-&gt;setX(1.0);
+    point-&gt;setY(2.5);
+    delete point;
+    return 0;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1609"></a><a name="iddle1902"></a><a name="iddle2530"></a><a name="iddle3486"></a><a name="iddle3560"></a><a name="iddle4594"></a><a name="iddle4735"></a><a name="iddle6497"></a>The <tt>new</tt> operator returns the memory address of a newly allocated object. We store the address in a pointer variable and access the object through that pointer. When we are done with the object, we release its memory using the <tt>delete</tt> operator. Unlike Java and C#, C++ has no garbage collector; dynamically allocated objects must be explicitly released using <tt>delete</tt> when we don't need them anymore. <a class="docLink" href="ch02.html#ch02">Chapter 2</a> describes Qt's parentchild mechanism, which greatly simplifies memory management in C++ programs.</P>
+<p class="docText">If we forget to call <tt>delete</tt>, the memory is kept around until the program finishes. This would not be an issue in the example above, because we only allocate one object, but in a program that allocates new objects all the time, this could cause the program to keep allocating memory until the machine's memory is exhausted. Once an object is deleted, the pointer variable still holds the address of the object. Such a pointer is a &quot;dangling pointer&quot; and should not be used to access the object. Qt provides a &quot;smart&quot; pointer, <tt>QPointer&lt;T&gt;</tt>, that automatically sets itself to 0 if the <tt>QObject</tt> it points to is deleted.</p>
+<p class="docText">In the example above, we invoked the default constructor and called <tt>setX()</tt> and <tt>setY()</tt> to initialize the object. We could have used the two-parameter constructor instead:q</p>
+<div class="docText"><pre>
+Point2D *point = new Point2D(1.0, 2.5);
+</pre></div><br>
+<p class="docText">The example didn't require the use of <tt>new</tt> and <tt>delete</tt>. We could just as well have allocated the object on the stack as follows:</P>
+<div class="docText"><pre>
+Point2D point;
+point.setX(1.0);
+point.setY(2.5);
+</pre></div><br>
+<p class="docText">Objects allocated like this are automatically freed at the end of the block in which they appear.</P>
+<p class="docText">If we don't intend to modify the object through the pointer, we can declare the pointer const. For example:</P>
+<div class="docText"><pre>
+const Point2D *ptr = new Point2D(1.0, 2.5);
+double x = ptr-&gt;x();
+double y = ptr-&gt;y();
+// WON'T COMPILE
+ptr-&gt;setX(4.0);
+*ptr = Point2D(4.0, 4.5);
+</pre></div><br>
+<p class="docText"><a name="iddle1006"></a><a name="iddle1009"></a><a name="iddle2410"></a><a name="iddle3289"></a><a name="iddle5743"></a>The <tt>ptr</tt> const pointer can only be used to call const member functions such as <tt>x()</tt> and <tt>y()</tt>. It is good style to declare pointers const when we don't intend to modify the object using them. Furthermore, if the object itself is const, we have no choice but to use a const pointer to store its address. The use of <tt>const</tt> provides information to the compiler that can lead to early bug detection and performance gains. C# has a <tt>const</tt> keyword that is very similar to that of C++. The closest Java equivalent is <tt>final</tt>, but it only protects variables from assignment, not from calling &quot;non-const&quot; member functions on it.</P>
+<p class="docText">Pointers can be used with built-in types as well as with classes. In an expression, the unary <tt>*</tt> operator returns the value of the object associated with the pointer. For example:</p>
+<div class="docText"><pre>
+int i = 10;
+int j = 20;
+int *p = &amp;i;
+int *q = &amp;j;
+cout &lt;&lt; *p &lt;&lt; " equals 10" &lt;&lt; endl;
+cout &lt;&lt; *q &lt;&lt; " equals 20" &lt;&lt; endl;
+*p = 40;
+cout &lt;&lt; i &lt;&lt; " equals 40" &lt;&lt; endl;
+p = q;
+*p = 100;
+cout &lt;&lt; i &lt;&lt; " equals 40" &lt;&lt; endl;
+cout &lt;&lt; j &lt;&lt; " equals 100" &lt;&lt; endl;
+</pre></div><br>
+<p class="docText">The <tt>-&gt;</tt> operator, which can be used to access an object's members through a pointer, is pure syntactic sugar. Instead of <tt>ptr-&gt;member</tt>, we can also write <tt>(*ptr).member</tt>. The parentheses are necessary because the <tt>.</tt> (dot) operator has precedence over the unary <tt>*</tt> operator.</P>
+<p class="docText">Pointers had a poor reputation in C and C++, to the extent that Java is often advertised as having no pointers. In reality,C++ pointers are conceptually similar to Java and C# references except that we can use pointers to iterate through memory, as we will see later in this section. Furthermore,the inclusion of &quot;copy on write&quot; container classes in Qt, along with C++'s ability to instantiate any class on the stack, means that we can often avoid pointers.</P>
+
+<a name="app02lev2sec4"></a>
+<H4 id="title-IDAZKUFW" class="docSection2Title">References</h4>
+<p class="docText">In addition to pointers, C++ also supports the concept of a &quot;reference&quot;. Like a pointer, a C++ reference stores the address of an object. The main differences are these:</p>
+<ul><LI><p class="docList">References are declared using <tt>&amp;</tt> instead of <tt>*</tt>.</p></li><LI><p class="docList">The reference must be initialized and can't be reassigned later.</P></li><li><p class="docList"><a name="iddle3266"></a>The object associated with a reference is directly accessible; there is no special syntax such as <tt>*</tt> or <tt>-&gt;</tt>.</p></li><LI><p class="docList">A reference cannot be null.</p></li></UL>
+<p class="docText">References are mostly used when declaring parameters. By default, C++ uses call-by-value as its parameter-passing mechanism, meaning that when an argument is passed to a function, the function receives a brand new copy of the object. Here's the definition of a function that receives its parameters through call-by-value:</p>
+<div class="docText"><pre>
+#include &lt;cstdlib&gt;
+using namespace std;
+double manhattanDistance(Point2D a, Point2D b)
+{
+    return abs(b.x() - a.x()) + abs(b.y() - a.y());
+}
+</pre></div><BR>
+<p class="docText">We would then invoke the function as follows:</p>
+<div class="docText"><pre>
+Point2D broadway(12.5, 40.0);
+Point2D harlem(77.5, 50.0);
+double distance = manhattanDistance(broadway, harlem);
+</pre></div><br>
+<p class="docText">Reformed C programmers avoid needless copy operations by declaring their parameters as pointers instead of as values:</p>
+<div class="docText"><pre>
+double manhattanDistance(const Point2D *ap, const Point2D *bp)
+{
+    return abs(bp-&gt;x() - ap-&gt;x()) + abs(bp-&gt;y() - ap-&gt;y());
+}
+</pre></div><br>
+<p class="docText">They must then pass addresses instead of values when calling the function:</p>
+<div class="docText"><pre>
+Point2D broadway(12.5, 40.0);
+Point2D harlem(77.5, 50.0);
+double distance = manhattanDistance(&amp;broadway, &amp;harlem);
+</pre></div><br>
+<p class="docText">C++ introduced references to make the syntax less cumbersome and to prevent the caller from passing a null pointer. If we use references instead of pointers, the function looks like this:</p>
+<div class="docText"><pre>
+double manhattanDistance(const Point2D &amp;a, const Point2D &amp;b)
+{
+    return abs(b.x() - a.x()) + abs(b.y() - a.y());
+}
+</pre></div><br>
+<p class="docText">The declaration of a reference is similar to that of a pointer, with <tt>&amp;</tt> instead of <tt>*</tt>. But when we actually use the reference, we can forget that it is a memory address and treat it like an ordinary variable. In addition, calling a function that takes references as arguments doesn't require any special care (no <tt>&amp;</tt> operator).</p>
+<p class="docText"><a name="iddle1192"></a><a name="iddle3769"></a><a name="iddle6936"></a>All in all, by replacing <tt>Point2D</tt> with <tt>const Point2D &amp;</tt> in the parameter list, we reduced the overhead of the function call: Instead of copying 256 bits (the size of four <tt>double</tt>s), we copy only 64 or 128 bits, depending on the target platform's pointer size.</p>
+<p class="docText">The previous example used const references, preventing the function from modifying the objects associated with the references. When this kind of side effect is desired, we can pass a non-const reference or pointer. For example:</p>
+<div class="docText"><pre>
+void transpose(Point2D &amp;point)
+{
+    double oldX = point.x();
+    point.setX(point.y());
+    point.setY(oldX);
+}
+</pre></div><br>
+<p class="docText">In some cases, we have a reference and we need to call a function that takes a pointer, or vice versa. To convert a reference to a pointer, we can simply use the unary <tt>&amp;</tt> operator:</p>
+<div class="docText"><pre>
+Point2D point;
+Point2D &amp;ref = point;
+Point2D *ptr = &amp;ref;
+</pre></div><br>
+<p class="docText">To convert a pointer to a reference, there's the unary <tt>*</tt> operator:</p>
+<div class="docText"><pre>
+Point2D point;
+Point2D *ptr = &amp;point;
+Point2D &amp;ref = *ptr;
+</pre></div><BR>
+<p class="docText">References and pointers are represented the same way in memory, and they can often be used interchangeably, which begs the question of when to use which. On the one hand, references have a more convenient syntax; on the other hand, pointers can be reassigned at any time to point to another object, they can hold a null value, and their more explicit syntax is often a blessing in disguise. For these reasons, pointers tend to prevail, with references almost exclusively used for declaring function parameters, in conjunction with <tt>const</tt>.</p>
+
+<a name="app02lev2sec5"></a>
+<h4 id="title-IDAMQUFW" class="docSection2Title">Arrays</h4>
+<p class="docText">Arrays in C++ are declared by specifying the number of items in the array within brackets in the variable declaration <span class="docEmphasis">after</span> the variable name. Two-dimensional arrays are possible using an array of arrays. Here's the definition of a one-dimensional array containing 10 items of type <tt>int</tt>:</P>
+<div class="docText"><pre>
+int fibonacci[10];
+</pre></div><br>
+<p class="docText">The items are accessible as <tt>fibonacci[0]</tt>, <tt>fibonacci[1]</tt>, &#8230;, <tt>fibonacci[9]</tt>. Often we want to initialize the array as we define it:</P>
+<div class="docText"><pre>
+int fibonacci[10] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+</pre></div><BR>
+<p class="docText"><a name="iddle1610"></a><a name="iddle2158"></a><a name="iddle3770"></a><a name="iddle6346"></a>In such cases, we can then omit the array size, since the compiler can deduce it from the number of initializers:</p>
+<div class="docText"><pre>
+int fibonacci[] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+</pre></div><BR>
+<p class="docText">Static initialization also works for complex types, such as <tt>Point2D</tt>:</p>
+<div class="docText"><pre>
+Point2D triangle[] = {
+    Point2D(0.0, 0.0), Point2D(1.0, 0.0), Point2D(0.5, 0.866)
+};
+</pre></div><br>
+<p class="docText">If we have no intention of altering the array later on, we can make it const:</P>
+<div class="docText"><pre>
+const int fibonacci[] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+</pre></div><BR>
+<p class="docText">To find out how many items an array contains, we can use the <tt>sizeof()</tt> operator as follows:</P>
+<div class="docText"><pre>
+int n = sizeof(fibonacci) / sizeof(fibonacci[0]);
+</pre></div><br>
+<p class="docText">The <tt>sizeof()</tt> operator returns the size of its argument in bytes. The number of items in an array is its size in bytes divided by the size of one of its items. Because this is cumbersome to type, a common alternative is to declare a constant and to use it for defining the array:</p>
+<div class="docText"><pre>
+enum { NFibonacci = 10 };
+const int fibonacci[NFibonacci] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+</pre></div><br>
+<p class="docText">It would have been tempting to declare the constant as a <tt>const int</tt> variable. Unfortunately, some compilers have issues with const variables as array size specifiers. The <tt>enum</tt> keyword will be explained later in this appendix.</P>
+<p class="docText">Iterating through an array is normally done using an integer. For example:</p>
+<div class="docText"><pre>
+for (int i = 0; i &lt; NFibonacci; ++i)
+    cout &lt;&lt; fibonacci[i] &lt;&lt; endl;
+</pre></div><br>
+<p class="docText">It is also possible to traverse the array using a pointer:</P>
+<div class="docText"><pre>
+const int *ptr = &amp;fibonacci[0];
+while (ptr != &amp;fibonacci[10]) {
+    cout &lt;&lt; *ptr &lt;&lt; endl;
+    ++ptr;
+}
+</pre></div><BR>
+<p class="docText">We initialize the pointer with the address of the first item and loop until we reach the &quot;one past the last&quot; item (the &quot;eleventh&quot; item, <tt>fibonacci[10]</tt>). At each iteration, the <tt>++</tt> operator advances the pointer to the next item.</p>
+<p class="docText">Instead of <tt>&amp;fibonacci[0]</tt>, we could also have written <tt>fibonacci</tt>. This is because the name of an array used alone is automatically converted into a pointer to the first item in the array. Similarly, we could substitute <tt>fibonacci + 10</tt> for <tt>&amp;fibonacci[10]</tt>. This works the other way around as well: We can retrieve the contents of the current item using either <tt>*ptr</tt> or <tt>ptr[0]</tt> and could access <a name="iddle1903"></a><a name="iddle3287"></a><a name="iddle3488"></a><a name="iddle6562"></a>the next item using <tt>*(ptr + 1)</tt> or <tt>ptr[1]</tt>. This principle is sometimes called &quot;equivalence of pointers and arrays&quot;.</p>
+<p class="docText">To prevent what it considers to be a gratuitous inefficiency, C++ does not let us pass arrays to functions by value. Instead, they must be passed by address. For example:</p>
+<div class="docText"><pre>
+#include &lt;iostream&gt;
+using namespace std;
+void printIntegerTable(const int *table, int size)
+{
+    for (int i = 0; i &lt; size; ++i)
+        cout &lt;&lt; table[i] &lt;&lt; endl;
+}
+int main()
+{
+    const int fibonacci[10] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+    printIntegerTable(fibonacci, 10);
+    return 0;
+}
+</pre></div><br>
+<p class="docText">Ironically, although C++ doesn't give us any choice about whether we want to pass an array by address or by value, it gives us some freedom in the <span class="docEmphasis">syntax</span> used to declare the parameter type. Instead of <tt>const int *table</tt>, we could also have written <tt>const int table[]</tt> to declare a pointer-to-constant- <tt>int</tt> parameter. Similarly, the <tt>argv</tt> parameter to <tt>main()</tt> can be declared as either <tt>char *argv[]</tt> or <tt>char **argv</tt>.</P>
+<p class="docText">To copy an array into another array, one approach is to loop through the array:</p>
+<div class="docText"><pre>
+const int fibonacci[NFibonacci] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 };
+int temp[NFibonacci];
+for (int i = 0; i &lt; NFibonacci; ++i)
+    temp[i] = fibonacci[i];
+</pre></div><br>
+<p class="docText">For basic data types such as <tt>int</tt>, we can also use <tt>std::memcpy()</tt>, which copies a block of memory. For example:</P>
+<div class="docText"><pre>
+memcpy(temp, fibonacci, sizeof(fibonacci));
+</pre></div><br>
+<p class="docText">When we declare a C++ array, the size must be a constant.<sup class="docFootnote"><a class="docLink" href="#app02fn2">[*]</a></sup> If we want to create an array of a variable size, we have several options.</P><blockquote><p class="docFootnote"><sup><a name="app02fn2">[*]</a></sup> Some compilers allow variables in that context, but this feature should not be relied upon in portable programs.</p></blockquote>
+<ul><li><p class="docText"><span class="docEmphStrong">We can dynamically allocate the array:</span> </p><div class="docText"><pre>
+int *fibonacci = new int[n];
+</pre></div><p class="docList"><a name="iddle1029"></a><a name="iddle1145"></a><a name="iddle1404"></a><a name="iddle1411"></a><a name="iddle1640"></a><a name="iddle1664"></a><a name="iddle2811"></a><a name="iddle5457"></a><a name="iddle6263"></a><a name="iddle6570"></a><a name="iddle6596"></a><a name="iddle6708"></a><a name="iddle7116"></a><a name="iddle7119"></a>The <tt>new []</tt> operator allocates a certain number of items at consecutive memory locations and returns a pointer to the first item. Thanks to the &quot;equivalence of pointers and arrays&quot; principle, the items can be accessed through the pointer as <tt>fibonacci[0]</tt>, <tt>fibonacci[1]</tt>, &#8230;, <tt>fibonacci[n - 1]</tt>. When we have finished using the array, we should release the memory it consumes using the <tt>delete []</tt> operator:</p><div class="docText"><pre>
+delete [] fibonacci;
+</pre></div></li><li><p class="docText"><span class="docEmphStrong">We can use the standard std::vector&lt;T&gt; class:</span> </p><div class="docText"><pre>
+#include &lt;vector&gt;
+using namespace std;
+vector&lt;int&gt; fibonacci(n);
+</pre></div><p class="docList">Items are accessible using the <tt>[]</tt> operator, just like with a plain C++ array. With <tt>std::vector&lt;T&gt;</tt> (where <tt>T</tt> is the type of the items stored in the vector), we can resize the array at any time using <tt>resize()</tt> and we can copy it using the assignment operator. Classes that contain angle brackets (<tt>&lt;&gt;</tt>) in their name are called template classes.</p></li><li><p class="docText"><span class="docEmphStrong">We can use Qt's QVector&lt;T&gt; class:</span> </p><div class="docText"><pre>
+#include &lt;QVector&gt;
+QVector&lt;int&gt; fibonacci(n);
+</pre></div><p class="docList"><tt>QVector&lt;T&gt;</tt>'s API is very similar to that of <tt>std::vector&lt;T&gt;</tt>, but it also supports iteration using Qt's <tt>foreach</tt> keyword and uses implicit data sharing (&quot;copy on write&quot;) as a memory and speed optimization. <a class="docLink" href="ch11.html#ch11">Chapter 11</a> presents Qt's container classes and explains how they relate to the Standard C++ containers.</p></li></ul>
+<p class="docText">You might be tempted to avoid built-in arrays whenever possible and use <tt>std::vector&lt;T&gt;</tt> or <tt>QVector&lt;T&gt;</tt> instead. It is nonetheless worthwhile understanding how the built-in arrays work because sooner or later you might want to use them in highly optimized code, or need them to interface with existing C libraries.</P>
+
+<a name="app02lev2sec6"></a>
+<h4 id="title-IDA05UFW" class="docSection2Title">Character Strings</h4>
+<p class="docText">The most basic way of representing character strings in C++ is to use an array of <tt>char</tt>s terminated by a null byte ('\<sub>0').</sub> The following four functions demonstrate how these kinds of strings work:</p>
+<div class="docText"><pre>
+void hello1()
+{
+    const char str[] = {
+        'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd', '\0'
+    };
+    cout &lt;&lt; str &lt;&lt; endl;
+}
+void hello2()
+{
+    const char str[] = "Hello world!";
+    cout &lt;&lt; str &lt;&lt; endl;
+}
+void hello3()
+{
+    cout &lt;&lt; "Hello world!" &lt;&lt; endl;
+}
+void hello4()
+{
+    const char *str = "Hello world!";
+    cout &lt;&lt; str &lt;&lt; endl;
+}
+</pre></div><BR>
+<p class="docText">In the first function, we declare the string as an array and initialize it the hard way. Notice the '\0' terminator at the end, which indicates the end of the string. The second function has a similar array definition, but this time we use a string literal to initialize the array. In C++, string literals are simply <tt>const char</tt> arrays with an implicit '\0' terminator. The third function uses a string literal directly, without giving it a name. Once translated into machine language instructions, it is identical to the previous two functions.</p>
+<p class="docText">The fourth function is a bit different in that it creates not only an (anonymous) array but also a pointer variable called <tt>str</tt> that stores the address of the array's first item. In spite of this, the semantics of the function are identical to the previous three functions, and an optimizing compiler would eliminate the superfluous <tt>str</tt> variable.</P>
+<p class="docText">Functions that take C++ strings as arguments usually take either a <tt>char *</tt> or a <tt>const char *</tt>. Here's a short program that illustrates the use of both:</P>
+<div class="docText"><pre>
+#include &lt;cctype&gt;
+#include &lt;iostream&gt;
+using namespace std;
+void makeUppercase(char *str)
+{
+    for (int i = 0; str[i] != '\0'; ++i)
+        str[i] = toupper(str[i]);
+}
+void writeLine(const char *str)
+{
+    cout &lt;&lt; str &lt;&lt; endl;
+}
+int main(int argc, char *argv[])
+{
+    for (int i = 1; i &lt; argc; ++i) {
+        makeUppercase(argv[i]);
+        writeLine(argv[i]);
+    }
+    return 0;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1339"></a><a name="iddle1403"></a><a name="iddle2159"></a><a name="iddle4971"></a><a name="iddle7012"></a>In C++, the <tt>char</tt> type normally holds an 8-bit value. This means that we can easily store ASCII, ISO 8859-1 (Latin-1), and other 8-bit-encoded strings in a <tt>char</tt> array, but that we can't store arbitrary Unicode characters without resorting to multibyte sequences. Qt provides the powerful <tt>QString</tt> class, which stores Unicode strings as sequences of 16-bit <tt>QChar</tt>s and internally uses the implicit data sharing (&quot;copy on write&quot;) optimization. <a class="docLink" href="ch11.html#ch11">Chapter 11</a> (Container Classes) and <a class="docLink" href="ch17.html#ch17">Chapter 17</a> (Internationalization) explain <tt>QString</tt> in more detail.</P>
+
+<a name="app02lev2sec7"></a>
+<h4 id="title-IDANLVFW" class="docSection2Title">Enumerations</h4>
+<p class="docText">C++ has an enumeration feature for declaring a set of named constants similar to that provided by C#. Let's suppose that we want to store days of the week in a program:</P>
+<div class="docText"><pre>
+enum DayOfWeek {
+    Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+};
+</pre></div><BR>
+<p class="docText">Normally, we would put this declaration in a header file, or even inside a class. The above declaration is superficially equivalent to the following constant definitions:</P>
+<div class="docText"><pre>
+const int Sunday    = 0;
+const int Monday    = 1;
+const int Tuesday   = 2;
+const int Wednesday = 3;
+const int Thursday  = 4;
+const int Friday    = 5;
+const int Saturday  = 6;
+</pre></div><br>
+<p class="docText">By using the enumeration construct, we can later declare variables or parameters of type <tt>DayOfWeek</tt> and the compiler will ensure that only values from the <tt>DayOfWeek</tt> enumeration are assigned to it. For example:</p>
+<div class="docText"><pre>
+DayOfWeek day = Sunday;
+</pre></div><br>
+<p class="docText">If we don't care about type safety, we can also write</P>
+<div class="docText"><pre>
+int day = Sunday;
+</pre></div><br>
+<p class="docText">Notice that to refer to the <tt>Sunday</tt> constant from the <tt>DayOfWeek</tt> enum, we simply write <tt>Sunday</tt>, not <tt>DayOfWeek::Sunday</tt>.</p>
+<p class="docText">By default, the compiler assigns consecutive integer values to the constants of an enum, starting at 0. We can specify other values if we want:</P>
+<div class="docText"><pre>
+enum DayOfWeek {
+    Sunday     = 628,
+    Monday     = 616,
+    Tuesday    = 735,
+    Wednesday  = 932,
+    Thursday   = 852,
+    Friday     = 607,
+    Saturday   = 845
+};
+</pre></div><BR>
+<p class="docText"><a name="iddle4297"></a>If we don't specify the value of an enum item, the item takes the value of the previous item, plus 1. Enums are sometimes used to declare integer constants, in which case we normally omit the name of the enum:</p>
+<div class="docText"><pre>
+enum {
+    FirstPort = 1024,
+    MaxPorts = 32767
+};
+</pre></div><br>
+<p class="docText">Another frequent use of enums is to represent sets of options. Let's consider the example of a Find dialog, with four checkboxes controlling the search algorithm (Wildcard syntax, Case sensitive, Search backward, and Wrap around). We can represent this by an enum where the constants are powers of 2:</p>
+<div class="docText"><pre>
+enum FindOption {
+    NoOptions      = 0x00000000,
+    WildcardSyntax = 0x00000001,
+    CaseSensitive  = 0x00000002,
+    SearchBackward = 0x00000004,
+    WrapAround     = 0x00000008
+};
+</pre></div><br>
+<p class="docText">Each option is often called a &quot;flag&quot;. We can combine flags using the bitwise <tt>|</tt> or  <tt>|=</tt> operators:</P>
+<div class="docText"><pre>
+int options = NoOptions;
+if (wilcardSyntaxCheckBox-&gt;isChecked())
+    options |= WildcardSyntax;
+if (caseSensitiveCheckBox-&gt;isChecked())
+    options |= CaseSensitive;
+if (searchBackwardCheckBox-&gt;isChecked())
+    options |= SearchBackwardSyntax;
+if (wrapAroundCheckBox-&gt;isChecked())
+    options |= WrapAround;
+</pre></div><br>
+<p class="docText">We can test whether a flag is set or not using the bitwise <tt>&amp;</tt> operator:</p>
+<div class="docText"><pre>
+if (options &amp; CaseSensitive) {
+    // case-sensitive search
+}
+</pre></div><BR>
+<p class="docText">A variable of type <tt>FindOption</tt> can only contain one flag at a time. The result of combining several flags using <tt>|</tt> is a plain integer. Unfortunately, this is not type-safe: The compiler won't complain if a function expecting a combination of <tt>FindOption</tt>s through an <tt>int</tt> parameter receives <tt>Saturday</tt> instead. Qt uses <tt>QFlags&lt;T&gt;</tt> to provide type safety for its own flag types. The class is also available <a name="iddle1030"></a><a name="iddle1146"></a><a name="iddle1279"></a><a name="iddle1338"></a><a name="iddle1345"></a><a name="iddle1364"></a><a name="iddle1611"></a><a name="iddle2146"></a><a name="iddle3125"></a><a name="iddle6984"></a><a name="iddle7130"></a>when we define custom flag types. See the <tt>QFlags&lt;T&gt;</tt> online documentation for details.</p>
+
+<a name="app02lev2sec8"></a>
+<H4 id="title-IDAISVFW" class="docSection2Title">Typedefs</h4>
+<p class="docText">C++ lets us give an alias to a data type using the <tt>typedef</tt> keyword. For example, if we use <tt>QVector&lt;Point2D&gt;</tt> a lot and want to save a few keystrokes (or are unfortunate enough to be stuck with a Norwegian keyboard and have trouble locating the angle brackets), we can put this typedef declaration in one of our header files:</p>
+<div class="docText"><pre>
+typedef QVector&lt;Point2D&gt; PointVector;
+</pre></div><br>
+<p class="docText">From then on, we can use <tt>PointVector</tt> as a shorthand for <tt>QVector&lt;Point2D&gt;</tt>. Notice that the new name for the type appears after the old name. The typedef syntax deliberately mimics that of variable declarations.</p>
+<p class="docText">In Qt, typedefs are used mainly for three reasons:</p>
+<ul><li><p class="docText"><span class="docEmphasis">Convenience:</span> Qt declares <tt>uint</tt> and <tt>QWidgetList</tt> as typedefs for <tt>unsigned int</tt> and <tt>QList&lt;QWidget *&gt;</tt> to save a few keystrokes.</p></li><li><p class="docText"><span class="docEmphasis">Platform differences:</span> Certain types need different definitions on different platforms. For example, <tt>qlonglong</tt> is defined as <tt>__int64</tt> on Windows and as <tt>long long</tt> on other platforms.</p></li><li><p class="docText"><span class="docEmphasis">Compatibility:</span> The <tt>QIconSet</tt> class from Qt 3 was renamed <tt>QIcon</tt> in Qt 4. To help Qt 3 users port their applications to Qt 4, <tt>QIconSet</tt> is provided as a typedef for <tt>QIcon</tt> when Qt 3 compatibility is enabled.</p></li></UL>
+
+<a name="app02lev2sec9"></a>
+<h4 id="title-IDA3UVFW" class="docSection2Title">Type Conversions</h4>
+<p class="docText">C++ provides several syntaxes for casting values from one type to another. The traditional syntax, inherited from C, involves putting the resulting type in parentheses before the value to convert:</p>
+<div class="docText"><pre>
+const double Pi = 3.14159265359;
+int x = (int)(Pi * 100);
+cout &lt;&lt; x &lt;&lt; " equals 314" &lt;&lt; endl;
+</pre></div><BR>
+<p class="docText">This syntax is very powerful. It can be used to change the type of pointers, to remove <tt>const</tt>, and much more. For example:</p>
+<div class="docText"><pre>
+short j = 0x1234;
+if (*(char *)&amp;j == 0x12)
+    cout &lt;&lt; "The byte order is big-endian" &lt;&lt; endl;
+</pre></div><BR>
+<p class="docText">In the example above, we cast a <tt>short *</tt> to a <tt>char *</tt> and we use the unary <tt>*</tt> operator to access the byte at the given memory location. On big-endian systems, that byte is <tt>0x12</tt>; on little-endian systems, that byte is <tt>0x34</tt>. Since pointers and references are represented the same way, it should come as no surprise that the code above can be rewritten using a reference cast:</P>
+<div class="docText"><pre>
+short j = 0x1234;
+if ((char &amp;)j == 0x12)
+    cout &lt;&lt; "The byte order is big-endian" &lt;&lt; endl;
+</pre></div><br>
+<p class="docText"><a name="iddle1344"></a><a name="iddle1602"></a><a name="iddle1612"></a><a name="iddle2084"></a><a name="iddle2089"></a><a name="iddle3453"></a><a name="iddle3498"></a><a name="iddle3545"></a><a name="iddle4593"></a><a name="iddle4641"></a><a name="iddle5895"></a><a name="iddle5912"></a><a name="iddle6530"></a><a name="iddle6772"></a>If the data type is a class name, a typedef, or a primitive type that can be expressed as a single alphanumeric token, we can use the constructor syntax as a cast:</P>
+<div class="docText"><pre>
+int x = int(Pi * 100);
+</pre></div><br>
+<p class="docText">Casting pointers and references using the traditional C-style casts is a kind of extreme sport, on par with paragliding and elevator surfing, because the compiler lets us cast any pointer (or reference) type into any other pointer (or reference) type. For that reason, C++ introduced four new-style casts with more precise semantics. For pointers and references, the new-style casts are preferable to the risky C-style casts and are used in this book.</p>
+<UL><LI><p class="docList"><tt>static_cast&lt;T&gt;()</tt> can be used to cast a pointer-to- <tt>A</tt> to a pointer-to- <tt>B</tt>, with the constraint that class <tt>B</tt> must inherit from class <tt>A</tt>. For example:</P><div class="docText"><pre>
+A *obj = new B;
+B *b = static_cast&lt;B *&gt;(obj);
+b-&gt;someFunctionDeclaredInB();
+</pre></div><p class="docList">If the object isn't an instance of <tt>B</tt> (but still inherits from <tt>A</tt>), using the resulting pointer can lead to obscure crashes.</p></li><li><p class="docList"><tt>dynamic_cast&lt;T&gt;()</tt> is similar to <tt>static_cast&lt;T&gt;()</tt>, except that it uses runtime type information (RTTI) to check that the object associated with the pointer is an instance of class <tt>B</tt>. If this is not the case, the cast returns a null pointer. For example:</P><div class="docText"><pre>
+A *obj = new B;
+B *b = dynamic_cast&lt;B *&gt;(obj);
+if (b)
+    b-&gt;someFunctionDeclaredInB();
+</pre></div><p class="docList">On some compilers, <tt>dynamic_cast&lt;T&gt;()</tt> doesn't work across dynamic library boundaries. It also relies on the compiler supporting RTTI, a feature that programmers can turn off to reduce the size of their executables. Qt solves these problems by providing <tt>qobject_cast&lt;T&gt;()</tt> for <tt>QObject</tt> subclasses.</p></li><LI><p class="docList"><tt>const_cast&lt;T&gt;()</tt> adds or removes a <tt>const</tt> qualifier to a pointer or reference. For example:</P><div class="docText"><pre>
+int MyClass::someConstFunction() const
+{
+    if (isDirty()) {
+        MyClass *that = const_cast&lt;MyClass *&gt;(this);
+        that-&gt;recomputeInternalData();
+    }
+    ...
+}
+</pre></div><p class="docList"><a name="iddle2358"></a><a name="iddle3459"></a><a name="iddle3460"></a><a name="iddle5771"></a><a name="iddle7167"></a>In the previous example, we cast away the <tt>const</tt> qualifier of the <tt>this</tt> pointer to call the non-const member function <tt>recomputeInternalData()</tt>. Doing so is not recommended and can normally be avoided by using the <tt>mutable</tt> keyword, as explained in <a class="docLink" href="ch04.html#ch04">Chapter 4</a> (Implementing Application Functionality).</p></li><li><p class="docList"><tt>reinterpret_cast&lt;T&gt;()</tt> converts any pointer or reference type to any other such type. For example:</p><div class="docText"><pre>
+short j = 0x1234;
+if (reinterpret_cast&lt;char &amp;&gt;(j) == 0x12)
+    cout &lt;&lt; "The byte order is big-endian" &lt;&lt; endl;
+</pre></div></LI></ul>
+<p class="docText">In Java and C#, any reference can be stored as an <tt>Object</tt> reference if needed. C++ doesn't have any universal base class, but it provides a special data type, <tt>void *</tt>, that stores the address of an instance of any type. A <tt>void *</tt> must be cast back to another type (using <tt>static_cast&lt;T&gt;()</tt>) before it can be used.</p>
+<p class="docText">C++ provides many ways of casting types, but most of the time we don't even need a cast. When using container classes such as <tt>std::vector&lt;T&gt;</tt> or <tt>QVector&lt;T&gt;</tt>, we can specify the <tt>T</tt> type and extract items without casts. In addition, for primitive types, certain conversions occur implicitly (for example, from <tt>char</tt> to <tt>int</tt>), and for custom types we can define implicit conversions by providing a one-parameter constructor. For example:</P>
+<div class="docText"><pre>
+class MyInteger
+{
+public:
+    MyInteger();
+    MyInteger(int i);
+    ...
+};
+int main()
+{
+    MyInteger n;
+    n = 5;
+    ...
+}
+</pre></div><br>
+<p class="docText">For some one-parameter constructors, the automatic conversion makes little sense. We can disable it by declaring the constructor with the <tt>explicit</tt> keyword:</P>
+<div class="docText"><pre>
+class MyVector
+{
+public:
+    explicit MyVector(int size);
+    ...
+};
+</pre></div><br>
+
+<a name="app02lev2sec10"></a>
+
+<h4 id="title-IDAY5VFW" class="docSection2Title">Operator Overloading</h4>
+<p class="docText"><a name="iddle1027"></a><a name="iddle3269"></a><a name="iddle3611"></a><a name="iddle3615"></a><a name="iddle3628"></a><a name="iddle3765"></a><a name="iddle6563"></a><a name="iddle6582"></a><a name="iddle6586"></a>C++ allows us to overload functions, meaning that we can declare several functions with the same name in the same scope, as long as they have different parameter lists. In addition, C++ supports <span class="docEmphasis">operator overloading</span>the possibility of assigning special semantics to built-in operators (such as <tt>+</tt>, <tt>&lt;&lt;</tt>, and <tt>[]</tt>) when they are used with custom types.</p>
+<p class="docText">We have already seen a few examples of overloaded operators. When we used <tt>&lt;&lt;</tt> to output text to <tt>cout</tt> or <tt>cerr</tt>, we didn't trigger C++'s left-shift operator, but rather a special version of the operator that takes an <tt>ostream</tt> object (such as <tt>cout</tt> and <tt>cerr</tt>) on the left and a string (alternatively, a number or a stream manipulator such as <tt>endl</tt>) on the right side and that returns the <tt>ostream</tt> object, allowing multiple calls in a row.</p>
+<p class="docText">The beauty of operator overloading is that we can make custom types behave just like built-in types. To show how operator overloading works, we will overload <tt>+=</tt>, <tt>-=</tt>, <tt>+</tt>, and <tt>-</tt> to work on <tt>Point2D</tt> objects:</p>
+<div class="docText"><pre>
+#ifndef POINT2D_H
+#define POINT2D_H
+class Point2D
+{
+public:
+    Point2D();
+    Point2D(double x, double y);
+    void setX(double x);
+    void setY(double y);
+    double x() const;
+    double y() const;
+    Point2D &amp;operator+=(const Point2D &amp;other) {
+        xVal += other.xVal;
+        yVal += other.yVal;
+        return *this;
+    }
+    Point2D &amp;operator-=(const Point2D &amp;other) {
+        xVal -= other.xVal;
+        yVal -= other.yVal;
+        return *this;
+    }
+private:
+    double xVal;
+    double yVal;
+};
+inline Point2D operator+(const Point2D &amp;a, const Point2D &amp;b)
+{
+    return Point2D(a.x() + b.x(), a.y() + b.y());
+}
+inline Point2D operator-(const Point2D &amp;a, const Point2D &amp;b)
+{
+    return Point2D(a.x() - b.x(), a.y() - b.y());
+}
+#endif
+</pre></div><br>
+<p class="docText"><a name="iddle6773"></a>Operators can be implemented either as member functions or as global functions. In our example, we implemented <tt>+=</tt> and <tt>-=</tt> as member functions, <tt>+</tt> and <tt>-</tt> as global functions.</p>
+<p class="docText">The <tt>+=</tt> and <tt>-=</tt> operators take a reference to another <tt>Point2D</tt> object and increment or decrement the <span class="docEmphasis">x</span> and <span class="docEmphasis">y</span> coordinates of the current object based on the other object. They return <tt>*this</tt>, which denotes a reference to the current object (<tt>this</tt> is of type <tt>Point2D *</tt>). Returning a reference allows us to write exotic code likeq</p>
+<div class="docText"><pre>
+a += b += c;
+</pre></div><br>
+<p class="docText">The <tt>+</tt> and <tt>-</tt> operators take two parameters and return a <tt>Point2D</tt> object by value (not a reference to an existing object). The <tt>inline</tt> keyword allows us to put these function definitions in the header file. If the function's body had been longer, we would put a function prototype in the header file and the function definition (without the <tt>inline</tt> keyword) in a <tt>.cpp</tt> file.</p>
+<p class="docText">The following code snippets shows all four overloaded operators in action:</p>
+<div class="docText"><pre>
+Point2D alpha(12.5, 40.0);
+Point2D beta(77.5, 50.0);
+alpha += beta;
+beta -= alpha;
+Point2D gamma = alpha + beta;
+Point2D delta = beta - alpha;
+</pre></div><br>
+<p class="docText">We can also invoke the <tt>operator</tt> functions just like any other functions:</p>
+<div class="docText"><pre>
+Point2D alpha(12.5, 40.0);
+Point2D beta(77.5, 50.0);
+alpha.operator+=(beta);
+beta.operator-=(alpha);
+Point2D gamma = operator+(alpha, beta);
+Point2D delta = operator-(beta, alpha);
+</pre></div><br>
+<p class="docText">Operator overloading in C++ is a complex topic, but we can go a long way without knowing all the details. It is still important to understand the fundamentals of operator overloading because several Qt classes (including <tt>QString</tt> and <tt>QVector&lt;T&gt;</tt>) use this feature to provide a simple and more natural syntax for such operations as concatenation and append.</P>
+
+<a name="app02lev2sec11"></a>
+
+<h4 id="title-IDAS4REW" class="docSection2Title">Value Types</h4>
+<p class="docText"><a name="iddle1210"></a><a name="iddle1619"></a><a name="iddle1715"></a><a name="iddle1866"></a><a name="iddle3487"></a><a name="iddle5741"></a><a name="iddle7105"></a>Java and C# distinguish between value types and reference types.</p>
+<UL><li><p class="docText"><span class="docEmphasis">Value types:</span> These are primitive types such as <tt>char</tt>, <tt>int</tt>, and <tt>float</tt>, as well as C# structs. What characterizes them is that they aren't created using <tt>new</tt> and the assignment operator performs a copy of the value held by the variable. For example:</P><div class="docText"><pre>
+int i = 5;
+int j = 10;
+i = j;
+</pre></div></LI><li><p class="docText"><span class="docEmphasis">Reference types:</span> These are classes such as <tt>Integer</tt> (in Java), <tt>String</tt>, and <tt>MyVeryOwnClass</tt>. Instances are created using <tt>new</tt>. The assignment operator copies only a reference to the object; to obtain a deep copy, we must call <tt>clone()</tt> (in Java) or <tt>Clone()</tt> (in C#). For example:</P><div class="docText"><pre>
+Integer i = new Integer(5);
+Integer j = new Integer(10);
+i = j.clone();
+</pre></div></li></ul>
+<p class="docText">In C++, all types can be used as &quot;reference types&quot;, and those that are copyable can be used as &quot;value types&quot; as well. For example, C++ doesn't need any <tt>Integer</tt> class, because we can use pointers and <tt>new</tt> as follows:</P>
+<div class="docText"><pre>
+int *i = new int(5);
+int *j = new int(10);
+*i = *j;
+</pre></div><BR>
+<p class="docText">Unlike Java and C#, C++ treats user-defined classes the same as builtin types:</P>
+<div class="docText"><pre>
+Point2D *i = new Point2D(5, 5);
+Point2D *j = new Point2D(10, 10);
+*i = *j;
+</pre></div><br>
+<p class="docText">If we want to make a C++ class copyable, we must ensure that our class has a copy constructor and an assignment operator. The copy constructor is invoked when we initialize an object with another object of the same type. C++ provides two equivalent syntaxes for this:</p>
+<div class="docText"><pre>
+Point2D i(20, 20);
+Point2D j(i);       // first syntax
+Point2D k = i;      // second syntax
+</pre></div><br>
+<p class="docText">The assignment operator is invoked when we use the assignment operator on an existing variable:</P>
+<div class="docText"><pre>
+Point2D i(5, 5);
+Point2D j(10, 10);
+j = i;
+</pre></div><br>
+<p class="docText"><a name="iddle1248"></a><a name="iddle3603"></a><a name="iddle3762"></a><a name="iddle3763"></a>When we define a class, the C++ compiler automatically provides a copy constructor and an assignment operator that perform member-by-member copy. For the <tt>Point2D</tt> class, this is as if we had written the following code in the class definition:</p>
+<div class="docText"><pre>
+class Point2D
+{
+public:
+    ...
+    Point2D(const Point2D &amp;other)
+        : xVal(other.xVal), yVal(other.yVal) { }
+    Point2D &amp;operator=(const Point2D &amp;other) {
+        xVal = other.xVal;
+        yVal = other.yVal;
+        return *this;
+    }
+    ...
+private:
+    double xVal;
+    double yVal;
+};
+</pre></div><BR>
+<p class="docText">For some classes, the default copy constructor and assignment operator are unsuitable. This typically occurs if the class uses dynamic memory. To make the class copyable, we must then implement the copy constructor and the assignment operator ourselves.</P>
+<p class="docText">For classes that don't need to be copyable, we can disable the copy constructor and assignment operator by making them private. If we accidentally attempt to copy instances of such a class, the compiler reports an error. For example:</p>
+<div class="docText"><pre>
+class BankAccount
+{
+public:
+    ...
+private:
+    BankAccount(const BankAccount &amp;other);
+    BankAccount &amp;operator=(const BankAccount &amp;other);
+};
+</pre></div><br>
+<p class="docText">In Qt, many classes are designed to be used as value classes. These have a copy constructor and an assignment operator, and are normally instantiated on the stack without <tt>new</tt>. This is the case for <tt>QDateTime</tt>, <tt>QImage</tt>, <tt>QString</tt>, and container classes such as <tt>QList&lt;T&gt;</tt>, <tt>QVector&lt;T&gt;</tt>, and <tt>QMap&lt;K, T&gt;</tt>.</p>
+<p class="docText">Other classes fall in the &quot;reference type&quot; category, notably <tt>QObject</tt> and its subclasses (<tt>QWidget</tt>, <tt>QTimer</tt>, <tt>QTcpSocket</tt>, etc.). These have virtual functions and cannot be copied. For example, a <tt>QWidget</tt> represents a specific window or control on screen. If there are 75 <tt>QWidget</tt> instances in memory, there are also 75 windows or controls on screen. These classes are typically instantiated using the <tt>new</tt> operator.</p>
+
+<a name="app02lev2sec12"></a>
+
+<H4 id="title-IDALOKEW" class="docSection2Title">Global Variables and Functions</h4>
+<p class="docText"><a name="iddle1560"></a><a name="iddle2371"></a><a name="iddle2572"></a><a name="iddle2573"></a><a name="iddle3507"></a><a name="iddle3778"></a><a name="iddle6532"></a><a name="iddle6535"></a>C++ lets us declare functions and variables that don't belong to any classes and that are accessible from any other function. We have seen several examples of global functions, including <tt>main()</tt>, the program's entry point. Global variables are rarer, because they compromise modularity and thread reentrancy. It is still important to understand them because you might encounter them in code written by reformed C programmers and other C++ users.</p>
+<p class="docText">To illustrate how global functions and variables work, we will study a small program that prints a list of 128 pseudo-random numbers using a quick-and-dirty algorithm. The program's source code is spread over two <tt>.cpp</tt> files.</P>
+<p class="docText">The first source file is <tt>random.cpp</tt>:</p>
+<div class="docText"><pre>
+int randomNumbers[128];
+static int seed = 42;
+static int nextRandomNumber()
+{
+    seed = 1009 + (seed * 2011);
+    return seed;
+}
+void populateRandomArray()
+{
+    for (int i = 0; i &lt; 128; ++i)
+        randomNumbers[i] = nextRandomNumber();
+}
+</pre></div><BR>
+<p class="docText">The file declares two global variables (<tt>randomNumbers</tt> and <tt>seed</tt>) and two global functions (<tt>nextrandomNumber()</tt> and <tt>populateRandomArray()</tt>). Two of the declarations contain the <tt>static</tt> keyword; these are visible only within the current compilation unit (<tt>random.cpp</tt>) and are said to have <span class="docEmphasis">static linkage</span>. The two others can be accessed from any compilation unit in the program; these have <span class="docEmphasis">external linkage</span>.</p>
+<p class="docText">Static linkage is ideal for helper functions and internal variables that should not be used in other compilation units. It reduces the risks of having colliding identifiers (global variables with the same name or global functions with the same signature in different compilation units) and prevents malicious or otherwise ill-advised users from accessing the internals of a compilation unit.</p>
+<p class="docText">Let's now look at the second file, <tt>main.cpp</tt>, which uses the two global variables declared with external linkage in <tt>random.cpp</tt>:</p>
+<div class="docText"><pre>
+#include &lt;iostream&gt;
+using namespace std;
+extern int randomNumbers[128];
+void populateRandomArray();
+int main()
+{
+    populateRandomArray();
+    for (int i = 0; i &lt; 128; ++i)
+        cout &lt;&lt; randomNumbers[i] &lt;&lt; endl;
+    return 0;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1862"></a><a name="iddle1884"></a><a name="iddle2369"></a><a name="iddle3138"></a><a name="iddle3506"></a><a name="iddle6533"></a>We declare the external variables and functions before we call them. The external variable declaration (which makes an external variable visible in the current compilation unit) for <tt>randomNumbers</tt> starts with the <tt>extern</tt> keyword. Without <tt>extern</tt>, the compiler would think it has to deal with a variable <span class="docEmphasis">definition</span>, and the linker would complain because the same variable is defined in two compilation units (<tt>random.cpp</tt> and <tt>main.cpp</tt>). Variables can be declared as many times as we want, but they may only be defined once. The definition is what causes the compiler to reserve space for the variable.</p>
+<p class="docText">The <tt>populateRandomArray()</tt> function is declared using a function prototype. The <tt>extern</tt> keyword is optional for functions.</p>
+<p class="docText">Typically we would put the external variable and function declarations in a header file and include it in all the files that need them:</p>
+<div class="docText"><pre>
+#ifndef RANDOM_H
+#define RANDOM_H
+extern int randomNumbers[128];
+void populateRandomArray();
+#endif
+</pre></div><br>
+<p class="docText">We have already seen how <tt>static</tt> can be used to declare member variables and functions that are not attached to a specific instance of the class, and now we have seen how to use it to declare functions and variables with static linkage. There is one more use of the <tt>static</tt> keyword that should be noted in passing. In C++, we can declare a local variable static. Such variables are initialized the first time the function is called and hold their value between function invocations. For example:</p>
+<div class="docText"><pre>
+void nextPrime()
+{
+    static int n = 1;
+    do {
+        ++n;
+    } while (!isPrime(n));
+    return n;
+}
+</pre></div><br>
+<p class="docText">Static local variables are similar to global variables, except that they are only visible inside the function where they are defined.</p>
+
+<a name="app02lev2sec13"></a>
+
+<h4 id="title-IDAYUKEW" class="docSection2Title">Namespaces</h4>
+<p class="docText"><a name="iddle3472"></a><a name="iddle3508"></a><a name="iddle3779"></a>Namespaces are a mechanism for reducing the risks of name clashes in C++ programs. Name clashes are often an issue in large programs that use several third-party libraries. In your own programs, you can choose whether you want to use namespaces or not.</p>
+<p class="docText">Typically, we put a namespace around all the declarations in a header file to ensure that the identifiers declared in that header file don't leak into the global namespace. For example:</P>
+<div class="docText"><pre>
+#ifndef SOFTWAREINC_RANDOM_H
+#define SOFTWAREINC_RANDOM_H
+namespace SoftwareInc
+{
+    extern int randomNumbers[128];
+    void populateRandomArray();
+}
+#endif
+</pre></div><br>
+<p class="docText">(Notice that we have also renamed the preprocessor macro used to avoid multiple inclusions, reducing the risk of a name clash with a header file of the same name but located in a different directory.)</p>
+<p class="docText">The namespace syntax is similar to that of a class, but it doesn't end with a semicolon. Here's the new <tt>random.cpp</tt> file:</p>
+<div class="docText"><pre>
+#include "random.h"
+int SoftwareInc::randomNumbers[128];
+static int seed = 42;
+static int nextRandomNumber()
+{
+    seed = 1009 + (seed * 2011);
+    return seed;
+}
+void SoftwareInc::populateRandomArray()
+{
+    for (int i = 0; i &lt; 128; ++i)
+        randomNumbers[i] = nextRandomNumber();
+}
+</pre></div><BR>
+<p class="docText">Unlike classes, namespaces can be &quot;reopened&quot; at any time. For example:</p>
+<div class="docText"><pre>
+namespace Alpha
+{
+    void alpha1();
+    void alpha2();
+}
+namespace Beta
+{
+    void beta1();
+}
+namespace Alpha
+{
+    void alpha3();
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1018"></a><a name="iddle5050"></a><a name="iddle6548"></a><a name="iddle7071"></a><a name="iddle7073"></a>This makes it possible to define hundreds of classes, located in as many header files, as part of a single namespace. Using this trick, the Standard C++ library puts all its identifiers in the <tt>std</tt> namespace. In Qt, namespaces are used for global-like identifiers such as <tt>Qt::AlignBottom</tt> and <tt>Qt::yellow</tt>. For historical reasons, Qt classes do not belong to any namespace but are prefixed with the letter 'Q'.</P>
+<p class="docText">To refer to an identifier declared in a namespace from outside the namespace, we prefix it with the name of the namespace (and <tt>::</tt>). Alternatively, we can use one of the following three mechanisms, which are aimed at reducing the number of keystrokes we must type.</p>
+<UL><li><p class="docText"><span class="docEmphStrong">We can define a namespace alias:</span> </p><div class="docText"><pre>
+namespace ElPuebloDeLaReinaDeLosAngeles
+{
+    void beverlyHills();
+    void culverCity();
+    void malibu();
+    void santaMonica();
+}
+namespace LA = ElPuebloDeLaReinaDeLosAngeles;
+</pre></div><p class="docList">After the alias definition, the alias can be used instead of the original name.q</P></LI><LI><p class="docText"><span class="docEmphStrong">We can import a single identifier from a namespace:</span> </p><div class="docText"><pre>
+int main()
+{
+    using ElPuebloDeLaReinaDeLosAngeles::beverlyHills;
+    beverlyHills();
+    ...
+}
+</pre></div><p class="docList">The <tt>using</tt> declaration allows us to access a given identifier from a name-space without having to prefix it with the name of the namespace.</p></li><LI><p class="docText"><span class="docEmphStrong">We can import an entire namespace with a single directive:</span> </p><div class="docText"><pre>
+int main()
+{
+    using namespace ElPuebloDeLaReinaDeLosAngeles;
+    santaMonica();
+    malibu();
+    ...
+}
+</pre></div></li></UL>
+<p class="docText"><a name="iddle1881"></a><a name="iddle2815"></a><a name="iddle3173"></a><a name="iddle3803"></a>With this approach, name clashes are more likely to occur. If the compiler complains about an ambiguous name (for example, two classes with the same name defined in two different namespaces), we can always qualify the identifier with the name of the namespace when referring to it.</P>
+
+<a name="app02lev2sec14"></a>
+<h4 id="title-IDAN1KEW" class="docSection2Title">The Preprocessor</h4>
+<p class="docText">The C++ preprocessor is a program that converts a <tt>.cpp</tt> source file containing <tt>#</tt>-directives (such as <tt>#include</tt>, <tt>#ifndef</tt>, and <tt>#endif</tt>) into a source file that contains no such directives. These directives perform simple textual operations on the source file, such as conditional compilation, file inclusion, and macro expansion. Normally, the preprocessor is invoked automatically by the compiler, but most systems still offer a way of invoking it alone (often through a <tt>-E</tt> or <tt>/E</tt> compiler option).</p>
+<ul><LI><p class="docList">The <tt>#include</tt> directive expands to the contents of the file specified within angle brackets (<tt>&lt;&gt;</tt>) or double quotes (<tt>""</tt>), depending on whether the header file is installed at a standard location or is part of the current project. The file name may contain <tt>..</tt> and <tt>/</tt> (which Windows compilers correctly interpret as a directory separator). For example:</p><div class="docText"><pre>
+#include "../shared/globaldefs.h"
+</pre></div></li><LI><p class="docList">The <tt>#define</tt> directive defines a macro. Occurrences of the macro appearing after the <tt>#define</tt> directive are replaced with the macro's definition. For example, the directive</p><div class="docText"><pre>
+#define PI 3.14159265359
+</pre></div><p class="docList">tells the preprocessor to replace all future occurrences of the token <tt>PI</tt> in the current compilation unit with the token <tt>3.14159265359</tt>. To avoid clashes with variable and class names, it is common practice to give macros alluppercase names. It is possible to define macros that take arguments:</P><div class="docText"><pre>
+#define SQUARE(x) ((x) * (x))
+</pre></div><p class="docList">In the macro body, it is good style to surround all occurrences of the parameters with parentheses, as well as the entire body, to avoid problems with operator precedence. After all, we want <tt>7 * SQUARE(2 + 3)</tt> to expand to <tt>7 * ((2 + 3) * (2 + 3))</tt>, not to <tt>7 * 2 + 3 * 2 + 3</tt>.</p><p class="docList">C++ compilers normally allow us to define macros on the command line, using the <tt>-D</tt> or <tt>/D</tt> option. For example:</p><div class="docText"><pre>
+CC -DPI=3.14159265359 -c main.cpp
+</pre></div><p class="docList"><a name="iddle1568"></a><a name="iddle1882"></a><a name="iddle2119"></a><a name="iddle2122"></a><a name="iddle2149"></a><a name="iddle2767"></a><a name="iddle2768"></a><a name="iddle2771"></a><a name="iddle7004"></a>Macros were very popular in the old days, before typedefs, enums, constants, inline functions, and templates were introduced. Nowadays, their most important role is to protect header files against multiple inclusions.</p></li><li><p class="docList">Macros can be undefined at any point using <tt>#undef</tt>:</p><div class="docText"><pre>
+#undef PI
+</pre></div><p class="docList">This is useful if we want to redefine a macro, since the preprocessor doesn't let us define the same macro twice. It is also useful to control conditional compilation.</p></li><li><p class="docList">Portions of code can be processed or skipped using <tt>#if</tt>, <tt>#elif</tt>, <tt>#else</tt>, and <tt>#endif</tt>, based on the numeric value of macros. For example:</p><div class="docText"><pre>
+#define NO_OPTIM         0
+#define OPTIM_FOR_SPEED  1
+#define OPTIM_FOR_MEMORY 2
+#define OPTIMIZATION     OPTIM_FOR_MEMORY
+...
+#if OPTIMIZATION == OPTIM_FOR_SPEED
+typedef int MyInt;
+#elif OPTIMIZATION == OPTIM_FOR_MEMORY
+typedef short MyInt;
+#else
+typedef long long MyInt;
+#endif
+</pre></div><p class="docList">In the example above, only the second <tt>typedef</tt> declaration would be processed by the compiler, resulting in <tt>MyInt</tt> being defined as a synonym for <tt>short</tt>. By changing the definition of the <tt>OPTIMIZATION</tt> macro, we get different programs. If a macro isn't defined, its value is taken to be 0.</p><p class="docList">Another approach to conditional compilation is to test whether a macro is defined or not. This can be done using the using the <tt>defined()</tt> operator as follows:</p><div class="docText"><pre>
+#define OPTIM_FOR_MEMORY
+...
+#if defined(OPTIM_FOR_SPEED)
+typedef int MyInt;
+#elif defined(OPTIM_FOR_MEMORY)
+typedef short MyInt;
+#else
+typedef long long MyInt;
+#endif
+</pre></div></li><li><p class="docList">For convenience, the preprocessor recognizes <tt>#ifdef X</tt> and <tt>#ifndef X</tt> as synonyms for <tt>#if defined(X)</tt> and <tt>#if !defined(X)</tt>. To protect a header <a name="iddle1037"></a><a name="iddle1246"></a><a name="iddle1342"></a><a name="iddle2181"></a><a name="iddle2340"></a><a name="iddle2877"></a><a name="iddle2899"></a><a name="iddle4093"></a><a name="iddle4482"></a><a name="iddle4538"></a><a name="iddle4972"></a><a name="iddle6506"></a>file against multiple inclusions, we wrap its contents with the following idiom:</p><div class="docText"><pre>
+#ifndef MYHEADERFILE_H
+#define MYHEADERFILE_H
+...
+#endif
+</pre></div><p class="docList">The first time the header file is included, the symbol <tt>MYHEADERFILE_H</tt> is not defined, so the compiler processes the code between <tt>#ifndef</tt> and <tt>#endif</tt>. The second and any subsequent times the header file is included, <tt>MYHEADERFILE_H</tt> is defined, so the entire <tt>#ifndef</tt> &#8230; <tt>#endif</tt> block is skipped.</P></li><li><p class="docList">The <tt>#error</tt> directive emits a user-defined error message at compile time. This is often used in conjunction with conditional compilation to report an impossible case. For example:</p><div class="docText"><pre>
+class UniChar
+{
+public:
+#if BYTE_ORDER == BIG_ENDIAN
+    uchar row;
+    uchar cell;
+#elif BYTE_ORDER == LITTLE_ENDIAN
+    uchar cell;
+    uchar row;
+#else
+#error "BYTE_ORDER must be BIG_ENDIAN or LITTLE_ENDIAN"
+#endif
+};
+</pre></div></LI></ul>
+<p class="docText">Unlike most other C++ constructs,where whitespace is irrelevant,preprocessor directives stand alone on a line and require no semicolon. Very long directives can be split across multiple lines by ending every line except the last with a backslash.</P>
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app02lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

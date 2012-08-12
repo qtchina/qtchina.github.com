@@ -1,0 +1,185 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Implementing the Edit Menu</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch04lev1sec4"></a>
+
+<h3 id="title-IDAH5ETN" class="docSection1Title">Implementing the Edit Menu</h3>
+<p class="docText"><a name="iddle1474"></a><a name="iddle1476"></a><a name="iddle1708"></a><a name="iddle1814"></a><a name="iddle2095"></a><a name="iddle4023"></a><a name="iddle4116"></a><a name="iddle6197"></a><a name="iddle6454"></a><a name="iddle6457"></a>We are now ready to implement the slots that correspond to the application's Edit menu.</p>
+<div class="docText"><pre>
+void Spreadsheet::cut()
+{
+    copy();
+    del();
+}
+</pre></div><br>
+<p class="docText">The <tt>cut()</tt> slot corresponds to Edit|Cut. The implementation is simple since Cut is the same as Copy followed by Delete.</p>
+<a name="ch04fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.4. The Spreadsheet application's Edit menu</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="313" height="212" SRC="images/edit_menu.jpg"></p>
+
+</center></p><br>
+<div class="docText"><pre>
+void Spreadsheet::copy()
+{
+    QTableWidgetSelectionRange range = selectedRange();
+    QString str;
+    for (int i = 0; i &lt; range.rowCount(); ++i) {
+        if (i &gt; 0)
+            str += "\n";
+        for (int j = 0; j &lt; range.columnCount(); ++j) {
+            if (j &gt; 0)
+                str += "\t";
+            str += formula(range.topRow() + i, range.leftColumn() + j);
+        }
+    }
+    QApplication::clipboard()-&gt;setText(str);
+}
+</pre></div><br>
+<p class="docText">The <tt>copy()</tt> slot corresponds to Edit|Copy. It iterates over the current selection (which is simply the current cell if there is no explicit selection). Each selected cell's formula is added to a <tt>QString</tt>, with rows separated by newline characters and columns separated by tab characters.</p>
+<p class="docText">The system clipboard is available in Qt through the <tt>QApplication::clipboard()</tt> static function. By calling <tt>QClipboard::setText()</tt>, we make the text available <a name="iddle1678"></a><a name="iddle3688"></a><a name="iddle3974"></a><a name="iddle5191"></a><a name="iddle5974"></a><a name="iddle5975"></a><a name="iddle6464"></a><a name="iddle6469"></a><a name="iddle6690"></a>on the clipboard, both to this application and to other applications that support plain text. Our format with tab and newline characters as separators is understood by a variety of applications, including Microsoft Excel.</P>
+<a name="ch04fig05"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 4.5. Copying a selection onto the clipboard</H5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="355" height="143" SRC="images/spreadsheet_clip1.jpg"></P>
+
+</center></p><br>
+<p class="docText">The <tt>QTableWidget::selectedRanges()</tt> function returns a list of selection ranges. We know there cannot be more than one because we set the selection mode to <tt>QAbstractItemView::ContiguousSelection</tt> in the constructor. For our convenience, we define a <tt>selectedRange()</tt> function that returns the selection range:</p>
+<div class="docText"><pre>
+QTableWidgetSelectionRange Spreadsheet::selectedRange() const
+{
+    QList&lt;QTableWidgetSelectionRange&gt; ranges = selectedRanges();
+    if (ranges.isEmpty())
+        return QTableWidgetSelectionRange();
+    return ranges.first();
+}
+</pre></div><br>
+<p class="docText">If there is a selection at all, we simply return the first (and only) one. The case where there is no selection should never happen since the <tt>ContiguousSelection</tt> mode treats the current cell as being selected. But to protect against the possibility of a bug in our program that makes no cell current, we handle this case.</p>
+<div class="docText"><pre>
+void Spreadsheet::paste()
+{
+    QTableWidgetSelectionRange range = selectedRange();
+    QString str = QApplication::clipboard()-&gt;text();
+    QStringList rows = str.split('\n');
+    int numRows = rows.count();
+    int numColumns = rows.first().count('\t') + 1;
+    if (range.rowCount() * range.columnCount() != 1
+            &amp;&amp; (range.rowCount() != numRows
+                || range.columnCount() != numColumns)) {
+        QMessageBox::information(this, tr("Spreadsheet"),
+                tr("The information cannot be pasted because the copy "
+                   "and paste areas aren't the same size."));
+        return;
+    }
+    for (int i = 0; i &lt; numRows; ++i) {
+        QStringList columns = rows[i].split('\t');
+        for (int j = 0; j &lt; numColumns; ++j) {
+            int row = range.topRow() + i;
+            int column = range.leftColumn() + j;
+            if (row &lt; RowCount &amp;&amp; column &lt; ColumnCount)
+                setFormula(row, column, columns[j]);
+        }
+    }
+    somethingChanged();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1887"></a><a name="iddle1888"></a><a name="iddle1899"></a><a name="iddle4117"></a><a name="iddle5010"></a><a name="iddle6435"></a><a name="iddle6458"></a><a name="iddle6725"></a><a name="iddle6726"></a>The <tt>paste()</tt> slot corresponds to Edit|Paste. We fetch the text on the clipboard and call the static function <tt>QString::split()</tt> to break the string into a <tt>QStringList</tt>. Each row becomes one string in the list.</p>
+<p class="docText">Next, we determine the dimension of the copy area. The number of rows is the number of strings in the <tt>QStringList</tt>; the number of columns is the number of tab characters in the first row, plus 1. If only one cell is selected, we use that cell as the top-left corner of the paste area; otherwise, we use the current selection as the paste area.</p>
+<p class="docText">To perform the paste, we iterate over the rows and split each of them into cells by using <tt>QString::split()</tt> again, but this time using tab as the separator. <a class="docLink" href="#ch04fig06">Figure 4.6</a> illustrates the steps.</p>
+<a name="ch04fig06"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.6. Pasting clipboard text into the spreadsheet</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="375" height="235" SRC="images/spreadsheet_clip2.jpg"></P>
+
+</center></p><br>
+<div class="docText"><pre>
+void Spreadsheet::del()
+{
+    foreach (QTableWidgetItem *item, selectedItems())
+        delete item;
+}
+</pre></div><BR>
+<p class="docText">The <tt>del()</tt> slot corresponds to Edit|Delete. It is sufficient to use <tt>delete</tt> on each of the <tt>Cell</tt> objects in the selection to clear the cells. The <tt>QTableWidget</tt> notices when its <tt>QTableWidgetItem</tt>s are deleted and automatically repaints itself if any of the items were visible. If we call <tt>cell()</tt> with the location of a deleted cell, it will return a null pointer.</P>
+<div class="docText"><pre>
+void Spreadsheet::selectCurrentRow()
+{
+    selectRow(currentRow());
+}
+void Spreadsheet::selectCurrentColumn()
+{
+    selectColumn(currentColumn());
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1066"></a><a name="iddle1258"></a><a name="iddle1671"></a><a name="iddle2431"></a><a name="iddle2434"></a><a name="iddle3978"></a><a name="iddle4022"></a><a name="iddle4983"></a><a name="iddle5189"></a><a name="iddle5190"></a><a name="iddle5478"></a><a name="iddle5968"></a><a name="iddle5969"></a><a name="iddle5970"></a><a name="iddle5971"></a><a name="iddle5972"></a><a name="iddle6459"></a><a name="iddle6460"></a><a name="iddle6467"></a><a name="iddle6468"></a>The <tt>selectCurrentRow()</tt> and <tt>selectCurrentColumn()</tt> functions correspond to the Edit|Select|Row and Edit|Select|Column menu options. The implementations rely on <tt>QTableWidget</tt>'s <tt>selectRow()</tt> and <tt>selectColumn()</tt> functions. We do not need to implement the functionality behind Edit|Select|All, since that is provided by <tt>QTableWidget</tt>'s inherited function <tt>QAbstractItemView::selectAll()</tt>.</p>
+<div class="docText"><pre>
+void Spreadsheet::findNext(const QString &amp;str, Qt::CaseSensitivity cs)
+{
+    int row = currentRow();
+    int column = currentColumn() + 1;
+    while (row &lt; RowCount) {
+        while (column &lt; ColumnCount) {
+            if (text(row, column).contains(str, cs)) {
+                clearSelection();
+                setCurrentCell(row, column);
+                activateWindow();
+                return;
+            }
+            ++column;
+        }
+        column = 0;
+        ++row;
+    }
+    QApplication::beep();
+}
+</pre></div><br>
+<p class="docText">The <tt>findNext()</tt> slot iterates through the cells starting from the cell to the right of the cursor and moving right until the last column is reached, then continues from the first column in the row below, and so on until the text is found or until the very last cell is reached. For example, if the current cell is cell C24, we search D24, E24, &#8230;, Z24, then A25, B25, C25, &#8230;, Z25, and so on until Z999. If we find a match, we clear the current selection, move the cell cursor to the cell that matched, and make the window that contains the <tt>Spreadsheet</tt> active. If no match is found, we make the application beep to indicate that the search finished unsuccessfully.</p>
+<div class="docText"><pre>
+void Spreadsheet::findPrevious(const QString &amp;str,
+                               Qt::CaseSensitivity cs)
+{
+    int row = currentRow();
+    int column = currentColumn() - 1;
+    while (row &gt;= 0) {
+        while (column &gt;= 0) {
+            if (text(row, column).contains(str, cs)) {
+                clearSelection();
+                setCurrentCell(row, column);
+                activateWindow();
+                return;
+            }
+            --column;
+        }
+        column = ColumnCount - 1;
+        --row;
+    }
+    QApplication::beep();
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle5603"></a><a name="iddle5726"></a><a name="iddle6466"></a><a name="iddle7033"></a>The <tt>findPrevious()</tt> slot is similar to <tt>findNext()</tt>, except that it iterates backward and stops at cell A1.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

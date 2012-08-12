@@ -1,0 +1,180 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Implementing Custom Delegates</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch10lev1sec4"></a>
+<h3 id="title-IDAUGADW" class="docSection1Title">Implementing Custom Delegates</h3>
+<p class="docText">Individual items in views are rendered and edited using delegates. In most cases, the default delegate supplied by a view is sufficient. If we want to have finer control over the rendering of items, we can often achieve what we want simply by using a custom model: In our <tt>data()</tt> reimplementation we can handle the <tt>Qt::FontRole</tt>, <tt>Qt::TextAlignmentRole</tt>, <tt>Qt::TextColorRole</tt>, and <tt>Qt::BackgroundColorRole</tt>, and these are used by the default delegate. For example, in the Cities and Currencies examples shown earlier, we handled the <tt>Qt::TextAlignmentRole</tt> to get right-aligned numbers.</p>
+<p class="docText">If we want even greater control, we can create our own delegate class and set it on the views that we want to make use of it. The Track Editor dialog shown below makes use of a custom delegate. It shows the titles of music tracks and their durations. The data held by the model will be simply <tt>QString</tt>s (titles) and <tt>int</tt>s (seconds), but the durations will be separated into minutes and seconds and will be editable using a <tt>QTimeEdit</tt>.</p>
+<a name="ch10fig15"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.15. The Track Editor dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="421" height="255" SRC="images/trackeditor.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle3983"></a><a name="iddle4433"></a><a name="iddle6121"></a><a name="iddle6630"></a><a name="iddle6893"></a><a name="iddle6894"></a><a name="iddle6895"></a><a name="iddle6903"></a>The Track Editor dialog uses a <tt>QTableWidget</tt>, a convenience item view subclass that operates on <tt>QTableWidgetItem</tt>s. The data is provided as a list of <tt>track</tt>s:</p>
+<div class="docText"><pre>
+class Track
+{
+public:
+    Track(const QString &amp;title = "", int duration = 0);
+    QString title;
+    int duration;
+};
+</pre></div><br>
+<p class="docText">Here is an extract from the constructor that shows the creation and population of the table widget:</P>
+<div class="docText"><pre>
+TrackEditor::TrackEditor(QList&lt;Track&gt; *tracks, QWidget *parent)
+    : QDialog(parent)
+{
+    this-&gt;tracks = tracks;
+    tableWidget = new QTableWidget(tracks-&gt;count(), 2);
+    tableWidget-&gt;setItemDelegate(new TrackDelegate(1));
+    tableWidget-&gt;setHorizontalHeaderLabels(
+            QStringList() &lt;&lt; tr("Track") &lt;&lt; tr("Duration"));
+    for (int row = 0; row &lt; tracks-&gt;count(); ++row) {
+        Track track = tracks-&gt;at(row);
+        QTableWidgetItem *item0 = new QTableWidgetItem(track.title);
+        tableWidget-&gt;setItem(row, 0, item0);
+        QTableWidgetItem *item1
+             = new QTableWidgetItem(QString::number(track.duration));
+        item1-&gt;setTextAlignment(Qt::AlignRight);
+        tableWidget-&gt;setItem(row, 1, item1);
+    }
+    ...
+}
+</pre></div><BR>
+<p class="docText">The constructor creates a table widget, and instead of simply using the default delegate, we set our custom <tt>TRackDelegate</tt>, passing it the column that holds time data. We begin by setting the column headings, and then iterate through the data, populating the rows with the name and duration of each track.</P>
+<p class="docText">The rest of the constructor and the rest of the <tt>TRackEditor</tt> dialog holds no surprises, so we will now look at the <tt>trackDelegate</tt> that handles the rendering and editing of track data.</p>
+<div class="docText"><pre>
+class TrackDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    TrackDelegate(int durationColumn, QObject *parent = 0);
+        void paint(QPainter *painter, const QStyleOptionViewItem &amp;option,
+                   const QModelIndex &amp;index) const;
+        QWidget *createEditor(QWidget *parent,
+                              const QStyleOptionViewItem &amp;option,
+                              const QModelIndex &amp;index) const;
+        void setEditorData(QWidget *editor, const QModelIndex &amp;index) const;
+        void setModelData(QWidget *editor, QAbstractItemModel *model,
+                          const QModelIndex &amp;index) const;
+    private slots:
+        void commitAndCloseEditor();
+    private:
+    int durationColumn;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1177"></a><a name="iddle3634"></a><a name="iddle3939"></a><a name="iddle3943"></a><a name="iddle4980"></a><a name="iddle6897"></a><a name="iddle6900"></a>We use <tt>QItemDelegate</tt> as our base class, so that we benefit from the default delegate implementation. We could also have used <tt>QAbstractItemDelegate</tt> if we had wanted to start from scratch. To provide a delegate that can edit data, we must implement <tt>createEditor()</tt>, <tt>setEditorData()</tt>, and <tt>setModelData()</tt>. We also implement <tt>paint()</tt> to change the rendering of the duration column.</p>
+<div class="docText"><pre>
+TrackDelegate::TrackDelegate(int durationColumn, QObject *parent)
+    : QItemDelegate(parent)
+{
+    this-&gt;durationColumn = durationColumn;
+}
+</pre></div><br>
+<p class="docText">The <tt>durationColumn</tt> parameter to the constructor tells the delegate which column holds the track duration.</p>
+<div class="docText"><pre>
+void TrackDelegate::paint(QPainter *painter,
+                          const QStyleOptionViewItem &amp;option,
+                          const QModelIndex &amp;index) const
+{
+    if (index.column() == durationColumn) {
+        int secs = index.model()-&gt;data(index, Qt::DisplayRole).toInt();
+        QString text = QString("%1:%2")
+                       .arg(secs / 60, 2, 10, QChar('0'))
+                       .arg(secs % 60, 2, 10, QChar('0'));
+        QStyleOptionViewItem myOption = option;
+        myOption.displayAlignment = Qt::AlignRight | Qt::AlignVCenter;
+        drawDisplay(painter, myOption, myOption.rect, text);
+        drawFocus(painter, myOption, myOption.rect);
+    } else{
+        QItemDelegate::paint(painter, option, index);
+    }
+}
+</pre></div><br>
+<p class="docText">Since we want to render the duration in the form &quot;<span class="docEmphasis">minutes</span> :<span class="docEmphasis">seconds</span>&quot;, we have reimplemented the <tt>paint()</tt> function. The <tt>arg()</tt> calls take an integer to render as a string, how many characters the string should have, the base of the integer (10 for decimal), and the padding character.</p>
+<p class="docText"><a name="iddle1494"></a><a name="iddle1553"></a><a name="iddle1554"></a><a name="iddle1555"></a><a name="iddle1736"></a><a name="iddle2028"></a><a name="iddle2032"></a><a name="iddle2104"></a><a name="iddle2154"></a><a name="iddle2187"></a><a name="iddle2462"></a><a name="iddle2467"></a><a name="iddle3004"></a><a name="iddle3006"></a><a name="iddle3940"></a><a name="iddle3941"></a><a name="iddle3942"></a><a name="iddle3944"></a><a name="iddle4434"></a><a name="iddle4435"></a><a name="iddle4622"></a><a name="iddle5346"></a><a name="iddle5987"></a><a name="iddle6075"></a><a name="iddle6898"></a><a name="iddle6899"></a><a name="iddle6901"></a>To right-align the text, we copy the current style options and overwrite the default alignment. We then call <tt>QItemDelegate::drawDisplay()</tt> to draw the text, followed by <tt>QItemDelegate::drawFocus()</tt>, which will draw a focus rectangle if the item has focus and will do nothing otherwise. Using <tt>drawDisplay()</tt> is very convenient, especially when used with our own style options. We could also draw using the painter directly.</p>
+<div class="docText"><pre>
+QWidget *TrackDelegate::createEditor(QWidget *parent,
+        const QStyleOptionViewItem &amp;option,
+        const QModelIndex &amp;index) const
+{
+    if (index.column() == durationColumn) {
+        QTimeEdit *timeEdit = new QTimeEdit(parent);
+        timeEdit-&gt;setDisplayFormat("mm:ss");
+        connect(timeEdit, SIGNAL(editingFinished()),
+                this, SLOT(commitAndCloseEditor()));
+        return timeEdit;
+    } else {
+        return QItemDelegate::createEditor(parent, option, index);
+    }
+}
+</pre></div><br>
+<p class="docText">We only want to control the editing of track durations, leaving the editing of track names to the default delegate. We achieve this by checking which column the delegate has been asked to provide an editor for. If it's the duration column, we create a <tt>QTimeEdit</tt>, set the display format appropriately,and connect its <tt>editingFinished()</tt> signal to our <tt>commitAndCloseEditor()</tt> slot. For any other column, we pass on the edit handling to the default delegate.</p>
+<div class="docText"><pre>
+void TrackDelegate::commitAndCloseEditor()
+{
+    QTimeEdit *editor = qobject_cast&lt;QTimeEdit *&gt;(sender());
+    emit commitData(editor);
+    emit closeEditor(editor);
+}
+</pre></div><br>
+<p class="docText">If the user presses Enter or moves the focus out of the <tt>QTimeEdit</tt> (but not if they press Esc), the <tt>editingFinished()</tt> signal is emitted and the <tt>commitAndCloseEditor()</tt> slot is called. This slot emits the <tt>commitData()</tt> signal to inform the view that there is edited data to replace existing data. It also emits the <tt>closeEditor()</tt> signal to notify the view that this editor is no longer required, at which point the model will delete it. The editor is retrieved using <tt>QObject::sender()</tt>, which returns the object that emitted the signal that triggered the slot. If the user cancels (by pressing Esc), the view will simply delete the editor.</P>
+<div class="docText"><pre>
+void TrackDelegate::setEditorData(QWidget *editor,
+                                  const QModelIndex &amp;index) const
+{
+    if (index.column() == durationColumn) {
+        int secs = index.model()-&gt;data(index, Qt::DisplayRole).toInt();
+        QTimeEdit *timeEdit = qobject_cast&lt;QTimeEdit *&gt;(editor);
+        timeEdit-&gt;setTime(QTime(0, secs / 60, secs % 60));
+    } else {
+        QItemDelegate::setEditorData(editor, index);
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1413"></a><a name="iddle1808"></a><a name="iddle3376"></a><a name="iddle3945"></a><a name="iddle6137"></a><a name="iddle6902"></a>When the user initiates editing, the view calls <tt>createEditor()</tt> to create an editor, and then <tt>setEditorData()</tt> to initialize the editor with the item's current data. If the editor is for the duration column, we extract the track's duration in seconds and set the <tt>QTimeEdit</tt>'s time to the corresponding number of minutes and seconds; otherwise, we let the default delegate handle the initialization.</p>
+<div class="docText"><pre>
+void TrackDelegate::setModelData(QWidget *editor,
+                                 QAbstractItemModel *model,
+                                 const QModelIndex &amp;index) const
+{
+    if (index.column() == durationColumn) {
+        QTimeEdit *timeEdit = qobject_cast&lt;QTimeEdit *&gt;(editor);
+        QTime time = timeEdit-&gt;time();
+        int secs = (time.minute() * 60) + time.second();
+        model-&gt;setData(index, secs);
+    } else {
+        QItemDelegate::setModelData(editor, model, index);
+    }
+}
+</pre></div><BR>
+<p class="docText">If the user completes the edit (for example, by left-clicking outside the editor widget, or by pressing Enter or Tab) rather than canceling it, the model must be updated with the editor's data. If the duration was edited, we extract the minutes and seconds from the <tt>QTimeEdit</tt>, and set the data to the corresponding number of seconds.</P>
+<p class="docText">Although not necessary in this case, it is entirely possible to create a custom delegate that finely controls the editing and rendering of any item in a model. We have chosen to take control of a particular column, but since the <tt>QModelIndex</tt> is passed to all the <tt>QItemDelegate</tt> functions that we reimplement, we can take control by column, row, rectangular region, parent, or any combination of these, right down to individual items if required.</p>
+<p class="docText">In this chapter, we have presented a broad overview of Qt's model/view architecture. We have shown how to use the view convenience subclasses, how to use Qt's predefined models, and how to create custom models and custom delegates. But the model/view architecture is so rich that we have not had the space to cover all the things it makes possible. For example, we could create a custom view that does not render its items as a list, table, or tree. This is done by the Chart example located in Qt's <tt>examples/itemviews/chart</tt> directory, which shows a custom view that renders model data in the form of a pie chart.</p>
+<p class="docText">It is also possible to use multiple views to view the same model without any formality. Any edits made through one view will be automatically and immediately reflected in the other views. This kind of functionality is particularly useful for viewing large data sets where the user may wish to see sections of data that are logically far apart. The architecture also supports selections: Where two <a name="iddle1893"></a>or more views are using the same model, each view can be set to have its own independent selections, or the selections can be shared across the views.</p>
+<p class="docText">Qt's online documentation provides comprehensive coverage of item view programming and the classes that implement it. See <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/model-view.html">http://doc.trolltech.com/4.1/model-view.html</a> for a list of all the relevant classes, and <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/model-view-programming.html">http://doc.trolltech.com/4.1/model-view-programming.html</a> for additional information and links to the relevant examples included with Qt.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

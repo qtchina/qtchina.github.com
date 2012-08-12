@@ -1,0 +1,44 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 11.&nbsp; Container Classes</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch11"></a>
+
+<h2 id="title-IDA5GADW" class="docChapterTitle">Chapter 11. Container Classes</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="199" height="118" SRC="images/251fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle1121"></a><a name="iddle1648"></a><a name="iddle2541"></a><a name="iddle4148"></a><a name="iddle5368"></a><a name="iddle6502"></a><a name="iddle6508"></a><a name="iddle6571"></a><span class="docEmphasis"><a class="docLink" href="ch11lev1sec1.html#ch11lev1sec1">Sequential Containers</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch11lev1sec2.html#ch11lev1sec2">Associative Containers</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch11lev1sec3.html#ch11lev1sec3">Generic Algorithms</a></span></p></li><LI><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch11lev1sec4.html#ch11lev1sec4">Strings, Byte Arrays, and Variants</a></span></P></LI></UL>
+<p class="docText">Container classes are general-purpose template classes that store items of a given type in memory. C++ already offers many containers as part of the Standard Template Library (STL), which is included in the Standard C++ library.</P>
+<p class="docText">Qt provides its own container classes, so for Qt programs we can use both the Qt and the STL containers. The main advantages of the Qt containers are that they behave the same on all platforms and that they are implicitly shared. Implicit sharing, or &quot;copy on write&quot;, is an optimization that makes it possible to pass entire containers as values without any significant performance cost. The Qt containers also feature easy-to-use iterator classes inspired by Java, they can be streamed using <tt>QDataStream</tt>, and they usually result in less code in the executable than the corresponding STL containers. Finally, on some hardware platforms supported by Qtopia Core (the Qt version for mobile devices), the Qt containers are the only ones available.</p>
+<p class="docText">Qt offers both sequential containers such as <tt>QVector&lt;T&gt;</tt>, <tt>QLinkedList&lt;T&gt;</tt>, and <tt>QList&lt;T&gt;</tt>, and associative containers such as <tt>QMap&lt;K, T&gt;</tt> and <tt>QHash&lt;K, T&gt;</tt>. Conceptually, the sequential containers store items one after another, whereas the associative containers store keyvalue pairs.</p>
+<p class="docText">Qt also provides generic algorithms that perform operations on arbitrary containers. For example, the <tt>qSort()</tt> algorithm sorts a sequential container, and <tt>qBinaryFind()</tt> performs a binary search on a sorted sequential container. These algorithms are similar to those offered by the STL.</p>
+<p class="docText">If you are already familiar with the STL containers and have STL available on your target platforms, you might want to use them instead of, or in addition to, the Qt containers. For more information about the STL classes and functions, a good place to start is SGI's STL web site: <a class="docLink" target="_blank" href="http://www.sgi.com/tech/stl/">http://www.sgi.com/tech/stl/</a>.</p>
+<p class="docText">In this chapter, we will also look at <tt>QString</tt>, <tt>QByteArray</tt>, and <tt>QVariant</tt>, since they have a lot in common with containers. <tt>QString</tt> is a 16-bit Unicode string used throughout Qt's API. <tt>QByteArray</tt> is an array of 8-bit <tt>char</tt>s useful for storing raw binary data. <tt>QVariant</tt> is a type that can store most C++ and Qt value types.</p>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch11lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

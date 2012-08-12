@@ -1,0 +1,140 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Shape-Changing Dialogs</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch02lev1sec4"></a>
+<h3 id="title-IDAZDW2H" class="docSection1Title">Shape-Changing Dialogs</h3>
+<p class="docText">We have seen how to create dialogs that always show the same widgets whenever they are used. In some cases, it is desirable to provide dialogs that can change shape. The two most common kinds of shape-changing dialogs are <span class="docEmphasis">extension dialogs</span> and <span class="docEmphasis">multi-page dialogs</span>. Both types of dialog can be implemented in Qt, either purely in code or using <span class="docEmphasis">Qt Designer</span>.</p>
+<p class="docText">Extension dialogs usually present a simple appearance but have a toggle button that allows the user to switch between the dialog's simple and extended appearances. Extension dialogs are commonly used for applications that are trying to cater for both casual and power users, hiding the advanced options unless the user explicitly asks to see them. In this section, we will use <span class="docEmphasis">Qt Designer</span> to create the extension dialog shown in <a class="docLink" href="#ch02fig10">Figure 2.10</a>.</p>
+<a name="ch02fig10"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.10. The Sort dialog with simple and extended appearances</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/sort1_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="279" SRC="images/sort1.jpg"></p>
+</center></p><br>
+<p class="docText">The dialog is a Sort dialog in a spreadsheet application, where the user can select one or several columns to sort on. The dialog's simple appearance allows the user to enter a single sort key, and its extended appearance provides for two extra sort keys. A More button lets the user switch between the simple and extended appearances.</p>
+<p class="docText"><a name="iddle2596"></a><a name="iddle3046"></a><a name="iddle3050"></a><a name="iddle4353"></a><a name="iddle5136"></a>We will create the widget with its extended appearance in <span class="docEmphasis">Qt Designer</span>, and hide the secondary and tertiary keys at run-time as needed. The widget looks complicated, but it's fairly easy to do in <span class="docEmphasis">Qt Designer</span>. The trick is to do the primary key part first, then duplicate it twice to obtain the secondary and tertiary keys:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docList">Click File|New Form and choose the &quot;Dialog with Buttons Right&quot; template.</P></div></LI><LI><div style="font-weight:normal"><p class="docList">Create the More button and drag it into the vertical layout, below the vertical spacer. Set the More button's <tt>text</tt> property to &quot;&amp;More&quot;, and its <tt>checkable</tt> property to &quot;true&quot;. Set the OK button's <tt>default</tt> property to &quot;true&quot;.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Create a group box, two labels, two comboboxes, and one horizontal spacer, and put them anywhere on the form.</p></div></li><li><div style="font-weight:normal"><p class="docList">Drag the bottom right corner of the group box to make it larger. Then move the other widgets into the group box and position them approximately as shown in <a class="docLink" href="#ch02fig11">Figure 2.11</a> (a).</p><a name="ch02fig11"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.11. Laying out the group box's children in a grid</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/sort3_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="140" SRC="images/sort3.jpg"></p>
+</center></p></div></li><li><div style="font-weight:normal"><p class="docList">Drag the right edge of the second combobox to make it about twice as wide as the first combobox.</P></div></li><li><div style="font-weight:normal"><p class="docList">Set the group box's <tt>title</tt> property to &quot;&amp;Primary Key&quot;, the first label's <tt>text</tt> property to &quot;Column:&quot;, and the second label's <tt>text</tt> property to &quot;Order:&quot;.</P></div></LI><li><div style="font-weight:normal"><p class="docList">Right-click the first combobox and choose Edit Items from the context menu to pop up <span class="docEmphasis">Qt Designer</span>'s combobox editor. Create one item with the text &quot;None&quot;.</p></div></li><li><div style="font-weight:normal"><p class="docList">Right-click the second combobox and choose Edit Items. Create an &quot;Ascending&quot; item and a &quot;Descending&quot; item.</P></div></li><li><div style="font-weight:normal"><p class="docList">Click the group box, then click Form|Lay Out in a Grid. Click the group box again and click Form|Adjust Size. This will produce the layout shown in <a class="docLink" href="#ch02fig11">Figure 2.11</a> (b).</p></div></li></ol></div>
+<p class="docText">If a layout doesn't turn out quite right or if you make a mistake, you can always click Edit|Undo or Form|Break Layout, then reposition the widgets and try again.</P>
+<p class="docText">We will now add the Secondary Key and Tertiary Key group boxes:</P>
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docList">Make the dialog window tall enough for the extra parts.</p></div></li><li><div style="font-weight:normal"><p class="docList">Hold down the Ctrl key (Alt on the Mac) and click the Primary Key group box to create a copy of the group box (and its contents) on top of the original. Drag the copy below the original group box, while still pressing Ctrl (or Alt). Repeat this process to create a third group box, dragging it below the second group box.</p></div></li><li><div style="font-weight:normal"><p class="docList">Change their <tt>title</tt> properties to &quot;&amp;Secondary Key&quot; and &quot;&amp;Tertiary Key&quot;.</p></div></li><li><div style="font-weight:normal"><p class="docList">Create one vertical spacer and place it between the primary key group box and the secondary key group box.</p></div></li><li><div style="font-weight:normal"><p class="docList"><a name="iddle1596"></a><a name="iddle2597"></a><a name="iddle3047"></a><a name="iddle3051"></a><a name="iddle4354"></a><a name="iddle5137"></a><a name="iddle6295"></a><a name="iddle6301"></a><a name="iddle6322"></a><a name="iddle6361"></a><a name="iddle6366"></a><a name="iddle6411"></a>Arrange the widgets in the grid-like pattern shown in <a class="docLink" href="#ch02fig12">Figure 2.12</a> (a).</p><a name="ch02fig12"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 2.12. Laying out the form's children in a grid</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/sort5_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="323" SRC="images/sort5.jpg"></P>
+</center></P></div></LI><li><div style="font-weight:normal"><p class="docList">Click the form to deselect any selected widgets, then click Form|Lay Out in a Grid. The form should now match <a class="docLink" href="#ch02fig12">Figure 2.12</a> (b).</p></div></li><li><div style="font-weight:normal"><p class="docList">Set the two vertical spacer items' <tt>sizeHint</tt> property to [20, 0].</p></div></li></ol></div>
+<p class="docText">The resulting grid layout has two columns and four rows, giving a total of eight cells. The Primary Key group box, the leftmost vertical spacer item, the Secondary Key group box, and the Tertiary Key group box each occupy a single cell. The vertical layout that contains the OK, Cancel, and More buttons occupies two cells. That leaves two empty cells in the bottom-right of the dialog. If this isn't what you have, undo the layout, reposition the widgets, and try again.</p>
+<p class="docText">Rename the form &quot;SortDialog&quot; and change the window title to &quot;Sort&quot;. Set the names of the child widgets to those shown in <a class="docLink" href="#ch02fig13">Figure 2.13</a>.</p>
+<a name="ch02fig13"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.13. Naming the form's widgets</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/sort7_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="319" SRC="images/sort7.jpg"></p>
+</center></P><br>
+<p class="docText">Click Edit|Edit Tab Order. Click each combobox in turn from topmost to bottommost, then click the OK, Cancel, and More buttons on the right side. Click Edit|Edit Widgets to leave tab order mode.</p>
+<p class="docText">Now that the form has been designed, we are ready to make it functional by setting up some signalslot connections.<span class="docEmphasis">Qt Designer</span> allows us to establish connections between widgets that are part of the same form. We need to establish two connections.</P>
+<p class="docText">Click Edit|Edit Signals/Slots to enter <span class="docEmphasis">Qt Designer</span>'s connection mode. Connections are represented by blue arrows between the form's widgets. Because we chose <a name="iddle1049"></a><a name="iddle4199"></a><a name="iddle4205"></a><a name="iddle4780"></a><a name="iddle5577"></a><a name="iddle5773"></a><a name="iddle6226"></a><a name="iddle6871"></a><a name="iddle6872"></a>the &quot;Dialog with Buttons Right&quot; template, the OK and Cancel buttons are already connected to <tt>QDialog</tt>'s <tt>accept()</tt> and <tt>reject()</tt> slots. Connections are also listed in <span class="docEmphasis">Qt Designer</span>'s signal/slot editor window.</P>
+<p class="docText">To establish a connection between two widgets, click the sender widget and drag the red arrow line to the receiver widget, then release. This pops up a dialog that allows you to choose the signal and the slot to connect.</p>
+<a name="ch02fig14"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.14. Connecting the form's widgets</h5>
+
+<p class="docText">
+<img border="0" alt="" width="334" height="398" SRC="images/sort8.jpg"></P>
+
+</center></p><br>
+<p class="docText">The first connection to establish is between the <tt>moreButton</tt> and the <tt>secondary-GroupBox</tt>. Drag the red arrow line between these two widgets, then choose <tt>toggled(bool)</tt> as the signal and <tt>setVisible(bool)</tt> as the slot. By default,<span class="docEmphasis">Qt Designer</span> doesn't list <tt>setVisible(bool)</tt> in the list of slots, but it will appear if you enable the Show all signals and slots option.</p>
+<a name="ch02fig15"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 2.15. <span class="docEmphasis">Qt Designer</span>'s connection editor</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/connections_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="272" SRC="images/connections.jpg"></P>
+</center></p><br>
+<p class="docText"><a name="iddle4193"></a><a name="iddle4448"></a><a name="iddle6031"></a><a name="iddle6179"></a><a name="iddle6390"></a><a name="iddle6391"></a><a name="iddle6395"></a><a name="iddle6396"></a><a name="iddle6398"></a><a name="iddle6626"></a><a name="iddle6653"></a><a name="iddle6990"></a>The second connection is between the <tt>moreButton</tt>'s <tt>toggled(bool)</tt> signal and the <tt>tertiaryGroupBox</tt>'s <tt>setVisible(bool)</tt> slot. Once the connections have been made, click Edit|Edit Widgets to leave connection mode.</p>
+<p class="docText">Save the dialog as <tt>sortdialog.ui</tt> in a directory called <tt>sort</tt>. To add code to the form, we will use the same multiple inheritance approach that we used for the Go-to-Cell dialog in the previous section.</p>
+<p class="docText">First, create a <tt>sortdialog.h</tt> file with the following contents:</p>
+<div class="docText"><pre>
+#ifndef SORTDIALOG_H
+#define SORTDIALOG_H
+#include &lt;QDialog&gt;
+#include "ui_sortdialog.h"
+class SortDialog : public QDialog, public Ui::SortDialog
+{
+    Q_OBJECT
+public:
+    SortDialog(QWidget *parent = 0);
+    void setColumnRange(QChar first, QChar last);
+};
+#endif
+</pre></div><br>
+<p class="docText">Then create <tt>sortdialog.cpp</tt>:</p>
+<div class="docText"><pre>
+ 1 #include &lt;QtGui&gt;
+ 2 #include "sortdialog.h"
+ 3 SortDialog::SortDialog(QWidget *parent)
+ 4     : QDialog(parent)
+ 5 {
+ 6     setupUi(this);
+ 7     secondaryGroupBox-&gt;hide();
+ 8     tertiaryGroupBox-&gt;hide();
+ 9     layout()-&gt;setSizeConstraint(QLayout::SetFixedSize);
+10     setColumnRange('A', 'Z');
+11 }
+12 void SortDialog::setColumnRange(QChar first, QChar last)
+13 {
+14     primaryColumnCombo-&gt;clear();
+15     secondaryColumnCombo-&gt;clear();
+16     tertiaryColumnCombo-&gt;clear();
+17     secondaryColumnCombo-&gt;addItem(tr("None"));
+18     tertiaryColumnCombo-&gt;addItem(tr("None"));
+19     primaryColumnCombo-&gt;setMinimumSize(
+20             secondaryColumnCombo-&gt;sizeHint());
+21     QChar ch = first;
+22     while (ch &lt;= last) {
+23         primaryColumnCombo-&gt;addItem(QString(ch));
+24         secondaryColumnCombo-&gt;addItem(QString(ch));
+25         tertiaryColumnCombo-&gt;addItem(QString(ch));
+26         ch = ch.unicode() + 1;
+27     }
+28 }
+</pre></div><br>
+<p class="docText"><a name="iddle1086"></a><a name="iddle3062"></a><a name="iddle3345"></a><a name="iddle4129"></a><a name="iddle4446"></a><a name="iddle4779"></a><a name="iddle5566"></a><a name="iddle5593"></a><a name="iddle6089"></a><a name="iddle6131"></a><a name="iddle6195"></a><a name="iddle6196"></a><a name="iddle6328"></a><a name="iddle6337"></a><a name="iddle7245"></a>The constructor hides the secondary and tertiary parts of the dialog. It also sets the <tt>sizeConstraint</tt> property of the form's layout to <tt>QLayout::SetFixedSize</tt>, making the dialog non-resizable by the user. The layout then takes over the responsibility for resizing, and resizes the dialog automatically when child widgets are shown or hidden, ensuring that the dialog is always displayed at its optimal size.</p>
+<p class="docText">The <tt>setColumnRange()</tt> slot initializes the contents of the comboboxes based on the selected columns in the spreadsheet. We insert a &quot;None&quot; item in the comboboxes for the (optional) secondary and tertiary keys.</p>
+<p class="docText">Lines 19 and 20 present a subtle layout idiom. The <tt>QWidget::sizeHint()</tt> function returns a widget's &quot;ideal&quot; size, which the layout system tries to honor. This explains why different kinds of widgets, or similar widgets with different contents, may be assigned different sizes by the layout system. For comboboxes, this means that the secondary and tertiary comboboxes, which contain &quot;None&quot;, end up larger than the primary combobox, which contains only single-letter entries. To avoid this inconsistency, we set the primary combobox's minimum size to the <span class="docEmphasis">secondary</span> combobox's ideal size.</p>
+<p class="docText">Here is a <tt>main()</tt> test function that sets the range to include columns 'C' to 'F' and then shows the dialog:</p>
+<div class="docText"><pre>
+#include &lt;QApplication&gt;
+#include "sortdialog.h"
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    SortDialog *dialog = new SortDialog;
+    dialog-&gt;setColumnRange('C', 'F');
+    dialog-&gt;show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">That completes the extension dialog. As the example illustrates, an extension dialog isn't much more difficult to design than a plain dialog: All we needed was a toggle button, a few extra signalslot connections, and a non-resizable layout. In production applications, it is quite common for the button that controls the extension to show the text Advanced &gt;&gt;&gt; when only the basic dialog is visible and Advanced &lt;&lt;&lt; when the extension is shown. This is easy to achieve in Qt by calling <tt>setText()</tt> on the <tt>QPushButton</tt> whenever it is clicked.</p>
+<p class="docText"><a name="iddle1569"></a><a name="iddle1776"></a><a name="iddle2085"></a><a name="iddle2417"></a><a name="iddle3115"></a><a name="iddle3130"></a><a name="iddle3325"></a><a name="iddle3433"></a><a name="iddle3852"></a><a name="iddle4296"></a><a name="iddle4466"></a><a name="iddle4470"></a><a name="iddle4613"></a><a name="iddle4964"></a><a name="iddle5145"></a><a name="iddle5171"></a><a name="iddle5384"></a><a name="iddle5418"></a><a name="iddle6049"></a><a name="iddle6499"></a><a name="iddle6676"></a><a name="iddle6943"></a><a name="iddle6994"></a><a name="iddle6999"></a><a name="iddle7066"></a><a name="iddle7160"></a><a name="iddle7206"></a>The other common type of shape-changing dialogs, multi-page dialogs, are even easier to create in Qt, either in code or using <span class="docEmphasis">Qt Designer</span>. Such dialogs can be built in many different ways.</P>
+<UL><LI><p class="docList">A <tt>QTabWidget</tt> can be used in its own right. It provides a tab bar along the top that controls a built-in <tt>QStackedWidget</tt>.</P></LI><li><p class="docList">A <tt>QListWidget</tt> and a <tt>QStackedWidget</tt> can be used together, with the <tt>QList-Widget</tt>'s current item determining which page the <tt>QStackedWidget</tt> shows, by connecting the <tt>QListWidget::currentRowChanged()</tt> signal to the <tt>QStackedWidget::setCurrentIndex()</tt> slot.</p></li><li><p class="docList">A <tt>QtreeWidget</tt> can be used with a <tt>QStackedWidget</tt> in a similar way to a <tt>QListWidget</tt>.</p></li></ul>
+<p class="docText">The <tt>QStackedWidget</tt> class is covered in <a class="docLink" href="ch06.html#ch06">Chapter 6</a> (Layout Management).</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

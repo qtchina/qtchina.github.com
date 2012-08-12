@@ -1,0 +1,71 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>High-Quality Rendering with QImage</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch08lev1sec3"></a>
+<h3 id="title-IDAA5H4Y" class="docSection1Title">High-Quality Rendering with QImage</h3>
+<p class="docText">When drawing, we may be faced with a trade-off between speed and accuracy. For example, on X11 and Mac OS X, drawing on a <tt>QWidget</tt> or <tt>QPixmap</tt> relies on the platform's native paint engine. On X11, this ensures that communication with the X server is kept to a minimum; only paint commands are sent rather than actual image data. The main drawback of this approach is that Qt is limited by the platform's native support:</p>
+<ul><li><p class="docList">On X11, features such as antialiasing and support for fractional coordinates are available only if the X Render extension is present on the X server.</p></li><li><p class="docList">On Mac OS X, the native aliased graphics engine uses different algorithms for drawing polygons than X11 and Windows, with slightly different results.</p></li></ul>
+<p class="docText">When accuracy is more important than efficiency, we can draw to a <tt>QImage</tt> and copy the result onto the screen. This always uses Qt's own internal paint <a name="iddle1139"></a><a name="iddle1155"></a><a name="iddle1181"></a><a name="iddle1564"></a><a name="iddle2794"></a><a name="iddle2827"></a><a name="iddle3578"></a><a name="iddle3800"></a><a name="iddle4393"></a><a name="iddle4648"></a><a name="iddle4688"></a><a name="iddle5862"></a><a name="iddle5981"></a><a name="iddle6933"></a><a name="iddle7329"></a>engine, giving identical results on all platforms. The only restriction is that the <tt>QImage</tt> on which we paint must be created with an argument of either <tt>QImage::Format_RGB32</tt> or <tt>QImage::Format_ARGB32_Premultiplied</tt>.</p>
+<p class="docText">The premultiplied ARGB32 format is almost identical to the conventional ARGB32 format (<tt>0xaarrggbb</tt>), the difference being that the red, green, and blue channels are &quot;premultiplied&quot; with the alpha channel. This means that the RGB values, which normally range from <tt>0x00</tt> to <tt>0xFF</tt>, are scaled from <tt>0x00</tt> to the alpha value. For example, a 50%-transparent blue color is represented as <tt>0x7F0000FF</tt> in ARGB32 format, but <tt>0x7F00007F</tt> in premultiplied ARGB32 format, and similarly a 75%-transparent dark green of <tt>0x3F008000</tt> in ARGB32 format would be <tt>0x3F002000</tt> in premultiplied ARGB32 format.</p>
+<p class="docText">Let's suppose we want to use antialiasing for drawing a widget, and we want to obtain good results even on X11 systems with no X Render extension. The original <tt>paintEvent()</tt> handler, which relies on X Render for the antialiasing, might look like this:</P>
+<div class="docText"><pre>
+void MyWidget::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    draw(&amp;painter);
+}
+</pre></div><BR>
+<p class="docText">Here's how to rewrite the widget's <tt>paintEvent()</tt> function to use Qt's platform-independent graphics engine:</P>
+<div class="docText"><pre>
+void MyWidget::paintEvent(QPaintEvent *event)
+{
+    QImage image(size(), QImage::Format_ARGB32_Premultiplied);
+    QPainter imagePainter(&amp;image);
+    imagePainter.initFrom(this);
+    imagePainter.setRenderHint(QPainter::Antialiasing, true);
+    imagePainter.eraseRect(rect());
+    draw(&amp;imagePainter);
+    imagePainter.end();
+    QPainter widgetPainter(this);
+    widgetPainter.drawImage(0, 0, image);
+}
+</pre></div><BR>
+<p class="docText">We create a <tt>QImage</tt> of the same size as the widget in premultiplied ARGB32 format, and a <tt>QPainter</tt> to draw on the image. The <tt>initFrom()</tt> call initializes the painter's pen, background, and font based on the widget. We perform the drawing using the <tt>QPainter</tt> as usual, and at the end we reuse the <tt>QPainter</tt> object to copy the image onto the widget.</P>
+<p class="docText">This approach produces identical high-quality results on all platforms, with the exception of font rendering, which depends on the installed fonts.</p>
+<p class="docText">One particularly powerful feature of Qt's graphics engine is its support for composition modes. These specify how a source and a destination pixel are merged <a name="iddle1140"></a><a name="iddle1453"></a><a name="iddle1916"></a><a name="iddle1917"></a><a name="iddle1918"></a><a name="iddle1919"></a><a name="iddle1920"></a><a name="iddle2795"></a><a name="iddle3579"></a><a name="iddle3636"></a><a name="iddle3814"></a><a name="iddle3832"></a><a name="iddle4651"></a><a name="iddle4699"></a><a name="iddle4737"></a><a name="iddle4742"></a><a name="iddle5982"></a><a name="iddle6033"></a><a name="iddle6402"></a><a name="iddle6404"></a><a name="iddle6405"></a><a name="iddle6406"></a><a name="iddle6407"></a><a name="iddle6934"></a><a name="iddle7359"></a>together when drawing. This applies to all painting operations, including pen, brush, gradient, and image drawing.</p>
+<p class="docText">The default composition mode is <tt>QImage::CompositionMode_SourceOver</tt>, meaning that the source pixel (the pixel we are drawing) is blended on top of the destination pixel (the existing pixel) in such a way that the alpha component of the source defines its translucency. <a class="docLink" href="#ch08fig11">Figure 8.11</a> shows the result of drawing a semi-transparent butterfly on top of a checker pattern with the different modes.</p>
+<a name="ch08fig11"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 8.11. <tt>QPainter</tt>'s composition modes</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/composition_modes_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="188" SRC="images/composition_modes.jpg"></p>
+</center></p><br>
+<p class="docText">Compositions modes are set using <tt>QPainter::setCompositionMode()</tt>. For example, here's how to create a <tt>QImage</tt> containing the XOR of the butterfly and the checker pattern:</p>
+<div class="docText"><pre>
+QImage resultImage = checkerPatternImage;
+QPainter painter(&amp;resultImage);
+painter.setCompositionMode(QPainter::CompositionMode_Xor);
+painter.drawImage(0, 0, butterflyImage);
+</pre></div><br>
+<p class="docText">One issue to be aware of is that the <tt>QImage::CompositionMode_Xor</tt> operation applies to the alpha channel. This means that if we XOR the color white (<tt>0xFFFFFFFF</tt>) with itself, we obtain a transparent color (<tt>0x00000000</tt>), not black (<tt>0xFF000000</tt>).</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch08lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

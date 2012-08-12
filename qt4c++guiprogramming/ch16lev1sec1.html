@@ -1,0 +1,72 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Tooltips, Status Tips, and &quot;What's This?&quot; Help</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch16lev1sec1"></a>
+<h3 id="title-IDAJPN3W" class="docSection1Title">Tooltips, Status Tips, and &quot;What's This?&quot; Help</h3>
+<p class="docText">A tooltip is a small piece of text that appears when the mouse hovers over a widget for a certain period of time. Tooltips are presented with black text on a yellow background. Their primary use is to provide textual descriptions of toolbar buttons.</p>
+<p class="docText">We can add tooltips to arbitrary widgets in code using <tt>QWidget::setToolTip()</tt>. For example:</p>
+<div class="docText"><pre>
+findButton-&gt;setToolTip(tr("Find next"));
+</pre></div><br>
+<p class="docText">To set the tooltip of a <tt>QAction</tt> that could be added to a menu or a toolbar, we can simply call <tt>setToolTip()</tt> on the action. For example:</p>
+<div class="docText"><pre>
+newAction = new QAction(tr("&amp;New"), this);
+newAction-&gt;setToolTip(tr("New document"));
+</pre></div><br>
+<p class="docText">If we don't explicitly set a tooltip, <tt>QAction</tt> will automatically use the action text.</p>
+<p class="docText">A status tip is also a short piece of descriptive text, usually a little longer than a tooltip. When the mouse hovers over a toolbar button or a menu option, a status tip appears in the status bar. Call <tt>setStatusTip()</tt> to add a status tip to an action or to a widget:</p>
+<div class="docText"><pre>
+newAction-&gt;setStatusTip(tr("Create a new document"));
+</pre></div><br>
+
+<p class="docText"></p><a name="ch16fig01"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 16.1. An application showing a tooltip and a status tip</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/status_tip_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="391" SRC="images/status_tip.jpg"></p>
+</center></p><BR>
+<p class="docText"><a name="iddle2704"></a><a name="iddle5578"></a><a name="iddle5831"></a><a name="iddle5866"></a><a name="iddle6227"></a><a name="iddle7202"></a>In some situations, it is desirable to provide more information about a widget than can be given by tooltips or status tips. For example, we might want to provide a complex dialog with explanatory text about each field without forcing the user to invoke a separate help window. &quot;What's This?&quot; mode is an ideal solution for this. When a window is in &quot;What's This?&quot; mode, the cursor changes to <img border="0" alt="" width="20" height="20" SRC="images/352fig01.jpg"> and the user can click on any user interface component to obtain its help text. To enter &quot;What's This?&quot; mode, the user can either click the ? button in the dialog's title bar (on Windows and KDE) or press <tt>Shift+F1</tt>.</p>
+<p class="docText">Here is an example of a &quot;What's This?&quot; text set on a dialog:</P>
+<div class="docText"><pre>
+dialog-&gt;setWhatsThis(tr("&lt;img src=\":/images/icon.png\"&gt;"
+                        "&amp;nbsp;The meaning of the Source field depends "
+                        "on the Type field:"
+                        "&lt;ul&gt;"
+                        "&lt;li&gt;&lt;b&gt;Books&lt;/b&gt; have a Publisher"
+                        "&lt;li&gt;&lt;b&gt;Articles&lt;/b&gt; have a Journal name with "
+                        "volume and issue number"
+                        "&lt;li&gt;&lt;b&gt;Theses&lt;/b&gt; have an Institution name "
+                        "and a Department name"
+                        "&lt;/ul&gt;"));
+</pre></div><BR>
+<p class="docText">We can use HTML tags to format the text of a &quot;What's This?&quot; text. In the example, we include an image (which is listed in the application's resource file), a bulleted list, and some text in bold. The tags and attributes that Qt supports are specified at <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/richtext-html-subset.html">http://doc.trolltech.com/4.1/richtext-html-subset.html</a>.</p>
+
+<p class="docText"></P><a name="ch16fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 16.2. A dialog showing a &quot;What's This?&quot; help text</H5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="386" SRC="images/help_text.jpg"></P>
+
+</center></P><br>
+<p class="docText"><a name="iddle1726"></a><a name="iddle1981"></a><a name="iddle2650"></a><a name="iddle2651"></a><a name="iddle2705"></a><a name="iddle2997"></a><a name="iddle5259"></a><a name="iddle5465"></a><a name="iddle6274"></a>When we set a &quot;What's This?&quot; text on an action, the text will be shown when the user clicks the menu item or toolbar button or presses the shortcut key while in &quot;What's This?&quot; mode. When the user interface components of an application's main window provide &quot;What's This?&quot; text, it is customary to provide a What's This? option in the Help menu and a corresponding toolbar button. This can be done by creating a What's This? action with the static <tt>QWhatsThis::createAction()</tt> function and adding the action it returns to a Help menu and to a toolbar. The <tt>QWhatsThis</tt> class also provides static functions to programmatically enter and leave &quot;What's This?&quot; mode.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,43 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Embedding Resources</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch12lev1sec4"></a>
+<h3 id="title-IDAG10EP" class="docSection1Title">Embedding Resources</h3>
+<p class="docText">So far in this chapter we have talked about accessing data in external devices, but with Qt it is also possible to embed binary data or text inside the application's executable. This is achieved using Qt's resource system. In other chapters, we used resource files to embed images in the executable, but it is possible to embed any kind of file. Embedded files can be read using <tt>QFile</tt> just like normal files in the file system.</p>
+<p class="docText">Resources are converted into C++ code by <tt>rcc</tt>, Qt's resource compiler. We can tell <tt>qmake</tt> to include special rules to run <tt>rcc</tt> by adding this line to the <tt>.pro</tt> file:</p>
+<div class="docText"><pre>
+RESOURCES    = myresourcefile.qrc
+</pre></div><br>
+<p class="docText">The <tt>myresourcefile.qrc</tt> file is an XML file that lists the files to embed in the executable.</p>
+<p class="docText">Let's imagine that we are writing an application that keeps contact details. For the convenience of our users, we want to embed the international dialing codes <a name="iddle1013"></a><a name="iddle1212"></a><a name="iddle1423"></a><a name="iddle1512"></a><a name="iddle1684"></a><a name="iddle2302"></a><a name="iddle2372"></a><a name="iddle2781"></a><a name="iddle2784"></a><a name="iddle2875"></a><a name="iddle2909"></a><a name="iddle3038"></a><a name="iddle3516"></a><a name="iddle3865"></a><a name="iddle4750"></a><a name="iddle4786"></a><a name="iddle5911"></a>in the executable. If the file is in the <tt>datafiles</tt> directory in the application's build directory, the resource file might look like this:</p>
+<div class="docText"><pre>
+&lt;!DOCTYPE RCC&gt;&lt;RCC version="1.0"&gt;
+&lt;qresource&gt;
+    &lt;file&gt;datafiles/phone-codes.dat&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;/RCC&gt;
+</pre></div><br>
+<p class="docText">From the application, resources are identified by the <tt>:/</tt> path prefix. In this example, the dialing codes file has the path <tt>:/datafiles/phone-codes.dat</tt> and can be read just like any other file using <tt>QFile</tt>.</p>
+<p class="docText">Embedding data in the executable has the advantage that it cannot get lost and makes it possible to create truly stand-alone executables (if static linking is also used). Two disadvantages are that if the embedded data needs changing the whole executable must be replaced, and the size of the executable will be larger because it must accommodate the embedded data.</p>
+<p class="docText">Qt's resource system provides more features than we presented in this example, including support for file name aliases and for localization. These facilities are documented at <tt><a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/resources.html">http://doc.trolltech.com/4.1/resources.html</a></tt>.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec5.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

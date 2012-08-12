@@ -1,0 +1,186 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using Predefined Models</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch10lev1sec2"></a>
+
+<h3 id="title-IDAX2BFZ" class="docSection1Title">Using Predefined Models</h3>
+<p class="docText"><a name="iddle2001"></a><a name="iddle2002"></a><a name="iddle2323"></a><a name="iddle3370"></a><a name="iddle3791"></a><a name="iddle3976"></a><a name="iddle3982"></a><a name="iddle3984"></a><a name="iddle4221"></a><a name="iddle4873"></a><a name="iddle4927"></a><a name="iddle4930"></a><a name="iddle4934"></a><a name="iddle4966"></a><a name="iddle5037"></a><a name="iddle6074"></a><a name="iddle6136"></a><a name="iddle6191"></a><a name="iddle6486"></a><a name="iddle6700"></a><a name="iddle6701"></a><a name="iddle6705"></a>Qt provides several predefined models for use with the view classes:</p>
+<p><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="200"><col width="300"></colgroup><thead></thead><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QStringListModel</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Stores a list of strings</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>QStandardItemModel</tt></P></TD><TD class="docTableCell" align="left" valign="top"><p class="docText">Stores arbitrary hierarchical data</P></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QDirModel</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Encapsulates the local file system</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QSqlQueryModel</tt></P></td><td class="docTableCell" align="left" valign="top"><p class="docText">Encapsulates an SQL result set</P></TD></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QSqlTableModel</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">Encapsulates an SQL table</p></td></tr><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>QSqlRelationalTableModel</tt></P></td><td class="docTableCell" align="left" valign="top"><p class="docText">Encapsulates an SQL table with foreign keys</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText"><tt>QSortFilterProxyModel</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Sorts and/or filters another model</p></td></tr></table></p><BR>
+<p class="docText">In this section, we will look at how to use the <tt>QStringListModel</tt>, the <tt>QDirModel</tt>, and the <tt>QSortFilterProxyModel</tt>. The SQL models are covered in <a class="docLink" href="ch13.html#ch13">Chapter 13</a>.</P>
+<p class="docText">Let's begin with a simple dialog that users can use to add, delete, and edit a <tt>QStringList</tt>, where each string represents a team leader.</P>
+<a name="ch10fig06"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 10.6. The Team Leaders application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="356" height="272" SRC="images/teamleaders.jpg"></p>
+
+</center></p><br>
+<p class="docText">Here's the relevant extract from the constructor:</p>
+<div class="docText"><pre>
+TeamLeadersDialog::TeamLeadersDialog(const QStringList &amp;leaders,
+                                     QWidget *parent)
+    : QDialog(parent)
+{
+    model = new QStringListModel(this);
+    model-&gt;setStringList(leaders);
+    listView = new QListView;
+    listView-&gt;setModel(model);
+    listView-&gt;setEditTriggers(QAbstractItemView::AnyKeyPressed
+                              | QAbstractItemView::DoubleClicked);
+    ...
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1889"></a><a name="iddle2103"></a><a name="iddle2842"></a><a name="iddle3076"></a><a name="iddle3114"></a><a name="iddle3373"></a><a name="iddle3965"></a><a name="iddle4222"></a><a name="iddle4465"></a><a name="iddle4562"></a><a name="iddle5038"></a><a name="iddle5795"></a><a name="iddle6594"></a><a name="iddle6702"></a><a name="iddle6703"></a><a name="iddle6704"></a>We begin by creating and populating a <tt>QStringListModel</tt>. Next we create a <tt>QListView</tt> and set its model to the one we have just created. We also set some editing triggers to allow the user to edit a string simply by starting to type on it or by double-clicking it. By default, no editing triggers are set on a <tt>QListView</tt>, making the view effectively read-only.</p>
+<div class="docText"><pre>
+void TeamLeadersDialog::insert()
+{
+    int row = listView-&gt;currentIndex().row();
+    model-&gt;insertRows(row, 1);
+    QModelIndex index = model-&gt;index(row);
+    listView-&gt;setCurrentIndex(index);
+    listView-&gt;edit(index);
+}
+</pre></div><br>
+<p class="docText">When the user clicks the Insert button, the <tt>insert()</tt> slot is invoked. The slot begins by retrieving the row number for the list view's current item. Every data item in a model has a corresponding &quot;model index&quot;, which is represented by a <tt>QModelIndex</tt> object. We will look at model indexes in detail in the next section, but for now it is sufficient to know that an index has three main components: a row, a column, and a pointer to the model to which it belongs. For a one-dimensional list model, the column is always 0.</p>
+<p class="docText">Once we have the row number, we insert one new row at that position. The insertion is performed on the model, and the model automatically updates the list view. We then set the list view's current index to the blank row we just inserted. Finally, we set the list view to editing mode on the new row, just as if the user had pressed a key or double-clicked to initiate editing.</p>
+<div class="docText"><pre>
+void TeamLeadersDialog::del()
+{
+    model-&gt;removeRows(listView-&gt;currentIndex().row(), 1);
+}
+</pre></div><br>
+<p class="docText">In the constructor, the Delete button's <tt>clicked()</tt> signal is connected to the <tt>del()</tt> slot. Since we are just deleting the current row, we can call <tt>removeRows()</tt> with the current index position and a row count of 1. Just like with insertion, we rely on the model to update the view accordingly.</p>
+<div class="docText"><pre>
+QStringList TeamLeadersDialog::leaders() const
+{
+    return model-&gt;stringList();
+}
+</pre></div><BR>
+<p class="docText">Finally, the <tt>leaders()</tt> function provides a means of reading back the edited strings when the dialog is closed.</p>
+<p class="docText"><tt>TeamLeadersDialog</tt> could be made into a generic string list editing dialog simply by parameterizing its window title. Another generic dialog that is often required is one that presents a list of files or directories to the user. The next example uses the <tt>QDirModel</tt> class, which encapsulates the computer's file system and is capable of showing (and hiding) various file attributes. This model <a name="iddle1945"></a><a name="iddle1946"></a><a name="iddle2287"></a><a name="iddle2355"></a><a name="iddle2637"></a><a name="iddle5380"></a><a name="iddle5382"></a><a name="iddle6941"></a>can apply a filter to restrict the kinds of file system entries that are shown and can order the entries in various ways.</p>
+<a name="ch10fig07"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 10.7. The Directory Viewer application</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/directoryviewer_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="270" SRC="images/directoryviewer.jpg"></p>
+</center></p><br>
+<p class="docText">We will begin by looking at the creation and setting up of the model and the view in the Directory Viewer dialog's constructor.</P>
+<div class="docText"><pre>
+DirectoryViewer::DirectoryViewer(QWidget *parent)
+    : QDialog(parent)
+{
+    model = new QDirModel;
+    model-&gt;setReadOnly(false);
+    model-&gt;setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
+    treeView = new QTreeView;
+    treeView-&gt;setModel(model);
+    treeView-&gt;header()-&gt;setStretchLastSection(true);
+    treeView-&gt;header()-&gt;setSortIndicator(0, Qt::AscendingOrder);
+    treeView-&gt;header()-&gt;setSortIndicatorShown(true);
+    treeView-&gt;header()-&gt;setClickable(true);
+    QModelIndex index = model-&gt;index(QDir::currentPath());
+    treeView-&gt;expand(index);
+    treeView-&gt;scrollTo(index);
+    treeView-&gt;resizeColumnToContents(0);
+    ...
+}
+</pre></div><br>
+<p class="docText">Once the model has been constructed, we make it editable and set various initial sort ordering attributes. We then create the <tt>QtreeView</tt> that will display the model's data. The <tt>QtreeView</tt>'s header can be used to provide user-controlled sorting. By making the header clickable, the user can sort by whichever column header they click, with repeated clicks alternating between ascending and descending orders. Once the tree view's header has been set up, we get the model index of the current directory and make sure that this directory is visible by expanding its parents if necessary using <tt>expand()</tt>, and scrolling to <a name="iddle1520"></a><a name="iddle1733"></a><a name="iddle2283"></a><a name="iddle2373"></a><a name="iddle2404"></a><a name="iddle2569"></a><a name="iddle2879"></a><a name="iddle3007"></a><a name="iddle3359"></a><a name="iddle3901"></a><a name="iddle4209"></a><a name="iddle4223"></a><a name="iddle4416"></a><a name="iddle4874"></a><a name="iddle5383"></a><a name="iddle5785"></a><a name="iddle5786"></a><a name="iddle5955"></a><a name="iddle6401"></a>it using <tt>scrollTo()</tt>. Then we make sure that the first column is wide enough to show all its entries without using ellipses (&#8230;).</p>
+<p class="docText">In the part of the constructor code that isn't shown here, we connected the Create Directory and Remove buttons to slots to perform these actions. We do not need a Rename button since users can rename in-place by pressing F2 and typing.</P>
+<div class="docText"><pre>
+void DirectoryViewer::createDirectory()
+{
+    QModelIndex index = treeView-&gt;currentIndex();
+    if (!index.isValid())
+        return;
+    QString dirName = QInputDialog::getText(this,
+                              tr("Create Directory"),
+                              tr("Directory name"));
+    if (!dirName.isEmpty()) {
+        if (!model-&gt;mkdir(index, dirName).isValid())
+            QMessageBox::information(this, tr("Create Directory"),
+                    tr("Failed to create the directory"));
+    }
+}
+</pre></div><BR>
+<p class="docText">If the user enters a directory name in the input dialog, we attempt to create a directory with this name as a child of the current directory. The <tt>QDirModel::mkdir()</tt> function takes the parent directory's index and the name of the new directory, and returns the model index of the directory it created. If the operation fails, it returns an invalid model index.</P>
+<div class="docText"><pre>
+void DirectoryViewer::remove()
+{
+    QModelIndex index = treeView-&gt;currentIndex();
+    if (!index.isValid())
+        return;
+    bool ok;
+    if (model-&gt;fileInfo(index).isDir()) {
+        ok = model-&gt;rmdir(index);
+    } else {
+        ok = model-&gt;remove(index);
+    }
+    if (!ok)
+        QMessageBox::information(this, tr("Remove"),
+                tr("Failed to remove %1").arg(model-&gt;fileName(index)));
+}
+</pre></div><br>
+<p class="docText">If the user clicks Remove, we attempt to remove the file or directory associated with the current item. We could use <tt>QDir</tt> to accomplish that, but <tt>QDirModel</tt> offers convenience functions that work on <tt>QModelIndex</tt>es.</p>
+<p class="docText">The last example in this section shows how to use <tt>QSortFilterProxyModel</tt>. Unlike the other predefined models, this model encapsulates an existing model and manipulates the data that passes between the underlying model and the <a name="iddle1087"></a><a name="iddle1518"></a><a name="iddle1519"></a><a name="iddle1537"></a><a name="iddle3694"></a><a name="iddle3695"></a><a name="iddle4124"></a><a name="iddle4130"></a><a name="iddle4875"></a><a name="iddle4877"></a><a name="iddle5039"></a><a name="iddle6086"></a><a name="iddle6186"></a><a name="iddle7261"></a>view. In our example, the underlying model is a <tt>QStringListModel</tt> initialized with the list of color names recognized by Qt (obtained through <tt>QColor::colorNames()</tt>). The user can type a filter string in a <tt>QLineEdit</tt> and specify how this string is to be interpreted (as a regular expression, a wildcard pattern, or a fixed string) using a combobox.</p>
+<a name="ch10fig08"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.8. The Color Names application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="273" height="266" SRC="images/colornames.jpg"></p>
+
+</center></p><br>
+<p class="docText">Here's an extract from the <tt>ColorNamesDialog</tt> constructor:</p>
+<div class="docText"><pre>
+ColorNamesDialog::ColorNamesDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    sourceModel = new QStringListModel(this);
+    sourceModel-&gt;setStringList(QColor::colorNames());
+    proxyModel = new QSortFilterProxyModel(this);
+    proxyModel-&gt;setSourceModel(sourceModel);
+    proxyModel-&gt;setFilterKeyColumn(0);
+    listView = new QListView;
+    listView-&gt;setModel(proxyModel);
+    ...
+    syntaxComboBox = new QComboBox;
+    syntaxComboBox-&gt;addItem(tr("Regular expression"), QRegExp::RegExp);
+    syntaxComboBox-&gt;addItem(tr("Wildcard"), QRegExp::Wildcard);
+    syntaxComboBox-&gt;addItem(tr("Fixed string"), QRegExp::FixedString);
+    ...
+}
+</pre></div><br>
+<p class="docText">The <tt>QStringListModel</tt> is created and populated in the usual way. This is followed by the construction of the <tt>QSortFilterProxyModel</tt>. We pass the underlying model using <tt>setSourceModel()</tt> and tell the proxy to filter based on column 0 of the original model. The <tt>QComboBox::addItem()</tt> function accepts an optional &quot;data&quot; argument of type <tt>QVariant</tt>; we use this to store the <tt>QRegExp::PatternSyntax</tt> value that corresponds to each item's text.</p>
+<div class="docText"><pre>
+void ColorNamesDialog::reapplyFilter()
+{
+    QRegExp::PatternSyntax syntax =
+            QRegExp::PatternSyntax(syntaxComboBox-&gt;itemData(
+                    syntaxComboBox-&gt;currentIndex()).toInt());
+    QRegExp regExp(filterLineEdit-&gt;text(), Qt::CaseInsensitive, syntax);
+    proxyModel-&gt;setFilterRegExp(regExp);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1243"></a><a name="iddle1805"></a><a name="iddle1965"></a><a name="iddle2099"></a><a name="iddle2473"></a><a name="iddle3111"></a><a name="iddle3375"></a><a name="iddle4801"></a><a name="iddle4876"></a><a name="iddle5052"></a><a name="iddle5066"></a><a name="iddle5073"></a><a name="iddle5081"></a><a name="iddle5102"></a><a name="iddle5105"></a><a name="iddle5108"></a><a name="iddle5110"></a><a name="iddle5122"></a><a name="iddle5769"></a><a name="iddle6087"></a><a name="iddle6542"></a><a name="iddle6682"></a><a name="iddle6738"></a><a name="iddle6754"></a><a name="iddle6875"></a><a name="iddle6938"></a><a name="iddle7203"></a>The <tt>reapplyFilter()</tt> slot is invoked whenever the user changes the filter string or the pattern syntax combobox. We create a <tt>QRegExp</tt> using the text in the line edit. Then we set its pattern syntax to the one stored in the syntax combobox's current item's data. When we call <tt>setFilterRegExp()</tt>, the new filter becomes active and the view is automatically updated.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

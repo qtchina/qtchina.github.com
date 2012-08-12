@@ -1,0 +1,193 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Enabling Drag and Drop</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch09lev1sec1"></a>
+<h3 id="title-IDARUCZL" class="docSection1Title">Enabling Drag and Drop</h3>
+<p class="docText">Drag and drop involves two distinct actions: dragging and dropping. Qt widgets can serve as drag sites, as drop sites, or as both.</p>
+<p class="docText">Our first example shows how to make a Qt application accept a drag initiated by another application. The Qt application is a main window with a <tt>QTextEdit</tt> as its central widget. When the user drags a text file from the desktop or from a file explorer and drops it onto the application, the application loads the file into the <tt>QTextEdit</tt>.</p>
+<p class="docText">Here's the definition of the example's <tt>MainWindow</tt> class:</p>
+<div class="docText"><pre>
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+public:
+    MainWindow();
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+private:
+    bool readFile(const QString &amp;fileName);
+    QTextEdit *textEdit;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1056"></a><a name="iddle2010"></a><a name="iddle2076"></a><a name="iddle2223"></a><a name="iddle2227"></a><a name="iddle2266"></a><a name="iddle2617"></a><a name="iddle2718"></a><a name="iddle2865"></a><a name="iddle3335"></a><a name="iddle3337"></a><a name="iddle3885"></a><a name="iddle4244"></a><a name="iddle4247"></a><a name="iddle4248"></a><a name="iddle4547"></a><a name="iddle5492"></a><a name="iddle5497"></a><a name="iddle5547"></a><a name="iddle6003"></a><a name="iddle7015"></a><a name="iddle7016"></a><a name="iddle7056"></a><a name="iddle7057"></a>The <tt>MainWindow</tt> class reimplements <tt>dragEnterEvent()</tt> and <tt>dropEvent()</tt> from <tt>QWidget</tt>. Since the purpose of the example is to show drag and drop, much of the functionality we would expect to be in a main window class has been omitted.</p>
+<div class="docText"><pre>
+MainWindow::MainWindow()
+{
+    textEdit = new QTextEdit;
+    setCentralWidget(textEdit);
+    textEdit-&gt;setAcceptDrops(false);
+    setAcceptDrops(true);
+    setWindowTitle(tr("Text Editor"));
+}
+</pre></div><br>
+<p class="docText">In the constructor, we create a <tt>QTextEdit</tt> and set it as the central widget. By default, <tt>QTextEdit</tt> accepts textual drags from other applications, and if the user drops a file onto it, it will insert the file name into the text. Since drop events are propagated from child to parent, by disabling dropping on the <tt>QTextEdit</tt> and enabling it on the main window, we get the drop events for the whole window in <tt>MainWindow</tt>.</p>
+<div class="docText"><pre>
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event-&gt;mimeData()-&gt;hasFormat("text/uri-list"))
+        event-&gt;acceptProposedAction();
+}
+</pre></div><br>
+<p class="docText">The <tt>dragEnterEvent()</tt> is called whenever the user drags an object onto a widget. If we call <tt>acceptProposedAction()</tt> on the event, we indicate that the user can drop the drag object on this widget. By default, the widget wouldn't accept the drag. Qt automatically changes the cursor to indicate to the user whether or not the widget is a legitimate drop site.</p>
+<p class="docText">Here we want the user to be allowed to drag files but nothing else. To do so, we check the MIME type of the drag. The MIME type <tt>text/uri-list</tt> is used to store a list of universal resource identifiers (URIs), which can be file names, URLs (such as HTTP or FTP paths), or other global resource identifiers. Standard MIME types are defined by the Internet Assigned Numbers Authority (IANA). They consist of a type and a subtype separated by a slash. MIME types are used by the clipboard and by the drag and drop system to identify different types of data. The official list of MIME types is available at <a class="docLink" target="_blank" href="http://www.iana.org/assignments/media-types/">http://www.iana.org/assignments/media-types/</a>.</p>
+<div class="docText"><pre>
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QList&lt;QUrl&gt; urls = event-&gt;mimeData()-&gt;urls();
+    if (urls.isEmpty())
+        return;
+    QString fileName = urls.first().toLocalFile();
+    if (fileName.isEmpty())
+        return;
+    if (readFile(fileName))
+        setWindowTitle(tr("%1 - %2").arg(fileName)
+                                    .arg(tr("Drag File")));
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2006"></a><a name="iddle2012"></a><a name="iddle2015"></a><a name="iddle2225"></a><a name="iddle2226"></a><a name="iddle2311"></a><a name="iddle3117"></a><a name="iddle3871"></a><a name="iddle3873"></a><a name="iddle3874"></a><a name="iddle4467"></a><a name="iddle4558"></a><a name="iddle5426"></a><a name="iddle5494"></a><a name="iddle5495"></a><a name="iddle6631"></a><a name="iddle7017"></a><a name="iddle7058"></a><a name="iddle7060"></a>The <tt>dropEvent()</tt> is called when the user drops an object onto the widget. We call <tt>QMimeData::urls()</tt> to obtain a list of <tt>QUrl</tt>s. Typically, users only drag one file at a time, but it is possible for them to drag multiple files by dragging a selection. If there's more that one URL, or if the URL is not a local file name, we return immediately.</P>
+<p class="docText"><tt>QWidget</tt> also provides <tt>dragMoveEvent()</tt> and <tt>dragLeaveEvent()</tt>, but for most applications they don't need to be reimplemented.</P>
+<p class="docText">The second example illustrates how to initiate a drag and accept a drop. We will create a <tt>QListWidget</tt> subclass that supports drag and drop, and use it as a component in the Project Chooser application shown in <a class="docLink" href="#ch09fig01">Figure 9.1</a>.</P>
+<a name="ch09fig01"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 9.1. The Project Chooser application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="425" height="207" SRC="images/projectchooser.jpg"></p>
+
+</center></p><br>
+<p class="docText">The Project Chooser application presents the user with two list widgets, populated with names. Each list widget represents a project. The user can drag and drop the names in the list widgets to move a person from one project to another.</p>
+<p class="docText">The drag and drop code is all located in the <tt>QListWidget</tt> subclass. Here's the class definition:</p>
+<div class="docText"><pre>
+class ProjectListWidget : public QListWidget
+{
+    Q_OBJECT
+public:
+    ProjectListWidget(QWidget *parent = 0);
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
+private:
+    void startDrag();
+    QPoint startPos;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1318"></a><a name="iddle1323"></a><a name="iddle1331"></a><a name="iddle2007"></a><a name="iddle2248"></a><a name="iddle2253"></a><a name="iddle3082"></a><a name="iddle3267"></a><a name="iddle3398"></a><a name="iddle3410"></a><a name="iddle3416"></a><a name="iddle3783"></a><a name="iddle3875"></a><a name="iddle3879"></a><a name="iddle3880"></a><a name="iddle3881"></a><a name="iddle4052"></a><a name="iddle4573"></a><a name="iddle4733"></a><a name="iddle5523"></a><a name="iddle5529"></a><a name="iddle5548"></a><a name="iddle6004"></a><a name="iddle6522"></a><a name="iddle6523"></a>The <tt>ProjectListWidget</tt> class reimplements five event handlers declared in <tt>QWidget</tt>.</p>
+<div class="docText"><pre>
+ProjectListWidget::ProjectListWidget(QWidget *parent)
+    : QListWidget(parent)
+{
+    setAcceptDrops(true);
+}
+</pre></div><br>
+<p class="docText">In the constructor, we enable drops on the list widget.</p>
+<div class="docText"><pre>
+void ProjectListWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event-&gt;button() == Qt::LeftButton)
+        startPos = event-&gt;pos();
+    QListWidget::mousePressEvent(event);
+}
+</pre></div><br>
+<p class="docText">When the user presses the left mouse button, we store the mouse position in the <tt>startPos</tt> private variable. We call <tt>QListWidget</tt>'s implementation of <tt>mousePressEvent()</tt> to ensure that the <tt>QListWidget</tt> has the opportunity to process mouse press events as usual.</p>
+<div class="docText"><pre>
+void ProjectListWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event-&gt;buttons() &amp; Qt::LeftButton) {
+        int distance = (event-&gt;pos() - startPos).manhattanLength();
+        if (distance &gt;= QApplication::startDragDistance())
+            startDrag();
+    }
+    QListWidget::mouseMoveEvent(event);
+}
+</pre></div><BR>
+<p class="docText">When the user moves the mouse cursor while holding the left mouse button, we consider starting a drag. We compute the distance between the current mouse position and the position where the left mouse button was pressed. If the distance is larger than <tt>QApplication</tt>'s recommended drag start distance (normally 4 pixels), we call the private function <tt>startDrag()</tt> to start dragging. This avoids initiating a drag just because the user's hand shakes.</p>
+<div class="docText"><pre>
+void ProjectListWidget::startDrag()
+{
+    QListWidgetItem *item = currentItem();
+    if (item) {
+        QMimeData *mimeData = new QMimeData;
+        mimeData-&gt;setText(item-&gt;text());
+        QDrag *drag = new QDrag(this);
+        drag-&gt;setMimeData(mimeData);
+        drag-&gt;setPixmap(QPixmap(":/images/person.png"));
+        if (drag-&gt;start(Qt::MoveAction) == Qt::MoveAction)
+            delete item;
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1054"></a><a name="iddle1709"></a><a name="iddle2005"></a><a name="iddle2008"></a><a name="iddle2009"></a><a name="iddle2011"></a><a name="iddle2013"></a><a name="iddle2014"></a><a name="iddle2016"></a><a name="iddle2224"></a><a name="iddle2754"></a><a name="iddle2776"></a><a name="iddle2804"></a><a name="iddle3096"></a><a name="iddle3424"></a><a name="iddle3876"></a><a name="iddle3877"></a><a name="iddle4243"></a><a name="iddle4245"></a><a name="iddle4246"></a><a name="iddle4249"></a><a name="iddle4250"></a><a name="iddle4251"></a><a name="iddle4252"></a><a name="iddle4253"></a><a name="iddle4539"></a><a name="iddle4637"></a><a name="iddle5056"></a><a name="iddle5085"></a><a name="iddle5089"></a><a name="iddle5092"></a><a name="iddle5493"></a><a name="iddle5496"></a><a name="iddle6069"></a><a name="iddle6152"></a><a name="iddle6403"></a><a name="iddle6514"></a>In <tt>startDrag()</tt>, we create an object of type <tt>QDrag</tt> with <tt>this</tt> as its parent. The <tt>QDrag</tt> object stores the data in a <tt>QMimeData</tt> object. For this example, we provide the data as a <tt>text/plain</tt> string using <tt>QMimeData::setText()</tt>. <tt>QMimeData</tt> provides several functions for handling the most common types of drags (images, URLs, colors, etc.) and can handle arbitrary MIME types represented as <tt>QByteArray</tt>s. The call to <tt>QDrag::setPixmap()</tt> sets the icon that follows the cursor while the drag is taking place.</P>
+<p class="docText">The <tt>QDrag::start()</tt> call starts the dragging operation and blocks until the user drops or cancels the drag. It takes a combination of supported &quot;drag actions&quot; as argument (<tt>Qt::CopyAction</tt>, <tt>Qt::MoveAction</tt>, and <tt>Qt::LinkAction</tt>) and returns the drag action that was executed (or <tt>Qt::IgnoreAction</tt> if none was executed). Which action is executed depends on what the source widget allows, what the target supports, and which modifier keys are pressed when the drop occurs. After the <tt>start()</tt> call, Qt takes ownership of the drag object and will delete it when it is no longer required.</P>
+<div class="docText"><pre>
+void ProjectListWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    ProjectListWidget *source =
+            qobject_cast&lt;ProjectListWidget *&gt;(event-&gt;source());
+    if (source &amp;&amp; source != this) {
+        event-&gt;setDropAction(Qt::MoveAction);
+        event-&gt;accept();
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>ProjectListWidget</tt> widget not only originates drags, it also accepts such drags if they come from another <tt>ProjectListWidget</tt> in the same application. <tt>QDragEnterEvent::source()</tt> returns a pointer to the widget that initiated the drag if that widget is part of the same application; otherwise, it returns a null pointer. We use <tt>qobject_cast&lt;T&gt;()</tt> to ensure that the drag comes from a <tt>ProjectListWidget</tt>. If all is correct, we tell Qt that we are ready to accept the action as a move action.</p>
+<div class="docText"><pre>
+void ProjectListWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    ProjectListWidget *source =
+            qobject_cast&lt;ProjectListWidget *&gt;(event-&gt;source());
+    if (source &amp;&amp; source != this) {
+        event-&gt;setDropAction(Qt::MoveAction);
+        event-&gt;accept();
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1831"></a><a name="iddle2075"></a><a name="iddle2077"></a><a name="iddle2228"></a><a name="iddle2493"></a><a name="iddle2494"></a><a name="iddle3336"></a><a name="iddle3338"></a><a name="iddle3878"></a><a name="iddle4254"></a><a name="iddle4255"></a><a name="iddle4256"></a><a name="iddle4543"></a><a name="iddle4545"></a><a name="iddle4550"></a><a name="iddle4552"></a><a name="iddle4556"></a><a name="iddle5498"></a><a name="iddle5530"></a><a name="iddle5532"></a><a name="iddle5853"></a><a name="iddle5854"></a><a name="iddle6063"></a><a name="iddle6070"></a><a name="iddle6729"></a>The code in <tt>dragMoveEvent()</tt> is identical to what we did in <tt>dragEnterEvent()</tt>. It is necessary because we need to override <tt>QListWidget</tt>'s (actually, <tt>QAbstractItem-View</tt>'s) implementation of the function.</p>
+<div class="docText"><pre>
+void ProjectListWidget::dropEvent(QDropEvent *event)
+{
+    ProjectListWidget *source =
+            qobject_cast&lt;ProjectListWidget *&gt;(event-&gt;source());
+    if (source &amp;&amp; source != this) {
+        addItem(event-&gt;mimeData()-&gt;text());
+        event-&gt;setDropAction(Qt::MoveAction);
+        event-&gt;accept();
+    }
+}
+</pre></div><BR>
+<p class="docText">In <tt>dropEvent()</tt>, we retrieve the dragged text using <tt>QMimeData::text()</tt> and create an item with that text. We also need to accept the event as a &quot;move action&quot; to tell the source widget that it can now remove the original version of the dragged item.</p>
+<p class="docText">Drag and drop is a powerful mechanism for transferring data between applications. But in some cases,it's possible to implement drag and drop without using Qt's drag and drop facilities. If all we want to do is to move data within one widget in one application, we can often simply reimplement <tt>mousePressEvent()</tt> and <tt>mouseReleaseEvent()</tt>.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch09lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,221 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using the Item View Convenience Classes</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch10lev1sec1"></a>
+<h3 id="title-IDA3MEMN" class="docSection1Title">Using the Item View Convenience Classes</h3>
+<p class="docText">Using Qt's item view convenience subclasses is usually simpler than defining a custom model and is appropriate when we don't need the benefits of separating the model and the view. We used this technique in <a class="docLink" href="ch04.html#ch04">Chapter 4</a> when we subclassed <tt>QTableWidget</tt> and <tt>QTableWidgetItem</tt> to implement spreadsheet functionality.</p>
+<p class="docText"><a name="iddle2292"></a><a name="iddle2450"></a><a name="iddle2451"></a><a name="iddle2452"></a><a name="iddle2454"></a><a name="iddle2455"></a><a name="iddle5973"></a>In this section, we will show how to use the convenience item view subclasses to display items. The first example shows a read-only <tt>QListWidget</tt>, the second example shows an editable <tt>QTableWidget</tt>, and the third example shows a read-only <tt>QtreeWidget</tt>.</p>
+<p class="docText">We begin with a simple dialog that lets the user pick a flowchart symbol from a list. Each item consists of an icon, a text, and a unique ID.</p>
+<a name="ch10fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.3. The Flowchart Symbol Picker application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="277" height="266" SRC="images/flowchartsymbolpicker.jpg"></p>
+
+</center></p><br>
+<p class="docText">Let's start with an extract from the dialog's header file:</p>
+<div class="docText"><pre>
+class FlowChartSymbolPicker : public QDialog
+{
+    Q_OBJECT
+public:
+    FlowChartSymbolPicker(const QMap&lt;int, QString&gt; &amp;symbolMap,
+                          QWidget *parent = 0);
+    int selectedId() const { return id; }
+    void done(int result);
+    ...
+};
+</pre></div><BR>
+<p class="docText">When we construct the dialog, we must pass it a <tt>QMap&lt;int, QString&gt;</tt>, and after it has executed we can retrieve the chosen ID (or -1 if the user didn't select any item) by calling <tt>selectedId()</tt>.</P>
+<div class="docText"><pre>
+FlowChartSymbolPicker::FlowChartSymbolPicker(
+        const QMap&lt;int, QString&gt; &amp;symbolMap, QWidget *parent)
+    : QDialog(parent)
+{
+    id = -1;
+    listWidget = new QListWidget;
+    listWidget-&gt;setIconSize(QSize(60, 60));
+    QMapIterator&lt;int, QString&gt; i(symbolMap);
+    while (i.hasNext()) {
+        i.next();
+        QListWidgetItem *item = new QListWidgetItem(i.value(),
+                                                    listWidget);
+        item-&gt;setIcon(iconForSymbol(i.value()));
+        item-&gt;setData(Qt::UserRole, i.key());
+    }
+    ...
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1158"></a><a name="iddle1835"></a><a name="iddle1964"></a><a name="iddle1987"></a><a name="iddle1988"></a><a name="iddle1991"></a><a name="iddle2098"></a><a name="iddle2101"></a><a name="iddle2453"></a><a name="iddle2749"></a><a name="iddle3119"></a><a name="iddle3972"></a><a name="iddle3980"></a><a name="iddle4201"></a><a name="iddle4469"></a><a name="iddle4474"></a><a name="iddle4477"></a><a name="iddle4478"></a><a name="iddle4479"></a><a name="iddle5065"></a><a name="iddle5072"></a><a name="iddle5084"></a><a name="iddle5112"></a><a name="iddle5214"></a><a name="iddle5220"></a><a name="iddle5441"></a><a name="iddle6062"></a><a name="iddle6072"></a><a name="iddle6111"></a><a name="iddle6200"></a><a name="iddle6734"></a><a name="iddle7070"></a>We initialize <tt>id</tt> (the last selected ID) to -1. Next we construct a <tt>QListWidget</tt>, a convenience item view widget. We iterate over each item in the flowchart symbol map and create a <tt>QListWidgetItem</tt> to represent each one. The <tt>QListWidget-Item</tt> constructor takes a <tt>QString</tt> that represents the text to display, followed by the parent <tt>QListWidget</tt>.</P>
+<p class="docText">Then we set the item's icon and we call <tt>setData()</tt> to store our arbitrary ID in the <tt>QListWidgetItem</tt>. The <tt>iconForSymbol()</tt> private function returns a <tt>QIcon</tt> for a given symbol name.</P>
+<p class="docText"><tt>QListWidgetItem</tt>'s have several roles, each of which has an associated <tt>QVariant</tt>. The most common roles are <tt>Qt::DisplayRole</tt>, <tt>Qt::EditRole</tt>, and <tt>Qt::IconRole</tt>, and for these there are convenience setter and getter functions (<tt>setText()</tt>, <tt>setIcon()</tt>), but there are several other roles. We can also define custom roles by specifying a numeric value of <tt>Qt::UserRole</tt> or higher. In our example, we use <tt>Qt::UserRole</tt> to store each item's ID.</p>
+<p class="docText">The omitted part of the constructor is concerned with creating the buttons, laying out the widgets, and setting the window's title.</p>
+<div class="docText"><pre>
+void FlowChartSymbolPicker::done(int result)
+{
+    id = -1;
+    if (result == QDialog::Accepted) {
+        QListWidgetItem *item = listWidget-&gt;currentItem();
+        if (item)
+            id = item-&gt;data(Qt::UserRole).toInt();
+    }
+    QDialog::done(result);
+}
+</pre></div><br>
+<p class="docText">The <tt>done()</tt> function is reimplemented from <tt>QDialog</tt>. It is called when the user presses OK or Cancel. If the user clicked OK, we retrieve the relevant item and extract the ID using the <tt>data()</tt> function. If we were interested in the item's text, we could retrieve it by calling <tt>item-&gt;data(Qt::DisplayRole).toString()</tt> or more conveniently, <tt>item-&gt;text()</tt>.</p>
+<p class="docText">By default, <tt>QListWidget</tt> is read-only. If we wanted the user to edit the items, we could set the view's edit triggers using <tt>QAbstractItemView::setEditTriggers()</tt>; for example, a setting of <tt>QAbstractItemView::AnyKeyPressed</tt> means that the user can begin editing an item just by starting to type. Alternatively, we could provide an Edit button (and perhaps Add and Delete buttons) and connect them to slots so that we could handle the editing operations programmatically.</p>
+<p class="docText"><a name="iddle1698"></a><a name="iddle1699"></a><a name="iddle2284"></a><a name="iddle2636"></a><a name="iddle5179"></a><a name="iddle5194"></a><a name="iddle6103"></a><a name="iddle6689"></a>Now that we have seen how to use a convenience item view class for viewing and selecting data, we will look at an example where we can edit data. Again we are using a dialog, this time one that presents a set of (<span class="docEmphasis">x, y</span>) coordinates that the user can edit.</p>
+<a name="ch10fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 10.4. The Coordinate Setter application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="273" height="292" SRC="images/coordinatesetter.jpg"></p>
+
+</center></p><br>
+<p class="docText">As with the previous example, we will focus on the item view relevant code, starting with the constructor.</P>
+<div class="docText"><pre>
+CoordinateSetter::CoordinateSetter(QList&lt;QPointF&gt; *coords,
+                                   QWidget *parent)
+    : QDialog(parent)
+{
+    coordinates = coords;
+    tableWidget = new QTableWidget(0, 2);
+    tableWidget-&gt;setHorizontalHeaderLabels(
+            QStringList() &lt;&lt; tr("X") &lt;&lt; tr("Y"));
+    for (int row = 0; row &lt; coordinates-&gt;count(); ++row) {
+        QPointF point = coordinates-&gt;at(row);
+        addRow();
+        tableWidget-&gt;item(row, 0)-&gt;setText(QString::number(point.x()));
+        tableWidget-&gt;item(row, 1)-&gt;setText(QString::number(point.y()));
+    }
+    ...
+}
+</pre></div><br>
+<p class="docText">The <tt>QTableWidget</tt> constructor takes the initial number of table rows and columns to display. Every item in a <tt>QTableWidget</tt> is represented by a <tt>QTableWidgetItem</tt>, including horizontal and vertical header items. The <tt>setHorizontalHeaderLabels()</tt> function sets the text for each horizontal table widget item to the corresponding text in the string list it is passed. By default, <tt>QTableWidget</tt> provides a vertical header with rows labeled from 1, which is exactly what we want, so we don't need to set the vertical header labels manually.</p>
+<p class="docText"><a name="iddle1094"></a><a name="iddle1992"></a><a name="iddle2102"></a><a name="iddle2316"></a><a name="iddle3514"></a><a name="iddle3977"></a><a name="iddle3981"></a><a name="iddle4202"></a><a name="iddle5196"></a><a name="iddle5386"></a><a name="iddle6073"></a><a name="iddle6120"></a><a name="iddle6253"></a><a name="iddle6945"></a>Once we have created and centered the column labels, we iterate through the coordinate data that was passed in. For every (<span class="docEmphasis">x, y</span>) pair, we create two <tt>QTableWidgetItem</tt>s corresponding to the <span class="docEmphasis">x</span> and <span class="docEmphasis">y</span> coordinates. The items are added to the table using <tt>QTableWidget::setItem()</tt>, which takes a row and a column in addition to the item.</P>
+<p class="docText">By default, <tt>QTableWidget</tt> allows editing. The user can edit any cell in the table by navigating to it and then either pressing F2 or simply by typing. All changes made by the user in the view will be automatically reflected into the <tt>QTableWidgetItem</tt>s. To prevent editing, we can call <tt>setEditTriggers(QAbstractItemView:: NoEditTriggers)</tt>.</P>
+<div class="docText"><pre>
+void CoordinateSetter::addRow()
+{
+    int row = tableWidget-&gt;rowCount();
+    tableWidget-&gt;insertRow(row);
+    QTableWidgetItem *item0 = new QTableWidgetItem;
+    item0-&gt;setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    tableWidget-&gt;setItem(row, 0, item0);
+    QTableWidgetItem *item1 = new QTableWidgetItem;
+    item1-&gt;setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    tableWidget-&gt;setItem(row, 1, item1);
+    tableWidget-&gt;setCurrentItem(item0);
+}
+</pre></div><br>
+<p class="docText">The <tt>addRow()</tt> slot is invoked when the user clicks the Add Row button. We append a new row using <tt>insertRow()</tt>. If the user attempts to edit a cell in the new row, the <tt>QTableWidget</tt> will automatically create a new <tt>QTableWidgetItem</tt>.</p>
+<div class="docText"><pre>
+void CoordinateSetter::done(int result)
+{
+    if (result == QDialog::Accepted) {
+        coordinates-&gt;clear();
+        for (int row = 0; row &lt; tableWidget-&gt;rowCount(); ++row) {
+            double x = tableWidget-&gt;item(row, 0)-&gt;text().toDouble();
+            double y = tableWidget-&gt;item(row, 1)-&gt;text().toDouble();
+            coordinates-&gt;append(QPointF(x, y));
+        }
+    }
+    QDialog::done(result);
+}
+</pre></div><br>
+<p class="docText">Finally, when the user clicks OK, we clear the coordinates that were passed in to the dialog, and create a new set based on the coordinates in the <tt>QTableWidget</tt>'s items.</p>
+<p class="docText">For our third and final example of Qt's convenience item view widgets, we will look at some snippets from an application that shows Qt application settings using a <tt>QTReeWidget</tt>. Read-only is the default for <tt>QtreeWidget</tt>.</p>
+
+<p class="docText"></p><a name="ch10fig05"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 10.5. The Settings Viewer application</H5>
+
+<p class="docText">
+<img border="0" alt="" width="372" height="266" SRC="images/settingsviewer.jpg"></P>
+
+</center></p><br>
+<p class="docText"><a name="iddle1171"></a><a name="iddle3796"></a><a name="iddle4840"></a><a name="iddle5709"></a><a name="iddle6248"></a><a name="iddle6249"></a><a name="iddle6250"></a><a name="iddle6252"></a>Here's an extract from the constructor:</p>
+<div class="docText"><pre>
+SettingsViewer::SettingsViewer(QWidget *parent)
+    : QDialog(parent)
+{
+    organization = "Trolltech";
+    application = "Designer";
+    treeWidget = new QTreeWidget;
+    treeWidget-&gt;setColumnCount(2);
+    treeWidget-&gt;setHeaderLabels(
+            QStringList() &lt;&lt; tr("Key") &lt;&lt; tr("Value"));
+    treeWidget-&gt;header()-&gt;setResizeMode(0, QHeaderView::Stretch);
+    treeWidget-&gt;header()-&gt;setResizeMode(1, QHeaderView::Stretch);
+    ...
+    setWindowTitle(tr("Settings Viewer"));
+    readSettings();
+}
+</pre></div><br>
+<p class="docText">To access an application's settings, a <tt>QSettings</tt> object must be created with the organization's name and the application's name as parameters. We set default names (&quot;Designer&quot; by &quot;Trolltech&quot;) and then construct a new <tt>QtreeWidget</tt>. At the end, we call the <tt>readSettings()</tt> function.</p>
+<div class="docText"><pre>
+void SettingsViewer::readSettings()
+{
+    QSettings settings(organization, application);
+    treeWidget-&gt;clear();
+    addChildSettings(settings, 0, "");
+    treeWidget-&gt;sortByColumn(0);
+    treeWidget-&gt;setFocus();
+    setWindowTitle(tr("Settings Viewer - %1 by %2")
+                   .arg(application).arg(organization));
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1083"></a><a name="iddle3666"></a><a name="iddle5391"></a><a name="iddle6251"></a>Application settings are stored in a hierarchy of keys and values. The <tt>addChildSettings()</tt> private function takes a settings object, a parent <tt>QtreeWidgetItem</tt>, and the current &quot;group&quot;. A group is the <tt>QSettings</tt> equivalent of a file system directory. The <tt>addChildSettings()</tt> function can call itself recursively to traverse an arbitrary tree structure. The initial call from the <tt>readSettings()</tt> function passes 0 as the parent item to represent the root.</p>
+<div class="docText"><pre>
+void SettingsViewer::addChildSettings(QSettings &amp;settings,
+        QTreeWidgetItem *parent, const QString &amp;group)
+{
+    QTreeWidgetItem *item;
+    settings.beginGroup(group);
+    foreach (QString key, settings.childKeys()) {
+        if (parent) {
+            item = new QTreeWidgetItem(parent);
+        } else {
+            item = new QTreeWidgetItem(treeWidget);
+        }
+        item-&gt;setText(0, key);
+        item-&gt;setText(1, settings.value(key).toString());
+    }
+    foreach (QString group, settings.childGroups()) {
+        if (parent) {
+            item = new QTreeWidgetItem(parent);
+        } else {
+            item = new QTreeWidgetItem(treeWidget);
+        }
+        item-&gt;setText(0, group);
+        addChildSettings(settings, item, group);
+    }
+    settings.endGroup();
+}
+</pre></div><br>
+<p class="docText">The <tt>addChildSettings()</tt> function is used to create all the <tt>QtreeWidgetItem</tt>s. It iterates over all the keys at the current level in the settings hierarchy and creates one <tt>QTableWidgetItem</tt> per key. If 0 was passed as the <tt>parent</tt> item, we create the item as a child of the <tt>QtreeWidget</tt> itself (making it a top-level item); otherwise, we create the item as a child of <tt>parent</tt>. The first column is set to the name of the key and the second column to the corresponding value.</p>
+<p class="docText">Next, the function iterates over every group at the current level. For each group, a new <tt>QtreeWidgetItem</tt> is created with its first column set to the group's name. The function then calls itself recursively with the group item as the parent to populate the <tt>QTReeWidget</tt> with the group's child items.</P>
+<p class="docText">The item view widgets shown in this section allow us to use a style of programming that is very similar to that used in earlier versions of Qt: reading an entire data set into an item view widget, using item objects to represent data elements, and (if the items are editable) writing back to the data source. In the following sections, we will go beyond this simple approach and take full advantage of Qt's model/view architecture.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch10lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

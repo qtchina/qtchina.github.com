@@ -1,0 +1,132 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Making Applications Plugin-Aware</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch19lev1sec2"></a>
+<h3 id="title-IDACB1PW" class="docSection1Title">Making Applications Plugin-Aware</h3>
+<p class="docText">An application plugin is a dynamic library that implements one or more <span class="docEmphasis">interfaces</span>. An interface is a class that consists exclusively of pure virtual functions. The communication between the application and the plugins is done through the interface's virtual table. In this section, we will focus on how to use a plugin in a Qt application through its interfaces, and in the next section we will show how to implement a plugin.</p>
+<p class="docText">To provide a concrete example, we will create the simple Text Art application shown in <a class="docLink" href="#ch19fig03">Figure 19.3</a>. The text effects are provided by plugins; the application retrieves the list of text effects provided by each plugin and iterates over them to show each one as an item in a <tt>QListWidget</tt>.</p>
+
+<p class="docText"></p><a name="ch19fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 19.3. The Text Art application</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/textart_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="328" SRC="images/textart.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle1923"></a><a name="iddle3916"></a><a name="iddle6749"></a><a name="iddle7151"></a>The Text Art application defines one interface:</p>
+<div class="docText"><pre>
+class TextArtInterface
+{
+public:
+    virtual ~TextArtInterface() { }
+    virtual QStringList effects() const = 0;
+    virtual QPixmap applyEffect(const QString &amp;effect,
+                                const QString &amp;text,
+                                const QFont &amp;font, const QSize &amp;size,
+                                const QPen &amp;pen,
+                                const QBrush &amp;brush) = 0;
+};
+Q_DECLARE_INTERFACE(TextArtInterface,
+                    "com.software-inc.TextArt.TextArtInterface/1.0")
+</pre></div><BR>
+<p class="docText">An interface class normally declares a virtual destructor, a virtual function that returns a <tt>QStringList</tt>, and one or more other virtual functions. The destructor is there primarily to silence the compiler, which might otherwise complain about the lack of a virtual destructor in a class that has virtual functions. In this example, the <tt>effects()</tt> function returns a list of the text effects the plugin can provide. We can think of this list as a list of keys. Every time we call one of the other functions, we pass one of these keys as first argument, making it possible to implement multiple effects in one plugin.</p>
+<p class="docText">At the end, we use the <tt>Q_DECLARE_INTERFACE()</tt> macro to associate an identifier to the interface. The identifier normally has four components: an inverted domain name specifying the creator of the interface, the name of the application, the name of the interface, and a version number. Whenever we alter the interface (for example, by adding a virtual function or changing the signature of an existing function), we must remember to increase the version number; otherwise, the application might crash trying to access an outdated plugin.</p>
+<p class="docText"><a name="iddle2851"></a><a name="iddle3132"></a><a name="iddle4731"></a><a name="iddle6742"></a><a name="iddle6743"></a><a name="iddle6744"></a>The application is implemented in a class called <tt>TextArtDialog</tt>. We will only show the code relevant to making it plugin-aware. Let's start with the constructor:</p>
+<div class="docText"><pre>
+TextArtDialog::TextArtDialog(const QString &amp;text, QWidget *parent)
+    : QDialog(parent)
+{
+    listWidget = new QListWidget;
+    listWidget-&gt;setViewMode(QListWidget::IconMode);
+    listWidget-&gt;setMovement(QListWidget::Static);
+    listWidget-&gt;setIconSize(QSize(260, 80));
+    ...
+    loadPlugins();
+    populateListWidget(text);
+    ...
+}
+</pre></div><BR>
+<p class="docText">The constructor creates a <tt>QListWidget</tt> to list the available effects. It calls the private function <tt>loadPlugins()</tt> to find and load any plugins that implement the <tt>TextArtInterface</tt> and populates the list widget accordingly by calling another private function, <tt>populateListWidget()</tt>.</p>
+<div class="docText"><pre>
+void TextArtDialog::loadPlugins()
+{
+    QDir pluginDir(QApplication::applicationDirPath());
+#if defined(Q_OS_WIN)
+    if (pluginDir.dirName().toLower() == "debug"
+            || pluginDir.dirName().toLower() == "release")
+        pluginDir.cdUp();
+#elif defined(Q_OS_MAC)
+    if (pluginDir.dirName() == "MacOS") {
+        pluginDir.cdUp();
+        pluginDir.cdUp();
+        pluginDir.cdUp();
+    }
+#endif
+    if (!pluginDir.cd("plugins"))
+        return;
+    foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
+        QPluginLoader loader(pluginDir.absoluteFilePath(fileName));
+        if (TextArtInterface *interface =
+                    qobject_cast&lt;TextArtInterface *&gt;(loader.instance()))
+            interfaces.append(interface);
+    }
+}
+</pre></div><BR>
+<p class="docText">In <tt>loadPlugins()</tt>, we attempt to load all the files in the application's <tt>plugins</tt> directory. (On Windows, the application's executable usually lives in a <tt>debug</tt> or <tt>release</tt> subdirectory, so we move one directory up. On Mac OS X, we take the bundle directory structure into account.)</P>
+<p class="docText">If the file we try to load is a Qt plugin that uses the same version of Qt as the application, <tt>QPluginLoader::instance()</tt> will return a <tt>QObject *</tt> that points to a <a name="iddle3442"></a><a name="iddle3777"></a><a name="iddle4475"></a><a name="iddle4639"></a><a name="iddle6745"></a>Qt plugin. We use <tt>qobject_cast&lt;T&gt;()</tt> to check whether the plugin implements the <tt>TextArtInterface</tt>. Each time the cast is successful, we add the interface to the <tt>TextArtDialog</tt>'s list of interfaces (of type <tt>QList&lt;TextArtInterface *&gt;</tt>).</p>
+<p class="docText">Some applications may want to load two or more different interfaces, in which case the code for obtaining the interfaces would look more like that shown below:</P>
+<div class="docText"><pre>
+QObject *plugin = loader.instance();
+if (TextArtInterface *i = qobject_cast&lt;TextArtInterface *&gt;(plugin))
+    textArtInterfaces.append(i);
+if (BorderArtInterface *i = qobject_cast&lt;BorderArtInterface *&gt;(plugin))
+    borderArtInterfaces.append(i);
+if (TextureInterface *i = qobject_cast&lt;TextureInterface *&gt;(plugin))
+    textureInterfaces.append(i);
+</pre></div><br>
+<p class="docText">The same plugin may successfully cast to more than one interface pointer, since it is possible for plugins to provide multiple interfaces by using multiple inheritance.</p>
+<div class="docText"><pre>
+void TextArtDialog::populateListWidget(const QString &amp;text)
+{
+    QSize iconSize = listWidget-&gt;iconSize();
+    QPen pen(QColor("darkseagreen"));
+    QLinearGradient gradient(0, 0, iconSize.width() / 2,
+                             iconSize.height() / 2);
+    gradient.setColorAt(0.0, QColor("darkolivegreen"));
+    gradient.setColorAt(0.8, QColor("darkgreen"));
+    gradient.setColorAt(1.0, QColor("lightgreen"));
+    QFont font("Helvetica", iconSize.height(), QFont::Bold);
+    foreach (TextArtInterface *interface, interfaces) {
+        foreach (QString effect, interface-&gt;effects()) {
+            QListWidgetItem *item = new QListWidgetItem(effect,
+                                                        listWidget);
+            QPixmap pixmap = interface-&gt;applyEffect(effect, text, font,
+                                                       iconSize, pen,
+                                                       gradient);
+            item-&gt;setData(Qt::DecorationRole, pixmap);
+        }
+    }
+    listWidget-&gt;setCurrentRow(0);
+}
+</pre></div><BR>
+<p class="docText">The <tt>populateListWidget()</tt> function begins by creating some variables to pass to the <tt>applyEffect()</tt> function, in particular a pen, a linear gradient, and a font. It then iterates over every <tt>TextArtInterface</tt> that was found by <tt>loadPlugins()</tt>. For each effect provided by each interface, a new <tt>QListWidgetItem</tt> is created with its text set to the name of the effect it represents, and a <tt>QPixmap</tt> is created using <tt>applyEffect()</tt>.</P>
+<p class="docText"><a name="iddle1173"></a><a name="iddle1254"></a><a name="iddle1255"></a><a name="iddle2118"></a><a name="iddle2279"></a><a name="iddle3314"></a><a name="iddle3365"></a><a name="iddle3924"></a><a name="iddle4640"></a><a name="iddle6656"></a><a name="iddle6747"></a><a name="iddle6748"></a><a name="iddle6750"></a>In this section we have seen how to load plugins by calling <tt>loadPlugins()</tt> in the constructor, and how to make use of them in <tt>populateListWidget()</tt>. The code copes gracefully whether there are no plugins providing <tt>TextArtInterface</tt>s, just one, or more than one. Furthermore, additional plugins could be added later: Every time the application starts up it loads whatever plugins it finds that provide the interfaces it wants. This makes it easy to extend the application's functionality without changing the application itself.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

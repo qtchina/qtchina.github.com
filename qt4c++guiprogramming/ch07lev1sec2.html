@@ -1,0 +1,89 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Installing Event Filters</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch07lev1sec2"></a>
+<h3 id="title-IDANTFNW" class="docSection1Title"><span class="docEmphStrong">Installing Event Filters</span></h3>
+<p class="docText">One really powerful feature of Qt's event model is that a <tt>QObject</tt> instance can be set to monitor the events of another <tt>QObject</tt> instance before the latter object even sees them.</p>
+<p class="docText">Let's suppose that we have a <tt>CustomerInfoDialog</tt> widget composed of several <tt>QLineEdit</tt>s and that we want to use the Space key to move the focus to the next <tt>QLineEdit</tt>. This non-standard behavior might be appropriate for an in-house application whose users are trained in its use. A straightforward solution is to subclass <tt>QLineEdit</tt> and reimplement <tt>keyPressEvent()</tt> to call <tt>focusNextChild()</tt>, like this:</p>
+<div class="docText"><pre>
+void MyLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    if (event-&gt;key() == Qt::Key_Space) {
+        focusNextChild();
+    } else {
+        QLineEdit::keyPressEvent(event);
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2202"></a><a name="iddle2239"></a><a name="iddle2463"></a><a name="iddle2848"></a><a name="iddle2984"></a><a name="iddle4611"></a><a name="iddle4614"></a><a name="iddle5501"></a><a name="iddle5513"></a>This approach has one main disadvantage: If we use several different kinds of widgets in the form (for example, <tt>QComboBox</tt>es and <tt>QSpinBox</tt>es), we must also subclass them to make them exhibit the same behavior. A better solution is to make <tt>CustomerInfoDialog</tt> monitor its child widgets' key press events and implement the required behavior in the monitoring code. This can be achieved using event filters. Setting up an event filter involves two steps:</p>
+<a name="ch07pro01"></a>
+
+
+<table border="0" class="docText"><tr><td width="25" valign="top"><div class="docText"><b>1. </b></div></td><td><div class="docText">Register the monitoring object with the target object by calling <tt>install-EventFilter()</tt> on the target.<br><br>
+</div></TD></TR><TR><TD width="25" valign="top"><div class="docText"><B>2. </b></div></td><td><div class="docText">Handle the target object's events in the monitor's <tt>eventFilter()</tt> function.<br><br>
+</div></td></tr></table>
+<p class="docText">A good place to register the monitoring object is in the <tt>CustomerInfoDialog</tt> constructor:</p>
+<div class="docText"><pre>
+CustomerInfoDialog::CustomerInfoDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    ...
+    firstNameEdit-&gt;installEventFilter(this);
+    lastNameEdit-&gt;installEventFilter(this);
+    cityEdit-&gt;installEventFilter(this);
+    phoneNumberEdit-&gt;installEventFilter(this);
+}
+</pre></div><br>
+<p class="docText">Once the event filter is registered, the events that are sent to the <tt>firstName-Edit</tt>, <tt>lastNameEdit</tt>, <tt>cityEdit</tt>, and <tt>phoneNumberEdit</tt> widgets are first sent to the <tt>CustomerInfoDialog</tt>'s <tt>eventFilter()</tt> function before they are sent on to their intended destination.</p>
+<p class="docText">Here's the <tt>eventFilter()</tt> function that receives the events:</p>
+<div class="docText"><pre>
+bool CustomerInfoDialog::eventFilter(QObject *target, QEvent *event)
+{
+    if (target == firstNameEdit || target == lastNameEdit
+            || target == cityEdit || target == phoneNumberEdit) {
+        if (event-&gt;type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast&lt;QKeyEvent *&gt;(event);
+            if (keyEvent-&gt;key() == Qt::Key_Space) {
+                focusNextChild();
+                return true;
+            }
+        }
+    }
+    return QDialog::eventFilter(target, event);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1950"></a><a name="iddle2201"></a><a name="iddle2203"></a><a name="iddle2233"></a><a name="iddle2242"></a><a name="iddle2464"></a><a name="iddle2849"></a><a name="iddle3058"></a><a name="iddle3531"></a><a name="iddle4014"></a><a name="iddle4037"></a><a name="iddle4610"></a><a name="iddle4612"></a><a name="iddle4615"></a><a name="iddle5502"></a><a name="iddle5858"></a><a name="iddle7221"></a>First, we check to see if the target widget is one of the <tt>QLineEdit</tt>s. If the event was a key press, we cast it to <tt>QKeyEvent</tt> and check which key was pressed. If the pressed key was Space, we call <tt>focusNextChild()</tt> to pass focus on to the next widget in the focus chain, and we return <tt>true</tt> to tell Qt that we have handled the event. If we returned <tt>false</tt>, Qt would send the event to its intended target, resulting in a spurious space being inserted into the <tt>QLineEdit</tt>.</P>
+<p class="docText">If the target widget isn't a <tt>QLineEdit</tt>, or if the event isn't a Space key press, we pass control to the base class's implementation of <tt>eventFilter()</tt>. The target widget could also be some widget that the base class, <tt>QDialog</tt>, is monitoring. (In Qt 4.1, this is not the case for <tt>QDialog</tt>. However, other Qt widget classes, such as <tt>QScrollArea</tt>, do monitor some of their child widgets for various reasons.)</p>
+<p class="docText">Qt offers five levels at which events can be processed and filtered:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><LI><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">We can reimplement a specific event handler.</span> </P><p class="docList">Reimplementing event handlers such as <tt>mousePressEvent()</tt>, <tt>keyPress-Event()</tt>, and <tt>paintEvent()</tt> is by far the most common way to process events. We have already seen many examples of this.</p></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">We can reimplement QObject::event().</span> </p><p class="docList">By reimplementing the <tt>event()</tt> function, we can process events before they reach the specific event handlers. This approach is mostly needed to override the default meaning of the Tab key, as shown earlier (p. 164). This is also used to handle rare types of event for which no specific event handler exists (for example, <tt>QEvent::HoverEnter</tt>). When we reimplement <tt>event()</tt>, we must call the base class's <tt>event()</tt> function for handling the cases we don't explicitly handle.</P></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">We can install an event filter on a single QObject.</span> </p><p class="docList">Once an object has been registered using <tt>installEventFilter()</tt>, all the events for the target object are first sent to the monitoring object's <tt>event-Filter()</tt> function. If multiple event filters are installed on the same object, the filters are activated in turn, from the most recently installed back to the first installed.</p></div></LI><LI><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">We can install an event filter on the QApplication object.</span> </P><p class="docList">Once an event filter has been registered for <tt>qApp</tt> (the unique <tt>QApplication</tt> object), every event for every object in the application is sent to the <tt>event-Filter()</tt> function before it is sent to any other event filter. This approach is mostly useful for debugging. It can also be used to handle mouse events sent to disabled widgets, which <tt>QApplication</tt> normally discards.</p></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">We can subclass QApplication and reimplement notify().</span> </p><p class="docList">Qt calls <tt>QApplication::notify()</tt> to send out an event. Reimplementing this function is the only way to get all the events, before any event filters get the opportunity to look at them. Event filters are generally more useful, <a name="iddle2205"></a><a name="iddle2265"></a><a name="iddle2345"></a><a name="iddle2461"></a><a name="iddle2642"></a><a name="iddle2854"></a><a name="iddle3861"></a><a name="iddle3884"></a><a name="iddle4029"></a><a name="iddle4038"></a>because there can be any number of concurrent event filters, but only one <tt>notify()</tt> function.</p></div></li></ol></div>
+<p class="docText">Many event types, including mouse and key events, can be propagated. If the event has not been handled on the way to its target object or by the target object itself, the whole event processing process is repeated, but this time with the target object's parent as the new target. This continues, going from parent to parent, until either the event is handled or the top-level object is reached.</p>
+<p class="docText"><a class="docLink" href="#ch07fig02">Figure 7.2</a> shows how a key press event is propagated from child to parent in a dialog. When the user presses a key, the event is first sent to the widget that has focus, in this case the bottom-right <tt>QCheckBox</tt>. If the <tt>QCheckBox</tt> doesn't handle the event, Qt sends it to the <tt>QGroupBox</tt>, and finally to the <tt>QDialog</tt> object.</p>
+<a name="ch07fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 7.2. Event propagation in a dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="380" height="211" SRC="images/propagation.jpg"></p>
+
+</center></p><br>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch07lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

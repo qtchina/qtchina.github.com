@@ -1,0 +1,157 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Implementing the Other Menus</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch04lev1sec5"></a>
+<h3 id="title-IDAFAFC2" class="docSection1Title">Implementing the Other Menus</h3>
+<p class="docText">We will now implement the slots for the Tools and Options menus.</p>
+<a name="ch04fig07"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.7. The Spreadsheet application's Tools and Options menus</h5>
+
+<p class="docText">
+<img border="0" alt="" width="349" height="75" SRC="images/tools_menu.jpg"></p>
+
+</center></p><br>
+<div class="docText"><pre>
+void Spreadsheet::recalculate()
+{
+    for (int row = 0; row &lt; RowCount; ++row) {
+        for (int column = 0; column &lt; ColumnCount; ++column) {
+            if (cell(row, column))
+                cell(row, column)-&gt;setDirty();
+        }
+    }
+    viewport()-&gt;update();
+}
+</pre></div><br>
+<p class="docText">The <tt>recalculate()</tt> slot corresponds to Tools|Recalculate. It is also called automatically by <tt>Spreadsheet</tt> when necessary.</p>
+<p class="docText">We iterate over all the cells and call <tt>setDirty()</tt> on every cell to mark each one as requiring recalculation. The next time <tt>QTableWidget</tt> calls <tt>text()</tt> on a <tt>Cell</tt> to obtain the value to show in the spreadsheet, the value will be recalculated.</p>
+<p class="docText">Then we call <tt>update()</tt> on the viewport to repaint the whole spreadsheet. The repaint code in <tt>QTableWidget</tt> then calls <tt>text()</tt> on each visible cell to obtain the value to display. Because we called <tt>setDirty()</tt> on every cell, the calls to <tt>text()</tt> will use a freshly calculated value. The calculation may require non-visible cells to be recalculated, cascading the calculation until every cell that needs <a name="iddle1120"></a><a name="iddle2540"></a><a name="iddle4955"></a><a name="iddle6010"></a><a name="iddle6389"></a><a name="iddle6470"></a><a name="iddle6474"></a>to be recalculated to display the correct text in the viewport has been freshly calculated. The calculation is performed by the <tt>Cell</tt> class.</p>
+<div class="docText"><pre>
+void Spreadsheet::setAutoRecalculate(bool recalc)
+{
+    autoRecalc = recalc;
+    if (autoRecalc)
+        recalculate();
+}
+</pre></div><BR>
+<p class="docText">The <tt>setAutoRecalculate()</tt> slot corresponds to Options|Auto-Recalculate. If the feature is being turned on, we recalculate the whole spreadsheet immediately to make sure that it's up to date; afterward, <tt>recalculate()</tt> is called automatically from <tt>somethingChanged()</tt>.</P>
+<p class="docText">We don't need to implement anything for Options|Show Grid because <tt>QTableWidget</tt> already has a <tt>setShowGrid()</tt> slot, which it inherits from its base class <tt>QTable-View</tt>. All that remains is <tt>Spreadsheet::sort()</tt>, which is called from <tt>MainWindow::sort()</tt>:</P>
+<div class="docText"><pre>
+void Spreadsheet::sort(const SpreadsheetCompare &amp;compare)
+{
+    QList&lt;QStringList&gt; rows;
+    QTableWidgetSelectionRange range = selectedRange();
+    int i;
+    for (i = 0; i &lt; range.rowCount(); ++i) {
+        QStringList row;
+        for (int j = 0; j &lt; range.columnCount(); ++j)
+            row.append(formula(range.topRow() + i,
+                                range.leftColumn() + j));
+        rows.append(row);
+    }
+    qStableSort(rows.begin(), rows.end(), compare);
+    for (i = 0; i &lt; range.rowCount(); ++i) {
+        for (int j = 0; j &lt; range.columnCount(); ++j)
+            setFormula(range.topRow() + i, range.leftColumn() + j,
+                        rows[i][j]);
+    }
+    clearSelection();
+    somethingChanged();
+}
+</pre></div><BR>
+<p class="docText">Sorting operates on the current selection and reorders the rows according to the sort keys and sort orders stored in the <tt>compare</tt> object. We represent each row of data with a <tt>QStringList</tt> and store the selection as a list of rows. We use Qt's <tt>qStableSort()</tt> algorithm, and for simplicity sort by formula rather than by value. Qt's standard algorithms and data structures are covered in <a class="docLink" href="ch11.html#ch11">Chapter 11</a> (Container Classes).</P>
+
+<p class="docText"></p><a name="ch04fig08"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.8. Storing the selection as a list of rows</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/list_of_rows_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="106" SRC="images/list_of_rows.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle2529"></a><a name="iddle3594"></a><a name="iddle3610"></a><a name="iddle3627"></a><a name="iddle6481"></a><a name="iddle6490"></a>The <tt>qStableSort()</tt> function accepts a begin iterator, an end iterator, and a comparison function. The comparison function is a function that takes two arguments (two <tt>QStringList</tt>s) and that returns <tt>true</tt> if the first argument is &quot;less than&quot; the second argument, <tt>false</tt> otherwise. The <tt>compare</tt> object we pass as the comparison function isn't really a function, but it can be used as one, as we will see shortly.</p>
+<a name="ch04fig09"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.9. Putting the data back into the table after sorting</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/table_after_sorting_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="106" SRC="images/table_after_sorting.jpg"></P>
+</center></p><br>
+<p class="docText">After performing the <tt>qStableSort()</tt>, we move the data back into the table, clear the selection, and call <tt>somethingChanged()</tt>.</P>
+<p class="docText">In <tt>spreadsheet.h</tt>, the <tt>SpreadsheetCompare</tt> class was defined like this:</P>
+<div class="docText"><pre>
+class SpreadsheetCompare
+{
+public:
+    bool operator()(const QStringList &amp;row1,
+                    const QStringList &amp;row2) const;
+    enum { KeyCount = 3 };
+    int keys[KeyCount];
+    bool ascending[KeyCount];
+};
+</pre></div><br>
+<p class="docText">The <tt>SpreadsheetCompare</tt> class is special because it implements a <tt>()</tt> operator. This allows us to use the class as if it were a function. Such classes are called function objects, or functors. To understand how functors work, we will start with a simple example:</p>
+<div class="docText"><pre>
+class Square
+{
+public:
+    int operator()(int x) const { return x * x; }
+}
+</pre></div><br>
+<p class="docText">The <tt>Square</tt> class provides one function, <tt>operator()(int)</tt>, that returns the square of its parameter. By naming the function <tt>operator()(int)</tt> rather than, say, <tt>compute(int)</tt>, we gain the capability of using an object of type <tt>Square</tt> as if it were a function:</p>
+<div class="docText"><pre>
+Square square;
+int y = square(5);
+</pre></div><BR>
+<p class="docText">Now let's see an example involving <tt>SpreadsheetCompare</tt>:</p>
+<div class="docText"><pre>
+QStringList row1, row2;
+QSpreadsheetCompare compare;
+...
+if (compare(row1, row2)) {
+    // row1 is less than row2
+}
+</pre></div><br>
+<p class="docText">The <tt>compare</tt> object can be used just as if it had been a plain <tt>compare()</tt> function. Additionally, its implementation can access all the sort keys and sort orders, which are stored as member variables.</p>
+<p class="docText">An alternative to this scheme would have been to store the sort keys and sort orders in global variables and use a plain <tt>compare()</tt> function. However, communicating through global variables is inelegant and can lead to subtle bugs. Functors are a more powerful idiom for interfacing with template functions such as <tt>qStableSort()</tt>.</p>
+<p class="docText">Here is the implementation of the function that is used to compare two spreadsheet rows:</P>
+<div class="docText"><pre>
+bool SpreadsheetCompare::operator()(const QStringList &amp;row1,
+                                    const QStringList &amp;row2) const
+{
+    for (int i = 0; i &lt; KeyCount; ++i) {
+        int column = keys[i];
+        if (column != -1) {
+            if (row1[column] != row2[column]) {
+                if (ascending[i]) {
+                    return row1[column] &lt; row2[column];
+                } else {
+                    return row1[column] &gt; row2[column];
+                }
+            }
+        }
+    }
+    return false;
+}
+</pre></div><BR>
+<p class="docText">The operator returns <tt>TRue</tt> if the first row is less than the second row; otherwise, it returns <tt>false</tt>. The <tt>qStableSort()</tt> function uses the result of this function to perform the sort.</p>
+<p class="docText"><a name="iddle1372"></a><a name="iddle1373"></a><a name="iddle1833"></a><a name="iddle4871"></a><a name="iddle5208"></a><a name="iddle5210"></a><a name="iddle5212"></a><a name="iddle5218"></a><a name="iddle6640"></a><a name="iddle6732"></a>The <tt>SpreadsheetCompare</tt> object's <tt>keys</tt> and <tt>ascending</tt> arrays are populated in the <tt>MainWindow::sort()</tt> function (shown in <a class="docLink" href="ch02.html#ch02">Chapter 2</a>). Each key holds a column index, or -1 (&quot;None&quot;).</p>
+<p class="docText">We compare the corresponding cell entries in the two rows for each key in order. As soon as we find a difference, we return an appropriate <tt>true</tt> or <tt>false</tt> value. If all the comparisons turn out to be equal, we return <tt>false</tt>. The <tt>qStableSort()</tt> function uses the order before the sort to resolve tie situations; if <tt>row1</tt> preceded <tt>row2</tt> originally and neither compares as &quot;less than&quot; the other, <tt>row1</tt> will still precede <tt>row2</tt> in the result. This is what distinguishes <tt>qStableSort()</tt> from its unstable cousin <tt>qSort()</tt>.</p>
+<p class="docText">We have now completed the <tt>Spreadsheet</tt> class. In the next section, we will review the <tt>Cell</tt> class. This class is used to hold cell formulas and provides a reimplementation of the <tt>QTableWidgetItem::data()</tt> function that <tt>Spreadsheet</tt> calls indirectly, through the <tt>QTableWidgetItem::text()</tt> function, to display the result of calculating a cell's formula.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

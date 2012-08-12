@@ -1,0 +1,196 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Making Applications Translation-Aware</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch17lev1sec2"></a>
+<h3 id="title-IDAMUR3W" class="docSection1Title">Making Applications Translation-Aware</h3>
+<p class="docText">If we want to make our applications available in multiple languages, we must do two things:</p>
+<ul><li><p class="docList">Make sure that every user-visible string goes through <tt>tr()</tt>.</p></li><li><p class="docList">Load a translation (<tt>.qm</tt>) file at startup.</p></li></ul>
+<p class="docText">Neither of these is necessary for applications that will never be translated. However, using <tt>TR()</tt> requires almost no effort and leaves the door open for doing translations at a later date.</p>
+<p class="docText"><a name="iddle3161"></a><a name="iddle3932"></a>The <tt>tr()</tt> function is a static function defined in <tt>QObject</tt> and overridden in every subclass defined with the <tt>Q_OBJECT</tt> macro. When writing code inside a <tt>QObject</tt> subclass, we can call <tt>tr()</tt> without formality. A call to <tt>TR()</tt> returns a translation if one is available; otherwise, the original text is returned.</p>
+<p class="docText">To prepare translation files, we must run Qt's <tt>lupdate</tt> tool. This tool extracts all the string literals that appear in <tt>TR()</tt> calls and produces translation files that contain all of these strings ready to be translated. The files can then be sent to a translator to have the translations added. This process is explained in the &quot;<a class="docLink" href="ch17lev1sec4.html#ch17lev1sec4">Translating Applications</a>&quot; section later in this chapter.</P>
+<p class="docText">A <tt>tr()</tt> call has the following general syntax:</P>
+<div class="docText"><pre>
+Context::tr(sourceText, comment)
+</pre></div><br>
+<p class="docText">The <tt>Context</tt> part is the name of a <tt>QObject</tt> subclass defined with the <tt>Q_OBJECT</tt> macro. We don't need to specify it if we call <tt>tr()</tt> from a member function of the class in question. The <tt>sourceText</tt> part is the string literal that needs to be translated. The <tt>comment</tt> part is optional; it can be used to provide additional information to the translator.</P>
+<p class="docText">Here are a few examples:</P>
+<div class="docText"><pre>
+RockyWidget::RockyWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    QString str1 = tr("Letter");
+    QString str2 = RockyWidget::tr("Letter");
+    QString str3 = SnazzyDialog::tr("Letter");
+    QString str4 = SnazzyDialog::tr("Letter", "US paper size");
+}
+</pre></div><BR>
+<p class="docText">The first two calls to <tt>tr()</tt> have &quot;RockyWidget&quot; as context, and the last two calls have &quot;SnazzyDialog&quot;. All four have &quot;Letter&quot; as source text. The last call also has a comment to help the translator understand the meaning of the source text.</p>
+<p class="docText">Strings in different contexts (classes) are translated independently of each other. Translators typically work on one context at a time, often with the application running and showing the widget or dialog being translated.</p>
+<p class="docText">When we call <tt>TR()</tt> from a global function, we must specify the context explicitly. Any <tt>QObject</tt> subclass in the application can be used as the context. If none is appropriate, we can always use <tt>QObject</tt> itself. For example:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    ...
+    QPushButton button(QObject::tr("Hello Qt!"));
+    button.show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1179"></a><a name="iddle3162"></a><a name="iddle4055"></a><a name="iddle4982"></a><a name="iddle5169"></a><a name="iddle6923"></a><a name="iddle6924"></a>In every example so far, the context has been a class name. This is convenient, because we can almost always omit it, but this doesn't have to be the case. The most general way of translating a string in Qt is to use the <tt>QApplication::translate()</tt> function, which accepts up to three arguments: the context, the source text, and the optional comment. For example, here's another way to translate &quot;Hello Qt!&quot;:</P>
+<div class="docText"><pre>
+QApplication::translate("Global Stuff", "Hello Qt!")
+</pre></div><BR>
+<p class="docText">This time, we put the text in the &quot;Global Stuff&quot; context.</p>
+<p class="docText">The <tt>tr()</tt> and <tt>translate()</tt> functions serve a dual purpose: They are markers that <tt>lupdate</tt> uses to find user-visible strings, and at the same time they are C++ functions that translate text. This has an impact on how we write code. For example, the following will not work:</p>
+<div class="docText"><pre>
+// WRONG
+const char *appName = "OpenDrawer 2D";
+QString translated = tr(appName);
+</pre></div><BR>
+<p class="docText">The problem here is that <tt>lupdate</tt> will not be able to extract the &quot;OpenDrawer 2D&quot; string literal, as it doesn't appear inside a <tt>tr()</tt> call. This means that the translator will not have the opportunity to translate the string. This issue often arises in conjunction with dynamic strings:</p>
+<div class="docText"><pre>
+// WRONG
+statusBar()-&gt;showMessage(tr("Host " + hostName + " found"));
+</pre></div><BR>
+<p class="docText">Here, the string we pass to <tt>tr()</tt> varies depending on the value of <tt>hostName</tt>, so we can't reasonably expect <tt>TR()</tt> to translate it correctly.</p>
+<p class="docText">The solution is to use <tt>QString::arg()</tt>:</p>
+<div class="docText"><pre>
+statusBar()-&gt;showMessage(tr("Host %1 found").arg(hostName));
+</pre></div><br>
+<p class="docText">Notice how it works: The string literal &quot;Host %1 found&quot; is passed to <tt>tr()</tt>. Assuming that a French translation file is loaded, <tt>tr()</tt> would return something like &quot;H&ocirc;te %1 trouv&eacute;&quot;. Then the &quot;%1&quot; parameter is replaced with the contents of the <tt>hostName</tt> variable.</p>
+<p class="docText">Although it is generally inadvisable to call <tt>tr()</tt> on a variable, it can be made to work. We must use the <tt>QT_tr_NOOP()</tt> macro to mark the string literals for translation before we assign them to a variable. This is mostly useful for static arrays of strings. For example:</p>
+<div class="docText"><pre>
+void OrderForm::init()
+{
+    static const char * const flowers[] = {
+        QT_TR_NOOP("Medium Stem Pink Roses"),
+        QT_TR_NOOP("One Dozen Boxed Roses"),
+        QT_TR_NOOP("Calypso Orchid"),
+        QT_TR_NOOP("Dried Red Rose Bouquet"),
+        QT_TR_NOOP("Mixed Peonies Bouquet"),
+        0
+    };
+    for (int i = 0; flowers[i]; ++i)
+         comboBox-&gt;addItem(tr(flowers[i]));
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1203"></a><a name="iddle1401"></a><a name="iddle1883"></a><a name="iddle3187"></a><a name="iddle3845"></a><a name="iddle4443"></a><a name="iddle5162"></a><a name="iddle5170"></a>The <tt>QT_tr_NOOP()</tt> macro simply returns its argument. But <tt>lupdate</tt> will extract all the strings wrapped in <tt>QT_tr_NOOP()</tt> so that they can be translated. When using the variable later on, we call <tt>tr()</tt> to perform the translation as usual. Even though we have passed <tt>tr()</tt> a variable, the translation will still work.</p>
+<p class="docText">There is also a <tt>QT_TRANSLATE_NOOP()</tt> macro that works like <tt>QT_tr_NOOP()</tt> but also takes a context. This macro is useful when initializing variables outside of a class:</p>
+<div class="docText"><pre>
+static const char * const flowers[] = {
+    QT_TRANSLATE_NOOP("OrderForm", "Medium Stem Pink Roses"),
+    QT_TRANSLATE_NOOP("OrderForm", "One Dozen Boxed Roses"),
+    QT_TRANSLATE_NOOP("OrderForm", "Calypso Orchid"),
+    QT_TRANSLATE_NOOP("OrderForm", "Dried Red Rose Bouquet"),
+    QT_TRANSLATE_NOOP("OrderForm", "Mixed Peonies Bouquet"),
+    0
+};
+</pre></div><br>
+<p class="docText">The context argument must be the same as the context given to <tt>TR()</tt> or <tt>translate()</tt> later on.</P>
+<p class="docText">When we start using <tt>TR()</tt> in an application, it's easy to forget to surround some user-visible strings with a <tt>tr()</tt> call, especially when we are just beginning to use it. These missing <tt>TR()</tt> calls are eventually discovered by the translator or, worse, by users of the translated application, when some strings appear in the original language. To avoid this problem, we can tell Qt to forbid implicit conversions from <tt>const char *</tt> to <tt>QString</tt>. We do this by defining the <tt>QT_NO_CAST_FROM_ASCII</tt> preprocessor symbol before including any Qt header. The easiest way to ensure this symbol is set is to add the following line to the application's <tt>.pro</tt> file:</p>
+<div class="docText"><pre>
+DEFINES        += QT_NO_CAST_FROM_ASCII
+</pre></div><br>
+<p class="docText">This will force every string literal to require wrapping by <tt>TR()</tt> or by <tt>QLatin1String()</tt>, depending on whether it should be translated or not. Strings that are not suitably wrapped will produce a compile-time error, thereby compelling us to add the missing <tt>TR()</tt> or <tt>QLatin1String()</tt> call.</P>
+<p class="docText">Once we have wrapped every user-visible string by a <tt>tr()</tt> call, the only thing left to do to enable translation is to load a translation file. Typically, we would do this in the application's <tt>main()</tt> function. For example, here's how we would try to load a translation file depending on the user's locale:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QTranslator appTranslator;
+    appTranslator.load("myapp_" + QLocale::system().name(),
+                       qApp-&gt;applicationDirPath());
+    app.installTranslator(&amp;appTranslator);
+    ...
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1039"></a><a name="iddle1429"></a><a name="iddle2196"></a><a name="iddle2505"></a><a name="iddle2547"></a><a name="iddle2850"></a><a name="iddle2936"></a><a name="iddle3037"></a><a name="iddle3059"></a><a name="iddle3126"></a><a name="iddle3127"></a><a name="iddle3159"></a><a name="iddle4032"></a><a name="iddle4049"></a><a name="iddle4480"></a><a name="iddle4484"></a><a name="iddle5374"></a><a name="iddle5832"></a><a name="iddle5859"></a><a name="iddle5873"></a><a name="iddle6126"></a><a name="iddle6669"></a>The <tt>QLocale::system()</tt> function returns a <tt>QLocale</tt> object that provides information about the user's locale. Conventionally, we use the locale's name as part of the <tt>.qm</tt> file name. Locale names can be more or less precise; for example, <tt>fr</tt> specifies a French-language locale, <tt>fr_CA</tt> specifies a French Canadian locale, and <tt>fr_CA.ISO8859-15</tt> specifies a French Canadian locale with ISO 8859-15 encoding (an encoding that supports '&euro;', '&OElig;', '&oelig;', and '<img src=images/U03AB.jpg border=0>').</P>
+<p class="docText">Assuming that the locale is <tt>fr_CA.ISO8859-15</tt>, the <tt>Qtranslator::load()</tt> function first tries to load the file <tt>myapp_fr_CA.ISO8859-15.qm</tt>. If this file does not exist, <tt>load()</tt> next tries <tt>myapp_fr_CA.qm</tt>, then <tt>myapp_fr.qm</tt>, and finally <tt>myapp.qm</tt>, before giving up. Normally, we would only provide <tt>myapp_fr.qm</tt>, containing a standard French translation, but if we need a different file for French-speaking Canada, we can also provide <tt>myapp_fr_CA.qm</tt> and it will be used for <tt>fr_CA</tt> locales.</P>
+<p class="docText">The second argument to <tt>QTRanslator::load()</tt> is the directory where we want <tt>load()</tt> to look for the translation file. In this case, we assume that the translation files are located in the same directory as the executable.</p>
+<p class="docText">The Qt libraries contain a few strings that need to be translated. Trolltech provides French, German, and Simplified Chinese translations in Qt's <tt>translations</tt> directory. A few other languages are provided as well, but these are contributed by Qt users and are not officially supported. The Qt libraries' translation file should also be loaded:</p>
+<div class="docText"><pre>
+QTranslator qtTranslator;
+qtTranslator.load("qt_" + QLocale::system().name(),
+                  qApp-&gt;applicationDirPath());
+app.installTranslator(&amp;qtTranslator);
+</pre></div><br>
+<p class="docText">A <tt>QTRanslator</tt> object can only hold one translation file at a time, so we use a separate <tt>Qtranslator</tt> for Qt's translation. Having just one file per translator is not a problem since we can install as many translators as we need. <tt>QApplication</tt> will use all of them when searching for a translation.</p>
+<p class="docText">Some languages, such as Arabic and Hebrew, are written right-to-left instead of left-to-right. In those languages, the whole layout of the application must be reversed, and this is done by calling <tt>QApplication::setLayoutDirection(Qt::RightToLeft)</tt>. The translation files for Qt contain a special marker called &quot;LTR&quot; that tells Qt whether the language is left-to-right or right-to-left, so we normally don't need to call <tt>setLayoutDirection()</tt> ourselves.</P>
+<p class="docText">It may prove more convenient for our users if we supply our applications with the translation files embedded in the executable, using Qt's resource system. Not only does this reduce the number of files distributed as part of the product, it also avoids the risk of translation files getting lost or deleted by accident.</p>
+<p class="docText"><a name="iddle1857"></a><a name="iddle2755"></a><a name="iddle2805"></a><a name="iddle2924"></a><a name="iddle3060"></a><a name="iddle3134"></a><a name="iddle3140"></a><a name="iddle3142"></a><a name="iddle3859"></a><a name="iddle4033"></a><a name="iddle4168"></a><a name="iddle4170"></a><a name="iddle4172"></a><a name="iddle4174"></a><a name="iddle4481"></a><a name="iddle4485"></a><a name="iddle4787"></a><a name="iddle4995"></a><a name="iddle5090"></a><a name="iddle5343"></a><a name="iddle5347"></a><a name="iddle5837"></a><a name="iddle5860"></a><a name="iddle5874"></a><a name="iddle6243"></a><a name="iddle6560"></a><a name="iddle6566"></a><a name="iddle6817"></a><a name="iddle6859"></a><a name="iddle6860"></a><a name="iddle6861"></a><a name="iddle6862"></a>Assuming that the <tt>.qm</tt> files are located in a <tt>TRanslations</tt> subdirectory in the source tree, we would then have a <tt>myapp.qrc</tt> file with the following contents:</p>
+<div class="docText"><pre>
+&lt;!DOCTYPE RCC&gt;&lt;RCC version="1.0"&gt;
+&lt;qresource&gt;
+    &lt;file&gt;translations/myapp_de.qm&lt;/file&gt;
+    &lt;file&gt;translations/myapp_fr.qm&lt;/file&gt;
+    &lt;file&gt;translations/myapp_zh.qm&lt;/file&gt;
+    &lt;file&gt;translations/qt_de.qm&lt;/file&gt;
+    &lt;file&gt;translations/qt_fr.qm&lt;/file&gt;
+    &lt;file&gt;translations/qt_zh.qm&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;/RCC&gt;
+</pre></div><br>
+<p class="docText">The <tt>.pro</tt> file would contain the following entry:</p>
+<div class="docText"><pre>
+RESOURCES         = myapp.qrc
+</pre></div><br>
+<p class="docText">Finally, in <tt>main()</tt>, we must specify <tt>:/translations</tt> as the path for the translation files. The leading colon indicates that the path refers to a resource as opposed to a file in the file system.</p>
+<p class="docText">We have now covered all that is required to make an application able to operate using translations into other languages. But language and the direction of the writing system are not the only things that vary between countries and cultures. An internationalized program must also take into account the local date and time formats, monetary formats, numeric formats, and string collation order. Qt includes a <tt>QLocale</tt> class that provides localized numeric and date/time formats. To query other locale-specific information, we can use the standard C++ <tt>setlocale()</tt> and <tt>localeconv()</tt> functions.</p>
+<p class="docText">Some Qt classes and functions adapt their behavior to the locale:</p>
+<ul><li><p class="docList"><tt>QString::localeAwareCompare()</tt> compares two strings in a locale-dependent manner. It is useful for sorting user-visible items.</p></li><li><p class="docList">The <tt>toString()</tt> function provided by <tt>QDate</tt>, <tt>QTime</tt>, and <tt>QDateTime</tt> returns a string in a local format when called with <tt>Qt::LocalDate</tt> as argument.</p></li><LI><p class="docList">By default, the <tt>QDateEdit</tt> and <tt>QDateTimeEdit</tt> widgets present dates in the local format.</p></li></ul>
+<p class="docText">Finally, a translated application may need to use different icons in certain situations rather than the original icons. For example, the left and right arrows on a web browser's Back and Forward buttons should be swapped when dealing with a right-to-left language. We can do this as follows:</P>
+<div class="docText"><pre>
+if (QApplication::isRightToLeft()) {
+    backAction-&gt;setIcon(forwardIcon);
+    forwardAction-&gt;setIcon(backIcon);
+} else {
+    backAction-&gt;setIcon(backIcon);
+    forwardAction-&gt;setIcon(forwardIcon);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle4788"></a><a name="iddle5833"></a>Icons that contain alphabetic characters very commonly need to be translated. For example, the letter 'I' on a toolbar button associated with a word processor's Italic option should be replaced by a 'C' in Spanish (Cursivo) and by a 'K' in Danish, Dutch, German, Norwegian, and Swedish (Kursiv). Here's a simple way to do it:</P>
+<div class="docText"><pre>
+if (tr("Italic")[0] == 'C') {
+    italicAction-&gt;setIcon(iconC);
+} else if (tr("Italic")[0] == 'K') {
+    italicAction-&gt;setIcon(iconK);
+} else {
+    italicAction-&gt;setIcon(iconI);
+}
+</pre></div><BR>
+<p class="docText">An alternative is to use the resource system's support for multiple locales. In the <tt>.qrc</tt> file, we can specify a locale for a resource using the <tt>lang</tt> attribute. For example:</p>
+<div class="docText"><pre>
+&lt;qresource&gt;
+    &lt;file&gt;italic.png&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;qresource lang="es"&gt;
+    &lt;file alias="italic.png"&gt;cursivo.png&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;qresource lang="sv"&gt;
+    &lt;file alias="italic.png"&gt;kursiv.png&lt;/file&gt;
+&lt;/qresource&gt;
+</pre></div><BR>
+<p class="docText">If the user's locale is <tt>es</tt> (Espa&ntilde;ol), <tt>:/italic.png</tt> becomes a reference to the <tt>cursivo.png</tt> image. If the locale is <tt>sv</tt> (Svenska), the <tt>kursiv.png</tt> image is used. For other locales, <tt>italic.png</tt> is used.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

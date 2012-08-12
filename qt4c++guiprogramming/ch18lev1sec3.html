@@ -1,0 +1,195 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Communicating with the Main Thread</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch18lev1sec3"></a>
+<h3 id="title-IDAGP32J" class="docSection1Title">Communicating with the Main Thread</h3>
+<p class="docText">When a Qt application starts, only one thread is runningthe main thread. This is the only thread that is allowed to create the <tt>QApplication</tt> or <tt>QCoreApplication</tt> object and call <tt>exec()</tt> on it. After the call to <tt>exec()</tt>, this thread is either waiting for an event or processing an event.</p>
+<p class="docText">The main thread can start new threads by creating objects of a <tt>QThread</tt> subclass, as we did in the previous section. If these new threads need to communicate among themselves, they can use shared variables together with mutexes, read/write locks, semaphores, or wait conditions. But none of these techniques can be used to communicate with the main thread, since they would lock the event loop and freeze the user interface.</p>
+<p class="docText">The solution for communicating from a secondary thread to the main thread is to use signalslot connections across threads. Normally, the signals and slots mechanism operates synchronously, meaning that the slots connected to a signal are invoked immediately when the signal is emitted, using a direct function call.</p>
+<p class="docText">However, when we connect objects that &quot;live&quot; in different threads, the mechanism becomes asynchronous. (This behavior can be changed through an optional fifth parameter to <tt>QObject::connect()</tt>.) Behind the scenes, these connections are implemented by posting an event. The slot is then called by the event <a name="iddle2303"></a><a name="iddle2785"></a><a name="iddle2787"></a><a name="iddle2788"></a><a name="iddle3425"></a><a name="iddle4618"></a>loop of the thread in which the receiver object exists. By default, a <tt>QObject</tt> exists in the thread in which it was created; this can be changed at any time by calling <tt>QObject::moveToThread()</tt>.</p>
+<a name="ch18fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 18.3. The Image Pro application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="458" height="430" SRC="images/imagepro.jpg"></p>
+
+</center></p><BR>
+<p class="docText">To illustrate how signalslot connections across threads work, we will review the code of the Image Pro application,a basic image processing application that allows the user to rotate, resize, and change the color depth of an image. The application uses one secondary thread to perform operations on images without locking the event loop. This makes a significant difference when processing very large images. The secondary thread has a list of tasks, or &quot;transactions&quot;, to accomplish and sends events to the main window to report progress.</p>
+<div class="docText"><pre>
+ImageWindow::ImageWindow()
+{
+    imageLabel = new QLabel;
+    imageLabel-&gt;setBackgroundRole(QPalette::Dark);
+    imageLabel-&gt;setAutoFillBackground(true);
+    imageLabel-&gt;setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setCentralWidget(imageLabel);
+    createActions();
+    createMenus();
+    statusBar()-&gt;showMessage(tr("Ready"), 2000);
+    connect(&amp;thread, SIGNAL(transactionStarted(const QString &amp;)),
+            statusBar(), SLOT(showMessage(const QString &amp;)));
+    connect(&amp;thread, SIGNAL(finished()),
+            this, SLOT(allTransactionsDone()));
+    setCurrentFile("");
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1064"></a><a name="iddle1101"></a><a name="iddle1102"></a><a name="iddle1136"></a><a name="iddle2448"></a><a name="iddle2789"></a><a name="iddle2790"></a><a name="iddle2791"></a><a name="iddle5327"></a><a name="iddle6645"></a><a name="iddle6912"></a><a name="iddle6913"></a>The interesting part of the <tt>ImageWindow</tt> constructor is the two signalslot connections. Both of them involve signals emitted by the <tt>transactionThread</tt> object, which we will cover in a moment.</P>
+<div class="docText"><pre>
+void ImageWindow::flipHorizontally()
+{
+    addTransaction(new FlipTransaction(Qt::Horizontal));
+}
+</pre></div><br>
+<p class="docText">The <tt>flipHorizontally()</tt> slot creates a &quot;flip&quot; transaction and registers it using the private function <tt>addTransaction()</tt>. The <tt>flipVertically()</tt>, <tt>resizeImage()</tt>, <tt>convertTo32Bit()</tt>, <tt>convertTo8Bit()</tt>, and <tt>convertTo1Bit()</tt> functions are similar.</P>
+<div class="docText"><pre>
+void ImageWindow::addTransaction(Transaction *transact)
+{
+    thread.addTransaction(transact);
+    openAction-&gt;setEnabled(false);
+    saveAction-&gt;setEnabled(false);
+    saveAsAction-&gt;setEnabled(false);
+}
+</pre></div><BR>
+<p class="docText">The <tt>addTransaction()</tt> function adds a transaction to the secondary thread's transaction queue and disables the Open, Save, and Save As actions while transactions are being processed.</p>
+<div class="docText"><pre>
+void ImageWindow::allTransactionsDone()
+{
+    openAction-&gt;setEnabled(true);
+    saveAction-&gt;setEnabled(true);
+    saveAsAction-&gt;setEnabled(true);
+    imageLabel-&gt;setPixmap(QPixmap::fromImage(thread.image()));
+    setWindowModified(true);
+    statusBar()-&gt;showMessage(tr("Ready"), 2000);
+}
+</pre></div><BR>
+<p class="docText">The <tt>allTransactionsDone()</tt> slot is called when the <tt>transactionThread</tt>'s transaction queue becomes empty.</p>
+<p class="docText">Now, let's turn to the <tt>TRansactionThread</tt> class:</P>
+<div class="docText"><pre>
+class TransactionThread : public QThread
+{
+    Q_OBJECT
+public:
+    void addTransaction(Transaction *transact);
+    void setImage(const QImage &amp;image);
+    QImage image();
+signals:
+    void transactionStarted(const QString &amp;message);
+protected:
+    void run();
+private:
+    QMutex mutex;
+    QImage currentImage;
+    QQueue&lt;Transaction *&gt; transactions;
+};
+</pre></div><BR>
+<p class="docText"><a name="iddle1103"></a><a name="iddle2780"></a><a name="iddle3457"></a><a name="iddle5336"></a><a name="iddle5904"></a><a name="iddle5908"></a><a name="iddle6115"></a><a name="iddle6914"></a><a name="iddle6915"></a><a name="iddle6916"></a><a name="iddle6917"></a>The <tt>transactionThread</tt> class maintains a list of transactions to process and executes them one after the other in the background.</p>
+<div class="docText"><pre>
+void TransactionThread::addTransaction(Transaction *transact)
+{
+    QMutexLocker locker(&amp;mutex);
+    transactions.enqueue(transact);
+    if (!isRunning())
+        start();
+}
+</pre></div><br>
+<p class="docText">The <tt>addTransaction()</tt> function adds a transaction to the transaction queue and starts the transaction thread if it isn't already running. All accesses to the <tt>TRansactions</tt> member variable are protected by a mutex, because the main thread might modify them through <tt>addTransaction()</tt> at the same time as the secondary thread is iterating over <tt>transactions</tt>.</p>
+<div class="docText"><pre>
+void TransactionThread::setImage(const QImage &amp;image)
+{
+    QMutexLocker locker(&amp;mutex);
+    currentImage = image;
+}
+QImage TransactionThread::image()
+{
+    QMutexLocker locker(&amp;mutex);
+    return currentImage;
+}
+</pre></div><BR>
+<p class="docText">The <tt>setImage()</tt> and <tt>image()</tt> functions let the main thread set the image on which to perform the transactions and retrieve the resulting image once all transactions are done. Again, we protect accesses to a member variable using a mutex.</P>
+<div class="docText"><pre>
+void TransactionThread::run()
+{
+    Transaction *transact;
+    forever {
+        mutex.lock();
+        if (transactions.isEmpty()) {
+            mutex.unlock();
+            break;
+        }
+        QImage oldImage = currentImage;
+        transact = transactions.dequeue();
+        mutex.unlock();
+        emit transactionStarted(transact-&gt;message());
+        QImage newImage = transact-&gt;apply(oldImage);
+        delete transact;
+        mutex.lock();
+        currentImage = newImage;
+        mutex.unlock();
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1172"></a><a name="iddle1685"></a><a name="iddle1922"></a><a name="iddle2437"></a><a name="iddle2449"></a><a name="iddle3355"></a><a name="iddle4396"></a><a name="iddle5330"></a><a name="iddle5822"></a><a name="iddle6906"></a><a name="iddle6907"></a><a name="iddle6908"></a><a name="iddle6911"></a><a name="iddle6918"></a><a name="iddle7148"></a>The <tt>run()</tt> function goes through the transaction queue and executes each transaction in turn by calling <tt>apply()</tt> on them.</p>
+<p class="docText">When a transaction is started, we emit the <tt>transactionStarted()</tt> signal with a message to display in the application's status bar. When all the transactions have finished processing, the <tt>run()</tt> function returns and <tt>QThread</tt> emits the <tt>finished()</tt> signal.</P>
+<div class="docText"><pre>
+class Transaction
+{
+public:
+    virtual ~Transaction() { }
+    virtual QImage apply(const QImage &amp;image) = 0;
+    virtual QString message() = 0;
+};
+</pre></div><br>
+<p class="docText">The <tt>transaction</tt> class is an abstract base class for operations that the user can perform on an image. The virtual destructor is necessary because we need to delete instances of <tt>TRansaction</tt> subclasses through a <tt>transaction</tt> pointer. (Also, if we omit it, some compilers emit a warning.) <tt>TRansaction</tt> has three concrete subclasses: <tt>FlipTransaction</tt>, <tt>ResizeTransaction</tt>, and <tt>ConvertDepthTransaction</tt>. We will only review <tt>FlipTransaction</tt>; the other two classes are similar.</p>
+<div class="docText"><pre>
+class FlipTransaction : public Transaction
+{
+public:
+    FlipTransaction(Qt::Orientation orientation);
+    QImage apply(const QImage &amp;image);
+    QString message();
+private:
+    Qt::Orientation orientation;
+};
+</pre></div><br>
+<p class="docText">The <tt>FlipTransaction</tt> constructor takes one parameter that specifies the orientation of the flip (horizontal or vertical).</p>
+<div class="docText"><pre>
+QImage FlipTransaction::apply(const QImage &amp;image)
+{
+    return image.mirrored(orientation == Qt::Horizontal,
+                          orientation == Qt::Vertical);
+}
+</pre></div><br>
+<p class="docText">The <tt>apply()</tt> function calls <tt>QImage::mirrored()</tt> on the <tt>QImage</tt> it receives as parameter and returns the resulting <tt>QImage</tt>.</p>
+<div class="docText"><pre>
+QString FlipTransaction::message()
+{
+    if (orientation == Qt::Horizontal) {
+        return QObject::tr("Flipping image horizontally...");
+    } else {
+        return QObject::tr("Flipping image vertically...");
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1422"></a><a name="iddle1585"></a><a name="iddle1954"></a><a name="iddle3305"></a><a name="iddle3785"></a><a name="iddle4140"></a><a name="iddle4141"></a><a name="iddle4142"></a><a name="iddle4603"></a><a name="iddle4608"></a><a name="iddle5337"></a><a name="iddle5736"></a><a name="iddle5792"></a><a name="iddle5793"></a><a name="iddle5905"></a><a name="iddle6541"></a><a name="iddle6788"></a><a name="iddle6909"></a>The <tt>message()</tt> function returns the message to display in the status bar while the operation is in progress. This function is called in <tt>transactionThread::run()</tt> when emitting the <tt>transactionStarted()</tt> signal.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

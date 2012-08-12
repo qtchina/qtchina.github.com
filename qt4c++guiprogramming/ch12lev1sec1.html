@@ -1,0 +1,193 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Reading and Writing Binary Data</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch12lev1sec1"></a>
+<h3 id="title-IDAQTMEW" class="docSection1Title">Reading and Writing Binary Data</h3>
+<p class="docText">The simplest way to load and save binary data with Qt is to instantiate a <tt>QFile</tt>, to open the file, and to access it through a <tt>QDataStream</tt> object. <tt>QDataStream</tt> provides a platform-independent storage format that supports basic C++ types like <tt>int</tt> and <tt>double</tt>, and many Qt data types, including <tt>QByteArray</tt>, <tt>QFont</tt>, <tt>QImage</tt>, <tt>QPixmap</tt>, <tt>QString</tt>, and <tt>QVariant</tt>, as well as Qt container classes such as <tt>QList&lt;T&gt;</tt> and <tt>QMap&lt;K, T&gt;</tt>.</p>
+<p class="docText">Here's how we would store an integer, a <tt>QImage</tt>, and a <tt>QMap&lt;QString, QColor&gt;</tt> in a file called <tt>facts.dat</tt>:</p>
+<div class="docText"><pre>
+QImage image("philip.png");
+QMap&lt;QString, QColor&gt; map;
+map.insert("red", Qt::red);
+map.insert("green", Qt::green);
+map.insert("blue", Qt::blue);
+QFile file("facts.dat");
+if (!file.open(QIODevice::WriteOnly)) {
+    cerr &lt;&lt; "Cannot open file for writing: "
+         &lt;&lt; qPrintable(file.errorString()) &lt;&lt; endl;
+    return;
+}
+QDataStream out(&amp;file);
+out.setVersion(QDataStream::Qt_4_1);
+out &lt;&lt; quint32(0x12345678) &lt;&lt; image &lt;&lt; map;
+</pre></div><br>
+<p class="docText">If we cannot open the file, we inform the user and return. The <tt>qPrintable()</tt> macro returns a <tt>const char *</tt> for a <tt>QString</tt>. (Another approach would have been to use <tt>QString::toStdString()</tt>, which returns a <tt>std::string</tt>, for which <tt>&lt;iostream&gt;</tt> has a <tt>&lt;&lt;</tt> overload.)</p>
+<p class="docText">If the file is opened successfully, we create a <tt>QDataStream</tt> and set its version number. The version number is an integer that influences the way Qt data <a name="iddle1024"></a><a name="iddle1033"></a><a name="iddle1276"></a><a name="iddle1334"></a><a name="iddle2143"></a><a name="iddle3122"></a><a name="iddle4147"></a><a name="iddle4158"></a><a name="iddle4164"></a><a name="iddle4273"></a><a name="iddle4419"></a><a name="iddle5124"></a><a name="iddle5420"></a><a name="iddle6219"></a><a name="iddle7123"></a>types are represented (basic C++ data types are always represented the same way). In Qt 4.1, the most comprehensive format is version 7. We can either hard-code the constant 7 or use the <tt>QDataStream::Qt_4_1</tt> symbolic name.</p>
+<p class="docText">To ensure that the number <tt>0x12345678</tt> is written as an unsigned 32-bit integer on all platforms, we cast it to <tt>quint32</tt>, a data type that is guaranteed to be exactly 32 bits. To ensure interoperability, <tt>QDataStream</tt> standardizes on big-endian by default; this can be changed by calling <tt>setByteOrder()</tt>.</p>
+<p class="docText">We don't need to explicitly close the file since this is done automatically when the <tt>QFile</tt> variable goes out of scope. If we want to verify that the data has actually been written, we can call <tt>flush()</tt> and check its return value (<tt>true</tt> on success).</p>
+<p class="docText">The code to read back the data mirrors the code we used to write it:</p>
+<div class="docText"><pre>
+quint32 n;
+QImage image;
+QMap&lt;QString, QColor&gt; map;
+QFile file("facts.dat");
+if (!file.open(QIODevice::ReadOnly)) {
+    cerr &lt;&lt; "Cannot open file for reading: "
+         &lt;&lt; qPrintable(file.errorString()) &lt;&lt; endl;
+    return;
+}
+QDataStream in(&amp;file);
+in.setVersion(QDataStream::Qt_4_1);
+in &gt;&gt; n &gt;&gt; image &gt;&gt; map;
+</pre></div><br>
+<p class="docText">The <tt>QDataStream</tt> version we use for reading is the same as the one we used for writing. This must always be the case. By hard-coding the version number, we guarantee that the application can always read and write the data (assuming it is compiled with Qt 4.1 or any later Qt version).</P>
+<p class="docText"><tt>QDataStream</tt> stores data in such a way that we can read it back seamlessly. For example, a <tt>QByteArray</tt> is represented as a 32-bit byte count followed by the bytes themselves. <tt>QDataStream</tt> can also be used to read and write raw bytes, without any byte count header, using <tt>readRawBytes()</tt> and <tt>writeRawBytes()</tt>.</p>
+<p class="docText">Error handling when reading from a <tt>QDataStream</tt> is fairly easy. The stream has a <tt>status()</tt> value that can be <tt>QDataStream::Ok</tt>, <tt>QDataStream::ReadPastEnd</tt>, or <tt>QDataStream::ReadCorruptData</tt>. Once an error has occurred, the <tt>&gt;&gt;</tt> operator always reads zero or empty values. This means that we can often simply read an entire file without worrying about potential errors and check the <tt>status()</tt> value at the end to see if what we read was valid.</p>
+<p class="docText"><tt>QDataStream</tt> handles a variety of C++ and Qt data types; the complete list is available at <tt><a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/datastreamformat.html">http://doc.trolltech.com/4.1/datastreamformat.html</a></tt>. We can also add support for our own custom types by overloading the <tt>&lt;&lt;</tt> and <tt>&gt;&gt;</tt> operators. Here's the definition of a custom data type that can be used with <tt>QDataStream</tt>:</p>
+<div class="docText"><pre>
+class Painting
+{
+public:
+    Painting() { myYear = 0; }
+    Painting(const QString &amp;title, const QString &amp;artist, int year) {
+        myTitle = title;
+        myArtist = artist;
+        myYear = year;
+    }
+    void setTitle(const QString &amp;title) { myTitle = title; }
+    QString title() const { return myTitle; }
+    ...
+private:
+    QString myTitle;
+    QString myArtist;
+    int myYear;
+};
+QDataStream &amp;operator&lt;&lt;(QDataStream &amp;out, const Painting &amp;painting);
+QDataStream &amp;operator&gt;&gt;(QDataStream &amp;in, Painting &amp;painting);
+</pre></div><BR>
+<p class="docText">Here's how we would implement the <tt>&lt;&lt;</tt> operator:</p>
+<div class="docText"><pre>
+QDataStream &amp;operator&lt;&lt;(QDataStream &amp;out, const Painting &amp;painting)
+{
+    out &lt;&lt; painting.title() &lt;&lt; painting.artist()
+        &lt;&lt; quint32(painting.year());
+    return out;
+}
+</pre></div><BR>
+<p class="docText">To output a <tt>Painting</tt>, we simply output two <tt>QString</tt>s and a <tt>quint32</tt>. At the end of the function, we return the stream. This is a common C++ idiom that allows us to use a chain of <tt>&lt;&lt;</tt> operators with an output stream. For example:</P>
+<div class="docText"><pre>
+out &lt;&lt; painting1 &lt;&lt; painting2 &lt;&lt; painting3;
+</pre></div><br>
+<p class="docText">The implementation of <tt>operator&gt;&gt;()</tt> is similar to that of <tt>operator&lt;&lt;()</tt>:</P>
+<div class="docText"><pre>
+QDataStream &amp;operator&gt;&gt;(QDataStream &amp;in, Painting &amp;painting)
+{
+    QString title;
+    QString artist;
+    quint32 year;
+    in &gt;&gt; title &gt;&gt; artist &gt;&gt; year;
+    painting = Painting(title, artist, year);
+    return in;
+}
+</pre></div><br>
+<p class="docText">There are several benefits to providing streaming operators for custom data types. One of them is that it allows us to stream containers that use the custom type. For example:</p>
+<div class="docText"><pre>
+QList&lt;Painting&gt; paintings = ...;
+</pre></div><BR>
+<div class="docText"><pre>
+out &lt;&lt; paintings;
+</pre></div><BR>
+<p class="docText"><a name="iddle4159"></a><a name="iddle4160"></a><a name="iddle4165"></a><a name="iddle4167"></a><a name="iddle4806"></a><a name="iddle4843"></a><a name="iddle5125"></a><a name="iddle5704"></a><a name="iddle6220"></a><a name="iddle7124"></a><a name="iddle7322"></a>We can read in containers just as easily:</P>
+<div class="docText"><pre>
+QList&lt;Painting&gt; paintings;
+in &gt;&gt; paintings;
+</pre></div><br>
+<p class="docText">This would result in a compiler error if <tt>Painting</tt> didn't support <tt>&lt;&lt;</tt> or <tt>&gt;&gt;</tt>. Another benefit of providing streaming operators for custom types is that we can store values of these types as <tt>QVariant</tt>s, which makes them more widely usable, for example by <tt>QSettings</tt>. This works provided that we register the type using <tt>qRegisterMetaTypeStreamOperators&lt;T&gt;()</tt> beforehand, as explained in <a class="docLink" href="ch11.html#ch11">Chapter 11</a> (p. 270).</p>
+<p class="docText">When we use <tt>QDataStream</tt>, Qt takes care of reading and writing each type, including containers with an arbitrary number of items. This relieves us from the need to structure what we write and from performing any kind of parsing on what we read. Our only obligation is to ensure that we read all the types in exactly the same order as we wrote them, leaving Qt to handle all the details.</p>
+<p class="docText"><tt>QDataStream</tt> is useful both for our own custom application file formats and for standard binary formats. We can read and write standard binary formats using the streaming operators on basic types (like <tt>quint16</tt> or <tt>float</tt>) or using <tt>readRawBytes()</tt> and <tt>writeRawBytes()</tt>. If the <tt>QDataStream</tt> is being used purely to read and write basic C++ data types, we don't even need to call <tt>setVersion()</tt>.</P>
+<p class="docText">So far, we loaded and saved data with the stream's version hard-coded as <tt>QDataStream::Qt_4_1</tt>. This approach is simple and safe, but it does have one small drawback: We cannot take advantage of new or updated formats. For example, if a later version of Qt added a new attribute to <tt>QFont</tt> (in addition to its point size, family, etc.) and we hard-coded the version number to <tt>Qt_4_1</tt>, that attribute wouldn't be saved or loaded. There are two solutions. The first approach is to embed the <tt>QDataStream</tt> version number in the file:</p>
+<div class="docText"><pre>
+QDataStream out(&amp;file);
+out &lt;&lt; quint32(MagicNumber) &lt;&lt; quint16(out.version());
+</pre></div><br>
+<p class="docText">(<tt>MagicNumber</tt> is a constant that uniquely identifies the file type.) This approach ensures that we always write the data using the most recent version of <tt>QDataStream</tt>, whatever that happens to be. When we come to read the file, we read the stream version:</P>
+<div class="docText"><pre>
+quint32 magic;
+quint16 streamVersion;
+QDataStream in(&amp;file);
+in &gt;&gt; magic &gt;&gt; streamVersion;
+if (magic != MagicNumber) {
+    cerr &lt;&lt; "File is not recognized by this application" &lt;&lt; endl;
+} else if (streamVersion &gt; in.version()) {
+    cerr &lt;&lt; "File is from a more recent version of the application"
+         &lt;&lt; endl;
+    return false;
+}
+in.setVersion(streamVersion);
+</pre></div><BR>
+<p class="docText"><a name="iddle4427"></a><a name="iddle4432"></a><a name="iddle5688"></a><a name="iddle7312"></a>We can read the data as long as the stream version is less than or equal to the version used by the application; otherwise, we report an error.</p>
+<p class="docText">If the file format contains a version number of its own, we can use it to deduce the stream version number instead of storing it explicitly. For example, let's suppose that the file format is for version 1.3 of our application. We might then write the data as follows:</p>
+<div class="docText"><pre>
+QDataStream out(&amp;file);
+out.setVersion(QDataStream::Qt_4_1);
+out &lt;&lt; quint32(MagicNumber) &lt;&lt; quint16(0x0103);
+</pre></div><br>
+<p class="docText">When we read it back, we determine which <tt>QDataStream</tt> version to use based on the application's version number:</p>
+<div class="docText"><pre>
+QDataStream in(&amp;file);
+in &gt;&gt; magic &gt;&gt; appVersion;
+if (magic != MagicNumber) {
+    cerr &lt;&lt; "File is not recognized by this application" &lt;&lt; endl;
+    return false;
+} else if (appVersion &gt; 0x0103) {
+    cerr &lt;&lt; "File is from a more recent version of the application"
+         &lt;&lt; endl;
+    return false;
+}
+if (appVersion &lt; 0x0103) {
+    in.setVersion(QDataStream::Qt_3_0);
+} else {
+    in.setVersion(QDataStream::Qt_4_1);
+}
+</pre></div><BR>
+<p class="docText">In this example, we specify that any file saved with versions prior to 1.3 of the application uses data stream version 4 (<tt>Qt_3_0</tt>), and that files saved with version 1.3 of the application use data stream version 7 (<tt>Qt_4_1</tt>).</p>
+<p class="docText">In summary, there are three policies for handling <tt>QDataStream</tt> versions: hard-coding the version number, explicitly writing and reading the version number, and using different hard-coded version numbers depending on the application's version. Any of these policies can be used to ensure that data written by an old version of an application can be read by a new version, even if the new version links against a more recent version of Qt. Once we have chosen a policy for handling <tt>QDataStream</tt> versions, reading and writing binary data using Qt is both simple and reliable.</p>
+<p class="docText">If we want to read or write a file in one go, we can avoid using <tt>QDataStream</tt> altogether and instead use <tt>QIODevice</tt>'s <tt>write()</tt> and <tt>readAll()</tt> functions. For example:</P>
+<div class="docText"><pre>
+bool copyFile(const QString &amp;source, const QString &amp;dest)
+{
+    QFile sourceFile(source);
+    if (!sourceFile.open(QIODevice::ReadOnly))
+        return false;
+    QFile destFile(dest);
+    if (!destFile.open(QIODevice::WriteOnly))
+        return false;
+    destFile.write(sourceFile.readAll());
+    return sourceFile.error() == QFile::NoError
+           &amp;&amp; destFile.error() == QFile::NoError;
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1282"></a><a name="iddle1357"></a><a name="iddle1406"></a><a name="iddle1565"></a><a name="iddle1566"></a><a name="iddle1747"></a><a name="iddle1841"></a><a name="iddle2132"></a><a name="iddle2177"></a><a name="iddle2397"></a><a name="iddle2900"></a><a name="iddle3090"></a><a name="iddle3499"></a><a name="iddle3515"></a><a name="iddle3698"></a><a name="iddle4102"></a><a name="iddle4132"></a><a name="iddle4275"></a><a name="iddle4277"></a><a name="iddle4425"></a><a name="iddle4429"></a><a name="iddle4431"></a><a name="iddle5288"></a><a name="iddle5290"></a><a name="iddle5425"></a><a name="iddle5675"></a><a name="iddle5960"></a><a name="iddle5995"></a><a name="iddle6758"></a><a name="iddle6766"></a><a name="iddle7006"></a><a name="iddle7008"></a><a name="iddle7366"></a>In the line where <tt>readAll()</tt> is called, the entire contents of the input file is read into a <tt>QByteArray</tt>, which is then passed to the <tt>write()</tt> function to be written to the output file. Having all the data in a <tt>QByteArray</tt> requires more memory than reading item by item, but it offers some advantages. For example, we can then use <tt>qCompress()</tt> and <tt>qUncompress()</tt> to compress and uncompress the data.</P>
+<p class="docText">There are other scenarios where accessing <tt>QIODevice</tt> directly is more appropriate than using <tt>QDataStream</tt>. <tt>QIODevice</tt> provides a <tt>peek()</tt> function that returns the next data bytes without moving the device position as well as an <tt>unget-Char()</tt> function that &quot;unreads&quot; a byte. This works both for random-access devices (such as files) and for sequential devices (such as network sockets). There is also a <tt>seek()</tt> function that sets the device position, for devices that support random access.</p>
+<p class="docText">Binary file formats provide the most versatile and most compact means of storing data, and <tt>QDataStream</tt> makes accessing binary data easy. In addition to the examples in this section, we have already seen the use of <tt>QDataStream</tt> in <a class="docLink" href="ch04.html#ch04">Chapter 4</a> to read and write Spreadsheet files, and we will see it again in <a class="docLink" href="ch19.html#ch19">Chapter 19</a>, where we use it to read and write Windows cursor files.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

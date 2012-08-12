@@ -1,0 +1,42 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 15.&nbsp; XML</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch15"></a>
+
+<h2 id="title-IDA1HSTL" class="docChapterTitle">Chapter 15. XML</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" width="147" height="149" SRC="images/339fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle1983"></a><a name="iddle2394"></a><a name="iddle2959"></a><a name="iddle3473"></a><a name="iddle3525"></a><a name="iddle3684"></a><a name="iddle3685"></a><a name="iddle5402"></a><a name="iddle5666"></a><a name="iddle5932"></a><a name="iddle7085"></a><a name="iddle7352"></a><a name="iddle7353"></a><a name="iddle7356"></a><span class="docEmphasis"><a class="docLink" href="ch15lev1sec1.html#ch15lev1sec1">Reading XML with SAX</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch15lev1sec2.html#ch15lev1sec2">Reading XML with DOM</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch15lev1sec3.html#ch15lev1sec3">Writing XML</a></span></p></LI></ul>
+<p class="docText">XML (Extensible Markup Language) is a general-purpose text file format that is popular for data interchange and data storage. Qt provides two distinct APIs for reading XML documents as part of the <span class="docEmphasis">QtXml</span> module:</p>
+<ul><LI><p class="docList">SAX (Simple API for XML) reports &quot;parsing events&quot; directly to the application through virtual functions.</p></LI><LI><p class="docList">DOM (Document Object Model) converts an XML document into a tree structure, which the application can then navigate.</p></LI></ul>
+<p class="docText">There are many factors to take into account when choosing between DOM and SAX for a particular application. SAX is more low level and usually faster, which makes it especially appropriate both for simple tasks (like finding all the occurrences of a given tag in an XML document) and for reading very large files that may not fit in memory. But for many applications, the convenience offered by DOM outweighs the potential speed and memory benefits of SAX.</p>
+<p class="docText">For writing XML files, two options are available as well: We can generate the XML by hand, or we can represent the data as a DOM tree in memory and ask the tree to write itself to a file.</P>
+
+
+
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

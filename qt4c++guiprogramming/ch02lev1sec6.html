@@ -1,0 +1,98 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Built-in Widget and Dialog Classes</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch02lev1sec6"></a>
+
+<h3 id="title-IDADOKA2" class="docSection1Title">Built-in Widget and Dialog Classes</h3>
+<p class="docText"><a name="iddle1310"></a><a name="iddle1319"></a><a name="iddle1320"></a><a name="iddle1326"></a><a name="iddle1327"></a><a name="iddle1328"></a><a name="iddle1416"></a><a name="iddle1666"></a><a name="iddle2504"></a><a name="iddle2600"></a><a name="iddle3911"></a><a name="iddle4114"></a><a name="iddle4303"></a><a name="iddle4357"></a><a name="iddle4773"></a><a name="iddle4783"></a><a name="iddle5363"></a><a name="iddle5674"></a><a name="iddle6511"></a><a name="iddle6869"></a><a name="iddle6874"></a><a name="iddle7212"></a>Qt provides a complete set of built-in widgets and common dialogs that cater for most situations. In this section, we present screenshots of almost all of them. A few specialized widgets are deferred until later: Main window widgets such as <tt>QMenuBar</tt>, <tt>QToolBar</tt>, and <tt>QStatusBar</tt> are covered in <a class="docLink" href="ch03.html#ch03">Chapter 3</a>, and layout-related widgets such as <tt>QSplitter</tt> and <tt>QScrollArea</tt> are covered in <a class="docLink" href="ch06.html#ch06">Chapter 6</a>. Most of the built-in widgets and dialogs are used in the examples presented in this book. In the screenshots below, the widgets are shown using the Plastique style.</p>
+<a name="ch02fig16"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.16. Qt's button widgets</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="104" SRC="images/qpushbutton.jpg"></p>
+
+</center></p><br>
+<p class="docText">Qt provides four kinds of "buttons": <tt>QPushButton</tt>, <tt>QToolButton</tt>, <tt>QCheckBox</tt>, and <tt>QRadioButton</tt>. <tt>QPushButton</tt> and <tt>QToolButton</tt> are most commonly used to initiate an action when they are clicked, but they can also behave like toggle buttons (click to press down, click to restore). <tt>QCheckBox</tt> can be used for independent on/off options, whereas <tt>QRadioButton</tt>s are normally mutually exclusive.</p>
+<a name="ch02fig17"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.17. Qt's single-page container widgets</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qgroupbox_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="162" SRC="images/qgroupbox.jpg"></P>
+</center></P><BR>
+<p class="docText">Qt's container widgets are widgets that contain other widgets. <tt>QFrame</tt> can also be used on its own to simply draw lines and is inherited by many other widget classes, including <tt>QToolBox</tt> and <tt>QLabel</tt>.</P>
+
+<p class="docText"></P><a name="ch02fig18"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.18. Qt's multi-page container widgets</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qtabwidget_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="158" SRC="images/qtabwidget.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle2700"></a><a name="iddle2944"></a><a name="iddle3027"></a><a name="iddle3075"></a><a name="iddle3112"></a><a name="iddle3434"></a><a name="iddle3868"></a><a name="iddle3986"></a><a name="iddle4441"></a><a name="iddle4450"></a><a name="iddle4463"></a><a name="iddle4762"></a><a name="iddle5172"></a><a name="iddle5173"></a><a name="iddle5258"></a><a name="iddle5362"></a><a name="iddle5378"></a><a name="iddle5864"></a><a name="iddle5950"></a><a name="iddle6677"></a><a name="iddle6683"></a><a name="iddle6751"></a><a name="iddle6879"></a><a name="iddle6939"></a><tt>QTabWidget</tt> and <tt>QToolBox</tt> are multi-page widgets. Each page is a child widget, and the pages are numbered from 0.</p>
+<a name="ch02fig19"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.19. Qt's item view widgets</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qlistview_list_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="317" SRC="images/qlistview_list.jpg"></p>
+</center></p><BR>
+<p class="docText">The item views are optimized for handling large amounts of data and often use scroll bars. The scroll bar mechanism is implemented in <tt>QAbstractScrollArea</tt>, a base class for item views and other kinds of scrollable widgets.</p>
+<p class="docText">Qt provides a few widgets that are used purely for displaying information. <tt>QLabel</tt> is the most important of these, and it can be used for showing rich text (using a simple HTML-like syntax) and images.</p>
+<p class="docText"><tt>QTextBrowser</tt> is a read-only <tt>QTextEdit</tt> subclass that has basic HTML support including lists, tables, images, and hypertext links.<span class="docEmphasis">Qt Assistant</span> uses <tt>QTextBrowser</tt> to present documentation to the user.</P>
+
+<p class="docText"></P><a name="ch02fig20"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.20. Qt's display widgets</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="332" SRC="images/qlabel_text.jpg"></p>
+
+</center></P><br>
+<p class="docText"><a name="iddle1309"></a><a name="iddle1516"></a><a name="iddle1523"></a><a name="iddle1536"></a><a name="iddle1558"></a><a name="iddle1842"></a><a name="iddle1856"></a><a name="iddle1929"></a><a name="iddle1930"></a><a name="iddle1941"></a><a name="iddle2117"></a><a name="iddle2470"></a><a name="iddle2475"></a><a name="iddle3089"></a><a name="iddle3431"></a><a name="iddle3987"></a><a name="iddle4125"></a><a name="iddle4128"></a><a name="iddle4169"></a><a name="iddle4173"></a><a name="iddle4189"></a><a name="iddle4241"></a><a name="iddle4300"></a><a name="iddle4452"></a><a name="iddle4825"></a><a name="iddle4867"></a><a name="iddle4879"></a><a name="iddle5277"></a><a name="iddle5344"></a><a name="iddle5951"></a><a name="iddle6353"></a><a name="iddle6430"></a><a name="iddle6507"></a><a name="iddle6756"></a><a name="iddle6816"></a>Qt provides several widgets for data entry. <tt>QLineEdit</tt> can restrict its input using an input mask or a validator. <tt>QTextEdit</tt> is a <tt>QAbstractScrollArea</tt> subclass capable of editing large amounts of text.</p>
+<a name="ch02fig21"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.21. Qt's input widgets</H5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="455" SRC="images/qspinbox.jpg"></P>
+
+</center></P><br>
+<p class="docText">Qt provides the standard set of common dialogs that make it easy to ask the user to select a color, font, or file, or to print a document.</p>
+
+<p class="docText"></p><a name="ch02fig22"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.22. Qt's color dialog and font dialog</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qcolordialog_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="197" SRC="images/qcolordialog.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle2180"></a><a name="iddle2378"></a><a name="iddle2832"></a><a name="iddle3306"></a><a name="iddle3476"></a><a name="iddle3632"></a><a name="iddle3813"></a><a name="iddle3870"></a><a name="iddle4257"></a><a name="iddle4286"></a><a name="iddle4415"></a><a name="iddle4527"></a><a name="iddle4642"></a><a name="iddle4736"></a><a name="iddle4766"></a>On Windows and Mac OS X, Qt uses the native dialogs rather than its own common dialogs when possible.</p>
+<a name="ch02fig23"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.23. Qt's file and print dialogs</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qpagesetupdialog_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="293" SRC="images/qpagesetupdialog.jpg"></p>
+</center></P><BR>
+<p class="docText">Qt provides a versatile message box and an error dialog that remembers which messages it has shown. The progress of time-consuming operations can be indicated using <tt>QProgressDialog</tt> or using the <tt>QProgressBar</tt> shown earlier. <tt>QInputDialog</tt> is very convenient when a single line of text or a single number is required from the user.</P>
+<p class="docText">A lot of ready-to-use functionality is provided by the built-in widgets and common dialogs. More specialized requirements can often be satisfied by setting widget properties, or by connecting signals to slots and implementing custom behavior in the slots.</P>
+
+<p class="docText"></P><a name="ch02fig24"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 2.24. Qt's feedback dialogs</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/qinputdialog_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="270" SRC="images/qinputdialog.jpg"></p>
+</center></p><br>
+<p class="docText">In some situations, it may be desirable to create a custom widget from scratch. Qt makes this straightforward, and custom widgets can access all the same platform-independent drawing functionality as Qt's built-in widgets. Custom widgets can even be integrated with <span class="docEmphasis">Qt Designer</span> so that they can be used in the same way as Qt's built-in widgets. <a class="docLink" href="ch05.html#ch05">Chapter 5</a> explains how to create custom widgets.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch02lev1sec5.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,91 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Customizing Qt Widgets</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch05lev1sec1"></a>
+<h3 id="507906-898" class="docSection1Title">Customizing Qt Widgets</h3>
+<p class="docText">In some cases, we find that a Qt widget requires more customization than is possible by setting its properties in <span class="docEmphasis">Qt Designer</span> or by calling its functions. A simple and direct solution is to subclass the relevant widget class and adapt it to suit our needs.</p>
+<a name="ch05fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.1. The <tt>HexSpinBox</tt> widget</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="91" height="37" SRC="images/hexspinbox.jpg"></p>
+
+</center></p><br>
+<p class="docText">In this section, we will develop a hexadecimal spin box to show how this works. <tt>QSpinBox</tt> only supports decimal integers, but by subclassing it's quite easy to make it accept and display hexadecimal values.</p>
+<div class="docText"><pre>
+#ifndef HEXSPINBOX_H
+#define HEXSPINBOX_H
+#include &lt;QSpinBox&gt;
+class QRegExpValidator;
+class HexSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    HexSpinBox(QWidget *parent = 0);
+protected:
+    QValidator::State validate(QString &amp;text, int &amp;pos) const;
+    int valueFromText(const QString &amp;text) const;
+    QString textFromValue(int value) const;
+private:
+    QRegExpValidator *validator;
+};
+#endif
+</pre></div><br>
+<p class="docText"><a name="iddle1057"></a><a name="iddle2661"></a><a name="iddle2662"></a><a name="iddle2663"></a><a name="iddle2862"></a><a name="iddle2878"></a><a name="iddle4800"></a><a name="iddle4803"></a><a name="iddle4884"></a><a name="iddle4885"></a><a name="iddle5432"></a><a name="iddle5433"></a><a name="iddle5434"></a><a name="iddle5435"></a><a name="iddle5768"></a><a name="iddle6765"></a><a name="iddle7082"></a><a name="iddle7083"></a><a name="iddle7084"></a><a name="iddle7088"></a>The <tt>HexSpinBox</tt> inherits most of its functionality from <tt>QSpinBox</tt>. It provides a typical constructor and reimplements three virtual functions from <tt>QSpinBox</tt>.</p>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "hexspinbox.h"
+HexSpinBox::HexSpinBox(QWidget *parent)
+    : QSpinBox(parent)
+{
+    setRange(0, 255);
+    validator = new QRegExpValidator(QRegExp("[0-9A-Fa-f]{1,8}"), this);
+}
+</pre></div><br>
+<p class="docText">We set the default range to be 0 to 255 (<tt>0x00</tt> to <tt>0xFF</tt>), which is more appropriate for a hexadecimal spin box than <tt>QSpinBox</tt>'s default of 0 to 99.</P>
+<p class="docText">The user can modify a spin box's current value either by clicking its up and down arrows or by typing a value into the spin box's line editor. In the latter case, we want to restrict the user's input to legitimate hexadecimal numbers. To achieve this, we use a <tt>QRegExpValidator</tt> that accepts between one and eight characters, each of which must be in one of the sets, '0' to '9', 'A' to 'F', and 'a' to 'f'.</P>
+<div class="docText"><pre>
+QValidator::State HexSpinBox::validate(QString &amp;text, int &amp;pos) const
+{
+    return validator-&gt;validate(text, pos);
+}
+</pre></div><BR>
+<p class="docText">This function is called by <tt>QSpinBox</tt> to see if the text entered so far is valid. There are three possible results: <tt>Invalid</tt> (the text doesn't match the regular expression), <tt>Intermediate</tt> (the text is a plausible part of a valid value), and <tt>Acceptable</tt> (the text is valid). The <tt>QRegExpValidator</tt> has a suitable <tt>validate()</tt> function, so we simply return the result of calling it. In theory, we should return <tt>Invalid</tt> or <tt>Intermediate</tt> for values that lie outside the spin box's range, but <tt>QSpinBox</tt> is smart enough to detect that condition without any help.</P>
+<div class="docText"><pre>
+QString HexSpinBox::textFromValue(int value) const
+{
+    return QString::number(value, 16).toUpper();
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1252"></a><a name="iddle2664"></a><a name="iddle2667"></a><a name="iddle3538"></a><a name="iddle4887"></a><a name="iddle4999"></a><a name="iddle5019"></a><a name="iddle5027"></a><a name="iddle5142"></a><a name="iddle6710"></a><a name="iddle6849"></a><a name="iddle6866"></a><a name="iddle7103"></a>The <tt>textFromValue()</tt> function converts an integer value to a string. <tt>QSpinBox</tt> calls it to update the editor part of the spin box when the user presses the spin box's up or down arrows. We use the static function <tt>QString::number()</tt> with a second argument of 16 to convert the value to lowercase hexadecimal, and call <tt>QString::toUpper()</tt> on the result to make it uppercase.</p>
+<div class="docText"><pre>
+int HexSpinBox::valueFromText(const QString &amp;text) const
+{
+    bool ok;
+    return text.toInt(&amp;ok, 16);
+}
+</pre></div><br>
+<p class="docText">The <tt>valueFromText()</tt> function performs the reverse conversion, from a string to an integer value. It is called by <tt>QSpinBox</tt> when the user types a value into the editor part of the spin box and presses Enter. We use the <tt>QString::toInt()</tt> function to attempt to convert the current text to an integer value, again using base 16. If the string is not valid hexadecimal, <tt>ok</tt> is set to <tt>false</tt> and <tt>toInt()</tt> returns 0. Here, we don't have to consider this possibility because the validator only permits valid hexadecimal strings to be entered. Instead of passing the address of a dummy variable (<tt>ok</tt>), we could instead pass a null pointer as the first argument to <tt>toInt()</tt>.</p>
+<p class="docText">We have now finished the hexadecimal spin box. Customizing other Qt widgets follows the same pattern: Pick a suitable Qt widget, subclass it, and reimplement some virtual functions to change its behavior.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

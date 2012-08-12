@@ -1,0 +1,98 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Interfacing with Native APIs</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch20lev1sec1"></a>
+<h3 id="570594-952" class="docSection1Title">Interfacing with Native APIs</h3>
+<p class="docText">Qt's comprehensive API caters for most needs on all platforms, but in some circumstances, we may want to use the underlying platform-specific APIs. In this section, we will show how to use the native APIs for the different platforms supported by Qt to accomplish particular tasks.</p>
+<p class="docText">On every platform, <tt>QWidget</tt> provides a <tt>winId()</tt> function that returns the window ID or handle. <tt>QWidget</tt> also provides a static function called <tt>find()</tt> that returns the <tt>QWidget</tt> with a particular window ID. We can pass this ID to native API functions to achieve platform-specific effects. For example, the following code <a name="iddle1356"></a><a name="iddle2260"></a><a name="iddle2534"></a><a name="iddle2671"></a><a name="iddle3648"></a><a name="iddle5538"></a>uses <tt>winId()</tt> to move the title bar of a tool window to the left using native Mac OS X functions:</p>
+<div class="docText"><pre>
+#ifdef Q_WS_MAC
+    ChangeWindowAttributes(HIViewGetWindow(HIViewRef(toolWin.winId())),
+                           kWindowSideTitlebarAttribute,
+                           kWindowNoAttributes);
+#endif
+</pre></div><br>
+<a name="ch20fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 20.1. A Mac OS X tool window with the title bar on the side</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="344" height="358" SRC="images/mac_sidebar.jpg"></p>
+
+</center></p><br>
+<p class="docText">On X11, here's how we would modify a window property:</p>
+<div class="docText"><pre>
+#ifdef Q_WS_X11
+    Atom atom = XInternAtom(QX11Info::display(), "MY_PROPERTY", False);
+    long data = 1;
+    XChangeProperty(QX11Info::display(), window-&gt;winId(), atom, atom,
+                    32, PropModeReplace,
+                    reinterpret_cast&lt;uchar *&gt;(&amp;data), 1);
+#endif
+</pre></div><BR>
+<p class="docText">The <tt>#ifdef</tt> and <tt>#endif</tt> directives around the platform-specific code ensure that the application will still compile on other platforms.</p>
+<p class="docText">For a Windows-only application, here's an example of how we can use GDI calls to draw on a Qt widget:</p>
+<div class="docText"><pre>
+void GdiControl::paintEvent(QPaintEvent * /* event */)
+{
+    RECT rect;
+    GetClientRect(winId(), &amp;rect);
+    HDC hdc = GetDC(winId());
+    FillRect(hdc, &amp;rect, HBRUSH(COLOR_WINDOW + 1));
+    SetTextAlign(hdc, TA_CENTER | TA_BASELINE);
+    TextOutW(hdc, width() / 2, height() / 2, text.utf16(), text.size());
+    ReleaseDC(winId(), hdc);
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2261"></a><a name="iddle2556"></a><a name="iddle3172"></a><a name="iddle3327"></a><a name="iddle3593"></a><a name="iddle3637"></a><a name="iddle3638"></a><a name="iddle3639"></a><a name="iddle3649"></a><a name="iddle3914"></a><a name="iddle3934"></a><a name="iddle3936"></a><a name="iddle4643"></a><a name="iddle4644"></a><a name="iddle4647"></a><a name="iddle4689"></a><a name="iddle5049"></a><a name="iddle5119"></a><a name="iddle5366"></a><a name="iddle5539"></a><a name="iddle5783"></a><a name="iddle7125"></a><a name="iddle7162"></a><a name="iddle7175"></a><a name="iddle7264"></a><a name="iddle7304"></a><a name="iddle7307"></a>For this to work, we must also reimplement <tt>QPaintDevice::paintEngine()</tt> to return a null pointer and set the <tt>Qt::WA_PaintOnScreen</tt> attribute in the widget's constructor.</P>
+<p class="docText">The next example shows how to combine <tt>QPainter</tt> and GDI calls in a paint event handler using <tt>QPaintEngine</tt>'s <tt>getdC()</tt> and <tt>releaseDC()</tt> functions:</P>
+<div class="docText"><pre>
+void MyWidget::paintEvent(QPaintEvent * /* event */)
+{
+    QPainter painter(this);
+    painter.fillRect(rect().adjusted(20, 20, -20, -20), Qt::red);
+#ifdef Q_WS_WIN
+    HDC hdc = painter.paintEngine()-&gt;getDC();
+    Rectangle(hdc, 40, 40, width() - 40, height() - 40);
+    painter.paintEngine()-&gt;releaseDC();
+#endif
+}
+</pre></div><BR>
+<p class="docText">Mixing <tt>QPainter</tt> and GDI calls like this can sometimes lead to strange results, especially when <tt>QPainter</tt> calls occur after GDI calls, because <tt>QPainter</tt> makes some assumptions about the state of the underlying drawing layer.</p>
+<p class="docText">Qt defines one of the following four window system symbols: <tt>Q_WS_WIN</tt>, <tt>Q_WS_X11</tt>, <tt>Q_WS_MAC</tt>, and <tt>Q_WS_QWS</tt> (Qtopia). We must include at least one Qt header before we can use them in applications. Qt also provides preprocessor symbols to identify the operating system:</P>
+<ul><li><p class="docList"><tt>Q_OS_AIX</tt></P></LI><LI><p class="docList"><tt>Q_OS_BSD4</tt></p></li><li><p class="docList"><tt>Q_OS_BSDI</tt></P></li><li><p class="docList"><tt>Q_OS_CYGWIN</tt></P></LI><li><p class="docList"><tt>Q_OS_DGUX</tt></p></li><li><p class="docList"><tt>Q_OS_DYNIX</tt></P></li><li><p class="docList"><tt>Q_OS_FREEBSD</tt></P></li><LI><p class="docList"><tt>Q_OS_HPUX</tt></p></li><li><p class="docList"><tt>Q_OS_HURD</tt></p></li><li><p class="docList"><tt>Q_OS_IRIX</tt></p></li><li><p class="docList"><tt>Q_OS_LINUX</tt></p></li><li><p class="docList"><tt>Q_OS_LYNX</tt></p></li><li><p class="docList"><tt>Q_OS_MAC</tt></P></li><li><p class="docList"><tt>Q_OS_NETBSD</tt></p></LI><li><p class="docList"><tt>Q_OS_OPENBSD</tt></P></LI><li><p class="docList"><tt>Q_OS_OS2EMX</tt></P></li><li><p class="docList"><tt>Q_OS_OSF</tt></P></LI><LI><p class="docList"><tt>Q_OS_QNX6</tt></p></li><li><p class="docList"><tt>Q_OS_QNX</tt></P></li><li><p class="docList"><tt>Q_OS_RELIANT</tt></P></LI><li><p class="docList"><tt>Q_OS_SCO</tt></p></li><li><p class="docList"><tt>Q_OS_SOLARIS</tt></P></li><li><p class="docList"><tt>Q_OS_ULTRIX</tt></P></li><LI><p class="docList"><tt>Q_OS_UNIXWARE</tt></p></li><li><p class="docList"><tt>Q_OS_WIN32</tt></p></li><li><p class="docList"><tt>Q_OS_WIN64</tt></p></li></ul>
+<p class="docText">We can assume that at most one of these will be defined. For convenience, Qt also defines <tt>Q_OS_WIN</tt> when either Win32 or Win64 is detected, and <tt>Q_OS_UNIX</tt> when any Unix-based operating system (including Linux and Mac OS X) is detected. At run-time, we can check <tt>QSysInfo::WindowsVersion</tt> or <tt>QSysInfo:: MacintoshVersion</tt> to distinguish between different versions of Windows (2000, ME, etc.) or Mac OS X (10.2, 10.3, etc.).</p>
+<p class="docText">In addition to the operating system and window system macros, there is also a set of compiler macros. For example, <tt>Q_CC_MSVC</tt> is defined if the compiler is Microsoft Visual C++. These can be useful for working around compiler bugs.</p>
+<p class="docText">Several of Qt's GUI-related classes provide platform-specific functions that return low-level handles to the underlying object. These are listed in <a class="docLink" href="#ch20fig02">Figure 20.2</a>.</p>
+
+<p class="docText"></p><a name="ch20fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 20.2. Platform-specific functions to access low-level handles</H5>
+<p><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="100"><col width="200"></colgroup><thead></thead><tr><td class="docTableCell" align="left" valign="top" colspan="2"><p class="docText"><a name="iddle1221"></a><a name="iddle1395"></a><a name="iddle1782"></a><a name="iddle2211"></a><a name="iddle2469"></a><a name="iddle2557"></a><a name="iddle2567"></a><a name="iddle2605"></a><a name="iddle2608"></a><a name="iddle2609"></a><a name="iddle2610"></a><a name="iddle2611"></a><a name="iddle2612"></a><a name="iddle2613"></a><a name="iddle2614"></a><a name="iddle2624"></a><a name="iddle2625"></a><a name="iddle2670"></a><a name="iddle2672"></a><a name="iddle2696"></a><a name="iddle2697"></a><a name="iddle2717"></a><a name="iddle3164"></a><a name="iddle3168"></a><a name="iddle3169"></a><a name="iddle3428"></a><a name="iddle3707"></a><a name="iddle3711"></a><a name="iddle4127"></a><a name="iddle4143"></a><a name="iddle4258"></a><a name="iddle4299"></a><a name="iddle4645"></a><a name="iddle4724"></a><a name="iddle4725"></a><a name="iddle4726"></a><a name="iddle4727"></a><a name="iddle4728"></a><a name="iddle4729"></a><a name="iddle4739"></a><a name="iddle4804"></a><a name="iddle4835"></a><a name="iddle5367"></a><a name="iddle5505"></a><a name="iddle5618"></a><a name="iddle5620"></a><a name="iddle5621"></a><a name="iddle5640"></a><a name="iddle5650"></a><a name="iddle5762"></a><a name="iddle5863"></a><a name="iddle5944"></a><a name="iddle6381"></a><a name="iddle7268"></a><a name="iddle7272"></a><a name="iddle7337"></a><a name="iddle7338"></a><a name="iddle7339"></a><a name="iddle7340"></a><a name="iddle7341"></a><a name="iddle7342"></a><a name="iddle7343"></a><a name="iddle7346"></a>Mac OS X</P></td></TR><TR><td class="docTableCell" align="left" valign="top"><p class="docText">ATSFontFormatRef</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">QFont::handle()</P></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">CGImageRef</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::macCGHandle()</p></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">GWorldPtr</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::macQDAlphaHandle()</p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">GWorldPtr</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::macQDHandle()</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">RgnHandle</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QRegion::handle()</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">HIViewRef</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QWidget::winId()</P></td></TR></table></P><br>
+<P><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="100"><col width="200"></colgroup><thead></thead><tr><td class="docTableCell" align="left" valign="top" colspan="2"><p class="docText">Windows</P></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">HCURSOR</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">QCursor::handle()</p></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">HDC</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">QPaintEngine::getDC()</p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">HDC</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QPrintEngine::getPrinterDC()</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">HFONT</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QFont::handle()</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">HPALETTE</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QColormap::hPal()</P></td></TR><TR><td class="docTableCell" align="left" valign="top"><p class="docText">HRGN</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">QRegion::handle()</P></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">HWND</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">QWidget::winId()</p></TD></TR></table></p><br>
+<p><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="100"><col width="200"></colgroup><thead></thead><tr><TD class="docTableCell" align="left" valign="top" colspan="2"><p class="docText">X11</p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">Cursor</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QCursor::handle()</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">Font</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QFont::handle()</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">Picture</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::x11PictureHandle()</P></td></TR><TR><td class="docTableCell" align="left" valign="top"><p class="docText">Picture</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">QWidget::x11PictureHandle()</P></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">Pixmap</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::handle()</p></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">QX11Info</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">QPixmap::x11Info()</p></td></TR><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">QX11Info</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QWidget::x11Info()</p></td></tr><tr><td class="docTableCell" align="left" valign="top"><p class="docText">Region</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QRegion::handle()</p></td></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText">Screen</p></td><td class="docTableCell" align="left" valign="top"><p class="docText">QCursor::x11Screen()</P></td></TR><TR><td class="docTableCell" align="left" valign="top"><p class="docText">SmcConn</P></td><td class="docTableCell" align="left" valign="top"><p class="docText">QSessionManager::handle()</P></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">Window</p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">QWidget::handle()</p></TD></TR><tr><td class="docTableCell" align="left" valign="top"><p class="docText">Window</p></td><TD class="docTableCell" align="left" valign="top"><p class="docText">QWidget::winId()</p></td></TR></table></p><BR>
+</center></p><br>
+<p class="docText">On X11, <tt>QPixmap::x11Info()</tt> and <tt>QWidget::x11Info()</tt> return a <tt>QX11Info</tt> object that provides various pointers or handles, such as <tt>display()</tt>, <tt>screen()</tt>, <tt>colormap()</tt>, and <tt>visual()</tt>. We can use these to set up an X11 graphics context on a <tt>QPixmap</tt> or <tt>QWidget</tt>, for example.</p>
+<p class="docText">Qt applications that need to interface with other toolkits or libraries frequently need to access the low-level events (<tt>XEvent</tt>s on X11, <tt>MSG</tt>s on Windows, <tt>Eventref</tt> on Mac OS X, <tt>QWSEvent</tt>s on Qtopia) before they are converted into <a name="iddle1069"></a><a name="iddle1075"></a><a name="iddle1535"></a><a name="iddle2230"></a><a name="iddle2234"></a><a name="iddle2263"></a><a name="iddle2307"></a><a name="iddle2407"></a><a name="iddle3165"></a><a name="iddle3166"></a><a name="iddle3286"></a><a name="iddle3388"></a><a name="iddle4036"></a><a name="iddle4041"></a><a name="iddle4056"></a><a name="iddle4057"></a><a name="iddle4080"></a><a name="iddle4083"></a><a name="iddle5515"></a><a name="iddle5541"></a><a name="iddle5616"></a><a name="iddle5619"></a><a name="iddle5641"></a><a name="iddle5642"></a><a name="iddle7265"></a><a name="iddle7266"></a><a name="iddle7301"></a><a name="iddle7335"></a><a name="iddle7336"></a><tt>QEvent</tt>s. We can do this by subclassing <tt>QApplication</tt> and reimplementing the relevant platform-specific event filter, one of <tt>x11EventFilter()</tt>, <tt>winEventFilter()</tt>, <tt>macEventFilter()</tt>, and <tt>qwsEventFilter()</tt>. Alternatively, we can access the platform-specific events that are sent to a given <tt>QWidget</tt> by reimplementing one of <tt>x11Event()</tt>, <tt>winEvent()</tt>, <tt>macEvent()</tt>, and <tt>qwsEvent()</tt>. This can be useful for handling certain types of events that Qt normally ignores, such as joystick events.</p>
+<p class="docText">For more information about platform-specific issues, including how to deploy Qt applications on different platforms, see <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/winsystem.html">http://doc.trolltech.com/4.1/winsystem.html</a>.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch20lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

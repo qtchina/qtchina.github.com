@@ -1,0 +1,42 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 17.&nbsp; Internationalization</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part03.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch17"></a>
+
+<h2 id="title-IDAK2FLL" class="docChapterTitle">Chapter 17. Internationalization</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" width="200" height="139" SRC="images/361fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle2833"></a><a name="iddle2864"></a><a name="iddle3143"></a><a name="iddle3157"></a><a name="iddle3160"></a><a name="iddle4630"></a><a name="iddle5159"></a><a name="iddle6763"></a><a name="iddle6888"></a><a name="iddle6928"></a><span class="docEmphasis"><a class="docLink" href="ch17lev1sec1.html#ch17lev1sec1">Working with Unicode</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch17lev1sec2.html#ch17lev1sec2">Making Applications Translation-Aware</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch17lev1sec3.html#ch17lev1sec3">Dynamic Language Switching</a></span></p></LI><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch17lev1sec4.html#ch17lev1sec4">Translating Applications</a></span></p></li></UL>
+<p class="docText">In addition to the Latin alphabet used for English and for many European languages, Qt 4 also provides extensive support for the rest of the world's writing systems:</p>
+<UL><LI><p class="docList">Qt uses Unicode throughout the API and internally. No matter what language we use for the user interface, the application can support all users alike.</p></LI><li><p class="docList">Qt's text engine can handle all the major non-Latin writing systems, including Arabic, Chinese, Cyrillic, Hebrew, Japanese, Korean, Thai, and the Indic languages.</p></LI><LI><p class="docList">Qt's layout engine supports right-to-left layouts for languages such as Arabic and Hebrew.</P></li><li><p class="docList">Certain languages require special input methods for entering text. Editor widgets such as <tt>QLineEdit</tt> and <tt>QTextEdit</tt> work well with any input method installed on the user's system.</p></LI></ul>
+<p class="docText">Often, it isn't enough to allow users to enter text in their native language; the entire user interface's must be translated as well. Qt makes this easy: Simply wrap all user-visible strings with the <tt>tr()</tt> function (as we have done in earlier chapters) and use Qt's supporting tools to prepare translation files in the required languages. Qt provides a GUI tool called <span class="docEmphasis">Qt Linguist</span> for use by translators.<span class="docEmphasis">Qt Linguist</span> is complemented by two command-line programs, <tt>lupdate</tt> and <tt>lrelease</tt>, which are typically run by the application's developers.</P>
+<p class="docText">For most applications, a translation file is loaded at startup, based on the user's locale settings. But in a few cases, it is also necessary for users to be able to switch language at run-time. This is perfectly possible with Qt, although it does require a bit of extra work. And thanks to Qt's layout system, the various user interface components will automatically adjust to make room for the translated texts when they are longer than the original texts.</P>
+
+
+
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part03.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch17lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

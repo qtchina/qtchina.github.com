@@ -1,0 +1,89 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Laying Out Widgets</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch01lev1sec3"></a>
+<h3 id="title-IDA2FZX" class="docSection1Title">Laying Out Widgets</h3>
+<p class="docText">In this section, we will create a small example application that demonstrates how to use layouts to manage the geometry of widgets in a window and how to use signals and slots to synchronize two widgets. The application asks for the user's age, which the user can enter by manipulating either a spin box or a slider.</p>
+<p class="docText"><a name="iddle1116"></a><a name="iddle1354"></a><a name="iddle1424"></a><a name="iddle2277"></a><a name="iddle3663"></a><a name="iddle4866"></a><a name="iddle4868"></a><a name="iddle4869"></a><a name="iddle4870"></a><a name="iddle4878"></a><a name="iddle4882"></a><a name="iddle4883"></a><a name="iddle4886"></a><a name="iddle5564"></a><a name="iddle5583"></a><a name="iddle6124"></a><a name="iddle6159"></a><a name="iddle6160"></a><a name="iddle6161"></a><a name="iddle6213"></a><a name="iddle6216"></a><a name="iddle6238"></a><a name="iddle6352"></a><a name="iddle6429"></a><a name="iddle6836"></a><a name="iddle7100"></a><a name="iddle7101"></a><a name="iddle7102"></a><a name="iddle7234"></a><a name="iddle7292"></a>The application consists of three widgets: a <tt>QSpinBox</tt>, a <tt>QSlider</tt>, and a <tt>QWidget</tt>. The <tt>QWidget</tt> is the application's main window. The <tt>QSpinBox</tt> and the <tt>QSlider</tt> are rendered inside the <tt>QWidget</tt>; they are <span class="docEmphasis">children</span> of the <tt>QWidget</tt>. Alternatively, we can say that the <tt>QWidget</tt> is the <span class="docEmphasis">parent</span> of the <tt>QSpinBox</tt> and the <tt>QSlider</tt>. The <tt>QWidget</tt> has no parent itself because it is being used as a top-level window. The constructors for <tt>QWidget</tt> and all of its subclasses take a <tt>QWidget *</tt> parameter that specifies the parent widget.</p>
+<a name="ch01fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 1.4. The Age application</h5>
+
+<p class="docText">
+<img border="0" alt="" width="243" height="73" SRC="images/age.jpg"></p>
+
+</center></p><br>
+<p class="docText">Here's the source code:</p>
+<div class="docText"><pre>
+ 1 #include &lt;QApplication&gt;
+ 2 #include &lt;QHBoxLayout&gt;
+ 3 #include &lt;QSlider&gt;
+ 4 #include &lt;QSpinBox&gt;
+ 5 int main(int argc, char *argv[])
+ 6 {
+ 7     QApplication app(argc, argv);
+ 8     QWidget *window = new QWidget;
+ 9     window-&gt;setWindowTitle("Enter Your Age");
+10     QSpinBox *spinBox = new QSpinBox;
+11     QSlider *slider = new QSlider(Qt::Horizontal);
+12     spinBox-&gt;setRange(0, 130);
+13     slider-&gt;setRange(0, 130);
+14     QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+15                      slider, SLOT(setValue(int)));
+16     QObject::connect(slider, SIGNAL(valueChanged(int)),
+17                      spinBox, SLOT(setValue(int)));
+18     spinBox-&gt;setValue(35);
+19     QHBoxLayout *layout = new QHBoxLayout;
+20     layout-&gt;addWidget(spinBox);
+21     layout-&gt;addWidget(slider);
+22     window-&gt;setLayout(layout);
+23     window-&gt;show();
+24     return app.exec();
+25 }
+</pre></div><br>
+<p class="docText">Lines 8 and 9 set up the <tt>QWidget</tt> that will serve as the application's main window. We call <tt>setWindowTitle()</tt> to set the text displayed in the window's title bar.</p>
+<p class="docText"><a name="iddle1581"></a><a name="iddle1816"></a><a name="iddle4599"></a><a name="iddle6292"></a><a name="iddle6358"></a>Lines 10 and 11 create a <tt>QSpinBox</tt> and a <tt>QSlider</tt>, and lines 12 and 13 set their valid ranges. We can safely assume that the user is at most 130 years old. We could pass <tt>window</tt> to the <tt>QSpinBox</tt> and <tt>QSlider</tt> constructors, specifying that these widgets should have <tt>window</tt> as their parent, but it isn't necessary here because the layout system will figure this out by itself and automatically set the parent of the spin box and the slider, as we will see shortly.</P>
+<p class="docText">The two <tt>QObject::connect()</tt> calls shown in lines 14 to 17 ensure that the spin box and the slider are synchronized so that they always show the same value. Whenever the value of one widget changes, its <tt>valueChanged(int)</tt> signal is emitted, and the <tt>setValue(int)</tt> slot of the other widget is called with the new value.</P>
+<p class="docText">Line 18 sets the spin box value to 35. When this happens, the <tt>QSpinBox</tt> emits the <tt>valueChanged(int)</tt> signal with an <tt>int</tt> argument of 35. This argument is passed to the <tt>QSlider</tt>'s <tt>setValue(int)</tt> slot, which sets the slider value to 35. The slider then emits the <tt>valueChanged(int)</tt> signal, because its own value changed, triggering the spin box's <tt>setValue(int)</tt> slot. But at this point, <tt>setValue(int)</tt> doesn't emit any signal, since the spin box value is already 35. This prevents infinite recursion. <a class="docLink" href="#ch01fig05">Figure 1.5</a> summarizes the situation.</P>
+<a name="ch01fig05"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 1.5. Changing one widget's value changes both</h5>
+
+<p class="docText">
+<img border="0" alt="" width="300" height="313" SRC="images/widget_s_value.jpg"></p>
+
+</center></p><br>
+<p class="docText">In lines 19 to 22, we lay out the spin box and slider widgets using a <span class="docEmphasis">layout manager</span>. A layout manager is an object that sets the size and position of the widgets that lie under its responsibility. Qt has three main layout manager classes:</p>
+<ul><li><p class="docList"><a name="iddle1298"></a><a name="iddle1451"></a><a name="iddle1980"></a><a name="iddle2595"></a><a name="iddle2688"></a><a name="iddle2699"></a><a name="iddle3039"></a><a name="iddle3040"></a><a name="iddle3045"></a><a name="iddle3057"></a><a name="iddle3555"></a><a name="iddle3574"></a><a name="iddle4352"></a><a name="iddle4360"></a><a name="iddle5127"></a><a name="iddle5128"></a><a name="iddle5449"></a><a name="iddle5565"></a><a name="iddle5739"></a><a name="iddle5806"></a><a name="iddle5857"></a><a name="iddle5872"></a><a name="iddle6125"></a><a name="iddle7132"></a><a name="iddle7241"></a><tt>QHBoxLayout</tt> lays out widgets horizontally from left to right (right to left for some cultures).</p></li><li><p class="docList"><tt>QVBoxLayout</tt> lays out widgets vertically from top to bottom.</p></li><LI><p class="docList"><tt>QGridLayout</tt> lays out widgets in a grid.</p></li></UL>
+<p class="docText">The call to <tt>QWidget::setLayout()</tt> on line 22 installs the layout manager on the window. Behind the scenes, the <tt>QSpinBox</tt> and <tt>QSlider</tt> are &quot;reparented&quot; to be children of the widget on which the layout is installed, and for this reason we don't need to specify an explicit parent when we construct a widget that will be put in a layout.</P>
+<a name="ch01fig06"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 1.6. The Age application's widgets</h5>
+
+<p class="docText">
+<img border="0" alt="" width="316" height="68" SRC="images/age_application.jpg"></p>
+
+</center></P><br>
+<p class="docText">Even though we didn't set the position or size of any widget explicitly, the <tt>QSpinBox</tt> and <tt>QSlider</tt> appear nicely laid out side by side. This is because <tt>QHBox-Layout</tt> automatically assigns reasonable positions and sizes to the widgets for which it is responsible, based on their needs. The layout managers free us from the chore of hard-coding screen positions in our applications and ensure that windows resize smoothly.</p>
+<p class="docText">Qt's approach to building user interfaces is simple to understand and very flexible. The most common pattern that Qt programmers use is to instantiate the required widgets and then set their properties as necessary. Programmers add the widgets to layouts, which automatically take care of sizing and positioning. User interface behavior is managed by connecting widgets together using Qt's signals and slots mechanism.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch01lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

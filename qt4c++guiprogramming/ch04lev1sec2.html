@@ -1,0 +1,230 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Subclassing QTableWidget</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch04lev1sec2"></a>
+<h3 id="title-IDAWL1YV" class="docSection1Title">Subclassing QTableWidget</h3>
+<p class="docText">The <tt>Spreadsheet</tt> class inherits from <tt>QTableWidget</tt>. A <tt>QTableWidget</tt> is effectively a grid that represents a two-dimensional sparse array. It displays whichever cells the user scrolls to, within its specified dimensions. When the user enters some text into an empty cell, <tt>QTableWidget</tt> automatically creates a <tt>QTableWidgetItem</tt> to store the text.</p>
+<p class="docText">Let's start implementing <tt>Spreadsheet</tt>, beginning with the header file:</p>
+<div class="docText"><pre>
+#ifndef SPREADSHEET_H
+#define SPREADSHEET_H
+#include &lt;QTableWidget&gt;
+class Cell;
+class SpreadsheetCompare;
+</pre></div><br>
+<p class="docText">The header starts with forward declarations for the <tt>Cell</tt> and <tt>SpreadsheetCom-pare</tt> classes.</p>
+<a name="ch04fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 4.1. Inheritance trees for <tt>Spreadsheet</tt> and <tt>Cell</tt> </h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="262" height="123" SRC="images/04fig01.jpg"></p>
+
+</center></p><br>
+<p class="docText"><a name="iddle1227"></a><a name="iddle3378"></a><a name="iddle5183"></a><a name="iddle5206"></a><a name="iddle6441"></a><a name="iddle6442"></a><a name="iddle6451"></a><a name="iddle6462"></a><a name="iddle6639"></a>The attributes of a <tt>QTableWidget</tt> cell, such as its text and its alignment, are stored in a <tt>QTableWidgetItem</tt>. Unlike <tt>QTableWidget</tt>, <tt>QTableWidgetItem</tt> isn't a widget class; it is a pure data class. The <tt>Cell</tt> class inherits <tt>QTableWidgetItem</tt> and is explained when its implementation is shown in this chapter's last section.</p>
+<div class="docText"><pre>
+class Spreadsheet : public QTableWidget
+{
+    Q_OBJECT
+public:
+    Spreadsheet(QWidget *parent = 0);
+    bool autoRecalculate() const { return autoRecalc; }
+    QString currentLocation() const;
+    QString currentFormula() const;
+    QTableWidgetSelectionRange selectedRange() const;
+    void clear();
+    bool readFile(const QString &amp;fileName);
+    bool writeFile(const QString &amp;fileName);
+    void sort(const SpreadsheetCompare &amp;compare);
+</pre></div><BR>
+<p class="docText">The <tt>autoRecalculate()</tt> function is implemented inline since it just returns whether or not auto-recalculation is in force.</P>
+<p class="docText">In <a class="docLink" href="ch03.html#ch03">Chapter 3</a>, we relied on some public functions in <tt>Spreadsheet</tt> when we implemented <tt>MainWindow</tt>. For example, we called <tt>clear()</tt> from <tt>MainWindow::newFile()</tt> to reset the spreadsheet. We also used some functions inherited from <tt>QTableWidget</tt>, notably <tt>setCurrentCell()</tt> and <tt>setShowGrid()</tt>.</P>
+<div class="docText"><pre>
+public slots:
+    void cut();
+    void copy();
+    void paste();
+    void del();
+    void selectCurrentRow();
+    void selectCurrentColumn();
+    void recalculate();
+    void setAutoRecalculate(bool recalc);
+    void findNext(const QString &amp;str, Qt::CaseSensitivity cs);
+    void findPrevious(const QString &amp;str, Qt::CaseSensitivity cs);
+signals:
+    void modified();
+</pre></div><BR>
+<p class="docText"><tt>Spreadsheet</tt> provides many slots that implement actions from the Edit, Tools, and Options menus, and it provides one signal, <tt>modified()</tt>, to announce any change that has occurred.</P>
+<div class="docText"><pre>
+private slots:
+    void somethingChanged();
+</pre></div><br>
+<p class="docText">We define one private slot used internally by the <tt>Spreadsheet</tt> class.</p>
+<div class="docText"><pre>
+private:
+    enum { MagicNumber = 0x7F51C883, RowCount = 999, ColumnCount = 26 };
+    Cell *cell(int row, int column) const;
+    QString text(int row, int column) const;
+    QString formula(int row, int column) const;
+    void setFormula(int row, int column, const QString &amp;formula);
+    bool autoRecalc;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1529"></a><a name="iddle1677"></a><a name="iddle2939"></a><a name="iddle2943"></a><a name="iddle3174"></a><a name="iddle3900"></a><a name="iddle3973"></a><a name="iddle5188"></a><a name="iddle5197"></a><a name="iddle5200"></a><a name="iddle5889"></a><a name="iddle6122"></a><a name="iddle6174"></a><a name="iddle6444"></a><a name="iddle6446"></a><a name="iddle6448"></a><a name="iddle6450"></a><a name="iddle6480"></a>In the class's private section, we declare three constants, four functions, and one variable.</p>
+<div class="docText"><pre>
+class SpreadsheetCompare
+{
+public:
+    bool operator()(const QStringList &amp;row1,
+                    const QStringList &amp;row2) const;
+    enum { KeyCount = 3 };
+    int keys[KeyCount];
+    bool ascending[KeyCount];
+};
+#endif
+</pre></div><br>
+<p class="docText">The header file ends with the <tt>SpreadsheetCompare</tt> class definition. We will explain this when we review <tt>Spreadsheet::sort()</tt>.</p>
+<p class="docText">We will now look at the implementation:</p>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "cell.h"
+#include "spreadsheet.h"
+Spreadsheet::Spreadsheet(QWidget *parent)
+    : QTableWidget(parent)
+{
+    autoRecalc = true;
+    setItemPrototype(new Cell);
+    setSelectionMode(ContiguousSelection);
+    connect(this, SIGNAL(itemChanged(QTableWidgetItem *)),
+            this, SLOT(somethingChanged()));
+    clear();
+}
+</pre></div><br>
+<p class="docText">Normally, when the user enters some text on an empty cell, the <tt>QTableWidget</tt> will automatically create a <tt>QTableWidgetItem</tt> to hold the text. In our spreadsheet, we want <tt>Cell</tt> items to be created instead. This is achieved by the <tt>setItemPrototype()</tt> call in the constructor. Internally, <tt>QTableWidget</tt> clones the item passed as a prototype every time a new item is required.</p>
+<p class="docText">Also in the constructor, we set the selection mode to <tt>QAbstractItemView::ContiguousSelection</tt> to allow a single rectangular selection. We connect the table widget's <tt>itemChanged()</tt> signal to the private <tt>somethingChanged()</tt> slot; this ensures <a name="iddle1457"></a><a name="iddle1459"></a><a name="iddle1530"></a><a name="iddle2687"></a><a name="iddle2691"></a><a name="iddle3988"></a><a name="iddle4365"></a><a name="iddle4826"></a><a name="iddle5180"></a><a name="iddle5184"></a><a name="iddle5185"></a><a name="iddle5186"></a><a name="iddle5192"></a><a name="iddle5199"></a><a name="iddle5203"></a><a name="iddle5204"></a><a name="iddle5205"></a><a name="iddle5890"></a><a name="iddle5952"></a><a name="iddle6030"></a><a name="iddle6171"></a><a name="iddle6445"></a><a name="iddle6449"></a><a name="iddle6453"></a><a name="iddle7131"></a><a name="iddle7135"></a><a name="iddle7142"></a><a name="iddle7144"></a>that when the user edits a cell, the <tt>somethingChanged()</tt> slot is called. Finally, we call <tt>clear()</tt> to resize the table and to set the column headings.</p>
+<div class="docText"><pre>
+void Spreadsheet::clear()
+{
+    setRowCount(0);
+    setColumnCount(0);
+    setRowCount(RowCount);
+    setColumnCount(ColumnCount);
+    for (int i = 0; i &lt; ColumnCount; ++i) {
+        QTableWidgetItem *item = new QTableWidgetItem;
+        item-&gt;setText(QString(QChar('A' + i)));
+        setHorizontalHeaderItem(i, item);
+    }
+    setCurrentCell(0, 0);
+}
+</pre></div><br>
+<p class="docText">The <tt>clear()</tt> function is called from the <tt>Spreadsheet</tt> constructor to initialize the spreadsheet. It is also called from <tt>MainWindow::newFile()</tt>.</p>
+<p class="docText">We could have used <tt>QTableWidget::clear()</tt> to clear all the items and any selections, but that would have left the headers at their current size. Instead, we resize the table down to 0 x 0. This clears the entire spreadsheet, including the headers. We then resize the table to <tt>ColumnCount</tt> x <tt>RowCount</tt> (26 x 999) and populate the horizontal header with <tt>QTableWidgetItem</tt>s containing the column names &quot;A&quot;, &quot;B&quot;, &#8230;, &quot;Z&quot;. We don't need to set the vertical header labels, because these default to &quot;1&quot;, &quot;2&quot;, &#8230;, &quot;999&quot;. At the end, we move the cell cursor to cell A1.</P>
+<p class="docText">A <tt>QTableWidget</tt> is composed of several child widgets. It has a horizontal <tt>QHeaderView</tt> at the top, a vertical <tt>QHeaderView</tt> on the left, and two <tt>QScrollBar</tt>s. The area in the middle is occupied by a special widget called the <span class="docEmphasis">viewport</span>, on which <tt>QTableWidget</tt> draws the cells. The different child widgets are accessible through functions inherited from <tt>QTableView</tt> and <tt>QAbstractScrollArea</tt> (see <a class="docLink" href="#ch04fig02">Figure 4.2</a>). <tt>QAbstractScrollArea</tt> provides a scrollable viewport and two scroll bars, which can be turned on and off. Its <tt>QScrollArea</tt> subclass is covered in <a class="docLink" href="ch06.html#ch06">Chapter 6</a>.</p>
+<a name="ch04fig02"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 4.2. <tt>QTableWidget</tt>'s constituent widgets</H5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084202" width="400" height="203" SRC="images/constituent_widgets.jpg"></p>
+
+</center></p><br>
+
+<p class="docText"></p><a name="ch04sb01"></a><P><table cellspacing="0" width="90%" border="1" cellpadding="5"><tr><td>
+
+<h2 class="docSidebarTitle"><span class="docEmphStrong">Storing Data as Items</span></h2>
+<p class="docText"><a name="iddle1386"></a><a name="iddle2499"></a><a name="iddle2938"></a><a name="iddle4473"></a><a name="iddle4476"></a><a name="iddle5187"></a><a name="iddle5207"></a><a name="iddle5215"></a><a name="iddle5217"></a><a name="iddle5390"></a><a name="iddle5393"></a><a name="iddle6057"></a><a name="iddle6452"></a><a name="iddle6461"></a><a name="iddle6475"></a><a name="iddle6731"></a><a name="iddle6736"></a><a name="iddle7165"></a>In the Spreadsheet application, every non-empty cell is stored in memory as an individual <tt>QTableWidgetItem</tt> object. Storing data as items is an approach that is also used by <tt>QListWidget</tt> and <tt>QTReeWidget</tt>, which operate on <tt>QListWidgetItem</tt>s and <tt>QTReeWidgetItem</tt>s.</P>
+<p class="docText">Qt's item classes can be used out of the box as data holders. For example, a <tt>QTableWidgetItem</tt> already stores a few attributes, including a string, font, color, and icon, and a pointer back to the <tt>QTableWidget</tt>. The items can also hold data (<tt>QVariant</tt>s), including registered custom types, and by subclassing the item class we can provide additional functionality.</p>
+<p class="docText">Other toolkits provide a <tt>void</tt> pointer in their item classes to store custom data. In Qt, the more natural approach is to use <tt>setData()</tt> with a <tt>QVariant</tt>, but if a <tt>void</tt> pointer is required, it can be trivially achieved by subclassing an item class and adding a <tt>void</tt> pointer member variable.</p>
+<p class="docText">For more challenging data handling requirements, such as large data sets, complex data items, database integration, and multiple data views, Qt provides a set of model/view classes that separate the data from their visual representation. These are covered in <a class="docLink" href="ch10.html#ch10">Chapter 10</a>.</p>
+</td></tr></table></p><br>
+<div class="docText"><pre>
+Cell *Spreadsheet::cell(int row, int column) const
+{
+    return static_cast&lt;Cell *&gt;(item(row, column));
+}
+</pre></div><br>
+<p class="docText">The <tt>cell()</tt> private function returns the <tt>Cell</tt> object for a given row and column. It is almost the same as <tt>QTableWidget::item()</tt>, except that it returns a <tt>Cell</tt> pointer instead of a <tt>QTableWidgetItem</tt> pointer.</p>
+<div class="docText"><pre>
+QString Spreadsheet::text(int row, int column) const
+{
+    Cell *c = cell(row, column);
+    if (c) {
+        return c-&gt;text();
+    } else {
+        return "";
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>text()</tt> private function returns the text for a given cell. If <tt>cell()</tt> returns a null pointer, the cell is empty, so we return an empty string.</p>
+<div class="docText"><pre>
+QString Spreadsheet::formula(int row, int column) const
+{
+    Cell *c = cell(row, column);
+    if (c) {
+        return c-&gt;formula();
+    } else {
+        return "";
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1774"></a><a name="iddle3537"></a><a name="iddle3665"></a><a name="iddle4998"></a><a name="iddle5182"></a><a name="iddle5195"></a><a name="iddle5209"></a><a name="iddle6097"></a><a name="iddle6119"></a><a name="iddle6456"></a><a name="iddle6471"></a>The <tt>formula()</tt> function returns the cell's formula. In many cases, the formula and the text are the same; for example, the formula &quot;Hello&quot; evaluates to the string &quot;Hello&quot;, so if the user types &quot;Hello&quot; into a cell and presses Enter, that cell will show the text &quot;Hello&quot;. But there are a few exceptions:</p>
+<ul><LI><p class="docList">If the formula is a number, it is interpreted as such. For example, the formula &quot;1.50&quot; evaluates to the <tt>double</tt> value 1.5, which is rendered as a right-aligned &quot;1.5&quot; in the spreadsheet.</P></LI><LI><p class="docList">If the formula starts with a single quote, the rest of the formula is interpreted as text. For example, the formula &quot; '12345&quot; evaluates to the string &quot;12345&quot;.</P></li><li><p class="docList">If the formula starts with an equals sign ('='), the formula is interpreted as an arithmetic formula. For example, if cell A1 contains &quot;12&quot; and cell A2 contains &quot;6&quot;, the formula &quot;=A1+A2&quot; evaluates to 18.</p></li></ul>
+<p class="docText">The task of converting a formula into a value is performed by the <tt>Cell</tt> class. For the moment, the thing to bear in mind is that the text shown in the cell is the result of evaluating the formula, not the formula itself.</p>
+<div class="docText"><pre>
+void Spreadsheet::setFormula(int row, int column,
+                             const QString &amp;formula)
+{
+    Cell *c = cell(row, column);
+    if (!c) {
+        c = new Cell;
+        setItem(row, column, c);
+    }
+    c-&gt;setFormula(formula);
+}
+</pre></div><br>
+<p class="docText">The <tt>setFormula()</tt> private function sets the formula for a given cell. If the cell already has a <tt>Cell</tt> object, we reuse it. Otherwise, we create a new <tt>Cell</tt> object and call <tt>QTableWidget::setItem()</tt> to insert it into the table. At the end, we call the cell's own <tt>setFormula()</tt> function, which will cause the cell to be repainted if it's shown on screen. We don't need to worry about deleting the <tt>Cell</tt> object later on; <tt>QTableWidget</tt> takes ownership of the cell and will delete it automatically at the right time.</p>
+<div class="docText"><pre>
+QString Spreadsheet::currentLocation() const
+{
+    return QChar('A' + currentColumn())
+           + QString::number(currentRow() + 1);
+}
+</pre></div><br>
+<p class="docText">The <tt>currentLocation()</tt> function returns the current cell's location in the usual spreadsheet format of column letter followed by row number. <tt>MainWindow::updateStatusBar()</tt> uses it to show the location in the status bar.</p>
+<div class="docText"><pre>
+QString Spreadsheet::currentFormula() const
+{
+    return formula(currentRow(), currentColumn());
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1280"></a><a name="iddle1771"></a><a name="iddle2182"></a><a name="iddle2183"></a><a name="iddle2386"></a><a name="iddle2889"></a><a name="iddle2890"></a><a name="iddle3379"></a><a name="iddle4043"></a><a name="iddle4050"></a><a name="iddle4269"></a><a name="iddle4278"></a><a name="iddle4423"></a><a name="iddle5841"></a><a name="iddle6142"></a><a name="iddle6386"></a><a name="iddle6455"></a><a name="iddle6463"></a><a name="iddle6473"></a><a name="iddle6476"></a><a name="iddle7317"></a><a name="iddle7320"></a>The <tt>currentFormula()</tt> function returns the current cell's formula. It is called from <tt>MainWindow::updateStatusBar()</tt>.</p>
+<div class="docText"><pre>
+void Spreadsheet::somethingChanged()
+{
+    if (autoRecalc)
+        recalculate();
+    emit modified();
+}
+</pre></div><BR>
+<p class="docText">The <tt>somethingChanged()</tt> private slot recalculates the whole spreadsheet if &quot;auto-recalculate&quot; is enabled. It also emits the <tt>modified()</tt> signal.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

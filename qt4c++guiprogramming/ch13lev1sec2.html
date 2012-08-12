@@ -1,0 +1,182 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Presenting Data in Tabular Form</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch13lev1sec2"></a>
+<h3 id="title-IDAFVH3W" class="docSection1Title">Presenting Data in Tabular Form</h3>
+<p class="docText">In many cases, it is simplest to present users with a tabular view of a data set. In this section and the following section, we present a simple CD Collection application that uses <tt>QSqlTableModel</tt> and its subclass <tt>QSqlRelationalTableModel</tt> to let users view and interact with data stored in a database.</p>
+<p class="docText"><a name="iddle2489"></a>The main form shows a masterdetail view of CDs and the tracks on the currently selected CD, as shown in <a class="docLink" href="#ch13fig01">Figure 13.1</a>.</p>
+<a name="ch13fig01"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 13.1. The CD Collection application</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/cdcollection1_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="456" SRC="images/cdcollection1.jpg"></p>
+</center></p><br>
+<p class="docText">The application uses three tables, defined as follows:</p>
+<div class="docText"><pre>
+CREATE TABLE artist (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(40) NOT NULL,
+    country VARCHAR(40));
+CREATE TABLE cd (
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(40) NOT NULL,
+    artistid INTEGER NOT NULL,
+    year INTEGER NOT NULL,
+    FOREIGN KEY (artistid) REFERENCES artist);
+CREATE TABLE track (
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(40) NOT NULL,
+    duration INTEGER NOT NULL,
+    cdid INTEGER NOT NULL,
+    FOREIGN KEY (cdid) REFERENCES cd);
+</pre></div><br>
+<p class="docText">Some databases don't support foreign keys. For those, we must remove the <tt>FOREIGN KEY</tt> clauses. The example will still work, but the database will not enforce referential integrity.</P>
+
+<p class="docText"></p><a name="ch13fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 13.2. The CD Collection application's tables</H5>
+
+<p class="docText">
+<img border="0" alt="" width="400" height="109" SRC="images/application_s_tables.jpg"></p>
+
+</center></P><BR>
+<p class="docText"><a name="iddle1193"></a><a name="iddle1194"></a>In this section, we will write a dialog that allows the user to edit a list of artists using a simple tabular form. The user can insert or delete artists using the form's buttons. Updates can be applied directly, simply by editing cell text. Changes are applied to the database when the user presses Enter or navigates to another record.</p>
+<a name="ch13fig03"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 13.3. The <tt>ArtistForm</tt> dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="298" height="263" SRC="images/cdcollection2.jpg"></P>
+
+</center></P><BR>
+<p class="docText">Here's the class definition for the <tt>ArtistForm</tt> dialog:</p>
+<div class="docText"><pre>
+class ArtistForm : public QDialog
+{
+    Q_OBJECT
+public:
+    ArtistForm(const QString &amp;name, QWidget *parent = 0);
+private slots:
+    void addArtist();
+    void deleteArtist();
+    void beforeInsertArtist(QSqlRecord &amp;record);
+private:
+    enum {
+        Artist_Id = 0,
+        Artist_Name = 1,
+        Artist_Country = 2
+    };
+    QSqlTableModel *model;
+    QTableView *tableView;
+    QPushButton *addButton;
+    QPushButton *deleteButton;
+    QPushButton *closeButton;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1080"></a><a name="iddle1195"></a><a name="iddle1196"></a><a name="iddle4936"></a><a name="iddle5175"></a><a name="iddle6685"></a>The constructor is very similar to one that would be used to create a form based on a non-SQL model:</p>
+<div class="docText"><pre>
+ArtistForm::ArtistForm(const QString &amp;name, QWidget *parent)
+    : QDialog(parent)
+{
+    model = new QSqlTableModel(this);
+    model-&gt;setTable("artist");
+    model-&gt;setSort(Artist_Name, Qt::AscendingOrder);
+    model-&gt;setHeaderData(Artist_Name, Qt::Horizontal, tr("Name"));
+    model-&gt;setHeaderData(Artist_Country, Qt::Horizontal, tr("Country"));
+    model-&gt;select();
+    connect(model, SIGNAL(beforeInsert(QSqlRecord &amp;)),
+            this, SLOT(beforeInsertArtist(QSqlRecord &amp;)));
+    tableView = new QTableView;
+    tableView-&gt;setModel(model);
+    tableView-&gt;setColumnHidden(Artist_Id, true);
+    tableView-&gt;setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableView-&gt;resizeColumnsToContents();
+    for (int row = 0; row &lt; model-&gt;rowCount(); ++row) {
+        QSqlRecord record = model-&gt;record(row);
+        if (record.value(Artist_Name).toString() == name) {
+            tableView-&gt;selectRow(row);
+            break;
+        }
+    }
+    ...
+}
+</pre></div><BR>
+<p class="docText">We begin the constructor by creating a <tt>QSqlTableModel</tt>. We pass <tt>this</tt> as parent to give ownership to the form. We have chosen to sort by column 1 (specified by the constant <tt>Artist_Name</tt>), which corresponds to the <tt>name</tt> field. If we did not specify column headers, the field names would be used. We prefer to name them ourselves to ensure that they are properly capitalized and internationalized.</p>
+<p class="docText">Next, we create a <tt>QTableView</tt> to visualize the model. We hide the <tt>id</tt> field and set the column widths to accommodate their text without needing to show ellipses.</p>
+<p class="docText">The <tt>ArtistForm</tt> constructor takes the name of the artist that should be selected when the dialog pops up. We iterate through the <tt>artist</tt> table's records and select the specified artist. The rest of the constructor's code is used to create and connect the buttons and to lay out the child widgets.</P>
+<div class="docText"><pre>
+void ArtistForm::addArtist()
+{
+    int row = model-&gt;rowCount();
+    model-&gt;insertRow(row);
+    QModelIndex index = model-&gt;index(row, Artist_Name);
+    tableView-&gt;setCurrentIndex(index);
+    tableView-&gt;edit(index);
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1197"></a><a name="iddle1198"></a><a name="iddle1226"></a><a name="iddle1259"></a><a name="iddle1262"></a><a name="iddle1904"></a><a name="iddle2538"></a><a name="iddle4938"></a>To add a new artist, we insert a single blank row at the bottom of the <tt>QTable-View</tt>. Now the user can enter a new artist's name and country. If the user confirms the insertion by pressing Enter, the <tt>beforeInsert()</tt> signal is emitted and then the new record is inserted into the database.</p>
+<div class="docText"><pre>
+void ArtistForm::beforeInsertArtist(QSqlRecord &amp;record)
+{
+    record.setValue("id", generateId("artist"));
+}
+</pre></div><br>
+<p class="docText">In the constructor, we connected the model's <tt>beforeInsert()</tt> signal to this slot. We are passed a non-const reference to the record just before it is inserted into the database. At this point, we populate its <tt>id</tt> field.</p>
+<p class="docText">Since we will need <tt>generateId()</tt> a few times, we define it inline in a header file and include it each time we need it. Here's a quick (and inefficient) way of implementing it:</p>
+<div class="docText"><pre>
+inline int generateId(const QString &amp;table)
+{
+    QSqlQuery query;
+    query.exec("SELECT MAX(id) FROM " + table);
+    int id = 0;
+    if (query.next())
+        id = query.value(0).toInt() + 1;
+    return id;
+}
+</pre></div><BR>
+<p class="docText">The <tt>generateId()</tt> function can only be guaranteed to work correctly if it is executed within the context of the same transaction as the corresponding <tt>INSERT</tt> statement. Some databases support auto-generated fields, and it is usually far better to use the database-specific support for this operation.</p>
+<p class="docText">The last possibility the <tt>ArtistForm</tt> dialog offers is deletion. Rather than performing cascading deletions (covered shortly), we have chosen to only permit deletions of artists who have no CDs in the collection.</p>
+<div class="docText"><pre>
+void ArtistForm::deleteArtist()
+{
+    tableView-&gt;setFocus();
+    QModelIndex index = tableView-&gt;currentIndex();
+    if (!index.isValid())
+        return;
+    QSqlRecord record = model-&gt;record(index.row());
+    QSqlTableModel cdModel;
+    cdModel.setTable("cd");
+    cdModel.setFilter("artistid = " + record.value("id").toString());
+    cdModel.select();
+    if (cdModel.rowCount() == 0) {
+        model-&gt;removeRow(tableView-&gt;currentIndex().row());
+    } else {
+        QMessageBox::information(this,
+                tr("Delete Artist"),
+                tr("Cannot delete %1 because there are CDs associated "
+                   "with this artist in the collection.")
+                .arg(record.value("name").toString()));
+    }
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle3193"></a><a name="iddle3194"></a><a name="iddle3277"></a><a name="iddle4944"></a><a name="iddle4948"></a><a name="iddle5794"></a><a name="iddle5966"></a>If there is a record selected, we check to see if the artist has any CDs, and if they don't, we delete them immediately. Otherwise, we pop up a message box explaining why the deletion was not performed. Strictly speaking, we should have used a transaction, because as the code stands, it is possible for a CD to have its artist set to the one we are deleting in-between the <tt>cdModel.select()</tt> and <tt>model-&gt;removeRow()</tt> calls. We will show a transaction in the next section.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch13lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

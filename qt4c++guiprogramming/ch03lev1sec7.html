@@ -1,0 +1,114 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Multiple Documents</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch03lev1sec7"></a>
+<h3 id="title-IDA1TMF2" class="docSection1Title">Multiple Documents</h3>
+<p class="docText">We are now ready to code the Spreadsheet application's <tt>main()</tt> function:</p>
+<div class="docText"><pre>
+include &lt;QApplication&gt;
+include "mainwindow.h"
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    MainWindow mainWin;
+    mainWin.show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">This <tt>main()</tt> function is a little bit different from those we have written so far: We have created the <tt>MainWindow</tt> instance as a variable on the stack instead of using <tt>new</tt>. The <tt>MainWindow</tt> instance is then automatically destroyed when the function terminates.</p>
+<p class="docText">With the <tt>main()</tt> function shown above, the Spreadsheet application provides a single main window and can only handle one document at a time. If we want to edit multiple documents at the same time, we could start multiple instances of the Spreadsheet application. But this isn't as convenient for <a name="iddle2382"></a><a name="iddle3189"></a><a name="iddle3234"></a><a name="iddle3492"></a>users as having a single instance of the application providing multiple main windows, just as one instance of a web browser can provide multiple browser windows simultaneously.</p>
+<p class="docText">We will modify the Spreadsheet application so that it can handle multiple documents. First, we need a slightly different File menu:</p>
+<ul><li><p class="docList">File|New creates a new main window with an empty document, instead of reusing the existing main window.</p></li><li><p class="docList">File|Close closes the current main window.</p></LI><LI><p class="docList">File|Exit closes all windows.</P></LI></UL>
+<p class="docText">In the original version of the File menu, there was no Close option because that would have been the same as Exit.</p>
+<a name="ch03fig16"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.16. The new File menu</h5>
+
+<p class="docText">
+<img border="0" alt="" width="156" height="183" SRC="images/new_file_menu.jpg"></p>
+
+</center></p><br>
+<p class="docText">This is the new <tt>main()</tt> function:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    MainWindow *mainWin = new MainWindow;
+    mainWin-&gt;show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">With multiple windows, it now makes sense to create <tt>MainWindow</tt> with <tt>new</tt>, because then we can use <tt>delete</tt> on a main window when we have finished with it to save memory.</p>
+<p class="docText">This is the new <tt>MainWindow::newFile()</tt> slot:</p>
+<div class="docText"><pre>
+void MainWindow::newFile()
+{
+    MainWindow *mainWin = new MainWindow;
+    mainWin-&gt;show();
+}
+</pre></div><br>
+<p class="docText">We simply create a new <tt>MainWindow</tt> instance. It may seem odd that we don't keep any pointer to the new window, but that isn't a problem since Qt keeps track of all the windows for us.</P>
+<p class="docText"><a name="iddle1222"></a><a name="iddle1223"></a><a name="iddle1490"></a><a name="iddle1491"></a><a name="iddle1682"></a><a name="iddle1728"></a><a name="iddle3211"></a><a name="iddle3219"></a><a name="iddle3292"></a><a name="iddle4025"></a><a name="iddle5114"></a><a name="iddle5550"></a><a name="iddle6007"></a><a name="iddle7170"></a><a name="iddle7207"></a><a name="iddle7208"></a>These are the actions for Close and Exit:</p>
+<div class="docText"><pre>
+void MainWindow::createActions()
+{
+    ...
+    closeAction = new QAction(tr("&amp;Close"), this);
+    closeAction-&gt;setShortcut(tr("Ctrl+W"));
+    closeAction-&gt;setStatusTip(tr("Close this window"));
+    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    exitAction = new QAction(tr("E&amp;xit"), this);
+    exitAction-&gt;setShortcut(tr("Ctrl+Q"));
+    exitAction-&gt;setStatusTip(tr("Exit the application"));
+    connect(exitAction, SIGNAL(triggered()),
+            qApp, SLOT(closeAllWindows()));
+    ...
+}
+</pre></div><br>
+<p class="docText">The <tt>QApplication::closeAllWindows()</tt> slot closes all of the application's windows, unless one of them rejects the close event. This is exactly the behavior we need here. We don't have to worry about unsaved changes because that's handled in <tt>MainWindow::closeEvent()</tt> whenever a window is closed.</P>
+<p class="docText">It looks as if we have finished making the application capable of handling multiple windows. Unfortunately, there is a hidden problem lurking: If the user keeps creating and closing main windows, the machine might eventually run out of memory. This is because we keep creating <tt>MainWindow</tt> widgets in <tt>newFile()</tt> but we never delete them. When the user closes a main window, the default behavior is to hide it, so it still remains in memory. With many main windows, this can be a problem.</P>
+<p class="docText">The solution is to set the <tt>Qt::WA_DeleteOnClose</tt> attribute in the constructor:</p>
+<div class="docText"><pre>
+MainWindow::MainWindow()
+{
+    ...
+    setAttribute(Qt::WA_DeleteOnClose);
+    ...
+}
+</pre></div><br>
+<p class="docText">This tells Qt to delete the window when it is closed. The <tt>Qt::WA_DeleteOnClose</tt> attribute is one of many flags that can be set on a <tt>QWidget</tt> to influence its behavior.</p>
+<p class="docText">Memory leaking isn't the only problem that we must deal with. Our original application design included an implied assumption that we would only have one main window. With multiple windows, each main window has its own recently opened files list and its own options. Clearly, the recently opened files list should be global to the whole application. We can achieve this quite easily by declaring the <tt>recentFiles</tt> variable static, so that only one instance of it exists for the whole application. But then we must ensure that wherever we called <tt>updateRecentFileActions()</tt> to update the File menu, we must call it on all main windows. Here's the code to achieve this:</p>
+<div class="docText"><pre>
+foreach (QWidget *win, QApplication::topLevelWidgets()) {
+    if (MainWindow *mainWin = qobject_cast&lt;MainWindow *&gt;(win))
+        mainWin-&gt;updateRecentFileActions();
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle2484"></a><a name="iddle3282"></a><a name="iddle3436"></a><a name="iddle4054"></a><a name="iddle4636"></a><a name="iddle4888"></a><a name="iddle5956"></a><a name="iddle6315"></a><a name="iddle6432"></a><a name="iddle6885"></a>The code uses Qt's <tt>foreach</tt> construct (explained in <a class="docLink" href="ch11.html#ch11">Chapter 11</a>) to iterate over all the application's windows and calls <tt>updateRecentFileActions()</tt> on all widgets of type <tt>MainWindow</tt>. Similar code can be used for synchronizing the Show Grid and Auto-Recalculate options, or to make sure that the same file isn't loaded twice.</p>
+<p class="docText">Applications that provide one document per main window are said to be SDI (single document interface) applications. A common alternative on Windows is MDI (multiple document interface), where the application has a single main window that manages multiple document windows within its central area. Qt can be used to create both SDI and MDI applications on all its supported platforms. <a class="docLink" href="#ch03fig17">Figure 3.17</a> shows the Spreadsheet application using both approaches. MDI is explained in <a class="docLink" href="ch06.html#ch06">Chapter 6</a> (Layout Management).</p>
+<a name="ch03fig17"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.17. SDI versus MDI</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/sdiversusmdi_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="201" SRC="images/sdiversusmdi.jpg"></P>
+</center></P><br>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec6.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec8.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,33 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Installing Qt/Mac</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app01lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app01lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="app01lev1sec3"></a>
+<h3 id="title-IDAKWGFV" class="docSection1Title">Installing Qt/Mac</h3>
+<p class="docText">Before Qt can be installed on Mac OS X, Apple's Xcode Tools must already be installed. The CD (or DVD) containing these tools is usually supplied with Mac OS X; they can also be downloaded from the Apple Developer Connection, <a class="docLink" target="_blank" href="http://developer.apple.com">http://developer.apple.com</a>.</p>
+<p class="docText">If you have Mac OS X 10.4 (Tiger) and Xcode Tools 2.x (with GCC 4.0.x), you can use the installer described below. If you have an earlier version of Mac OS X, or an older version of GCC, you will need to install the source package manually. This package is called <tt>qt-mac-opensource-4.1.1.tar.gz</tt> and is located in the <tt>mac</tt> folder on the CD. If you install this package, follow the instructions in the next section for installing Qt on X11.</p>
+<p class="docText"><a name="iddle3106"></a><a name="iddle7019"></a><a name="iddle7330"></a><a name="iddle7331"></a>To use the installer, insert the CD and double-click the package called <tt>Qt.mpkg</tt>. This will launch the installer, <tt>Installer.app</tt>, and Qt will be installed with the standard examples, documentation, and the examples that accompany this book. Qt will be installed in <tt>/Developer</tt>, with the book's examples in <tt>/Developer/Examples/Qt4Book</tt>.</p>
+<p class="docText">To run commands like <tt>qmake</tt> and <tt>make</tt>, you will need to use a terminal window, for example, <tt>Terminal.app</tt> in <tt>/Applications/Utilities</tt>. It is also possible to generate Xcode projects using <tt>qmake</tt>. For example, to generate an Xcode project for the <tt>hello</tt> example, start a console such as <tt>Terminal.app</tt>, change directory to <tt>/Developer/Examples/Qt4Book/chap01/hello</tt>, and enter the following command:</p>
+<div class="docText"><pre>
+qmake -spec macx-xcode hello.pro
+</pre></div><br>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app01lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=app01lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,44 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using Qt's Classes in Secondary Threads</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch18lev1sec4"></a>
+<h3 id="title-IDAPPIES" class="docSection1Title">Using Qt's Classes in Secondary Threads</h3>
+<p class="docText">A function is said to be <span class="docEmphasis">thread-safe</span> when it can safely be called from different threads simultaneously. If two thread-safe functions are called from different threads on the same shared data, the result is always defined. By extension, a class is said to be thread-safe when all of its functions can be called from different threads simultaneously without interfering with each other, even when operating on the same object.</p>
+<p class="docText">Qt's thread-safe classes are <tt>QMutex</tt>, <tt>QMutexLocker</tt>, <tt>QReadWriteLock</tt>, <tt>QReadLocker</tt>, <tt>QWriteLocker</tt>, <tt>QSemaphore</tt>, <tt>QThreadStorage&lt;T&gt;</tt>, <tt>QWaitCondition</tt>, and parts of the <tt>QThread</tt> API. In addition, several functions are thread-safe, including <tt>QObject::connect()</tt>, <tt>QObject::disconnect()</tt>, <tt>QCoreApplication::postEvent()</tt>, <tt>QCoreApplication::removePostedEvent()</tt>, and <tt>QCoreApplication::removePostedEvents()</tt>.</p>
+<p class="docText">Most of Qt's non-GUI classes meet a less stringent requirement: They are <span class="docEmphasis">reentrant</span>. A class is reentrant if different instances of the class can be used simultaneously in different threads. However, accessing the same reentrant object in multiple threads simultaneously is not safe, and such accesses should be protected with a mutex. Reentrant classes are marked as such in the Qt reference documentation. Typically, any C++ class that doesn't reference global or otherwise shared data is reentrant.</p>
+<p class="docText"><tt>QObject</tt> is reentrant, but there are three constraints to keep in mind:</p>
+<ul><li><p class="docText"><span class="docEmphStrong">Child QObjects must be created in their parent's thread.</span> </p><p class="docList">In particular, this means that the objects created in a secondary thread must never be created with the <tt>QThread</tt> object as their parent, because that object was created in another thread (either the main thread or a different secondary thread).</P></li><li><p class="docText"><span class="docEmphStrong">We must delete all QObjects created in a secondary thread before deleting the corresponding QThread object.</span> </p><p class="docList">This can be done by creating the objects on the stack in <tt>QTHRead::run()</tt>.</p></LI><LI><p class="docText"><span class="docEmphStrong">QObjects must be deleted in the thread that created them.</span> </p><p class="docList"><a name="iddle1206"></a><a name="iddle1220"></a><a name="iddle1638"></a><a name="iddle1878"></a><a name="iddle1907"></a><a name="iddle2210"></a><a name="iddle2222"></a><a name="iddle2350"></a><a name="iddle2809"></a><a name="iddle2888"></a><a name="iddle3913"></a><a name="iddle3990"></a><a name="iddle4537"></a><a name="iddle4605"></a><a name="iddle4760"></a><a name="iddle5329"></a><a name="iddle5398"></a><a name="iddle5468"></a><a name="iddle5738"></a><a name="iddle6261"></a><a name="iddle6299"></a><a name="iddle6365"></a><a name="iddle7184"></a><a name="iddle7186"></a>If we need to delete a <tt>QObject</tt> that exists in a different thread, we must call the thread-safe <tt>QObject::deleteLater()</tt> function instead, which posts a &quot;deferred delete&quot; event.</P></li></ul>
+<p class="docText">Non-GUI <tt>QObject</tt> subclasses such as <tt>QTimer</tt>, <tt>QProcess</tt>, and the network classes are reentrant. We can use them in any thread, as long as the thread has an event loop. For secondary threads, the event loop is started by calling <tt>QTHRead::exec()</tt> or by convenience functions such as <tt>QProcess::waitForFinished()</tt> and <tt>QAbstractSocket::waitForDisconnected()</tt>.</P>
+<p class="docText">Because of limitations inherited from the low-level libraries on which Qt's GUI support is built, <tt>QWidget</tt> and its subclasses are not reentrant. One consequence of this is that we cannot directly call functions on a widget from a secondary thread. If we want to, say, change the text of a <tt>QLabel</tt> from a secondary thread, we can emit a signal connected to <tt>QLabel::setText()</tt> or call <tt>QMetaObject::invokeMethod()</tt> from that thread. For example:</P>
+<div class="docText"><pre>
+void MyThread::run()
+{
+    ...
+    QMetaObject::invokeMethod(label, SLOT(setText(const QString &amp;)),
+                              Q_ARG(QString, "Hello"));
+    ...
+}
+</pre></div><br>
+<p class="docText">Many of Qt's non-GUI classes, including <tt>QImage</tt>, <tt>QString</tt>, and the container classes,use implicit sharing as an optimization technique. While this optimization usually makes a class non-reentrant, in Qt this is not an issue because Qt uses atomic assembly language instructions to implement thread-safe reference counting, making Qt's implicitly shared classes reentrant.</p>
+<p class="docText">Qt's <span class="docEmphasis">QtSql</span> module can also be used in multithreaded applications, but it has its own restrictions, which vary from database to database. For details, see  <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/sql-driver.html">http://doc.trolltech.com/4.1/sql-driver.html</a>. For a complete list of multi-threading caveats, see <a class="docLink" target="_blank" href="http://doc.trolltech.com/4.1/threads.html">http://doc.trolltech.com/4.1/threads.html</a>.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,188 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using Dialogs</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch03lev1sec5"></a>
+<h3 id="title-IDA10AOP" class="docSection1Title">Using Dialogs</h3>
+<p class="docText">In this section, we will explain how to use dialogs in Qthow to create and initialize them, run them, and respond to choices made by the user interacting with them. We will make use of the Find, Go-to-Cell, and Sort dialogs that we created in <a class="docLink" href="ch02.html#ch02">Chapter 2</a>. We will also create a simple About box.</p>
+<a name="ch03fig12"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.12. The Spreadsheet application's Find dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="311" height="131" SRC="images/find.jpg"></p>
+
+</center></p><br>
+<p class="docText">We will begin with the Find dialog. Since we want the user to be able to switch between the main Spreadsheet window and the Find dialog at will, the Find dialog must be modeless. A <span class="docEmphasis">modeless</span> window is one that runs independently of any other windows in the application.</p>
+<p class="docText">When modeless dialogs are created,they normally have their signals connected to slots that respond to the user's interactions.</p>
+<div class="docText"><pre>
+void MainWindow::find()
+{
+    if (!findDialog) {
+        findDialog = new FindDialog(this);
+        connect(findDialog, SIGNAL (findNext(const QString &amp;,
+                                            Qt::CaseSensitivity)),
+                spreadsheet, SLOT (findNext(const QString &amp;,
+                                            Qt::CaseSensitivity)));
+        connect(findDialog, SIGNAL(findPrevious(const QString &amp;,
+                                                Qt::CaseSensitivity)),
+                 spreadsheet, SLOT(findPrevious(const QString &amp;,
+                                                Qt::CaseSensitivity)));
+    }
+    findDialog-&gt;show();
+    findDialog-&gt;activateWindow();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1070"></a><a name="iddle2295"></a><a name="iddle2347"></a><a name="iddle2422"></a><a name="iddle2580"></a><a name="iddle2582"></a><a name="iddle2583"></a><a name="iddle2675"></a><a name="iddle2884"></a><a name="iddle3231"></a><a name="iddle3367"></a><a name="iddle4203"></a><a name="iddle4207"></a><a name="iddle6134"></a><a name="iddle7155"></a><a name="iddle7226"></a><a name="iddle7283"></a>The Find dialog is a window that enables the user to search for text in the spreadsheet. The <tt>find()</tt> slot is called when the user clicks Edit|Find to pop up the Find dialog. At that point, several scenarios are possible:</p>
+<UL><LI><p class="docList">This is the first time the user has invoked the Find dialog.</P></LI><LI><p class="docList">The Find dialog was invoked before, but the user closed it.</p></li><li><p class="docList">The Find dialog was invoked before and is still visible.</p></li></ul>
+<p class="docText">If the Find dialog doesn't already exist, we create it and connect its <tt>findNext()</tt> and <tt>findPrevious()</tt> signals to the corresponding <tt>Spreadsheet</tt> slots. We could also have created the dialog in the <tt>MainWindow</tt> constructor, but delaying its creation makes startup faster. Also, if the dialog is never used, it is never created, saving both time and memory.</p>
+<p class="docText">Then we call <tt>show()</tt> and <tt>activateWindow()</tt> to ensure that the window is visible and active. A call to <tt>show()</tt> alone is sufficient to make a hidden window visible and active, but the Find dialog may be invoked when its window is already visible, in which case <tt>show()</tt> does nothing and <tt>activateWindow()</tt> is necessary to make the window active. An alternative would have been to write</p>
+<div class="docText"><pre>
+if (findDialog-&gt;isHidden()) {
+    findDialog-&gt;show();
+} else {
+    findDialog-&gt;activateWindow();
+}
+</pre></div><br>
+<p class="docText">which is the programming equivalent of looking both ways before crossing a one-way street.</p>
+<p class="docText">We will now look at the Go-to-Cell dialog. We want the user to pop it up, use it, and close it without being able to switch to any other window in the application. This means that the Go-to-Cell dialog must be modal. A <span class="docEmphasis">modal</span> window is a window that pops up when invoked and blocks the application, preventing any other processing or interactions from taking place until the window is closed. The file dialogs and message boxes we used earlier were modal.</p>
+<a name="ch03fig13"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 3.13. The Spreadsheet application's Go-to-Cell dialog</h5>
+
+<p class="docText">
+<img border="0" alt="" width="274" height="107" SRC="images/gotocell.jpg"></p>
+
+</center></P><BR>
+<p class="docText">A dialog is modeless if it's invoked using <tt>show()</tt> (unless we call <tt>setModal()</tt> beforehand to make it modal); it is modal if it's invoked using <tt>exec()</tt>.</p>
+<div class="docText"><pre>
+void MainWindow::goToCell()
+{
+    GoToCellDialog dialog(this);
+    if (dialog.exec()) {
+        QString str = dialog.lineEdit-&gt;text().toUpper();
+        spreadsheet-&gt;setCurrentCell(str.mid(1).toInt() - 1,
+                                    str[0].unicode() - 'A');
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1050"></a><a name="iddle1059"></a><a name="iddle1897"></a><a name="iddle2318"></a><a name="iddle3329"></a><a name="iddle3482"></a><a name="iddle4195"></a><a name="iddle4197"></a><a name="iddle4200"></a><a name="iddle4206"></a><a name="iddle4455"></a><a name="iddle4996"></a><a name="iddle5018"></a><a name="iddle5193"></a><a name="iddle5774"></a><a name="iddle5776"></a><a name="iddle6041"></a><a name="iddle6400"></a><a name="iddle6728"></a><a name="iddle6848"></a>The <tt>QDialog::exec()</tt> function returns a true value (<tt>QDialog::Accepted</tt>) if the dialog is accepted, and a false value (<tt>QDialog::Rejected</tt>) otherwise. Recall that when we created the Go-to-Cell dialog using <span class="docEmphasis">Qt Designer</span> in <a class="docLink" href="ch02.html#ch02">Chapter 2</a>, we connected OK to <tt>accept()</tt> and Cancel to <tt>reject()</tt>. If the user chooses OK, we set the current cell to the value in the line editor.</p>
+<p class="docText">The <tt>QTableWidget::setCurrentCell()</tt> function expects two arguments: a row index and a column index. In the Spreadsheet application, cell A1 is cell (0, 0) and cell B27 is cell (26, 1). To obtain the row index from the <tt>QString</tt> returned by <tt>QLineEdit::text()</tt>, we extract the row number using <tt>QString::mid()</tt> (which returns a substring from the start position to the end of the string), convert it to an <tt>int</tt> using <tt>QString::toInt()</tt>, and subtract 1. For the column number, we subtract the numeric value of 'A' from the numeric value of the string's uppercased first character. We know that the string will have the correct format because the <tt>QRegExpValidator</tt> we created for the dialog only allows the OK button to be enabled if we have a letter followed by up to three digits.</P>
+<p class="docText">The <tt>goToCell()</tt> function differs from all the code seen so far in that it creates a widget (a <tt>GoToCellDialog</tt>) as a variable on the stack. At the cost of one extra line, we could just as easily have used <tt>new</tt> and <tt>delete</tt>:</p>
+<div class="docText"><pre>
+void MainWindow::goToCell()
+{
+    GoToCellDialog *dialog = new GoToCellDialog(this);
+    if (dialog-&gt;exec()) {
+        QString str = dialog-&gt;lineEdit-&gt;text().toUpper();
+        spreadsheet-&gt;setCurrentCell(str.mid(1).toInt() - 1,
+                                    str[0].unicode() - 'A');
+    }
+    delete dialog;
+}
+</pre></div><br>
+<p class="docText">Creating modal dialogs (and context menus in <tt>QWidget::contextMenuEvent()</tt> reimplementations) on the stack is a common programming pattern since we usually don't need the dialog (or menu) after we have used it, and it will automatically be destroyed at the end of the enclosing scope.</p>
+<p class="docText">We will now turn to the Sort dialog. The Sort dialog is a modal dialog that allows the user to sort the currently selected area by the columns they specify. <a class="docLink" href="#ch03fig14">Figure 3.14</a> shows an example of sorting, with column B as the primary sort key and column A as the secondary sort key (both ascending).</p>
+<a name="ch03fig14"></a><P><center>
+
+<H5 class="docFigureTitle">Figure 3.14. Sorting the spreadsheet's selected area</H5>
+<p class="docText"><div class="v1"><a target="_self" href="images/spreadsheet_sort1_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="192" SRC="images/spreadsheet_sort1.jpg"></p>
+</center></p><br>
+
+<div class="docText"><pre>
+void MainWindow::sort()
+{
+    SortDialog dialog(this);
+    QTableWidgetSelectionRange range = spreadsheet-&gt;selectedRange();
+    dialog.setColumnRange('A' + range.leftColumn(),
+                          'A' + range.rightColumn());
+    if (dialog.exec()) {
+        SpreadsheetCompare compare;
+        compare.keys[0] =
+              dialog.primaryColumnCombo-&gt;currentIndex();
+        compare.keys[1] =
+              dialog.secondaryColumnCombo-&gt;currentIndex() - 1;
+        compare.keys[2] =
+              dialog.tertiaryColumnCombo-&gt;currentIndex() - 1;
+        compare.ascending[0] =
+              (dialog.primaryOrderCombo-&gt;currentIndex() == 0);
+        compare.ascending[1] =
+              (dialog.secondaryOrderCombo-&gt;currentIndex() == 0);
+        compare.ascending[2] =
+              (dialog.tertiaryOrderCombo-&gt;currentIndex() == 0);
+        spreadsheet-&gt;sort(compare);
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1773"></a><a name="iddle3079"></a><a name="iddle3248"></a><a name="iddle4131"></a><a name="iddle5221"></a><a name="iddle5869"></a><a name="iddle6032"></a><a name="iddle6387"></a><a name="iddle6388"></a><a name="iddle6393"></a><a name="iddle6397"></a><a name="iddle6479"></a>The code in <tt>sort()</tt> follows a similar pattern to that used for <tt>goToCell()</tt>:</p>
+<ul><li><p class="docList">We create the dialog on the stack and initialize it.</p></li><li><p class="docList">We pop up the dialog using <tt>exec()</tt>.</p></li><li><p class="docList">If the user clicks OK, we extract the values entered by the user from the dialog's widgets and make use of them.</p></LI></UL>
+<p class="docText">The <tt>setColumnRange()</tt> call sets the columns available for sorting to the columns that are selected. For example, using the selection shown in <a class="docLink" href="#ch03fig14">Figure 3.14</a>, <tt>range.leftColumn()</tt> would yield 0, giving 'A' + 0 = 'A', and <tt>range.rightColumn()</tt> would yield 2, giving 'A' + 2 = 'C'.</P>
+<p class="docText"><a name="iddle1939"></a><a name="iddle6394"></a>The <tt>compare</tt> object stores the primary, secondary, and tertiary sort keys and their sort orders. (We will see the definition of the <tt>SpreadsheetCompare</tt> class in the next chapter.) The object is used by <tt>Spreadsheet::sort()</tt> to compare two rows. The <tt>keys</tt> array stores the column numbers of the keys. For example, if the selection extends from C2 to E5, column C has position 0. The <tt>ascending</tt> array stores the order associated with each key as a <tt>bool</tt>. <tt>QComboBox::current-Index()</tt> returns the index of the currently selected item, starting at 0. For the secondary and tertiary keys, we subtract one from the current item to account for the &quot;None&quot; item.</P>
+<p class="docText">The <tt>sort()</tt> function does the job, but it is a bit fragile. It assumes that the Sort dialog is implemented in a particular way, with comboboxes and &quot;None&quot; items. This means that if we redesign the Sort dialog, we may also need to rewrite this code. While this approach is adequate for a dialog that is only called from one place, it opens the door to maintenance nightmares if the dialog is used in several places.</P>
+<p class="docText">A more robust approach is to make the <tt>SortDialog</tt> class smarter by having it create a <tt>SpreadsheetCompare</tt> object itself, which can then be accessed by its caller. This simplifies <tt>MainWindow::sort()</tt> significantly:</p>
+<div class="docText"><pre>
+void MainWindow::sort()
+{
+    SortDialog dialog(this);
+    QTableWidgetSelectionRange range = spreadsheet-&gt;selectedRange();
+    dialog.setColumnRange('A' + range.leftColumn(),
+                          'A' + range.rightColumn());
+    if (dialog.exec())
+        spreadsheet-&gt;performSort(dialog.comparisonObject());
+}
+</pre></div><br>
+<p class="docText">This approach leads to loosely coupled components and is almost always the right choice for dialogs that will be called from more than one place.</p>
+<p class="docText">A more radical approach would be to pass a pointer to the <tt>Spreadsheet</tt> object when initializing the <tt>SortDialog</tt> object and to allow the dialog to operate directly on the <tt>Spreadsheet</tt>. This makes the <tt>SortDialog</tt> much less general, since it will only work on a certain type of widget, but it simplifies the code even further by eliminating the <tt>SortDialog::setColumnRange()</tt> function. The <tt>MainWindow::sort()</tt> function then becomes</p>
+<div class="docText"><pre>
+void MainWindow::sort()
+{
+    SortDialog dialog(this);
+    dialog.setSpreadsheet(spreadsheet);
+    dialog.exec();
+}
+</pre></div><br>
+<p class="docText">This approach mirrors the first: Instead of the caller needing intimate knowledge of the dialog, the dialog needs intimate knowledge of the data structures supplied by the caller. This approach may be useful where the dialog needs <a name="iddle1041"></a><a name="iddle1042"></a><a name="iddle1043"></a><a name="iddle2753"></a><a name="iddle2803"></a><a name="iddle3214"></a><a name="iddle4529"></a><a name="iddle4532"></a>to apply changes live. But just as the caller code is fragile using the first approach, this third approach breaks if the data structures change.</p>
+<p class="docText">Some developers choose just one approach to using dialogs and stick with that. This has the benefit of familiarity and simplicity since all their dialog usages follow the same pattern, but it also misses the benefits of the approaches that are not used. Ideally, the approach to use should be decided on a per-dialog basis.</p>
+<p class="docText">We will round off this section with the About box. We could create a custom dialog like we did for the Find or Go-to-Cell dialogs to present the information about the application, but since most About boxes are highly stylized, Qt provides a simpler solution.</p>
+<div class="docText"><pre>
+void MainWindow::about()
+{
+    QMessageBox::about(this, tr("About Spreadsheet"),
+            tr("&lt;h2&gt;Spreadsheet 1.1&lt;/h2&gt;"
+               "&lt;p&gt;Copyright &amp;copy; 2006 Software Inc."
+               "&lt;p&gt;Spreadsheet is a small application that "
+               "demonstrates QAction, QMainWindow, QMenuBar, "
+               "QStatusBar, QTableWidget, QToolBar, and many other "
+               "Qt classes."));
+}
+</pre></div><br>
+<p class="docText">The About box is obtained by calling <tt>QMessageBox::about()</tt>, a static convenience function. The function is very similar to <tt>QMessageBox::warning()</tt>, except that it uses the parent window's icon instead of the standard &quot;warning&quot; icon.</p>
+<a name="ch03fig15"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 3.15. About Spreadsheet</H5>
+
+<p class="docText">
+<img border="0" alt="" width="437" height="240" SRC="images/about.jpg"></p>
+
+</center></p><BR>
+<p class="docText">So far we have used several convenience static functions from both <tt>QMessageBox</tt> and <tt>QFileDialog</tt>. These functions create a dialog, initialize it, and call <tt>exec()</tt> on it. It is also possible, although less convenient, to create a <tt>QMessageBox</tt> or a <tt>QFileDialog</tt> widget like any other widget and explicitly call <tt>exec()</tt>, or even <tt>show()</tt>, on it.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch03lev1sec6.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

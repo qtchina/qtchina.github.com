@@ -1,0 +1,153 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Sending and Receiving UDP Datagrams</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch14lev1sec4"></a>
+<h3 id="title-IDAQ5ZDY" class="docSection1Title">Sending and Receiving UDP Datagrams</h3>
+<p class="docText">The <tt>QUdpSocket</tt> class can be used to send and receive UDP datagrams. UDP is an unreliable, datagram-oriented protocol. Some application-level protocols use UDP because it is more lightweight than TCP. With UDP, data is sent as packets (datagrams) from one host to another. There is no concept of connection, and if a UDP packet doesn't get delivered successfully, no error is reported to the sender.</p>
+<a name="ch14fig03"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 14.3. The Weather Station application</h5>
+
+<p class="docText">
+<img border="0" alt="" id="195131084204" width="208" height="180" SRC="images/weatherstation.jpg"></p>
+
+</center></p><br>
+<p class="docText">We will see how to use UDP from a Qt application through the Weather Balloon and Weather Station example. The Weather Balloon application mimics a weather balloon that sends a UDP datagram (presumably using a wireless connection) containing the current atmospheric conditions every 2 seconds. The Weather Station application receives these datagrams and displays them on screen. We will start by reviewing the code for the Weather Balloon.</p>
+<div class="docText"><pre>
+class WeatherBalloon : public QPushButton
+{
+    Q_OBJECT
+public:
+    WeatherBalloon(QWidget *parent = 0);
+    double temperature() const;
+    double humidity() const;
+    double altitude() const;
+private slots:
+    void sendDatagram();
+private:
+    QUdpSocket udpSocket;
+    QTimer timer;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle5353"></a><a name="iddle5356"></a><a name="iddle5408"></a><a name="iddle5984"></a><a name="iddle6518"></a><a name="iddle6822"></a><a name="iddle7315"></a>The <tt>WeatherBalloon</tt> class inherits from <tt>QPushButton</tt>. It uses its <tt>QUdpSocket</tt> private variable for communicating with the Weather Station.</p>
+<div class="docText"><pre>
+WeatherBalloon::WeatherBalloon(QWidget *parent)
+    : QPushButton(tr("Quit"), parent)
+{
+    connect(this, SIGNAL(clicked()), this, SLOT(close()));
+    connect(&amp;timer, SIGNAL(timeout()), this, SLOT(sendDatagram()));
+    timer.start(2 * 1000);
+    setWindowTitle(tr("Weather Balloon"));
+}
+</pre></div><BR>
+<p class="docText">In the constructor, we start a <tt>QTimer</tt> to invoke <tt>sendDatagram()</tt> every 2 seconds.</p>
+<div class="docText"><pre>
+void WeatherBalloon::sendDatagram()
+{
+    QByteArray datagram;
+    QDataStream out(&amp;datagram, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_1);
+    out &lt;&lt; QDateTime::currentDateTime() &lt;&lt; temperature() &lt;&lt; humidity()
+        &lt;&lt; altitude();
+    udpSocket.writeDatagram(datagram, QHostAddress::LocalHost, 5824);
+}
+</pre></div><br>
+<p class="docText">In <tt>sendDatagram()</tt>, we generate and send a datagram containing the current date, time, temperature, humidity, and altitude:</p>
+<P><table cellspacing="0" class="allBorders" border="1" RULES="all" cellpadding="4"><colgroup align="left" span="2"><col width="50"><col width="150"></colgroup><thead></thead><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>QDateTime</tt></P></td><TD class="docTableCell" align="left" valign="top"><p class="docText">Date and time of measurement</p></td></TR><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>double</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Temperature (in &#176;C)</P></td></tr><TR><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>double</tt></p></td><td class="docTableCell" align="left" valign="top"><p class="docText">Humidity (in %)</p></TD></tr><tr><TD class="docTableCell" align="left" valign="top"><p class="docText"><tt>double</tt></p></TD><td class="docTableCell" align="left" valign="top"><p class="docText">Altitude (in meters)</p></td></tr></table></p><br>
+<p class="docText">The datagram is sent using <tt>QUdpSocket::writeDatagram()</tt>. The second and third arguments to <tt>writeDatagram()</tt> are the IP address and the port number of the peer (the Weather Station). For this example, we assume that the Weather Station is running on the same machine as the Weather Balloon, so we use <a name="iddle1972"></a><a name="iddle2337"></a><a name="iddle2509"></a><a name="iddle2694"></a><a name="iddle2869"></a><a name="iddle2908"></a><a name="iddle3136"></a><a name="iddle3156"></a><a name="iddle4369"></a><a name="iddle7194"></a><a name="iddle7195"></a><a name="iddle7196"></a><a name="iddle7199"></a>an IP address of 127.0.0.1 (<tt>QHostAddress::LocalHost</tt>), a special address that designates the local host.</p>
+<p class="docText">Unlike the <tt>QAbstractSocket</tt> subclasses, <tt>QUdpSocket</tt> does not accept host names, only host addresses. If we wanted to resolve a host name to its IP address here, we have two choices: If we are prepared to block while the lookup takes place, we can use the static <tt>QHostInfo::fromName()</tt> function. Otherwise, we can use the static <tt>QHostInfo::lookupHost()</tt> function, which returns immediately and calls the slot it is passed with a <tt>QHostInfo</tt> object containing the corresponding addresses when the lookup is complete.</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    WeatherBalloon balloon;
+    balloon.show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText">The <tt>main()</tt> function simply creates a <tt>WeatherBalloon</tt> object, which serves both as a UDP peer and as a <tt>QPushButton</tt> on screen. By clicking the <tt>QPushButton</tt>, the user can quit the application.</p>
+<p class="docText">Now let's review the source code for the Weather Station client.</p>
+<div class="docText"><pre>
+class WeatherStation : public QDialog
+{
+    Q_OBJECT
+public:
+    WeatherStation(QWidget *parent = 0);
+private slots:
+    void processPendingDatagrams();
+private:
+    QUdpSocket udpSocket;
+    QLabel *dateLabel;
+    QLabel *timeLabel;
+    ...
+    QLineEdit *altitudeLineEdit;
+};
+</pre></div><br>
+<p class="docText">The <tt>WeatherStation</tt> class inherits from <tt>QDialog</tt>. It listens to a particular UDP port, parses any incoming datagrams (from the Weather Balloon), and displays their contents in five read-only <tt>QLineEdit</tt>s. The only private variable of interest here is <tt>udpSocket</tt> of type <tt>QUdpSocket</tt>, which we will use to receive datagrams.</p>
+<div class="docText"><pre>
+WeatherStation::WeatherStation(QWidget *parent)
+    : QDialog(parent)
+{
+    udpSocket.bind(5824);
+    connect(&amp;udpSocket, SIGNAL(readyRead()),
+            this, SLOT(processPendingDatagrams()));
+    ...
+}
+</pre></div><br>
+<p class="docText"><a name="iddle3700"></a><a name="iddle3864"></a><a name="iddle5405"></a><a name="iddle5406"></a><a name="iddle5407"></a><a name="iddle5693"></a><a name="iddle5724"></a><a name="iddle7197"></a>In the constructor, we start by binding the <tt>QUdpSocket</tt> to the port that the weather balloon is transmitting to. Since we have not specified a host address, the socket will accept datagrams sent to any IP address that belongs to the machine the Weather Station is running on. Then, we connect the socket's <tt>readyRead()</tt> signal to the private <tt>processPendingDatagrams()</tt> that extracts and displays the data.</p>
+<div class="docText"><pre>
+void WeatherStation::processPendingDatagrams()
+{
+    QByteArray datagram;
+    do {
+        datagram.resize(udpSocket.pendingDatagramSize());
+        udpSocket.readDatagram(datagram.data(), datagram.size());
+    } while (udpSocket.hasPendingDatagrams());
+    QDateTime dateTime;
+    double temperature;
+    double humidity;
+    double altitude;
+    QDataStream in(&amp;datagram, QIODevice::ReadOnly);
+    in.setVersion(QDataStream::Qt_4_1);
+    in &gt;&gt; dateTime &gt;&gt; temperature &gt;&gt; humidity &gt;&gt; altitude;
+    dateLineEdit-&gt;setText(dateTime.date().toString());
+    timeLineEdit-&gt;setText(dateTime.time().toString());
+    temperatureLineEdit-&gt;setText(tr("%1 &#176; C").arg(temperature));
+    humidityLineEdit-&gt;setText(tr("%1%").arg(humidity));
+    altitudeLineEdit-&gt;setText(tr("%1 m").arg(altitude));
+}
+</pre></div><BR>
+<p class="docText">The <tt>processPendingDatagrams()</tt> slot is called when a datagram has arrived. <tt>QUdpSocket</tt> queues the incoming datagrams and lets us access them one at a time. Normally, there should be only one datagram, but we can't exclude the possibility that the sender would send a few datagrams in a row before the <tt>readyRead()</tt> signal is emitted. In that case, we can ignore all the datagrams except the last one, since the earlier ones contain obsolete atmospheric conditions.</p>
+<p class="docText">The <tt>pendingDatagramSize()</tt> function returns the size of the first pending datagram. From the application's point of view, datagrams are always sent and received as a single unit of data. This means that if any bytes are available, an entire datagram can be read. The <tt>readDatagram()</tt> call copies the contents of the first pending datagram into the specified <tt>char *</tt> buffer (truncating data if the buffer is too small) and advances to the next pending datagram. Once we have read all the datagrams, we decompose the last one (the one with the most recent atmospheric measurements) into its parts and populate the <tt>QLineEdit</tt>s with the new data.</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    WeatherStation station;
+    station.show();
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1286"></a><a name="iddle5404"></a><a name="iddle5409"></a><a name="iddle7316"></a>Finally, in <tt>main()</tt>, we create and show the <tt>WeatherStation</tt>.</P>
+<p class="docText">We have now finished our UDP sender and receiver. The applications are as simple as possible, with the Weather Balloon sending datagrams and the Weather Station receiving them. In most real-world applications, both applications would need to both read and write on their socket. The <tt>QUdpSocket::writeDatagram()</tt> functions can be passed a host address and port number, so the <tt>QUdpSocket</tt> can read from the host and port it is bound to with <tt>bind()</tt>, and write to some other host and port.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

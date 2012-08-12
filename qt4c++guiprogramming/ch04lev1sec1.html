@@ -1,0 +1,30 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>The Central Widget</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a name="ch04lev1sec1"></a>
+<h3 id="title-IDA4R5CW" class="docSection1Title">The Central Widget</h3>
+<p class="docText">The central area of a <tt>QMainWindow</tt> can be occupied by any kind of widget. Here's an overview of the possibilities:</p>
+<div style="font-weight:bold"><ol class="docList" type="1"><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">Use a standard Qt widget.</span> </p><p class="docList">A standard widget like <tt>QTableWidget</tt> or <tt>QTextEdit</tt> can be used as a central widget. In this case, the application's functionality, such as loading and saving files, must be implemented elsewhere (for example, in a <tt>QMainWindow</tt> subclass).</p></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">Use a custom widget.</span> </p><p class="docList">Specialized applications often need to show data in a custom widget. For example, an icon editor program would have an <tt>IconEditor</tt> widget as its central widget. <a class="docLink" href="ch05.html#ch05">Chapter 5</a> explains how to write custom widgets in Qt.</p></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">Use a plain QWidget with a layout manager.</span> </p><p class="docList">Sometimes the application's central area is occupied by many widgets. This can be done by using a <tt>QWidget</tt> as the parent of all the other widgets, and using layout managers to size and position the child widgets.</P></div></LI><LI><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">Use a splitter.</span> </P><p class="docList"><a name="iddle1374"></a><a name="iddle3283"></a><a name="iddle3437"></a><a name="iddle4889"></a><a name="iddle5177"></a><a name="iddle5624"></a><a name="iddle6439"></a><a name="iddle6443"></a><a name="iddle6687"></a>Another way of using multiple widgets together is to use a <tt>QSplitter</tt>. The <tt>QSplitter</tt> arranges its child widgets horizontally or vertically, with splitter handles to give some sizing control to the user. Splitters can contain all kinds of widgets, including other splitters.</P></div></li><li><div style="font-weight:normal"><p class="docText"><span class="docEmphStrong">Use an MDI workspace.</span> </p><p class="docList">If the application uses MDI, the central area is occupied by a <tt>QWorkspace</tt> widget, and each of the MDI windows is a child of that widget.</p></div></li></ol></div>
+<p class="docText">Layouts, splitters, and MDI workspaces can be combined with standard Qt widgets or with custom widgets. <a class="docLink" href="ch06.html#ch06">Chapter 6</a> covers these classes in depth.</p>
+<p class="docText">For the Spreadsheet application, a <tt>QTableWidget</tt> subclass is used as the central widget. The <tt>QTableWidget</tt> class already provides most of the spreadsheet capability we need, but it doesn't support clipboard operations and doesn't understand spreadsheet formulas like &quot;=A1+A2+A3&quot;. We will implement this missing functionality in the <tt>Spreadsheet</tt> class.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch04lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

@@ -1,0 +1,47 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Chapter 19.&nbsp; Creating Plugins</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch19"></a>
+
+<h2 id="title-IDA0XQGW" class="docChapterTitle">Chapter 19. Creating Plugins</h2>
+
+
+
+<p class="docText">
+<img border="0" alt="" width="169" height="121" SRC="images/399fig1.jpg"></p>
+
+
+<ul><li><p class="docList"><a name="iddle1970"></a><a name="iddle2087"></a><a name="iddle2817"></a><a name="iddle3085"></a><a name="iddle3087"></a><a name="iddle3838"></a><a name="iddle3855"></a><a name="iddle4451"></a><a name="iddle6264"></a><span class="docEmphasis"><a class="docLink" href="ch19lev1sec1.html#ch19lev1sec1">Extending Qt with Plugins</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch19lev1sec2.html#ch19lev1sec2">Making Applications Plugin-Aware</a></span></p></li><li><p class="docList"><span class="docEmphasis"><a class="docLink" href="ch19lev1sec3.html#ch19lev1sec3">Writing Application Plugins</a></span></p></LI></ul>
+<p class="docText">Dynamic libraries (also called shared libraries or DLLs) are independent modules that are stored in a separate file on disk and can be accessed by multiple applications. Programs usually specify which dynamic libraries they need at link time, in which case the libraries are automatically loaded when the application starts. This approach usually involves adding the library and possibly its include path to the application's <tt>.pro</tt> file and including the relevant headers in the source files. For example:</p>
+<div class="docText"><pre>
+LIBS         += -ldb_cxx
+INCLUDEPATH  += /usr/local/BerkeleyDB.4.2/include
+</pre></div><br>
+<p class="docText">The alternative is to dynamically load the library when it is required, and then resolve the symbols that we want to use from it. Qt provides the <tt>QLibrary</tt> class to achieve this in a platform-independent manner. Given the stem of a library's name, <tt>QLibrary</tt> searches the platform's standard locations for the library looking for an appropriate file. For example, given the name <tt>mimetype</tt>, it will look for <tt>mimetype.dll</tt> on Windows, <tt>mimetype.so</tt> on Linux, and <tt>mimetype.dylib</tt> on Mac OS X.</P>
+<p class="docText">Modern GUI applications can often be extended by the use of plugins. A plugin is a dynamic library that implements a particular interface to provide optional extra functionality. For example, in <a class="docLink" href="ch05.html#ch05">Chapter 5</a>, we created a plugin to integrate a custom widget with <span class="docEmphasis">Qt Designer</span> (p. 113).</p>
+<p class="docText">Qt recognizes its own set of plugin interfaces for various domains, including image formats, database drivers, widget styles, text encodings, and accessibility. This chapter's first section explains how to extend Qt with a Qt plugin.</P>
+<p class="docText">It is also possible to create application-specific plugins for particular Qt applications. Qt makes writing such plugins easy through its plugin framework, which adds crash safety and convenience to <tt>QLibrary</tt>. In the last two sections of this chapter, we show how to make an application support plugins and how to create a custom plugin for an application.</P>
+
+
+
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch18lev1sec4.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch19lev1sec1.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

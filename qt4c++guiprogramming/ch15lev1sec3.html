@@ -1,0 +1,78 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Writing XML</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch15lev1sec3"></a>
+<h3 id="title-IDAMJANG" class="docSection1Title">Writing XML</h3>
+<p class="docText">There are basically two approaches for generating XML files from Qt applications:</p>
+<ul><li><p class="docList">We can build a DOM tree and call <tt>save()</tt> on it.</p></li><li><p class="docList">We can generate XML by hand.</p></li></ul>
+<p class="docText">The choice between these approaches is often independent of whether we use SAX or DOM for reading XML documents.</p>
+<p class="docText">Here's a code snippet that illustrates how we can create a DOM tree and write it using a <tt>QTextStream</tt>:</P>
+<div class="docText"><pre>
+const int Indent = 4;
+QDomDocument doc;
+QDomElement root = doc.createElement("doc");
+QDomElement quote = doc.createElement("quote");
+QDomElement translation = doc.createElement("translation");
+QDomText latin = doc.createTextNode("Ars longa vita brevis");
+QDomText english = doc.createTextNode("Art is long, life is short");
+doc.appendChild(root);
+root.appendChild(quote);
+root.appendChild(translation);
+quote.appendChild(latin);
+translation.appendChild(english);
+QTextStream out(&amp;file);
+doc.save(out, Indent);
+</pre></div><br>
+<p class="docText"><a name="iddle1164"></a><a name="iddle1408"></a><a name="iddle1507"></a><a name="iddle2134"></a><a name="iddle2192"></a><a name="iddle4233"></a><a name="iddle5078"></a><a name="iddle5165"></a><a name="iddle6760"></a><a name="iddle7076"></a>The second argument to <tt>save()</tt> is the indentation size to use. A non-zero value makes the file easier for humans to read. Here's the XML file output:</p>
+<div class="docText"><pre>
+&lt;doc&gt;
+    &lt;quote&gt;Ars longa vita brevis&lt;/quote&gt;
+    &lt;translation&gt;Art is long, life is short&lt;/translation&gt;
+&lt;/doc&gt;
+</pre></div><br>
+<p class="docText">Another scenario occurs in applications that use the DOM tree as their primary data structure. These applications would normally read in XML documents using DOM, then modify the DOM tree in memory, and finally call <tt>save()</tt> to convert the tree back to XML.</P>
+<p class="docText">By default, <tt>QDomDocument::save()</tt> uses UTF-8 as the encoding for the generated file. We can use another encoding by prepending an XML declaration such as</p>
+<div class="docText"><pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+</pre></div><BR>
+<p class="docText">to the DOM tree. The following code snippet shows how to do this:</P>
+<div class="docText"><pre>
+QTextStream out(&amp;file);
+QDomNode xmlNode = doc.createProcessingInstruction("xml",
+                           "version=\"1.0\" encoding=\"ISO-8859-1\"");
+doc.insertBefore(xmlNode, doc.firstChild());
+doc.save(out, Indent);
+</pre></div><br>
+<p class="docText">Generating XML files by hand isn't much harder than using DOM. We can use <tt>QTextStream</tt> and write the strings as we would do with any other text file. The most tricky part is to escape special characters in text and attribute values. The <tt>Qt::escape()</tt> function escapes the characters '&lt;', '&gt;', and '&amp;'. Here's some code that makes use of it:</P>
+<div class="docText"><pre>
+QTextStream out(&amp;file);
+out.setCodec("UTF-8");
+out &lt;&lt; "&lt;doc&gt;\n"
+    &lt;&lt; "       &lt;quote&gt;" &lt;&lt; Qt::escape(quoteText) &lt;&lt; "&lt;/quote&gt;\n"
+    &lt;&lt; "  
+    &lt;&lt;"        &lt;translation&gt;" &lt;&lt; Qt::escape(translationText)
+    &lt;&lt; "&lt;/translation&gt;\n"
+    &lt;&lt; "&lt;/doc&gt;\n";
+</pre></div><br>
+<p class="docText">The <span class="docEmphasis">Qt Quarterly</span> article &quot;Generating XML&quot;, available online at <tt><a class="docLink" target="_blank" href="http://doc.trolltech.com/qq/qq05-generating-xml.html">http://doc.trolltech.com/qq/qq05-generating-xml.html</a></tt>, presents a very simple class that makes it easy to generate XML files. The class takes care of the details such as special characters, indentation, and encoding issues, leaving us free to concentrate on the XML we want to generate. The class was designed to work with Qt 3 but it is trivial to port to Qt 4.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch15lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

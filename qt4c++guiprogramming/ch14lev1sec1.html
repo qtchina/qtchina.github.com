@@ -1,0 +1,346 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Writing FTP Clients</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch14lev1sec1"></a>
+<h3 id="title-IDAS2W51" class="docSection1Title">Writing FTP Clients</h3>
+<p class="docText">The <tt>QFtp</tt> class implements the client side of the FTP protocol in Qt. It offers various functions to perform the most common FTP operations and lets us execute arbitrary FTP commands.</p>
+<p class="docText">The <tt>QFtp</tt> class works asynchronously. When we call a function like <tt>get()</tt> or <tt>put()</tt>, it returns immediately and the data transfer occurs when control passes back to Qt's event loop. This ensures that the user interface remains responsive while FTP commands are executed.</p>
+<p class="docText">We will start with an example that shows how to retrieve a single file using <tt>get()</tt>. The example is a console application called <tt>ftpget</tt> that downloads the remote file specified on the command line. Let's begin with the <tt>main()</tt> function:</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    QStringList args = app.arguments();
+    if (args.count() != 2) {
+        cerr &lt;&lt; "Usage: ftpget url" &lt;&lt; endl
+             &lt;&lt; "Example:" &lt;&lt; endl
+             &lt;&lt; "    ftpget ftp://ftp.trolltech.com/mirrors" &lt;&lt; endl;
+        return 1;
+    }
+    FtpGet getter;
+    if (!getter.getFile(QUrl(args[1])))
+        return 1;
+    QObject::connect(&amp;getter, SIGNAL(done()), &amp;app, SLOT(quit()));
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1188"></a><a name="iddle1989"></a><a name="iddle2516"></a><a name="iddle2517"></a><a name="iddle2518"></a><a name="iddle2519"></a><a name="iddle4016"></a><a name="iddle4137"></a><a name="iddle4139"></a><a name="iddle5324"></a><a name="iddle5427"></a><a name="iddle7014"></a><a name="iddle7059"></a>We create a <tt>QCoreApplication</tt> rather than its subclass <tt>QApplication</tt> to avoid linking in the <span class="docEmphasis">QtGui</span> library. The <tt>QCoreApplication::arguments()</tt> function returns the command-line arguments as a <tt>QStringList</tt>, with the first item being the name the program was invoked as, and any Qt-specific arguments such as <tt>-style</tt> removed. The heart of the <tt>main()</tt> function is the construction of the <tt>FtpGet</tt> object and the <tt>getFile()</tt> call. If the call succeeds, we let the event loop run until the download finishes.</p>
+<p class="docText">All the work is done by the <tt>FtpGet</tt> subclass, which is defined as follows:</p>
+<div class="docText"><pre>
+class FtpGet : public QObject
+{
+    Q_OBJECT
+public:
+    FtpGet(QObject *parent = 0);
+    bool getFile(const QUrl &amp;url);
+signals:
+    void done();
+private slots:
+    void ftpDone(bool error);
+private:
+    QFtp ftp;
+    QFile file;
+};
+</pre></div><br>
+<p class="docText">The class has a public function, <tt>getFile()</tt>, that retrieves the file specified by a URL. The <tt>QUrl</tt> class provides a high-level interface for extracting the different parts of a URL, such as the file name, path, protocol, and port.</p>
+<p class="docText"><tt>FtpGet</tt> has a private slot, <tt>ftpDone()</tt>, that is called when the file transfer is completed, and a <tt>done()</tt> signal that it emits when the file has been downloaded. The class also has two private variables: The <tt>ftp</tt> variable, of type <tt>QFtp</tt>, encapsulates the connection to an FTP server, and the <tt>file</tt> variable that is used for writing the downloaded file to disk.</p>
+<div class="docText"><pre>
+FtpGet::FtpGet(QObject *parent)
+    : QObject(parent)
+{
+    connect(&amp;ftp, SIGNAL(done(bool)), this, SLOT(ftpDone(bool)));
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1480"></a><a name="iddle1481"></a><a name="iddle1588"></a><a name="iddle1993"></a><a name="iddle2523"></a><a name="iddle2550"></a><a name="iddle2559"></a><a name="iddle2560"></a><a name="iddle3149"></a><a name="iddle3781"></a><a name="iddle4307"></a><a name="iddle4311"></a><a name="iddle4314"></a><a name="iddle4318"></a><a name="iddle4325"></a><a name="iddle5428"></a>In the constructor, we connect the <tt>QFtp::done(bool)</tt> signal to our <tt>ftpDone(bool)</tt> private slot. <tt>QFtp</tt> emits <tt>done(bool)</tt> when it has finished processing all requests. The <tt>bool</tt> parameter indicates whether an error occurred or not.</P>
+<div class="docText"><pre>
+bool FtpGet::getFile(const QUrl &amp;url)
+{
+    if (!url.isValid()) {
+        cerr &lt;&lt; "Error: Invalid URL" &lt;&lt; endl;
+        return false;
+    }
+    if (url.scheme() != "ftp") {
+        cerr &lt;&lt; "Error: URL must start with 'ftp:'" &lt;&lt; endl;
+        return false;
+    }
+    if (url.path().isEmpty()) {
+        cerr &lt;&lt; "Error: URL has no path" &lt;&lt; endl;
+        return false;
+    }
+    QString localFileName = QFileInfo(url.path()).fileName();
+    if (localFileName.isEmpty())
+        localFileName = "ftpget.out";
+    file.setFileName(localFileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        cerr &lt;&lt; "Error: Cannot open " &lt;&lt; qPrintable(file.fileName())
+             &lt;&lt; " for writing: " &lt;&lt; qPrintable(file.errorString())
+             &lt;&lt; endl;
+        return false;
+    }
+    ftp.connectToHost(url.host(), url.port(21));
+    ftp.login();
+    ftp.get(url.path(), &amp;file);
+    ftp.close();
+    return true;
+}
+</pre></div><br>
+<p class="docText">The <tt>getFile()</tt> function begins by checking the URL that was passed in. If a problem is encountered, the function prints an error message to <tt>cerr</tt> and returns <tt>false</tt> to indicate that the download failed.</p>
+<p class="docText">Instead of forcing the user to make up a local file name, we try to create a sensible name using the URL itself, with a fallback of <tt>ftpget.out</tt>. If we fail to open the file, we print an error message and return <tt>false</tt>.</p>
+<p class="docText">Next, we execute a sequence of four FTP commands using our <tt>QFtp</tt> object. The <tt>url.port(21)</tt> call returns the port number specified in the URL, or port 21 if none is specified in the URL itself. Since no user name or password are given to <a name="iddle1367"></a><a name="iddle1482"></a><a name="iddle1540"></a><a name="iddle1550"></a><a name="iddle1589"></a><a name="iddle1990"></a><a name="iddle1994"></a><a name="iddle2207"></a><a name="iddle2512"></a><a name="iddle2513"></a><a name="iddle2514"></a><a name="iddle2520"></a><a name="iddle2521"></a><a name="iddle2522"></a><a name="iddle2524"></a><a name="iddle2551"></a><a name="iddle2561"></a><a name="iddle2761"></a><a name="iddle2894"></a><a name="iddle3107"></a><a name="iddle3150"></a><a name="iddle3360"></a><a name="iddle3912"></a><a name="iddle4305"></a><a name="iddle4308"></a><a name="iddle4309"></a><a name="iddle4310"></a><a name="iddle4312"></a><a name="iddle4315"></a><a name="iddle4319"></a><a name="iddle4321"></a><a name="iddle4326"></a><a name="iddle4328"></a><a name="iddle4329"></a><a name="iddle4330"></a><a name="iddle4334"></a><a name="iddle4335"></a><a name="iddle4336"></a><a name="iddle5677"></a><a name="iddle5789"></a><a name="iddle5799"></a><a name="iddle5877"></a><a name="iddle6919"></a><a name="iddle6920"></a>the <tt>login()</tt> function, an anonymous login is attempted. The second argument to <tt>get()</tt> specifies the output I/O device.</P>
+<p class="docText">The FTP commands are queued and executed in Qt's event loop. The completion of all the commands is indicated by <tt>QFtp</tt>'s <tt>done(bool)</tt> signal, which we connected to <tt>ftpDone(bool)</tt> in the constructor.</p>
+<div class="docText"><pre>
+void FtpGet::ftpDone(bool error)
+{
+    if (error) {
+        cerr &lt;&lt; "Error: " &lt;&lt; qPrintable(ftp.errorString()) &lt;&lt; endl;
+    } else {
+        cerr &lt;&lt; "File downloaded as " &lt;&lt; qPrintable(file.fileName())
+             &lt;&lt; endl;
+    }
+    file.close();
+    emit done();
+}
+</pre></div><BR>
+<p class="docText">Once the FTP commands have all been executed, we close the file and emit our own <tt>done()</tt> signal. It may appear strange that we close the file here, rather than after the <tt>ftp.close()</tt> call at the end of the <tt>getFile()</tt> function, but remember that the FTP commands are executed asynchronously and may well be in progress after the <tt>getFile()</tt> function has returned. Only when the <tt>QFtp</tt> object's <tt>done()</tt> signal is emitted do we know that the download is finished and that it is safe to close the file.</P>
+<p class="docText"><tt>QFtp</tt> provides several FTP commands, including <tt>connectToHost()</tt>, <tt>login()</tt>, <tt>close()</tt>, <tt>list()</tt>, <tt>cd()</tt>, <tt>get()</tt>, <tt>put()</tt>, <tt>remove()</tt>, <tt>mkdir()</tt>, <tt>rmdir()</tt>, and <tt>rename()</tt>. All of these functions schedule an FTP command and return an ID number that identifies the command. It is also possible to control the transfer mode (the default is passive) and the transfer type (the default is binary).</p>
+<p class="docText">Arbitrary FTP commands can be executed using <tt>rawCommand()</tt>. For example, here's how to execute a <tt>SITE CHMOD</tt> command:</P>
+<div class="docText"><pre>
+ftp.rawCommand("SITE CHMOD 755 fortune");
+</pre></div><br>
+<p class="docText"><tt>QFtp</tt> emits the <tt>commandStarted(int)</tt> signal when it starts executing a command, and it emits the <tt>commandFinished(int, bool)</tt> signal when the command is finished. The <tt>int</tt> parameter is the ID number that identifies the command. If we are interested in the fate of individual commands, we can store the ID numbers when we schedule the commands. Keeping track of the ID numbers allows us to provide detailed feedback to the user. For example:</p>
+<div class="docText"><pre>
+bool FtpGet::getFile(const QUrl &amp;url)
+{
+    ...
+    connectId = ftp.connectToHost(url.host(), url.port(21));
+    loginId = ftp.login();
+    getId = ftp.get(url.path(), &amp;file);
+    closeId = ftp.close();
+    return true;
+}
+void FtpGet::ftpCommandStarted(int id)
+{
+    if (id == connectId) {
+        cerr &lt;&lt; "Connecting..." &lt;&lt; endl;
+    } else if (id == loginId) {
+        cerr &lt;&lt; "Logging in..." &lt;&lt; endl;
+    ...
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1995"></a><a name="iddle2319"></a><a name="iddle3847"></a><a name="iddle4316"></a><a name="iddle4337"></a><a name="iddle5152"></a><a name="iddle6420"></a><a name="iddle6421"></a><a name="iddle6428"></a><a name="iddle6529"></a>Another way of providing feedback is to connect to <tt>QFtp</tt>'s <tt>stateChanged()</tt> signal, which is emitted whenever the connection enters a new state (<tt>QFtp::Connecting</tt>, <tt>QFtp::Connected</tt>, <tt>QFtp::LoggedIn</tt>, etc.).</P>
+<p class="docText">In most applications, we are only interested in the fate of the sequence of commands as a whole rather than in particular commands. In such cases, we can simply connect to the <tt>done(bool)</tt> signal, which is emitted whenever the command queue becomes empty.</P>
+<p class="docText">When an error occurs, <tt>QFtp</tt> automatically clears the command queue. This means that if the connection or the login fails, the commands that follow in the queue are never executed. If we schedule new commands after the error has occurred using the same <tt>QFtp</tt> object, these commands will be queued and executed.</p>
+<p class="docText">In the application's <tt>.pro</tt> file, we need the following line to link against the <span class="docEmphasis">QtNetwork</span> library:</p>
+<div class="docText"><pre>
+QT        += network
+</pre></div><br>
+<p class="docText">We will now review a more advanced example. The <tt>spider</tt> command-line program downloads all the files located in an FTP directory, recursively downloading from all the directory's subdirectories. The network logic is located in the <tt>Spider</tt> class:</P>
+<div class="docText"><pre>
+class Spider : public QObject
+{
+    Q_OBJECT
+public:
+    Spider(QObject *parent = 0);
+    bool getDirectory(const QUrl &amp;url);
+signals:
+    void done();
+private slots:
+    void ftpDone(bool error);
+    void ftpListInfo(const QUrlInfo &amp;urlInfo);
+private:
+    void processNextDirectory();
+    QFtp ftp;
+    QList&lt;QFile *&gt; openedFiles;
+    QString currentDir;
+    QString currentLocalDir;
+    QStringList pendingDirs;
+};
+</pre></div><br>
+<p class="docText"><a name="iddle1590"></a><a name="iddle2558"></a><a name="iddle3109"></a><a name="iddle3151"></a><a name="iddle3863"></a><a name="iddle4313"></a><a name="iddle4323"></a><a name="iddle4327"></a><a name="iddle5429"></a><a name="iddle6422"></a><a name="iddle6426"></a><a name="iddle6427"></a>The starting directory is specified as a <tt>QUrl</tt> and is set using the <tt>getdirectory()</tt> function.</P>
+<div class="docText"><pre>
+Spider::Spider(QObject *parent)
+    : QObject(parent)
+{
+    connect(&amp;ftp, SIGNAL(done(bool)), this, SLOT(ftpDone(bool)));
+    connect(&amp;ftp, SIGNAL(listInfo(const QUrlInfo &amp;)),
+            this, SLOT(ftpListInfo(const QUrlInfo &amp;)));
+}
+</pre></div><BR>
+<p class="docText">In the constructor, we establish two signalslot connections. The <tt>listInfo(const QUrlInfo &amp;)</tt> signal is emitted by <tt>QFtp</tt> when we request a directory listing (in <tt>getdirectory()</tt>) for each file that it retrieves. This signal is connected to a slot called <tt>ftpListInfo()</tt>, which downloads the file associated with the URL it is given.</p>
+<div class="docText"><pre>
+bool Spider::getDirectory(const QUrl &amp;url)
+{
+    if (!url.isValid()) {
+        cerr &lt;&lt; "Error: Invalid URL" &lt;&lt; endl;
+        return false;
+    }
+    if (url.scheme() != "ftp") {
+        cerr &lt;&lt; "Error: URL must start with 'ftp:'" &lt;&lt; endl;
+        return false;
+    }
+    ftp.connectToHost(url.host(), url.port(21));
+    ftp.login();
+    QString path = url.path();
+    if (path.isEmpty())
+        path = "/";
+    pendingDirs.append(path);
+    processNextDirectory();
+    return true;
+}
+</pre></div><br>
+<p class="docText">When the <tt>getdirectory()</tt> function is called, it begins by doing some sanity checks, and if all is well, attempts to establish an FTP connection. It keeps track of the paths that it must process and calls <tt>processNextDirectory()</tt> to start downloading the root directory.</P>
+<div class="docText"><pre>
+void Spider::processNextDirectory()
+{
+    if (!pendingDirs.isEmpty()) {
+        currentDir = pendingDirs.takeFirst();
+        currentLocalDir = "downloads/" + currentDir;
+        QDir(".").mkpath(currentLocalDir);
+        ftp.cd(currentDir);
+        ftp.list();
+    } else {
+        emit done();
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1368"></a><a name="iddle1944"></a><a name="iddle1997"></a><a name="iddle2515"></a><a name="iddle2525"></a><a name="iddle2552"></a><a name="iddle3108"></a><a name="iddle3110"></a><a name="iddle4271"></a><a name="iddle4306"></a><a name="iddle4320"></a><a name="iddle4322"></a><a name="iddle4324"></a><a name="iddle5430"></a><a name="iddle6423"></a><a name="iddle6424"></a><a name="iddle6425"></a><a name="iddle6665"></a>The <tt>processNextDirectory()</tt> function takes the first remote directory out of the <tt>pendingDirs</tt> list and creates a corresponding directory in the local file system. It then tells the <tt>QFtp</tt> object to change directory into the taken directory and to list its files. For every file that <tt>list()</tt> processes, it emits a <tt>listInfo()</tt> signal that causes the <tt>ftpListInfo()</tt> slot to be called.</p>
+<p class="docText">If there are no more directories to process, the function emits the <tt>done()</tt> signal to indicate that the downloading is complete.</P>
+<div class="docText"><pre>
+void Spider::ftpListInfo(const QUrlInfo &amp;urlInfo)
+{
+    if (urlInfo.isFile()) {
+        if (urlInfo.isReadable()) {
+            QFile *file = new QFile(currentLocalDir + "/"
+                                    + urlInfo.name());
+            if (!file-&gt;open(QIODevice::WriteOnly)) {
+                cerr &lt;&lt; "Warning: Cannot open file "
+                     &lt;&lt; qPrintable(
+                            QDir::convertSeparators(file-&gt;fileName()))
+                     &lt;&lt; endl;
+                return;
+            }
+            ftp.get(urlInfo.name(), file);
+            openedFiles.append(file);
+        }
+    } else if (urlInfo.isDir() &amp;&amp; !urlInfo.isSymLink()) {
+        pendingDirs.append(currentDir + "/" + urlInfo.name());
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>ftpListInfo()</tt> slot's <tt>urlInfo</tt> parameter provides detailed information about a remote file. If the file is a normal file (not a directory) and is readable, we call <tt>get()</tt> to download it. The <tt>QFile</tt> object used for downloading is allocated using <tt>new</tt> and a pointer to it is stored in the <tt>openedFiles</tt> list.</P>
+<p class="docText">If the <tt>QUrlInfo</tt> holds the details of a remote directory that is not a symbolic link, we add this directory to the <tt>pendingDirs</tt> list. We skip symbolic links because they can easily lead to infinite recursion.</p>
+<div class="docText"><pre>
+void Spider::ftpDone(bool error)
+{
+    if (error) {
+        cerr &lt;&lt; "Error: " &lt;&lt; qPrintable(ftp.errorString()) &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "Downloaded " &lt;&lt; qPrintable(currentDir) &lt;&lt; " to "
+             &lt;&lt; qPrintable(QDir::convertSeparators(
+                               QDir(currentLocalDir).canonicalPath()));
+    }
+    qDeleteAll(openedFiles);
+    openedFiles.clear();
+    processNextDirectory();
+}
+</pre></div><br>
+<p class="docText">The <tt>ftpDone()</tt> slot is called when all the FTP commands have finished or if an error occurred. We delete the <tt>QFile</tt> objects to prevent memory leaks and also to close each file. Finally, we call <tt>processNextDirectory()</tt>. If there are any directories left, the whole process begins again with the next directory in the list; otherwise, the downloading stops and <tt>done()</tt> is emitted.</p>
+<p class="docText">If there are no errors, the sequence of FTP commands and signals is as follows:</p>
+<div class="docText"><pre>
+connectToHost(host, port)
+login()
+cd(directory_1)
+list()
+    emit listInfo(file_1_1)
+        get(file_1_1)
+    emit listInfo(file_1_2)
+        get(file_1_2)
+    ...
+emit done()
+...
+cd(directory_N)
+list()
+    emit listInfo(file_N_1)
+        get(file_N_1)
+    emit listInfo(file_N_2)
+        get(file_N_2)
+    ...
+emit done()
+</pre></div><br>
+<p class="docText">If a file is in fact a directory, it is added to the <tt>pendingDirs</tt> list, and when the last file of the current <tt>list()</tt> command has been downloaded, a new <tt>cd()</tt> command is issued, followed by a new <tt>list()</tt> command with the next pending directory, and the whole process begins again with the new directory. This is repeated, with new files being downloaded, and new directories added to the <tt>pendingDirs</tt> list, until every file has been downloaded from every directory, at which point the <tt>pendingDirs</tt> list will finally be empty.</p>
+<p class="docText">If a network error occurs while downloading the fifth of, say, twenty files in a directory, the remaining files will not be downloaded. If we wanted to download as many files as possible, one solution would be to schedule the <tt>GET</tt> operations one at a time and to wait for the <tt>done(bool)</tt> signal before scheduling a new <tt>GET</tt> operation. In <tt>listInfo()</tt>, we would simply append the file name to a <tt>QStringList</tt>, instead of calling <tt>get()</tt> right away, and in <tt>done(bool)</tt> we would call <tt>get()</tt> on the next file to download in the <tt>QStringList</tt>. The sequence of execution would then look like this:</p>
+<div class="docText"><pre>
+connectToHost(host, port)
+login()
+cd(directory_1)
+list()
+...
+cd(directory_N)
+list()
+    emit listInfo(file_1_1)
+    emit listInfo(file_1_2)
+    ...
+    emit listInfo(file_N_1)
+    emit listInfo(file_N_2)
+    ...
+emit done()
+get(file_1_1)
+emit done()
+get(file_1_2)
+emit done()
+...
+get(file_N_1)
+emit done()
+get(file_N_2)
+emit done()
+...
+</pre></div><br>
+<p class="docText">Another solution would be to use one <tt>QFtp</tt> object per file. This would enable us to download the files in parallel, through separate FTP connections.</p>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    QStringList args = app.arguments();
+    if (args.count() != 2) {
+        cerr &lt;&lt; "Usage: spider url" &lt;&lt; endl
+             &lt;&lt; "Example:" &lt;&lt; endl
+             &lt;&lt; "    spider ftp://ftp.trolltech.com/freebies/leafnode"
+             &lt;&lt; endl;
+        return 1;
+    }
+    Spider spider;
+    if (!spider.getDirectory(QUrl(args[1])))
+        return 1;
+    QObject::connect(&amp;spider, SIGNAL(done()), &amp;app, SLOT(quit()));
+    return app.exec();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1215"></a><a name="iddle1996"></a><a name="iddle2208"></a><a name="iddle2299"></a><a name="iddle2562"></a><a name="iddle2710"></a><a name="iddle2712"></a><a name="iddle2713"></a><a name="iddle2714"></a><a name="iddle2716"></a><a name="iddle2871"></a><a name="iddle2895"></a><a name="iddle3589"></a><a name="iddle4098"></a><a name="iddle4331"></a><a name="iddle4332"></a><a name="iddle4333"></a><a name="iddle4370"></a><a name="iddle4372"></a><a name="iddle5683"></a><a name="iddle5685"></a><a name="iddle5686"></a><a name="iddle5715"></a><a name="iddle5716"></a>The <tt>main()</tt> function completes the program. If the user does not specify a URL on the command line, we give an error message and terminate the program.</p>
+<p class="docText">In both FTP examples, the data retrieved using <tt>get()</tt> was written to a <tt>QFile</tt>. This need not be the case. If we wanted the data in memory, we could use a <tt>QBuffer</tt>, the <tt>QIODevice</tt> subclass that wraps a <tt>QByteArray</tt>. For example:</p>
+<div class="docText"><pre>
+QBuffer *buffer = new QBuffer;
+buffer-&gt;open(QIODevice::WriteOnly);
+ftp.get(urlInfo.name(), buffer);
+</pre></div><br>
+<p class="docText">We could also omit the I/O device argument to <tt>get()</tt> or pass a null pointer. The <tt>QFtp</tt> class then emits a <tt>readyRead()</tt> signal every time new data is available, and the data can be read using <tt>read()</tt> or <tt>readAll()</tt>.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch14lev1sec2.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

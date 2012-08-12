@@ -1,0 +1,284 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Subclassing QWidget</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch05lev1sec2"></a>
+<h3 id="title-IDARCDZV" class="docSection1Title">Subclassing QWidget</h3>
+<p class="docText">Many custom widgets are simply a combination of existing widgets, whether they are built-in Qt widgets or other custom widgets such as <tt>HexSpinBox</tt>. Custom widgets that are built by composing existing widgets can usually be developed in <span class="docEmphasis">Qt Designer</span>:</p>
+<ul><li><p class="docList">Create a new form using the &quot;Widget&quot; template.</p></li><li><p class="docList">Add the necessary widgets to the form, and lay them out.</p></li><li><p class="docList">Set up the signals and slots connections.</p></li><LI><p class="docList">If behavior beyond what can be achieved through signals and slots is required, write the necessary code in a class that inherits both <tt>QWidget</tt> and the <tt>uic</tt>-generated class.</P></LI></UL>
+<p class="docText">Naturally, combining existing widgets can also be done entirely in code. Whichever approach is taken, the resulting class inherits directly from <tt>QWidget</tt>.</P>
+<p class="docText">If the widget has no signals and slots of its own and doesn't reimplement any virtual functions, it is even possible to simply assemble the widget by combining existing widgets without a subclass. That's the approach we used in <a class="docLink" href="ch01.html#ch01">Chapter 1</a> to create the Age application, with a <tt>QWidget</tt>, a <tt>QSpinBox</tt>, and a <a name="iddle1312"></a><a name="iddle2300"></a><a name="iddle2722"></a><a name="iddle2723"></a><a name="iddle2736"></a><a name="iddle3935"></a><a name="iddle5469"></a><a name="iddle6647"></a><a name="iddle7214"></a><tt>QSlider</tt>. Even so, we could just as easily have subclassed <tt>QWidget</tt> and created the <tt>QSpinBox</tt> and <tt>QSlider</tt> in the subclass's constructor.</p>
+<p class="docText">When none of Qt's widgets are suitable for the task at hand, and when there's no way to combine or adapt existing widgets to obtain the desired result, we can still create the widget we want. This is achieved by subclassing <tt>QWidget</tt> and reimplementing a few event handlers to paint the widget and to respond to mouse clicks. This approach gives us complete freedom to define and control both the appearance and the behavior of our widget. Qt's built-in widgets, like <tt>QLabel</tt>, <tt>QPushButton</tt>, and <tt>QTableWidget</tt>, are implemented this way. If they didn't exist in Qt, it would still be possible to create them ourselves using the public functions provided by <tt>QWidget</tt> in a completely platform-independent manner.</p>
+<p class="docText">To demonstrate how to write a custom widget using this approach, we will create the <tt>IconEditor</tt> widget shown in <a class="docLink" href="#ch05fig02">Figure 5.2</a>. The <tt>IconEditor</tt> is a widget that could be used in an icon editing program.</p>
+<a name="ch05fig02"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.2. The <tt>IconEditor</tt> widget</h5>
+
+<p class="docText">
+<img border="0" alt="" width="257" height="257" SRC="images/iconeditor.jpg"></p>
+
+</center></p><br>
+<p class="docText">Let's begin by reviewing the header file.</p>
+<div class="docText"><pre>
+#ifndef ICONEDITOR_H
+#define ICONEDITOR_H
+#include &lt;QColor&gt;
+#include &lt;QImage&gt;
+#include &lt;QWidget&gt;
+class IconEditor : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
+    Q_PROPERTY(QImage iconImage READ iconImage WRITE setIconImage)
+    Q_PROPERTY(int zoomFactor READ zoomFactor WRITE setZoomFactor)
+public:
+    IconEditor(QWidget *parent = 0);
+    void setPenColor(const QColor &amp;newColor);
+    QColor penColor() const { return curColor; }
+
+    void setZoomFactor(int newZoom);
+    int zoomFactor() const { return zoom; }
+    void setIconImage(const QImage &amp;newImage);
+    QImage iconImage() const { return image; }
+    QSize sizeHint() const;
+</pre></div><br>
+<p class="docText"><a name="iddle1524"></a><a name="iddle1659"></a><a name="iddle1806"></a><a name="iddle2726"></a><a name="iddle3552"></a><a name="iddle3888"></a><a name="iddle3927"></a><a name="iddle5442"></a><a name="iddle5570"></a><a name="iddle6180"></a><a name="iddle7112"></a><a name="iddle7238"></a>The <tt>IconEditor</tt> class uses the <tt>Q_PROPERTY()</tt> macro to declare three custom properties: <tt>penColor</tt>, <tt>iconImage</tt>, and <tt>zoomFactor</tt>. Each property has a data type, a &quot;read&quot; function, and an optional &quot;write&quot; function. For example, the <tt>penColor</tt> property is of type <tt>QColor</tt> and can be read and written using the <tt>penColor()</tt> and <tt>setPenColor()</tt> functions.</p>
+<p class="docText">When we make use of the widget in <span class="docEmphasis">Qt Designer</span>, custom properties appear in <span class="docEmphasis">Qt Designer</span>'s property editor below the properties inherited from <tt>QWidget</tt>. Properties may be of any type supported by <tt>QVariant</tt>. The <tt>Q_OBJECT</tt> macro is necessary for classes that define properties.</P>
+<div class="docText"><pre>
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event);
+private:
+    void setImagePixel(const QPoint &amp;pos, bool opaque);
+    QRect pixelRect(int i, int j) const;
+    QColor curColor;
+    QImage image;
+    int zoom;
+};
+#endif
+</pre></div><br>
+<p class="docText"><tt>IconEditor</tt> reimplements three protected functions from <tt>QWidget</tt> and has a few private functions and variables. The three private variables hold the values of the three properties.</p>
+<p class="docText">The implementation file begins with the <tt>IconEditor</tt>'s constructor:</P>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include "iconeditor.h"
+IconEditor::IconEditor(QWidget *parent)
+    : QWidget(parent)
+{
+    setAttribute(Qt::WA_StaticContents);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    curColor = Qt::black;
+    zoom = 8;
+    image = QImage(16, 16, QImage::Format_ARGB32);
+    image.fill(qRgba(0, 0, 0, 0));
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1138"></a><a name="iddle1180"></a><a name="iddle1289"></a><a name="iddle1515"></a><a name="iddle1525"></a><a name="iddle2591"></a><a name="iddle2735"></a><a name="iddle2792"></a><a name="iddle2793"></a><a name="iddle2797"></a><a name="iddle3530"></a><a name="iddle3577"></a><a name="iddle4122"></a><a name="iddle4390"></a><a name="iddle4807"></a><a name="iddle4808"></a><a name="iddle4809"></a><a name="iddle5120"></a><a name="iddle5595"></a><a name="iddle5861"></a><a name="iddle5980"></a><a name="iddle6325"></a><a name="iddle6330"></a><a name="iddle6932"></a><a name="iddle7176"></a>The constructor has some subtle aspects such as the <tt>Qt::WA_StaticContents</tt> attribute and the <tt>setSizePolicy()</tt> call. We will discuss them shortly.</p>
+<p class="docText">The pen color is set to black. The zoom factor is set to 8, meaning that each pixel in the icon will be rendered as an 8 x 8 square.</p>
+<p class="docText">The icon data is stored in the <tt>image</tt> member variable and can be accessed through the <tt>setIconImage()</tt> and <tt>iconImage()</tt> functions. An icon editor program would typically call <tt>setIconImage()</tt> when the user opens an icon file and <tt>icon-Image()</tt> to retrieve the icon when the user wants to save it. The <tt>image</tt> variable is of type <tt>QImage</tt>. We initialize it to 16 x 16 pixels and 32-bit ARGB format, a format that supports semi-transparency. We clear the image data by filling it with a transparent color.</p>
+<p class="docText">The <tt>QImage</tt> class stores an image in a hardware-independent fashion. It can be set to use a 1-bit, 8-bit, or 32-bit depth. An image with 32-bit depth uses 8 bits for each of the red, green, and blue components of a pixel. The remaining 8 bits store the pixel's alpha component (opacity). For example, a pure red color's red, green, blue, and alpha components have the values 255, 0, 0, and 255. In Qt, this color can be specified as</p>
+<div class="docText"><pre>
+QRgb red = qRgba(255, 0, 0, 255);
+</pre></div><BR>
+<p class="docText">or, since the color is opaque, as</p>
+<div class="docText"><pre>
+QRgb red = qRgb(255, 0, 0);
+</pre></div><br>
+<p class="docText"><tt>QRgb</tt> is simply a typedef for <tt>unsigned int</tt>, and <tt>qRgb()</tt> and <tt>qRgba()</tt> are inline functions that combine their arguments into one 32-bit integer value. It is also possible to write</p>
+<div class="docText"><pre>
+QRgb red = 0xFFFF0000;
+</pre></div><br>
+<p class="docText">where the first <tt>FF</tt> corresponds to the alpha component and the second <tt>FF</tt> to the red component. In the <tt>IconEditor</tt> constructor, we fill the <tt>QImage</tt> with a transparent color by using 0 as the alpha component.</P>
+<p class="docText">Qt provides two types for storing colors: <tt>QRgb</tt> and <tt>QColor</tt>. While <tt>QRgb</tt> is only a typedef used in <tt>QImage</tt> to store 32-bit pixel data, <tt>QColor</tt> is a class with many useful functions and is widely used in Qt to store colors. In the <tt>IconEditor</tt> widget, we only use <tt>QRgb</tt> when dealing with the <tt>QImage</tt>; we use <tt>QColor</tt> for everything else, including the <tt>penColor</tt> property.</P>
+<div class="docText"><pre>
+QSize IconEditor::sizeHint() const
+{
+    QSize size = zoom * image.size();
+    if (zoom &gt;= 3)
+        size += QSize(1, 1);
+    return size;
+}
+</pre></div><BR>
+<p class="docText">The <tt>sizeHint()</tt> function is reimplemented from <tt>QWidget</tt> and returns the ideal size of a widget. Here, we take the image size multiplied by the zoom factor, <a name="iddle1697"></a><a name="iddle2731"></a><a name="iddle2733"></a><a name="iddle2734"></a><a name="iddle3064"></a><a name="iddle3068"></a><a name="iddle3341"></a><a name="iddle4394"></a><a name="iddle4853"></a><a name="iddle4861"></a><a name="iddle5571"></a><a name="iddle5604"></a><a name="iddle5612"></a><a name="iddle5803"></a><a name="iddle6112"></a><a name="iddle6148"></a><a name="iddle6181"></a><a name="iddle6242"></a><a name="iddle6339"></a><a name="iddle6343"></a><a name="iddle7034"></a><a name="iddle7042"></a><a name="iddle7247"></a><a name="iddle7251"></a>with one extra pixel in each direction to accommodate a grid if the zoom factor is 3 or more. (We don't show a grid if the zoom factor is 2 or 1, because the grid would then hardly leave any room for the icon's pixels.)</p>
+<p class="docText">A widget's size hint is mostly useful in conjunction with layouts. Qt's layout managers try as much as possible to respect a widget's size hint when they lay out a form's child widgets. For <tt>IconEditor</tt> to be a good layout citizen, it must report a credible size hint.</p>
+<p class="docText">In addition to the size hint, widgets have a size policy that tells the layout system whether they like to be stretched and shrunk. By calling <tt>setSizePolicy()</tt> in the constructor with <tt>QSizePolicy::Minimum</tt> as horizontal and vertical policies, we tell any layout manager that is responsible for this widget that the widget's size hint is really its minimum size. In other words, the widget can be stretched if required, but it should never shrink below the size hint. This can be overridden in <span class="docEmphasis">Qt Designer</span> by setting the widget's <tt>sizePolicy</tt> property. The meaning of the various size policies is explained in <a class="docLink" href="ch06.html#ch06">Chapter 6</a> (Layout Management).</p>
+<div class="docText"><pre>
+void IconEditor::setPenColor(const QColor &amp;newColor)
+{
+    curColor = newColor;
+}
+</pre></div><br>
+<p class="docText">The <tt>setPenColor()</tt> function sets the current pen color. The color will be used for newly drawn pixels.</p>
+<div class="docText"><pre>
+void IconEditor::setIconImage(const QImage &amp;newImage)
+{
+    if (newImage != image) {
+        image = newImage.convertToFormat(QImage::Format_ARGB32);
+        update();
+        updateGeometry();
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>setIconImage()</tt> function sets the image to edit. We call <tt>convertToFormat()</tt> to make the image 32-bit with an alpha buffer, if it isn't already. Elsewhere in the code, we will assume that the image data is stored as 32-bit ARGB values.</p>
+<p class="docText">After setting the <tt>image</tt> variable, we call <tt>QWidget::update()</tt> to force a repainting of the widget using the new image. Next, we call <tt>QWidget::updateGeometry()</tt> to tell any layout that contains the widget that the widget's size hint has changed. The layout will then automatically adapt to the new size hint.</p>
+<div class="docText"><pre>
+void IconEditor::setZoomFactor(int newZoom)
+{
+    if (newZoom &lt; 1)
+        newZoom = 1;
+    if (newZoom != zoom) {
+        zoom = newZoom;
+        update();
+        updateGeometry();
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1567"></a><a name="iddle1969"></a><a name="iddle2220"></a><a name="iddle2231"></a><a name="iddle2256"></a><a name="iddle2447"></a><a name="iddle2729"></a><a name="iddle3640"></a><a name="iddle3641"></a><a name="iddle3644"></a><a name="iddle5534"></a><a name="iddle5542"></a><a name="iddle5605"></a><a name="iddle5802"></a><a name="iddle5804"></a><a name="iddle7035"></a>The <tt>setZoomFactor()</tt> function sets the zoom factor for the image. To prevent division by zero elsewhere, we correct any value below 1. Again, we call <tt>update()</tt> and <tt>updateGeometry()</tt> to repaint the widget and to notify any managing layout about the size hint change.</p>
+<p class="docText">The <tt>penColor()</tt>, <tt>iconImage()</tt>, and <tt>zoomFactor()</tt> functions are implemented as inline functions in the header file.</p>
+<p class="docText">We will now review the code for the <tt>paintEvent()</tt> function. This function is <tt>IconEditor</tt>'s most important function. It is called whenever the widget needs repainting. The default implementation in <tt>QWidget</tt> does nothing, leaving the widget blank.</p>
+<p class="docText">Just like <tt>closeEvent()</tt>, which we met in <a class="docLink" href="ch03.html#ch03">Chapter 3</a>, <tt>paintEvent()</tt> is an event handler. Qt has many other event handlers, each of which corresponds to a different type of event. <a class="docLink" href="ch07.html#ch07">Chapter 7</a> covers event processing in depth.</p>
+<p class="docText">There are many situations when a paint event is generated and <tt>paintEvent()</tt> is called:</p>
+<UL><LI><p class="docList">When a widget is shown for the first time, the system automatically generates a paint event to force the widget to paint itself.</P></LI><LI><p class="docList">When a widget is resized, the system generates a paint event.</p></li><li><p class="docList">If the widget is obscured by another window and then revealed again, a paint event is generated for the area that was hidden (unless the window system stored the area).</p></li></ul>
+<p class="docText">We can also force a paint event by calling <tt>QWidget::update()</tt> or <tt>QWidget::re-paint()</tt>. The difference between these two functions is that <tt>repaint()</tt> forces an immediate repaint, whereas <tt>update()</tt> simply schedules a paint event for when Qt next processes events. (Both functions do nothing if the widget isn't visible on screen.) If <tt>update()</tt> is called multiple times, Qt compresses the consecutive paint events into a single paint event to avoid flicker. In <tt>IconEditor</tt>, we always use <tt>update()</tt>.</p>
+<p class="docText">Here's the code:</p>
+<div class="docText"><pre>
+void IconEditor::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    if (zoom &gt;= 3) {
+        painter.setPen(palette().foreground().color());
+        for (int i = 0; i &lt;= image.width(); ++i)
+            painter.drawLine(zoom * i, 0,
+                             zoom * i, zoom * image.height());
+        for (int j = 0; j &lt;= image.height(); ++j)
+            painter.drawLine(0, zoom * j,
+                             zoom * image.width(), zoom * j);
+    }
+    for (int i = 0; i &lt; image.width(); ++i) {
+        for (int j = 0; j &lt; image.height(); ++j) {
+            QRect rect = pixelRect(i, j);
+            if (!event-&gt;region().intersect(rect).isEmpty()) {
+                QColor color = QColor::fromRgba(image.pixel(i, j));
+                painter.fillRect(rect, color);
+            }
+        }
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1239"></a><a name="iddle1359"></a><a name="iddle1700"></a><a name="iddle1701"></a><a name="iddle1703"></a><a name="iddle2034"></a><a name="iddle2645"></a><a name="iddle3658"></a><a name="iddle4649"></a><a name="iddle4661"></a><a name="iddle4702"></a><a name="iddle4732"></a><a name="iddle5506"></a><a name="iddle5615"></a><a name="iddle6146"></a><a name="iddle6921"></a><a name="iddle7209"></a><a name="iddle7215"></a><a name="iddle7232"></a><a name="iddle7258"></a>We start by constructing a <tt>QPainter</tt> object on the widget. If the zoom factor is 3 or more, we draw the horizontal and vertical lines that form the grid using the <tt>QPainter::drawLine()</tt> function.</p>
+<p class="docText">A call to <tt>QPainter::drawLine()</tt> has the following syntax:</p>
+<div class="docText"><pre>
+painter.drawLine(x1, y1, x2, y2);
+</pre></div><br>
+<p class="docText">where (<tt>x1</tt>, <tt>y1</tt>) is the position of one end of the line and (<tt>x2</tt>, <tt>y2</tt>) is the position of the other end. There is also an overloaded version of the function that takes two <tt>QPoint</tt>s instead of four <tt>int</tt>s.</P>
+<p class="docText">The top-left pixel of a Qt widget is located at position (0, 0), and the bottom-right pixel is located at (<tt>width()</tt> - 1, <tt>height()</tt> - 1). This is similar to the conventional Cartesian coordinate system, but upside down. We can change <tt>QPainter</tt>'s coordinate system by using transformations, such as translation, scaling, rotation, and shearing. This is covered in <a class="docLink" href="ch08.html#ch08">Chapter 8</a> (2D and 3D Graphics).</p>
+<a name="ch05fig03"></a><p><center>
+
+<H5 class="docFigureTitle">Figure 5.3. Drawing a line using <tt>QPainter</tt></H5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="191" SRC="images/diagramline.jpg"></p>
+
+</center></p><br>
+<p class="docText">Before we call <tt>drawLine()</tt> on the <tt>QPainter</tt>, we set the line's color using <tt>setPen()</tt>. We could hard-code a color, like black or gray, but a better approach is to use the widget's palette.</p>
+<p class="docText">Every widget is equipped with a palette that specifies which colors should be used for what. For example, there is a palette entry for the background color of widgets (usually light gray) and one for the color of text on that background (usually black). By default, a widget's palette adopts the window system's color scheme. By using colors from the palette, we ensure that <tt>IconEditor</tt> respects the user's preferences.</P>
+<p class="docText"><a name="iddle1071"></a><a name="iddle1301"></a><a name="iddle1517"></a><a name="iddle1526"></a><a name="iddle1949"></a><a name="iddle2403"></a><a name="iddle2487"></a><a name="iddle2730"></a><a name="iddle3657"></a><a name="iddle3710"></a><a name="iddle4095"></a><a name="iddle4123"></a><a name="iddle4686"></a><a name="iddle4716"></a><a name="iddle5540"></a><a name="iddle7220"></a><a name="iddle7284"></a>A widget's palette consists of three color groups: active, inactive, and disabled. Which color group should be used depends on the widget's current state:</p>
+<ul><li><p class="docList">The <tt>Active</tt> group is used for widgets in the currently active window.</p></LI><LI><p class="docList">The <tt>Inactive</tt> group is used for widgets in the other windows.</P></li><li><p class="docList">The <tt>Disabled</tt> group is used for disabled widgets in any window.</p></li></ul>
+<p class="docText">The <tt>QWidget::palette()</tt> function returns the widget's palette as a <tt>QPalette</tt> object. Color groups are specified as enums of type <tt>QPalette::ColorGroup</tt>.</p>
+<p class="docText">When we want to get an appropriate brush or color for drawing, the correct approach is to use the current palette, obtained from <tt>QWidget::palette()</tt>, and the required role, for example, <tt>QPalette::foreground()</tt>. Each role function returns a brush, which is normally what we want, but if we just need the color we can extract it from the brush, as we did in the <tt>paintEvent()</tt>. By default, the brushes returned are those appropriate to the widget's state, so we do not need to specify a color group.</p>
+<p class="docText">The <tt>paintEvent()</tt> function finishes by drawing the image itself. The call to <tt>IconEditor::pixelRect()</tt> returns a <tt>QRect</tt> that defines the region to repaint. As an easy optimization, we don't redraw pixels that fall outside this region.</p>
+<a name="ch05fig04"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.4. Drawing a line using <tt>QPainter</tt></h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="191" SRC="images/drawingarectangle.jpg"></p>
+
+</center></p><br>
+<p class="docText">We call <tt>QPainter::fillRect()</tt> to draw a zoomed pixel. <tt>QPainter::fillRect()</tt> takes a <tt>QRect</tt> and a <tt>QBrush</tt>. By passing a <tt>QColor</tt> as the brush, we obtain a solid fill pattern.</P>
+<div class="docText"><pre>
+QRect IconEditor::pixelRect(int i, int j) const
+{
+    if (zoom &gt;= 3) {
+        return QRect(zoom * i + 1, zoom * j + 1, zoom - 1, zoom - 1);
+    } else {
+        return QRect(zoom * i, zoom * j, zoom, zoom);
+    }
+}
+</pre></div><BR>
+<p class="docText">The <tt>pixelRect()</tt> function returns a <tt>QRect</tt> suitable for <tt>QPainter::fillRect()</tt>. The <tt>i</tt> and <tt>j</tt> parameters are pixel coordinates in the <tt>QImage</tt>not in the widget. If the zoom factor is 1, the two coordinate systems coincide exactly.</P>
+<p class="docText"><a name="iddle1316"></a><a name="iddle1321"></a><a name="iddle1329"></a><a name="iddle1752"></a><a name="iddle2245"></a><a name="iddle2249"></a><a name="iddle2727"></a><a name="iddle2728"></a><a name="iddle2732"></a><a name="iddle3002"></a><a name="iddle3010"></a><a name="iddle3080"></a><a name="iddle3396"></a><a name="iddle3406"></a><a name="iddle3407"></a><a name="iddle3412"></a><a name="iddle3413"></a><a name="iddle3422"></a><a name="iddle3782"></a><a name="iddle4571"></a><a name="iddle4791"></a><a name="iddle5520"></a><a name="iddle5525"></a><a name="iddle5569"></a><a name="iddle5733"></a><a name="iddle5870"></a><a name="iddle6116"></a><a name="iddle6139"></a><a name="iddle6267"></a><a name="iddle6905"></a>The <tt>QRect</tt> constructor has the syntax <tt>QRect(x, y, width, height)</tt>, where (<tt>x</tt>, <tt>y</tt>) is the position of the top-left corner of the rectangle and <tt>width</tt> x <tt>height</tt> is the size of the rectangle. If the zoom factor is 3 or more, we reduce the size of the rectangle by one pixel horizontally and vertically so that the fill does not draw over the grid lines.</P>
+<div class="docText"><pre>
+void IconEditor::mousePressEvent(QMouseEvent *event)
+{
+    if (event-&gt;button() == Qt::LeftButton) {
+        setImagePixel(event-&gt;pos(), true);
+    } else if (event-&gt;button() == Qt::RightButton) {
+        setImagePixel(event-&gt;pos(), false);
+    }
+}
+</pre></div><BR>
+<p class="docText">When the user presses a mouse button, the system generates a &quot;mouse press&quot; event. By reimplementing <tt>QWidget::mousePressEvent()</tt>, we can respond to this event and set or clear the image pixel under the mouse cursor.</p>
+<p class="docText">If the user pressed the left mouse button, we call the private function <tt>setImagePixel()</tt> with <tt>true</tt> as the second argument, telling it to set the pixel to the current pen color. If the user pressed the right mouse button, we also call <tt>setImagePixel()</tt>, but pass <tt>false</tt> to clear the pixel.</p>
+<div class="docText"><pre>
+void IconEditor::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event-&gt;buttons() &amp; Qt::LeftButton) {
+        setImagePixel(event-&gt;pos(), true);
+    } else if (event-&gt;buttons() &amp; Qt::RightButton) {
+        setImagePixel(event-&gt;pos(), false);
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>mouseMoveEvent()</tt> handles &quot;mouse move&quot; events. By default, these events are only generated when the user is holding down a button. It is possible to change this behavior by calling <tt>QWidget::setMouseTracking()</tt>, but we don't need to do so for this example.</p>
+<p class="docText">Just as pressing the left or right mouse button sets or clears a pixel, keeping it pressed and hovering over a pixel is also enough to set or clear a pixel. Since it's possible to hold more than one button pressed down at a time, the value returned by <tt>QMouseEvent::buttons()</tt> is a bitwise OR of the mouse buttons. We test whether a certain button is pressed down using the <tt>&amp;</tt> operator, and if this is the case we call <tt>setImagePixel()</tt>.</p>
+<div class="docText"><pre>
+void IconEditor::setImagePixel(const QPoint &amp;pos, bool opaque)
+{
+    int i = pos.x() / zoom;
+    int j = pos.y() / zoom;
+    if (image.rect().contains(i, j)) {
+        if (opaque) {
+            image.setPixel(i, j, penColor().rgba());
+        } else {
+            image.setPixel(i, j, qRgba(0, 0, 0, 0));
+        }
+        update(pixelRect(i, j));
+    }
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1669"></a><a name="iddle1704"></a><a name="iddle2646"></a><a name="iddle4395"></a><a name="iddle4397"></a><a name="iddle4398"></a><a name="iddle4399"></a><a name="iddle4794"></a><a name="iddle5121"></a><a name="iddle5606"></a><a name="iddle5732"></a><a name="iddle5805"></a><a name="iddle5823"></a><a name="iddle6149"></a><a name="iddle7036"></a><a name="iddle7177"></a><a name="iddle7216"></a><a name="iddle7259"></a>The <tt>setImagePixel()</tt> function is called from <tt>mousePressEvent()</tt> and <tt>mouseMove-Event()</tt> to set or clear a pixel. The <tt>pos</tt> parameter is the position of the mouse on the widget.</p>
+<p class="docText">The first step is to convert the mouse position from widget coordinates to image coordinates. This is done by dividing the <tt>x()</tt> and <tt>y()</tt> components of the mouse position by the zoom factor. Next, we check whether the point is within the correct range. The check is easily made using <tt>QImage::rect()</tt> and <tt>QRect::contains()</tt>; this effectively checks that <tt>i</tt> is between 0 and <tt>image.width()</tt> - 1 and that <tt>j</tt> is between 0 and <tt>image.height()</tt> - 1.</p>
+<p class="docText">Depending on the <tt>opaque</tt> parameter, we set or clear the pixel in the image. Clearing a pixel is really setting it to be transparent. We must convert the pen <tt>QColor</tt> to an 32-bit ARGB value for the <tt>QImage::setPixel()</tt> call. At the end, we call <tt>update()</tt> with a <tt>QRect</tt> of the area that needs to be repainted.</p>
+<p class="docText">Now that we have reviewed the member functions, we will return to the <tt>Qt:: WA_StaticContents</tt> attribute that we used in the constructor. This attribute tells Qt that the widget's content doesn't change when the widget is resized and that the content stays rooted to the widget's top-left corner. Qt uses this information to avoid needlessly repainting areas that are already shown when resizing the widget.</p>
+<p class="docText">Normally, when a widget is resized, Qt generates a paint event for the widget's entire visible area. But if the widget is created with the <tt>Qt::WA_StaticContents</tt> attribute, the paint event's region is restricted to the pixels that were not previously shown. This implies that if the widget is resized to a smaller size, no paint event is generated at all.</p>
+<a name="ch05fig05"></a><P><center>
+
+<h5 class="docFigureTitle">Figure 5.5. Resizing a <tt>Qt::WA_StaticContents</tt> widget</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="115" SRC="images/wa_staticcontents.jpg"></P>
+
+</center></P><br>
+<p class="docText">The <tt>IconEditor</tt> widget is now complete. Using the information and examples from earlier chapters, we could write code that uses the <tt>IconEditor</tt> as a window in its own right, as a central widget in a <tt>QMainWindow</tt>, as a child widget inside a layout, or as a child widget inside a <tt>QScrollArea</tt> (p. 148). In the next section, we will see how to integrate it with <span class="docEmphasis">Qt Designer</span>.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec1.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec3.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

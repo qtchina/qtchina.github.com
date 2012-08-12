@@ -1,0 +1,590 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Double Buffering</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part02.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><td valign="top"><a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a><a name="ch05lev1sec4"></a>
+<h3 id="title-IDAJ2NVO" class="docSection1Title">Double Buffering</h3>
+<p class="docText">Double buffering is a GUI programming technique that consists of rendering a widget to an off-screen pixmap and copying the pixmap onto the display. With earlier versions of Qt, this technique was frequently used to eliminate flicker and to provide a snappier user interface.</p>
+<p class="docText">In Qt 4, <tt>QWidget</tt> handles this automatically, so we rarely need to worry about widgets flickering. Still, explicit double buffering remains beneficial if the widget's rendering is complex and needed repeatedly. We can then store a pixmap permanently with the widget, always ready for the next paint event, and copy the pixmap to the widget whenever we receive a paint event. It is especially helpful when we want to do small modifications, such as drawing a rubber band, without recomputing the whole widget's rendering over and over.</p>
+<p class="docText">We will round off this chapter by reviewing the <tt>Plotter</tt> custom widget. This widget uses double buffering and also demonstrates some other aspects of Qt programming, including keyboard event handling, manual layout, and coordinate systems.</p>
+<p class="docText">The <tt>Plotter</tt> widget displays one or more curves specified as vectors of coordinates. The user can draw a rubber band on the image, and the <tt>Plotter</tt> will zoom in on the area enclosed by the rubber band. The user draws the rubber band by clicking a point on the graph, dragging the mouse to another position with the left mouse button held down, and releasing the mouse button.</p>
+
+<p class="docText"></p><a name="ch05fig07"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.7. Zooming in on the <tt>Plotter</tt> widget</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/plotter2_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="174" SRC="images/plotter2.jpg"></p>
+</center></p><br>
+<p class="docText"><a name="iddle3732"></a><a name="iddle3733"></a><a name="iddle5470"></a><a name="iddle6648"></a>The user can zoom in repeatedly by drawing a rubber band multiple times, zooming out using the Zoom Out button, and then zooming back in using the Zoom In button. The Zoom In and Zoom Out buttons appear the first time they become available, so that they don't clutter the display if the user doesn't zoom the graph.</P>
+<p class="docText">The <tt>Plotter</tt> widget can hold the data for any number of curves. It also maintains a stack of <tt>PlotSettings</tt> objects, each of which corresponds to a particular zoom level.</P>
+<p class="docText">Let's review the class, starting with <tt>plotter.h</tt>:</P>
+<div class="docText"><pre>
+#ifndef PLOTTER_H
+#define PLOTTER_H
+#include &lt;QMap&gt;
+#include &lt;QPixmap&gt;
+#include &lt;QVector&gt;
+#include &lt;QWidget&gt;
+class QToolButton;
+class PlotSettings;
+class Plotter : public QWidget
+{
+    Q_OBJECT
+public:
+    Plotter(QWidget *parent = 0);
+    void setPlotSettings(const PlotSettings &amp;settings);
+    void setCurveData(int id, const QVector&lt;QPointF&gt; &amp;data);
+    void clearCurve(int id);
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+public slots:
+    void zoomIn();
+    void zoomOut();
+</pre></div><BR>
+<p class="docText"><a name="iddle3275"></a><a name="iddle3713"></a><a name="iddle3724"></a><a name="iddle3725"></a><a name="iddle3730"></a><a name="iddle3731"></a><a name="iddle3734"></a><a name="iddle4722"></a><a name="iddle4734"></a><a name="iddle6416"></a><a name="iddle6417"></a>We start by including the header files for the Qt classes that are used in the plotter file's header, and forward declaring the classes that have pointers or references in the header.</P>
+<p class="docText">In the <tt>Plotter</tt> class, we provide three public functions for setting up the plot, and two public slots for zooming in and out. We also reimplement <tt>minimum-SizeHint()</tt> and <tt>sizeHint()</tt> from <tt>QWidget</tt>. We store a curve's points as a <tt>QVector&lt;QPointF&gt;</tt>, where <tt>QPointF</tt> is a floating-point version of <tt>QPoint</tt>.</p>
+<div class="docText"><pre>
+protected:
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event);
+</pre></div><br>
+<p class="docText">In the protected section of the class, we declare all the <tt>QWidget</tt> event handlers that we want to reimplement.</p>
+<div class="docText"><pre>
+private:
+    void updateRubberBandRegion();
+    void refreshPixmap();
+    void drawGrid(QPainter *painter);
+    void drawCurves(QPainter *painter);
+    enum { Margin = 50 };
+    QToolButton *zoomInButton;
+    QToolButton *zoomOutButton;
+    QMap&lt;int, QVector&lt;QPointF&gt; &gt; curveMap;
+    QVector&lt;PlotSettings&gt; zoomStack;
+    int curZoom;
+    bool rubberBandIsShown;
+    QRect rubberBandRect;
+    QPixmap pixmap;
+};
+</pre></div><br>
+<p class="docText">In the private section of the class, we declare a few functions for painting the widget, a constant, and several member variables. The <tt>Margin</tt> constant is used to provide some spacing around the graph.</p>
+<p class="docText">Among the member variables is <tt>pixmap</tt> of type <tt>QPixmap</tt>. This variable holds a copy of the whole widget's rendering, identical to what is shown on screen. The plot is always drawn onto this off-screen pixmap first; then the pixmap is copied onto the widget.</p>
+<div class="docText"><pre>
+class PlotSettings
+{
+public:
+    PlotSettings();
+
+    void scroll(int dx, int dy);
+    void adjust();
+    double spanX() const { return maxX - minX; }
+    double spanY() const { return maxY - minY; }
+
+    double minX;
+    double maxX;
+    int numXTicks;
+    double minY;
+    double maxY;
+    int numYTicks;
+
+private:
+    static void adjustAxis(double &amp;min, double &amp;max, int &amp;numTicks);
+};
+#endif
+</pre></div><br>
+<p class="docText"><a name="iddle1500"></a><a name="iddle3735"></a><a name="iddle5552"></a><a name="iddle6011"></a><a name="iddle6546"></a>The <tt>PlotSettings</tt> class specifies the range of the <span class="docEmphasis">x</span> and <span class="docEmphasis">y</span> axes and the number of ticks for these axes. <a class="docLink" href="#ch05fig08">Figure 5.8</a> shows the correspondence between a <tt>PlotSettings</tt> object and a <tt>Plotter</tt> widget.</p>
+<a name="ch05fig08"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.8. <tt>PlotSettings</tt>'s member variables</h5>
+
+<p class="docText">
+<img border="0" alt="" width="280" height="243" SRC="images/plotsetting.jpg"></p>
+
+</center></P><br>
+<p class="docText">By convention, <tt>numXTicks</tt> and <tt>numYTicks</tt> are off by one; if <tt>numXTicks</tt> is 5, <tt>Plotter</tt> will actually draw 6 tick marks on the <span class="docEmphasis">x</span> axis. This simplifies the calculations later on.</p>
+<p class="docText">Now let's review the implementation file:</P>
+<div class="docText"><pre>
+#include &lt;QtGui&gt;
+#include &lt;cmath&gt;
+
+#include "plotter.h"
+</pre></div><BR>
+<p class="docText">We include the expected header files and import all the <tt>std</tt> namespace's symbols into the global namespace. This allows us to access the functions that are declared in <tt>&lt;cmath&gt;</tt> without prefixing them with <tt>std::</tt> (for example, <tt>floor()</tt> instead of <tt>std::floor()</tt>).</p>
+<div class="docText"><pre>
+Plotter::Plotter(QWidget *parent)
+    : QWidget(parent)
+{
+    setBackgroundRole(QPalette::Dark);
+    setAutoFillBackground(true);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setFocusPolicy(Qt::StrongFocus);
+    rubberBandIsShown = false;
+
+    zoomInButton = new QToolButton(this);
+    zoomInButton-&gt;setIcon(QIcon(":/images/zoomin.png"));
+    zoomInButton-&gt;adjustSize();
+    connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));
+
+    zoomOutButton = new QToolButton(this);
+    zoomOutButton-&gt;setIcon(QIcon(":/images/zoomout.png"));
+    zoomOutButton-&gt;adjustSize();
+    connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));
+
+    setPlotSettings(PlotSettings());
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1240"></a><a name="iddle2173"></a><a name="iddle2356"></a><a name="iddle2458"></a><a name="iddle2465"></a><a name="iddle3013"></a><a name="iddle3069"></a><a name="iddle3659"></a><a name="iddle3798"></a><a name="iddle4856"></a><a name="iddle4864"></a><a name="iddle5103"></a><a name="iddle5551"></a><a name="iddle5561"></a><a name="iddle5572"></a><a name="iddle6009"></a><a name="iddle6092"></a><a name="iddle6182"></a><a name="iddle6344"></a><a name="iddle6599"></a><a name="iddle6671"></a><a name="iddle7210"></a><a name="iddle7223"></a><a name="iddle7233"></a><a name="iddle7252"></a>The <tt>setBackgroundRole()</tt> call tells <tt>QWidget</tt> to use the &quot;dark&quot; component of the palette as the color for erasing the widget, instead of the &quot;window&quot; component. This gives Qt a default color that it can use to fill any newly revealed pixels when the widget is resized to a larger size, before <tt>paintEvent()</tt> even has the chance to paint the new pixels. We also need to call <tt>setAutoFillBackground(true)</tt> to enable this mechanism. (By default, child widgets inherit the background from their parent widget.)</p>
+<p class="docText">The <tt>setSizePolicy()</tt> call sets the widget's size policy to <tt>QSizePolicy::Expanding</tt> in both directions. This tells any layout manager that is responsible for the widget that the widget is especially willing to grow, but can also shrink. This setting is typical for widgets that can take up a lot of screen space. The default is <tt>QSizePolicy::Preferred</tt> in both directions, which means that the widget prefers to be the size of its size hint, but it can be shrunk down to its minimum size hint or expanded indefinitely if necessary.</p>
+<p class="docText">The <tt>setFocusPolicy(Qt::StrongFocus)</tt> call makes the widget accept focus by clicking or by pressing Tab. When the <tt>Plotter</tt> has focus, it will receive events for key presses. The <tt>Plotter</tt> widget understands a few keys: + to zoom in; - to zoom out; and the arrow keys to scroll up, down, left, and right.</P>
+<a name="ch05fig09"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.9. Scrolling the <tt>Plotter</tt> widget</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/plotter4_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="176" SRC="images/plotter4.jpg"></p>
+</center></P><BR>
+<p class="docText"><a name="iddle1114"></a><a name="iddle1425"></a><a name="iddle2676"></a><a name="iddle2679"></a><a name="iddle2885"></a><a name="iddle3065"></a><a name="iddle3748"></a><a name="iddle3857"></a><a name="iddle5480"></a><a name="iddle5507"></a><a name="iddle5589"></a><a name="iddle5607"></a><a name="iddle5830"></a><a name="iddle5835"></a><a name="iddle6155"></a><a name="iddle6277"></a><a name="iddle6340"></a><a name="iddle7037"></a><a name="iddle7156"></a><a name="iddle7248"></a>Still in the constructor, we create two <tt>QToolButton</tt>s, each with an icon. These buttons allow the user to zoom in and out. The button's icons are stored in a resource file, so any application that uses the <tt>Plotter</tt> widget will need this entry in its <tt>.pro</tt> file:</P>
+<div class="docText"><pre>
+RESOURCES     = plotter.qrc
+</pre></div><br>
+<p class="docText">The resource file is similar to the one we have used for the Spreadsheet application:</p>
+<div class="docText"><pre>
+&lt;!DOCTYPE RCC&gt;&lt;RCC version="1.0"&gt;
+&lt;qresource&gt;
+    &lt;file&gt;images/zoomin.png&lt;/file&gt;
+    &lt;file&gt;images/zoomout.png&lt;/file&gt;
+&lt;/qresource&gt;
+&lt;/RCC&gt;
+</pre></div><br>
+<p class="docText">The <tt>adjustSize()</tt> calls on the buttons set their sizes to be that of their size hints. The buttons are not put in a layout; instead, we will position them manually in the <tt>Plotter</tt>'s resize event. Since we are not using any layouts, we must specify the buttons' parent explicitly by passing <tt>this</tt> to the <tt>QPushButton</tt> constructor.</p>
+<p class="docText">The call to <tt>setPlotSettings()</tt> at the end completes the initialization.</p>
+<div class="docText"><pre>
+void Plotter::setPlotSettings(const PlotSettings &amp;settings)
+{
+    zoomStack.clear();
+    zoomStack.append(settings);
+    curZoom = 0;
+    zoomInButton-&gt;hide();
+    zoomOutButton-&gt;hide();
+    refreshPixmap();
+}
+</pre></div><br>
+<p class="docText">The <tt>setPlotSettings()</tt> function is used to specify the <tt>PlotSettings</tt> to use for displaying the plot. It is called by the <tt>Plotter</tt> constructor and can be called by users of the class. The plotter starts out at its default zoom level. Each time the user zooms in, a new <tt>PlotSettings</tt> instance is created and put onto the zoom stack. The zoom stack is represented by two member variables:</p>
+<ul><li><p class="docList"><tt>zoomStack</tt> holds the different zoom settings as a <tt>QVector&lt;PlotSettings&gt;</tt>.</p></li><li><p class="docList"><tt>curZoom</tt> holds the current <tt>PlotSettings</tt>'s index in the <tt>zoomStack</tt>.</p></li></UL>
+<p class="docText">After the call to <tt>setPlotSettings()</tt>, the zoom stack contains only one entry, and the Zoom In and Zoom Out buttons are hidden. These buttons will not be shown until we call <tt>show()</tt> on them in the <tt>zoomIn()</tt> and <tt>zoomOut()</tt> slots. (Normally, it is sufficient to call <tt>show()</tt> on the top-level widget to show all the children. But when we explicitly call <tt>hide()</tt> on a child widget, it is hidden until we call <tt>show()</tt> on it.)</P>
+<p class="docText">The call to <tt>refreshPixmap()</tt> is necessary to update the display. Usually, we would call <tt>update()</tt>, but here we do things slightly differently because we <a name="iddle1461"></a><a name="iddle3736"></a><a name="iddle3747"></a><a name="iddle3752"></a><a name="iddle3753"></a><a name="iddle4512"></a><a name="iddle6053"></a><a name="iddle7367"></a><a name="iddle7368"></a>want to keep a <tt>QPixmap</tt> up to date at all times. After regenerating the pixmap, <tt>refreshPixmap()</tt> calls <tt>update()</tt> to copy the pixmap onto the widget.</P>
+<div class="docText"><pre>
+void Plotter::zoomOut()
+{
+    if (curZoom &gt; 0) {
+        --curZoom;
+        zoomOutButton-&gt;setEnabled(curZoom &gt; 0);
+        zoomInButton-&gt;setEnabled(true);
+        zoomInButton-&gt;show();
+        refreshPixmap();
+    }
+}
+</pre></div><BR>
+<p class="docText">The <tt>zoomOut()</tt> slot zooms out if the graph is zoomed in. It decrements the current zoom level and enables the Zoom Out button depending on whether the graph can be zoomed out any more or not. The Zoom In button is enabled and shown, and the display is updated with a call to <tt>refreshPixmap()</tt>.</P>
+<div class="docText"><pre>
+void Plotter::zoomIn()
+{
+    if (curZoom &lt; zoomStack.count() - 1) {
+        ++curZoom;
+        zoomInButton-&gt;setEnabled(curZoom &lt; zoomStack.count() - 1);
+        zoomOutButton-&gt;setEnabled(true);
+        zoomOutButton-&gt;show();
+        refreshPixmap();
+    }
+}
+</pre></div><br>
+<p class="docText">If the user has previously zoomed in and then out again, the <tt>PlotSettings</tt> for the next zoom level will be in the zoom stack, and we can zoom in. (Otherwise, it is still possible to zoom in using a rubber band.)</p>
+<p class="docText">The slot increments <tt>curZoom</tt> to move one level deeper into the zoom stack, sets the Zoom In button enabled or disabled depending on whether it's possible to zoom in any further, and enables and shows the Zoom Out button. Again, we call <tt>refreshPixmap()</tt> to make the plotter use the latest zoom settings.</p>
+<div class="docText"><pre>
+void Plotter::setCurveData(int id, const QVector&lt;QPointF&gt; &amp;data)
+{
+    curveMap[id] = data;
+    refreshPixmap();
+}
+</pre></div><br>
+<p class="docText">The <tt>setCurveData()</tt> function sets the curve data for a given curve ID. If a curve with the same ID already exists in <tt>curveMap</tt>, it is replaced with the new curve data; otherwise, the new curve is simply inserted. The <tt>curveMap</tt> member variable is of type <tt>QMap&lt;int, QVector&lt;QPointF&gt; &gt;</tt>.</p>
+<div class="docText"><pre>
+void Plotter::clearCurve(int id)
+{
+    curveMap.remove(id);
+    refreshPixmap();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle2042"></a><a name="iddle2257"></a><a name="iddle3349"></a><a name="iddle3350"></a><a name="iddle3352"></a><a name="iddle3528"></a><a name="iddle3643"></a><a name="iddle3645"></a><a name="iddle3740"></a><a name="iddle3744"></a><a name="iddle3749"></a><a name="iddle4669"></a><a name="iddle4796"></a><a name="iddle5517"></a><a name="iddle5535"></a><a name="iddle5596"></a><a name="iddle6326"></a><a name="iddle6331"></a>The <tt>clearCurve()</tt> function removes the specified curve from the curve map.</p>
+<div class="docText"><pre>
+QSize Plotter::minimumSizeHint() const
+{
+    return QSize(6 * Margin, 4 * Margin);
+}
+</pre></div><br>
+<p class="docText">The <tt>minimumSizeHint()</tt> function is similar to <tt>sizeHint()</tt>; just as <tt>sizeHint()</tt> spec-ifies a widget's ideal size, <tt>minimumSizeHint()</tt> specifies a widget's ideal minimum size. A layout never resizes a widget below its minimum size hint.</p>
+<p class="docText">The value we return is 300 x 200 (since <tt>Margin</tt> equals 50) to allow for the margin on all four sides and some space for the plot itself. Below that size, the plot would be too small to be useful.</p>
+<div class="docText"><pre>
+QSize Plotter::sizeHint() const
+{
+    return QSize(12 * Margin, 8 * Margin);
+}
+</pre></div><br>
+<p class="docText">In <tt>sizeHint()</tt>, we return an &quot;ideal&quot; size in proportion to the <tt>Margin</tt> constant and with the same pleasing 3:2 aspect ratio we used for the <tt>minimumSizeHint()</tt>.</p>
+<p class="docText">This finishes the review of the <tt>Plotter</tt>'s public functions and slots. Now let's review the protected event handlers.</P>
+<div class="docText"><pre>
+void Plotter::paintEvent(QPaintEvent * /* event */)
+{
+    QStylePainter painter(this);
+    painter.drawPixmap(0, 0, pixmap);
+    if (rubberBandIsShown) {
+        painter.setPen(palette().light().color());
+        painter.drawRect(rubberBandRect.normalized()
+                                       .adjusted(0, 0, -1, -1));
+    }
+    if (hasFocus()) {
+        QStyleOptionFocusRect option;
+        option.initFrom(this);
+        option.backgroundColor = palette().dark().color();
+        painter.drawPrimitive(QStyle::PE_FrameFocusRect, option);
+    }
+}
+</pre></div><br>
+<p class="docText">Normally, <tt>paintEvent()</tt> is the place where we perform all the drawing. But here all the plot drawing is done beforehand in <tt>refreshPixmap()</tt>, so we can render the entire plot simply by copying the pixmap onto the widget at position (0, 0).</p>
+<p class="docText">If the rubber band is visible, we draw it on top of the plot. We use the &quot;light&quot; component from the widget's current color group as the pen color to ensure good contrast with the &quot;dark&quot; background. Notice that we draw directly on the widget, leaving the off-screen pixmap untouched. Using <tt>QRect::normalized()</tt> <a name="iddle1115"></a><a name="iddle1371"></a><a name="iddle1807"></a><a name="iddle2050"></a><a name="iddle2051"></a><a name="iddle2052"></a><a name="iddle2129"></a><a name="iddle2267"></a><a name="iddle2459"></a><a name="iddle2466"></a><a name="iddle2828"></a><a name="iddle3155"></a><a name="iddle3171"></a><a name="iddle3394"></a><a name="iddle3697"></a><a name="iddle3717"></a><a name="iddle3746"></a><a name="iddle4053"></a><a name="iddle4106"></a><a name="iddle4488"></a><a name="iddle4569"></a><a name="iddle4730"></a><a name="iddle4793"></a><a name="iddle5040"></a><a name="iddle5043"></a><a name="iddle5044"></a><a name="iddle5045"></a><a name="iddle5046"></a><a name="iddle5544"></a><a name="iddle5574"></a><a name="iddle5601"></a><a name="iddle5622"></a><a name="iddle5623"></a><a name="iddle5819"></a><a name="iddle6192"></a><a name="iddle6604"></a><a name="iddle6605"></a><a name="iddle6610"></a><a name="iddle6638"></a><a name="iddle7256"></a><a name="iddle7299"></a><a name="iddle7306"></a><a name="iddle7361"></a>ensures that the rubber band rectangle has positive width and height (swap-ping coordinates if necessary), and <tt>adjusted()</tt> reduces the size of the rectangle by one pixel to allow for its own 1-pixel-wide outline.</P>
+<p class="docText">If the <tt>Plotter</tt> has focus, a focus rectangle is drawn using the widget style's <tt>draw-Primitive()</tt> function with <tt>QStyle::PE_FrameFocusRect</tt> as its first argument and a <tt>QStyleOptionFocusRect</tt> object as its second argument. The focus rectangle's drawing options are inherited from the <tt>Plotter</tt> widget (by the <tt>initFrom()</tt> call). The background color must be specified explicitly.</P>
+<p class="docText">When we want to paint using the current style, we can either call a <tt>QStyle</tt> function directly, for example,</p>
+<div class="docText"><pre>
+style()-&gt;drawPrimitive(QStyle::PE_FrameFocusRect, &amp;option, &amp;painter,
+                       this);
+</pre></div><br>
+<p class="docText">or we can use a <tt>QStylePainter</tt> instead of a normal <tt>QPainter</tt>, as we have done in <tt>Plotter</tt>, and paint more conveniently using that.</p>
+<p class="docText">The <tt>QWidget::style()</tt> function returns the style that should be used to draw the widget. In Qt, a widget style is a subclass of <tt>QStyle</tt>. The built-in styles include <tt>QWindowsStyle</tt>, <tt>QWindowsXPStyle</tt>, <tt>QMotifStyle</tt>, <tt>QCDEStyle</tt>, <tt>QMacStyle</tt>, and <tt>QPlastiqueStyle</tt>. Each of these styles reimplements the virtual functions in <tt>QStyle</tt> to perform the drawing in the correct way for the platform the style is emulating. <tt>QStylePainter</tt>'s <tt>drawPrimitive()</tt> function calls the <tt>QStyle</tt> function of the same name, which can be used for drawing &quot;primitive elements&quot; like panels, buttons, and focus rectangles. The widget style is usually the same for all widgets in an application (<tt>QApplication::style()</tt>), but it can be overridden on a per-widget basis using <tt>QWidget::setStyle()</tt>.</p>
+<p class="docText">By subclassing <tt>QStyle</tt>, it is possible to define a custom style. This can be done to give a distinctive look to an application or a suite of applications. While it is generally advisable to use the target platform's native look and feel, Qt offers a lot of flexibility if you want to be adventurous.</P>
+<p class="docText">Qt's built-in widgets rely almost exclusively on <tt>QStyle</tt> to paint themselves. This is why they look like native widgets on all platforms supported by Qt. Custom widgets can be made style-aware either by using <tt>QStyle</tt> to paint themselves or by using built-in Qt widgets as child widgets. For <tt>Plotter</tt>, we use a combination of both approaches: The focus rectangle is drawn using <tt>QStyle</tt> (via a <tt>QStylePainter</tt>), and the Zoom In and Zoom Out buttons are built-in Qt widgets.</p>
+<div class="docText"><pre>
+void Plotter::resizeEvent(QResizeEvent * /* event */)
+{
+    int x = width() - (zoomInButton-&gt;width()
+                       + zoomOutButton-&gt;width() + 10);
+    zoomInButton-&gt;move(x, 5);
+    zoomOutButton-&gt;move(x + zoomInButton-&gt;width() + 5, 5);
+    refreshPixmap();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1670"></a><a name="iddle2250"></a><a name="iddle3043"></a><a name="iddle3271"></a><a name="iddle3415"></a><a name="iddle3742"></a><a name="iddle4792"></a><a name="iddle4795"></a><a name="iddle5526"></a><a name="iddle5734"></a><a name="iddle5897"></a>Whenever the <tt>Plotter</tt> widget is resized, Qt generates a &quot;resize&quot; event. Here, we reimplement <tt>resizeEvent()</tt> to place the Zoom In and Zoom Out buttons at the top right of the <tt>Plotter</tt> widget.</p>
+<p class="docText">We move the Zoom In button and the Zoom Out button to be side by side, separated by a 5-pixel gap and with a 5-pixel offset from the top and right edges of the parent widget.</p>
+<p class="docText">If we wanted the buttons to stay rooted to the top-left corner, whose coordinates are (0, 0), we would simply have moved them there in the <tt>Plotter</tt> constructor. But we want to track the top-right corner, whose coordinates depend on the size of the widget. Because of this, it's necessary to reimplement <tt>resizeEvent()</tt> and to set the buttons' position there.</P>
+<p class="docText">We didn't set any positions for the buttons in the <tt>Plotter</tt> constructor. This isn't a problem, since Qt always generates a resize event before a widget is shown for the first time.</P>
+<p class="docText">An alternative to reimplementing <tt>resizeEvent()</tt> and laying out the child widgets manually would have been to use a layout manager (for example, <tt>QGridLayout</tt>). Using a layout would have been a little more complicated and would have consumed more resources; on the other hand, it would gracefully handle right-to-left layouts, necessary for languages such as Arabic and Hebrew.</P>
+<p class="docText">At the end, we call <tt>refreshPixmap()</tt> to redraw the pixmap at the new size.</p>
+<div class="docText"><pre>
+void Plotter::mousePressEvent(QMouseEvent *event)
+{
+    QRect rect(Margin, Margin,
+               width() - 2 * Margin, height() - 2 * Margin);
+    if (event-&gt;button() == Qt::LeftButton) {
+        if (rect.contains(event-&gt;pos())) {
+            rubberBandIsShown = true;
+            rubberBandRect.setTopLeft(event-&gt;pos());
+            rubberBandRect.setBottomRight(event-&gt;pos());
+            updateRubberBandRegion();
+            setCursor(Qt::CrossCursor);
+        }
+    }
+}
+</pre></div><br>
+<p class="docText">When the user presses the left mouse button, we start displaying a rubber band. This involves setting <tt>rubberBandIsShown</tt> to <tt>true</tt>, initializing the <tt>rubber-BandRect</tt> member variable with the current mouse pointer position, scheduling a paint event to paint the rubber band, and changing the mouse cursor to have a crosshair shape.</p>
+<p class="docText">The <tt>rubberBandRect</tt> variable is of type <tt>QRect</tt>. A <tt>QRect</tt> can be defined either as an (<span class="docEmphasis">x, y, width, height</span>) quadruplewhere (<span class="docEmphasis">x, y</span>) is the position of the top-left corner and <span class="docEmphasis">width</span> x <span class="docEmphasis">height</span> is the size of the rectangleor as a top-left and a bottom-right coordinate pair. Here, we have used the coordinate pair representation. We set the point where the user clicked as both the top-left corner and as the <a name="iddle1780"></a><a name="iddle2246"></a><a name="iddle2254"></a><a name="iddle3401"></a><a name="iddle3409"></a><a name="iddle3418"></a><a name="iddle3419"></a><a name="iddle3420"></a><a name="iddle3529"></a><a name="iddle3630"></a><a name="iddle3741"></a><a name="iddle3743"></a><a name="iddle4044"></a><a name="iddle4051"></a><a name="iddle4797"></a><a name="iddle5521"></a><a name="iddle5531"></a><a name="iddle5555"></a><a name="iddle5602"></a><a name="iddle5842"></a><a name="iddle6052"></a><a name="iddle6143"></a><a name="iddle7030"></a>bottom-right corner. Then we call <tt>updateRubberBandRegion()</tt> to force a repaint of the (tiny) area covered by the rubber band.</p>
+<p class="docText">Qt provides two mechanisms for controlling the mouse cursor's shape:</p>
+<ul><li><p class="docList"><tt>QWidget::setCursor()</tt> sets the cursor shape to use when the mouse hovers over a particular widget. If no cursor is set for a widget, the parent widget's cursor is used. The default for top-level widgets is an arrow cursor.</p></li><li><p class="docList"><tt>QApplication::setOverrideCursor()</tt> sets the cursor shape for the entire application, overriding the cursors set by individual widgets until <tt>restore-OverrideCursor()</tt> is called.</p></li></ul>
+<p class="docText">In <a class="docLink" href="ch04.html#ch04">Chapter 4</a>, we called <tt>QApplication::setOverrideCursor()</tt> with <tt>Qt::WaitCursor</tt> to change the application's cursor to the standard wait cursor.</P>
+<div class="docText"><pre>
+void Plotter::mouseMoveEvent(QMouseEvent *event)
+{
+    if (rubberBandIsShown) {
+        updateRubberBandRegion();
+        rubberBandRect.setBottomRight(event-&gt;pos());
+        updateRubberBandRegion();
+    }
+}
+</pre></div><BR>
+<p class="docText">When the user moves the mouse cursor while holding the left button, we first call <tt>updateRubberBandRegion()</tt> to schedule a paint event to repaint the area where the rubber band was, then we recompute <tt>rubberBandRect</tt> to account for the mouse move, and finally we call <tt>updateRubberBandRegion()</tt> a second time to repaint the area where the rubber band has moved to. This effectively erases the rubber band and redraws it at the new coordinates.</P>
+<p class="docText">If the user moves the mouse upward or leftward, it's likely that <tt>rubberBandRect</tt>'s nominal bottom-right corner will end up above or to the left of its top-left corner. If this occurs, the <tt>QRect</tt> will have a negative width or height. We used <tt>QRect::normalized()</tt> in <tt>paintEvent()</tt> to ensure that the top-left and bottom-right coordinates are adjusted to obtain a nonnegative width and height.</P>
+<div class="docText"><pre>
+void Plotter::mouseReleaseEvent(QMouseEvent *event)
+{
+    if ((event-&gt;button() == Qt::LeftButton) &amp;&amp; rubberBandIsShown) {
+        rubberBandIsShown = false;
+        updateRubberBandRegion();
+        unsetCursor();
+        QRect rect = rubberBandRect.normalized();
+        if (rect.width() &lt; 4 || rect.height() &lt; 4)
+            return;
+        rect.translate(-Margin, -Margin);
+        PlotSettings prevSettings = zoomStack[curZoom];
+        PlotSettings settings;
+        double dx = prevSettings.spanX() / (width() - 2 * Margin);
+        double dy = prevSettings.spanY() / (height() - 2 * Margin);
+        settings.minX = prevSettings.minX + dx * rect.left();
+        settings.maxX = prevSettings.minX + dx * rect.right();
+        settings.minY = prevSettings.maxY - dy * rect.bottom();
+        settings.maxY = prevSettings.maxY - dy * rect.top();
+        settings.adjust();
+        zoomStack.resize(curZoom + 1);
+        zoomStack.append(settings);
+        zoomIn();
+    }
+}
+</pre></div><BR>
+<p class="docText"><a name="iddle1705"></a><a name="iddle1781"></a><a name="iddle3402"></a><a name="iddle7217"></a>When the user releases the left mouse button, we erase the rubber band and restore the standard arrow cursor. If the rubber band is at least 4 x 4, we perform the zoom. If the rubber band is smaller than that, it's likely that the user clicked the widget by mistake or to give it focus, so we do nothing.</p>
+<p class="docText">The code to perform the zoom is a bit complicated. This is because we deal with widget coordinates and plotter coordinates at the same time. Most of the work we perform here is to convert the <tt>rubberBandRect</tt> from widget coordinates to plotter coordinates. Once we have done the conversion, we call <tt>PlotSettings::adjust()</tt> to round the numbers and find a sensible number of ticks for each axis. <a class="docLink" href="#ch05fig10">Figures 5.10</a> and <a class="docLink" href="#ch05fig11">5.11</a> depict the situation.</p>
+<a name="ch05fig10"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.10. Converting the rubber band from widget to plotter coordinates</h5>
+
+<p class="docText">
+<img border="0" alt="" width="500" height="184" SRC="images/converting_the_rubber.jpg"></p>
+
+</center></p><br>
+<a name="ch05fig11"></a><p><center>
+
+<h5 class="docFigureTitle">Figure 5.11. Adjusting plotter coordinates and zooming in on the rubber band</h5>
+<p class="docText"><div class="v1"><a target="_self" href="images/adjusting_plooter_alt.jpg">[View full size image]</a></div><img border="0" alt="" width="500" height="183" SRC="images/adjusting_plooter.jpg"></p>
+</center></P><br>
+<p class="docText"><a name="iddle2237"></a><a name="iddle2274"></a><a name="iddle2985"></a><a name="iddle2986"></a><a name="iddle3384"></a><a name="iddle3739"></a><a name="iddle3751"></a><a name="iddle4438"></a><a name="iddle5511"></a><a name="iddle5614"></a><a name="iddle7204"></a>Then we perform the zoom. The zoom is achieved by pushing the new <tt>PlotSettings</tt> that we have just calculated on top of the zoom stack and calling <tt>zoomIn()</tt> to do the job.</p>
+<div class="docText"><pre>
+void Plotter::keyPressEvent(QKeyEvent *event)
+{
+    switch (event-&gt;key()) {
+    case Qt::Key_Plus:
+        zoomIn();
+        break;
+    case Qt::Key_Minus:
+        zoomOut();
+        break;
+    case Qt::Key_Left:
+        zoomStack[curZoom].scroll(-1, 0);
+        refreshPixmap();
+        break;
+    case Qt::Key_Right:
+        zoomStack[curZoom].scroll(+1, 0);
+        refreshPixmap();
+        break;
+    case Qt::Key_Down:
+        zoomStack[curZoom].scroll(0, -1);
+        refreshPixmap();
+        break;
+    case Qt::Key_Up:
+        zoomStack[curZoom].scroll(0, +1);
+        refreshPixmap();
+        break;
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
+</pre></div><BR>
+<p class="docText">When the user presses a key and the <tt>Plotter</tt> widget has focus, the <tt>keyPress-Event()</tt> function is called. We reimplement it here to respond to six keys: +, -, Up, Down, Left, and Right. If the user pressed a key that we are not handling, we call the base class implementation. For simplicity, we ignore the Shift, Ctrl, and Alt modifier keys, which are available through <tt>QKeyEvent::modifiers()</tt>.</P>
+<div class="docText"><pre>
+void Plotter::wheelEvent(QWheelEvent *event)
+{
+    int numDegrees = event-&gt;delta() / 8;
+    int numTicks = numDegrees / 15;
+    if (event-&gt;orientation() == Qt::Horizontal) {
+        zoomStack[curZoom].scroll(numTicks, 0);
+    } else {
+        zoomStack[curZoom].scroll(0, numTicks);
+    }
+    refreshPixmap();
+}
+</pre></div><br>
+<p class="docText"><a name="iddle1147"></a><a name="iddle1241"></a><a name="iddle1885"></a><a name="iddle1909"></a><a name="iddle2174"></a><a name="iddle2401"></a><a name="iddle2825"></a><a name="iddle2826"></a><a name="iddle3423"></a><a name="iddle3745"></a><a name="iddle3750"></a><a name="iddle4687"></a><a name="iddle4723"></a><a name="iddle4810"></a><a name="iddle4816"></a><a name="iddle5466"></a><a name="iddle5553"></a><a name="iddle5608"></a><a name="iddle5744"></a><a name="iddle5898"></a><a name="iddle5953"></a><a name="iddle6012"></a><a name="iddle7038"></a><a name="iddle7049"></a><a name="iddle7211"></a>Wheel events occur when a mouse wheel is turned. Most mice only provide a vertical wheel, but some also have a horizontal wheel. Qt supports both kinds of wheel. Wheel events go to the widget that has the focus. The <tt>delta()</tt> function returns the distance the wheel was rotated in eighths of a degree. Mice typically work in steps of 15 degrees. Here, we scroll by the requested number of ticks by modifying the topmost item on the zoom stack and update the display using <tt>refreshPixmap()</tt>.</p>
+<p class="docText">The most common use of the wheel mouse is to scroll a scroll bar. When we use <tt>QScrollArea</tt> (covered in <a class="docLink" href="ch06.html#ch06">Chapter 6</a>) to provide scroll bars, <tt>QScrollArea</tt> handles the wheel mouse events automatically, so we don't need to reimplement <tt>wheelEvent()</tt> ourselves.</p>
+<p class="docText">This finishes the implementation of the event handlers. Now let's review the private functions.</p>
+<div class="docText"><pre>
+void Plotter::updateRubberBandRegion()
+{
+    QRect rect = rubberBandRect.normalized();
+    update(rect.left(), rect.top(), rect.width(), 1);
+    update(rect.left(), rect.top(), 1, rect.height());
+    update(rect.left(), rect.bottom(), rect.width(), 1);
+    update(rect.right(), rect.top(), 1, rect.height());
+}
+</pre></div><BR>
+<p class="docText">The <tt>updateRubberBand()</tt> function is called from <tt>mousePressEvent()</tt>, <tt>mouseMove-Event()</tt>, and <tt>mouseReleaseEvent()</tt> to erase or redraw the rubber band. It consists of four calls to <tt>update()</tt> that schedule a paint event for the four small rectangular areas that are covered by the rubber band (two vertical and two horizontal lines). Qt provides the <tt>QRubberBand</tt> class for drawing rubber bands, but here, hand-coding provided finer control.</p>
+<div class="docText"><pre>
+void Plotter::refreshPixmap()
+{
+    pixmap = QPixmap(size());
+    pixmap.fill(this, 0, 0);
+    QPainter painter(&amp;pixmap);
+    painter.initFrom(this);
+    drawGrid(&amp;painter);
+    drawCurves(&amp;painter);
+    update();
+}
+</pre></div><br>
+<p class="docText">The <tt>refreshPixmap()</tt> function redraws the plot onto the off-screen pixmap and updates the display. We resize the pixmap to have the same size as the widget and fill it with the widget's erase color. This color is the &quot;dark&quot; component of the palette, because of the call to <tt>setBackgroundRole()</tt> in the <tt>Plotter</tt> constructor. If the background is a non-solid brush, <tt>QPixmap::fill()</tt> needs to know the offset in the widget where the pixmap will end up to align the brush pattern correctly. Here, the pixmap corresponds to the entire widget, so we specify position (0, 0).</p>
+<p class="docText"><a name="iddle2033"></a><a name="iddle2057"></a><a name="iddle3738"></a><a name="iddle4681"></a>Then we create a <tt>QPainter</tt> to draw on the pixmap. The <tt>initFrom()</tt> call sets the painter's pen, background, and font to the same ones as the <tt>Plotter</tt> widget. Next we call <tt>drawGrid()</tt> and <tt>drawCurves()</tt> to perform the drawing. At the end, we call <tt>update()</tt> to schedule a paint event for the whole widget. The pixmap is copied to the widget in the <tt>paintEvent()</tt> function (p. 123).</p>
+<div class="docText"><pre>
+void Plotter::drawGrid(QPainter *painter)
+{
+    QRect rect(Margin, Margin,
+               width() - 2 * Margin, height() - 2 * Margin);
+    if (!rect.isValid())
+        return;
+    PlotSettings settings = zoomStack[curZoom];
+    QPen quiteDark = palette().dark().color().light();
+    QPen light = palette().light().color();
+    for (int i = 0; i &lt;= settings.numXTicks; ++i) {
+        int x = rect.left() + (i * (rect.width() - 1)
+                                 / settings.numXTicks);
+        double label = settings.minX + (i * settings.spanX()
+                                          / settings.numXTicks);
+        painter-&gt;setPen(quiteDark);
+        painter-&gt;drawLine(x, rect.top(), x, rect.bottom());
+        painter-&gt;setPen(light);
+        painter-&gt;drawLine(x, rect.bottom(), x, rect.bottom() + 5);
+        painter-&gt;drawText(x - 50, rect.bottom() + 5, 100, 15,
+                          Qt::AlignHCenter | Qt::AlignTop,
+                          QString::number(label));
+    }
+    for (int j = 0; j &lt;= settings.numYTicks; ++j) {
+        int y = rect.bottom() - (j * (rect.height() - 1)
+                                   / settings.numYTicks);
+        double label = settings.minY + (j * settings.spanY()
+                                          / settings.numYTicks);
+        painter-&gt;setPen(quiteDark);
+        painter-&gt;drawLine(rect.left(), y, rect.right(), y);
+        painter-&gt;setPen(light);
+        painter-&gt;drawLine(rect.left() - 5, y, rect.left(), y);
+        painter-&gt;drawText(rect.left() - Margin, y - 10, Margin - 5, 20,
+                          Qt::AlignRight | Qt::AlignVCenter,
+                          QString::number(label));
+    }
+    painter-&gt;drawRect(rect.adjusted(0, 0, -1, -1));
+}
+</pre></div><BR>
+<p class="docText">The <tt>drawGrid()</tt> function draws the grid behind the curves and the axes. The area on which we draw the grid is specified by <tt>rect</tt>. If the widget isn't large enough to accommodate the graph, we return immediately.</P>
+<p class="docText">The first <tt>for</tt> loop draws the grid's vertical lines and the ticks along the <span class="docEmphasis">x</span> axis. The second <tt>for</tt> loop draws the grid's horizontal lines and the ticks along the <span class="docEmphasis">y</span> axis. At the end, we draw a rectangle along the margins. The <tt>drawText()</tt> <a name="iddle1133"></a><a name="iddle1472"></a><a name="iddle2027"></a><a name="iddle2975"></a><a name="iddle2976"></a><a name="iddle3737"></a><a name="iddle4514"></a><a name="iddle4698"></a><a name="iddle6021"></a><a name="iddle7091"></a>function is used to draw the numbers corresponding to the tick marks on both axes.</P>
+<p class="docText">The calls to <tt>drawText()</tt> have the following syntax:</p>
+<div class="docText"><pre>
+painter-&gt;drawText(x, y, width, height, alignment, text);
+</pre></div><br>
+<p class="docText">where (<tt>x</tt>, <tt>y</tt>, <tt>width</tt>, <tt>height</tt>) define a rectangle, <tt>alignment</tt> the position of the text within that rectangle, and <tt>text</tt> the text to draw.</p>
+<div class="docText"><pre>
+void Plotter::drawCurves(QPainter *painter)
+{
+    static const QColor colorForIds[6] = {
+        Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow
+    };
+    PlotSettings settings = zoomStack[curZoom];
+    QRect rect(Margin, Margin,
+               width() - 2 * Margin, height() - 2 * Margin);
+    if (!rect.isValid())
+        return;
+    painter-&gt;setClipRect(rect.adjusted(+1, +1, -1, -1));
+    QMapIterator&lt;int, QVector&lt;QPointF&gt; &gt; i(curveMap);
+    while (i.hasNext()) {
+        i.next();
+        int id = i.key();
+        const QVector&lt;QPointF&gt; &amp;data = i.value();
+        QPolygonF polyline(data.count());
+        for (int j = 0; j &lt; data.count(); ++j) {
+            double dx = data[j].x() - settings.minX;
+            double dy = data[j].y() - settings.minY;
+            double x = rect.left() + (dx * (rect.width() - 1)
+                                         / settings.spanX());
+            double y = rect.bottom() - (dy * (rect.height() - 1)
+                                           / settings.spanY());
+            polyline[j] = QPointF(x, y);
+        }
+        painter-&gt;setPen(colorForIds[uint(id) % 6]);
+        painter-&gt;drawPolyline(polyline);
+    }
+}
+</pre></div><br>
+<p class="docText">The <tt>drawCurves()</tt> function draws the curves on top of the grid. We start by calling <tt>setClipRect()</tt> to set the <tt>QPainter</tt>'s clip region to the rectangle that contains the curves (excluding the margins and the frame around the graph). <tt>QPainter</tt> will then ignore drawing operations on pixels outside the area.</p>
+<p class="docText">Next, we iterate over all the curves using a Java-style iterator, and for each curve, we iterate over its constituent <tt>QPointF</tt>s. The <tt>key()</tt> function gives the curve's ID, and the <tt>value()</tt> function gives the corresponding curve data as a <tt>QVector&lt;QPointF&gt;</tt>. The inner <tt>for</tt> loop converts each <tt>QPointF</tt> from plotter coordinates to widget coordinates and stores them in the <tt>polyline</tt> variable.</p>
+<p class="docText"><a name="iddle1112"></a><a name="iddle1113"></a><a name="iddle2048"></a><a name="iddle3726"></a><a name="iddle3727"></a><a name="iddle3728"></a><a name="iddle3729"></a><a name="iddle3773"></a><a name="iddle4675"></a><a name="iddle5946"></a><a name="iddle5947"></a>Once we have converted all the points of a curve to widget coordinates, we set the pen color for the curve (using one of a set of predefined colors) and call <tt>drawPolyline()</tt> to draw a line that goes through all the curve's points.</p>
+<p class="docText">This is the complete <tt>Plotter</tt> class. All that remains are a few functions in <tt>PlotSettings</tt>.</p>
+<div class="docText"><pre>
+PlotSettings::PlotSettings()
+{
+    minX = 0.0;
+    maxX = 10.0;
+    numXTicks = 5;
+    minY = 0.0;
+    maxY = 10.0;
+    numYTicks = 5;
+}
+</pre></div><br>
+<p class="docText">The <tt>PlotSettings</tt> constructor initializes both axes to the range 0 to 10 with 5 tick marks.</p>
+<div class="docText"><pre>
+void PlotSettings::scroll(int dx, int dy)
+{
+    double stepX = spanX() / numXTicks;
+    minX += dx * stepX;
+    maxX += dx * stepX;
+    double stepY = spanY() / numYTicks;
+    minY += dy * stepY;
+    maxY += dy * stepY;
+}
+</pre></div><br>
+<p class="docText">The <tt>scroll()</tt> function increments (or decrements) <tt>minX</tt>, <tt>maxX</tt>, <tt>minY</tt>, and <tt>maxY</tt> by the interval between two ticks times a given number. This function is used to implement scrolling in <tt>Plotter::keyPressEvent()</tt>.</p>
+<div class="docText"><pre>
+void PlotSettings::adjust()
+{
+    adjustAxis(minX, maxX, numXTicks);
+    adjustAxis(minY, maxY, numYTicks);
+}
+</pre></div><br>
+<p class="docText">The <tt>adjust()</tt> function is called from <tt>mouseReleaseEvent()</tt> to round the <tt>minX</tt>, <tt>maxX</tt>, <tt>minY</tt>, and <tt>maxY</tt> values to &quot;nice&quot; values and to determine the number of ticks appropriate for each axis. The private function <tt>adjustAxis()</tt> does its work one axis at a time.</p>
+<div class="docText"><pre>
+void PlotSettings::adjustAxis(double &amp;min, double &amp;max,
+                              int &amp;numTicks)
+{
+    const int MinTicks = 4;
+    double grossStep = (max - min) / MinTicks;
+    double step = pow(10.0, floor(log10(grossStep)));
+    if (5 * step &lt; grossStep) {
+        step *= 5;
+    } else if (2 * step &lt; grossStep) {
+        step *= 2;
+    }
+    numTicks = int(ceil(max / step) - floor(min / step));
+    if (numTicks &lt; MinTicks)
+        numTicks = MinTicks;
+    min = floor(min / step) * step;
+    max = ceil(max / step) * step;
+}
+</pre></div><BR>
+<p class="docText">The <tt>adjustAxis()</tt> function converts its <tt>min</tt> and <tt>max</tt> parameters into &quot;nice&quot; numbers and sets its <tt>numTicks</tt> parameter to the number of ticks it calculates to be appropriate for the given [<tt>min</tt>, <tt>max</tt>] range. Because <tt>adjustAxis()</tt> needs to modify the actual variables (<tt>minX</tt>, <tt>maxX</tt>, <tt>numXTicks</tt>, etc.) and not just copies, its parameters are non-const references.</P>
+<p class="docText">Most of the code in <tt>adjustAxis()</tt> simply attempts to determine an appropriate value for the interval between two ticks (the &quot;step&quot;). To obtain nice numbers along the axis, we must select the step with care. For example, a step value of 3.8 would lead to an axis with multiples of 3.8, which is difficult for people to relate to. For axes labeled in decimal notation, &quot;nice&quot; step values are numbers of the form 10<sup><span class="docEmphasis">n</span></sup>, 2&#183;10<sup><span class="docEmphasis">n</span></sup>, or 5&#183;10<sup><span class="docEmphasis">n</span></sup>.</P>
+<p class="docText">We start by computing the &quot;gross step&quot;, a kind of maximum for the step value. Then we find the corresponding number of the form 10<sup><span class="docEmphasis">n</span></sup> that is smaller than or equal to the gross step. We do this by taking the decimal logarithm of the gross step, rounding that value down to a whole number, then raising 10 to the power of this rounded number. For example, if the gross step is 236, we compute log 236 = 2.37291&#8230;; then we round it down to 2 and obtain 10<sup>2</sup> = 100 as the candidate step value of the form 10<sup><span class="docEmphasis">n</span></sup>.</P>
+<p class="docText">Once we have the first candidate step value, we can use it to calculate the other two candidates: 2&#183;10<sup><span class="docEmphasis">n</span></sup> and 5&#183;10<sup><span class="docEmphasis">n</span></sup>. For the example above, the two other candidates are 200 and 500. The 500 candidate is larger than the gross step, so we can't use it. But 200 is smaller than 236, so we use 200 for the step size in this example.</P>
+<p class="docText">It's fairly easy to derive <tt>numTicks</tt>, <tt>min</tt>, and <tt>max</tt> from the step value. The new <tt>min</tt> value is obtained by rounding the original <tt>min</tt> down to the nearest multiple of the step, and the new <tt>max</tt> value is obtained by rounding up to the nearest multiple of the step. The new <tt>numTicks</tt> is the number of intervals between the rounded <tt>min</tt> and <tt>max</tt> values. For example, if <tt>min</tt> is 240 and <tt>max</tt> is 1184 upon entering the function, the new range becomes [200, 1200], with 5 tick marks.</p>
+<p class="docText">This algorithm will give suboptimal resultsin some cases. A more sophisticated algorithm is described in Paul S. Heckbert's article &quot;Nice Numbers for Graph Labels&quot; published in <span class="docEmphasis">Graphics Gems</span> (ISBN 0-12-286166-3).</p>
+<p class="docText">This chapter has brought us to the end of <a class="docLink" href="part01.html#part01">Part I</a>. It has explained how to customize an existing Qt widget and how to build a widget from the ground up using <tt>QWidget</tt> as the base class. We have already seen how to compose a widget from existing widgets in <a class="docLink" href="ch02.html#ch02">Chapter 2</a>, and we will explore the theme further in <a class="docLink" href="ch06.html#ch06">Chapter 6</a>.</p>
+<p class="docText">At this point, we know enough to write complete GUI applications using Qt. In <a class="docLink" href="part02.html#part02">Parts II</a> and <a class="docLink" href="part03.html#part03">III</a>, we will explore Qt in greater depth so that we can make full use of Qt's power.</p>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch05lev1sec3.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part02.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

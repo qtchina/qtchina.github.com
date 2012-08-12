@@ -1,0 +1,65 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Using Qt Assistant for Powerful Online Help</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part03.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch16lev1sec3"></a>
+<h3 id="title-IDAF152S" class="docSection1Title">Using Qt Assistant for Powerful Online Help</h3>
+<p class="docText"><span class="docEmphasis">Qt Assistant</span> is a redistributable online help application supplied by Trolltech. Its main virtues are that it supports indexing and full text search and that it can handle documentation sets for multiple applications.</p>
+<p class="docText">To make use of <span class="docEmphasis">Qt Assistant</span>, we must incorporate the necessary code in our application, and we must make <span class="docEmphasis">Qt Assistant</span> aware of our documentation.</p>
+<p class="docText">Communication between a Qt application and <span class="docEmphasis">Qt Assistant</span> is handled by the <tt>QAssistantClient</tt> class, which is located in a separate library. To link this library with an application, we must add the following line to the application's <tt>.pro</tt> file:</p>
+<div class="docText"><pre>
+CONFIG       += assistant
+</pre></div><br>
+<p class="docText">We will now review the code of a new <tt>HelpBrowser</tt> class that uses <span class="docEmphasis">Qt Assistant</span>.</p>
+<div class="docText"><pre>
+#ifndef HELPBROWSER_H
+#define HELPBROWSER_H
+class QAssistantClient;
+class QString;
+class HelpBrowser
+{
+public:
+    static void showPage(const QString &amp;page);
+private:
+    static QAssistantClient *assistant;
+};
+#endif
+</pre></div><br>
+<p class="docText"><a name="iddle1068"></a><a name="iddle1165"></a><a name="iddle1859"></a><a name="iddle2162"></a><a name="iddle2655"></a><a name="iddle2706"></a><a name="iddle2866"></a><a name="iddle3319"></a><a name="iddle3690"></a><a name="iddle4058"></a><a name="iddle4751"></a><a name="iddle6283"></a>Here's the new <tt>helpbrowser.cpp</tt> file:</p>
+<div class="docText"><pre>
+#include &lt;QApplication&gt;
+#include &lt;QAssistantClient&gt;
+#include "helpbrowser.h"
+QAssistantClient *HelpBrowser::assistant = 0;
+void HelpBrowser::showPage(const QString &amp;page)
+{
+    QString path = QApplication::applicationDirPath() + "/doc/" + page;
+    if (!assistant)
+        assistant = new QAssistantClient("");
+    assistant-&gt;showPage(path);
+}
+</pre></div><br>
+<p class="docText">The <tt>QAssistantClient</tt> constructor accepts a path string as its first argument, which it uses to locate the <span class="docEmphasis">Qt Assistant</span> executable. By passing an empty path, we signify that <tt>QAssistantClient</tt> should look for the executable in the <tt>PATH</tt> environment variable. <tt>QAssistantClient</tt> has a <tt>showPage()</tt> function that accepts a page name with an optional HTML anchor.</p>
+<p class="docText">The next step is to prepare a table of contents and an index for the documentation. This is done by creating a <span class="docEmphasis">Qt Assistant</span> profile and writing a <tt>.dcf</tt> file that provides information about the documentation. All this is explained in <span class="docEmphasis">Qt Assistant</span>'s online documentation, so we will not duplicate that information here.</p>
+<p class="docText">An alternative to using <tt>QTextBrowser</tt> or <span class="docEmphasis">Qt Assistant</span> is to use platform-specific approaches to providing online help. For Windows applications, it might be desirable to create Windows HTML Help files and to provide access to them using Microsoft Internet Explorer. You could use Qt's <tt>QProcess</tt> class or the ActiveQt framework for this. For X11 applications, a suitable approach might be to provide HTML files and to launch a web browser using <tt>QProcess</tt>. On Mac OS X, Apple Help provides similar functionality to <span class="docEmphasis">Qt Assistant</span>.</P>
+<p class="docText">We have now reached the end of <a class="docLink" href="part02.html#part02">Part II</a>. The chapters that follow in <a class="docLink" href="part03.html#part03">Part III</a> cover more advanced and specialized features of Qt. The C++ and Qt coding they present are no more difficult than that seen in <a class="docLink" href="part02.html#part02">Part II</a>, but some of the concepts and ideas may be more challenging in those areas that are new to you.</p>
+
+</TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch16lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=part03.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>

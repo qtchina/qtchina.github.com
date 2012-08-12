@@ -1,0 +1,65 @@
+<html>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<head>
+<title>Traversing Directories</title>
+<link rel="STYLESHEET" type="text/css" href="images/style.css">
+<link rel="STYLESHEET" type="text/css" href="images/docsafari.css">
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<br><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"><a name="ch12lev1sec3"></a>
+<h3 id="title-IDA30W5O" class="docSection1Title">Traversing Directories</h3>
+<p class="docText">The <tt>QDir</tt> class provides a platform-independent means of traversing directories and retrieving information about files. To see how <tt>QDir</tt> is used, we will write a small console application that calculates the space consumed by all the images in a particular directory and all its subdirectories to any depth.</p>
+<p class="docText">The heart of the application is the <tt>imageSpace()</tt> function, which recursively computes the cumulative size of a given directory's images:</p>
+<div class="docText"><pre>
+qlonglong imageSpace(const QString &amp;path)
+{
+    QDir dir(path);
+    qlonglong size = 0;
+    QStringList filters;
+    foreach (QByteArray format, QImageReader::supportedImageFormats())
+        filters += "*." + format;
+    foreach (QString file, dir.entryList(filters, QDir::Files))
+        size += QFileInfo(dir, file).size();
+    foreach (QString subDir, dir.entryList(QDir::Dirs
+                                           | QDir::NoDotAndDotDot))
+        size += imageSpace(path + QDir::separator() + subDir);
+    return size;
+}
+</pre></div><br>
+<p class="docText">We begin by creating a <tt>QDir</tt> object using the given path, which may be relative to the current directory or absolute. We pass the <tt>entryList()</tt> function two arguments. The first is a list of file name filters. These can contain '*' and '?' wildcard characters. In this example, we are filtering to include only file formats that <tt>QImage</tt> can read. The second argument specifies what kind of entries we want (normal files, directories, drives, etc.).</p>
+<p class="docText">We iterate over the list of files, accumulating their sizes. The <tt>QFileInfo</tt> class allows us to access a file's attributes, such as the file's size, permissions, owner, and timestamps.</p>
+<p class="docText">The second <tt>entryList()</tt> call retrieves all the subdirectories in this directory. We iterate over them (excluding <tt>.</tt> and <tt>..</tt>) and recursively call <tt>imageSpace()</tt> to ascertain their accumulated image sizes.</p>
+<p class="docText">To create each subdirectory's path, we combine the current directory's path with the subdirectory name, separating them with a slash. <tt>QDir</tt> treats '/' as a <a name="iddle1011"></a><a name="iddle1036"></a><a name="iddle1245"></a><a name="iddle1696"></a><a name="iddle1775"></a><a name="iddle2156"></a><a name="iddle2352"></a><a name="iddle2353"></a><a name="iddle2354"></a><a name="iddle2389"></a><a name="iddle2685"></a><a name="iddle3357"></a><a name="iddle3358"></a><a name="iddle3858"></a><a name="iddle4211"></a><a name="iddle4212"></a><a name="iddle4213"></a><a name="iddle4215"></a><a name="iddle4216"></a><a name="iddle4217"></a><a name="iddle4218"></a><a name="iddle4219"></a><a name="iddle4280"></a><a name="iddle4285"></a><a name="iddle4510"></a><a name="iddle4785"></a><a name="iddle5680"></a><a name="iddle5788"></a><a name="iddle5797"></a><a name="iddle5798"></a><a name="iddle5828"></a><a name="iddle5836"></a><a name="iddle5875"></a><a name="iddle5876"></a><a name="iddle5989"></a><a name="iddle5990"></a><a name="iddle6350"></a><a name="iddle7351"></a>directory separator on all platforms, in addition to recognizing '\' on Windows. When presenting paths to the user, we can call the static function <tt>QDir::convertSeparators()</tt> to convert slashes to the correct platform-specific separator.</p>
+<p class="docText">Let's add a <tt>main()</tt> function to our small program:</P>
+<div class="docText"><pre>
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    QStringList args = app.arguments();
+    QString path = QDir::currentPath();
+    if (args.count() &gt; 1)
+        path = args[1];
+    cout &lt;&lt; "Space used by images in " &lt;&lt; qPrintable(path)
+         &lt;&lt; " and its subdirectories is " &lt;&lt; (imageSpace(path) / 1024)
+         &lt;&lt; " KB" &lt;&lt; endl;
+    return 0;
+}
+</pre></div><br>
+<p class="docText">We use <tt>QDir::currentPath()</tt> to initialize the path to the current directory. Alternatively, we could have used <tt>QDir::homePath()</tt> to initialize it to the user's home directory. If the user has specified a path on the command line, we use that instead. Finally, we call our <tt>imageSpace()</tt> function to calculate how much space is consumed by images.</p>
+<p class="docText">The <tt>QDir</tt> class provides other file- and directory-related functions, including <tt>entryInfoList()</tt> (which returns a list of <tt>QFileInfo</tt> objects), <tt>rename()</tt>, <tt>exists()</tt>, <tt>mkdir()</tt>, and <tt>rmdir()</tt>. The <tt>QFile</tt> class provides some static convenience functions, including <tt>remove()</tt> and <tt>exists()</tt>.</P>
+
+<a href="21021536.html"><img src="images/pixel.jpg" alt="" width="1" height="1" border="0"></a></TD></TR></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec2.html><img src="images/prev.gif" width="60" height="17" border="0" align="absmiddle" alt="Previous Page"></a>
+<td align="right"><div STYLE="MARGIN-LEFT: 0.15in;">
+<a href=ch12lev1sec4.html><img src="images/next.gif" width="60" height="17" border="0" align="absmiddle" alt="Next Page"></a>
+</div></td></tr></table>
+<div style="display:none"><center><a href="http://sourceforge.net/donate/index.php?group_id=186258"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>|<script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330&show=pic2' language='JavaScript' charset='gb2312'></script></center></script></div></body></html>
