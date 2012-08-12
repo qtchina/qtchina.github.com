@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: LocalDirSortFilterModel类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>LocalDirSortFilterModel类参考</h1><!-- doxytag: class="LocalDirSortFilterModel" -->
+<p><code>#include &lt;<a class="el" href="localdirsortfiltermodel_8h_source.html">localdirsortfiltermodel.h</a>&gt;</code></p>
+
+<p><a href="class_local_dir_sort_filter_model-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#afa719ef74a64853722c918faa9462720">refresh</a> (const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#af334978dbd6798da2628d89efd9857e6">LocalDirSortFilterModel</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#abab5c7a3be319bc21c5ba809d69aaec4">~LocalDirSortFilterModel</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#a6b9ac97842b8db2a616183a70b3a0502">index</a> (const QString &amp;path, int column=0) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#a3cb1a47639c7582a83e6bbe4f8e49511">index</a> (int &amp;row, int column, QModelIndex &amp;parent) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#abcc3abcde594e9929085a69296fdd782">setSourceModel</a> (QAbstractItemModel *sourceModel)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#ae851c0c1aa99dec6961d853c023c607d">filePath</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#a1edd7df69f0b7038a9adecf7edd8bd43">fileName</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#af45edacd01bebb7945d5d01b6d09e72a">isDir</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#a55c0c2f1ca88bfdef1b7cee88516a307">filterAcceptsRow</a> (int source_row, const QModelIndex &amp;source_parent) const </td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QFileSystemModel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_dir_sort_filter_model.html#ae07b1749dbdd65099c30b4da15678044">source_model</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8h_source.html">localdirsortfiltermodel.h</a>第<a class="el" href="localdirsortfiltermodel_8h_source.html#l00020">20</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="af334978dbd6798da2628d89efd9857e6"></a><!-- doxytag: member="LocalDirSortFilterModel::LocalDirSortFilterModel" ref="af334978dbd6798da2628d89efd9857e6" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LocalDirSortFilterModel::LocalDirSortFilterModel </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00016">16</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abab5c7a3be319bc21c5ba809d69aaec4"></a><!-- doxytag: member="LocalDirSortFilterModel::~LocalDirSortFilterModel" ref="abab5c7a3be319bc21c5ba809d69aaec4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LocalDirSortFilterModel::~LocalDirSortFilterModel </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00047">47</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a1edd7df69f0b7038a9adecf7edd8bd43"></a><!-- doxytag: member="LocalDirSortFilterModel::fileName" ref="a1edd7df69f0b7038a9adecf7edd8bd43" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString LocalDirSortFilterModel::fileName </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00071">71</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00441">LocalView::slot_rename()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae851c0c1aa99dec6961d853c023c607d"></a><!-- doxytag: member="LocalDirSortFilterModel::filePath" ref="ae851c0c1aa99dec6961d853c023c607d" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString LocalDirSortFilterModel::filePath </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">67</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00228">LocalView::get_selected_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00485">LocalView::slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00291">LocalView::slot_dir_tree_item_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00417">LocalView::slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">LocalView::slot_rename()</a>及<a class="el" href="localview_8cpp_source.html#l00505">LocalView::slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a55c0c2f1ca88bfdef1b7cee88516a307"></a><!-- doxytag: member="LocalDirSortFilterModel::filterAcceptsRow" ref="a55c0c2f1ca88bfdef1b7cee88516a307" args="(int source_row, const QModelIndex &amp;source_parent) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LocalDirSortFilterModel::filterAcceptsRow </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>source_row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>source_parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const<code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00085">85</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3cb1a47639c7582a83e6bbe4f8e49511"></a><!-- doxytag: member="LocalDirSortFilterModel::index" ref="a3cb1a47639c7582a83e6bbe4f8e49511" args="(int &amp;row, int column, QModelIndex &amp;parent) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex LocalDirSortFilterModel::index </td>
+          <td>(</td>
+          <td class="paramtype">int &amp;&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00055">55</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6b9ac97842b8db2a616183a70b3a0502"></a><!-- doxytag: member="LocalDirSortFilterModel::index" ref="a6b9ac97842b8db2a616183a70b3a0502" args="(const QString &amp;path, int column=0) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex LocalDirSortFilterModel::index </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00051">51</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00165">LocalView::expand_to_home_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00019">LocalView::LocalView()</a>及<a class="el" href="localview_8cpp_source.html#l00304">LocalView::slot_dir_file_view_double_clicked()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af45edacd01bebb7945d5d01b6d09e72a"></a><!-- doxytag: member="LocalDirSortFilterModel::isDir" ref="af45edacd01bebb7945d5d01b6d09e72a" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LocalDirSortFilterModel::isDir </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00075">75</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa719ef74a64853722c918faa9462720"></a><!-- doxytag: member="LocalDirSortFilterModel::refresh" ref="afa719ef74a64853722c918faa9462720" args="(const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalDirSortFilterModel::refresh </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00080">80</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00256">LocalView::slot_refresh_directory_tree()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abcc3abcde594e9929085a69296fdd782"></a><!-- doxytag: member="LocalDirSortFilterModel::setSourceModel" ref="abcc3abcde594e9929085a69296fdd782" args="(QAbstractItemModel *sourceModel)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalDirSortFilterModel::setSourceModel </td>
+          <td>(</td>
+          <td class="paramtype">QAbstractItemModel *&nbsp;</td>
+          <td class="paramname"> <em>sourceModel</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a>第<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00060">60</a>行定义。</p>
+
+<p>参考 <a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">source_model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView::LocalView()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ae07b1749dbdd65099c30b4da15678044"></a><!-- doxytag: member="LocalDirSortFilterModel::source_model" ref="ae07b1749dbdd65099c30b4da15678044" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QFileSystemModel* <a class="el" href="class_local_dir_sort_filter_model.html#ae07b1749dbdd65099c30b4da15678044">LocalDirSortFilterModel::source_model</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localdirsortfiltermodel_8h_source.html">localdirsortfiltermodel.h</a>第<a class="el" href="localdirsortfiltermodel_8h_source.html#l00044">44</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00071">fileName()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">filePath()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00085">filterAcceptsRow()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00051">index()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00075">isDir()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00016">LocalDirSortFilterModel()</a>及<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00060">setSourceModel()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="localdirsortfiltermodel_8h_source.html">localdirsortfiltermodel.h</a></li>
+<li><a class="el" href="localdirsortfiltermodel_8cpp_source.html">localdirsortfiltermodel.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

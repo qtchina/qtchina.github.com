@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: syncdiffermodel.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>syncdiffermodel.cpp</h1><a href="syncdiffermodel_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// syncdiffermodel.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-08-10 21:13:15 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: syncdiffermodel.cpp 455 2009-08-29 09:23:35Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;<a class="code" href="synchronizewindow_8h.html">synchronizewindow.h</a>&quot;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="syncdiffermodel_8h.html">syncdiffermodel.h</a>&quot;</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a><a class="code" href="class_sync_differ_model.html#a32639dc12d9475d4fc7bacb6b3164990">00015</a> <a class="code" href="class_sync_differ_model.html#a32639dc12d9475d4fc7bacb6b3164990">SyncDifferModel::SyncDifferModel</a>(QObject *parent)
+<a name="l00016"></a>00016     :QAbstractItemModel(parent)
+<a name="l00017"></a>00017 {
+<a name="l00018"></a>00018     this-&gt;<a class="code" href="class_sync_differ_model.html#a54bca1e8b4116efc1d2223b2c5845503">sync_win</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="class_synchronize_window.html">SynchronizeWindow</a>*<span class="keyword">&gt;</span>(parent);
+<a name="l00019"></a>00019 }
+<a name="l00020"></a>00020 
+<a name="l00021"></a><a class="code" href="class_sync_differ_model.html#afe7aef8fbb59f2029849db7b0925807d">00021</a> <a class="code" href="class_sync_differ_model.html#afe7aef8fbb59f2029849db7b0925807d">SyncDifferModel::~SyncDifferModel</a>()
+<a name="l00022"></a>00022 {
+<a name="l00023"></a>00023     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;destructured&quot;</span>;
+<a name="l00024"></a>00024 }
+<a name="l00025"></a>00025 
+<a name="l00026"></a><a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">00026</a> QModelIndex <a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">SyncDifferModel::index</a>(<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column, <span class="keyword">const</span> QModelIndex &amp;parent)<span class="keyword"> const</span>
+<a name="l00027"></a>00027 <span class="keyword"></span>{
+<a name="l00028"></a>00028     <span class="comment">//q_debug()&lt;&lt;row&lt;&lt;&quot;,&quot;&lt;&lt;column&lt;&lt;&quot; &quot;&lt;&lt;parent;</span>
+<a name="l00029"></a>00029     assert(row &gt;= 0);
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031     QModelIndex idx = QModelIndex();
+<a name="l00032"></a>00032     <span class="keywordflow">if</span> (!parent.isValid()) {
+<a name="l00033"></a>00033         idx = this-&gt;createIndex(row, column, -1);
+<a name="l00034"></a>00034     } <span class="keywordflow">else</span> {
+<a name="l00035"></a>00035         <span class="comment">//idx = this-&gt;createIndex(row, column, parent.row());</span>
+<a name="l00036"></a>00036         <span class="comment">//qDebug()&lt;&lt;&quot;create sub model&quot;&lt;&lt;parent.row();</span>
+<a name="l00037"></a>00037         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;not possible now&quot;</span>;
+<a name="l00038"></a>00038     }
+<a name="l00039"></a>00039     <span class="keywordflow">return</span> idx;
+<a name="l00040"></a>00040 }
+<a name="l00041"></a><a class="code" href="class_sync_differ_model.html#ae356eca4942998896c21ad296af65783">00041</a> QModelIndex <a class="code" href="class_sync_differ_model.html#ae356eca4942998896c21ad296af65783">SyncDifferModel::parent</a>(<span class="keyword">const</span> QModelIndex &amp;index)<span class="keyword"> const</span>
+<a name="l00042"></a>00042 <span class="keyword"></span>{
+<a name="l00043"></a>00043     <span class="comment">//q_debug()&lt;&lt;&quot;&quot;&lt;&lt;index;    </span>
+<a name="l00044"></a>00044     QModelIndex idx = QModelIndex();
+<a name="l00045"></a>00045     <span class="keywordflow">return</span> idx;
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047     <span class="keywordflow">if</span> (!index.isValid()) {
+<a name="l00048"></a>00048 
+<a name="l00049"></a>00049     } <span class="keywordflow">else</span> {
+<a name="l00050"></a>00050         <span class="comment">//idx = index((int)(index.internalPointer()), 0, idx);</span>
+<a name="l00051"></a>00051         <span class="comment">//idx = createIndex(0,0,0);</span>
+<a name="l00052"></a>00052         <span class="keywordtype">int</span> row = index.internalId();
+<a name="l00053"></a>00053         <span class="keywordflow">if</span> (row == -1) {
+<a name="l00054"></a>00054         } <span class="keywordflow">else</span> {
+<a name="l00055"></a>00055             assert(row != -1);
+<a name="l00056"></a>00056             idx = this-&gt;<a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">index</a>(row, 0, idx);        
+<a name="l00057"></a>00057         }
+<a name="l00058"></a>00058     }
+<a name="l00059"></a>00059     <span class="keywordflow">return</span> idx;
+<a name="l00060"></a>00060 }
+<a name="l00061"></a>00061 
+<a name="l00062"></a><a class="code" href="class_sync_differ_model.html#a9d41e629683f324f865043e84fac4d64">00062</a> QVariant   <a class="code" href="class_sync_differ_model.html#a9d41e629683f324f865043e84fac4d64">SyncDifferModel::data</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keywordtype">int</span> role)<span class="keyword"> const</span>
+<a name="l00063"></a>00063 <span class="keyword"></span>{
+<a name="l00064"></a>00064     <span class="keywordflow">if</span> (!index.isValid()) {
+<a name="l00065"></a>00065         assert(1 == 2);
+<a name="l00066"></a>00066     }
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068     <span class="comment">//q_debug()&lt;&lt;&quot;&quot;&lt;&lt;index;</span>
+<a name="l00069"></a>00069     <span class="keywordflow">if</span> (role != Qt::DisplayRole) {
+<a name="l00070"></a>00070         <span class="keywordflow">return</span> QVariant();
+<a name="l00071"></a>00071     }
+<a name="l00072"></a>00072     LIBSSH2_SFTP_ATTRIBUTES * attr = NULL;
+<a name="l00073"></a>00073     
+<a name="l00074"></a>00074     <span class="keywordflow">switch</span> (index.column()) {
+<a name="l00075"></a>00075     <span class="keywordflow">case</span> 0:
+<a name="l00076"></a>00076         <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a>.at(index.row()).first;
+<a name="l00077"></a>00077         <span class="keywordflow">break</span>;
+<a name="l00078"></a>00078     <span class="keywordflow">case</span> 1:
+<a name="l00079"></a>00079         attr = this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a>.at(index.row()).second;
+<a name="l00080"></a>00080         <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_sync_differ_model.html#a54bca1e8b4116efc1d2223b2c5845503">sync_win</a>-&gt;<a class="code" href="class_synchronize_window.html#a3bf7557bc16be54c994d577ba06d986c">diffDesciption</a>(attr-&gt;flags);
+<a name="l00081"></a>00081         <span class="keywordflow">break</span>;
+<a name="l00082"></a>00082     <span class="keywordflow">case</span> 2:
+<a name="l00083"></a>00083         <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_sync_differ_model.html#a0230bfcf8928fa7eb46017c3b55d1de6">mTransferStatus</a>.at(index.row());
+<a name="l00084"></a>00084         <span class="keywordflow">break</span>;
+<a name="l00085"></a>00085     <span class="keywordflow">default</span>:
+<a name="l00086"></a>00086         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;this is impossible:&quot;</span>&lt;&lt;index.row();
+<a name="l00087"></a>00087         <span class="keywordflow">break</span>;
+<a name="l00088"></a>00088     };
+<a name="l00089"></a>00089     
+<a name="l00090"></a>00090     <span class="keywordflow">return</span> QVariant();
+<a name="l00091"></a>00091 }
+<a name="l00092"></a><a class="code" href="class_sync_differ_model.html#ab20b946aaceed58548b998dfe790c721">00092</a> <span class="keywordtype">int</span> <a class="code" href="class_sync_differ_model.html#ab20b946aaceed58548b998dfe790c721">SyncDifferModel::rowCount</a>(<span class="keyword">const</span> QModelIndex &amp;index)<span class="keyword"> const</span>
+<a name="l00093"></a>00093 <span class="keyword"></span>{
+<a name="l00094"></a>00094     <span class="comment">//q_debug()&lt;&lt;&quot;&quot;&lt;&lt;index;</span>
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096     <span class="keywordflow">if</span> (!index.isValid()) {
+<a name="l00097"></a>00097         <span class="comment">//return this-&gt;sync_win-&gt;synckeys.count();</span>
+<a name="l00098"></a>00098         <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a>.count();
+<a name="l00099"></a>00099     } <span class="keywordflow">else</span> {
+<a name="l00100"></a>00100         <span class="keywordflow">return</span> 0;
+<a name="l00101"></a>00101     }
+<a name="l00102"></a>00102     <span class="keywordflow">return</span> 0;
+<a name="l00103"></a>00103 }
+<a name="l00104"></a><a class="code" href="class_sync_differ_model.html#aa56ea94d46b6159991a98168e0153fff">00104</a> <span class="keywordtype">int</span> <a class="code" href="class_sync_differ_model.html#aa56ea94d46b6159991a98168e0153fff">SyncDifferModel::columnCount</a>(<span class="keyword">const</span> QModelIndex &amp;index)<span class="keyword"> const</span>
+<a name="l00105"></a>00105 <span class="keyword"></span>{
+<a name="l00106"></a>00106     <span class="comment">//q_debug()&lt;&lt;&quot;&quot;&lt;&lt;index;</span>
+<a name="l00107"></a>00107     <span class="keywordflow">if</span>(!index.isValid()) {
+<a name="l00108"></a>00108         <span class="keywordflow">return</span> 3;
+<a name="l00109"></a>00109     }<span class="keywordflow">else</span>{
+<a name="l00110"></a>00110         <span class="keywordflow">return</span> 3;
+<a name="l00111"></a>00111     }
+<a name="l00112"></a>00112     <span class="keywordflow">return</span> 0;
+<a name="l00113"></a>00113 }
+<a name="l00114"></a><a class="code" href="class_sync_differ_model.html#a7bdbe9422c03bc8987513cfcde2ecee2">00114</a> <span class="keywordtype">bool</span> <a class="code" href="class_sync_differ_model.html#a7bdbe9422c03bc8987513cfcde2ecee2">SyncDifferModel::setData</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keyword">const</span> QVariant &amp;value, <span class="keywordtype">int</span> role)
+<a name="l00115"></a>00115 {
+<a name="l00116"></a>00116     <span class="keywordflow">if</span> (!index.isValid()) {
+<a name="l00117"></a>00117         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00118"></a>00118     }
+<a name="l00119"></a>00119     <span class="keywordflow">if</span> (role == Qt::EditRole) {        
+<a name="l00120"></a>00120     }
+<a name="l00121"></a>00121     
+<a name="l00122"></a>00122     <span class="keywordflow">if</span> (index.column() == 2) {
+<a name="l00123"></a>00123         this-&gt;<a class="code" href="class_sync_differ_model.html#a0230bfcf8928fa7eb46017c3b55d1de6">mTransferStatus</a>[index.row()] = value.toString();
+<a name="l00124"></a>00124         emit dataChanged(index, index);
+<a name="l00125"></a>00125     } <span class="keywordflow">else</span> {
+<a name="l00126"></a>00126         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;Not impled&quot;</span>;
+<a name="l00127"></a>00127         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00128"></a>00128     }
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00131"></a>00131 }
+<a name="l00132"></a>00132 
+<a name="l00133"></a><a class="code" href="class_sync_differ_model.html#a636a4be2bf15dddaf41c37a8576fecaa">00133</a> QVariant <a class="code" href="class_sync_differ_model.html#a636a4be2bf15dddaf41c37a8576fecaa">SyncDifferModel::headerData</a>(<span class="keywordtype">int</span> section, Qt::Orientation orientation, <span class="keywordtype">int</span> role)<span class="keyword"> const</span>
+<a name="l00134"></a>00134 <span class="keyword"></span>{
+<a name="l00135"></a>00135     Q_UNUSED(orientation);
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137     <span class="keywordflow">if</span> (role != Qt::DisplayRole) {
+<a name="l00138"></a>00138         <span class="keywordflow">return</span> QVariant();
+<a name="l00139"></a>00139     }
+<a name="l00140"></a>00140     <span class="keywordflow">switch</span> (section) {
+<a name="l00141"></a>00141     <span class="keywordflow">case</span> 0:
+<a name="l00142"></a>00142         <span class="keywordflow">return</span> QString(tr(<span class="stringliteral">&quot;File Name&quot;</span>));
+<a name="l00143"></a>00143         <span class="keywordflow">break</span>;
+<a name="l00144"></a>00144     <span class="keywordflow">case</span> 1:
+<a name="l00145"></a>00145         <span class="keywordflow">return</span> QString(tr(<span class="stringliteral">&quot;Diff status&quot;</span>));
+<a name="l00146"></a>00146         <span class="keywordflow">break</span>;
+<a name="l00147"></a>00147     <span class="keywordflow">case</span> 2:
+<a name="l00148"></a>00148         <span class="keywordflow">return</span> QString(tr(<span class="stringliteral">&quot;Sync status&quot;</span>));
+<a name="l00149"></a>00149         <span class="keywordflow">break</span>;
+<a name="l00150"></a>00150     <span class="keywordflow">default</span>:
+<a name="l00151"></a>00151         <span class="keywordflow">break</span>;
+<a name="l00152"></a>00152     };
+<a name="l00153"></a>00153     <span class="keywordflow">return</span> QVariant();
+<a name="l00154"></a>00154 }
+<a name="l00155"></a>00155 
+<a name="l00156"></a><a class="code" href="class_sync_differ_model.html#a2d40b73a39cc12045e4b9a0d15051e5c">00156</a> <span class="keywordtype">void</span> <a class="code" href="class_sync_differ_model.html#a2d40b73a39cc12045e4b9a0d15051e5c">SyncDifferModel::maybe_has_data</a>()
+<a name="l00157"></a>00157 {
+<a name="l00158"></a>00158     qDebug()&lt;&lt;<span class="stringliteral">&quot;aaaaaaaaaa&quot;</span>;
+<a name="l00159"></a>00159     emit layoutChanged ();
+<a name="l00160"></a>00160 }
+<a name="l00161"></a>00161 
+<a name="l00162"></a><a class="code" href="class_sync_differ_model.html#ad7bde604f8f163c4a9a147ed28066fe8">00162</a> <span class="keywordtype">bool</span> <a class="code" href="class_sync_differ_model.html#ad7bde604f8f163c4a9a147ed28066fe8">SyncDifferModel::setDiffFiles</a>(QVector&lt;QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt; &gt; files)
+<a name="l00163"></a>00163 {
+<a name="l00164"></a>00164     this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a> = files;
+<a name="l00165"></a>00165     this-&gt;<a class="code" href="class_sync_differ_model.html#a0230bfcf8928fa7eb46017c3b55d1de6">mTransferStatus</a>.resize(files.count());
+<a name="l00166"></a>00166     
+<a name="l00167"></a>00167     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00168"></a>00168 }
+<a name="l00169"></a>00169 
+<a name="l00170"></a><a class="code" href="class_sync_differ_model.html#a24741ba4711fa573d2b0cf72b2b4dcf7">00170</a> QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt; <a class="code" href="class_sync_differ_model.html#a24741ba4711fa573d2b0cf72b2b4dcf7">SyncDifferModel::getFile</a>(<span class="keyword">const</span> QModelIndex &amp; index)<span class="keyword"> const</span>
+<a name="l00171"></a>00171 <span class="keyword"></span>{
+<a name="l00172"></a>00172     QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt; file;
+<a name="l00173"></a>00173     <span class="keywordflow">if</span> (index.row() &gt;= this-&gt;<a class="code" href="class_sync_differ_model.html#ab20b946aaceed58548b998dfe790c721">rowCount</a>(QModelIndex())) {
+<a name="l00174"></a>00174         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;Invalid index&quot;</span>;
+<a name="l00175"></a>00175     } <span class="keywordflow">else</span> {
+<a name="l00176"></a>00176         file = this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a>.at(index.row());
+<a name="l00177"></a>00177     }
+<a name="l00178"></a>00178     <span class="keywordflow">return</span> file;
+<a name="l00179"></a>00179 }
+<a name="l00180"></a>00180 
+<a name="l00181"></a><a class="code" href="class_sync_differ_model.html#a5cfc7e1d47b75480fbd0b8779335894c">00181</a> <span class="keywordtype">int</span> <a class="code" href="class_sync_differ_model.html#a5cfc7e1d47b75480fbd0b8779335894c">SyncDifferModel::getRowNumberByFileName</a>(QString fileName)
+<a name="l00182"></a>00182 {
+<a name="l00183"></a>00183     <span class="keywordtype">int</span> rowno = 0;
+<a name="l00184"></a>00184     <span class="keywordtype">int</span> <a class="code" href="class_sync_differ_model.html#ab20b946aaceed58548b998dfe790c721">rowCount</a> = this-&gt;<a class="code" href="class_sync_differ_model.html#ab20b946aaceed58548b998dfe790c721">rowCount</a>(QModelIndex());
+<a name="l00185"></a>00185 
+<a name="l00186"></a>00186     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; rowCount; i++) {
+<a name="l00187"></a>00187         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_sync_differ_model.html#a9e04ba4e2bf7612ecdadd73740614006">mMergedFiles</a>.at(i).first == fileName) {
+<a name="l00188"></a>00188             rowno = i;
+<a name="l00189"></a>00189             <span class="keywordflow">break</span>;
+<a name="l00190"></a>00190         }
+<a name="l00191"></a>00191     }
+<a name="l00192"></a>00192 
+<a name="l00193"></a>00193     <span class="keywordflow">return</span> rowno;
+<a name="l00194"></a>00194 }
+<a name="l00195"></a>00195 
+<a name="l00196"></a><a class="code" href="class_sync_differ_model.html#a9d6ae220d7aa64be613a252bad03bdec">00196</a> <span class="keywordtype">void</span> <a class="code" href="class_sync_differ_model.html#a9d6ae220d7aa64be613a252bad03bdec">SyncDifferModel::startSyncFile</a>(QString fileName, quint64 fileSize)
+<a name="l00197"></a>00197 {
+<a name="l00198"></a>00198     <span class="keywordtype">int</span> rowno = this-&gt;<a class="code" href="class_sync_differ_model.html#a5cfc7e1d47b75480fbd0b8779335894c">getRowNumberByFileName</a>(fileName);
+<a name="l00199"></a>00199     QModelIndex idx = this-&gt;<a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">index</a>(rowno, 2, QModelIndex());
+<a name="l00200"></a>00200     QString statusLine = QString(tr(<span class="stringliteral">&quot;Starting sync %1 Bytes ...&quot;</span>)).arg(fileSize);
+<a name="l00201"></a>00201     this-&gt;<a class="code" href="class_sync_differ_model.html#a7bdbe9422c03bc8987513cfcde2ecee2">setData</a>(idx, statusLine);
+<a name="l00202"></a>00202 }
+<a name="l00203"></a><a class="code" href="class_sync_differ_model.html#a000129bffe4492197fc9b8d52d17dae8">00203</a> <span class="keywordtype">void</span> <a class="code" href="class_sync_differ_model.html#a000129bffe4492197fc9b8d52d17dae8">SyncDifferModel::stopSyncFile</a>(QString fileName, <span class="keywordtype">int</span> status)
+<a name="l00204"></a>00204 {
+<a name="l00205"></a>00205     Q_UNUSED(status);
+<a name="l00206"></a>00206 
+<a name="l00207"></a>00207     <span class="keywordtype">int</span> rowno = this-&gt;<a class="code" href="class_sync_differ_model.html#a5cfc7e1d47b75480fbd0b8779335894c">getRowNumberByFileName</a>(fileName);
+<a name="l00208"></a>00208     QModelIndex idx = this-&gt;<a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">index</a>(rowno, 2, QModelIndex());
+<a name="l00209"></a>00209     QString statusLine = QString(tr(<span class="stringliteral">&quot;Sync success&quot;</span>));
+<a name="l00210"></a>00210     this-&gt;<a class="code" href="class_sync_differ_model.html#a7bdbe9422c03bc8987513cfcde2ecee2">setData</a>(idx, statusLine);
+<a name="l00211"></a>00211 }
+<a name="l00212"></a><a class="code" href="class_sync_differ_model.html#abfae32502ebe4724072aa7657db90023">00212</a> <span class="keywordtype">void</span> <a class="code" href="class_sync_differ_model.html#abfae32502ebe4724072aa7657db90023">SyncDifferModel::changeTransferedPercent</a>(QString fileName, <span class="keywordtype">int</span> percent, 
+<a name="l00213"></a>00213                                               quint64 transferdLength, quint64 lastBlockLength)
+<a name="l00214"></a>00214 {
+<a name="l00215"></a>00215     Q_UNUSED(transferdLength);
+<a name="l00216"></a>00216     Q_UNUSED(lastBlockLength);
+<a name="l00217"></a>00217 
+<a name="l00218"></a>00218     <span class="keywordtype">int</span> rowno = this-&gt;<a class="code" href="class_sync_differ_model.html#a5cfc7e1d47b75480fbd0b8779335894c">getRowNumberByFileName</a>(fileName);
+<a name="l00219"></a>00219     QModelIndex idx = this-&gt;<a class="code" href="class_sync_differ_model.html#a8018068e7ea9fc849b603e3eef91e58f">index</a>(rowno, 2, QModelIndex());
+<a name="l00220"></a>00220     QString statusLine = QString(tr(<span class="stringliteral">&quot;Synced %1% ...&quot;</span>)).arg(percent);
+<a name="l00221"></a>00221     this-&gt;<a class="code" href="class_sync_differ_model.html#a7bdbe9422c03bc8987513cfcde2ecee2">setData</a>(idx, statusLine);    
+<a name="l00222"></a>00222 }
+<a name="l00223"></a>00223 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

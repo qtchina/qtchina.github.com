@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sessiondialog.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sessiondialog.h</h1><a href="sessiondialog_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// sessiondialog.h --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-07-16 22:06:33 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: sessiondialog.h 489 2009-09-09 13:30:50Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="basestorage_8h.html">basestorage.h</a>&quot;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;ui_hostlistdialog.h&quot;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a><a class="code" href="class_session_dir_model.html">00016</a> <span class="keyword">class </span><a class="code" href="class_session_dir_model.html">SessionDirModel</a> : <span class="keyword">public</span> QDirModel
+<a name="l00017"></a>00017 {
+<a name="l00018"></a>00018     Q_OBJECT;
+<a name="l00019"></a>00019 <span class="keyword">public</span>:
+<a name="l00020"></a>00020     <a class="code" href="class_session_dir_model.html#a83ece861407e3abd191628d29078a8b9">SessionDirModel</a>(<span class="keyword">const</span> QStringList &amp; nameFilters, QDir::Filters filters, QDir::SortFlags sort, QObject * parent = 0 );
+<a name="l00021"></a>00021     <a class="code" href="class_session_dir_model.html#a83ece861407e3abd191628d29078a8b9">SessionDirModel</a>(QObject *parent = 0 );
+<a name="l00022"></a>00022     <a class="code" href="class_session_dir_model.html#a956deb863c93a91c78ee47b9b852022b">~SessionDirModel</a>();
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024     <span class="keyword">virtual</span> QVariant <a class="code" href="class_session_dir_model.html#ad8f85daea33f20b905b2ec2b42d96428">data</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keywordtype">int</span> role = Qt::DisplayRole) <span class="keyword">const</span>;
+<a name="l00025"></a>00025 };
+<a name="l00026"></a>00026 
+<a name="l00027"></a><a class="code" href="class_session_dialog.html">00027</a> <span class="keyword">class </span><a class="code" href="class_session_dialog.html">SessionDialog</a>: <span class="keyword">public</span> QDialog
+<a name="l00028"></a>00028 {
+<a name="l00029"></a>00029     Q_OBJECT;
+<a name="l00030"></a>00030 <span class="keyword">public</span>:
+<a name="l00031"></a>00031     <a class="code" href="class_session_dialog.html#a4609743db5cca82bdfaf405b3c5afd6c">SessionDialog</a>(QWidget *parent = 0);
+<a name="l00032"></a>00032     <a class="code" href="class_session_dialog.html#ad9cab9f87c2c8799d7f8588ae6f4d8b3">~SessionDialog</a>();
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="keyword">public</span> slots:
+<a name="l00035"></a>00035     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>();
+<a name="l00036"></a>00036     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>(<span class="keyword">const</span> QModelIndex &amp; index);
+<a name="l00037"></a>00037     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a0712348f907b7694605c2144ac86ba73">slot_edit_selected_host</a>();
+<a name="l00038"></a>00038     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#aa4ca79bb40c6226935826ad525a8f8d6">slot_rename_selected_host</a>();
+<a name="l00039"></a>00039     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ae88bc0f8ebebe1fa1d0c06d5123b5815">slot_remove_selected_host</a>();
+<a name="l00040"></a>00040     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ae05f2757552b1db23b5b6b9405c9e0ac">slot_quick_connect</a>();
+<a name="l00041"></a>00041     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a57418f1ee021feb2f4043e146bbe36e9">slot_cut_selected</a>();
+<a name="l00042"></a>00042     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#aeaa489da12560189732afdc07499707f">slot_copy_selected</a>();
+<a name="l00043"></a>00043     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#af32384b16652740309b53195aaffe1fd">slot_paste_selected</a>();
+<a name="l00044"></a>00044     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a28a58094d32df2c1f0d3c5b895cc7184">slot_new_folder</a>();
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046     QMap&lt;QString, QString&gt;  <a class="code" href="class_session_dialog.html#a94c3574df5e1a0548aa6b9204fb65a51">get_host_map</a>();
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048 signals:
+<a name="l00049"></a>00049     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a550cd01ff13c702ecc330fea4776b257">connect_remote_host_requested</a>(QMap&lt;QString, QString&gt; host);
+<a name="l00050"></a>00050     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ae3038c67dd3638779fb72d6aed6edec3">quick_connect</a>();
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052 <span class="keyword">private</span> slots:
+<a name="l00053"></a>00053     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a75d85e93e9d7345e6195ed7ed5f6b189">slot_ctx_menu_requested</a>(<span class="keyword">const</span> QPoint &amp;pos);
+<a name="l00054"></a>00054     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ab4ae0a4c77a9c3b78882f7ececd3e8c0">slot_item_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;index);
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 <span class="keyword">private</span>:
+<a name="l00058"></a><a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">00058</a>     Ui::HostListDialog <a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>;
+<a name="l00059"></a><a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">00059</a>     <a class="code" href="class_base_storage.html">BaseStorage</a> *<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>;
+<a name="l00060"></a>00060     <span class="comment">// QStringListModel *host_list_model;</span>
+<a name="l00061"></a><a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">00061</a>     QMenu *<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>;
+<a name="l00062"></a><a class="code" href="class_session_dialog.html#ac1441001fcc1bcd97dc824b4ca7cdcff">00062</a>     QAction *<a class="code" href="class_session_dialog.html#ac1441001fcc1bcd97dc824b4ca7cdcff">action_connect</a>;
+<a name="l00063"></a><a class="code" href="class_session_dialog.html#a6a18a0b7bbcc7a121b2dc268fb132a05">00063</a>     QAction *<a class="code" href="class_session_dialog.html#a6a18a0b7bbcc7a121b2dc268fb132a05">action_edit</a>;
+<a name="l00064"></a><a class="code" href="class_session_dialog.html#a192c1bef988adf41fe7ff5dccae10310">00064</a>     QAction *<a class="code" href="class_session_dialog.html#a192c1bef988adf41fe7ff5dccae10310">action_rename</a>;
+<a name="l00065"></a><a class="code" href="class_session_dialog.html#a59f5005310743a8086a774bfd34a66fe">00065</a>     QAction *<a class="code" href="class_session_dialog.html#a59f5005310743a8086a774bfd34a66fe">action_remove</a>;
+<a name="l00066"></a><a class="code" href="class_session_dialog.html#af0acc3b001045e895d2b2626ecd07b50">00066</a>     QAction *<a class="code" href="class_session_dialog.html#af0acc3b001045e895d2b2626ecd07b50">action_sep</a>;
+<a name="l00067"></a><a class="code" href="class_session_dialog.html#af95a2b969a3a43bb9f8afbd1258a39c5">00067</a>     QMap&lt;QString, QString&gt; <a class="code" href="class_session_dialog.html#af95a2b969a3a43bb9f8afbd1258a39c5">selected_host</a>;
+<a name="l00068"></a>00068 
+<a name="l00069"></a><a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">00069</a>     <span class="keywordtype">void</span> *<a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">info_dlg</a>;
+<a name="l00070"></a>00070 
+<a name="l00071"></a><a class="code" href="class_session_dialog.html#aa3c41470dd1057644d8659afa4ed5523">00071</a>     QString <a class="code" href="class_session_dialog.html#aa3c41470dd1057644d8659afa4ed5523">sessPath</a>;
+<a name="l00072"></a><a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">00072</a>     <a class="code" href="class_session_dir_model.html">SessionDirModel</a> *<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>;
+<a name="l00073"></a>00073 
+<a name="l00074"></a><a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">00074</a>     <span class="keyword">enum</span> {<a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a0e1107063191c99641ed8fa208f5376a">OP_COPY</a>=1, <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">OP_CUT</a>=2};
+<a name="l00075"></a><a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">00075</a>     <span class="keywordtype">int</span> <a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a>; <span class="comment">// OP_COPY, OP_CUT</span>
+<a name="l00076"></a><a class="code" href="class_session_dialog.html#a546eeec7680bc5555044d8e84eaf690b">00076</a>     QString <a class="code" href="class_session_dialog.html#a546eeec7680bc5555044d8e84eaf690b">opLeftFile</a>;
+<a name="l00077"></a>00077     <span class="comment">// QModelIndex oppidx;</span>
+<a name="l00078"></a>00078     <span class="comment">// QModelIndex opidx;</span>
+<a name="l00079"></a>00079 };
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 <span class="comment">/* sessiondialog.h ends here */</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

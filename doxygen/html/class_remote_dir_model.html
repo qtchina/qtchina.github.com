@@ -1,0 +1,1431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: RemoteDirModel类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>RemoteDirModel类参考</h1><!-- doxytag: class="RemoteDirModel" -->
+<p><code>#include &lt;<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>&gt;</code></p>
+
+<p><a href="class_remote_dir_model-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#afa24aded7d9a96e4207487783ab04dd8">slot_remote_dir_node_retrived</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, <a class="el" href="class_net_dir_node.html">NetDirNode</a> *newNodes)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3d0637f27fcbeacbbcbb8b86f6d4701e">slot_remote_dir_node_clicked</a> (const QModelIndex &amp;index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, QString params)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a24d6e4aabef36bbee5f12b0dd4d567e3">execute_command_finished</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, int status)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ac91475bebe5716dcfea8bc47e4e78116">set_keep_alive</a> (bool <a class="el" href="class_remote_dir_model.html#ae2d9712630aa07e81992adcc9a272153">keep_alive</a>, int time_out=DEFAULT_KEEP_ALIVE_TIMEOUT)</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3053ebf4e6957487ad7c0712c68ef9c1">sig_drop_mime_data</a> (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a64f4c0af292b7657fa6e57b0e2d0a045">enter_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a2b921852d2c403e1a76ed9c2b6c3dad8">leave_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered</a> (QString text) const </td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a00008677de4ec48bccfddce100eea3fa">RemoteDirModel</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a6af9aa7e23b695f748144c37c7b9c865">~RemoteDirModel</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a1d51629e316522fe29bbc85cf3a96c68">set_user_home_path</a> (QString <a class="el" href="class_remote_dir_model.html#abf6d952ec1edff04955596dcf276697d">user_home_path</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a6a8275e8a39e4eafea2ab2c7d0d6e450">setConnection</a> (<a class="el" href="class_connection.html">Connection</a> *<a class="el" href="class_remote_dir_model.html#a4ac3af9f6672ed2757ca92102bb16153">conn</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVariant&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#aae33d23583e3f88789adfc4f590072be">data</a> (const QModelIndex &amp;index, int role) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Qt::ItemFlags&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#aa4ca1aebe27d4b659d32b4b80d20ee86">flags</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVariant&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3cddfcf34fa1274ed1a7be9bbe3d3286">headerData</a> (int section, Qt::Orientation orientation, int role=Qt::DisplayRole) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a9214446987a09e4a19341b3af3443fa1">index</a> (int row, int column, const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ab52b4b2a74f7752fd7936f621e6cdc57">index</a> (const QString &amp;path, int column=0) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a0ba5ea5c41e23df69649465bcf6d3e94">parent</a> (const QModelIndex &amp;child) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a1294aa2c918dfea9aa3ed78792f3d9ff">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ad8c2c4981648f6fd57c141f1ce319afc">columnCount</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3bb7cd58c108dc2fa7104aa2ea354fda">setData</a> (const QModelIndex &amp;index, const QVariant &amp;value, int role=Qt::EditRole)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#aec2f37f0e9a72dff2fb9f1d243715939">insertRows</a> (int row, int count, const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a61242e6db21486401ff72250d938f91c">removeRows</a> (int row, int count, const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ad4bb57004dbcd1fd86562d03b9301b10">rowMoveTo</a> (const QModelIndex &amp;from, const QModelIndex &amp;to)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a61a66521ad34b58e5d59517561d9be55">insertColumns</a> (int column, int count, const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a889e9a7ddfdbf4beb34429049a120f57">setItemData</a> (const QModelIndex &amp;index, const QMap&lt; int, QVariant &gt; &amp;roles)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#afef430d78fc22fbc01d0351b477343ac">hasChildren</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStringList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a35217c5bec48d61a84fcc70b52997cfe">mimeTypes</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMimeData *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ab0611063f945d9fe44106b53b5f251f4">mimeData</a> (const QModelIndexList &amp;indexes) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a086141d104235c860315fa72451145f8">dropMimeData</a> (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Qt::DropActions&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a4cf6b152d384d91c397e9979ba8d2bd1">supportedDropActions</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a982cfed28ccd714753f399274e1acc1e">fileName</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ad3a15a7d01902f2adfaf0199030b4b8b">isSymLink</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a21e1797cf0ead9473679813487750a17">isSymLinkToDir</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#af2c078253e98032acb869d40f5bf9c08">dump_tree_node_item</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *node_item) const </td></tr>
+<tr><td colspan="2"><h2>私有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_remote_dir_model.html#a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11">DEFAULT_KEEP_ALIVE_TIMEOUT</a> =  30*1000
+ }</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a2463714dba2efdbd616a64df73a9f2c8">slot_keep_alive_time_out</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">time_out 秒  <a href="#a2463714dba2efdbd616a64df73a9f2c8"></a><br/></td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a3957ddea481eed631c9094ed50721d80">find_node_item_by_path_elements</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_node_item, QStringList &amp;path_elements, int level) const </td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#af498b88d945572ff0769ff107740f4d3">rootNode</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SESSION *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a2a44c0f96dbf08765afe7612762c019b">ssh2_sess</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a4ac3af9f6672ed2757ca92102bb16153">conn</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_dir_retriver.html">DirRetriver</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a0c3f26dda76bad09ae5e610c81e58741">dir_retriver</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#abf6d952ec1edff04955596dcf276697d">user_home_path</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#ae2d9712630aa07e81992adcc9a272153">keep_alive</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTimer *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#abd1b0f36207c9493e6f5cdd0b13a4f4c">keep_alive_timer</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_dir_model.html#a059a3140d12f8d51669021cd15b4b3ef">keep_alive_interval</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<dl class="author"><dt><b>作者:</b></dt><dd>liuguangzhao &lt;<a href="mailto:liuguangzhao@users.sf.net">liuguangzhao@users.sf.net</a> &gt;</dd></dl>
+<p>这个model必须做成lazy模式的，因为它是远程目录，只有需要显示的时候才去取来远程目录结构 </p>
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00034">34</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="a60fca2ab05b6487469a8d80352f1aacf"></a><!-- doxytag: member="RemoteDirModel::@8" ref="a60fca2ab05b6487469a8d80352f1aacf" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum<code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11"></a><!-- doxytag: member="DEFAULT_KEEP_ALIVE_TIMEOUT" ref="a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11" args="" -->DEFAULT_KEEP_ALIVE_TIMEOUT</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00109">109</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a00008677de4ec48bccfddce100eea3fa"></a><!-- doxytag: member="RemoteDirModel::RemoteDirModel" ref="a00008677de4ec48bccfddce100eea3fa" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RemoteDirModel::RemoteDirModel </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00025">25</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00109">DEFAULT_KEEP_ALIVE_TIMEOUT</a>、<a class="el" href="remotedirmodel_8h_source.html#l00123">keep_alive</a>、<a class="el" href="remotedirmodel_8h_source.html#l00125">keep_alive_interval</a>、<a class="el" href="remotedirmodel_8h_source.html#l00124">keep_alive_timer</a>、<a class="el" href="remotedirmodel_8h_source.html#l00110">rootNode</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00911">slot_keep_alive_time_out()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6af9aa7e23b695f748144c37c7b9c865"></a><!-- doxytag: member="RemoteDirModel::~RemoteDirModel" ref="a6af9aa7e23b695f748144c37c7b9c865" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RemoteDirModel::~RemoteDirModel </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00039">39</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>及<a class="el" href="remotedirmodel_8h_source.html#l00124">keep_alive_timer</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="ad8c2c4981648f6fd57c141f1ce319afc"></a><!-- doxytag: member="RemoteDirModel::columnCount" ref="ad8c2c4981648f6fd57c141f1ce319afc" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RemoteDirModel::columnCount </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00420">420</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>及<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aae33d23583e3f88789adfc4f590072be"></a><!-- doxytag: member="RemoteDirModel::data" ref="aae33d23583e3f88789adfc4f590072be" args="(const QModelIndex &amp;index, int role) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant RemoteDirModel::data </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00318">318</a>行定义。</p>
+
+<p>参考 <a class="el" href="mimetypeshash_8cpp_source.html#l00004">gMimeHash</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00934">isDir()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00945">isSymLink()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00488">setData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a086141d104235c860315fa72451145f8"></a><!-- doxytag: member="RemoteDirModel::dropMimeData" ref="a086141d104235c860315fa72451145f8" args="(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::dropMimeData </td>
+          <td>(</td>
+          <td class="paramtype">const QMimeData *&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::DropAction&nbsp;</td>
+          <td class="paramname"> <em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00764">764</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_remote_dir_model.html#a3053ebf4e6957487ad7c0712c68ef9c1">sig_drop_mime_data()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af2c078253e98032acb869d40f5bf9c08"></a><!-- doxytag: member="RemoteDirModel::dump_tree_node_item" ref="af2c078253e98032acb869d40f5bf9c08" args="(NetDirNode *node_item) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::dump_tree_node_item </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>node_item</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00620">620</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="rfsdirnode_8h_source.html#l00046">NetDirNode::deleted</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00143">NetDirNode::fileMDate()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00187">NetDirNode::fileType()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>、<a class="el" href="rfsdirnode_8h_source.html#l00065">NetDirNode::pNode</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>及<a class="el" href="rfsdirnode_8cpp_source.html#l00182">NetDirNode::strFileSize()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00292">parent()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00569">removeRows()</a>及<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64f4c0af292b7657fa6e57b0e2d0a045"></a><!-- doxytag: member="RemoteDirModel::enter_remote_dir_retrive_loop" ref="a64f4c0af292b7657fa6e57b0e2d0a045" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::enter_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a24d6e4aabef36bbee5f12b0dd4d567e3"></a><!-- doxytag: member="RemoteDirModel::execute_command_finished" ref="a24d6e4aabef36bbee5f12b0dd4d567e3" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::execute_command_finished </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00826">826</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8cpp_source.html#l00505">DirRetriver::add_node()</a>、<a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00180">index()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00073">NetDirNode::linkToDir</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00024">POP_NEWEST</a>、<a class="el" href="rfsdirnode_8h_source.html#l00020">POP_NO_NEED_NO_DATA</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>、<a class="el" href="sftp-const_8h_source.html#l00048">SSH2_FXP_MKDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00046">SSH2_FXP_READDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00050">SSH2_FXP_REALPATH</a>、<a class="el" href="sftp-const_8h_source.html#l00052">SSH2_FXP_RENAME</a>及<a class="el" href="sftp-const_8h_source.html#l00049">SSH2_FXP_RMDIR</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a982cfed28ccd714753f399274e1acc1e"></a><!-- doxytag: member="RemoteDirModel::fileName" ref="a982cfed28ccd714753f399274e1acc1e" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString RemoteDirModel::fileName </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00925">925</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00133">NetDirNode::fileName()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpview_8cpp_source.html#l00264">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">set_user_home_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>及<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a985b414ee9bc714c25aa11f417360412"></a><!-- doxytag: member="RemoteDirModel::filePath" ref="a985b414ee9bc714c25aa11f417360412" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString RemoteDirModel::filePath </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00917">917</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00129">NetDirNode::filePath()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00193">SFTPView::get_selected_directory()</a>、<a class="el" href="ftpview_8cpp_source.html#l00232">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>及<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3957ddea481eed631c9094ed50721d80"></a><!-- doxytag: member="RemoteDirModel::find_node_item_by_path_elements" ref="a3957ddea481eed631c9094ed50721d80" args="(NetDirNode *parent_node_item, QStringList &amp;path_elements, int level) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex RemoteDirModel::find_node_item_by_path_elements </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_node_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>path_elements</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>level</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const<code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00264">264</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>及<a class="el" href="remotedirmodel_8h_source.html#l00110">rootNode</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00223">index()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4ca1aebe27d4b659d32b4b80d20ee86"></a><!-- doxytag: member="RemoteDirModel::flags" ref="aa4ca1aebe27d4b659d32b4b80d20ee86" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Qt::ItemFlags RemoteDirModel::flags </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00383">383</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="afef430d78fc22fbc01d0351b477343ac"></a><!-- doxytag: member="RemoteDirModel::hasChildren" ref="afef430d78fc22fbc01d0351b477343ac" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::hasChildren </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00468">468</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00032">NetDirNode::isDir()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00043">NetDirNode::isSymLinkToDir()</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3cddfcf34fa1274ed1a7be9bbe3d3286"></a><!-- doxytag: member="RemoteDirModel::headerData" ref="a3cddfcf34fa1274ed1a7be9bbe3d3286" args="(int section, Qt::Orientation orientation, int role=Qt::DisplayRole) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant RemoteDirModel::headerData </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>section</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::Orientation&nbsp;</td>
+          <td class="paramname"> <em>orientation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em> = <code>Qt::DisplayRole</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00396">396</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ab52b4b2a74f7752fd7936f621e6cdc57"></a><!-- doxytag: member="RemoteDirModel::index" ref="ab52b4b2a74f7752fd7936f621e6cdc57" args="(const QString &amp;path, int column=0) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex RemoteDirModel::index </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00223">223</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8cpp_source.html#l00264">find_node_item_by_path_elements()</a>及<a class="el" href="remotedirmodel_8h_source.html#l00110">rootNode</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9214446987a09e4a19341b3af3443fa1"></a><!-- doxytag: member="RemoteDirModel::index" ref="a9214446987a09e4a19341b3af3443fa1" args="(int row, int column, const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex RemoteDirModel::index </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00180">180</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="remotedirmodel_8h_source.html#l00110">rootNode</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00826">execute_command_finished()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">set_user_home_path()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61a66521ad34b58e5d59517561d9be55"></a><!-- doxytag: member="RemoteDirModel::insertColumns" ref="a61a66521ad34b58e5d59517561d9be55" args="(int column, int count, const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::insertColumns </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00611">611</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aec2f37f0e9a72dff2fb9f1d243715939"></a><!-- doxytag: member="RemoteDirModel::insertRows" ref="aec2f37f0e9a72dff2fb9f1d243715939" args="(int row, int count, const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::insertRows </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00528">528</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>、<a class="el" href="rfsdirnode_8h_source.html#l00065">NetDirNode::pNode</a>及<a class="el" href="remotedirmodel_8h_source.html#l00110">rootNode</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00103">set_user_home_path()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a428e2f47d4d3ca217b0a458e699a0ac5"></a><!-- doxytag: member="RemoteDirModel::isDir" ref="a428e2f47d4d3ca217b0a458e699a0ac5" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::isDir </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00934">934</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00032">NetDirNode::isDir()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00318">data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00193">SFTPView::get_selected_directory()</a>、<a class="el" href="ftpview_8cpp_source.html#l00232">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">RemoteView::slot_mkdir()</a>及<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad3a15a7d01902f2adfaf0199030b4b8b"></a><!-- doxytag: member="RemoteDirModel::isSymLink" ref="ad3a15a7d01902f2adfaf0199030b4b8b" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::isSymLink </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00945">945</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00039">NetDirNode::isSymLink()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00318">data()</a>及<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a21e1797cf0ead9473679813487750a17"></a><!-- doxytag: member="RemoteDirModel::isSymLinkToDir" ref="a21e1797cf0ead9473679813487750a17" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::isSymLinkToDir </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00956">956</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00043">NetDirNode::isSymLinkToDir()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2b921852d2c403e1a76ed9c2b6c3dad8"></a><!-- doxytag: member="RemoteDirModel::leave_remote_dir_retrive_loop" ref="a2b921852d2c403e1a76ed9c2b6c3dad8" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::leave_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab0611063f945d9fe44106b53b5f251f4"></a><!-- doxytag: member="RemoteDirModel::mimeData" ref="ab0611063f945d9fe44106b53b5f251f4" args="(const QModelIndexList &amp;indexes) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMimeData * RemoteDirModel::mimeData </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndexList &amp;&nbsp;</td>
+          <td class="paramname"> <em>indexes</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00735">735</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00187">NetDirNode::fileType()</a>及<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35217c5bec48d61a84fcc70b52997cfe"></a><!-- doxytag: member="RemoteDirModel::mimeTypes" ref="a35217c5bec48d61a84fcc70b52997cfe" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList RemoteDirModel::mimeTypes </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00722">722</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2907bae14d0b29b370116ad40ae5d21"></a><!-- doxytag: member="RemoteDirModel::operationTriggered" ref="ab2907bae14d0b29b370116ad40ae5d21" args="(QString text) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::operationTriggered </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>text</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00826">execute_command_finished()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00488">setData()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">slot_execute_command()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00776">slot_remote_dir_node_clicked()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0ba5ea5c41e23df69649465bcf6d3e94"></a><!-- doxytag: member="RemoteDirModel::parent" ref="a0ba5ea5c41e23df69649465bcf6d3e94" args="(const QModelIndex &amp;child) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex RemoteDirModel::parent </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>child</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00292">292</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8cpp_source.html#l00620">dump_tree_node_item()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>及<a class="el" href="rfsdirnode_8h_source.html#l00065">NetDirNode::pNode</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61242e6db21486401ff72250d938f91c"></a><!-- doxytag: member="RemoteDirModel::removeRows" ref="a61242e6db21486401ff72250d938f91c" args="(int row, int count, const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::removeRows </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00569">569</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">dump_tree_node_item()</a>及<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1294aa2c918dfea9aa3ed78792f3d9ff"></a><!-- doxytag: member="RemoteDirModel::rowCount" ref="a1294aa2c918dfea9aa3ed78792f3d9ff" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RemoteDirModel::rowCount </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00427">427</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="dirretriver_8cpp_source.html#l00505">DirRetriver::add_node()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00129">NetDirNode::filePath()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00020">POP_NO_NEED_NO_DATA</a>、<a class="el" href="rfsdirnode_8h_source.html#l00022">POP_WITH_NEED_WANT_UPDATE</a>及<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad4bb57004dbcd1fd86562d03b9301b10"></a><!-- doxytag: member="RemoteDirModel::rowMoveTo" ref="ad4bb57004dbcd1fd86562d03b9301b10" args="(const QModelIndex &amp;from, const QModelIndex &amp;to)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::rowMoveTo </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>to</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00606">606</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ac91475bebe5716dcfea8bc47e4e78116"></a><!-- doxytag: member="RemoteDirModel::set_keep_alive" ref="ac91475bebe5716dcfea8bc47e4e78116" args="(bool keep_alive, int time_out=DEFAULT_KEEP_ALIVE_TIMEOUT)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::set_keep_alive </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>keep_alive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>time_out</em> = <code>DEFAULT_KEEP_ALIVE_TIMEOUT</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00889">889</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00125">keep_alive_interval</a>及<a class="el" href="remotedirmodel_8h_source.html#l00124">keep_alive_timer</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00278">SFTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">RemoteView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00351">FTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00287">SFTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">RemoteView::slot_leave_remote_dir_retrive_loop()</a>及<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1d51629e316522fe29bbc85cf3a96c68"></a><!-- doxytag: member="RemoteDirModel::set_user_home_path" ref="a1d51629e316522fe29bbc85cf3a96c68" args="(QString user_home_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::set_user_home_path </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>user_home_path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00103">103</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8h_source.html#l00075">NetDirNode::attrib</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00925">fileName()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00180">index()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">insertRows()</a>、<a class="el" href="remotedirmodel_8h_source.html#l00123">keep_alive</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>、<a class="el" href="rfsdirnode_8h_source.html#l00020">POP_NO_NEED_NO_DATA</a>、<a class="el" href="rfsdirnode_8h_source.html#l00021">POP_NO_NEED_WITH_DATA</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00488">setData()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>及<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a8275e8a39e4eafea2ab2c7d0d6e450"></a><!-- doxytag: member="RemoteDirModel::setConnection" ref="a6a8275e8a39e4eafea2ab2c7d0d6e450" args="(Connection *conn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::setConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00059">59</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="class_remote_dir_model.html#a64f4c0af292b7657fa6e57b0e2d0a045">enter_remote_dir_retrive_loop()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00826">execute_command_finished()</a>、<a class="el" href="class_remote_dir_model.html#a2b921852d2c403e1a76ed9c2b6c3dad8">leave_remote_dir_retrive_loop()</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="connection_8h_source.html#l00031">Connection::PROTO_FTP</a>、<a class="el" href="connection_8h_source.html#l00031">Connection::PROTO_SFTP</a>、<a class="el" href="connection_8cpp_source.html#l00081">Connection::protocolType()</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="dirretriver_8cpp_source.html#l00046">DirRetriver::setConnection()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>及<a class="el" href="remotedirmodel_8h_source.html#l00111">ssh2_sess</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">RemoteView::i_init_dir_view()</a>及<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3bb7cd58c108dc2fa7104aa2ea354fda"></a><!-- doxytag: member="RemoteDirModel::setData" ref="a3bb7cd58c108dc2fa7104aa2ea354fda" args="(const QModelIndex &amp;index, const QVariant &amp;value, int role=Qt::EditRole)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::setData </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVariant &amp;&nbsp;</td>
+          <td class="paramname"> <em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em> = <code>Qt::EditRole</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00488">488</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00193">NetDirNode::copyFrom()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00318">data()</a>、<a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00065">NetDirNode::pNode</a>、<a class="el" href="dirretriver_8cpp_source.html#l00522">DirRetriver::slot_execute_command()</a>及<a class="el" href="sftp-const_8h_source.html#l00052">SSH2_FXP_RENAME</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00103">set_user_home_path()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a889e9a7ddfdbf4beb34429049a120f57"></a><!-- doxytag: member="RemoteDirModel::setItemData" ref="a889e9a7ddfdbf4beb34429049a120f57" args="(const QModelIndex &amp;index, const QMap&lt; int, QVariant &gt; &amp;roles)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteDirModel::setItemData </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QMap&lt; int, QVariant &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>roles</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00615">615</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a3053ebf4e6957487ad7c0712c68ef9c1"></a><!-- doxytag: member="RemoteDirModel::sig_drop_mime_data" ref="a3053ebf4e6957487ad7c0712c68ef9c1" args="(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::sig_drop_mime_data </td>
+          <td>(</td>
+          <td class="paramtype">const QMimeData *&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::DropAction&nbsp;</td>
+          <td class="paramname"> <em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00764">dropMimeData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3c8fa50295a92af8ae184d8c6f1872c0"></a><!-- doxytag: member="RemoteDirModel::slot_execute_command" ref="a3c8fa50295a92af8ae184d8c6f1872c0" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, QString params)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::slot_execute_command </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>params</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00796">796</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00129">NetDirNode::filePath()</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00522">DirRetriver::slot_execute_command()</a>、<a class="el" href="sftp-const_8h_source.html#l00048">SSH2_FXP_MKDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00050">SSH2_FXP_REALPATH</a>、<a class="el" href="sftp-const_8h_source.html#l00052">SSH2_FXP_RENAME</a>及<a class="el" href="sftp-const_8h_source.html#l00049">SSH2_FXP_RMDIR</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">RemoteView::rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">RemoteView::slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">RemoteView::slot_rmdir()</a>及<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2463714dba2efdbd616a64df73a9f2c8"></a><!-- doxytag: member="RemoteDirModel::slot_keep_alive_time_out" ref="a2463714dba2efdbd616a64df73a9f2c8" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::slot_keep_alive_time_out </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>time_out 秒 </p>
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00911">911</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="dirretriver_8cpp_source.html#l00522">DirRetriver::slot_execute_command()</a>及<a class="el" href="dirretriver_8h_source.html#l00022">SSH2_FXP_KEEP_ALIVE</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00025">RemoteDirModel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3d0637f27fcbeacbbcbb8b86f6d4701e"></a><!-- doxytag: member="RemoteDirModel::slot_remote_dir_node_clicked" ref="a3d0637f27fcbeacbbcbb8b86f6d4701e" args="(const QModelIndex &amp;index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::slot_remote_dir_node_clicked </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00776">776</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8cpp_source.html#l00505">DirRetriver::add_node()</a>、<a class="el" href="remotedirmodel_8h_source.html#l00114">dir_retriver</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00129">NetDirNode::filePath()</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00021">POP_NO_NEED_WITH_DATA</a>及<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00793">RemoteView::slot_dir_tree_item_clicked()</a>、<a class="el" href="ftpview_8cpp_source.html#l00781">FTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">RemoteView::update_layout()</a>及<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa24aded7d9a96e4207487783ab04dd8"></a><!-- doxytag: member="RemoteDirModel::slot_remote_dir_node_retrived" ref="afa24aded7d9a96e4207487783ab04dd8" args="(NetDirNode *parent_item, void *parent_persistent_index, NetDirNode *newNodes)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteDirModel::slot_remote_dir_node_retrived </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>newNodes</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00641">641</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00120">NetDirNode::childAt()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00129">NetDirNode::filePath()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00180">index()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">insertRows()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">NetDirNode::onRow</a>、<a class="el" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00024">POP_NEWEST</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00569">removeRows()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">rowCount()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00488">setData()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4cf6b152d384d91c397e9979ba8d2bd1"></a><!-- doxytag: member="RemoteDirModel::supportedDropActions" ref="a4cf6b152d384d91c397e9979ba8d2bd1" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Qt::DropActions RemoteDirModel::supportedDropActions </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a>第<a class="el" href="remotedirmodel_8cpp_source.html#l00717">717</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a4ac3af9f6672ed2757ca92102bb16153"></a><!-- doxytag: member="RemoteDirModel::conn" ref="a4ac3af9f6672ed2757ca92102bb16153" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_connection.html">Connection</a>* <a class="el" href="class_remote_dir_model.html#a4ac3af9f6672ed2757ca92102bb16153">RemoteDirModel::conn</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00112">112</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a0c3f26dda76bad09ae5e610c81e58741"></a><!-- doxytag: member="RemoteDirModel::dir_retriver" ref="a0c3f26dda76bad09ae5e610c81e58741" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_dir_retriver.html">DirRetriver</a>* <a class="el" href="class_remote_dir_model.html#a0c3f26dda76bad09ae5e610c81e58741">RemoteDirModel::dir_retriver</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00114">114</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00826">execute_command_finished()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00488">setData()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">slot_execute_command()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00911">slot_keep_alive_time_out()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00776">slot_remote_dir_node_clicked()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00039">~RemoteDirModel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae2d9712630aa07e81992adcc9a272153"></a><!-- doxytag: member="RemoteDirModel::keep_alive" ref="ae2d9712630aa07e81992adcc9a272153" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_remote_dir_model.html#ae2d9712630aa07e81992adcc9a272153">RemoteDirModel::keep_alive</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00123">123</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00025">RemoteDirModel()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00103">set_user_home_path()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a059a3140d12f8d51669021cd15b4b3ef"></a><!-- doxytag: member="RemoteDirModel::keep_alive_interval" ref="a059a3140d12f8d51669021cd15b4b3ef" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_remote_dir_model.html#a059a3140d12f8d51669021cd15b4b3ef">RemoteDirModel::keep_alive_interval</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00125">125</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00025">RemoteDirModel()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00889">set_keep_alive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abd1b0f36207c9493e6f5cdd0b13a4f4c"></a><!-- doxytag: member="RemoteDirModel::keep_alive_timer" ref="abd1b0f36207c9493e6f5cdd0b13a4f4c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTimer* <a class="el" href="class_remote_dir_model.html#abd1b0f36207c9493e6f5cdd0b13a4f4c">RemoteDirModel::keep_alive_timer</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00124">124</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00025">RemoteDirModel()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00889">set_keep_alive()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00039">~RemoteDirModel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af498b88d945572ff0769ff107740f4d3"></a><!-- doxytag: member="RemoteDirModel::rootNode" ref="af498b88d945572ff0769ff107740f4d3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_net_dir_node.html">NetDirNode</a>* <a class="el" href="class_remote_dir_model.html#af498b88d945572ff0769ff107740f4d3">RemoteDirModel::rootNode</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00110">110</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00264">find_node_item_by_path_elements()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00180">index()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">insertRows()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00025">RemoteDirModel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2a44c0f96dbf08765afe7612762c019b"></a><!-- doxytag: member="RemoteDirModel::ssh2_sess" ref="a2a44c0f96dbf08765afe7612762c019b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SESSION* <a class="el" href="class_remote_dir_model.html#a2a44c0f96dbf08765afe7612762c019b">RemoteDirModel::ssh2_sess</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00111">111</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00059">setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abf6d952ec1edff04955596dcf276697d"></a><!-- doxytag: member="RemoteDirModel::user_home_path" ref="abf6d952ec1edff04955596dcf276697d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_remote_dir_model.html#abf6d952ec1edff04955596dcf276697d">RemoteDirModel::user_home_path</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a>第<a class="el" href="remotedirmodel_8h_source.html#l00121">121</a>行定义。</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="remotedirmodel_8h_source.html">remotedirmodel.h</a></li>
+<li><a class="el" href="remotedirmodel_8cpp_source.html">remotedirmodel.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

@@ -1,0 +1,2440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: KuFtpLib类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>KuFtpLib类参考</h1><!-- doxytag: class="KuFtpLib" -->
+<p><code>#include &lt;<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>&gt;</code></p>
+
+<p><a href="class_ku_ftp_lib-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> { <br/>
+&nbsp;&nbsp;<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db">dir</a> =  1, 
+<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363ac8e0db5e388484b0d66f94f60942adcf">dirverbose</a>, 
+<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a3f94f3b141c7015858e4f97b51eaf58a">fileread</a>, 
+<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a74e5a69ef1b3e5895be0b0c6e8d2a5f7">filewrite</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a0082b79cf70fddc2b6a635cd96642002">filereadappend</a>, 
+<a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363abceb88cca24174b006ce13b86e75511d">filewriteappend</a>
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> { <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543fa7ff2f661c53be0553d62d2156857d927">ascii</a> =  'A', 
+<a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543faefc0c977bb39d8893733204e3abb347b">image</a> =  'I'
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">connmode</a> { <a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a8d973b52c43943151502aeec50eaf076">pasv</a> =  1, 
+<a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0">port</a>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">fxpmethod</a> { <a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849a3f55c2e4763019c028b0c2aebff20219">defaultfxp</a> =  0, 
+<a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849ab915d3de9faaf96ed81859ac05c24667">alternativefxp</a>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">dataencryption</a> { <a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88ae5285759726eb1131ffb6b6fe82b4993">unencrypted</a> =  0, 
+<a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88a03a557276e62e3fb8cdd97a9bbe80390">secure</a>
+ }</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ad1dca686552df0c4e4ee739a93868311">KuFtpLib</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#abc270ca3cbf228bc97efbe6915e2a39c">~KuFtpLib</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a4eb5050fc6816654d0c2290ca999e695">LastResponse</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ac094a9af5e487576fb90a92c08965205">Connect</a> (const char *host, unsigned short port)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a9b21f440210cd1d136733a427b2fa89a">Connect</a> (const char *host, unsigned short port, const char *proxyHost, unsigned short proxyPort, const char *proxyUser, const char *proxyPass, int proxyType)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a05fc7f38e0e5b9de902468d235e5b799">Login</a> (const char *user, const char *pass)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#af969f34a88a785906aa043b9be981440">Site</a> (const char *cmd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a10c7410e531067011f6092a120476632">Raw</a> (const char *cmd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a3695a83f5f942b811f2cc2fa68b7857a">SysType</a> (char *buf, int max)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aed7e9a6d776b9a467e49cca10089a1dd">Feat</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa7fa4191d3624b33d82fbb6d41471fb2">Mkdir</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#acb19946112927af41be2f597fc48a9b0">Chdir</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aadf40518cc4dd832383cb59dfa76fba9">Cdup</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aac82004a868dbaffa18cd0bcd3a34faa">Rmdir</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a47625dcb17cfce3afe39fbc32715e031">Pwd</a> (char *path, int max)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aead8c211dfc9d2140c1a5d4f0136dd80">Nlst</a> (const char *outputfile, const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#af545717647a565d1315af74e86ee9ec2">Dir</a> (const char *outputfile, const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a1a468afaac78efafa5957ebd1b2bcc52">Size</a> (const char *path, int *size, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a3e57dbe4288568903e960499f6f8ace0">ModDate</a> (const char *path, char *dt, int max)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a981e9554d53481ba91e9e399a0ab3f56">Get</a> (const char *outputfile, const char *path, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, off64_t offset=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa0948fc5fdf3e8e5a95330c72ca21f61">Put</a> (const char *inputfile, const char *path, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, off64_t offset=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a32fd77b375f489f3e7f7f735ae8f2fd9">Rename</a> (const char *src, const char *dst)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a64b54ecf377e38e375cc60c42646bff9">Delete</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ae202c543934ce26a8fc7e50f8bd02830">Noop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a2ea992c1f3c08059a098f23533459401">Timeout</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#af0a0fbb09a0d96fac704792f87604ac9">ConnectionLost</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a64207f2332116beebef4b27be2defc61">SetFtpUseProxy</a> (bool)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa708138ee5c49f13b0c177ec1283e0f6">SetCheckTimeout</a> (bool)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#afb8ed0b54e018b4d6df77455b8cb965a">SetDataEncryption</a> (<a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">dataencryption</a> enc)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a5b5dca979fcf197437434d374131a1fa">NegotiateEncryption</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a8457224a7754bd88506ecfc03dc6d40c">SetCallbackCertFunction</a> (<a class="el" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a> pointer)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a4454156fe4e70c101329ea76b674d933">Quit</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa112f206cfdc0b5222011c506d8cdef4">StopTransfer</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa1d039d641e4f7ae08d16c4149c6f056">SetMaxUploadSpeed</a> (int i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aa745dbe4b5a28fbda3b61fc6f7570cb3">SetMaxDownloadSpeed</a> (int i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a8da2715c817da3e7e98e2c370465b1c0">SetCallbackIdleFunction</a> (<a class="el" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a> pointer)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a6fc20c1a9f5f7e54ed05614d4411d2db">SetCallbackLogFunction</a> (<a class="el" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a> pointer)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a6f347e49e18156b58c0090355ecffc06">SetCallbackXferFunction</a> (<a class="el" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a> pointer)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a10b03365addcdd0c799add6bab4c847b">SetCallbackArg</a> (void *arg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a675d925685ba7432de455ac212e2821d">SetCallbackBytes</a> (off64_t bytes)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#afbf52cb282ab3022d799bad1bbdf1991">SetCorrectPasv</a> (bool b)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ab8475d19790406d60a7595e39242f3ad">SetCallbackIdletime</a> (int time)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a9a8e2049a5f1b46fc3f46e45eb44d0d2">SetConnmode</a> (<a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">connmode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a31d1fff08283f41649676b98030fe19a">RawOpen</a> (const char *path, <a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ac8c7b140dd65d967c297f0f89a287591">RawClose</a> (<a class="el" href="structftphandle.html">ftphandle</a> *handle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a856329c06d3a78342edbbc599e69f057">RawWrite</a> (void *buf, int len, <a class="el" href="structftphandle.html">ftphandle</a> *handle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a047ce4199417a89e334bad2b871c0ced">RawRead</a> (void *buf, int max, <a class="el" href="structftphandle.html">ftphandle</a> *handle)</td></tr>
+<tr><td colspan="2"><h2>静态公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a1d031d6af82252cb1ef9423c7b65be5c">Fxp</a> (<a class="el" href="class_ku_ftp_lib.html">KuFtpLib</a> *src, <a class="el" href="class_ku_ftp_lib.html">KuFtpLib</a> *dst, const char *pathSrc, const char *pathDst, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">fxpmethod</a> method)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a5a54d1dd799969766c56a97d16a36fca">base64Encode</a> (const char *string, char *encoded)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ad449d8d036075cf42378ccb885900f78">ReadCrLfLine</a> (int fd, void *buf, int size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a61c479001c68e6b84352c21d47fdd8f8">LogHttpProxyReturn</a> (int fd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a4be72f5561e940df08d19ee15c47825b">LogSocks5ProxyError</a> (int error)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a18e6ea4aac876219c6dd3e6be98f91d6">SleepMicroseconds</a> (off64_t t)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ab7ed6a0a79bcd60f48049e92585fada2">DoHttpProxy</a> (const char *proxyUser, const char *proxyPass, const char *ftpHost, unsigned short ftpPort, int fd=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a8698070c24ec5c1bf2a632112f9ac633">DoSocks4Proxy</a> (const char *ftpHost, unsigned short ftpPort, int fd=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ac5352155d433258d3994da9088c241c1">DoSocks5Proxy</a> (const char *proxyUser, const char *proxyPass, const char *ftpHost, unsigned short ftpPort, int fd=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ab2e063c034ef9af67e482b8060125f41">FtpXfer</a> (const char *localfile, const char *path, <a class="el" href="structftphandle.html">ftphandle</a> *nControl, <a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a97ea50bce23a2c92df8171d205dc8b04">FtpOpenPasv</a> (<a class="el" href="structftphandle.html">ftphandle</a> *nControl, <a class="el" href="structftphandle.html">ftphandle</a> **nData, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, int dir, char *cmd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a626183b4d43ce09708d89af41ac860d5">FtpSendCmd</a> (const char *cmd, char expresp, <a class="el" href="structftphandle.html">ftphandle</a> *nControl)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#aaa0fc9e5438fd3f0970b0e5756642434">FtpAcceptConnection</a> (<a class="el" href="structftphandle.html">ftphandle</a> *nData, <a class="el" href="structftphandle.html">ftphandle</a> *nControl)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a3984573092a518d4c2f556cf541f3801">FtpOpenPort</a> (<a class="el" href="structftphandle.html">ftphandle</a> *nControl, <a class="el" href="structftphandle.html">ftphandle</a> **nData, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, int dir, char *cmd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a52da069a967027405f3db3937d753a27">FtpRead</a> (void *buf, int max, <a class="el" href="structftphandle.html">ftphandle</a> *nData)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a12a0f77915d042e241bfe64c1dfce1b2">FtpWrite</a> (void *buf, int len, <a class="el" href="structftphandle.html">ftphandle</a> *nData)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a0f5228d717dac677c2b36d1d55ea7b78">FtpAccess</a> (const char *path, <a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type, <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <a class="el" href="structftphandle.html">ftphandle</a> *nControl, <a class="el" href="structftphandle.html">ftphandle</a> **nData)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a09272d4b48b04cb82fa9c5f7436f3545">FtpClose</a> (<a class="el" href="structftphandle.html">ftphandle</a> *nData)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ab1a4d9725a55dbaab2c614335d48ed5a">socket_wait</a> (<a class="el" href="structftphandle.html">ftphandle</a> *ctl)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#ae51ab97cc7d88a28bc31191081f3f4e1">readline</a> (char *buf, int max, <a class="el" href="structftphandle.html">ftphandle</a> *ctl)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a602aba21207a13bd14e41e11cb98f84a">writeline</a> (char *buf, int len, <a class="el" href="structftphandle.html">ftphandle</a> *nData)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a9f4a8374263db6f765e32e155926da3a">readresp</a> (char c, <a class="el" href="structftphandle.html">ftphandle</a> *nControl)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a2e1c984453973d77f7047295107b13e3">ClearHandle</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a0e186c0ad509d04eabaabaaa72d0c510">CorrectPasvResponse</a> (unsigned char *v)</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">mp_ftphandle</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00086">86</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="a017a7687791fb578963135cb52d14363"></a><!-- doxytag: member="KuFtpLib::accesstype" ref="a017a7687791fb578963135cb52d14363" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">KuFtpLib::accesstype</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db"></a><!-- doxytag: member="dir" ref="a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db" args="" -->dir</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363ac8e0db5e388484b0d66f94f60942adcf"></a><!-- doxytag: member="dirverbose" ref="a017a7687791fb578963135cb52d14363ac8e0db5e388484b0d66f94f60942adcf" args="" -->dirverbose</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363a3f94f3b141c7015858e4f97b51eaf58a"></a><!-- doxytag: member="fileread" ref="a017a7687791fb578963135cb52d14363a3f94f3b141c7015858e4f97b51eaf58a" args="" -->fileread</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363a74e5a69ef1b3e5895be0b0c6e8d2a5f7"></a><!-- doxytag: member="filewrite" ref="a017a7687791fb578963135cb52d14363a74e5a69ef1b3e5895be0b0c6e8d2a5f7" args="" -->filewrite</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363a0082b79cf70fddc2b6a635cd96642002"></a><!-- doxytag: member="filereadappend" ref="a017a7687791fb578963135cb52d14363a0082b79cf70fddc2b6a635cd96642002" args="" -->filereadappend</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a017a7687791fb578963135cb52d14363abceb88cca24174b006ce13b86e75511d"></a><!-- doxytag: member="filewriteappend" ref="a017a7687791fb578963135cb52d14363abceb88cca24174b006ce13b86e75511d" args="" -->filewriteappend</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00089">89</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ae68ccea0dfc206740e939d35706af960"></a><!-- doxytag: member="KuFtpLib::connmode" ref="ae68ccea0dfc206740e939d35706af960" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">KuFtpLib::connmode</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="ae68ccea0dfc206740e939d35706af960a8d973b52c43943151502aeec50eaf076"></a><!-- doxytag: member="pasv" ref="ae68ccea0dfc206740e939d35706af960a8d973b52c43943151502aeec50eaf076" args="" -->pasv</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0"></a><!-- doxytag: member="port" ref="ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0" args="" -->port</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00103">103</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a919efce7b95c70e0d0b66ee168e54b88"></a><!-- doxytag: member="KuFtpLib::dataencryption" ref="a919efce7b95c70e0d0b66ee168e54b88" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">KuFtpLib::dataencryption</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a919efce7b95c70e0d0b66ee168e54b88ae5285759726eb1131ffb6b6fe82b4993"></a><!-- doxytag: member="unencrypted" ref="a919efce7b95c70e0d0b66ee168e54b88ae5285759726eb1131ffb6b6fe82b4993" args="" -->unencrypted</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a919efce7b95c70e0d0b66ee168e54b88a03a557276e62e3fb8cdd97a9bbe80390"></a><!-- doxytag: member="secure" ref="a919efce7b95c70e0d0b66ee168e54b88a03a557276e62e3fb8cdd97a9bbe80390" args="" -->secure</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00113">113</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a11ccc951f35a8e2b930d6d5e63cc3849"></a><!-- doxytag: member="KuFtpLib::fxpmethod" ref="a11ccc951f35a8e2b930d6d5e63cc3849" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">KuFtpLib::fxpmethod</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a11ccc951f35a8e2b930d6d5e63cc3849a3f55c2e4763019c028b0c2aebff20219"></a><!-- doxytag: member="defaultfxp" ref="a11ccc951f35a8e2b930d6d5e63cc3849a3f55c2e4763019c028b0c2aebff20219" args="" -->defaultfxp</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a11ccc951f35a8e2b930d6d5e63cc3849ab915d3de9faaf96ed81859ac05c24667"></a><!-- doxytag: member="alternativefxp" ref="a11ccc951f35a8e2b930d6d5e63cc3849ab915d3de9faaf96ed81859ac05c24667" args="" -->alternativefxp</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00108">108</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a5604f19d60d06cf06acadceaa3aa543f"></a><!-- doxytag: member="KuFtpLib::transfermode" ref="a5604f19d60d06cf06acadceaa3aa543f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">KuFtpLib::transfermode</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a5604f19d60d06cf06acadceaa3aa543fa7ff2f661c53be0553d62d2156857d927"></a><!-- doxytag: member="ascii" ref="a5604f19d60d06cf06acadceaa3aa543fa7ff2f661c53be0553d62d2156857d927" args="" -->ascii</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a5604f19d60d06cf06acadceaa3aa543faefc0c977bb39d8893733204e3abb347b"></a><!-- doxytag: member="image" ref="a5604f19d60d06cf06acadceaa3aa543faefc0c977bb39d8893733204e3abb347b" args="" -->image</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00098">98</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="ad1dca686552df0c4e4ee739a93868311"></a><!-- doxytag: member="KuFtpLib::KuFtpLib" ref="ad1dca686552df0c4e4ee739a93868311" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KuFtpLib::KuFtpLib </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00073">73</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8cpp_source.html#l02219">ClearHandle()</a>、<a class="el" href="kuftplib_8h_source.html#l00066">ftphandle::ctx</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abc270ca3cbf228bc97efbe6915e2a39c"></a><!-- doxytag: member="KuFtpLib::~KuFtpLib" ref="abc270ca3cbf228bc97efbe6915e2a39c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KuFtpLib::~KuFtpLib </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00094">94</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00066">ftphandle::ctx</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a5a54d1dd799969766c56a97d16a36fca"></a><!-- doxytag: member="KuFtpLib::base64Encode" ref="a5a54d1dd799969766c56a97d16a36fca" args="(const char *string, char *encoded)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::base64Encode </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>encoded</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00534">534</a>行定义。</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aadf40518cc4dd832383cb59dfa76fba9"></a><!-- doxytag: member="KuFtpLib::Cdup" ref="aadf40518cc4dd832383cb59dfa76fba9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Cdup </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01655">1655</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acb19946112927af41be2f597fc48a9b0"></a><!-- doxytag: member="KuFtpLib::Chdir" ref="acb19946112927af41be2f597fc48a9b0" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Chdir </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01638">1638</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e1c984453973d77f7047295107b13e3"></a><!-- doxytag: member="KuFtpLib::ClearHandle" ref="a2e1c984453973d77f7047295107b13e3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::ClearHandle </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02219">2219</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>、<a class="el" href="kuftplib_8h_source.html#l00070">ftphandle::certcb</a>、<a class="el" href="kuftplib_8h_source.html#l00077">ftphandle::checkTimeout</a>、<a class="el" href="kuftplib_8h_source.html#l00055">ftphandle::cmode</a>、<a class="el" href="kuftplib_8h_source.html#l00072">ftphandle::correctpasv</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00058">ftphandle::idlecb</a>、<a class="el" href="kuftplib_8h_source.html#l00056">ftphandle::idletime</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00076">ftphandle::maxDownloadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00075">ftphandle::maxUploadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>、<a class="el" href="kuftplib_8h_source.html#l00105">pasv</a>、<a class="el" href="kuftplib_8h_source.html#l00073">ftphandle::stoptransfer</a>、<a class="el" href="kuftplib_8h_source.html#l00078">ftphandle::timeout</a>、<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>、<a class="el" href="kuftplib_8h_source.html#l00074">ftphandle::useProxy</a>、<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00073">KuFtpLib()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b21f440210cd1d136733a427b2fa89a"></a><!-- doxytag: member="KuFtpLib::Connect" ref="a9b21f440210cd1d136733a427b2fa89a" args="(const char *host, unsigned short port, const char *proxyHost, unsigned short proxyPort, const char *proxyUser, const char *proxyPass, int proxyType)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Connect </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyHost</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>proxyPort</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyUser</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyPass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>proxyType</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00488">488</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8cpp_source.html#l00392">Connect()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00728">DoSocks4Proxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00790">DoSocks5Proxy()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00064">HTTP_PROXY</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8cpp_source.html#l00069">OUTLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00079">ftphandle::proxyHost</a>、<a class="el" href="kuftplib_8h_source.html#l00082">ftphandle::proxyPass</a>、<a class="el" href="kuftplib_8h_source.html#l00080">ftphandle::proxyPort</a>、<a class="el" href="kuftplib_8h_source.html#l00083">ftphandle::proxyType</a>、<a class="el" href="kuftplib_8h_source.html#l00081">ftphandle::proxyUser</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>及<a class="el" href="kuftplib_8cpp_source.html#l00065">SOCKS4_PROXY</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac094a9af5e487576fb90a92c08965205"></a><!-- doxytag: member="KuFtpLib::Connect" ref="ac094a9af5e487576fb90a92c08965205" args="(const char *host, unsigned short port)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Connect </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>port</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00392">392</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00077">ftphandle::checkTimeout</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00076">ftphandle::maxDownloadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00075">ftphandle::maxUploadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00055">SETSOCKOPT_OPTVAL_TYPE</a>、<a class="el" href="kuftplib_8h_source.html#l00078">ftphandle::timeout</a>、<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>、<a class="el" href="kuftplib_8h_source.html#l00074">ftphandle::useProxy</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00488">Connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af0a0fbb09a0d96fac704792f87604ac9"></a><!-- doxytag: member="KuFtpLib::ConnectionLost" ref="af0a0fbb09a0d96fac704792f87604ac9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::ConnectionLost </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00373">373</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00078">ftphandle::timeout</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0e186c0ad509d04eabaabaaa72d0c510"></a><!-- doxytag: member="KuFtpLib::CorrectPasvResponse" ref="a0e186c0ad509d04eabaabaaa72d0c510" args="(unsigned char *v)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::CorrectPasvResponse </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&nbsp;</td>
+          <td class="paramname"> <em>v</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02246">2246</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02007">Fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64b54ecf377e38e375cc60c42646bff9"></a><!-- doxytag: member="KuFtpLib::Delete" ref="a64b54ecf377e38e375cc60c42646bff9" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Delete </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01960">1960</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af545717647a565d1315af74e86ee9ec2"></a><!-- doxytag: member="KuFtpLib::Dir" ref="af545717647a565d1315af74e86ee9ec2" args="(const char *outputfile, const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Dir </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>outputfile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01859">1859</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00100">ascii</a>、<a class="el" href="kuftplib_8h_source.html#l00092">dirverbose</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab7ed6a0a79bcd60f48049e92585fada2"></a><!-- doxytag: member="KuFtpLib::DoHttpProxy" ref="ab7ed6a0a79bcd60f48049e92585fada2" args="(const char *proxyUser, const char *proxyPass, const char *ftpHost, unsigned short ftpPort, int fd=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::DoHttpProxy </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyUser</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyPass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>ftpHost</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>ftpPort</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fd</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00613">613</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00534">base64Encode()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00580">LogHttpProxyReturn()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8h_source.html#l00106">port</a>及<a class="el" href="kuftplib_8cpp_source.html#l00553">ReadCrLfLine()</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00488">Connect()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8698070c24ec5c1bf2a632112f9ac633"></a><!-- doxytag: member="KuFtpLib::DoSocks4Proxy" ref="a8698070c24ec5c1bf2a632112f9ac633" args="(const char *ftpHost, unsigned short ftpPort, int fd=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::DoSocks4Proxy </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>ftpHost</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>ftpPort</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fd</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00728">728</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8cpp_source.html#l00071">EMERLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00488">Connect()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac5352155d433258d3994da9088c241c1"></a><!-- doxytag: member="KuFtpLib::DoSocks5Proxy" ref="ac5352155d433258d3994da9088c241c1" args="(const char *proxyUser, const char *proxyPass, const char *ftpHost, unsigned short ftpPort, int fd=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::DoSocks5Proxy </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyUser</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>proxyPass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>ftpHost</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>ftpPort</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fd</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00790">790</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8cpp_source.html#l00071">EMERLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8cpp_source.html#l00692">LogSocks5ProxyError()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00488">Connect()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aed7e9a6d776b9a467e49cca10089a1dd"></a><!-- doxytag: member="KuFtpLib::Feat" ref="aed7e9a6d776b9a467e49cca10089a1dd" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Feat </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01610">1610</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaa0fc9e5438fd3f0970b0e5756642434"></a><!-- doxytag: member="KuFtpLib::FtpAcceptConnection" ref="aaa0fc9e5438fd3f0970b0e5756642434" args="(ftphandle *nData, ftphandle *nControl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpAcceptConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00946">946</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00057">ACCEPT_TIMEOUT</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0f5228d717dac677c2b36d1d55ea7b78"></a><!-- doxytag: member="KuFtpLib::FtpAccess" ref="a0f5228d717dac677c2b36d1d55ea7b78" args="(const char *path, accesstype type, transfermode mode, ftphandle *nControl, ftphandle **nData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpAccess </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a>&nbsp;</td>
+          <td class="paramname"> <em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> **&nbsp;</td>
+          <td class="paramname"> <em>nData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01017">1017</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00055">ftphandle::cmode</a>、<a class="el" href="kuftplib_8h_source.html#l00066">ftphandle::ctx</a>、<a class="el" href="kuftplib_8h_source.html#l00091">dir</a>、<a class="el" href="kuftplib_8h_source.html#l00092">dirverbose</a>、<a class="el" href="kuftplib_8h_source.html#l00093">fileread</a>、<a class="el" href="kuftplib_8h_source.html#l00095">filereadappend</a>、<a class="el" href="kuftplib_8h_source.html#l00094">filewrite</a>、<a class="el" href="kuftplib_8h_source.html#l00096">filewriteappend</a>、<a class="el" href="kuftplib_8cpp_source.html#l00946">FtpAcceptConnection()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01102">FtpOpenPort()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00105">pasv</a>、<a class="el" href="kuftplib_8h_source.html#l00106">port</a>、<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>及<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02262">RawOpen()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a09272d4b48b04cb82fa9c5f7436f3545"></a><!-- doxytag: member="KuFtpLib::FtpClose" ref="a09272d4b48b04cb82fa9c5f7436f3545" args="(ftphandle *nData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpClose </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nData</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01457">1457</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01835">SleepMicroseconds()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>及<a class="el" href="kuftplib_8cpp_source.html#l00257">writeline()</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01102">FtpOpenPort()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02273">RawClose()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97ea50bce23a2c92df8171d205dc8b04"></a><!-- doxytag: member="KuFtpLib::FtpOpenPasv" ref="a97ea50bce23a2c92df8171d205dc8b04" args="(ftphandle *nControl, ftphandle **nData, transfermode mode, int dir, char *cmd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpOpenPasv </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> **&nbsp;</td>
+          <td class="paramname"> <em>nData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01244">1244</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00100">ascii</a>、<a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>、<a class="el" href="kuftplib_8h_source.html#l00055">ftphandle::cmode</a>、<a class="el" href="kuftplib_8h_source.html#l00072">ftphandle::correctpasv</a>、<a class="el" href="kuftplib_8cpp_source.html#l02246">CorrectPasvResponse()</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00728">DoSocks4Proxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00790">DoSocks5Proxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00064">HTTP_PROXY</a>、<a class="el" href="kuftplib_8h_source.html#l00058">ftphandle::idlecb</a>、<a class="el" href="kuftplib_8h_source.html#l00056">ftphandle::idletime</a>、<a class="el" href="kuftplib_8h_source.html#l00101">image</a>、<a class="el" href="kuftplib_8cpp_source.html#l00068">INLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8cpp_source.html#l00049">net_write</a>、<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>、<a class="el" href="kuftplib_8h_source.html#l00105">pasv</a>、<a class="el" href="kuftplib_8h_source.html#l00079">ftphandle::proxyHost</a>、<a class="el" href="kuftplib_8h_source.html#l00082">ftphandle::proxyPass</a>、<a class="el" href="kuftplib_8h_source.html#l00080">ftphandle::proxyPort</a>、<a class="el" href="kuftplib_8h_source.html#l00083">ftphandle::proxyType</a>、<a class="el" href="kuftplib_8h_source.html#l00081">ftphandle::proxyUser</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>、<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>、<a class="el" href="kuftplib_8cpp_source.html#l00055">SETSOCKOPT_OPTVAL_TYPE</a>、<a class="el" href="kuftplib_8cpp_source.html#l00065">SOCKS4_PROXY</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>、<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00074">ftphandle::useProxy</a>、<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3984573092a518d4c2f556cf541f3801"></a><!-- doxytag: member="KuFtpLib::FtpOpenPort" ref="a3984573092a518d4c2f556cf541f3801" args="(ftphandle *nControl, ftphandle **nData, transfermode mode, int dir, char *cmd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpOpenPort </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> **&nbsp;</td>
+          <td class="paramname"> <em>nData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01102">1102</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00100">ascii</a>、<a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>、<a class="el" href="kuftplib_8h_source.html#l00055">ftphandle::cmode</a>、<a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00058">ftphandle::idlecb</a>、<a class="el" href="kuftplib_8h_source.html#l00056">ftphandle::idletime</a>、<a class="el" href="kuftplib_8h_source.html#l00101">image</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>、<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>、<a class="el" href="kuftplib_8h_source.html#l00105">pasv</a>、<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>、<a class="el" href="kuftplib_8cpp_source.html#l00055">SETSOCKOPT_OPTVAL_TYPE</a>、<a class="el" href="kuftplib_8h_source.html#l00074">ftphandle::useProxy</a>、<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a52da069a967027405f3db3937d753a27"></a><!-- doxytag: member="KuFtpLib::FtpRead" ref="a52da069a967027405f3db3937d753a27" args="(void *buf, int max, ftphandle *nData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpRead </td>
+          <td>(</td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01485">1485</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00048">net_read</a>、<a class="el" href="kuftplib_8cpp_source.html#l00164">readline()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00108">socket_wait()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>、<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>、<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02283">RawRead()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a626183b4d43ce09708d89af41ac860d5"></a><!-- doxytag: member="KuFtpLib::FtpSendCmd" ref="a626183b4d43ce09708d89af41ac860d5" args="(const char *cmd, char expresp, ftphandle *nControl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpSendCmd </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&nbsp;</td>
+          <td class="paramname"> <em>expresp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00885">885</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00068">INLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00049">net_write</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>及<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01655">Cdup()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01638">Chdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01960">Delete()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01610">Feat()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01102">FtpOpenPort()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02007">Fxp()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00917">Login()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01621">Mkdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01897">ModDate()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02148">NegotiateEncryption()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02001">Noop()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01684">Pwd()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01977">Quit()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01578">Raw()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01944">Rename()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01667">Rmdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02124">SetDataEncryption()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01560">Site()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01870">Size()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01596">SysType()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a12a0f77915d042e241bfe64c1dfce1b2"></a><!-- doxytag: member="KuFtpLib::FtpWrite" ref="a12a0f77915d042e241bfe64c1dfce1b2" args="(void *buf, int len, ftphandle *nData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpWrite </td>
+          <td>(</td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01522">1522</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00049">net_write</a>、<a class="el" href="kuftplib_8cpp_source.html#l00108">socket_wait()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>、<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>、<a class="el" href="kuftplib_8cpp_source.html#l00257">writeline()</a>、<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>、<a class="el" href="kuftplib_8h_source.html#l00061">ftphandle::xfered</a>及<a class="el" href="kuftplib_8h_source.html#l00063">ftphandle::xfered1</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02278">RawWrite()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2e063c034ef9af67e482b8060125f41"></a><!-- doxytag: member="KuFtpLib::FtpXfer" ref="ab2e063c034ef9af67e482b8060125f41" args="(const char *localfile, const char *path, ftphandle *nControl, accesstype type, transfermode mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::FtpXfer </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>localfile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a>&nbsp;</td>
+          <td class="paramname"> <em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01707">1707</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8cpp_source.html#l00070">COMMONLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00091">dir</a>、<a class="el" href="kuftplib_8h_source.html#l00092">dirverbose</a>、<a class="el" href="kuftplib_8h_source.html#l00093">fileread</a>、<a class="el" href="kuftplib_8h_source.html#l00095">filereadappend</a>、<a class="el" href="kuftplib_8h_source.html#l00094">filewrite</a>、<a class="el" href="kuftplib_8h_source.html#l00096">filewriteappend</a>、<a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8cpp_source.html#l01485">FtpRead()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01522">FtpWrite()</a>、<a class="el" href="kuftplib_8h_source.html#l00101">image</a>、<a class="el" href="kuftplib_8cpp_source.html#l00068">INLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00076">ftphandle::maxDownloadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00075">ftphandle::maxUploadSpeed</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8h_source.html#l00039">off64_t</a>、<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>、<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>、<a class="el" href="kuftplib_8cpp_source.html#l01835">SleepMicroseconds()</a>及<a class="el" href="kuftplib_8h_source.html#l00073">ftphandle::stoptransfer</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01859">Dir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01919">Get()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01848">Nlst()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01934">Put()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1d031d6af82252cb1ef9423c7b65be5c"></a><!-- doxytag: member="KuFtpLib::Fxp" ref="a1d031d6af82252cb1ef9423c7b65be5c" args="(KuFtpLib *src, KuFtpLib *dst, const char *pathSrc, const char *pathDst, transfermode mode, fxpmethod method)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Fxp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html">KuFtpLib</a> *&nbsp;</td>
+          <td class="paramname"> <em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html">KuFtpLib</a> *&nbsp;</td>
+          <td class="paramname"> <em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>pathSrc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>pathDst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">fxpmethod</a>&nbsp;</td>
+          <td class="paramname"> <em>method</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02007">2007</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00072">ftphandle::correctpasv</a>、<a class="el" href="kuftplib_8cpp_source.html#l02246">CorrectPasvResponse()</a>、<a class="el" href="kuftplib_8h_source.html#l00110">defaultfxp</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a981e9554d53481ba91e9e399a0ab3f56"></a><!-- doxytag: member="KuFtpLib::Get" ref="a981e9554d53481ba91e9e399a0ab3f56" args="(const char *outputfile, const char *path, transfermode mode, off64_t offset=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Get </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>outputfile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">off64_t&nbsp;</td>
+          <td class="paramname"> <em>offset</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01919">1919</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00093">fileread</a>、<a class="el" href="kuftplib_8h_source.html#l00095">filereadappend</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4eb5050fc6816654d0c2290ca999e695"></a><!-- doxytag: member="KuFtpLib::LastResponse" ref="a4eb5050fc6816654d0c2290ca999e695" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * KuFtpLib::LastResponse </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00380">380</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00917">Login()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61c479001c68e6b84352c21d47fdd8f8"></a><!-- doxytag: member="KuFtpLib::LogHttpProxyReturn" ref="a61c479001c68e6b84352c21d47fdd8f8" args="(int fd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::LogHttpProxyReturn </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fd</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00580">580</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8cpp_source.html#l00069">OUTLOG</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a05fc7f38e0e5b9de902468d235e5b799"></a><!-- doxytag: member="KuFtpLib::Login" ref="a05fc7f38e0e5b9de902468d235e5b799" args="(const char *user, const char *pass)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Login </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>user</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>pass</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00917">917</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00054">ftphandle::ctrl</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00380">LastResponse()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4be72f5561e940df08d19ee15c47825b"></a><!-- doxytag: member="KuFtpLib::LogSocks5ProxyError" ref="a4be72f5561e940df08d19ee15c47825b" args="(int error)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::LogSocks5ProxyError </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>error</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00692">692</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8cpp_source.html#l00071">EMERLOG</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00790">DoSocks5Proxy()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa7fa4191d3624b33d82fbb6d41471fb2"></a><!-- doxytag: member="KuFtpLib::Mkdir" ref="aa7fa4191d3624b33d82fbb6d41471fb2" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Mkdir </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01621">1621</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3e57dbe4288568903e960499f6f8ace0"></a><!-- doxytag: member="KuFtpLib::ModDate" ref="a3e57dbe4288568903e960499f6f8ace0" args="(const char *path, char *dt, int max)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::ModDate </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>dt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01897">1897</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5b5dca979fcf197437434d374131a1fa"></a><!-- doxytag: member="KuFtpLib::NegotiateEncryption" ref="a5b5dca979fcf197437434d374131a1fa" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::NegotiateEncryption </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02148">2148</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00070">ftphandle::certcb</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8h_source.html#l00067">ftphandle::sbio</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>及<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aead8c211dfc9d2140c1a5d4f0136dd80"></a><!-- doxytag: member="KuFtpLib::Nlst" ref="aead8c211dfc9d2140c1a5d4f0136dd80" args="(const char *outputfile, const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Nlst </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>outputfile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01848">1848</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00100">ascii</a>、<a class="el" href="kuftplib_8h_source.html#l00091">dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae202c543934ce26a8fc7e50f8bd02830"></a><!-- doxytag: member="KuFtpLib::Noop" ref="ae202c543934ce26a8fc7e50f8bd02830" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Noop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02001">2001</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa0948fc5fdf3e8e5a95330c72ca21f61"></a><!-- doxytag: member="KuFtpLib::Put" ref="aa0948fc5fdf3e8e5a95330c72ca21f61" args="(const char *inputfile, const char *path, transfermode mode, off64_t offset=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Put </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>inputfile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">off64_t&nbsp;</td>
+          <td class="paramname"> <em>offset</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01934">1934</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00094">filewrite</a>、<a class="el" href="kuftplib_8h_source.html#l00096">filewriteappend</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00071">ftphandle::offset</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a47625dcb17cfce3afe39fbc32715e031"></a><!-- doxytag: member="KuFtpLib::Pwd" ref="a47625dcb17cfce3afe39fbc32715e031" args="(char *path, int max)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Pwd </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01684">1684</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4454156fe4e70c101329ea76b674d933"></a><!-- doxytag: member="KuFtpLib::Quit" ref="a4454156fe4e70c101329ea76b674d933" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Quit </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01977">1977</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a10c7410e531067011f6092a120476632"></a><!-- doxytag: member="KuFtpLib::Raw" ref="a10c7410e531067011f6092a120476632" args="(const char *cmd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Raw </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01578">1578</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac8c7b140dd65d967c297f0f89a287591"></a><!-- doxytag: member="KuFtpLib::RawClose" ref="ac8c7b140dd65d967c297f0f89a287591" args="(ftphandle *handle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::RawClose </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>handle</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02273">2273</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a31d1fff08283f41649676b98030fe19a"></a><!-- doxytag: member="KuFtpLib::RawOpen" ref="a31d1fff08283f41649676b98030fe19a" args="(const char *path, accesstype type, transfermode mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structftphandle.html">ftphandle</a> * KuFtpLib::RawOpen </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a>&nbsp;</td>
+          <td class="paramname"> <em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02262">2262</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l01017">FtpAccess()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a047ce4199417a89e334bad2b871c0ced"></a><!-- doxytag: member="KuFtpLib::RawRead" ref="a047ce4199417a89e334bad2b871c0ced" args="(void *buf, int max, ftphandle *handle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::RawRead </td>
+          <td>(</td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>handle</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02283">2283</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l01485">FtpRead()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a856329c06d3a78342edbbc599e69f057"></a><!-- doxytag: member="KuFtpLib::RawWrite" ref="a856329c06d3a78342edbbc599e69f057" args="(void *buf, int len, ftphandle *handle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::RawWrite </td>
+          <td>(</td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>handle</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02278">2278</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l01522">FtpWrite()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad449d8d036075cf42378ccb885900f78"></a><!-- doxytag: member="KuFtpLib::ReadCrLfLine" ref="ad449d8d036075cf42378ccb885900f78" args="(int fd, void *buf, int size)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::ReadCrLfLine </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>size</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00553">553</a>行定义。</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae51ab97cc7d88a28bc31191081f3f4e1"></a><!-- doxytag: member="KuFtpLib::readline" ref="ae51ab97cc7d88a28bc31191081f3f4e1" args="(char *buf, int max, ftphandle *ctl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::readline </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>ctl</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00164">164</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00051">ftphandle::cavail</a>、<a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>、<a class="el" href="kuftplib_8h_source.html#l00049">ftphandle::cget</a>、<a class="el" href="kuftplib_8h_source.html#l00051">ftphandle::cleft</a>、<a class="el" href="kuftplib_8h_source.html#l00049">ftphandle::cput</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00060">FTPLIB_CONTROL</a>、<a class="el" href="kuftplib_8cpp_source.html#l00061">FTPLIB_READ</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00048">net_read</a>、<a class="el" href="kuftplib_8cpp_source.html#l00069">OUTLOG</a>、<a class="el" href="kuftplib_8cpp_source.html#l00108">socket_wait()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>、<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>及<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01485">FtpRead()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00327">readresp()</a>及<a class="el" href="kuftplib_8cpp_source.html#l00355">Timeout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9f4a8374263db6f765e32e155926da3a"></a><!-- doxytag: member="KuFtpLib::readresp" ref="a9f4a8374263db6f765e32e155926da3a" args="(char c, ftphandle *nControl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::readresp </td>
+          <td>(</td>
+          <td class="paramtype">char&nbsp;</td>
+          <td class="paramname"> <em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nControl</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00327">327</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00164">readline()</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l00392">Connect()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00946">FtpAcceptConnection()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8cpp_source.html#l02007">Fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a32fd77b375f489f3e7f7f735ae8f2fd9"></a><!-- doxytag: member="KuFtpLib::Rename" ref="a32fd77b375f489f3e7f7f735ae8f2fd9" args="(const char *src, const char *dst)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Rename </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>dst</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01944">1944</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aac82004a868dbaffa18cd0bcd3a34faa"></a><!-- doxytag: member="KuFtpLib::Rmdir" ref="aac82004a868dbaffa18cd0bcd3a34faa" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Rmdir </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01667">1667</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a10b03365addcdd0c799add6bab4c847b"></a><!-- doxytag: member="KuFtpLib::SetCallbackArg" ref="a10b03365addcdd0c799add6bab4c847b" args="(void *arg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackArg </td>
+          <td>(</td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>arg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02191">2191</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00060">ftphandle::cbarg</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a675d925685ba7432de455ac212e2821d"></a><!-- doxytag: member="KuFtpLib::SetCallbackBytes" ref="a675d925685ba7432de455ac212e2821d" args="(off64_t bytes)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackBytes </td>
+          <td>(</td>
+          <td class="paramtype">off64_t&nbsp;</td>
+          <td class="paramname"> <em>bytes</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02196">2196</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00062">ftphandle::cbbytes</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8457224a7754bd88506ecfc03dc6d40c"></a><!-- doxytag: member="KuFtpLib::SetCallbackCertFunction" ref="a8457224a7754bd88506ecfc03dc6d40c" args="(FtpCallbackCert pointer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackCertFunction </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a>&nbsp;</td>
+          <td class="paramname"> <em>pointer</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02170">2170</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00070">ftphandle::certcb</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8da2715c817da3e7e98e2c370465b1c0"></a><!-- doxytag: member="KuFtpLib::SetCallbackIdleFunction" ref="a8da2715c817da3e7e98e2c370465b1c0" args="(FtpCallbackIdle pointer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackIdleFunction </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a>&nbsp;</td>
+          <td class="paramname"> <em>pointer</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02176">2176</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00058">ftphandle::idlecb</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8475d19790406d60a7595e39242f3ad"></a><!-- doxytag: member="KuFtpLib::SetCallbackIdletime" ref="ab8475d19790406d60a7595e39242f3ad" args="(int time)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackIdletime </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>time</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02201">2201</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00056">ftphandle::idletime</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6fc20c1a9f5f7e54ed05614d4411d2db"></a><!-- doxytag: member="KuFtpLib::SetCallbackLogFunction" ref="a6fc20c1a9f5f7e54ed05614d4411d2db" args="(FtpCallbackLog pointer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackLogFunction </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a>&nbsp;</td>
+          <td class="paramname"> <em>pointer</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02186">2186</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00059">ftphandle::logcb</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6f347e49e18156b58c0090355ecffc06"></a><!-- doxytag: member="KuFtpLib::SetCallbackXferFunction" ref="a6f347e49e18156b58c0090355ecffc06" args="(FtpCallbackXfer pointer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCallbackXferFunction </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a>&nbsp;</td>
+          <td class="paramname"> <em>pointer</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02181">2181</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00057">ftphandle::xfercb</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa708138ee5c49f13b0c177ec1283e0f6"></a><!-- doxytag: member="KuFtpLib::SetCheckTimeout" ref="aa708138ee5c49f13b0c177ec1283e0f6" args="(bool)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCheckTimeout </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>i</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02215">2215</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00077">ftphandle::checkTimeout</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9a8e2049a5f1b46fc3f46e45eb44d0d2"></a><!-- doxytag: member="KuFtpLib::SetConnmode" ref="a9a8e2049a5f1b46fc3f46e45eb44d0d2" args="(connmode mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetConnmode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">connmode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02207">2207</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00055">ftphandle::cmode</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afbf52cb282ab3022d799bad1bbdf1991"></a><!-- doxytag: member="KuFtpLib::SetCorrectPasv" ref="afbf52cb282ab3022d799bad1bbdf1991" args="(bool b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetCorrectPasv </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>b</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00158">158</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00072">ftphandle::correctpasv</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb8ed0b54e018b4d6df77455b8cb965a"></a><!-- doxytag: member="KuFtpLib::SetDataEncryption" ref="afb8ed0b54e018b4d6df77455b8cb965a" args="(dataencryption enc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::SetDataEncryption </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">dataencryption</a>&nbsp;</td>
+          <td class="paramname"> <em>enc</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02124">2124</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8h_source.html#l00116">secure</a>、<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>、<a class="el" href="kuftplib_8h_source.html#l00069">ftphandle::tlsdata</a>及<a class="el" href="kuftplib_8h_source.html#l00115">unencrypted</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64207f2332116beebef4b27be2defc61"></a><!-- doxytag: member="KuFtpLib::SetFtpUseProxy" ref="a64207f2332116beebef4b27be2defc61" args="(bool)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetFtpUseProxy </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>i</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l02211">2211</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00074">ftphandle::useProxy</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa745dbe4b5a28fbda3b61fc6f7570cb3"></a><!-- doxytag: member="KuFtpLib::SetMaxDownloadSpeed" ref="aa745dbe4b5a28fbda3b61fc6f7570cb3" args="(int i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetMaxDownloadSpeed </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>i</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00152">152</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00076">ftphandle::maxDownloadSpeed</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa1d039d641e4f7ae08d16c4149c6f056"></a><!-- doxytag: member="KuFtpLib::SetMaxUploadSpeed" ref="aa1d039d641e4f7ae08d16c4149c6f056" args="(int i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SetMaxUploadSpeed </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>i</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00151">151</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00075">ftphandle::maxUploadSpeed</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af969f34a88a785906aa043b9be981440"></a><!-- doxytag: member="KuFtpLib::Site" ref="af969f34a88a785906aa043b9be981440" args="(const char *cmd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Site </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01560">1560</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>及<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a468afaac78efafa5957ebd1b2bcc52"></a><!-- doxytag: member="KuFtpLib::Size" ref="a1a468afaac78efafa5957ebd1b2bcc52" args="(const char *path, int *size, transfermode mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Size </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>&nbsp;</td>
+          <td class="paramname"> <em>mode</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01870">1870</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a18e6ea4aac876219c6dd3e6be98f91d6"></a><!-- doxytag: member="KuFtpLib::SleepMicroseconds" ref="a18e6ea4aac876219c6dd3e6be98f91d6" args="(off64_t t)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::SleepMicroseconds </td>
+          <td>(</td>
+          <td class="paramtype">off64_t&nbsp;</td>
+          <td class="paramname"> <em>t</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01835">1835</a>行定义。</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab1a4d9725a55dbaab2c614335d48ed5a"></a><!-- doxytag: member="KuFtpLib::socket_wait" ref="ab1a4d9725a55dbaab2c614335d48ed5a" args="(ftphandle *ctl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::socket_wait </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>ctl</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00108">108</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00058">ftphandle::idlecb</a>、<a class="el" href="kuftplib_8h_source.html#l00056">ftphandle::idletime</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00050">net_close</a>及<a class="el" href="kuftplib_8h_source.html#l00078">ftphandle::timeout</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01485">FtpRead()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01522">FtpWrite()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00164">readline()</a>及<a class="el" href="kuftplib_8cpp_source.html#l00257">writeline()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa112f206cfdc0b5222011c506d8cdef4"></a><!-- doxytag: member="KuFtpLib::StopTransfer" ref="aa112f206cfdc0b5222011c506d8cdef4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KuFtpLib::StopTransfer </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01997">1997</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00073">ftphandle::stoptransfer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3695a83f5f942b811f2cc2fa68b7857a"></a><!-- doxytag: member="KuFtpLib::SysType" ref="a3695a83f5f942b811f2cc2fa68b7857a" args="(char *buf, int max)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::SysType </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>max</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l01596">1596</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2ea992c1f3c08059a098f23533459401"></a><!-- doxytag: member="KuFtpLib::Timeout" ref="a2ea992c1f3c08059a098f23533459401" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::Timeout </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00355">355</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00077">ftphandle::checkTimeout</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8h_source.html#l00167">mp_ftphandle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00164">readline()</a>及<a class="el" href="kuftplib_8h_source.html#l00064">ftphandle::response</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a602aba21207a13bd14e41e11cb98f84a"></a><!-- doxytag: member="KuFtpLib::writeline" ref="a602aba21207a13bd14e41e11cb98f84a" args="(char *buf, int len, ftphandle *nData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KuFtpLib::writeline </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structftphandle.html">ftphandle</a> *&nbsp;</td>
+          <td class="paramname"> <em>nData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a>第<a class="el" href="kuftplib_8cpp_source.html#l00257">257</a>行定义。</p>
+
+<p>参考 <a class="el" href="kuftplib_8h_source.html#l00052">ftphandle::buf</a>、<a class="el" href="kuftplib_8h_source.html#l00053">ftphandle::dir</a>、<a class="el" href="kuftplib_8cpp_source.html#l00056">FTPLIB_BUFSIZ</a>、<a class="el" href="kuftplib_8cpp_source.html#l00062">FTPLIB_WRITE</a>、<a class="el" href="kuftplib_8h_source.html#l00050">ftphandle::handle</a>、<a class="el" href="kuftplib_8cpp_source.html#l00049">net_write</a>、<a class="el" href="kuftplib_8cpp_source.html#l00108">socket_wait()</a>、<a class="el" href="kuftplib_8h_source.html#l00065">ftphandle::ssl</a>及<a class="el" href="kuftplib_8h_source.html#l00068">ftphandle::tlsctrl</a>.</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01457">FtpClose()</a>及<a class="el" href="kuftplib_8cpp_source.html#l01522">FtpWrite()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a3de74a12bdef63c0f3c81097c036311d"></a><!-- doxytag: member="KuFtpLib::mp_ftphandle" ref="a3de74a12bdef63c0f3c81097c036311d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structftphandle.html">ftphandle</a>* <a class="el" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">KuFtpLib::mp_ftphandle</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00167">167</a>行定义。</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01655">Cdup()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01638">Chdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02219">ClearHandle()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00392">Connect()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00373">ConnectionLost()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02246">CorrectPasvResponse()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01960">Delete()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01859">Dir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00613">DoHttpProxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00728">DoSocks4Proxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00790">DoSocks5Proxy()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01610">Feat()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01244">FtpOpenPasv()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01102">FtpOpenPort()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00885">FtpSendCmd()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01707">FtpXfer()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02007">Fxp()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01919">Get()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00073">KuFtpLib()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00380">LastResponse()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00580">LogHttpProxyReturn()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00917">Login()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00692">LogSocks5ProxyError()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01621">Mkdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01897">ModDate()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02148">NegotiateEncryption()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01848">Nlst()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02001">Noop()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01934">Put()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01684">Pwd()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01977">Quit()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01578">Raw()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02262">RawOpen()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00164">readline()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01944">Rename()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01667">Rmdir()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02191">SetCallbackArg()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02196">SetCallbackBytes()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02170">SetCallbackCertFunction()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02176">SetCallbackIdleFunction()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02201">SetCallbackIdletime()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02186">SetCallbackLogFunction()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02181">SetCallbackXferFunction()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02215">SetCheckTimeout()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02207">SetConnmode()</a>、<a class="el" href="kuftplib_8h_source.html#l00158">SetCorrectPasv()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02124">SetDataEncryption()</a>、<a class="el" href="kuftplib_8cpp_source.html#l02211">SetFtpUseProxy()</a>、<a class="el" href="kuftplib_8h_source.html#l00152">SetMaxDownloadSpeed()</a>、<a class="el" href="kuftplib_8h_source.html#l00151">SetMaxUploadSpeed()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01560">Site()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01870">Size()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00108">socket_wait()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01997">StopTransfer()</a>、<a class="el" href="kuftplib_8cpp_source.html#l01596">SysType()</a>、<a class="el" href="kuftplib_8cpp_source.html#l00355">Timeout()</a>及<a class="el" href="kuftplib_8cpp_source.html#l00094">~KuFtpLib()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="kuftplib_8h_source.html">kuftplib.h</a></li>
+<li><a class="el" href="kuftplib_8cpp_source.html">kuftplib.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

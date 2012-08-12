@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: fileproperties.cpp文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>fileproperties.cpp文件参考</h1><code>#include &lt;errno.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="utils_8h_source.html">utils.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="fileproperties_8cpp_source.html">sshfileinfo.h</a>&quot;</code><br/>
+<code>#include &lt;QtCore&gt;</code><br/>
+<code>#include &quot;libssh2.h&quot;</code><br/>
+<code>#include &quot;libssh2_sftp.h&quot;</code><br/>
+<code>#include &quot;<a class="el" href="globaloption_8h_source.html">globaloption.h</a>&quot;</code><br/>
+<code>#include &lt;cassert&gt;</code><br/>
+<code>#include &lt;vector&gt;</code><br/>
+<code>#include &lt;map&gt;</code><br/>
+<code>#include &lt;queue&gt;</code><br/>
+<code>#include &lt;QThread&gt;</code><br/>
+<code>#include &quot;<a class="el" href="sftp-const_8h_source.html">sftp-const.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="dirretriver_8h_source.html">dirretriver.h</a>&quot;</code><br/>
+<code>#include &lt;QtGui&gt;</code><br/>
+<code>#include &lt;QDialog&gt;</code><br/>
+<code>#include &quot;ui_fileproperties.h&quot;</code><br/>
+<code>#include &quot;<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="connection_8h_source.html">connection.h</a>&quot;</code><br/>
+<code>#include &lt;QtNetwork&gt;</code><br/>
+
+<p><a href="fileproperties_8cpp_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="fileproperties_8cpp.html#a63dde6c26f5dff0e0482ab728f5e53c2">QUrlInfo2LIBSSH2_SFTP_ATTRIBUTES</a> (QUrlInfo &amp;ui, LIBSSH2_SFTP_ATTRIBUTES *attr)</td></tr>
+<tr><td colspan="2"><h2>变量</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="fileproperties_8cpp.html#a3075649565b4fb8974f3deea499a795d">gMimeHash</a></td></tr>
+</table>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="a63dde6c26f5dff0e0482ab728f5e53c2"></a><!-- doxytag: member="fileproperties.cpp::QUrlInfo2LIBSSH2_SFTP_ATTRIBUTES" ref="a63dde6c26f5dff0e0482ab728f5e53c2" args="(QUrlInfo &amp;ui, LIBSSH2_SFTP_ATTRIBUTES *attr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int QUrlInfo2LIBSSH2_SFTP_ATTRIBUTES </td>
+          <td>(</td>
+          <td class="paramtype">QUrlInfo &amp;&nbsp;</td>
+          <td class="paramname"> <em>ui</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LIBSSH2_SFTP_ATTRIBUTES *&nbsp;</td>
+          <td class="paramname"> <em>attr</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00032">32</a>行定义。</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00125">FilePropertiesRetriveThread::run_ftp()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>变量文档</h2>
+<a class="anchor" id="a3075649565b4fb8974f3deea499a795d"></a><!-- doxytag: member="fileproperties.cpp::gMimeHash" ref="a3075649565b4fb8974f3deea499a795d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;QString, QString&gt; <a class="el" href="remotedirmodel_8cpp.html#a3075649565b4fb8974f3deea499a795d">gMimeHash</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="mimetypeshash_8cpp_source.html">mimetypeshash.cpp</a>第<a class="el" href="mimetypeshash_8cpp_source.html#l00004">4</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00318">RemoteDirModel::data()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00546">LocalFileProperties::fileIcon()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00383">FileProperties::fileIcon()</a>及<a class="el" href="mimetypeshash_8cpp_source.html#l00006">mimeHashInit()</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

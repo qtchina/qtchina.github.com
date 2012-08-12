@@ -1,0 +1,1150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: SynchronizeWindow类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>SynchronizeWindow类参考</h1><!-- doxytag: class="SynchronizeWindow" -->
+<p><code>#include &lt;<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>&gt;</code></p>
+
+<p><a href="class_synchronize_window-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a4cff76e0dd1e39f24dbc8306ec57456c">slot_status_msg</a> (QString msg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aee1801f89031201ac076a971e0759ece">slot_finished</a> ()</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#ad68ad9efd0a14b6cdd608b2c4e894a04">syncDownload</a> (QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; file)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a5064e9e7c8c5183cc389dc4c2b0beb19">syncUpload</a> (QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; file)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a76b1994009bce66d1b499dcea18ea494">SynchronizeWindow</a> (QWidget *parent=0, Qt::WindowFlags flags=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a0cce61269cdb5a49282a66709d9334b9">~SynchronizeWindow</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a454aef4a8dca23e4234dc135643c8f14">set_sync_param</a> (QString <a class="el" href="class_synchronize_window.html#a1762ddacecf5495a9736c2b0935bab30">local_dir</a>, QString <a class="el" href="class_synchronize_window.html#a8152d5f0cb3562e76356cecec1a16f07">sess_name</a>, QString <a class="el" href="class_synchronize_window.html#a477166eedfea701e382929a78c14c1e0">remote_dir</a>, bool <a class="el" href="class_synchronize_window.html#aea6ab18f028e2b28c482e648c00570de">recursive</a>, int <a class="el" href="class_synchronize_window.html#a5f8e2e93017c90af1e6a7cb9af1b0710">way</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a3bf7557bc16be54c994d577ba06d986c">diffDesciption</a> (unsigned long flags)</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a3eadd78f5871628a85763f5fb57ae7ec">closeEvent</a> (QCloseEvent *evt)</td></tr>
+<tr><td colspan="2"><h2>私有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_synchronize_window.html#a155b3a30081c9e0ade8a0b368e1e22b6ac9fcdf2ee7613e1e3437020de04c7860">ST_LZERO</a> =  0x00, 
+<a class="el" href="class_synchronize_window.html#a155b3a30081c9e0ade8a0b368e1e22b6a4ca53a042a4fa708d6a112f2c3e966d1">ST_RZERO</a> =  0x01, 
+<a class="el" href="class_synchronize_window.html#a155b3a30081c9e0ade8a0b368e1e22b6ab69484f381a115390f35c321e93abd6f">ST_LRSAME</a> =  0x02, 
+<a class="el" href="class_synchronize_window.html#a155b3a30081c9e0ade8a0b368e1e22b6af693d35bef1e4be6343d5b94e37e6fbe">ST_LNEW</a> =  0x04, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_synchronize_window.html#a155b3a30081c9e0ade8a0b368e1e22b6a493827e6b0e2c2d82d21f800c6c448f3">ST_RNEW</a> =  0x08
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_synchronize_window.html#aabea4a6025af8293f993067e56deb78faafef13291c71cb8851396041275fc044">FT_DIR</a> =  0x10000, 
+<a class="el" href="class_synchronize_window.html#aabea4a6025af8293f993067e56deb78fa5571dcbc30c6190c39a4a7c52a9bf9b9">FT_REG</a> =  0x20000
+ }</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aaeaa59af878e992c838787f0337c000d">start</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a8c190b897b97d097d9d7d2b99569e0e6">stop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#abaa6bbd86af14b3e88c514e90c2a0a5b">progress_timer_timeout</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a5e1534d4253090f3ebd04b125a47f97f">showCtxMenu</a> (const QPoint &amp;pos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a1273ec0e0cdf59ad9715396f78dcc2b9">showDiffFileInfo</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aa228f0d69fe0a016b8a799cbba4759bf">dlSelectedDiffFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a5ff0fb90bb727c3fc74da59e3f249c8d">upSelectedDiffFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#ae593d08a6f4edaf85a0eb73703806926">syncAllFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aa97926f299bf887479567813e204136c">syncAllFiles</a> (int direct)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#ac6f984ab7f0446aa1510aca84059da26">downloadAllFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a97dba4d754bed3783815c1035521c8e0">uploadAllFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a55b143669a294f3bd184554a7e25e004">downloadRemoteOnlyFiles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a650ee4e2108ccbfe18d9d4979b5b98b4">uploadLocalOnlyFiles</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a42c79bce715754839f75bda6d7591be9">initCtxMenu</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndexList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#af8d4aec6a16cbd8dfced9a9efba2ee7b">getSelectedModelIndexes</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a3f03ff36f8385ad37f36634cba23c4dd">manualShowWhatsThis</a> (QString what)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a5e8239a900b9d72169e5c785ed65d971">acquireBusyControl</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#adc8a14a75da9410820a807c4acd901c1">releaseBusyControl</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui::SynchronizeWindow&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#acfd20f3342d8596034299cf3d447131e">ui_win</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a1762ddacecf5495a9736c2b0935bab30">local_dir</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a8152d5f0cb3562e76356cecec1a16f07">sess_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a477166eedfea701e382929a78c14c1e0">remote_dir</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aea6ab18f028e2b28c482e648c00570de">recursive</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a5f8e2e93017c90af1e6a7cb9af1b0710">way</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTimer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a3b9019f141e0157bfaf38d794d652e05">progress_timer</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a003d9a3186f1c81cd0928f813d823cdb">running</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMenu *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a7f60a140a61e6f4ccfdc4d36ade2a274">ctxMenu</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QAction *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a3f045365e918a54434c9dfd68692d755">dlAction</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QAction *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#ae085f5d569326d06b8eda48fed3886b9">upAction</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sync_walker.html">SyncWalker</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#abeeb7e997d5ad4c080948328511bef61">walker</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sync_differ_model.html">SyncDifferModel</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a44ccfd3cec9b20cded9a370c030291c1">model</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sync_transfer_thread.html">SyncTransferThread</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#aba6e3f689894d1e03dd6c739c0b5357d">transfer</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStringList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#af581da83aeec96f1916436765947d1b9">dirs</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QHash&lt; QString, <br class="typebreak"/>
+int &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a1dc3cba44b020390c17d791564015fc9">syncer</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QPair&lt; QString, int &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a92685cd2234db4f8fdd707bdd2e10e4e">synckeys</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a9423a30bdad9423da3af75051424dcd6">busy</a></td></tr>
+<tr><td colspan="2"><h2>友元</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a77b58c3c3bf887fd8930ddd4a725d249">SyncWalker</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchronize_window.html#a56105bd80da995809c35e53bc8633fb9">SyncDifferModel</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00085">85</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6"></a><!-- doxytag: member="SynchronizeWindow::@14" ref="a155b3a30081c9e0ade8a0b368e1e22b6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum<code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6ac9fcdf2ee7613e1e3437020de04c7860"></a><!-- doxytag: member="ST_LZERO" ref="a155b3a30081c9e0ade8a0b368e1e22b6ac9fcdf2ee7613e1e3437020de04c7860" args="" -->ST_LZERO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6a4ca53a042a4fa708d6a112f2c3e966d1"></a><!-- doxytag: member="ST_RZERO" ref="a155b3a30081c9e0ade8a0b368e1e22b6a4ca53a042a4fa708d6a112f2c3e966d1" args="" -->ST_RZERO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6ab69484f381a115390f35c321e93abd6f"></a><!-- doxytag: member="ST_LRSAME" ref="a155b3a30081c9e0ade8a0b368e1e22b6ab69484f381a115390f35c321e93abd6f" args="" -->ST_LRSAME</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6af693d35bef1e4be6343d5b94e37e6fbe"></a><!-- doxytag: member="ST_LNEW" ref="a155b3a30081c9e0ade8a0b368e1e22b6af693d35bef1e4be6343d5b94e37e6fbe" args="" -->ST_LNEW</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a155b3a30081c9e0ade8a0b368e1e22b6a493827e6b0e2c2d82d21f800c6c448f3"></a><!-- doxytag: member="ST_RNEW" ref="a155b3a30081c9e0ade8a0b368e1e22b6a493827e6b0e2c2d82d21f800c6c448f3" args="" -->ST_RNEW</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00138">138</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aabea4a6025af8293f993067e56deb78f"></a><!-- doxytag: member="SynchronizeWindow::@15" ref="aabea4a6025af8293f993067e56deb78f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum<code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="aabea4a6025af8293f993067e56deb78faafef13291c71cb8851396041275fc044"></a><!-- doxytag: member="FT_DIR" ref="aabea4a6025af8293f993067e56deb78faafef13291c71cb8851396041275fc044" args="" -->FT_DIR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aabea4a6025af8293f993067e56deb78fa5571dcbc30c6190c39a4a7c52a9bf9b9"></a><!-- doxytag: member="FT_REG" ref="aabea4a6025af8293f993067e56deb78fa5571dcbc30c6190c39a4a7c52a9bf9b9" args="" -->FT_REG</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00139">139</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a76b1994009bce66d1b499dcea18ea494"></a><!-- doxytag: member="SynchronizeWindow::SynchronizeWindow" ref="a76b1994009bce66d1b499dcea18ea494" args="(QWidget *parent=0, Qt::WindowFlags flags=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SynchronizeWindow::SynchronizeWindow </td>
+          <td>(</td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::WindowFlags&nbsp;</td>
+          <td class="paramname"> <em>flags</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00427">427</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00806">downloadAllFiles()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00128">progress_timer</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00545">progress_timer_timeout()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00129">running</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00612">showCtxMenu()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00528">slot_status_msg()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00476">start()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00146">SyncWalker</a>、<a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00811">uploadAllFiles()</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0cce61269cdb5a49282a66709d9334b9"></a><!-- doxytag: member="SynchronizeWindow::~SynchronizeWindow" ref="a0cce61269cdb5a49282a66709d9334b9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SynchronizeWindow::~SynchronizeWindow </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00454">454</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a5e8239a900b9d72169e5c785ed65d971"></a><!-- doxytag: member="SynchronizeWindow::acquireBusyControl" ref="a5e8239a900b9d72169e5c785ed65d971" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::acquireBusyControl </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00826">826</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3eadd78f5871628a85763f5fb57ae7ec"></a><!-- doxytag: member="SynchronizeWindow::closeEvent" ref="a3eadd78f5871628a85763f5fb57ae7ec" args="(QCloseEvent *evt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&nbsp;</td>
+          <td class="paramname"> <em>evt</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00533">533</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a3bf7557bc16be54c994d577ba06d986c"></a><!-- doxytag: member="SynchronizeWindow::diffDesciption" ref="a3bf7557bc16be54c994d577ba06d986c" args="(unsigned long flags)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString SynchronizeWindow::diffDesciption </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&nbsp;</td>
+          <td class="paramname"> <em>flags</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00540">540</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00368">SyncWalker::diffDesciption()</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+<p>参考自 <a class="el" href="syncdiffermodel_8cpp_source.html#l00062">SyncDifferModel::data()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa228f0d69fe0a016b8a799cbba4759bf"></a><!-- doxytag: member="SynchronizeWindow::dlSelectedDiffFiles" ref="aa228f0d69fe0a016b8a799cbba4759bf" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::dlSelectedDiffFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00659">659</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_DIFFERENT</a>、<a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_EQUAL</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_LOCAL_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_LOCAL_ONLY</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_REMOTE_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_REMOTE_ONLY</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00170">SyncDifferModel::getFile()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00594">getSelectedModelIndexes()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00135">model</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="class_synchronize_window.html#ad68ad9efd0a14b6cdd608b2c4e894a04">syncDownload()</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac6f984ab7f0446aa1510aca84059da26"></a><!-- doxytag: member="SynchronizeWindow::downloadAllFiles" ref="ac6f984ab7f0446aa1510aca84059da26" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::downloadAllFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00806">806</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_DOWNLOAD</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a55b143669a294f3bd184554a7e25e004"></a><!-- doxytag: member="SynchronizeWindow::downloadRemoteOnlyFiles" ref="a55b143669a294f3bd184554a7e25e004" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::downloadRemoteOnlyFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00816">816</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_DOWNLOAD_REMOTE_ONLY</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af8d4aec6a16cbd8dfced9a9efba2ee7b"></a><!-- doxytag: member="SynchronizeWindow::getSelectedModelIndexes" ref="af8d4aec6a16cbd8dfced9a9efba2ee7b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndexList SynchronizeWindow::getSelectedModelIndexes </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00594">594</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00659">dlSelectedDiffFiles()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00699">upSelectedDiffFiles()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a42c79bce715754839f75bda6d7591be9"></a><!-- doxytag: member="SynchronizeWindow::initCtxMenu" ref="a42c79bce715754839f75bda6d7591be9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::initCtxMenu </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00555">555</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00130">ctxMenu</a>、<a class="el" href="synchronizewindow_8h_source.html#l00131">dlAction</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00659">dlSelectedDiffFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00806">downloadAllFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00816">downloadRemoteOnlyFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00132">upAction</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00811">uploadAllFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00821">uploadLocalOnlyFiles()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00699">upSelectedDiffFiles()</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00476">start()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f03ff36f8385ad37f36634cba23c4dd"></a><!-- doxytag: member="SynchronizeWindow::manualShowWhatsThis" ref="a3f03ff36f8385ad37f36634cba23c4dd" args="(QString what)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::manualShowWhatsThis </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>what</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00606">606</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abaa6bbd86af14b3e88c514e90c2a0a5b"></a><!-- doxytag: member="SynchronizeWindow::progress_timer_timeout" ref="abaa6bbd86af14b3e88c514e90c2a0a5b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::progress_timer_timeout </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00545">545</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adc8a14a75da9410820a807c4acd901c1"></a><!-- doxytag: member="SynchronizeWindow::releaseBusyControl" ref="adc8a14a75da9410820a807c4acd901c1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::releaseBusyControl </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00835">835</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a454aef4a8dca23e4234dc135643c8f14"></a><!-- doxytag: member="SynchronizeWindow::set_sync_param" ref="a454aef4a8dca23e4234dc135643c8f14" args="(QString local_dir, QString sess_name, QString remote_dir, bool recursive, int way)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::set_sync_param </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>local_dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>sess_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>remote_dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>recursive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>way</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00463">463</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizeoptiondialog_8cpp_source.html#l00073">SynchronizeOptionDialog::slot_option_accepted()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5e1534d4253090f3ebd04b125a47f97f"></a><!-- doxytag: member="SynchronizeWindow::showCtxMenu" ref="a5e1534d4253090f3ebd04b125a47f97f" args="(const QPoint &amp;pos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::showCtxMenu </td>
+          <td>(</td>
+          <td class="paramtype">const QPoint &amp;&nbsp;</td>
+          <td class="paramname"> <em>pos</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00612">612</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00130">ctxMenu</a>及<a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1273ec0e0cdf59ad9715396f78dcc2b9"></a><!-- doxytag: member="SynchronizeWindow::showDiffFileInfo" ref="a1273ec0e0cdf59ad9715396f78dcc2b9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::showDiffFileInfo </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00626">626</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00368">SyncWalker::diffDesciption()</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00170">SyncDifferModel::getFile()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00123">local_dir</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00606">manualShowWhatsThis()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00135">model</a>、<a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aee1801f89031201ac076a971e0759ece"></a><!-- doxytag: member="SynchronizeWindow::slot_finished" ref="aee1801f89031201ac076a971e0759ece" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::slot_finished </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00489">489</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00123">local_dir</a>、<a class="el" href="synchronizewindow_8h_source.html#l00037">SyncWalker::mMergedFiles</a>、<a class="el" href="synchronizewindow_8h_source.html#l00135">model</a>、<a class="el" href="synchronizewindow_8h_source.html#l00128">progress_timer</a>、<a class="el" href="synchronizewindow_8h_source.html#l00125">remote_dir</a>、<a class="el" href="synchronizewindow_8h_source.html#l00129">running</a>、<a class="el" href="synchronizewindow_8h_source.html#l00124">sess_name</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00345">SyncTransferThread::setBasePath()</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00162">SyncDifferModel::setDiffFiles()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00338">SyncTransferThread::setRemoteSession()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00147">SyncDifferModel</a>、<a class="el" href="class_synchronize_window.html#ad68ad9efd0a14b6cdd608b2c4e894a04">syncDownload()</a>、<a class="el" href="class_synchronize_window.html#a5064e9e7c8c5183cc389dc4c2b0beb19">syncUpload()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00136">transfer</a>、<a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4cff76e0dd1e39f24dbc8306ec57456c"></a><!-- doxytag: member="SynchronizeWindow::slot_status_msg" ref="a4cff76e0dd1e39f24dbc8306ec57456c" args="(QString msg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::slot_status_msg </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>msg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00528">528</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00122">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaeaa59af878e992c838787f0337c000d"></a><!-- doxytag: member="SynchronizeWindow::start" ref="aaeaa59af878e992c838787f0337c000d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::start </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00476">476</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00128">progress_timer</a>、<a class="el" href="synchronizewindow_8h_source.html#l00129">running</a>及<a class="el" href="synchronizewindow_8h_source.html#l00134">walker</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8c190b897b97d097d9d7d2b99569e0e6"></a><!-- doxytag: member="SynchronizeWindow::stop" ref="a8c190b897b97d097d9d7d2b99569e0e6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::stop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00485">485</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aa97926f299bf887479567813e204136c"></a><!-- doxytag: member="SynchronizeWindow::syncAllFiles" ref="aa97926f299bf887479567813e204136c" args="(int direct)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::syncAllFiles </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>direct</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00746">746</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_DIFFERENT</a>、<a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_EQUAL</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_LOCAL_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_LOCAL_ONLY</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_REMOTE_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_REMOTE_ONLY</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00170">SyncDifferModel::getFile()</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00026">SyncDifferModel::index()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00135">model</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00092">SyncDifferModel::rowCount()</a>、<a class="el" href="class_synchronize_window.html#ad68ad9efd0a14b6cdd608b2c4e894a04">syncDownload()</a>、<a class="el" href="class_synchronize_window.html#a5064e9e7c8c5183cc389dc4c2b0beb19">syncUpload()</a>、<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_BOTH</a>、<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_DOWNLOAD</a>、<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_DOWNLOAD_REMOTE_ONLY</a>、<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_UPLOAD</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_UPLOAD_LOCAL_ONLY</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae593d08a6f4edaf85a0eb73703806926"></a><!-- doxytag: member="SynchronizeWindow::syncAllFiles" ref="ae593d08a6f4edaf85a0eb73703806926" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::syncAllFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00741">741</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_BOTH</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00806">downloadAllFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00816">downloadRemoteOnlyFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00811">uploadAllFiles()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00821">uploadLocalOnlyFiles()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad68ad9efd0a14b6cdd608b2c4e894a04"></a><!-- doxytag: member="SynchronizeWindow::syncDownload" ref="ad68ad9efd0a14b6cdd608b2c4e894a04" args="(QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; file)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::syncDownload </td>
+          <td>(</td>
+          <td class="paramtype">QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt;&nbsp;</td>
+          <td class="paramname"> <em>file</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00659">dlSelectedDiffFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00746">syncAllFiles()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5064e9e7c8c5183cc389dc4c2b0beb19"></a><!-- doxytag: member="SynchronizeWindow::syncUpload" ref="a5064e9e7c8c5183cc389dc4c2b0beb19" args="(QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; file)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::syncUpload </td>
+          <td>(</td>
+          <td class="paramtype">QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt;&nbsp;</td>
+          <td class="paramname"> <em>file</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00746">syncAllFiles()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00699">upSelectedDiffFiles()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97dba4d754bed3783815c1035521c8e0"></a><!-- doxytag: member="SynchronizeWindow::uploadAllFiles" ref="a97dba4d754bed3783815c1035521c8e0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::uploadAllFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00811">811</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_UPLOAD</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a650ee4e2108ccbfe18d9d4979b5b98b4"></a><!-- doxytag: member="SynchronizeWindow::uploadLocalOnlyFiles" ref="a650ee4e2108ccbfe18d9d4979b5b98b4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::uploadLocalOnlyFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00821">821</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8cpp_source.html#l00741">syncAllFiles()</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">SyncTransferThread::TASK_UPLOAD_LOCAL_ONLY</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5ff0fb90bb727c3fc74da59e3f249c8d"></a><!-- doxytag: member="SynchronizeWindow::upSelectedDiffFiles" ref="a5ff0fb90bb727c3fc74da59e3f249c8d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SynchronizeWindow::upSelectedDiffFiles </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a>第<a class="el" href="synchronizewindow_8cpp_source.html#l00699">699</a>行定义。</p>
+
+<p>参考 <a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_DIFFERENT</a>、<a class="el" href="synchronizewindow_8h_source.html#l00042">SyncWalker::FLAG_FILE_EQUAL</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_LOCAL_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_LOCAL_ONLY</a>、<a class="el" href="synchronizewindow_8h_source.html#l00041">SyncWalker::FLAG_REMOTE_NEWER</a>、<a class="el" href="synchronizewindow_8h_source.html#l00040">SyncWalker::FLAG_REMOTE_ONLY</a>、<a class="el" href="syncdiffermodel_8cpp_source.html#l00170">SyncDifferModel::getFile()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00594">getSelectedModelIndexes()</a>、<a class="el" href="synchronizewindow_8h_source.html#l00135">model</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="class_synchronize_window.html#a5064e9e7c8c5183cc389dc4c2b0beb19">syncUpload()</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>友元及相关函数文档</h2>
+<a class="anchor" id="a56105bd80da995809c35e53bc8633fb9"></a><!-- doxytag: member="SynchronizeWindow::SyncDifferModel" ref="a56105bd80da995809c35e53bc8633fb9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_sync_differ_model.html">SyncDifferModel</a><code> [friend]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00147">147</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a77b58c3c3bf887fd8930ddd4a725d249"></a><!-- doxytag: member="SynchronizeWindow::SyncWalker" ref="a77b58c3c3bf887fd8930ddd4a725d249" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_sync_walker.html">SyncWalker</a><code> [friend]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00146">146</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a9423a30bdad9423da3af75051424dcd6"></a><!-- doxytag: member="SynchronizeWindow::busy" ref="a9423a30bdad9423da3af75051424dcd6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_synchronize_window.html#a9423a30bdad9423da3af75051424dcd6">SynchronizeWindow::busy</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00144">144</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a7f60a140a61e6f4ccfdc4d36ade2a274"></a><!-- doxytag: member="SynchronizeWindow::ctxMenu" ref="a7f60a140a61e6f4ccfdc4d36ade2a274" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMenu* <a class="el" href="class_synchronize_window.html#a7f60a140a61e6f4ccfdc4d36ade2a274">SynchronizeWindow::ctxMenu</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00130">130</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00612">showCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af581da83aeec96f1916436765947d1b9"></a><!-- doxytag: member="SynchronizeWindow::dirs" ref="af581da83aeec96f1916436765947d1b9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList <a class="el" href="class_synchronize_window.html#af581da83aeec96f1916436765947d1b9">SynchronizeWindow::dirs</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00140">140</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f045365e918a54434c9dfd68692d755"></a><!-- doxytag: member="SynchronizeWindow::dlAction" ref="a3f045365e918a54434c9dfd68692d755" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QAction* <a class="el" href="class_synchronize_window.html#a3f045365e918a54434c9dfd68692d755">SynchronizeWindow::dlAction</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00131">131</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1762ddacecf5495a9736c2b0935bab30"></a><!-- doxytag: member="SynchronizeWindow::local_dir" ref="a1762ddacecf5495a9736c2b0935bab30" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_synchronize_window.html#a1762ddacecf5495a9736c2b0935bab30">SynchronizeWindow::local_dir</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00123">123</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00034">SyncWalker::checkLocalInfo()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a44ccfd3cec9b20cded9a370c030291c1"></a><!-- doxytag: member="SynchronizeWindow::model" ref="a44ccfd3cec9b20cded9a370c030291c1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sync_differ_model.html">SyncDifferModel</a>* <a class="el" href="class_synchronize_window.html#a44ccfd3cec9b20cded9a370c030291c1">SynchronizeWindow::model</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00135">135</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00659">dlSelectedDiffFiles()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00746">syncAllFiles()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00699">upSelectedDiffFiles()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b9019f141e0157bfaf38d794d652e05"></a><!-- doxytag: member="SynchronizeWindow::progress_timer" ref="a3b9019f141e0157bfaf38d794d652e05" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTimer <a class="el" href="class_synchronize_window.html#a3b9019f141e0157bfaf38d794d652e05">SynchronizeWindow::progress_timer</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00128">128</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00476">start()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aea6ab18f028e2b28c482e648c00570de"></a><!-- doxytag: member="SynchronizeWindow::recursive" ref="aea6ab18f028e2b28c482e648c00570de" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_synchronize_window.html#aea6ab18f028e2b28c482e648c00570de">SynchronizeWindow::recursive</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00126">126</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a477166eedfea701e382929a78c14c1e0"></a><!-- doxytag: member="SynchronizeWindow::remote_dir" ref="a477166eedfea701e382929a78c14c1e0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_synchronize_window.html#a477166eedfea701e382929a78c14c1e0">SynchronizeWindow::remote_dir</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00125">125</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a003d9a3186f1c81cd0928f813d823cdb"></a><!-- doxytag: member="SynchronizeWindow::running" ref="a003d9a3186f1c81cd0928f813d823cdb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_synchronize_window.html#a003d9a3186f1c81cd0928f813d823cdb">SynchronizeWindow::running</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00129">129</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00476">start()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8152d5f0cb3562e76356cecec1a16f07"></a><!-- doxytag: member="SynchronizeWindow::sess_name" ref="a8152d5f0cb3562e76356cecec1a16f07" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_synchronize_window.html#a8152d5f0cb3562e76356cecec1a16f07">SynchronizeWindow::sess_name</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00124">124</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1dc3cba44b020390c17d791564015fc9"></a><!-- doxytag: member="SynchronizeWindow::syncer" ref="a1dc3cba44b020390c17d791564015fc9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;QString, QHash&lt;QString, int&gt; &gt; <a class="el" href="class_synchronize_window.html#a1dc3cba44b020390c17d791564015fc9">SynchronizeWindow::syncer</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00141">141</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a92685cd2234db4f8fdd707bdd2e10e4e"></a><!-- doxytag: member="SynchronizeWindow::synckeys" ref="a92685cd2234db4f8fdd707bdd2e10e4e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QPair&lt;QString, int&gt; &gt; <a class="el" href="class_synchronize_window.html#a92685cd2234db4f8fdd707bdd2e10e4e">SynchronizeWindow::synckeys</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00142">142</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aba6e3f689894d1e03dd6c739c0b5357d"></a><!-- doxytag: member="SynchronizeWindow::transfer" ref="aba6e3f689894d1e03dd6c739c0b5357d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sync_transfer_thread.html">SyncTransferThread</a>* <a class="el" href="class_synchronize_window.html#aba6e3f689894d1e03dd6c739c0b5357d">SynchronizeWindow::transfer</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00136">136</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acfd20f3342d8596034299cf3d447131e"></a><!-- doxytag: member="SynchronizeWindow::ui_win" ref="acfd20f3342d8596034299cf3d447131e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui::SynchronizeWindow <a class="el" href="class_synchronize_window.html#acfd20f3342d8596034299cf3d447131e">SynchronizeWindow::ui_win</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00122">122</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00826">acquireBusyControl()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00594">getSelectedModelIndexes()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00545">progress_timer_timeout()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00835">releaseBusyControl()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00463">set_sync_param()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00612">showCtxMenu()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00528">slot_status_msg()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae085f5d569326d06b8eda48fed3886b9"></a><!-- doxytag: member="SynchronizeWindow::upAction" ref="ae085f5d569326d06b8eda48fed3886b9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QAction* <a class="el" href="class_synchronize_window.html#ae085f5d569326d06b8eda48fed3886b9">SynchronizeWindow::upAction</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00132">132</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00555">initCtxMenu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abeeb7e997d5ad4c080948328511bef61"></a><!-- doxytag: member="SynchronizeWindow::walker" ref="abeeb7e997d5ad4c080948328511bef61" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sync_walker.html">SyncWalker</a>* <a class="el" href="class_synchronize_window.html#abeeb7e997d5ad4c080948328511bef61">SynchronizeWindow::walker</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00134">134</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00540">diffDesciption()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00626">showDiffFileInfo()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00489">slot_finished()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00476">start()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00427">SynchronizeWindow()</a>及<a class="el" href="synchronizewindow_8cpp_source.html#l00454">~SynchronizeWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5f8e2e93017c90af1e6a7cb9af1b0710"></a><!-- doxytag: member="SynchronizeWindow::way" ref="a5f8e2e93017c90af1e6a7cb9af1b0710" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_synchronize_window.html#a5f8e2e93017c90af1e6a7cb9af1b0710">SynchronizeWindow::way</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a>第<a class="el" href="synchronizewindow_8h_source.html#l00127">127</a>行定义。</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="synchronizewindow_8h_source.html">synchronizewindow.h</a></li>
+<li><a class="el" href="synchronizewindow_8cpp_source.html">synchronizewindow.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

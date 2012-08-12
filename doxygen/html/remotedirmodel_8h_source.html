@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: remotedirmodel.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>remotedirmodel.h</h1><a href="remotedirmodel_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// remotedirmodel.h --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-05-25 09:48:00 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: remotedirmodel.h 646 2010-06-01 12:45:53Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="preprocessor">#ifndef REMOTEDIRMODEL_H</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span><span class="preprocessor">#define REMOTEDIRMODEL_H</span>
+<a name="l00013"></a>00013 <span class="preprocessor"></span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &lt;QAbstractItemModel&gt;</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;libssh2.h&quot;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#include &quot;libssh2_sftp.h&quot;</span>
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 <span class="preprocessor">#include &quot;<a class="code" href="sshdirretriver_8h.html">sshdirretriver.h</a>&quot;</span>
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keyword">class </span>RFSDirNode;
+<a name="l00024"></a>00024 <span class="keyword">class </span><a class="code" href="class_net_dir_node.html">NetDirNode</a>;
+<a name="l00025"></a>00025 <span class="keyword">class </span><a class="code" href="class_connection.html">Connection</a>;
+<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="class_dir_retriver.html">DirRetriver</a>;
+<a name="l00027"></a>00027 
+<a name="l00034"></a><a class="code" href="class_remote_dir_model.html">00034</a> <span class="keyword">class </span><a class="code" href="class_remote_dir_model.html">RemoteDirModel</a> : <span class="keyword">public</span> QAbstractItemModel
+<a name="l00035"></a>00035 {
+<a name="l00036"></a>00036     Q_OBJECT;
+<a name="l00037"></a>00037 <span class="keyword">public</span>:
+<a name="l00038"></a>00038     <a class="code" href="class_remote_dir_model.html#a00008677de4ec48bccfddce100eea3fa">RemoteDirModel</a>(QObject *<a class="code" href="class_remote_dir_model.html#a0ba5ea5c41e23df69649465bcf6d3e94">parent</a> = 0);
+<a name="l00039"></a>00039     <span class="keyword">virtual</span> <a class="code" href="class_remote_dir_model.html#a6af9aa7e23b695f748144c37c7b9c865">~RemoteDirModel</a>();
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041     <span class="comment">//仅需要调用一次的函数,并且是在紧接着该类的初始化之后调用。</span>
+<a name="l00042"></a>00042     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a1d51629e316522fe29bbc85cf3a96c68">set_user_home_path</a>(QString <a class="code" href="class_remote_dir_model.html#abf6d952ec1edff04955596dcf276697d">user_home_path</a>);
+<a name="l00043"></a>00043     <span class="comment">//这个调用应该在set_user_home_path之前</span>
+<a name="l00044"></a>00044     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a6a8275e8a39e4eafea2ab2c7d0d6e450">setConnection</a>(<a class="code" href="class_connection.html">Connection</a> *<a class="code" href="class_remote_dir_model.html#a4ac3af9f6672ed2757ca92102bb16153">conn</a>);
+<a name="l00045"></a>00045                 
+<a name="l00047"></a>00047     QVariant <a class="code" href="class_remote_dir_model.html#aae33d23583e3f88789adfc4f590072be">data</a>(<span class="keyword">const</span> QModelIndex &amp;<a class="code" href="class_remote_dir_model.html#a9214446987a09e4a19341b3af3443fa1">index</a>, <span class="keywordtype">int</span> role) <span class="keyword">const</span>;
+<a name="l00048"></a>00048     Qt::ItemFlags <a class="code" href="class_remote_dir_model.html#aa4ca1aebe27d4b659d32b4b80d20ee86">flags</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00049"></a>00049     QVariant <a class="code" href="class_remote_dir_model.html#a3cddfcf34fa1274ed1a7be9bbe3d3286">headerData</a>(<span class="keywordtype">int</span> section, Qt::Orientation orientation,
+<a name="l00050"></a>00050                         <span class="keywordtype">int</span> role = Qt::DisplayRole) <span class="keyword">const</span>;
+<a name="l00051"></a>00051     QModelIndex <a class="code" href="class_remote_dir_model.html#a9214446987a09e4a19341b3af3443fa1">index</a>(<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column,
+<a name="l00052"></a>00052                       <span class="keyword">const</span> QModelIndex &amp;<a class="code" href="class_remote_dir_model.html#a0ba5ea5c41e23df69649465bcf6d3e94">parent</a> = QModelIndex()) <span class="keyword">const</span>;
+<a name="l00053"></a>00053     QModelIndex <a class="code" href="class_remote_dir_model.html#a9214446987a09e4a19341b3af3443fa1">index</a>(<span class="keyword">const</span> QString &amp; path, <span class="keywordtype">int</span> column = 0) <span class="keyword">const</span>; <span class="comment">// 效率可能有问题</span>
+<a name="l00054"></a>00054         
+<a name="l00055"></a>00055     QModelIndex <a class="code" href="class_remote_dir_model.html#a0ba5ea5c41e23df69649465bcf6d3e94">parent</a>(<span class="keyword">const</span> QModelIndex &amp;child) <span class="keyword">const</span>;
+<a name="l00056"></a>00056     <span class="keywordtype">int</span> <a class="code" href="class_remote_dir_model.html#a1294aa2c918dfea9aa3ed78792f3d9ff">rowCount</a>(<span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex()) <span class="keyword">const</span>;
+<a name="l00057"></a>00057     <span class="keywordtype">int</span> <a class="code" href="class_remote_dir_model.html#ad8c2c4981648f6fd57c141f1ce319afc">columnCount</a>(<span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex()) <span class="keyword">const</span>;
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a3bb7cd58c108dc2fa7104aa2ea354fda">setData</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keyword">const</span> QVariant &amp;value, <span class="keywordtype">int</span> role = Qt::EditRole);
+<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#aec2f37f0e9a72dff2fb9f1d243715939">insertRows</a>(<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> count, <span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex());
+<a name="l00061"></a>00061     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a61242e6db21486401ff72250d938f91c">removeRows</a>(<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> count, <span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex());
+<a name="l00062"></a>00062         
+<a name="l00063"></a>00063     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#ad4bb57004dbcd1fd86562d03b9301b10">rowMoveTo</a>(<span class="keyword">const</span> QModelIndex &amp;from, <span class="keyword">const</span> QModelIndex &amp;to);
+<a name="l00064"></a>00064     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a61a66521ad34b58e5d59517561d9be55">insertColumns</a>(<span class="keywordtype">int</span> column, <span class="keywordtype">int</span> count, <span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex());
+<a name="l00065"></a>00065         
+<a name="l00066"></a>00066     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a889e9a7ddfdbf4beb34429049a120f57">setItemData</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keyword">const</span> QMap&lt;int, QVariant&gt; &amp;roles);
+<a name="l00067"></a>00067         
+<a name="l00068"></a>00068     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#afef430d78fc22fbc01d0351b477343ac">hasChildren</a>(<span class="keyword">const</span> QModelIndex &amp;parent = QModelIndex()) <span class="keyword">const</span>;
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070     QStringList <a class="code" href="class_remote_dir_model.html#a35217c5bec48d61a84fcc70b52997cfe">mimeTypes</a>() <span class="keyword">const</span>;
+<a name="l00071"></a>00071     QMimeData *<a class="code" href="class_remote_dir_model.html#ab0611063f945d9fe44106b53b5f251f4">mimeData</a>(<span class="keyword">const</span> QModelIndexList &amp;indexes) <span class="keyword">const</span>;
+<a name="l00072"></a>00072     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a086141d104235c860315fa72451145f8">dropMimeData</a>(<span class="keyword">const</span> QMimeData *data, Qt::DropAction action,
+<a name="l00073"></a>00073                       <span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column, <span class="keyword">const</span> QModelIndex &amp;parent);
+<a name="l00074"></a>00074     Qt::DropActions <a class="code" href="class_remote_dir_model.html#a4cf6b152d384d91c397e9979ba8d2bd1">supportedDropActions</a>() <span class="keyword">const</span>;
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076     QString <a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00077"></a>00077     QString <a class="code" href="class_remote_dir_model.html#a982cfed28ccd714753f399274e1acc1e">fileName</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00078"></a>00078     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00079"></a>00079     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#ad3a15a7d01902f2adfaf0199030b4b8b">isSymLink</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00080"></a>00080     <span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#a21e1797cf0ead9473679813487750a17">isSymLinkToDir</a>(<span class="keyword">const</span> QModelIndex &amp;index) <span class="keyword">const</span>;
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#af2c078253e98032acb869d40f5bf9c08">dump_tree_node_item</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *node_item) <span class="keyword">const</span>;
+<a name="l00083"></a>00083 <span class="keyword">public</span> slots:
+<a name="l00084"></a>00084     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#afa24aded7d9a96e4207487783ab04dd8">slot_remote_dir_node_retrived</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item, <span class="keywordtype">void</span> *parent_persistent_index, <a class="code" href="class_net_dir_node.html">NetDirNode</a> *newNodes);
+<a name="l00085"></a>00085     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a3d0637f27fcbeacbbcbb8b86f6d4701e">slot_remote_dir_node_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;index);
+<a name="l00086"></a>00086         
+<a name="l00087"></a>00087     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item, <span class="keywordtype">void</span> *parent_persistent_index, <span class="keywordtype">int</span> cmd, QString params );
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a24d6e4aabef36bbee5f12b0dd4d567e3">execute_command_finished</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item, <span class="keywordtype">void</span> *parent_persistent_index,
+<a name="l00090"></a>00090                                   <span class="keywordtype">int</span> cmd, <span class="keywordtype">int</span> status);
+<a name="l00091"></a>00091     <span class="comment">//keep_alive</span>
+<a name="l00092"></a>00092     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#ac91475bebe5716dcfea8bc47e4e78116">set_keep_alive</a>(<span class="keywordtype">bool</span> <a class="code" href="class_remote_dir_model.html#ae2d9712630aa07e81992adcc9a272153">keep_alive</a>, <span class="keywordtype">int</span> time_out = <a class="code" href="class_remote_dir_model.html#a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11">DEFAULT_KEEP_ALIVE_TIMEOUT</a>);
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094 <span class="keyword">private</span> slots:        
+<a name="l00096"></a>00096     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a2463714dba2efdbd616a64df73a9f2c8" title="time_out 秒">slot_keep_alive_time_out</a>();
+<a name="l00097"></a>00097 
+<a name="l00098"></a>00098 signals:
+<a name="l00099"></a>00099     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a3053ebf4e6957487ad7c0712c68ef9c1">sig_drop_mime_data</a>(<span class="keyword">const</span> QMimeData *data, Qt::DropAction action,
+<a name="l00100"></a>00100                             <span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column, <span class="keyword">const</span> QModelIndex &amp;parent);
+<a name="l00101"></a>00101         
+<a name="l00102"></a>00102     <span class="comment">//for wait option</span>
+<a name="l00103"></a>00103     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a64f4c0af292b7657fa6e57b0e2d0a045">enter_remote_dir_retrive_loop</a>();
+<a name="l00104"></a>00104     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#a2b921852d2c403e1a76ed9c2b6c3dad8">leave_remote_dir_retrive_loop</a>();
+<a name="l00105"></a>00105     <span class="keywordtype">void</span> <a class="code" href="class_remote_dir_model.html#ab2907bae14d0b29b370116ad40ae5d21">operationTriggered</a>(QString text) <span class="keyword">const</span>; <span class="comment">// for rowCount method</span>
+<a name="l00106"></a>00106     <span class="comment">// see http://lists.trolltech.com/qt-interest/2002-09/thread00073-0.html</span>
+<a name="l00107"></a>00107     
+<a name="l00108"></a>00108 <span class="keyword">private</span>:
+<a name="l00109"></a><a class="code" href="class_remote_dir_model.html#a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11">00109</a>     <span class="keyword">enum</span> { <a class="code" href="class_remote_dir_model.html#a60fca2ab05b6487469a8d80352f1aacfa4109f3c158a9214f7cbe2e7230f21d11">DEFAULT_KEEP_ALIVE_TIMEOUT</a> = 30*1000 };
+<a name="l00110"></a><a class="code" href="class_remote_dir_model.html#af498b88d945572ff0769ff107740f4d3">00110</a>     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *<a class="code" href="class_remote_dir_model.html#af498b88d945572ff0769ff107740f4d3">rootNode</a>;
+<a name="l00111"></a><a class="code" href="class_remote_dir_model.html#a2a44c0f96dbf08765afe7612762c019b">00111</a>     LIBSSH2_SESSION *<a class="code" href="class_remote_dir_model.html#a2a44c0f96dbf08765afe7612762c019b">ssh2_sess</a>;
+<a name="l00112"></a><a class="code" href="class_remote_dir_model.html#a4ac3af9f6672ed2757ca92102bb16153">00112</a>     <a class="code" href="class_connection.html">Connection</a> *conn;
+<a name="l00113"></a>00113 
+<a name="l00114"></a><a class="code" href="class_remote_dir_model.html#a0c3f26dda76bad09ae5e610c81e58741">00114</a>     <a class="code" href="class_dir_retriver.html">DirRetriver</a> *<a class="code" href="class_remote_dir_model.html#a0c3f26dda76bad09ae5e610c81e58741">dir_retriver</a>;
+<a name="l00115"></a>00115 
+<a name="l00116"></a>00116     <span class="comment">// 递归查找树</span>
+<a name="l00117"></a>00117     QModelIndex <a class="code" href="class_remote_dir_model.html#a3957ddea481eed631c9094ed50721d80">find_node_item_by_path_elements</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_node_item,
+<a name="l00118"></a>00118                                                 QStringList &amp;path_elements, <span class="keywordtype">int</span> level) <span class="keyword">const</span>;
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120 
+<a name="l00121"></a><a class="code" href="class_remote_dir_model.html#abf6d952ec1edff04955596dcf276697d">00121</a>     QString user_home_path;
+<a name="l00122"></a>00122         
+<a name="l00123"></a><a class="code" href="class_remote_dir_model.html#ae2d9712630aa07e81992adcc9a272153">00123</a>     <span class="keywordtype">bool</span>    keep_alive;
+<a name="l00124"></a><a class="code" href="class_remote_dir_model.html#abd1b0f36207c9493e6f5cdd0b13a4f4c">00124</a>     QTimer  *<a class="code" href="class_remote_dir_model.html#abd1b0f36207c9493e6f5cdd0b13a4f4c">keep_alive_timer</a>;
+<a name="l00125"></a><a class="code" href="class_remote_dir_model.html#a059a3140d12f8d51669021cd15b4b3ef">00125</a>     <span class="keywordtype">int</span>     <a class="code" href="class_remote_dir_model.html#a059a3140d12f8d51669021cd15b4b3ef">keep_alive_interval</a>;
+<a name="l00126"></a>00126 };
+<a name="l00127"></a>00127 
+<a name="l00128"></a>00128 <span class="preprocessor">#endif</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

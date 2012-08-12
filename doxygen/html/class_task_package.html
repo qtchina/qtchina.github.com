@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: TaskPackage类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>TaskPackage类参考</h1><!-- doxytag: class="TaskPackage" -->
+<p>这个类存储的值都为unicode编码的值。  
+<a href="#_details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>&gt;</code></p>
+
+<p><a href="class_task_package-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a752f2a17448fe86e322d56eacd29431e">TaskPackage</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a5444c17ab7a51c9909b717b3740516db">TaskPackage</a> (int <a class="el" href="class_task_package.html#a0637cf0aa04d92726c983a78b89d3b09">scheme</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a48037744746eaf506d470b9506391b66">~TaskPackage</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#af62b67ca1d4f6c477b0ec655d04acdf7">setFile</a> (QString file)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QByteArray&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#ad908de0c43a430c6e1aec054da45770b">toRawData</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a65e2fffa5eb0390a6945a631ffdb2320">hostInfo</a> ()</td></tr>
+<tr><td colspan="2"><h2>静态公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#ace51f7bf789fac6010bce3fde3ff5925">dump</a> (<a class="el" href="class_task_package.html">TaskPackage</a> &amp;pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a29bfdef9fb0aeb0f7ffefa10debb99cc">isValid</a> (<a class="el" href="class_task_package.html">TaskPackage</a> &amp;kg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a1e4993334beb941b4de2fa2d6ec15598">getProtocolNameById</a> (int protocol_id)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a6da99efc383400043b595950bab3f0dc">fromRawData</a> (QByteArray ba)</td></tr>
+<tr><td colspan="2"><h2>公有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a0637cf0aa04d92726c983a78b89d3b09">scheme</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStringList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">host</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">port</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a76753cb346617152f983cb153658f69d">username</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">password</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">pubkey</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<p>这个类存储的值都为unicode编码的值。 </p>
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00030">30</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a752f2a17448fe86e322d56eacd29431e"></a><!-- doxytag: member="TaskPackage::TaskPackage" ref="a752f2a17448fe86e322d56eacd29431e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskPackage::TaskPackage </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00014">14</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00136">fromRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5444c17ab7a51c9909b717b3740516db"></a><!-- doxytag: member="TaskPackage::TaskPackage" ref="a5444c17ab7a51c9909b717b3740516db" args="(int scheme)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskPackage::TaskPackage </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>scheme</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00018">18</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a48037744746eaf506d470b9506391b66"></a><!-- doxytag: member="TaskPackage::~TaskPackage" ref="a48037744746eaf506d470b9506391b66" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskPackage::~TaskPackage </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00023">23</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="ace51f7bf789fac6010bce3fde3ff5925"></a><!-- doxytag: member="TaskPackage::dump" ref="ace51f7bf789fac6010bce3fde3ff5925" args="(TaskPackage &amp;pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TaskPackage::dump </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>pkg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00035">35</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8cpp_source.html#l00069">getProtocolNameById()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">host</a>、<a class="el" href="taskpackage_8h_source.html#l00050">password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">port</a>、<a class="el" href="taskpackage_8h_source.html#l00051">pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00045">scheme</a>及<a class="el" href="taskpackage_8h_source.html#l00049">username</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6da99efc383400043b595950bab3f0dc"></a><!-- doxytag: member="TaskPackage::fromRawData" ref="a6da99efc383400043b595950bab3f0dc" args="(QByteArray ba)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_task_package.html">TaskPackage</a> TaskPackage::fromRawData </td>
+          <td>(</td>
+          <td class="paramtype">QByteArray&nbsp;</td>
+          <td class="paramname"> <em>ba</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00136">136</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">files</a>、<a class="el" href="taskpackage_8h_source.html#l00024">PROTO_MAX</a>及<a class="el" href="taskpackage_8cpp_source.html#l00014">TaskPackage()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>及<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1e4993334beb941b4de2fa2d6ec15598"></a><!-- doxytag: member="TaskPackage::getProtocolNameById" ref="a1e4993334beb941b4de2fa2d6ec15598" args="(int protocol_id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString TaskPackage::getProtocolNameById </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>protocol_id</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00069">69</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>、<a class="el" href="taskpackage_8h_source.html#l00018">PROTO_FTP</a>、<a class="el" href="taskpackage_8h_source.html#l00019">PROTO_FTPS</a>、<a class="el" href="taskpackage_8h_source.html#l00020">PROTO_HTTP</a>、<a class="el" href="taskpackage_8h_source.html#l00021">PROTO_HTTPS</a>、<a class="el" href="taskpackage_8h_source.html#l00024">PROTO_MAX</a>、<a class="el" href="taskpackage_8h_source.html#l00015">PROTO_MIN</a>、<a class="el" href="taskpackage_8h_source.html#l00023">PROTO_MMS</a>、<a class="el" href="taskpackage_8h_source.html#l00022">PROTO_RSTP</a>及<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>.</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>及<a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a65e2fffa5eb0390a6945a631ffdb2320"></a><!-- doxytag: member="TaskPackage::hostInfo" ref="a65e2fffa5eb0390a6945a631ffdb2320" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; QString, QString &gt; TaskPackage::hostInfo </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00158">158</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00047">host</a>、<a class="el" href="taskpackage_8h_source.html#l00050">password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">port</a>、<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>、<a class="el" href="taskpackage_8h_source.html#l00018">PROTO_FTP</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="taskpackage_8h_source.html#l00051">pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00045">scheme</a>及<a class="el" href="taskpackage_8h_source.html#l00049">username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29bfdef9fb0aeb0f7ffefa10debb99cc"></a><!-- doxytag: member="TaskPackage::isValid" ref="a29bfdef9fb0aeb0f7ffefa10debb99cc" args="(TaskPackage &amp;kg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool TaskPackage::isValid </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>kg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00044">44</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">files</a>、<a class="el" href="taskpackage_8h_source.html#l00024">PROTO_MAX</a>、<a class="el" href="taskpackage_8h_source.html#l00015">PROTO_MIN</a>及<a class="el" href="taskpackage_8h_source.html#l00045">scheme</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>及<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af62b67ca1d4f6c477b0ec655d04acdf7"></a><!-- doxytag: member="TaskPackage::setFile" ref="af62b67ca1d4f6c477b0ec655d04acdf7" args="(QString file)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int TaskPackage::setFile </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>file</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00027">27</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">files</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad908de0c43a430c6e1aec054da45770b"></a><!-- doxytag: member="TaskPackage::toRawData" ref="ad908de0c43a430c6e1aec054da45770b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QByteArray TaskPackage::toRawData </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a>第<a class="el" href="taskpackage_8cpp_source.html#l00105">105</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">files</a>、<a class="el" href="taskpackage_8h_source.html#l00047">host</a>、<a class="el" href="taskpackage_8h_source.html#l00050">password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">port</a>、<a class="el" href="taskpackage_8h_source.html#l00051">pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00045">scheme</a>及<a class="el" href="taskpackage_8h_source.html#l00049">username</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>及<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ae78aadb0bcc3389d94be5aff50b9f80b"></a><!-- doxytag: member="TaskPackage::files" ref="ae78aadb0bcc3389d94be5aff50b9f80b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList <a class="el" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">TaskPackage::files</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00046">46</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00136">fromRawData()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00044">isValid()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>、<a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>、<a class="el" href="transportor_8cpp_source.html#l02215">Transportor::set_transport_info()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">setFile()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="localview_8cpp_source.html#l00204">LocalView::slot_local_new_upload_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00668">SFTPView::slot_new_download_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00732">RemoteView::slot_new_download_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00720">FTPView::slot_new_download_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="affb1386a5f3573c3c48f7bd885d0df10"></a><!-- doxytag: member="TaskPackage::host" ref="affb1386a5f3573c3c48f7bd885d0df10" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">TaskPackage::host</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00047">47</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97f9c97e9ccaa5a432a7cbfc081e40c4"></a><!-- doxytag: member="TaskPackage::password" ref="a97f9c97e9ccaa5a432a7cbfc081e40c4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">TaskPackage::password</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00050">50</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a70888cc4edfdab1d8e98a4d5e3cf7656"></a><!-- doxytag: member="TaskPackage::port" ref="a70888cc4edfdab1d8e98a4d5e3cf7656" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">TaskPackage::port</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00048">48</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae1821b7260e07503db99e07be6298d40"></a><!-- doxytag: member="TaskPackage::pubkey" ref="ae1821b7260e07503db99e07be6298d40" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">TaskPackage::pubkey</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00051">51</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0637cf0aa04d92726c983a78b89d3b09"></a><!-- doxytag: member="TaskPackage::scheme" ref="a0637cf0aa04d92726c983a78b89d3b09" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_task_package.html#a0637cf0aa04d92726c983a78b89d3b09">TaskPackage::scheme</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00045">45</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00044">isValid()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="transportor_8cpp_source.html#l00167">Transportor::run()</a>、<a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a76753cb346617152f983cb153658f69d"></a><!-- doxytag: member="TaskPackage::username" ref="a76753cb346617152f983cb153658f69d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_task_package.html#a76753cb346617152f983cb153658f69d">TaskPackage::username</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="taskpackage_8h_source.html">taskpackage.h</a>第<a class="el" href="taskpackage_8h_source.html#l00049">49</a>行定义。</p>
+
+<p>参考自 <a class="el" href="taskpackage_8cpp_source.html#l00035">dump()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">Transportor::getHostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">hostInfo()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00056">operator&lt;&lt;()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="taskpackage_8cpp_source.html#l00105">toRawData()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="taskpackage_8h_source.html">taskpackage.h</a></li>
+<li><a class="el" href="taskpackage_8cpp_source.html">taskpackage.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

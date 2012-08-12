@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: nscp.c源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>nscp.c</h1><a href="nscp_8c.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// nscp.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2009-05-19 20:50:20 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: nscp.c 455 2009-08-29 09:23:35Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;assert.h&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;string.h&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;getopt.h&gt;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="nscp__p_8h.html">nscp_p.h</a>&quot;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;<a class="code" href="nscp__o_8h.html">nscp_o.h</a>&quot;</span>
+<a name="l00018"></a>00018 
+<a name="l00019"></a><a class="code" href="nscp_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">00019</a> <span class="keywordtype">int</span> <a class="code" href="main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv)
+<a name="l00020"></a>00020 {
+<a name="l00021"></a>00021     <span class="keywordtype">char</span> *host;
+<a name="l00022"></a>00022     <a class="code" href="structssh__conn.html">ssh_conn_t</a> *conn = NULL;
+<a name="l00023"></a>00023     <span class="keywordtype">int</span> rc = 0;
+<a name="l00024"></a>00024     <span class="keywordtype">int</span> opt;
+<a name="l00025"></a>00025     <a class="code" href="structnscp__option.html">nscp_option_t</a> nopt;
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027     <a class="code" href="nscp__o_8c.html#a6a2dad75cb888005c4e6b7a040d6adb6">nscp_option_set_default</a>(&amp;nopt);
+<a name="l00028"></a>00028     <span class="keywordflow">while</span> ((opt = getopt(argc, argv, <span class="stringliteral">&quot;hp:P:u:&quot;</span>)) != -1) {
+<a name="l00029"></a>00029         <span class="keywordflow">switch</span> (opt) {
+<a name="l00030"></a>00030         <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:
+<a name="l00031"></a>00031             <a class="code" href="nscp__o_8c.html#ae5ad5cbeccaedc03a48d3c7eaa803e79">print_usage</a>();
+<a name="l00032"></a>00032             exit(1);
+<a name="l00033"></a>00033             <span class="keywordflow">break</span>;
+<a name="l00034"></a>00034         <span class="keywordflow">case</span> <span class="charliteral">&#39;u&#39;</span>:
+<a name="l00035"></a>00035             nopt.<a class="code" href="structnscp__option.html#a3a9a82c1f2301f52db23f264ca9a9920">none_path_count</a> += 2;
+<a name="l00036"></a>00036             nopt.<a class="code" href="structnscp__option.html#aa1b72e1d34b00e2a56ff4fd28dafc3e4">user_name</a> = optarg;
+<a name="l00037"></a>00037             <span class="keywordflow">break</span>;
+<a name="l00038"></a>00038         <span class="keywordflow">case</span> <span class="charliteral">&#39;p&#39;</span>:
+<a name="l00039"></a>00039             nopt.<a class="code" href="structnscp__option.html#a3a9a82c1f2301f52db23f264ca9a9920">none_path_count</a> += 2;
+<a name="l00040"></a>00040             fprintf(stderr, <span class="stringliteral">&quot;password: %s\n&quot;</span>, optarg);
+<a name="l00041"></a>00041             nopt.<a class="code" href="structnscp__option.html#a2f1b326400e9ff65939e5e4898da48ca">password</a> = optarg;
+<a name="l00042"></a>00042             <span class="keywordflow">break</span>;
+<a name="l00043"></a>00043         <span class="keywordflow">case</span> <span class="charliteral">&#39;P&#39;</span>:
+<a name="l00044"></a>00044             nopt.<a class="code" href="structnscp__option.html#a3a9a82c1f2301f52db23f264ca9a9920">none_path_count</a> += 2;
+<a name="l00045"></a>00045             fprintf(stderr, <span class="stringliteral">&quot;port: %s\n&quot;</span>, optarg);
+<a name="l00046"></a>00046             nopt.<a class="code" href="structnscp__option.html#a5deb159662aff75768c51251f152a757">port</a> = atoi(optarg);
+<a name="l00047"></a>00047             <span class="keywordflow">break</span>;
+<a name="l00048"></a>00048         <span class="keywordflow">default</span>:
+<a name="l00049"></a>00049             <span class="keywordflow">break</span>;
+<a name="l00050"></a>00050         }
+<a name="l00051"></a>00051     }
+<a name="l00052"></a>00052     <a class="code" href="nscp__o_8c.html#aeb42485a8caa836ad939c0d9d57c8dbd">nscp_option_parse_path</a>(argc, argv, &amp;nopt);
+<a name="l00053"></a>00053     <a class="code" href="nscp__o_8c.html#a62e4c8b3a075d64bd0822e7df1b6ecad">nscp_option_check_validation</a>(&amp;nopt);
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055     <span class="comment">// </span>
+<a name="l00056"></a>00056     host = nopt.<a class="code" href="structnscp__option.html#a8f8b3e29549fcc53aafe018ad34eba9e">d_path</a>-&gt;<a class="code" href="structnscp__path.html#ab06d67ab087f00e726df3c04a99cc28d">host</a> != NULL ? nopt.<a class="code" href="structnscp__option.html#a8f8b3e29549fcc53aafe018ad34eba9e">d_path</a>-&gt;<a class="code" href="structnscp__path.html#ab06d67ab087f00e726df3c04a99cc28d">host</a> : nopt.<a class="code" href="structnscp__option.html#a21087f748867a8f9c11306609740c1e7">s_paths</a>[0]-&gt;<a class="code" href="structnscp__path.html#ab06d67ab087f00e726df3c04a99cc28d">host</a>;
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058     conn = <a class="code" href="nscp__p_8c.html#ae47c5dbab00c9147b44d40eed86f5d0d">connect_to_host</a>(host, nopt.<a class="code" href="structnscp__option.html#a5deb159662aff75768c51251f152a757">port</a>);
+<a name="l00059"></a>00059     <span class="keywordflow">if</span> (!conn) {
+<a name="l00060"></a>00060         fprintf(stderr, <span class="stringliteral">&quot;Connect to host error.\n&quot;</span>);
+<a name="l00061"></a>00061         <a class="code" href="nscp__o_8c.html#aca13ddb68c09e32fad3d80f6155bdda2">nscp_option_delete</a>(&amp;nopt);
+<a name="l00062"></a>00062         exit(1);
+<a name="l00063"></a>00063     }
+<a name="l00064"></a>00064     
+<a name="l00065"></a>00065     rc = <a class="code" href="nscp__p_8c.html#af46470b66e429ccd88cefcc7a5012513">connect_auth_password</a>(conn, nopt.<a class="code" href="structnscp__option.html#aa1b72e1d34b00e2a56ff4fd28dafc3e4">user_name</a>, nopt.<a class="code" href="structnscp__option.html#a2f1b326400e9ff65939e5e4898da48ca">password</a>);
+<a name="l00066"></a>00066     <span class="keywordflow">if</span> (rc != 0) {
+<a name="l00067"></a>00067         <a class="code" href="nscp__p_8c.html#a17e93ed6f8b355561e441c29e1ff9697">disconnect_from_host</a>(conn);
+<a name="l00068"></a>00068         <a class="code" href="nscp__o_8c.html#aca13ddb68c09e32fad3d80f6155bdda2">nscp_option_delete</a>(&amp;nopt);
+<a name="l00069"></a>00069         exit(2);
+<a name="l00070"></a>00070     }
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     rc = <a class="code" href="nscp__p_8c.html#aab4f29371a32b074769f09282d28cf92" title="nscp controller function, mkdir, scp files one by one">do_scp</a>(conn, &amp;nopt);
+<a name="l00073"></a>00073     
+<a name="l00074"></a>00074      <span class="comment">/* rc = scp_file_to_server_on_sftp(conn, &quot;/home/gzleo/download/goalbit-0.4.2.tar.bz2&quot;, */</span>
+<a name="l00075"></a>00075      <span class="comment">/*                                 &quot;/home/kitsoft/goalbit-0.4.2.tar.bz2&quot;); */</span>
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077     <span class="comment">// rc = scp_file_to_server_on_scp(conn, &quot;/home/gzleo/download/goalbit-0.4.2.tar.bz2&quot;,</span>
+<a name="l00078"></a>00078     <span class="comment">//                                &quot;/home/kitsoft/goalbit-0.4.2.tar.bz2&quot;);</span>
+<a name="l00079"></a>00079     
+<a name="l00080"></a>00080     <a class="code" href="nscp__p_8c.html#a17e93ed6f8b355561e441c29e1ff9697">disconnect_from_host</a>(conn);
+<a name="l00081"></a>00081     <a class="code" href="nscp__o_8c.html#aca13ddb68c09e32fad3d80f6155bdda2">nscp_option_delete</a>(&amp;nopt);
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083     <span class="keywordflow">return</span> 0;
+<a name="l00084"></a>00084 }
+<a name="l00085"></a>00085 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

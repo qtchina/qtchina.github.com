@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: nullfxp.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>nullfxp.h</h1><a href="nullfxp_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* nullfxp.h --- </span>
+<a name="l00002"></a>00002 <span class="comment"> * </span>
+<a name="l00003"></a>00003 <span class="comment"> * Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment"> * Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment"> * URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment"> * Created: 2008-05-06 22:02:06 +0800</span>
+<a name="l00007"></a>00007 <span class="comment"> * Version: $Id: nullfxp.h 642 2010-05-31 16:36:29Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment"> */</span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#ifndef NULLFXP_H</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#define NULLFXP_H</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017 <span class="keyword">class </span>MdiChild;
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019 <span class="preprocessor">#include &quot;<a class="code" href="taskpackage_8h.html">taskpackage.h</a>&quot;</span>
+<a name="l00020"></a>00020 <span class="preprocessor">#include &quot;ui_nullfxp.h&quot;</span>
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 <span class="keyword">class </span><a class="code" href="class_about_null_f_x_p.html" title="nullfxp关于信息对话框类">AboutNullFXP</a>;
+<a name="l00023"></a>00023 <span class="keyword">class </span><a class="code" href="class_local_view.html">LocalView</a>;
+<a name="l00024"></a>00024 <span class="keyword">class </span><a class="code" href="class_remote_view.html">RemoteView</a>;
+<a name="l00025"></a>00025 <span class="keyword">class </span><a class="code" href="class_connecting_status_dialog.html" title="连接到服务器的状态进度提示对话框类">ConnectingStatusDialog</a>;
+<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="class_quick_connect_info_dialog.html">QuickConnectInfoDialog</a>;
+<a name="l00027"></a>00027 <span class="keyword">class </span><a class="code" href="class_forward_connect_daemon.html">ForwardConnectDaemon</a>;
+<a name="l00028"></a>00028 <span class="keyword">class </span><a class="code" href="class_connection.html">Connection</a>;
+<a name="l00029"></a>00029 <span class="keyword">class </span><a class="code" href="class_connector.html">Connector</a>;
+<a name="l00030"></a>00030 <span class="keyword">class </span><a class="code" href="class_task_queue_view.html">TaskQueueView</a>;
+<a name="l00031"></a>00031 
+<a name="l00035"></a><a class="code" href="class_null_f_x_p.html">00035</a> <span class="keyword">class </span><a class="code" href="class_null_f_x_p.html" title="NullFXP main window class.">NullFXP</a> : <span class="keyword">public</span> QMainWindow
+<a name="l00036"></a>00036 {
+<a name="l00037"></a>00037     Q_OBJECT;
+<a name="l00038"></a>00038 <span class="keyword">public</span>:
+<a name="l00039"></a>00039     <a class="code" href="class_null_f_x_p.html#ac7161be0bdbe4684441def9189d71021">NullFXP</a>(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+<a name="l00040"></a>00040     <a class="code" href="class_null_f_x_p.html#a70e241ca50d8ce3fee830d814d751e85">~NullFXP</a>();
+<a name="l00041"></a>00041     
+<a name="l00042"></a>00042 <span class="keyword">public</span> slots:
+<a name="l00043"></a>00043     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a1256fc26f31233b6ca4e0fda702f162b">slot_about_nullfxp</a>();
+<a name="l00044"></a>00044         
+<a name="l00045"></a>00045     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a12111e1c68440fb06366d1187c9d7d4d">connect_to_remote_host</a>();
+<a name="l00046"></a>00046     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a12111e1c68440fb06366d1187c9d7d4d">connect_to_remote_host</a>(QMap&lt;QString, QString&gt; host);
+<a name="l00047"></a>00047     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#ab5f0c6392d05a15708aad1d187e38380">connect_to_remote_host2</a>(QMap&lt;QString, QString&gt; host);
+<a name="l00048"></a>00048     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#afb66e6e7fc30621e35b34e4efdf2145f">slot_disconnect_from_remote_host</a>();
+<a name="l00049"></a>00049     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a702c3613e81d4f75a5493d6f4ce8412b">slot_cancel_connect</a>();
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#ac26ee66bfbd0302616eae75d825f78ec">slot_connect_remote_host_finished</a>(<span class="keywordtype">int</span> status, <a class="code" href="class_connection.html">Connection</a> *conn);
+<a name="l00052"></a>00052         
+<a name="l00053"></a>00053     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#ac65cf6394856e3ecda478bb615e47146">slot_new_upload_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg);
+<a name="l00054"></a>00054         
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a13798bd90212893208a0d85752f66101">slot_show_local_view</a>(<span class="keywordtype">bool</span>);
+<a name="l00056"></a>00056     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#afa6438c8b07891a16b0cb086636e0054">slot_show_remote_view</a>(<span class="keywordtype">bool</span>);
+<a name="l00057"></a>00057     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#abb0f711150afa06fd455958dd8c461d5">slot_cascade_sub_windows</a>(<span class="keywordtype">bool</span> triggered);
+<a name="l00058"></a>00058     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#afe5cb2dc7db327ed47ebbe3f4c63138e">slot_tile_sub_windows</a>(<span class="keywordtype">bool</span> triggered);
+<a name="l00059"></a>00059     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a883cc85b579ae3d98de07d15e20a1dce">slot_show_transfer_queue</a>(<span class="keywordtype">bool</span> show);
+<a name="l00060"></a>00060     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#ad0d61a1b01816bf479c0688ceda45654">slot_show_fxp_command_log</a>(<span class="keywordtype">bool</span> show);
+<a name="l00061"></a>00061         
+<a name="l00062"></a>00062 <span class="keyword">private</span> slots:
+<a name="l00063"></a>00063     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#aef2b4d906d952a99e845461c1f91a047">slot_forward_connect</a>(<span class="keywordtype">bool</span> show);
+<a name="l00064"></a>00064     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a47f919eeb921759f4716636d909868be">slot_synchronize_file</a>();
+<a name="l00065"></a>00065     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a35aaf9e2d7dfa23d39c1f95cb78782f8">slot_show_session_dialog</a>();
+<a name="l00066"></a>00066     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#a0f0ddb0f8141a5dabaec9137900ec98e">slot_check_for_updates</a>();
+<a name="l00067"></a>00067     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#aef75a66d8ccac9b5240291d5d04d7585">slot_show_option_dialog</a>();
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069     <span class="keywordtype">void</span> <a class="code" href="class_null_f_x_p.html#afeef0ada7d88c79d4a5df292b3fe33db">slot_set_mdi_area_background</a>();
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="keyword">private</span>:
+<a name="l00072"></a>00072     MdiChild *<a class="code" href="class_null_f_x_p.html#acd31e3cd7dc8bab67029cf245c6b1b83">activeMdiChild</a>();        
+<a name="l00073"></a><a class="code" href="class_null_f_x_p.html#a60a4b2f00542badb4f2de915ed2f13b1">00073</a>     QMdiArea *<a class="code" href="class_null_f_x_p.html#a60a4b2f00542badb4f2de915ed2f13b1">mdiArea</a>;
+<a name="l00074"></a><a class="code" href="class_null_f_x_p.html#a7542dc33ed301e22484cc8d2c9db90a8">00074</a>     QSignalMapper *<a class="code" href="class_null_f_x_p.html#a7542dc33ed301e22484cc8d2c9db90a8">windowMapper</a>;                
+<a name="l00075"></a>00075     <a class="code" href="class_remote_view.html">RemoteView</a> *<a class="code" href="class_null_f_x_p.html#ae8690bfd7bcf08611bdbc14683ea1411">get_top_most_remote_view</a>();
+<a name="l00076"></a>00076         
+<a name="l00077"></a>00077 <span class="keyword">private</span>:
+<a name="l00078"></a><a class="code" href="class_null_f_x_p.html#a439d1a8178c36b7f7cb14a25386d4cf4">00078</a>     QSplitter *<a class="code" href="class_null_f_x_p.html#a439d1a8178c36b7f7cb14a25386d4cf4">central_splitter_widget</a>;
+<a name="l00079"></a><a class="code" href="class_null_f_x_p.html#ad71fcb50b9cfa0830fa8db8f0180bee8">00079</a>     <a class="code" href="class_task_queue_view.html">TaskQueueView</a> *<a class="code" href="class_null_f_x_p.html#ad71fcb50b9cfa0830fa8db8f0180bee8">task_queue_view</a>;
+<a name="l00080"></a>00080                 
+<a name="l00081"></a><a class="code" href="class_null_f_x_p.html#a3fc75a8744a00f6415be62cec65486b0">00081</a>     <a class="code" href="class_local_view.html">LocalView</a> *<a class="code" href="class_null_f_x_p.html#a3fc75a8744a00f6415be62cec65486b0">localView</a>;
+<a name="l00082"></a>00082         
+<a name="l00083"></a><a class="code" href="class_null_f_x_p.html#a779106f03e99ddccd9c7a8692e7ab601">00083</a>     Ui::MainWindow <a class="code" href="class_null_f_x_p.html#a779106f03e99ddccd9c7a8692e7ab601">mUIMain</a>;
+<a name="l00084"></a><a class="code" href="class_null_f_x_p.html#a7c7822e5f80da7ca9b92c40407b07da1">00084</a>     <a class="code" href="class_about_null_f_x_p.html" title="nullfxp关于信息对话框类">AboutNullFXP</a>  *<a class="code" href="class_null_f_x_p.html#a7c7822e5f80da7ca9b92c40407b07da1">about_nullfxp_dialog</a>;
+<a name="l00085"></a>00085 
+<a name="l00086"></a><a class="code" href="class_null_f_x_p.html#a3a29196ac4632a59fd356e2597d0e910">00086</a>     <a class="code" href="class_connecting_status_dialog.html" title="连接到服务器的状态进度提示对话框类">ConnectingStatusDialog</a> *<a class="code" href="class_null_f_x_p.html#a3a29196ac4632a59fd356e2597d0e910">connect_status_dailog</a>;
+<a name="l00087"></a><a class="code" href="class_null_f_x_p.html#a2806caf126d7d1a3af6d6d6ea1a53ebe">00087</a>     <a class="code" href="class_quick_connect_info_dialog.html">QuickConnectInfoDialog</a> *<a class="code" href="class_null_f_x_p.html#a2806caf126d7d1a3af6d6d6ea1a53ebe">quick_connect_info_dailog</a>;
+<a name="l00088"></a>00088 
+<a name="l00089"></a><a class="code" href="class_null_f_x_p.html#ad0fc72b4c547e2075c29a0e8b885ccaa">00089</a>     <a class="code" href="class_connector.html">Connector</a> *<a class="code" href="class_null_f_x_p.html#ad0fc72b4c547e2075c29a0e8b885ccaa">connector</a>;
+<a name="l00090"></a>00090 
+<a name="l00091"></a><a class="code" href="class_null_f_x_p.html#a4c74838ae96159c4d51bf27af8c77fc1">00091</a>     <a class="code" href="class_forward_connect_daemon.html">ForwardConnectDaemon</a> *<a class="code" href="class_null_f_x_p.html#a4c74838ae96159c4d51bf27af8c77fc1">fcd</a>;
+<a name="l00092"></a>00092 
+<a name="l00093"></a><a class="code" href="class_null_f_x_p.html#ad9fdaf4a546ef2befca3790f0ed56382">00093</a>     QDesktopWidget *<a class="code" href="class_null_f_x_p.html#ad9fdaf4a546ef2befca3790f0ed56382">desktop</a>;
+<a name="l00094"></a>00094 };
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096 <span class="preprocessor">#endif</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

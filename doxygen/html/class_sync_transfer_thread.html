@@ -1,0 +1,849 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: SyncTransferThread类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>SyncTransferThread类参考</h1><!-- doxytag: class="SyncTransferThread" -->
+<p><code>#include &lt;<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>&gt;</code></p>
+
+<p><a href="class_sync_transfer_thread-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_sync_transfer_thread.html#abd241410e5359aa406455b981579542ea5765bf12d36b45c3e59ae18bc0793a26">TASK_UPLOAD</a> =  1, 
+<a class="el" href="class_sync_transfer_thread.html#abd241410e5359aa406455b981579542ea1ef4a1cac27b6de9502d5e4ccedd1430">TASK_DOWNLOAD</a> = 2, 
+<a class="el" href="class_sync_transfer_thread.html#abd241410e5359aa406455b981579542ea73e5b1c75a09ec0f6a497702aa3d7337">TASK_BOTH</a> = 3, 
+<a class="el" href="class_sync_transfer_thread.html#abd241410e5359aa406455b981579542ea7338cda4724f31ba8643b4f9e5dc7be5">TASK_UPLOAD_LOCAL_ONLY</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_sync_transfer_thread.html#abd241410e5359aa406455b981579542ea26bdad07ef68ef6c46ff8fbe3f70af90">TASK_DOWNLOAD_REMOTE_ONLY</a>
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_sync_transfer_thread.html#a94233e4ed33f30697c2502a127d4390caf38b660b45d93c87d52f9c81c459e15e">TASK_OK</a> =  0, 
+<a class="el" href="class_sync_transfer_thread.html#a94233e4ed33f30697c2502a127d4390ca2d73ac892f5e4485e8919f057f2092ba">TASK_ERROR_CONN_FAILD</a> = 1, 
+<a class="el" href="class_sync_transfer_thread.html#a94233e4ed33f30697c2502a127d4390caad16cf9dfecfc45d37120265c34a0bee">TASK_ERROR_OTHER</a> = 2
+ }</td></tr>
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#af92603b26abf166c0eb89d75d1b41b22">slot_syncDownload</a> (QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; task)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a355afe899aeebabfd839e8d59d43a745">slot_syncUpload</a> (QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; task)</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a0d270b21df68d8c6164f3eaae5d17de9">syncFileStarted</a> (QString fileName, quint64 fileSize)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ac40b4297ba1763b5eb3e8020ef20f96d">syncFileStopped</a> (QString fileName, int status)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ae1a6f14c1ed027be9ced51d71975a54c">transfer_percent_changed</a> (QString fileName, int percent, quint64 transferLength, quint64 lastBlockLength)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#af33bcb90143a7ebb0e6c2c5e1b31a932">syncTaskFinished</a> (int status)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a0c0517944fdaf56d7129541c79ff83f0">SyncTransferThread</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a28f56bac008a127b9c8f24b909431a0b">~SyncTransferThread</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#accafe04c12ff0aaba7b10a18f4e25e6f">run</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#aab1a4d450ca4bfdf64e2b6f5ed869c94">setRemoteSession</a> (QString sess)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a959e8425f659968b5eb08448e0617ee3">setBasePath</a> (QString local, QString remote)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#aba5cd9bd2b376175adc25335f900b6fb">connectToRemoteHost</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a9c49b7605093c2f8dd95df63a5046a21">addTask</a> (<a class="el" href="class_sync_task_package.html">SyncTaskPackage</a> task)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a5a10ef8c7d5f25c9c88f412851d7b5a5">transfer_impl</a> (<a class="el" href="class_sync_task_package.html">SyncTaskPackage</a> task)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#acf9faaec1c53495009fb15a6b2d2e70d">do_download</a> (QString remote_path, QString local_path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a00905da2acd84012f70884d20add24b8">do_upload</a> (QString local_path, QString remote_path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#abb8992376ee231e008ef6862a896f1ca">do_touch_local_file_with_time</a> (QString fileName, QDateTime time)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a00473fbfa639978e24e55530504084ec">do_touch_sftp_file_with_time</a> (QString fileName, QDateTime time)</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QQueue&lt; <a class="el" href="class_sync_task_package.html">SyncTaskPackage</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ab6afbfd258dc28d46ab7aea47a3e143d">taskQueue</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QWaitCondition&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#abdbba287c0749c6ae8efa8d5d1516509">wc</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMutex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ad18299ce4b0e1d51276c5d76024d8ae4">wcMutex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMutex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a2aebe583aa8473fad635919bbfaf1383">tMutex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SESSION *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ab4c02dde0dda8f4fb95a99c9d9782453">ssh2_sess</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a8be0003156ab3c73520c300ea14e51f1">ssh2_sftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP_ATTRIBUTES&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a7b1297221752542075ea7cef23c25ccb">ssh2_attr</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP_HANDLE *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a0994ba3772ef608a805a5647160b45eb">hsftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#a2e2305b8f379f18cf6edfdd191708301">remoteHost</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ad65553aaf9720a669c3cb50419fc106b">sess_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ad9c61029cc82f0e9f39561e3adb6aba6">local_base_path</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sync_transfer_thread.html#ae6d48e34639c085cbaf94f8d16e0a783">remote_base_path</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00046">46</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="abd241410e5359aa406455b981579542e"></a><!-- doxytag: member="SyncTransferThread::@16" ref="abd241410e5359aa406455b981579542e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="abd241410e5359aa406455b981579542ea5765bf12d36b45c3e59ae18bc0793a26"></a><!-- doxytag: member="TASK_UPLOAD" ref="abd241410e5359aa406455b981579542ea5765bf12d36b45c3e59ae18bc0793a26" args="" -->TASK_UPLOAD</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd241410e5359aa406455b981579542ea1ef4a1cac27b6de9502d5e4ccedd1430"></a><!-- doxytag: member="TASK_DOWNLOAD" ref="abd241410e5359aa406455b981579542ea1ef4a1cac27b6de9502d5e4ccedd1430" args="" -->TASK_DOWNLOAD</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd241410e5359aa406455b981579542ea73e5b1c75a09ec0f6a497702aa3d7337"></a><!-- doxytag: member="TASK_BOTH" ref="abd241410e5359aa406455b981579542ea73e5b1c75a09ec0f6a497702aa3d7337" args="" -->TASK_BOTH</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd241410e5359aa406455b981579542ea7338cda4724f31ba8643b4f9e5dc7be5"></a><!-- doxytag: member="TASK_UPLOAD_LOCAL_ONLY" ref="abd241410e5359aa406455b981579542ea7338cda4724f31ba8643b4f9e5dc7be5" args="" -->TASK_UPLOAD_LOCAL_ONLY</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd241410e5359aa406455b981579542ea26bdad07ef68ef6c46ff8fbe3f70af90"></a><!-- doxytag: member="TASK_DOWNLOAD_REMOTE_ONLY" ref="abd241410e5359aa406455b981579542ea26bdad07ef68ef6c46ff8fbe3f70af90" args="" -->TASK_DOWNLOAD_REMOTE_ONLY</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00059">59</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a94233e4ed33f30697c2502a127d4390c"></a><!-- doxytag: member="SyncTransferThread::@17" ref="a94233e4ed33f30697c2502a127d4390c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a94233e4ed33f30697c2502a127d4390caf38b660b45d93c87d52f9c81c459e15e"></a><!-- doxytag: member="TASK_OK" ref="a94233e4ed33f30697c2502a127d4390caf38b660b45d93c87d52f9c81c459e15e" args="" -->TASK_OK</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a94233e4ed33f30697c2502a127d4390ca2d73ac892f5e4485e8919f057f2092ba"></a><!-- doxytag: member="TASK_ERROR_CONN_FAILD" ref="a94233e4ed33f30697c2502a127d4390ca2d73ac892f5e4485e8919f057f2092ba" args="" -->TASK_ERROR_CONN_FAILD</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a94233e4ed33f30697c2502a127d4390caad16cf9dfecfc45d37120265c34a0bee"></a><!-- doxytag: member="TASK_ERROR_OTHER" ref="a94233e4ed33f30697c2502a127d4390caad16cf9dfecfc45d37120265c34a0bee" args="" -->TASK_ERROR_OTHER</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00060">60</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a0c0517944fdaf56d7129541c79ff83f0"></a><!-- doxytag: member="SyncTransferThread::SyncTransferThread" ref="a0c0517944fdaf56d7129541c79ff83f0" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SyncTransferThread::SyncTransferThread </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00031">31</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8h_source.html#l00085">hsftp</a>、<a class="el" href="synctransferthread_8h_source.html#l00082">ssh2_sess</a>及<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a28f56bac008a127b9c8f24b909431a0b"></a><!-- doxytag: member="SyncTransferThread::~SyncTransferThread" ref="a28f56bac008a127b9c8f24b909431a0b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SyncTransferThread::~SyncTransferThread </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00038">38</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a9c49b7605093c2f8dd95df63a5046a21"></a><!-- doxytag: member="SyncTransferThread::addTask" ref="a9c49b7605093c2f8dd95df63a5046a21" args="(SyncTaskPackage task)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SyncTransferThread::addTask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_sync_task_package.html">SyncTaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>task</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00352">352</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8h_source.html#l00043">SyncTaskPackage::mnDirect</a>、<a class="el" href="synctransferthread_8h_source.html#l00042">SyncTaskPackage::mpAttr</a>、<a class="el" href="synctransferthread_8h_source.html#l00041">SyncTaskPackage::msFileName</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00077">taskQueue</a>、<a class="el" href="synctransferthread_8h_source.html#l00080">tMutex</a>及<a class="el" href="synctransferthread_8h_source.html#l00078">wc</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00396">slot_syncDownload()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00403">slot_syncUpload()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aba5cd9bd2b376175adc25335f900b6fb"></a><!-- doxytag: member="SyncTransferThread::connectToRemoteHost" ref="aba5cd9bd2b376175adc25335f900b6fb" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SyncTransferThread::connectToRemoteHost </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00365">365</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshconnection_8cpp_source.html#l00085">SSHConnection::connect()</a>、<a class="el" href="basestorage_8cpp_source.html#l00142">BaseStorage::getHost()</a>、<a class="el" href="basestorage_8cpp_source.html#l00015">BaseStorage::instance()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00087">remoteHost</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="synctransferthread_8h_source.html#l00088">sess_name</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="synctransferthread_8h_source.html#l00082">ssh2_sess</a>及<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acf9faaec1c53495009fb15a6b2d2e70d"></a><!-- doxytag: member="SyncTransferThread::do_download" ref="acf9faaec1c53495009fb15a6b2d2e70d" args="(QString remote_path, QString local_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SyncTransferThread::do_download </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>remote_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>local_path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00098">98</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8cpp_source.html#l00245">do_touch_local_file_with_time()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="synctransferthread_8h_source.html#l00089">local_base_path</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>、<a class="el" href="class_sync_transfer_thread.html#a0d270b21df68d8c6164f3eaae5d17de9">syncFileStarted()</a>、<a class="el" href="class_sync_transfer_thread.html#ac40b4297ba1763b5eb3e8020ef20f96d">syncFileStopped()</a>及<a class="el" href="class_sync_transfer_thread.html#ae1a6f14c1ed027be9ced51d71975a54c">transfer_percent_changed()</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abb8992376ee231e008ef6862a896f1ca"></a><!-- doxytag: member="SyncTransferThread::do_touch_local_file_with_time" ref="abb8992376ee231e008ef6862a896f1ca" args="(QString fileName, QDateTime time)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SyncTransferThread::do_touch_local_file_with_time </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QDateTime&nbsp;</td>
+          <td class="paramname"> <em>time</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00245">245</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="globaloption_8h_source.html#l00031">GlobalOption::locale_codec</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a00473fbfa639978e24e55530504084ec"></a><!-- doxytag: member="SyncTransferThread::do_touch_sftp_file_with_time" ref="a00473fbfa639978e24e55530504084ec" args="(QString fileName, QDateTime time)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SyncTransferThread::do_touch_sftp_file_with_time </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QDateTime&nbsp;</td>
+          <td class="paramname"> <em>time</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00306">306</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00082">ssh2_sess</a>及<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a00905da2acd84012f70884d20add24b8"></a><!-- doxytag: member="SyncTransferThread::do_upload" ref="a00905da2acd84012f70884d20add24b8" args="(QString local_path, QString remote_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SyncTransferThread::do_upload </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>local_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>remote_path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00158">158</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8cpp_source.html#l00306">do_touch_sftp_file_with_time()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="synctransferthread_8h_source.html#l00089">local_base_path</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00082">ssh2_sess</a>、<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>、<a class="el" href="class_sync_transfer_thread.html#a0d270b21df68d8c6164f3eaae5d17de9">syncFileStarted()</a>、<a class="el" href="class_sync_transfer_thread.html#ac40b4297ba1763b5eb3e8020ef20f96d">syncFileStopped()</a>及<a class="el" href="class_sync_transfer_thread.html#ae1a6f14c1ed027be9ced51d71975a54c">transfer_percent_changed()</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="accafe04c12ff0aaba7b10a18f4e25e6f"></a><!-- doxytag: member="SyncTransferThread::run" ref="accafe04c12ff0aaba7b10a18f4e25e6f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::run </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00042">42</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="synctransferthread_8h_source.html#l00060">TASK_ERROR_CONN_FAILD</a>、<a class="el" href="synctransferthread_8h_source.html#l00060">TASK_ERROR_OTHER</a>、<a class="el" href="synctransferthread_8h_source.html#l00060">TASK_OK</a>、<a class="el" href="synctransferthread_8h_source.html#l00077">taskQueue</a>、<a class="el" href="synctransferthread_8h_source.html#l00080">tMutex</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>、<a class="el" href="synctransferthread_8h_source.html#l00078">wc</a>及<a class="el" href="synctransferthread_8h_source.html#l00079">wcMutex</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a959e8425f659968b5eb08448e0617ee3"></a><!-- doxytag: member="SyncTransferThread::setBasePath" ref="a959e8425f659968b5eb08448e0617ee3" args="(QString local, QString remote)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SyncTransferThread::setBasePath </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>local</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>remote</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00345">345</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8h_source.html#l00089">local_base_path</a>及<a class="el" href="synctransferthread_8h_source.html#l00090">remote_base_path</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">SynchronizeWindow::slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aab1a4d450ca4bfdf64e2b6f5ed869c94"></a><!-- doxytag: member="SyncTransferThread::setRemoteSession" ref="aab1a4d450ca4bfdf64e2b6f5ed869c94" args="(QString sess)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SyncTransferThread::setRemoteSession </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>sess</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00338">338</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8h_source.html#l00088">sess_name</a>.</p>
+
+<p>参考自 <a class="el" href="synchronizewindow_8cpp_source.html#l00489">SynchronizeWindow::slot_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af92603b26abf166c0eb89d75d1b41b22"></a><!-- doxytag: member="SyncTransferThread::slot_syncDownload" ref="af92603b26abf166c0eb89d75d1b41b22" args="(QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; task)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::slot_syncDownload </td>
+          <td>(</td>
+          <td class="paramtype">QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt;&nbsp;</td>
+          <td class="paramname"> <em>task</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00396">396</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8cpp_source.html#l00352">addTask()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">TASK_DOWNLOAD</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a355afe899aeebabfd839e8d59d43a745"></a><!-- doxytag: member="SyncTransferThread::slot_syncUpload" ref="a355afe899aeebabfd839e8d59d43a745" args="(QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; task)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::slot_syncUpload </td>
+          <td>(</td>
+          <td class="paramtype">QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt;&nbsp;</td>
+          <td class="paramname"> <em>task</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00403">403</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8cpp_source.html#l00352">addTask()</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">TASK_UPLOAD</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0d270b21df68d8c6164f3eaae5d17de9"></a><!-- doxytag: member="SyncTransferThread::syncFileStarted" ref="a0d270b21df68d8c6164f3eaae5d17de9" args="(QString fileName, quint64 fileSize)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::syncFileStarted </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">quint64&nbsp;</td>
+          <td class="paramname"> <em>fileSize</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac40b4297ba1763b5eb3e8020ef20f96d"></a><!-- doxytag: member="SyncTransferThread::syncFileStopped" ref="ac40b4297ba1763b5eb3e8020ef20f96d" args="(QString fileName, int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::syncFileStopped </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af33bcb90143a7ebb0e6c2c5e1b31a932"></a><!-- doxytag: member="SyncTransferThread::syncTaskFinished" ref="af33bcb90143a7ebb0e6c2c5e1b31a932" args="(int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::syncTaskFinished </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5a10ef8c7d5f25c9c88f412851d7b5a5"></a><!-- doxytag: member="SyncTransferThread::transfer_impl" ref="a5a10ef8c7d5f25c9c88f412851d7b5a5" args="(SyncTaskPackage task)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SyncTransferThread::transfer_impl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_sync_task_package.html">SyncTaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>task</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a>第<a class="el" href="synctransferthread_8cpp_source.html#l00075">75</a>行定义。</p>
+
+<p>参考 <a class="el" href="synctransferthread_8cpp_source.html#l00365">connectToRemoteHost()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>、<a class="el" href="synctransferthread_8h_source.html#l00089">local_base_path</a>、<a class="el" href="synctransferthread_8h_source.html#l00043">SyncTaskPackage::mnDirect</a>、<a class="el" href="synctransferthread_8h_source.html#l00041">SyncTaskPackage::msFileName</a>、<a class="el" href="synctransferthread_8h_source.html#l00090">remote_base_path</a>、<a class="el" href="synctransferthread_8h_source.html#l00082">ssh2_sess</a>、<a class="el" href="synctransferthread_8h_source.html#l00083">ssh2_sftp</a>、<a class="el" href="synctransferthread_8h_source.html#l00059">TASK_DOWNLOAD</a>、<a class="el" href="synctransferthread_8h_source.html#l00060">TASK_ERROR_CONN_FAILD</a>、<a class="el" href="synctransferthread_8h_source.html#l00060">TASK_OK</a>及<a class="el" href="synctransferthread_8h_source.html#l00059">TASK_UPLOAD</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00042">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae1a6f14c1ed027be9ced51d71975a54c"></a><!-- doxytag: member="SyncTransferThread::transfer_percent_changed" ref="ae1a6f14c1ed027be9ced51d71975a54c" args="(QString fileName, int percent, quint64 transferLength, quint64 lastBlockLength)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SyncTransferThread::transfer_percent_changed </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>percent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">quint64&nbsp;</td>
+          <td class="paramname"> <em>transferLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">quint64&nbsp;</td>
+          <td class="paramname"> <em>lastBlockLength</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a0994ba3772ef608a805a5647160b45eb"></a><!-- doxytag: member="SyncTransferThread::hsftp" ref="a0994ba3772ef608a805a5647160b45eb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP_HANDLE* <a class="el" href="class_sync_transfer_thread.html#a0994ba3772ef608a805a5647160b45eb">SyncTransferThread::hsftp</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00085">85</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00031">SyncTransferThread()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad9c61029cc82f0e9f39561e3adb6aba6"></a><!-- doxytag: member="SyncTransferThread::local_base_path" ref="ad9c61029cc82f0e9f39561e3adb6aba6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_sync_transfer_thread.html#ad9c61029cc82f0e9f39561e3adb6aba6">SyncTransferThread::local_base_path</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00089">89</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00345">setBasePath()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae6d48e34639c085cbaf94f8d16e0a783"></a><!-- doxytag: member="SyncTransferThread::remote_base_path" ref="ae6d48e34639c085cbaf94f8d16e0a783" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_sync_transfer_thread.html#ae6d48e34639c085cbaf94f8d16e0a783">SyncTransferThread::remote_base_path</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00090">90</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00345">setBasePath()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e2305b8f379f18cf6edfdd191708301"></a><!-- doxytag: member="SyncTransferThread::remoteHost" ref="a2e2305b8f379f18cf6edfdd191708301" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt;QString, QString&gt; <a class="el" href="class_sync_transfer_thread.html#a2e2305b8f379f18cf6edfdd191708301">SyncTransferThread::remoteHost</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00087">87</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">connectToRemoteHost()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad65553aaf9720a669c3cb50419fc106b"></a><!-- doxytag: member="SyncTransferThread::sess_name" ref="ad65553aaf9720a669c3cb50419fc106b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_sync_transfer_thread.html#ad65553aaf9720a669c3cb50419fc106b">SyncTransferThread::sess_name</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00088">88</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">connectToRemoteHost()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00338">setRemoteSession()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7b1297221752542075ea7cef23c25ccb"></a><!-- doxytag: member="SyncTransferThread::ssh2_attr" ref="a7b1297221752542075ea7cef23c25ccb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP_ATTRIBUTES <a class="el" href="class_sync_transfer_thread.html#a7b1297221752542075ea7cef23c25ccb">SyncTransferThread::ssh2_attr</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00084">84</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ab4c02dde0dda8f4fb95a99c9d9782453"></a><!-- doxytag: member="SyncTransferThread::ssh2_sess" ref="ab4c02dde0dda8f4fb95a99c9d9782453" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SESSION* <a class="el" href="class_sync_transfer_thread.html#ab4c02dde0dda8f4fb95a99c9d9782453">SyncTransferThread::ssh2_sess</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00082">82</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">connectToRemoteHost()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00306">do_touch_sftp_file_with_time()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00031">SyncTransferThread()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8be0003156ab3c73520c300ea14e51f1"></a><!-- doxytag: member="SyncTransferThread::ssh2_sftp" ref="a8be0003156ab3c73520c300ea14e51f1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP* <a class="el" href="class_sync_transfer_thread.html#a8be0003156ab3c73520c300ea14e51f1">SyncTransferThread::ssh2_sftp</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00083">83</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">connectToRemoteHost()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00098">do_download()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00306">do_touch_sftp_file_with_time()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00158">do_upload()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00031">SyncTransferThread()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00075">transfer_impl()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6afbfd258dc28d46ab7aea47a3e143d"></a><!-- doxytag: member="SyncTransferThread::taskQueue" ref="ab6afbfd258dc28d46ab7aea47a3e143d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QQueue&lt;<a class="el" href="class_sync_task_package.html">SyncTaskPackage</a>&gt; <a class="el" href="class_sync_transfer_thread.html#ab6afbfd258dc28d46ab7aea47a3e143d">SyncTransferThread::taskQueue</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00077">77</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00352">addTask()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00042">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2aebe583aa8473fad635919bbfaf1383"></a><!-- doxytag: member="SyncTransferThread::tMutex" ref="a2aebe583aa8473fad635919bbfaf1383" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMutex <a class="el" href="class_sync_transfer_thread.html#a2aebe583aa8473fad635919bbfaf1383">SyncTransferThread::tMutex</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00080">80</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00352">addTask()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00042">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abdbba287c0749c6ae8efa8d5d1516509"></a><!-- doxytag: member="SyncTransferThread::wc" ref="abdbba287c0749c6ae8efa8d5d1516509" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QWaitCondition <a class="el" href="class_sync_transfer_thread.html#abdbba287c0749c6ae8efa8d5d1516509">SyncTransferThread::wc</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00078">78</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00352">addTask()</a>及<a class="el" href="synctransferthread_8cpp_source.html#l00042">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad18299ce4b0e1d51276c5d76024d8ae4"></a><!-- doxytag: member="SyncTransferThread::wcMutex" ref="ad18299ce4b0e1d51276c5d76024d8ae4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMutex <a class="el" href="class_sync_transfer_thread.html#ad18299ce4b0e1d51276c5d76024d8ae4">SyncTransferThread::wcMutex</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a>第<a class="el" href="synctransferthread_8h_source.html#l00079">79</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00042">run()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="synctransferthread_8h_source.html">synctransferthread.h</a></li>
+<li><a class="el" href="synctransferthread_8cpp_source.html">synctransferthread.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

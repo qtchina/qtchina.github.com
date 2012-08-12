@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: utils.cpp文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>utils.cpp文件参考</h1><code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;sys/stat.h&gt;</code><br/>
+<code>#include &lt;string.h&gt;</code><br/>
+<code>#include &lt;errno.h&gt;</code><br/>
+<code>#include &lt;unistd.h&gt;</code><br/>
+<code>#include &lt;fcntl.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="utils_8h_source.html">utils.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="globaloption_8h_source.html">globaloption.h</a>&quot;</code><br/>
+
+<p><a href="utils_8cpp_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#a5e3ce1ddbaec9bf324e051a2038483d9">strmode</a> (int mode, char *p)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#ab0140f324920f7b85a5ff973aa41a3da">digit_mode</a> (int mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#a33e21a775321baff199bc3e3c89e4408">is_reg</a> (char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#a6c9dfac7c15a170f9d07445aadb6b811">fxp_local_do_ls</a> (QString args, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#a700bcf7125e0d4c488859c635a2915d1">fxp_getpid</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#af65a27f898bfa668a421f690a841cc07">set_nonblock</a> (int sock)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8cpp.html#a83c45b98fbd1571d428fa8f2fc87ac71">set_sock_block</a> (int sock)</td></tr>
+</table>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="ab0140f324920f7b85a5ff973aa41a3da"></a><!-- doxytag: member="utils.cpp::digit_mode" ref="ab0140f324920f7b85a5ff973aa41a3da" args="(int mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString digit_mode </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>mode</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00134">134</a>行定义。</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00269">FileProperties::slot_file_attr_abtained()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a700bcf7125e0d4c488859c635a2915d1"></a><!-- doxytag: member="utils.cpp::fxp_getpid" ref="a700bcf7125e0d4c488859c635a2915d1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long fxp_getpid </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00273">273</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a6c9dfac7c15a170f9d07445aadb6b811"></a><!-- doxytag: member="utils.cpp::fxp_local_do_ls" ref="a6c9dfac7c15a170f9d07445aadb6b811" args="(QString args, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fxp_local_do_ls </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00219">219</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="globaloption_8h_source.html#l00031">GlobalOption::locale_codec</a>及<a class="el" href="utils_8cpp_source.html#l00024">strmode()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a33e21a775321baff199bc3e3c89e4408"></a><!-- doxytag: member="utils.cpp::is_reg" ref="a33e21a775321baff199bc3e3c89e4408" args="(char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int is_reg </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00166">166</a>行定义。</p>
+
+<p>参考自 <a class="el" href="testnullfxp_8cpp_source.html#l00061">TestNullfxp::testSpecialFileName()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af65a27f898bfa668a421f690a841cc07"></a><!-- doxytag: member="utils.cpp::set_nonblock" ref="af65a27f898bfa668a421f690a841cc07" args="(int sock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int set_nonblock </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>sock</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00286">286</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a83c45b98fbd1571d428fa8f2fc87ac71"></a><!-- doxytag: member="utils.cpp::set_sock_block" ref="a83c45b98fbd1571d428fa8f2fc87ac71" args="(int sock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int set_sock_block </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>sock</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00299">299</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a5e3ce1ddbaec9bf324e051a2038483d9"></a><!-- doxytag: member="utils.cpp::strmode" ref="a5e3ce1ddbaec9bf324e051a2038483d9" args="(int mode, char *p)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void strmode </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>p</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="utils_8cpp_source.html">utils.cpp</a>第<a class="el" href="utils_8cpp_source.html#l00024">24</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00137">NetDirNode::fileMode()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00384">SSHDirRetriver::fxp_do_ls_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00392">DirRetriver::fxp_do_ls_dir()</a>、<a class="el" href="utils_8cpp_source.html#l00219">fxp_local_do_ls()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00269">FileProperties::slot_file_attr_abtained()</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

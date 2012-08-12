@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: forwardconnectdaemon.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>forwardconnectdaemon.h</h1><a href="forwardconnectdaemon_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// forwardconnectdaemon.h --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2007-05-18 22:11:37 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: forwardconnectdaemon.h 455 2009-08-29 09:23:35Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 <span class="preprocessor">#ifndef FORWARDCONNECTDAEMON_H</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span><span class="preprocessor">#define FORWARDCONNECTDAEMON_H</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QWidget&gt;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;ui_forwardconnectdaemon.h&quot;</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="keyword">class </span><a class="code" href="class_forward_debug_window.html" title="Port Forward Connection Debug Message Window Class.">ForwardDebugWindow</a>;
+<a name="l00019"></a>00019 <span class="keyword">class </span><a class="code" href="class_forward_connect_info_dialog.html">ForwardConnectInfoDialog</a>;
+<a name="l00020"></a>00020 
+<a name="l00021"></a><a class="code" href="class_forward_process_daemon.html">00021</a> <span class="keyword">class </span><a class="code" href="class_forward_process_daemon.html">ForwardProcessDaemon</a>: <span class="keyword">public</span> QThread
+<a name="l00022"></a>00022 {
+<a name="l00023"></a>00023     Q_OBJECT;
+<a name="l00024"></a>00024 <span class="keyword">public</span>:
+<a name="l00025"></a><a class="code" href="class_forward_process_daemon.html#a6abc1cd751ae36691ef5aa31ffa01638">00025</a>     <a class="code" href="class_forward_process_daemon.html#a6abc1cd751ae36691ef5aa31ffa01638">ForwardProcessDaemon</a>(QObject *parent = 0)
+<a name="l00026"></a>00026         : QThread(parent)
+<a name="l00027"></a>00027     {
+<a name="l00028"></a>00028     }
+<a name="l00029"></a><a class="code" href="class_forward_process_daemon.html#ab586c86cc1fa1a448fefb84cf87cdaba">00029</a>     <a class="code" href="class_forward_process_daemon.html#ab586c86cc1fa1a448fefb84cf87cdaba">~ForwardProcessDaemon</a>(){};
+<a name="l00030"></a>00030     <span class="keywordtype">void</span> <a class="code" href="class_forward_process_daemon.html#ae48adc5a5efa79527d20402ad59d1886">run</a>();
+<a name="l00031"></a><a class="code" href="class_forward_process_daemon.html#af89abbcf41acd3186fc1040180658a20">00031</a>     <span class="keywordtype">int</span> <a class="code" href="class_forward_process_daemon.html#af89abbcf41acd3186fc1040180658a20">type</a>;
+<a name="l00032"></a><a class="code" href="class_forward_process_daemon.html#a5de681492d99800c9ef0d1e16bfe27a5">00032</a>     QString <a class="code" href="class_forward_process_daemon.html#a5de681492d99800c9ef0d1e16bfe27a5">response</a>; 
+<a name="l00033"></a>00033 };
+<a name="l00034"></a>00034 
+<a name="l00035"></a><a class="code" href="class_forward_list.html">00035</a> <span class="keyword">class </span><a class="code" href="class_forward_list.html">ForwardList</a>: <span class="keyword">public</span> QObject
+<a name="l00036"></a>00036 {
+<a name="l00037"></a>00037     Q_OBJECT;
+<a name="l00038"></a>00038 <span class="keyword">public</span>:
+<a name="l00039"></a><a class="code" href="class_forward_list.html#a1d6500c773dc4e4e24af05d7ee6184f2">00039</a>     <a class="code" href="class_forward_list.html#a1d6500c773dc4e4e24af05d7ee6184f2">ForwardList</a>(){
+<a name="l00040"></a>00040         this-&gt;<a class="code" href="class_forward_list.html#a269ba10a9c08c07a3e7437ec7551255b">fp_thread</a> = <span class="keyword">new</span> <a class="code" href="class_forward_process_daemon.html">ForwardProcessDaemon</a>();
+<a name="l00041"></a>00041         this-&gt;<a class="code" href="class_forward_list.html#addb616c02a30708d91d3fc45d7469a0b">plink_proc</a> = <span class="keyword">new</span> QProcess();
+<a name="l00042"></a>00042         this-&gt;<a class="code" href="class_forward_list.html#ac1f26af4a4013fc7ec1b5816b178be8c">ps_proc</a> = <span class="keyword">new</span> QProcess();
+<a name="l00043"></a>00043         this-&gt;<a class="code" href="class_forward_list.html#a8795fe97499ede12c001a3efbc95393a">user_canceled</a> = <span class="keyword">false</span>;
+<a name="l00044"></a>00044         this-&gt;<a class="code" href="class_forward_list.html#a8e1d753778bf0c463dc3ed1f36fbd049">ps_exist</a> = 0;
+<a name="l00045"></a>00045     }
+<a name="l00046"></a><a class="code" href="class_forward_list.html#a9e4a70830e8a841fcef742f865e18281">00046</a>     <a class="code" href="class_forward_list.html#a9e4a70830e8a841fcef742f865e18281">~ForwardList</a>(){
+<a name="l00047"></a>00047         <span class="keyword">delete</span> this-&gt;<a class="code" href="class_forward_list.html#a269ba10a9c08c07a3e7437ec7551255b">fp_thread</a>;
+<a name="l00048"></a>00048         <span class="keyword">delete</span> this-&gt;<a class="code" href="class_forward_list.html#addb616c02a30708d91d3fc45d7469a0b">plink_proc</a>;
+<a name="l00049"></a>00049         <span class="keyword">delete</span> this-&gt;<a class="code" href="class_forward_list.html#ac1f26af4a4013fc7ec1b5816b178be8c">ps_proc</a>;
+<a name="l00050"></a>00050     }
+<a name="l00051"></a>00051     
+<a name="l00053"></a><a class="code" href="class_forward_list.html#af625027a6ba0b6fcbe1c68d764541f43">00053</a>     QString <a class="code" href="class_forward_list.html#af625027a6ba0b6fcbe1c68d764541f43">host</a>;
+<a name="l00054"></a><a class="code" href="class_forward_list.html#a4d989a60bab4ee3432d507d9feed7a86">00054</a>     QString <a class="code" href="class_forward_list.html#a4d989a60bab4ee3432d507d9feed7a86">user_name</a>;
+<a name="l00055"></a><a class="code" href="class_forward_list.html#a538d8987d2fe1fe63059edea6ec183e7">00055</a>     QString <a class="code" href="class_forward_list.html#a538d8987d2fe1fe63059edea6ec183e7">passwd</a>;
+<a name="l00056"></a><a class="code" href="class_forward_list.html#a568f2ede14a693cffd354d04f12c82b3">00056</a>     QString <a class="code" href="class_forward_list.html#a568f2ede14a693cffd354d04f12c82b3">remote_listen_port</a>;
+<a name="l00057"></a><a class="code" href="class_forward_list.html#a728f0213dde5341e986de5ef4de715f7">00057</a>     QString <a class="code" href="class_forward_list.html#a728f0213dde5341e986de5ef4de715f7">forward_local_port</a>;
+<a name="l00058"></a><a class="code" href="class_forward_list.html#ad347ab5dd0e073c298bf5ff0c78b692c">00058</a>     QString <a class="code" href="class_forward_list.html#ad347ab5dd0e073c298bf5ff0c78b692c">remote_home_path</a>;
+<a name="l00059"></a><a class="code" href="class_forward_list.html#ae2cfa6b465d0b172bad3d538e4fd98e5">00059</a>     <span class="keywordtype">int</span> <a class="code" href="class_forward_list.html#ae2cfa6b465d0b172bad3d538e4fd98e5">status</a>;
+<a name="l00060"></a><a class="code" href="class_forward_list.html#a8e1d753778bf0c463dc3ed1f36fbd049">00060</a>     <span class="keywordtype">int</span> <a class="code" href="class_forward_list.html#a8e1d753778bf0c463dc3ed1f36fbd049">ps_exist</a>;
+<a name="l00061"></a><a class="code" href="class_forward_list.html#a9ad0b481e79a633595261e528766ae79">00061</a>     QTimer <a class="code" href="class_forward_list.html#a9ad0b481e79a633595261e528766ae79">alive_check_timer</a>;
+<a name="l00062"></a><a class="code" href="class_forward_list.html#addb616c02a30708d91d3fc45d7469a0b">00062</a>     QProcess *<a class="code" href="class_forward_list.html#addb616c02a30708d91d3fc45d7469a0b">plink_proc</a>;
+<a name="l00063"></a><a class="code" href="class_forward_list.html#a1ceec7680aad1357f11be0ffcb388a1f">00063</a>     Q_PID <a class="code" href="class_forward_list.html#a1ceec7680aad1357f11be0ffcb388a1f">plink_id</a> ;
+<a name="l00064"></a><a class="code" href="class_forward_list.html#ac1f26af4a4013fc7ec1b5816b178be8c">00064</a>     QProcess *<a class="code" href="class_forward_list.html#ac1f26af4a4013fc7ec1b5816b178be8c">ps_proc</a>;
+<a name="l00065"></a><a class="code" href="class_forward_list.html#aeba3121a278cd0fba8b5d38d273bd2e1">00065</a>     Q_PID <a class="code" href="class_forward_list.html#aeba3121a278cd0fba8b5d38d273bd2e1">ps_id</a> ;
+<a name="l00066"></a><a class="code" href="class_forward_list.html#a269ba10a9c08c07a3e7437ec7551255b">00066</a>     <a class="code" href="class_forward_process_daemon.html">ForwardProcessDaemon</a> *<a class="code" href="class_forward_list.html#a269ba10a9c08c07a3e7437ec7551255b">fp_thread</a>;
+<a name="l00067"></a><a class="code" href="class_forward_list.html#a8795fe97499ede12c001a3efbc95393a">00067</a>     <span class="keywordtype">bool</span> <a class="code" href="class_forward_list.html#a8795fe97499ede12c001a3efbc95393a">user_canceled</a> ;
+<a name="l00068"></a>00068 };
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 
+<a name="l00074"></a><a class="code" href="class_forward_connect_daemon.html">00074</a> <span class="keyword">class </span><a class="code" href="class_forward_connect_daemon.html">ForwardConnectDaemon</a> : <span class="keyword">public</span> QWidget
+<a name="l00075"></a>00075 {
+<a name="l00076"></a>00076     Q_OBJECT;
+<a name="l00077"></a>00077 <span class="keyword">public</span>:
+<a name="l00078"></a>00078     <a class="code" href="class_forward_connect_daemon.html#a4d90b8d173d297c9cb280e3d5f6e9ec4">ForwardConnectDaemon</a>(QWidget *parent = 0);
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080     <a class="code" href="class_forward_connect_daemon.html#a0424cb88904240f113ca894220d20d3b">~ForwardConnectDaemon</a>();
+<a name="l00081"></a>00081     
+<a name="l00082"></a><a class="code" href="class_forward_connect_daemon.html#a669ef526d22bfb64bea5314494161f0ba817d03ba967a4d21f40f63bd805d7872">00082</a>     <span class="keyword">enum</span> {<a class="code" href="class_forward_connect_daemon.html#a669ef526d22bfb64bea5314494161f0ba7a6a1f5ecb750ed04b8db7355b06fb95">DBG_ALL</a>, <a class="code" href="class_forward_connect_daemon.html#a669ef526d22bfb64bea5314494161f0ba817d03ba967a4d21f40f63bd805d7872">DBG_INFO</a>, <a class="code" href="class_forward_connect_daemon.html#a669ef526d22bfb64bea5314494161f0ba2e3d04a8a71e60759413ba0bb6d027fd">DBG_DEBUG</a>, <a class="code" href="class_forward_connect_daemon.html#a669ef526d22bfb64bea5314494161f0bab04441fc4849c955612464b7a86e7edd">DBG_ERROR</a>};
+<a name="l00083"></a>00083     
+<a name="l00084"></a>00084 <span class="keyword">private</span> slots:
+<a name="l00085"></a>00085     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#ac79b71277940a6e815bc3ef37bff2bf9">slot_custom_ctx_menu</a> ( <span class="keyword">const</span> QPoint &amp; pos );
+<a name="l00086"></a>00086     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a1963edf4c815bb9fb004b838459e3765">slot_new_forward</a>();
+<a name="l00087"></a>00087     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a0306ed064dede321c4405c0accc1df37">slot_start_forward</a>(<a class="code" href="class_forward_list.html">ForwardList</a> *fl);
+<a name="l00088"></a>00088     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a77af2cd0959a75ac6f649c35d7848fa7">slot_proc_error</a> ( QProcess::ProcessError error );
+<a name="l00089"></a>00089     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#ad63b0069a02360b684592909f361e4f0">slot_proc_finished</a> ( <span class="keywordtype">int</span> exitCode, QProcess::ExitStatus exitStatus );
+<a name="l00090"></a>00090     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a3259499e8fad3e79583e53d5cd9c40c0">slot_proc_readyReadStandardError</a> ();
+<a name="l00091"></a>00091     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#ae88f3a21929b6170b1e6caeba69aa800">slot_proc_readyReadStandardOutput</a> ();
+<a name="l00092"></a>00092     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a2675eca9c2b9ee198daf93197a6f7607">slot_proc_started</a> ();
+<a name="l00093"></a>00093     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a4724c3a06a0d96edbbfe9011cd36bfbc">slot_proc_stateChanged</a> ( QProcess::ProcessState newState );
+<a name="l00094"></a>00094     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a26a53a3e822bbaeea752b406eb532f98">slot_time_out</a>();
+<a name="l00095"></a>00095     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#afc02f23eacd83181eb283a38adfe20d5">slot_stop_port_forward</a>();
+<a name="l00096"></a>00096     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#ae9e260a60154e989d9d09eef1c5bc3cc">slot_show_debug_window</a>();
+<a name="l00097"></a>00097     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#ac9f94affdaab8f7b0211cf2256d8595c">slot_forward_index_changed</a>(<span class="keywordtype">int</span> index);
+<a name="l00098"></a>00098     
+<a name="l00099"></a>00099 <span class="keyword">private</span>:
+<a name="l00100"></a>00100     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a65a6e93a0694c8b6b459c1b32eb3b77e">init_custom_menu</a>();
+<a name="l00101"></a>00101     <a class="code" href="class_forward_list.html">ForwardList</a> *<a class="code" href="class_forward_connect_daemon.html#a7c7cd6a7b1051c2d9f1506f987641a45">get_forward_list_by_proc</a>(QObject *proc_obj, <span class="keywordtype">int</span> *which);
+<a name="l00102"></a>00102     <a class="code" href="class_forward_list.html">ForwardList</a> *<a class="code" href="class_forward_connect_daemon.html#afb855a767b7c5ebe89afb9e3cbd03230">get_forward_list_by_timer</a>(QObject *proc_obj);
+<a name="l00103"></a>00103     <a class="code" href="class_forward_list.html">ForwardList</a> *<a class="code" href="class_forward_connect_daemon.html#aa51560bb66216ce9827f6e38154b0d57">get_forward_list_by_serv_info</a>();
+<a name="l00104"></a>00104     
+<a name="l00105"></a>00105 <span class="keyword">private</span>:
+<a name="l00106"></a><a class="code" href="class_forward_connect_daemon.html#aedb40ef3a51cafdaedc70c3463943810">00106</a>     Ui::ForwardConnectDaemon <a class="code" href="class_forward_connect_daemon.html#aedb40ef3a51cafdaedc70c3463943810">ui_fcd</a>;
+<a name="l00107"></a><a class="code" href="class_forward_connect_daemon.html#a472f363e6abe0f20a6d7bf381f0d4834">00107</a>     QMenu *<a class="code" href="class_forward_connect_daemon.html#a472f363e6abe0f20a6d7bf381f0d4834">op_menu</a>;
+<a name="l00108"></a><a class="code" href="class_forward_connect_daemon.html#a98325ff62e16485c2cdd709d5adeb895">00108</a>     <a class="code" href="class_forward_debug_window.html" title="Port Forward Connection Debug Message Window Class.">ForwardDebugWindow</a> *<a class="code" href="class_forward_connect_daemon.html#a98325ff62e16485c2cdd709d5adeb895">fdw</a> ;
+<a name="l00109"></a><a class="code" href="class_forward_connect_daemon.html#a75bbbf27d7beb50bc8c9f5b87bc77115">00109</a>     <a class="code" href="class_forward_connect_info_dialog.html">ForwardConnectInfoDialog</a> *<a class="code" href="class_forward_connect_daemon.html#a75bbbf27d7beb50bc8c9f5b87bc77115">info_dlg</a>;
+<a name="l00110"></a>00110     
+<a name="l00111"></a><a class="code" href="class_forward_connect_daemon.html#ac1325a531f3f5c9edf409bab58652522">00111</a>     <span class="keywordtype">int</span> <a class="code" href="class_forward_connect_daemon.html#ac1325a531f3f5c9edf409bab58652522">connect_status</a>;
+<a name="l00112"></a><a class="code" href="class_forward_connect_daemon.html#acb44edb3900c2ad63f7058e5c94c55f0">00112</a>     <span class="keywordtype">void</span> *<a class="code" href="class_forward_connect_daemon.html#acb44edb3900c2ad63f7058e5c94c55f0">ssh2_sess</a>;
+<a name="l00113"></a><a class="code" href="class_forward_connect_daemon.html#acd0a436cb0aadaef477a531f62ce08b1">00113</a>     <span class="keywordtype">int</span> <a class="code" href="class_forward_connect_daemon.html#acd0a436cb0aadaef477a531f62ce08b1">ssh2_sock</a>;
+<a name="l00114"></a><a class="code" href="class_forward_connect_daemon.html#a8992c126a56cf161531ab756a3f56339">00114</a>     <span class="keywordtype">void</span> *<a class="code" href="class_forward_connect_daemon.html#a8992c126a56cf161531ab756a3f56339">ssh2_sftp</a>;
+<a name="l00115"></a>00115     
+<a name="l00116"></a><a class="code" href="class_forward_connect_daemon.html#ab33a6a14ac5faa0d509a109ce9b861fa">00116</a>     QVector&lt;ForwardList*&gt; <a class="code" href="class_forward_connect_daemon.html#ab33a6a14ac5faa0d509a109ce9b861fa">forward_list</a>;
+<a name="l00117"></a>00117     
+<a name="l00118"></a><a class="code" href="class_forward_connect_daemon.html#a2b672a1de9fb5e7de431badfe5816c07">00118</a>     QStringListModel *<a class="code" href="class_forward_connect_daemon.html#a2b672a1de9fb5e7de431badfe5816c07">host_model</a>;
+<a name="l00119"></a>00119     
+<a name="l00120"></a>00120 signals:
+<a name="l00121"></a>00121     <span class="keywordtype">void</span> <a class="code" href="class_forward_connect_daemon.html#a743a77d9332ff9423711e1f6dd4b4e4a">log_debug_message</a>(QString key, <span class="keywordtype">int</span> level, QString msg);
+<a name="l00122"></a>00122 };
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124 <span class="preprocessor">#endif</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

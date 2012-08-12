@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: ConnectingStatusDialog类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>ConnectingStatusDialog类参考</h1><!-- doxytag: class="ConnectingStatusDialog" -->
+<p>连接到服务器的状态进度提示对话框类  
+<a href="#_details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>&gt;</code></p>
+
+<p><a href="class_connecting_status_dialog-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#aa32555b952cdba965f5d0af9ae2305df">slot_connect_state_changed</a> (QString state_desc)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a5a389536063fb6a58be24dae7973b365">stop_progress_bar</a> ()</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a999fa99fa39b8d187aee6a4af8b09e12">cancel_connect</a> ()</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#aa2144d008480fc4075d332d27b565d3c">ConnectingStatusDialog</a> (QString <a class="el" href="class_connecting_status_dialog.html#a127e4f5aceb34c0ab2e3f8c966f97c07">user_name</a>, QString <a class="el" href="class_connecting_status_dialog.html#a826ab4ea35e950888a607c551322dbd9">host_name</a>, QString <a class="el" href="class_connecting_status_dialog.html#a57c4f7fc01f66515f04699f9cc96b4fc">port</a>, QWidget *parent, Qt::WindowFlags f)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a81f70092a546f7e0c92c1866658fd94b">~ConnectingStatusDialog</a> ()</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#aeb3ab2125c6901f9ed9aab255c993043">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#aa0936370b28fac4a5e977e63aa7312d1">slot_time_out</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a826ab4ea35e950888a607c551322dbd9">host_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a127e4f5aceb34c0ab2e3f8c966f97c07">user_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a57c4f7fc01f66515f04699f9cc96b4fc">port</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTimer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#acdcf58c9c411253c035e9324128f8487">timer</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui::ConnectingStatusDialog&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connecting_status_dialog.html#a0fe124d815ed518ef86d5f060aa8c34b">uiwin</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<p>连接到服务器的状态进度提示对话框类 </p>
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00021">21</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="aa2144d008480fc4075d332d27b565d3c"></a><!-- doxytag: member="ConnectingStatusDialog::ConnectingStatusDialog" ref="aa2144d008480fc4075d332d27b565d3c" args="(QString user_name, QString host_name, QString port, QWidget *parent, Qt::WindowFlags f)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ConnectingStatusDialog::ConnectingStatusDialog </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>user_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>host_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::WindowFlags&nbsp;</td>
+          <td class="paramname"> <em>f</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00015">15</a>行定义。</p>
+
+<p>参考 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00041">slot_time_out()</a>、<a class="el" href="connectingstatusdialog_8h_source.html#l00042">timer</a>及<a class="el" href="connectingstatusdialog_8h_source.html#l00044">uiwin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a81f70092a546f7e0c92c1866658fd94b"></a><!-- doxytag: member="ConnectingStatusDialog::~ConnectingStatusDialog" ref="a81f70092a546f7e0c92c1866658fd94b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ConnectingStatusDialog::~ConnectingStatusDialog </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00036">36</a>行定义。</p>
+
+<p>参考 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00064">stop_progress_bar()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a999fa99fa39b8d187aee6a4af8b09e12"></a><!-- doxytag: member="ConnectingStatusDialog::cancel_connect" ref="a999fa99fa39b8d187aee6a4af8b09e12" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConnectingStatusDialog::cancel_connect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00057">closeEvent()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb3ab2125c6901f9ed9aab255c993043"></a><!-- doxytag: member="ConnectingStatusDialog::closeEvent" ref="aeb3ab2125c6901f9ed9aab255c993043" args="(QCloseEvent *event)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConnectingStatusDialog::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&nbsp;</td>
+          <td class="paramname"> <em>event</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00057">57</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_connecting_status_dialog.html#a999fa99fa39b8d187aee6a4af8b09e12">cancel_connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa32555b952cdba965f5d0af9ae2305df"></a><!-- doxytag: member="ConnectingStatusDialog::slot_connect_state_changed" ref="aa32555b952cdba965f5d0af9ae2305df" args="(QString state_desc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConnectingStatusDialog::slot_connect_state_changed </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>state_desc</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00050">50</a>行定义。</p>
+
+<p>参考 <a class="el" href="connectingstatusdialog_8h_source.html#l00044">uiwin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa0936370b28fac4a5e977e63aa7312d1"></a><!-- doxytag: member="ConnectingStatusDialog::slot_time_out" ref="aa0936370b28fac4a5e977e63aa7312d1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConnectingStatusDialog::slot_time_out </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00041">41</a>行定义。</p>
+
+<p>参考 <a class="el" href="connectingstatusdialog_8h_source.html#l00044">uiwin</a>.</p>
+
+<p>参考自 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00015">ConnectingStatusDialog()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5a389536063fb6a58be24dae7973b365"></a><!-- doxytag: member="ConnectingStatusDialog::stop_progress_bar" ref="a5a389536063fb6a58be24dae7973b365" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConnectingStatusDialog::stop_progress_bar </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a>第<a class="el" href="connectingstatusdialog_8cpp_source.html#l00064">64</a>行定义。</p>
+
+<p>参考 <a class="el" href="connectingstatusdialog_8h_source.html#l00042">timer</a>及<a class="el" href="connectingstatusdialog_8h_source.html#l00044">uiwin</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00307">NullFXP::slot_connect_remote_host_finished()</a>及<a class="el" href="connectingstatusdialog_8cpp_source.html#l00036">~ConnectingStatusDialog()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a826ab4ea35e950888a607c551322dbd9"></a><!-- doxytag: member="ConnectingStatusDialog::host_name" ref="a826ab4ea35e950888a607c551322dbd9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connecting_status_dialog.html#a826ab4ea35e950888a607c551322dbd9">ConnectingStatusDialog::host_name</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00039">39</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a57c4f7fc01f66515f04699f9cc96b4fc"></a><!-- doxytag: member="ConnectingStatusDialog::port" ref="a57c4f7fc01f66515f04699f9cc96b4fc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connecting_status_dialog.html#a57c4f7fc01f66515f04699f9cc96b4fc">ConnectingStatusDialog::port</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00041">41</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="acdcf58c9c411253c035e9324128f8487"></a><!-- doxytag: member="ConnectingStatusDialog::timer" ref="acdcf58c9c411253c035e9324128f8487" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTimer <a class="el" href="class_connecting_status_dialog.html#acdcf58c9c411253c035e9324128f8487">ConnectingStatusDialog::timer</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00042">42</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00015">ConnectingStatusDialog()</a>及<a class="el" href="connectingstatusdialog_8cpp_source.html#l00064">stop_progress_bar()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0fe124d815ed518ef86d5f060aa8c34b"></a><!-- doxytag: member="ConnectingStatusDialog::uiwin" ref="a0fe124d815ed518ef86d5f060aa8c34b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui::ConnectingStatusDialog <a class="el" href="class_connecting_status_dialog.html#a0fe124d815ed518ef86d5f060aa8c34b">ConnectingStatusDialog::uiwin</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00044">44</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connectingstatusdialog_8cpp_source.html#l00015">ConnectingStatusDialog()</a>、<a class="el" href="connectingstatusdialog_8cpp_source.html#l00050">slot_connect_state_changed()</a>、<a class="el" href="connectingstatusdialog_8cpp_source.html#l00041">slot_time_out()</a>及<a class="el" href="connectingstatusdialog_8cpp_source.html#l00064">stop_progress_bar()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a127e4f5aceb34c0ab2e3f8c966f97c07"></a><!-- doxytag: member="ConnectingStatusDialog::user_name" ref="a127e4f5aceb34c0ab2e3f8c966f97c07" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connecting_status_dialog.html#a127e4f5aceb34c0ab2e3f8c966f97c07">ConnectingStatusDialog::user_name</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a>第<a class="el" href="connectingstatusdialog_8h_source.html#l00040">40</a>行定义。</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="connectingstatusdialog_8h_source.html">connectingstatusdialog.h</a></li>
+<li><a class="el" href="connectingstatusdialog_8cpp_source.html">connectingstatusdialog.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

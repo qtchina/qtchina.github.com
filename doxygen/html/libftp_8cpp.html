@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: libftp.cpp文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>libftp.cpp文件参考</h1><code>#include &lt;assert.h&gt;</code><br/>
+<code>#include &lt;sys/stat.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="utils_8h_source.html">utils.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="libftp_8h_source.html">libftp.h</a>&quot;</code><br/>
+
+<p><a href="libftp_8cpp_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="libftp_8cpp.html#a7afdd38b453be6939da206da9cc45103">_q_fixupDateTime</a> (QDateTime *dateTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="libftp_8cpp.html#a299e772611c3801964c450824511025c">_q_parseUnixDir</a> (const QStringList &amp;tokens, const QString &amp;userName, QUrlInfo *info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="libftp_8cpp.html#a2268e56a60baeca6b96328f5dcaaec49">_q_parseDosDir</a> (const QStringList &amp;tokens, const QString &amp;userName, QUrlInfo *info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="libftp_8cpp.html#a4843d81ebae60b9efd4650caf332d983">parseMLSTLine</a> (const QByteArray &amp;buffer, QUrlInfo *info)</td></tr>
+</table>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="a7afdd38b453be6939da206da9cc45103"></a><!-- doxytag: member="libftp.cpp::_q_fixupDateTime" ref="a7afdd38b453be6939da206da9cc45103" args="(QDateTime *dateTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _q_fixupDateTime </td>
+          <td>(</td>
+          <td class="paramtype">QDateTime *&nbsp;</td>
+          <td class="paramname"> <em>dateTime</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00270">270</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00281">_q_parseUnixDir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2268e56a60baeca6b96328f5dcaaec49"></a><!-- doxytag: member="libftp.cpp::_q_parseDosDir" ref="a2268e56a60baeca6b96328f5dcaaec49" args="(const QStringList &amp;tokens, const QString &amp;userName, QUrlInfo *info)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _q_parseDosDir </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>tokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>userName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QUrlInfo *&nbsp;</td>
+          <td class="paramname"> <em>info</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00366">366</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00419">LibFtp::parseDir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a299e772611c3801964c450824511025c"></a><!-- doxytag: member="libftp.cpp::_q_parseUnixDir" ref="a299e772611c3801964c450824511025c" args="(const QStringList &amp;tokens, const QString &amp;userName, QUrlInfo *info)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _q_parseUnixDir </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>tokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>userName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QUrlInfo *&nbsp;</td>
+          <td class="paramname"> <em>info</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00281">281</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00270">_q_fixupDateTime()</a>.</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00419">LibFtp::parseDir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4843d81ebae60b9efd4650caf332d983"></a><!-- doxytag: member="libftp.cpp::parseMLSTLine" ref="a4843d81ebae60b9efd4650caf332d983" args="(const QByteArray &amp;buffer, QUrlInfo *info)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool parseMLSTLine </td>
+          <td>(</td>
+          <td class="paramtype">const QByteArray &amp;&nbsp;</td>
+          <td class="paramname"> <em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QUrlInfo *&nbsp;</td>
+          <td class="paramname"> <em>info</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00447">447</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00688">LibFtp::mlst()</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

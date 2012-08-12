@@ -1,0 +1,902 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: Connection类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>Connection类参考</h1><!-- doxytag: class="Connection" -->
+<p><code>#include &lt;<a class="el" href="connection_8h_source.html">connection.h</a>&gt;</code></p>
+<div class="dynheader">
+继承图，类Connection</div>
+<div class="dynsection">
+ <div class="center">
+  <img src="class_connection.png" usemap="#Connection_map" alt=""/>
+  <map id="Connection_map" name="Connection_map">
+<area href="class_f_t_p_connection.html" alt="FTPConnection" shape="rect" coords="0,56,101,80"/>
+<area href="class_s_s_h_connection.html" alt="SSHConnection" shape="rect" coords="111,56,212,80"/>
+</map>
+ </div>
+</div>
+
+<p><a href="class_connection-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a91b4f84e687f7d6e0db3b64221b9e3f9">CONN_OK</a> = 0, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ae1154c0751684b0b66678239a51a730e">CONN_REFUSE</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a978097788e078ff08202e10e698763ac">CONN_CANCEL</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ab039708a1db8b5305aecbcd4e8323a1a">CONN_OTHER</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a1c685ded6c80ebfc22ab78cee6c2299c">CONN_RESOLVE_ERROR</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ac0e83cc787cf8eea1dc71ebbf1ec111c">CONN_SESS_ERROR</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a512285b740c88cb0849a9f553da6e7f8">CONN_AUTH_ERROR</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a1fec530f8a00c96cbbeb6ff8c270ab95">CONN_SFTP_ERROR</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a93b22e59f81d31b60d6192b8c2ea82e3">CONN_EXEC_ERROR</a>, 
+<a class="el" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ac9c32e6fc83264ad426354bb6e827ce0">CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</a>
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_connection.html#ae0bf5084c5811d2c3871ac4b0beb0258af452784a97c7af859abbcd927d5775cc">PROTO_MIN</a> =  0, 
+<a class="el" href="class_connection.html#ae0bf5084c5811d2c3871ac4b0beb0258a55e3e772a1fda53115153ba36cfffd66">PROTO_SFTP</a>, 
+<a class="el" href="class_connection.html#ae0bf5084c5811d2c3871ac4b0beb0258afad6e34695f31267fd0eb6586b413dff">PROTO_FTP</a>, 
+<a class="el" href="class_connection.html#ae0bf5084c5811d2c3871ac4b0beb0258ad73d666af0e32a85490bddc57c81d114">PROTO_FTPS</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_connection.html#ae0bf5084c5811d2c3871ac4b0beb0258a7d19e9a0793327c4dbb20d0fac099039">PROTO_MAX</a>
+<br/>
+ }</td></tr>
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a053249f8bb18ce880bb3e1a8d22fdd5e">alivePing</a> ()</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a9d0699edf3cf0909e4f1cbf39d87bcc0">alivePong</a> (int alive)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a799a0274919c0fb47bf8e7fc5e730356">connect_state_changed</a> (QString state_desc)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a903238da767af13261c8de1721807b48">Connection</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a2e4352edf667bea83001569e9da8a24d">~Connection</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#af358690532761001fbebed6f97bd908b">connect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ae76eb02ef90780042db86ceb9e106d63">disconnect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#adb00ee1614f8f69b0cc2df2656e4cb68">reconnect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a68536d10cc8bc26964a0e7eccfaab52c">isConnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#aa4a94450e09dc3280884e4f1d5624f10">isRealConnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a30ecd96362af7634bc871f8052668507">setUserCanceled</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a11eabb062ab01ea60ebfa65ca9d1a192">setHostInfo</a> (QMap&lt; QString, QString &gt; host)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#acba51fcf4945c709d6ca16b5816e74fe">hostInfo</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#acd10b51148608c63fe2139d85582869f">userHomePath</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ad348262f775e38d75dbf18ab06f9d7fa">protocolType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#aa858664f70a24867c8fc814cf5b5752d">get_status_desc</a> (int status)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QTextCodec *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ab9bf75eb6a3a41d47129f343168ad90d">codecForEnv</a> (QString env)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">根据环境信息字符串,获取编码.  <a href="#ab9bf75eb6a3a41d47129f343168ad90d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTextCodec *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ae54ceaa59e702fa3a802d50b67d3c1d2">codecForConnect</a> ()</td></tr>
+<tr><td colspan="2"><h2>公有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a1445f1ca4d7fd2155a7de480340b370a">connected</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a0bdb187fdddab4e15df03931f63ae655">mHostInfo</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#abd6ae397116d4a3eea357ff22adde9eb">protocol</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">password</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a5a8ed49a52c618dec4ccbec7189a41fd">decodedPassword</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned short&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a9a662369d7331a103503e54a623b735a">pubkey</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#acdd98addd46ac1ee11af9ed91fbab4ce">homePath</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SESSION *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">sess</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#acccd0099e1f8360fa0a0b04d7a5abe93">sock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a8792a072df43390f2de4ac1ba81cc2f9">dsock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTcpSocket *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#a9112209ca82d95b956ff767b9ccb8a50">qsock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTcpSocket *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ae7844ff31d9fd2782f11ef25d5e9a308">qdsock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ae3555ca88db833af6b29b5d747954c28">user_canceled</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_lib_ftp.html">LibFtp</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#aedb1810324c8ff5175b0c7b31d0742fd">ftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTextCodec *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connection.html#ab8a4913341340b95810ee264141cb185">codec</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00023">23</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="aee4d9c51e911c33770e17f719da73c29"></a><!-- doxytag: member="Connection::@1" ref="aee4d9c51e911c33770e17f719da73c29" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a91b4f84e687f7d6e0db3b64221b9e3f9"></a><!-- doxytag: member="CONN_OK" ref="aee4d9c51e911c33770e17f719da73c29a91b4f84e687f7d6e0db3b64221b9e3f9" args="" -->CONN_OK</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29ae1154c0751684b0b66678239a51a730e"></a><!-- doxytag: member="CONN_REFUSE" ref="aee4d9c51e911c33770e17f719da73c29ae1154c0751684b0b66678239a51a730e" args="" -->CONN_REFUSE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a978097788e078ff08202e10e698763ac"></a><!-- doxytag: member="CONN_CANCEL" ref="aee4d9c51e911c33770e17f719da73c29a978097788e078ff08202e10e698763ac" args="" -->CONN_CANCEL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29ab039708a1db8b5305aecbcd4e8323a1a"></a><!-- doxytag: member="CONN_OTHER" ref="aee4d9c51e911c33770e17f719da73c29ab039708a1db8b5305aecbcd4e8323a1a" args="" -->CONN_OTHER</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a1c685ded6c80ebfc22ab78cee6c2299c"></a><!-- doxytag: member="CONN_RESOLVE_ERROR" ref="aee4d9c51e911c33770e17f719da73c29a1c685ded6c80ebfc22ab78cee6c2299c" args="" -->CONN_RESOLVE_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29ac0e83cc787cf8eea1dc71ebbf1ec111c"></a><!-- doxytag: member="CONN_SESS_ERROR" ref="aee4d9c51e911c33770e17f719da73c29ac0e83cc787cf8eea1dc71ebbf1ec111c" args="" -->CONN_SESS_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a512285b740c88cb0849a9f553da6e7f8"></a><!-- doxytag: member="CONN_AUTH_ERROR" ref="aee4d9c51e911c33770e17f719da73c29a512285b740c88cb0849a9f553da6e7f8" args="" -->CONN_AUTH_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a1fec530f8a00c96cbbeb6ff8c270ab95"></a><!-- doxytag: member="CONN_SFTP_ERROR" ref="aee4d9c51e911c33770e17f719da73c29a1fec530f8a00c96cbbeb6ff8c270ab95" args="" -->CONN_SFTP_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29a93b22e59f81d31b60d6192b8c2ea82e3"></a><!-- doxytag: member="CONN_EXEC_ERROR" ref="aee4d9c51e911c33770e17f719da73c29a93b22e59f81d31b60d6192b8c2ea82e3" args="" -->CONN_EXEC_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aee4d9c51e911c33770e17f719da73c29ac9c32e6fc83264ad426354bb6e827ce0"></a><!-- doxytag: member="CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR" ref="aee4d9c51e911c33770e17f719da73c29ac9c32e6fc83264ad426354bb6e827ce0" args="" -->CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00027">27</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258"></a><!-- doxytag: member="Connection::@2" ref="ae0bf5084c5811d2c3871ac4b0beb0258" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258af452784a97c7af859abbcd927d5775cc"></a><!-- doxytag: member="PROTO_MIN" ref="ae0bf5084c5811d2c3871ac4b0beb0258af452784a97c7af859abbcd927d5775cc" args="" -->PROTO_MIN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258a55e3e772a1fda53115153ba36cfffd66"></a><!-- doxytag: member="PROTO_SFTP" ref="ae0bf5084c5811d2c3871ac4b0beb0258a55e3e772a1fda53115153ba36cfffd66" args="" -->PROTO_SFTP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258afad6e34695f31267fd0eb6586b413dff"></a><!-- doxytag: member="PROTO_FTP" ref="ae0bf5084c5811d2c3871ac4b0beb0258afad6e34695f31267fd0eb6586b413dff" args="" -->PROTO_FTP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258ad73d666af0e32a85490bddc57c81d114"></a><!-- doxytag: member="PROTO_FTPS" ref="ae0bf5084c5811d2c3871ac4b0beb0258ad73d666af0e32a85490bddc57c81d114" args="" -->PROTO_FTPS</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="ae0bf5084c5811d2c3871ac4b0beb0258a7d19e9a0793327c4dbb20d0fac099039"></a><!-- doxytag: member="PROTO_MAX" ref="ae0bf5084c5811d2c3871ac4b0beb0258a7d19e9a0793327c4dbb20d0fac099039" args="" -->PROTO_MAX</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00030">30</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a903238da767af13261c8de1721807b48"></a><!-- doxytag: member="Connection::Connection" ref="a903238da767af13261c8de1721807b48" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Connection::Connection </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00012">12</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00077">codec</a>、<a class="el" href="connection_8h_source.html#l00070">dsock</a>、<a class="el" href="connection_8h_source.html#l00072">qdsock</a>、<a class="el" href="connection_8h_source.html#l00071">qsock</a>、<a class="el" href="connection_8h_source.html#l00069">sock</a>及<a class="el" href="connection_8h_source.html#l00074">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e4352edf667bea83001569e9da8a24d"></a><!-- doxytag: member="Connection::~Connection" ref="a2e4352edf667bea83001569e9da8a24d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Connection::~Connection </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00022">22</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a053249f8bb18ce880bb3e1a8d22fdd5e"></a><!-- doxytag: member="Connection::alivePing" ref="a053249f8bb18ce880bb3e1a8d22fdd5e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Connection::alivePing </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a24cfb07e332d89127175f5bec1c51587">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#a661b893585c4720f42686b38e8a24747">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00026">26</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a9d0699edf3cf0909e4f1cbf39d87bcc0"></a><!-- doxytag: member="Connection::alivePong" ref="a9d0699edf3cf0909e4f1cbf39d87bcc0" args="(int alive)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Connection::alivePong </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>alive</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae54ceaa59e702fa3a802d50b67d3c1d2"></a><!-- doxytag: member="Connection::codecForConnect" ref="ae54ceaa59e702fa3a802d50b67d3c1d2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTextCodec * Connection::codecForConnect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00144">144</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00077">codec</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab9bf75eb6a3a41d47129f343168ad90d"></a><!-- doxytag: member="Connection::codecForEnv" ref="ab9bf75eb6a3a41d47129f343168ad90d" args="(QString env)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTextCodec * Connection::codecForEnv </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>env</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>根据环境信息字符串,获取编码. </p>
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a6784baa8559d8a3ccf3d180795fe0ec8">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#aad56a7cf83faeaf2b6190eaa0166dd01">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00140">140</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="af358690532761001fbebed6f97bd908b"></a><!-- doxytag: member="Connection::connect" ref="af358690532761001fbebed6f97bd908b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Connection::connect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a2637403e7a5530c0af223d70dd0c38c8">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#a737f6d12076a6cc9a7998812c9ab6e00">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00031">31</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connector_8cpp_source.html#l00058">Connector::run()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a799a0274919c0fb47bf8e7fc5e730356"></a><!-- doxytag: member="Connection::connect_state_changed" ref="a799a0274919c0fb47bf8e7fc5e730356" args="(QString state_desc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Connection::connect_state_changed </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>state_desc</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00295">SSHConnection::initSSHSession()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">SSHConnection::sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae76eb02ef90780042db86ceb9e106d63"></a><!-- doxytag: member="Connection::disconnect" ref="ae76eb02ef90780042db86ceb9e106d63" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Connection::disconnect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a430cc1cb34cbb386918a877de4e9a228">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#a62f802160730c860eacb53c27450c56f">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00035">35</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aa858664f70a24867c8fc814cf5b5752d"></a><!-- doxytag: member="Connection::get_status_desc" ref="aa858664f70a24867c8fc814cf5b5752d" args="(int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Connection::get_status_desc </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00094">94</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00028">CONN_AUTH_ERROR</a>、<a class="el" href="connection_8h_source.html#l00029">CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</a>、<a class="el" href="connection_8h_source.html#l00027">CONN_REFUSE</a>、<a class="el" href="connection_8h_source.html#l00027">CONN_RESOLVE_ERROR</a>、<a class="el" href="connection_8h_source.html#l00028">CONN_SESS_ERROR</a>及<a class="el" href="connection_8h_source.html#l00028">CONN_SFTP_ERROR</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">SSHConnection::connect()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acba51fcf4945c709d6ca16b5816e74fe"></a><!-- doxytag: member="Connection::hostInfo" ref="acba51fcf4945c709d6ca16b5816e74fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; QString, QString &gt; Connection::hostInfo </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00071">71</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00058">mHostInfo</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a68536d10cc8bc26964a0e7eccfaab52c"></a><!-- doxytag: member="Connection::isConnected" ref="a68536d10cc8bc26964a0e7eccfaab52c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Connection::isConnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a42247bd68feb1dfdaedecc9dbd38b437">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#aafe2316e6a1698d7c39f18a41ecc0ebf">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00043">43</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00057">connected</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4a94450e09dc3280884e4f1d5624f10"></a><!-- doxytag: member="Connection::isRealConnected" ref="aa4a94450e09dc3280884e4f1d5624f10" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Connection::isRealConnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#a2cf92bf2e6a1613836e39b0a7a53e97c">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#a3b088ae172403c477a750e5d339e82a3">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00047">47</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00057">connected</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad348262f775e38d75dbf18ab06f9d7fa"></a><!-- doxytag: member="Connection::protocolType" ref="ad348262f775e38d75dbf18ab06f9d7fa" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Connection::protocolType </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00081">81</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00031">PROTO_FTP</a>、<a class="el" href="connection_8h_source.html#l00031">PROTO_FTPS</a>、<a class="el" href="connection_8h_source.html#l00030">PROTO_MIN</a>、<a class="el" href="connection_8h_source.html#l00031">PROTO_SFTP</a>及<a class="el" href="connection_8h_source.html#l00059">protocol</a>.</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00098">FilePropertiesRetriveThread::run()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00059">RemoteDirModel::setConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adb00ee1614f8f69b0cc2df2656e4cb68"></a><!-- doxytag: member="Connection::reconnect" ref="adb00ee1614f8f69b0cc2df2656e4cb68" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Connection::reconnect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_connection.html#ae9cb93136bd1c24633e16a000093c89a">FTPConnection</a>及<a class="el" href="class_s_s_h_connection.html#a4a1cdd3ba1b4380db5a0bac139b1c5f3">SSHConnection</a>重载。</p>
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00039">39</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a11eabb062ab01ea60ebfa65ca9d1a192"></a><!-- doxytag: member="Connection::setHostInfo" ref="a11eabb062ab01ea60ebfa65ca9d1a192" args="(QMap&lt; QString, QString &gt; host)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Connection::setHostInfo </td>
+          <td>(</td>
+          <td class="paramtype">QMap&lt; QString, QString &gt;&nbsp;</td>
+          <td class="paramname"> <em>host</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00058">58</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00063">hostName</a>、<a class="el" href="connection_8h_source.html#l00058">mHostInfo</a>、<a class="el" href="connection_8h_source.html#l00061">password</a>、<a class="el" href="connection_8h_source.html#l00064">port</a>、<a class="el" href="connection_8h_source.html#l00059">protocol</a>、<a class="el" href="connection_8h_source.html#l00065">pubkey</a>及<a class="el" href="connection_8h_source.html#l00060">userName</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">SyncTransferThread::connectToRemoteHost()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>及<a class="el" href="connector_8cpp_source.html#l00031">Connector::setHostInfo()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a30ecd96362af7634bc871f8052668507"></a><!-- doxytag: member="Connection::setUserCanceled" ref="a30ecd96362af7634bc871f8052668507" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Connection::setUserCanceled </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00052">52</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00074">user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="connector_8cpp_source.html#l00052">Connector::setUserCanceled()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acd10b51148608c63fe2139d85582869f"></a><!-- doxytag: member="Connection::userHomePath" ref="acd10b51148608c63fe2139d85582869f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Connection::userHomePath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8cpp_source.html">connection.cpp</a>第<a class="el" href="connection_8cpp_source.html#l00076">76</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00066">homePath</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ab8a4913341340b95810ee264141cb185"></a><!-- doxytag: member="Connection::codec" ref="ab8a4913341340b95810ee264141cb185" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTextCodec* <a class="el" href="class_connection.html#ab8a4913341340b95810ee264141cb185">Connection::codec</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00077">77</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00144">codecForConnect()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00085">SSHConnection::connect()</a>、<a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1445f1ca4d7fd2155a7de480340b370a"></a><!-- doxytag: member="Connection::connected" ref="a1445f1ca4d7fd2155a7de480340b370a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_connection.html#a1445f1ca4d7fd2155a7de480340b370a">Connection::connected</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00057">57</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00043">isConnected()</a>及<a class="el" href="connection_8cpp_source.html#l00047">isRealConnected()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5a8ed49a52c618dec4ccbec7189a41fd"></a><!-- doxytag: member="Connection::decodedPassword" ref="a5a8ed49a52c618dec4ccbec7189a41fd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#a5a8ed49a52c618dec4ccbec7189a41fd">Connection::decodedPassword</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00062">62</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a8792a072df43390f2de4ac1ba81cc2f9"></a><!-- doxytag: member="Connection::dsock" ref="a8792a072df43390f2de4ac1ba81cc2f9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_connection.html#a8792a072df43390f2de4ac1ba81cc2f9">Connection::dsock</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00070">70</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aedb1810324c8ff5175b0c7b31d0742fd"></a><!-- doxytag: member="Connection::ftp" ref="aedb1810324c8ff5175b0c7b31d0742fd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_lib_ftp.html">LibFtp</a>* <a class="el" href="class_connection.html#aedb1810324c8ff5175b0c7b31d0742fd">Connection::ftp</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00076">76</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00084">FTPConnection::alivePing()</a>、<a class="el" href="ftpconnection_8cpp_source.html#l00090">FTPConnection::codecForEnv()</a>、<a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="ftpconnection_8cpp_source.html#l00061">FTPConnection::disconnect()</a>、<a class="el" href="ftpview_8cpp_source.html#l00995">FTPView::encodingChanged()</a>、<a class="el" href="transportor_8cpp_source.html#l00147">Transportor::isFTPDir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00432">FTPDirRetriver::keep_alive()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00253">FTPDirRetriver::mkdir()</a>、<a class="el" href="ftpconnection_8cpp_source.html#l00068">FTPConnection::reconnect()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00401">FTPDirRetriver::rename()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">FTPDirRetriver::rmdir()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00125">FilePropertiesRetriveThread::run_ftp()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01232">Transportor::setFTPCurrentDirByFullPath()</a>及<a class="el" href="ftpconnection_8cpp_source.html#l00021">FTPConnection::~FTPConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acdd98addd46ac1ee11af9ed91fbab4ce"></a><!-- doxytag: member="Connection::homePath" ref="acdd98addd46ac1ee11af9ed91fbab4ce" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#acdd98addd46ac1ee11af9ed91fbab4ce">Connection::homePath</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00066">66</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00463">SSHConnection::sshHomePath()</a>及<a class="el" href="connection_8cpp_source.html#l00076">userHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab1463d5c936a08b12dab5386743ccc87"></a><!-- doxytag: member="Connection::hostName" ref="ab1463d5c936a08b12dab5386743ccc87" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">Connection::hostName</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00063">63</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>、<a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">RemoteView::slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0bdb187fdddab4e15df03931f63ae655"></a><!-- doxytag: member="Connection::mHostInfo" ref="a0bdb187fdddab4e15df03931f63ae655" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt;QString, QString&gt; <a class="el" href="class_connection.html#a0bdb187fdddab4e15df03931f63ae655">Connection::mHostInfo</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00058">58</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00071">hostInfo()</a>及<a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a30ccbac90456347e8470e3243cc98c3c"></a><!-- doxytag: member="Connection::password" ref="a30ccbac90456347e8470e3243cc98c3c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">Connection::password</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00061">61</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f7aa8ba99884066f8aca74f8e125cd1"></a><!-- doxytag: member="Connection::port" ref="a1f7aa8ba99884066f8aca74f8e125cd1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short <a class="el" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">Connection::port</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00064">64</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>、<a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">RemoteView::slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>及<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abd6ae397116d4a3eea357ff22adde9eb"></a><!-- doxytag: member="Connection::protocol" ref="abd6ae397116d4a3eea357ff22adde9eb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#abd6ae397116d4a3eea357ff22adde9eb">Connection::protocol</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00059">59</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00081">protocolType()</a>、<a class="el" href="ftpview_8cpp_source.html#l00303">FTPView::setConnection()</a>及<a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9a662369d7331a103503e54a623b735a"></a><!-- doxytag: member="Connection::pubkey" ref="a9a662369d7331a103503e54a623b735a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#a9a662369d7331a103503e54a623b735a">Connection::pubkey</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00065">65</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7844ff31d9fd2782f11ef25d5e9a308"></a><!-- doxytag: member="Connection::qdsock" ref="ae7844ff31d9fd2782f11ef25d5e9a308" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTcpSocket* <a class="el" href="class_connection.html#ae7844ff31d9fd2782f11ef25d5e9a308">Connection::qdsock</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00072">72</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00072">SSHConnection::~SSHConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9112209ca82d95b956ff767b9ccb8a50"></a><!-- doxytag: member="Connection::qsock" ref="a9112209ca82d95b956ff767b9ccb8a50" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTcpSocket* <a class="el" href="class_connection.html#a9112209ca82d95b956ff767b9ccb8a50">Connection::qsock</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00071">71</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00072">SSHConnection::~SSHConnection()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac3055d7d6c5cc14a86dd8bff3aa00a2e"></a><!-- doxytag: member="Connection::sess" ref="ac3055d7d6c5cc14a86dd8bff3aa00a2e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SESSION* <a class="el" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">Connection::sess</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00068">68</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">SyncTransferThread::connectToRemoteHost()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>、<a class="el" href="sftpview_8cpp_source.html#l00947">SFTPView::encryption_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00958">RemoteView::encryption_focus_label_double_clicked()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00526">SSHConnection::get_server_env_vars()</a>、<a class="el" href="sftpview_8cpp_source.html#l00974">SFTPView::host_info_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00991">RemoteView::host_info_focus_label_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">RemoteView::i_init_dir_view()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00295">SSHConnection::initSSHSession()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00560">SSHConnection::libssh2SessionLastErrorString()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">Transportor::run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">Transportor::run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">Transportor::run_SFTP_to_SFTP()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00039">SSHDirRetriver::setConnection()</a>、<a class="el" href="sftpview_8cpp_source.html#l00228">SFTPView::setConnection()</a>、<a class="el" href="remoteview_8cpp_source.html#l00330">RemoteView::setConnection()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00059">RemoteDirModel::setConnection()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">SSHConnection::sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acccd0099e1f8360fa0a0b04d7a5abe93"></a><!-- doxytag: member="Connection::sock" ref="acccd0099e1f8360fa0a0b04d7a5abe93" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_connection.html#acccd0099e1f8360fa0a0b04d7a5abe93">Connection::sock</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00069">69</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00295">SSHConnection::initSSHSession()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">SSHConnection::sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3555ca88db833af6b29b5d747954c28"></a><!-- doxytag: member="Connection::user_canceled" ref="ae3555ca88db833af6b29b5d747954c28" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_connection.html#ae3555ca88db833af6b29b5d747954c28">Connection::user_canceled</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00074">74</a>行定义。</p>
+
+<p>参考自 <a class="el" href="connection_8cpp_source.html#l00012">Connection()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">SSHConnection::initSocket()</a>、<a class="el" href="connection_8cpp_source.html#l00052">setUserCanceled()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">SSHConnection::sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a998f3974f5813cb8bb56ca750bcab76b"></a><!-- doxytag: member="Connection::userName" ref="a998f3974f5813cb8bb56ca750bcab76b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">Connection::userName</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="connection_8h_source.html">connection.h</a>第<a class="el" href="connection_8h_source.html#l00060">60</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="sftpview_8cpp_source.html#l00228">SFTPView::setConnection()</a>、<a class="el" href="remoteview_8cpp_source.html#l00330">RemoteView::setConnection()</a>、<a class="el" href="connection_8cpp_source.html#l00058">setHostInfo()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">RemoteView::slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">RemoteView::slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">RemoteView::slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00334">SSHConnection::sshAuth()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="connection_8h_source.html">connection.h</a></li>
+<li><a class="el" href="connection_8cpp_source.html">connection.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

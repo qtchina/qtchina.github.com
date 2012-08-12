@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: taskqueue.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>taskqueue.cpp</h1><a href="taskqueue_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// taskqueue.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: </span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2010-03-22 11:45:59 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: taskqueue.cpp 599 2010-03-25 01:19:23Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;<a class="code" href="taskqueue_8h.html">taskqueue.h</a>&quot;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <a class="code" href="class_task_queue.html">TaskQueue</a> *<a class="code" href="class_task_queue.html#a38d391710214bce59e3c27887c6c74aa">TaskQueue::inst</a> = <span class="keyword">new</span> <a class="code" href="class_task_queue.html">TaskQueue</a>();
+<a name="l00013"></a><a class="code" href="class_task_queue.html#adf9fba638835a9229a5aa9d233b390f7">00013</a> <a class="code" href="class_task_queue.html#adf9fba638835a9229a5aa9d233b390f7">TaskQueue::TaskQueue</a>(QObject *parent)
+<a name="l00014"></a>00014     : QObject(parent), inited(false)
+<a name="l00015"></a>00015 {
+<a name="l00016"></a>00016 }
+<a name="l00017"></a>00017 
+<a name="l00018"></a><a class="code" href="class_task_queue.html#a80e3df38cc5af6574d5b3fa44726caca">00018</a> <a class="code" href="class_task_queue.html#a80e3df38cc5af6574d5b3fa44726caca">TaskQueue::~TaskQueue</a>()
+<a name="l00019"></a>00019 {
+<a name="l00020"></a>00020     this-&gt;<a class="code" href="class_task_queue.html#a96e86cc818f9cafd56363590010955b4">finalize</a>();
+<a name="l00021"></a>00021 }
+<a name="l00022"></a>00022 
+<a name="l00023"></a><a class="code" href="class_task_queue.html#a5b7d95e8ab91cfb389b4d3a8b60ed8f3">00023</a> <a class="code" href="class_task_queue.html">TaskQueue</a> *<a class="code" href="class_task_queue.html#a5b7d95e8ab91cfb389b4d3a8b60ed8f3">TaskQueue::instance</a>()
+<a name="l00024"></a>00024 {
+<a name="l00025"></a>00025     <a class="code" href="class_task_queue.html">TaskQueue</a> *q = TaskQueue::inst;
+<a name="l00026"></a>00026     <span class="keywordflow">if</span> (!q-&gt;<a class="code" href="class_task_queue.html#a67f1378ad08e24cc1768749d7d5fc6f2">inited</a>) {
+<a name="l00027"></a>00027         q-&gt;<a class="code" href="class_task_queue.html#a71f88e4f3b5727234a4a0aacd442f337">init</a>();
+<a name="l00028"></a>00028         q-&gt;<a class="code" href="class_task_queue.html#a67f1378ad08e24cc1768749d7d5fc6f2">inited</a> = <span class="keyword">true</span>;
+<a name="l00029"></a>00029     }
+<a name="l00030"></a>00030     <span class="keywordflow">return</span> q;
+<a name="l00031"></a>00031 }
+<a name="l00032"></a>00032 
+<a name="l00033"></a><a class="code" href="class_task_queue.html#a71f88e4f3b5727234a4a0aacd442f337">00033</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a71f88e4f3b5727234a4a0aacd442f337">TaskQueue::init</a>()
+<a name="l00034"></a>00034 {
+<a name="l00035"></a>00035     <span class="keywordtype">int</span> rv = sqlite3_open_v2(<span class="stringliteral">&quot;tobememory&quot;</span>, &amp;this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>, 
+<a name="l00036"></a>00036                              SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_SHAREDCACHE,
+<a name="l00037"></a>00037                              NULL);
+<a name="l00038"></a>00038     <span class="keywordflow">if</span> (rv != SQLITE_OK) {
+<a name="l00039"></a>00039         qDebug()&lt;&lt;<span class="stringliteral">&quot;Sqlite error:&quot;</span>&lt;&lt;rv&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt;sqlite3_errmsg(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00040"></a>00040         sqlite3_close(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00041"></a>00041         this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a> = NULL;
+<a name="l00042"></a>00042     }
+<a name="l00043"></a>00043     Q_ASSERT(rv == SQLITE_OK);
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045     <span class="comment">// 创建表，</span>
+<a name="l00046"></a>00046     <span class="keywordtype">char</span> * createTable = 
+<a name="l00047"></a>00047         <span class="stringliteral">&quot; CREATE TABLE IF NOT EXISTS task_queue (&quot;</span>
+<a name="l00048"></a>00048         <span class="stringliteral">&quot;  id INTEGER PRIMARY KEY,&quot;</span>
+<a name="l00049"></a>00049         <span class="stringliteral">&quot;  file_name VARCHAR(128),&quot;</span>
+<a name="l00050"></a>00050         <span class="stringliteral">&quot;  dest_path VARCHAR(256),&quot;</span>
+<a name="l00051"></a>00051         <span class="stringliteral">&quot;  file_size UNSIGNED BIG INT,&quot;</span>
+<a name="l00052"></a>00052         <span class="stringliteral">&quot;  got_size  UNSIGNED BIG INT,&quot;</span>
+<a name="l00053"></a>00053         <span class="stringliteral">&quot;  got_percent INT2,&quot;</span>
+<a name="l00054"></a>00054         <span class="stringliteral">&quot;  eclapsed_time VARCHAR(10),&quot;</span>
+<a name="l00055"></a>00055         <span class="stringliteral">&quot;  left_time VARCHAR(10),&quot;</span>
+<a name="l00056"></a>00056         <span class="stringliteral">&quot;  speed VARCHAR(10),&quot;</span>
+<a name="l00057"></a>00057         <span class="stringliteral">&quot;  status VARCHAR(10),&quot;</span>
+<a name="l00058"></a>00058         <span class="stringliteral">&quot;  start_time VARCHAR(16),&quot;</span>
+<a name="l00059"></a>00059         <span class="stringliteral">&quot;  finish_time VARCHAR(16)&quot;</span>
+<a name="l00060"></a>00060         <span class="stringliteral">&quot;); DELETE FROM task_queue WHERE 1;&quot;</span>;
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062     rv = sqlite3_exec(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>, createTable, NULL, NULL, NULL);
+<a name="l00063"></a>00063     <span class="keywordflow">if</span> (rv != SQLITE_OK) {
+<a name="l00064"></a>00064         qDebug()&lt;&lt;<span class="stringliteral">&quot;Sqlite error:&quot;</span>&lt;&lt;rv&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt;sqlite3_errmsg(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00065"></a>00065     }
+<a name="l00066"></a>00066     Q_ASSERT(rv == SQLITE_OK);
+<a name="l00067"></a>00067 }
+<a name="l00068"></a>00068 
+<a name="l00069"></a><a class="code" href="class_task_queue.html#a96e86cc818f9cafd56363590010955b4">00069</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a96e86cc818f9cafd56363590010955b4">TaskQueue::finalize</a>()
+<a name="l00070"></a>00070 {
+<a name="l00071"></a>00071     <span class="keywordtype">int</span> rv = sqlite3_close(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00072"></a>00072     <span class="keywordflow">if</span> (rv != SQLITE_OK) {
+<a name="l00073"></a>00073         qDebug()&lt;&lt;<span class="stringliteral">&quot;Sqlite error:&quot;</span>&lt;&lt;rv&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt;sqlite3_errmsg(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00074"></a>00074     }
+<a name="l00075"></a>00075     Q_ASSERT(rv == SQLITE_OK);
+<a name="l00076"></a>00076 }
+<a name="l00077"></a>00077 
+<a name="l00078"></a><a class="code" href="class_task_queue.html#a89e088852c3f96d64aa2b7d68ee54fe8">00078</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a89e088852c3f96d64aa2b7d68ee54fe8">TaskQueue::slot_set_transfer_percent</a>(<span class="keywordtype">int</span> percent, <span class="keywordtype">int</span> total_transfered, <span class="keywordtype">int</span> transfer_delta)
+<a name="l00079"></a>00079 {
+<a name="l00080"></a>00080     
+<a name="l00081"></a>00081 }
+<a name="l00082"></a><a class="code" href="class_task_queue.html#a849e9e90f62a593f07a6daa090af37f7">00082</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a849e9e90f62a593f07a6daa090af37f7">TaskQueue::slot_transfer_thread_finished</a>()
+<a name="l00083"></a>00083 {
+<a name="l00084"></a>00084 }
+<a name="l00085"></a><a class="code" href="class_task_queue.html#a477e3827f530037878eb8692cb50f85a">00085</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a477e3827f530037878eb8692cb50f85a">TaskQueue::slot_new_file_transfer_started</a>(QString new_file_name)
+<a name="l00086"></a>00086 {
+<a name="l00087"></a>00087     <span class="keywordtype">char</span> *preSql = <span class="stringliteral">&quot;INSERT INTO task_queue (id, file_name, dest_path, start_time) VALUES (NULL, &#39;%s&#39;, &#39;%s&#39;, &#39;%s&#39;);&quot;</span>;
+<a name="l00088"></a>00088     sqlite3_stmt *pStmt = NULL;
+<a name="l00089"></a>00089     <span class="keywordtype">char</span> sqlBuff[1024] = {0};
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091     sprintf(sqlBuff, preSql, QFileInfo(new_file_name).baseName().toAscii().data(),
+<a name="l00092"></a>00092             new_file_name.toAscii().data(),
+<a name="l00093"></a>00093             QDateTime::currentDateTime().toString().toAscii().data());
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095     qDebug()&lt;&lt;<span class="stringliteral">&quot;SQL:&quot;</span>&lt;&lt;sqlBuff;
+<a name="l00096"></a>00096     <span class="keywordtype">int</span> rv = sqlite3_exec(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>, sqlBuff, 0, 0, 0);
+<a name="l00097"></a>00097     <span class="keywordflow">if</span> (rv != SQLITE_OK) {
+<a name="l00098"></a>00098         qDebug()&lt;&lt;<span class="stringliteral">&quot;Sqlite error:&quot;</span>&lt;&lt;rv&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt;sqlite3_errmsg(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00099"></a>00099     }
+<a name="l00100"></a>00100     Q_ASSERT(rv == SQLITE_OK);
+<a name="l00101"></a>00101     qDebug()&lt;&lt;<span class="stringliteral">&quot; rowid: &quot;</span>&lt;&lt;sqlite3_last_insert_rowid(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>);
+<a name="l00102"></a>00102     emit this-&gt;<a class="code" href="class_task_queue.html#a9875f0934fef8b67224827a1949b6f12">insertRow</a>(sqlite3_last_insert_rowid(this-&gt;<a class="code" href="class_task_queue.html#ae2babefacbcaa5f81a84a35b497ac1a3">pDB</a>)-1);
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104     <span class="comment">// int rv = sqlite3_exec(this-&gt;pDB, &quot;BEGIN TRANSACTION;&quot;, 0, 0, 0);</span>
+<a name="l00105"></a>00105     <span class="comment">// rv = sqlite3_prepare_v2(this-&gt;pDB, preSql, -1, &amp;pStmt, NULL);</span>
+<a name="l00106"></a>00106     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00107"></a>00107     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00108"></a>00108     <span class="comment">// }</span>
+<a name="l00109"></a>00109     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00110"></a>00110     
+<a name="l00111"></a>00111     <span class="comment">// rv = sqlite3_bind_text(pStmt, 1, &quot;abcd&quot;, //QFileInfo(new_file_name).baseName().toAscii().data(),</span>
+<a name="l00112"></a>00112     <span class="comment">//                        4, // QFileInfo(new_file_name).baseName().length(),</span>
+<a name="l00113"></a>00113     <span class="comment">//                        NULL);</span>
+<a name="l00114"></a>00114     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00115"></a>00115     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00116"></a>00116     <span class="comment">// }</span>
+<a name="l00117"></a>00117     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119     <span class="comment">// rv = sqlite3_bind_text(pStmt, 2, &quot;abcde&quot;, // new_file_name.toAscii().data(),</span>
+<a name="l00120"></a>00120     <span class="comment">//                        5,// new_file_name.length(), </span>
+<a name="l00121"></a>00121     <span class="comment">//                        NULL);</span>
+<a name="l00122"></a>00122     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00123"></a>00123     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00124"></a>00124     <span class="comment">// }</span>
+<a name="l00125"></a>00125     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127     <span class="comment">// rv = sqlite3_bind_text(pStmt, 3, &quot;else&quot;, //QDateTime::currentDateTime().toString().toAscii().data(),</span>
+<a name="l00128"></a>00128     <span class="comment">//                        4, // QDateTime::currentDateTime().toString().length(), </span>
+<a name="l00129"></a>00129     <span class="comment">//                        NULL);</span>
+<a name="l00130"></a>00130     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00131"></a>00131     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00132"></a>00132     <span class="comment">// }</span>
+<a name="l00133"></a>00133     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135     <span class="comment">// rv = sqlite3_step(pStmt);</span>
+<a name="l00136"></a>00136     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00137"></a>00137     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00138"></a>00138     <span class="comment">// }</span>
+<a name="l00139"></a>00139     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141     <span class="comment">// preSql = (char*)sqlite3_sql(pStmt);</span>
+<a name="l00142"></a>00142     <span class="comment">// qDebug()&lt;&lt;&quot;Stmt SQL: &quot;&lt;&lt;preSql&lt;&lt;&quot; rowid: &quot;&lt;&lt;sqlite3_last_insert_rowid(this-&gt;pDB);</span>
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144     <span class="comment">// {</span>
+<a name="l00145"></a>00145     <span class="comment">//     rv = sqlite3_reset(pStmt);</span>
+<a name="l00146"></a>00146     <span class="comment">//     if (rv != SQLITE_OK) {</span>
+<a name="l00147"></a>00147     <span class="comment">//         qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00148"></a>00148     <span class="comment">//     }</span>
+<a name="l00149"></a>00149     <span class="comment">//     Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00150"></a>00150     <span class="comment">// }</span>
+<a name="l00151"></a>00151 
+<a name="l00152"></a>00152     <span class="comment">// rv = sqlite3_finalize(pStmt);</span>
+<a name="l00153"></a>00153     <span class="comment">// if (rv != SQLITE_OK) {</span>
+<a name="l00154"></a>00154     <span class="comment">//     qDebug()&lt;&lt;&quot;Sqlite error:&quot;&lt;&lt;rv&lt;&lt;&quot;:&quot;&lt;&lt;sqlite3_errmsg(this-&gt;pDB);</span>
+<a name="l00155"></a>00155     <span class="comment">// }</span>
+<a name="l00156"></a>00156     <span class="comment">// Q_ASSERT(rv == SQLITE_OK);</span>
+<a name="l00157"></a>00157 
+<a name="l00158"></a>00158     <span class="comment">// rv = sqlite3_exec(this-&gt;pDB, &quot;COMMIT TRANSACTION;&quot;, 0, 0, 0);</span>
+<a name="l00159"></a>00159 }
+<a name="l00160"></a>00160 
+<a name="l00161"></a><a class="code" href="class_task_queue.html#a5e6f185b9831e4dd45fb8686720d92fd">00161</a> <span class="keywordtype">void</span> <a class="code" href="class_task_queue.html#a5e6f185b9831e4dd45fb8686720d92fd">TaskQueue::slot_transfer_got_file_size</a>(<span class="keywordtype">int</span> size)
+<a name="l00162"></a>00162 {
+<a name="l00163"></a>00163 }
+<a name="l00164"></a>00164 
+<a name="l00165"></a>00165 
+<a name="l00166"></a>00166 
+<a name="l00167"></a>00167 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

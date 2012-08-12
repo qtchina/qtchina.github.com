@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sftpdirmodel.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sftpdirmodel.h</h1><a href="sftpdirmodel_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// sftpdirmodel.h --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2009-07-27 09:20:38 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: sftpdirmodel.h 455 2009-08-29 09:23:35Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;QFileIconProvider&gt;</span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a><a class="code" href="class_sftp_dir_model.html">00014</a> <span class="keyword">class </span><a class="code" href="class_sftp_dir_model.html">SftpDirModel</a> : <span class="keyword">public</span> QAbstractItemModel
+<a name="l00015"></a>00015 {
+<a name="l00016"></a>00016     Q_OBJECT;
+<a name="l00017"></a>00017 <span class="keyword">public</span>:
+<a name="l00018"></a>00018     <a class="code" href="class_sftp_dir_model.html#af61eedbc058effdf2e41316c61e01590">SftpDirModel</a>(QObject *parent = 0);
+<a name="l00019"></a>00019     <a class="code" href="class_sftp_dir_model.html#ae27c57bb88e71b3eb02d940ade601465">~SftpDirModel</a>();
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021     <span class="comment">// QModelIndex index(int row, int column, const QModelIndex &amp;parent = QModelIndex()) const;</span>
+<a name="l00022"></a>00022     <span class="comment">// QModelIndex parent(const QModelIndex &amp;child) const;</span>
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024     <span class="comment">// int rowCount(const QModelIndex &amp;parent = QModelIndex()) const;</span>
+<a name="l00025"></a>00025     <span class="comment">// int columnCount(const QModelIndex &amp;parent = QModelIndex()) const;</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027     <span class="comment">// QVariant data(const QModelIndex &amp;index, int role = Qt::DisplayRole) const;</span>
+<a name="l00028"></a>00028     <span class="comment">// bool setData(const QModelIndex &amp;index, const QVariant &amp;value, int role = Qt::EditRole);</span>
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030     <span class="comment">// QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;</span>
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032     <span class="comment">// bool hasChildren(const QModelIndex &amp;index = QModelIndex()) const;</span>
+<a name="l00033"></a>00033     <span class="comment">// Qt::ItemFlags flags(const QModelIndex &amp;index) const;</span>
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035     <span class="comment">// void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);</span>
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037     <span class="comment">// QStringList mimeTypes() const;</span>
+<a name="l00038"></a>00038     <span class="comment">// QMimeData *mimeData(const QModelIndexList &amp;indexes) const;</span>
+<a name="l00039"></a>00039     <span class="comment">// bool dropMimeData(const QMimeData *data, Qt::DropAction action,</span>
+<a name="l00040"></a>00040     <span class="comment">//                   int row, int column, const QModelIndex &amp;parent);</span>
+<a name="l00041"></a>00041     <span class="comment">// Qt::DropActions supportedDropActions() const;</span>
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043     <span class="comment">// SftpDirModel specific API</span>
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045 };
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

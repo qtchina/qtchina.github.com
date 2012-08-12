@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: kuftplib.h文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>kuftplib.h文件参考</h1><code>#include &lt;sys/time.h&gt;</code><br/>
+<code>#include &lt;unistd.h&gt;</code><br/>
+<code>#include &lt;openssl/ssl.h&gt;</code><br/>
+
+<p><a href="kuftplib_8h_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>组合类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structftphandle.html">ftphandle</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ku_ftp_lib.html">KuFtpLib</a></td></tr>
+<tr><td colspan="2"><h2>宏定义</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a>&nbsp;&nbsp;&nbsp;__off64_t</td></tr>
+<tr><td colspan="2"><h2>类型定义</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef int(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a> )(off64_t xfered, void *arg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef int(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a> )(void *arg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a> )(char *str, void *arg, int out)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef bool(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a> )(void *arg, X509 *cert)</td></tr>
+</table>
+<hr/><h2>宏定义文档</h2>
+<a class="anchor" id="aab4076a15253ffe4c39cdc85a9ed812a"></a><!-- doxytag: member="kuftplib.h::off64_t" ref="aab4076a15253ffe4c39cdc85a9ed812a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define off64_t&nbsp;&nbsp;&nbsp;__off64_t</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00039">39</a>行定义。</p>
+
+<p>参考自 <a class="el" href="kuftplib_8cpp_source.html#l01707">KuFtpLib::FtpXfer()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>类型定义文档</h2>
+<a class="anchor" id="a184082f86aa56aaa084623d1e90f068d"></a><!-- doxytag: member="kuftplib.h::FtpCallbackCert" ref="a184082f86aa56aaa084623d1e90f068d" args=")(void *arg, X509 *cert)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef bool(* <a class="el" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a>)(void *arg, X509 *cert)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00046">46</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a4e5444202e0d9df4032cbdf746c7c27d"></a><!-- doxytag: member="kuftplib.h::FtpCallbackIdle" ref="a4e5444202e0d9df4032cbdf746c7c27d" args=")(void *arg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* <a class="el" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a>)(void *arg)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00044">44</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a39ae77543e8b929d3f41716430d58a7a"></a><!-- doxytag: member="kuftplib.h::FtpCallbackLog" ref="a39ae77543e8b929d3f41716430d58a7a" args=")(char *str, void *arg, int out)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* <a class="el" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a>)(char *str, void *arg, int out)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00045">45</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a54a04f09763f04d9430983cf8f13d24b"></a><!-- doxytag: member="kuftplib.h::FtpCallbackXfer" ref="a54a04f09763f04d9430983cf8f13d24b" args=")(off64_t xfered, void *arg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* <a class="el" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a>)(off64_t xfered, void *arg)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="kuftplib_8h_source.html">kuftplib.h</a>第<a class="el" href="kuftplib_8h_source.html#l00043">43</a>行定义。</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

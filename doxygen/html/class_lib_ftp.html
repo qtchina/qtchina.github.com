@@ -1,0 +1,1528 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: LibFtp类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>LibFtp类参考</h1><!-- doxytag: class="LibFtp" -->
+<p><code>#include &lt;<a class="el" href="libftp_8h_source.html">libftp.h</a>&gt;</code></p>
+
+<p><a href="class_lib_ftp-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea973fa2bde6202733573c9facde0b8862">TYPE_MIN</a> =  0, 
+<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057eac429bb51e206484b5417a2fc6c6d5d84">TYPE_ASCII</a>, 
+<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057eac1061aed98171cc02427d59b5dee2ced">TYPE_EBCID</a>, 
+<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea360a43b4365fb698f9fb52efcb8b7498">TYPE_BIN</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea3adcff191ddbe2a96b20cb91cbcb1afe">TYPE_IMAGE</a>, 
+<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea1b009c99aa1c77b696c791828ac182e3">TYPE_LOCAL_BYTE</a>, 
+<a class="el" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea0317c625a2cb0808017ab9d0cacce464">TYPE_MAX</a>
+<br/>
+ }</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a1b1c3380b658d39871f1d8a96af118e9">LibFtp</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ab8d74c18deb861d55c0791308f754639">~LibFtp</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a2a5a18caccdad4886157c4039aa939a2">connect</a> (const QString host, unsigned short port=21)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a6c7b2e7ff1b7bd240e97878960d0e94d">login</a> (const QString &amp;user=QString(), const QString &amp;password=QString())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a3702bfa3262b65fcc114d03112e632cf">logout</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a86e10a4c18a6e1555d6a1717fb16e5bc">connectDataChannel</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a3b8d5c72e6bab4964f6d521f2c40b5e3">closeDataChannel</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a2944e7a0d9ac005a59069d5a9805ce5e">list</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a54b79158a2a73685d09b6266e051f6dc">lista</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a3aaaaa75e4bbf7712507e591ff867ecf">nlist</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a500c09744e0350a80350dd9269ed01c8">mlst</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a79606e7b173ca52c579952d5b35dd465">pwd</a> (QString &amp;path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a11a2d7283c0ece611a1c2a05fe55a691">mkdir</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a1d714e73c057dbec04da0a86bd75d9e7">rmdir</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#abea6be9423770fd41dd6c24158ddc496">chdir</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a8401355ddf1bc0d9081bbecc722bb05e">put</a> (const QString fileName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae3e89d61394e5410b80155538a806d2d">putNoWaitResponse</a> (const QString fileName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a184f8c165441ffd2d8cf809aacbce32c">get</a> (const QString fileName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a0aea008a4d477d83d0ddaacccfde9c9a">getNoWaitResponse</a> (const QString fileName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a2443168af3418aa429315dfe027e8224">remove</a> (const QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ab03a221c4d88e2519bbecac826bb3581">rename</a> (const QString src, const QString dest)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a742822415dcf04adf1434f872d601db0">passive</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#aa1c3d143f2acf8e6e42c11255f4eb83b">rein</a> (const QString &amp;user=QString(), const QString &amp;password=QString())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ab8af1b603cb6f9684469f5c173ea4e4e">type</a> (int type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a47dfb7a6f1e060c1bbdc5ad8bab5fb1e">noop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#af9e17c150939dde1df0a7719eb7328d7">system</a> (QString &amp;type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a178474742ca671b2fb1f96910aa6a09c">stat</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a> (const QString hostip, const unsigned short port)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#aeef69e405379d0eed14c43ee994fcd00">portNoWaitResponse</a> (const QString hostip, const unsigned short port)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a76ab9b702c11dcab680030b2fef0b4e3">size</a> (QString path, quint64 &amp;siz)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned short&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a8cf63a7677c4adf83f8572b362390b42">pasvPeer</a> (QString &amp;hostip)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a05e935dc983cb1c02c8cd060a5ac8c48">swallowResponse</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a504ec6cf4342307999980e3bde30986f">waitForCtrlResponse</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QUrlInfo &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a4776347f3686cc380c356636697680a3">getDirList</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#af534dcf5e00c9ec12db5f1773a11eb6b">getServerBanner</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTcpSocket *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#afdbd69fb55b4bf4854eff45b2b2fade6">getDataSocket</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a2cb70c0933fad6f86cee3caeeb208c74">errorString</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a92099a427264cde6f723beed0d3888ba">setEncoding</a> (QString <a class="el" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">encoding</a>)</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae17935d9839af65c75a557cfd5c51e56">onDataSockConnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a47e402b8454c4a7ab412a28d0c84a05b">onDataSockDisconnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae5f9283dab87fdf796836306763721bd">onDataSockError</a> (QAbstractSocket::SocketError socketError)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a5f678e6d081350e0733e00e4a43dae8e">onDataSockStateChanged</a> (QAbstractSocket::SocketState socketState)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ab609ef38cc57913d510257a29699bf65">parsePasvPort</a> (QString &amp;host, unsigned short &amp;port)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QByteArray&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a29f485e623db8b28fee05a8f2a8f9bd2">readAll</a> (QTcpSocket *sock)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QByteArray&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a1c875c9ef986d20cd2d55a3503aa1335">readAllByEndSymbol</a> (QTcpSocket *sock)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae570c2aa77744e1af377fd7b7c6e72c1">parseDir</a> (const QByteArray &amp;buffer, const QString &amp;userName, QUrlInfo *info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ab7b9dfd352d935aaa4eab16d4967eb47">setError</a> (int okno, QString msg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">private  <a href="#ab7b9dfd352d935aaa4eab16d4967eb47"></a><br/></td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QSslSocket *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae9d1554fba1ed967f8be3f1e0871a0c5">qsock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QSslSocket *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a4c8613e0603731ba5b85ee65895e4e1c">qdsock</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a5e4d3a04a315540f12f4eae0a99ea84c">pasvHost</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned short&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#afb4d7f73bb206a16ea562c232bd3577a">pasvPort</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QUrlInfo &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#ae95acb1db9fdeabfef2c5b131a24ec66">dirList</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a9fd79ee810aa59c7dd11b367684aba6e">servBanner</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a87158b686e1ae0746e26ed25f08136fb">errnum</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a159eb93054e836ace2bf565e0a0d753a">errmsg</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">encoding</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QTextCodec *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a587a7f9ffe331dce15febe32b64f75d6">codec</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lib_ftp.html#a766a0a558629f648c962872e588a59a7">useTLS</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00016">16</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="afb044fc326403c0137c74a4be25e057e"></a><!-- doxytag: member="LibFtp::@4" ref="afb044fc326403c0137c74a4be25e057e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057ea973fa2bde6202733573c9facde0b8862"></a><!-- doxytag: member="TYPE_MIN" ref="afb044fc326403c0137c74a4be25e057ea973fa2bde6202733573c9facde0b8862" args="" -->TYPE_MIN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057eac429bb51e206484b5417a2fc6c6d5d84"></a><!-- doxytag: member="TYPE_ASCII" ref="afb044fc326403c0137c74a4be25e057eac429bb51e206484b5417a2fc6c6d5d84" args="" -->TYPE_ASCII</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057eac1061aed98171cc02427d59b5dee2ced"></a><!-- doxytag: member="TYPE_EBCID" ref="afb044fc326403c0137c74a4be25e057eac1061aed98171cc02427d59b5dee2ced" args="" -->TYPE_EBCID</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057ea360a43b4365fb698f9fb52efcb8b7498"></a><!-- doxytag: member="TYPE_BIN" ref="afb044fc326403c0137c74a4be25e057ea360a43b4365fb698f9fb52efcb8b7498" args="" -->TYPE_BIN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057ea3adcff191ddbe2a96b20cb91cbcb1afe"></a><!-- doxytag: member="TYPE_IMAGE" ref="afb044fc326403c0137c74a4be25e057ea3adcff191ddbe2a96b20cb91cbcb1afe" args="" -->TYPE_IMAGE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057ea1b009c99aa1c77b696c791828ac182e3"></a><!-- doxytag: member="TYPE_LOCAL_BYTE" ref="afb044fc326403c0137c74a4be25e057ea1b009c99aa1c77b696c791828ac182e3" args="" -->TYPE_LOCAL_BYTE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afb044fc326403c0137c74a4be25e057ea0317c625a2cb0808017ab9d0cacce464"></a><!-- doxytag: member="TYPE_MAX" ref="afb044fc326403c0137c74a4be25e057ea0317c625a2cb0808017ab9d0cacce464" args="" -->TYPE_MAX</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00022">22</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a1b1c3380b658d39871f1d8a96af118e9"></a><!-- doxytag: member="LibFtp::LibFtp" ref="a1b1c3380b658d39871f1d8a96af118e9" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LibFtp::LibFtp </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00016">16</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00080">qdsock</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>、<a class="el" href="libftp_8cpp_source.html#l01442">setEncoding()</a>及<a class="el" href="libftp_8h_source.html#l00091">useTLS</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8d74c18deb861d55c0791308f754639"></a><!-- doxytag: member="LibFtp::~LibFtp" ref="ab8d74c18deb861d55c0791308f754639" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LibFtp::~LibFtp </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00025">25</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="abea6be9423770fd41dd6c24158ddc496"></a><!-- doxytag: member="LibFtp::chdir" ref="abea6be9423770fd41dd6c24158ddc496" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::chdir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00918">918</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00147">Transportor::isFTPDir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00125">FilePropertiesRetriveThread::run_ftp()</a>及<a class="el" href="transportor_8cpp_source.html#l01232">Transportor::setFTPCurrentDirByFullPath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b8d5c72e6bab4964f6d521f2c40b5e3"></a><!-- doxytag: member="LibFtp::closeDataChannel" ref="a3b8d5c72e6bab4964f6d521f2c40b5e3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::closeDataChannel </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00260">260</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00080">qdsock</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>、<a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2a5a18caccdad4886157c4039aa939a2"></a><!-- doxytag: member="LibFtp::connect" ref="a2a5a18caccdad4886157c4039aa939a2" args="(const QString host, unsigned short port=21)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::connect </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short&nbsp;</td>
+          <td class="paramname"> <em>port</em> = <code>21</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00028">28</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00088">errmsg</a>、<a class="el" href="libftp_8h_source.html#l00087">errnum</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>、<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>及<a class="el" href="libftp_8h_source.html#l00086">servBanner</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>及<a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a86e10a4c18a6e1555d6a1717fb16e5bc"></a><!-- doxytag: member="LibFtp::connectDataChannel" ref="a86e10a4c18a6e1555d6a1717fb16e5bc" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::connectDataChannel </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00205">205</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>、<a class="el" href="libftp_8cpp_source.html#l01526">onDataSockConnected()</a>、<a class="el" href="libftp_8cpp_source.html#l01531">onDataSockDisconnected()</a>、<a class="el" href="libftp_8cpp_source.html#l01535">onDataSockError()</a>、<a class="el" href="libftp_8cpp_source.html#l01540">onDataSockStateChanged()</a>、<a class="el" href="libftp_8h_source.html#l00083">pasvHost</a>、<a class="el" href="libftp_8h_source.html#l00084">pasvPort</a>、<a class="el" href="libftp_8h_source.html#l00080">qdsock</a>及<a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>、<a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2cb70c0933fad6f86cee3caeeb208c74"></a><!-- doxytag: member="LibFtp::errorString" ref="a2cb70c0933fad6f86cee3caeeb208c74" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString LibFtp::errorString </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01409">1409</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00088">errmsg</a>及<a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a184f8c165441ffd2d8cf809aacbce32c"></a><!-- doxytag: member="LibFtp::get" ref="a184f8c165441ffd2d8cf809aacbce32c" args="(const QString fileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::get </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01007">1007</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>及<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afdbd69fb55b4bf4854eff45b2b2fade6"></a><!-- doxytag: member="LibFtp::getDataSocket" ref="afdbd69fb55b4bf4854eff45b2b2fade6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTcpSocket * LibFtp::getDataSocket </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01372">1372</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00080">qdsock</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4776347f3686cc380c356636697680a3"></a><!-- doxytag: member="LibFtp::getDirList" ref="a4776347f3686cc380c356636697680a3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QUrlInfo &gt; LibFtp::getDirList </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00822">822</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00085">dirList</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00125">FilePropertiesRetriveThread::run_ftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0aea008a4d477d83d0ddaacccfde9c9a"></a><!-- doxytag: member="LibFtp::getNoWaitResponse" ref="a0aea008a4d477d83d0ddaacccfde9c9a" args="(const QString fileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::getNoWaitResponse </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01035">1035</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af534dcf5e00c9ec12db5f1773a11eb6b"></a><!-- doxytag: member="LibFtp::getServerBanner" ref="af534dcf5e00c9ec12db5f1773a11eb6b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString LibFtp::getServerBanner </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00826">826</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00086">servBanner</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2944e7a0d9ac005a59069d5a9805ce5e"></a><!-- doxytag: member="LibFtp::list" ref="a2944e7a0d9ac005a59069d5a9805ce5e" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::list </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00530">530</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00090">codec</a>、<a class="el" href="libftp_8h_source.html#l00085">dirList</a>、<a class="el" href="libftp_8cpp_source.html#l00419">parseDir()</a>、<a class="el" href="libftp_8h_source.html#l00080">qdsock</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01954">Transportor::run_FTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a54b79158a2a73685d09b6266e051f6dc"></a><!-- doxytag: member="LibFtp::lista" ref="a54b79158a2a73685d09b6266e051f6dc" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::lista </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00608">608</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00090">codec</a>、<a class="el" href="libftp_8h_source.html#l00085">dirList</a>、<a class="el" href="libftp_8cpp_source.html#l00419">parseDir()</a>、<a class="el" href="libftp_8h_source.html#l00080">qdsock</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>及<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6c7b2e7ff1b7bd240e97878960d0e94d"></a><!-- doxytag: member="LibFtp::login" ref="a6c7b2e7ff1b7bd240e97878960d0e94d" args="(const QString &amp;user=QString(), const QString &amp;password=QString())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::login </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>user</em> = <code>QString()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>password</em> = <code>QString()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00061">61</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>、<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>及<a class="el" href="libftp_8h_source.html#l00091">useTLS</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3702bfa3262b65fcc114d03112e632cf"></a><!-- doxytag: member="LibFtp::logout" ref="a3702bfa3262b65fcc114d03112e632cf" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::logout </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00177">177</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00061">FTPConnection::disconnect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a11a2d7283c0ece611a1c2a05fe55a691"></a><!-- doxytag: member="LibFtp::mkdir" ref="a11a2d7283c0ece611a1c2a05fe55a691" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::mkdir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00860">860</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00253">FTPDirRetriver::mkdir()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">Transportor::run_FTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01747">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a500c09744e0350a80350dd9269ed01c8"></a><!-- doxytag: member="LibFtp::mlst" ref="a500c09744e0350a80350dd9269ed01c8" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::mlst </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00688">688</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00085">dirList</a>、<a class="el" href="libftp_8cpp_source.html#l00447">parseMLSTLine()</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00125">FilePropertiesRetriveThread::run_ftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3aaaaa75e4bbf7712507e591ff867ecf"></a><!-- doxytag: member="LibFtp::nlist" ref="a3aaaaa75e4bbf7712507e591ff867ecf" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::nlist </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a47dfb7a6f1e060c1bbdc5ad8bab5fb1e"></a><!-- doxytag: member="LibFtp::noop" ref="a47dfb7a6f1e060c1bbdc5ad8bab5fb1e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::noop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01174">1174</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00084">FTPConnection::alivePing()</a>及<a class="el" href="ftpdirretriver_8cpp_source.html#l00432">FTPDirRetriver::keep_alive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae17935d9839af65c75a557cfd5c51e56"></a><!-- doxytag: member="LibFtp::onDataSockConnected" ref="ae17935d9839af65c75a557cfd5c51e56" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LibFtp::onDataSockConnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01526">1526</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a47e402b8454c4a7ab412a28d0c84a05b"></a><!-- doxytag: member="LibFtp::onDataSockDisconnected" ref="a47e402b8454c4a7ab412a28d0c84a05b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LibFtp::onDataSockDisconnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01531">1531</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae5f9283dab87fdf796836306763721bd"></a><!-- doxytag: member="LibFtp::onDataSockError" ref="ae5f9283dab87fdf796836306763721bd" args="(QAbstractSocket::SocketError socketError)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LibFtp::onDataSockError </td>
+          <td>(</td>
+          <td class="paramtype">QAbstractSocket::SocketError&nbsp;</td>
+          <td class="paramname"> <em>socketError</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01535">1535</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5f678e6d081350e0733e00e4a43dae8e"></a><!-- doxytag: member="LibFtp::onDataSockStateChanged" ref="a5f678e6d081350e0733e00e4a43dae8e" args="(QAbstractSocket::SocketState socketState)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LibFtp::onDataSockStateChanged </td>
+          <td>(</td>
+          <td class="paramtype">QAbstractSocket::SocketState&nbsp;</td>
+          <td class="paramname"> <em>socketState</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01540">1540</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae570c2aa77744e1af377fd7b7c6e72c1"></a><!-- doxytag: member="LibFtp::parseDir" ref="ae570c2aa77744e1af377fd7b7c6e72c1" args="(const QByteArray &amp;buffer, const QString &amp;userName, QUrlInfo *info)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LibFtp::parseDir </td>
+          <td>(</td>
+          <td class="paramtype">const QByteArray &amp;&nbsp;</td>
+          <td class="paramname"> <em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>userName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QUrlInfo *&nbsp;</td>
+          <td class="paramname"> <em>info</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00419">419</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00366">_q_parseDosDir()</a>及<a class="el" href="libftp_8cpp_source.html#l00281">_q_parseUnixDir()</a>.</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>及<a class="el" href="libftp_8cpp_source.html#l01231">stat()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab609ef38cc57913d510257a29699bf65"></a><!-- doxytag: member="LibFtp::parsePasvPort" ref="ab609ef38cc57913d510257a29699bf65" args="(QString &amp;host, unsigned short &amp;port)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::parsePasvPort </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short &amp;&nbsp;</td>
+          <td class="paramname"> <em>port</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a742822415dcf04adf1434f872d601db0"></a><!-- doxytag: member="LibFtp::passive" ref="a742822415dcf04adf1434f872d601db0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::passive </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00783">783</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00083">pasvHost</a>、<a class="el" href="libftp_8h_source.html#l00084">pasvPort</a>、<a class="el" href="libftp_8cpp_source.html#l01286">port()</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>、<a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8cf63a7677c4adf83f8572b362390b42"></a><!-- doxytag: member="LibFtp::pasvPeer" ref="a8cf63a7677c4adf83f8572b362390b42" args="(QString &amp;hostip)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short LibFtp::pasvPeer </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>hostip</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01377">1377</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00083">pasvHost</a>及<a class="el" href="libftp_8h_source.html#l00084">pasvPort</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac70981184e3ee0be152a547a1ac2eb49"></a><!-- doxytag: member="LibFtp::port" ref="ac70981184e3ee0be152a547a1ac2eb49" args="(const QString hostip, const unsigned short port)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::port </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>hostip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned short&nbsp;</td>
+          <td class="paramname"> <em>port</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01286">1286</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00783">passive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeef69e405379d0eed14c43ee994fcd00"></a><!-- doxytag: member="LibFtp::portNoWaitResponse" ref="aeef69e405379d0eed14c43ee994fcd00" args="(const QString hostip, const unsigned short port)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::portNoWaitResponse </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>hostip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned short&nbsp;</td>
+          <td class="paramname"> <em>port</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01320">1320</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8401355ddf1bc0d9081bbecc722bb05e"></a><!-- doxytag: member="LibFtp::put" ref="a8401355ddf1bc0d9081bbecc722bb05e" args="(const QString fileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::put </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00950">950</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00080">qdsock</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>、<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>及<a class="el" href="libftp_8cpp_source.html#l01419">setError()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3e89d61394e5410b80155538a806d2d"></a><!-- doxytag: member="LibFtp::putNoWaitResponse" ref="ae3e89d61394e5410b80155538a806d2d" args="(const QString fileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::putNoWaitResponse </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>fileName</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00990">990</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a79606e7b173ca52c579952d5b35dd465"></a><!-- doxytag: member="LibFtp::pwd" ref="a79606e7b173ca52c579952d5b35dd465" args="(QString &amp;path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::pwd </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00831">831</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>及<a class="el" href="transportor_8cpp_source.html#l01232">Transportor::setFTPCurrentDirByFullPath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29f485e623db8b28fee05a8f2a8f9bd2"></a><!-- doxytag: member="LibFtp::readAll" ref="a29f485e623db8b28fee05a8f2a8f9bd2" args="(QTcpSocket *sock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QByteArray LibFtp::readAll </td>
+          <td>(</td>
+          <td class="paramtype">QTcpSocket *&nbsp;</td>
+          <td class="paramname"> <em>sock</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01454">1454</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l01460">readAllByEndSymbol()</a>.</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00918">chdir()</a>、<a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>、<a class="el" href="libftp_8cpp_source.html#l01007">get()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>、<a class="el" href="libftp_8cpp_source.html#l00061">login()</a>、<a class="el" href="libftp_8cpp_source.html#l00177">logout()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">mkdir()</a>、<a class="el" href="libftp_8cpp_source.html#l00688">mlst()</a>、<a class="el" href="libftp_8cpp_source.html#l01174">noop()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">passive()</a>、<a class="el" href="libftp_8cpp_source.html#l01286">port()</a>、<a class="el" href="libftp_8cpp_source.html#l00950">put()</a>、<a class="el" href="libftp_8cpp_source.html#l00831">pwd()</a>、<a class="el" href="libftp_8cpp_source.html#l01054">remove()</a>、<a class="el" href="libftp_8cpp_source.html#l01086">rename()</a>、<a class="el" href="libftp_8cpp_source.html#l00887">rmdir()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">size()</a>、<a class="el" href="libftp_8cpp_source.html#l01231">stat()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">swallowResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l01202">system()</a>及<a class="el" href="libftp_8cpp_source.html#l01132">type()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1c875c9ef986d20cd2d55a3503aa1335"></a><!-- doxytag: member="LibFtp::readAllByEndSymbol" ref="a1c875c9ef986d20cd2d55a3503aa1335" args="(QTcpSocket *sock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QByteArray LibFtp::readAllByEndSymbol </td>
+          <td>(</td>
+          <td class="paramtype">QTcpSocket *&nbsp;</td>
+          <td class="paramname"> <em>sock</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01460">1460</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa1c3d143f2acf8e6e42c11255f4eb83b"></a><!-- doxytag: member="LibFtp::rein" ref="aa1c3d143f2acf8e6e42c11255f4eb83b" args="(const QString &amp;user=QString(), const QString &amp;password=QString())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::rein </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>user</em> = <code>QString()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>password</em> = <code>QString()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2443168af3418aa429315dfe027e8224"></a><!-- doxytag: member="LibFtp::remove" ref="a2443168af3418aa429315dfe027e8224" args="(const QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::remove </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01054">1054</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab03a221c4d88e2519bbecac826bb3581"></a><!-- doxytag: member="LibFtp::rename" ref="ab03a221c4d88e2519bbecac826bb3581" args="(const QString src, const QString dest)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::rename </td>
+          <td>(</td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString&nbsp;</td>
+          <td class="paramname"> <em>dest</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01086">1086</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00401">FTPDirRetriver::rename()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1d714e73c057dbec04da0a86bd75d9e7"></a><!-- doxytag: member="LibFtp::rmdir" ref="a1d714e73c057dbec04da0a86bd75d9e7" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::rmdir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l00887">887</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00336">FTPDirRetriver::rm_file_or_directory_recursively_ex()</a>及<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">FTPDirRetriver::rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a92099a427264cde6f723beed0d3888ba"></a><!-- doxytag: member="LibFtp::setEncoding" ref="a92099a427264cde6f723beed0d3888ba" args="(QString encoding)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::setEncoding </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>encoding</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01442">1442</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00090">codec</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00028">FTPConnection::connect()</a>、<a class="el" href="ftpview_8cpp_source.html#l00995">FTPView::encodingChanged()</a>及<a class="el" href="libftp_8cpp_source.html#l00016">LibFtp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab7b9dfd352d935aaa4eab16d4967eb47"></a><!-- doxytag: member="LibFtp::setError" ref="ab7b9dfd352d935aaa4eab16d4967eb47" args="(int okno, QString msg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LibFtp::setError </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>okno</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>msg</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>private </p>
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01419">1419</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00088">errmsg</a>及<a class="el" href="libftp_8h_source.html#l00087">errnum</a>.</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00950">put()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a76ab9b702c11dcab680030b2fef0b4e3"></a><!-- doxytag: member="LibFtp::size" ref="a76ab9b702c11dcab680030b2fef0b4e3" args="(QString path, quint64 &amp;siz)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::size </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">quint64 &amp;&nbsp;</td>
+          <td class="paramname"> <em>siz</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01343">1343</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>及<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a178474742ca671b2fb1f96910aa6a09c"></a><!-- doxytag: member="LibFtp::stat" ref="a178474742ca671b2fb1f96910aa6a09c" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::stat </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01231">1231</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00085">dirList</a>、<a class="el" href="libftp_8cpp_source.html#l00419">parseDir()</a>、<a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a05e935dc983cb1c02c8cd060a5ac8c48"></a><!-- doxytag: member="LibFtp::swallowResponse" ref="a05e935dc983cb1c02c8cd060a5ac8c48" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::swallowResponse </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01383">1383</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af9e17c150939dde1df0a7719eb7328d7"></a><!-- doxytag: member="LibFtp::system" ref="af9e17c150939dde1df0a7719eb7328d7" args="(QString &amp;type)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::system </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>type</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01202">1202</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>及<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpconnection_8cpp_source.html#l00090">FTPConnection::codecForEnv()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8af1b603cb6f9684469f5c173ea4e4e"></a><!-- doxytag: member="LibFtp::type" ref="ab8af1b603cb6f9684469f5c173ea4e4e" args="(int type)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::type </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>type</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01132">1132</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>、<a class="el" href="libftp_8cpp_source.html#l01454">readAll()</a>、<a class="el" href="libftp_8h_source.html#l00022">TYPE_ASCII</a>、<a class="el" href="libftp_8h_source.html#l00022">TYPE_BIN</a>、<a class="el" href="libftp_8h_source.html#l00022">TYPE_EBCID</a>、<a class="el" href="libftp_8h_source.html#l00023">TYPE_IMAGE</a>及<a class="el" href="libftp_8h_source.html#l00023">TYPE_LOCAL_BYTE</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">Transportor::run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">Transportor::run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">Transportor::run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">Transportor::run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">Transportor::run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a504ec6cf4342307999980e3bde30986f"></a><!-- doxytag: member="LibFtp::waitForCtrlResponse" ref="a504ec6cf4342307999980e3bde30986f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LibFtp::waitForCtrlResponse </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8cpp_source.html">libftp.cpp</a>第<a class="el" href="libftp_8cpp_source.html#l01396">1396</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8h_source.html#l00079">qsock</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01669">Transportor::run_FTP_to_FTP_fxp()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a587a7f9ffe331dce15febe32b64f75d6"></a><!-- doxytag: member="LibFtp::codec" ref="a587a7f9ffe331dce15febe32b64f75d6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTextCodec* <a class="el" href="class_lib_ftp.html#a587a7f9ffe331dce15febe32b64f75d6">LibFtp::codec</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00090">90</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>及<a class="el" href="libftp_8cpp_source.html#l01442">setEncoding()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae95acb1db9fdeabfef2c5b131a24ec66"></a><!-- doxytag: member="LibFtp::dirList" ref="ae95acb1db9fdeabfef2c5b131a24ec66" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QUrlInfo&gt; <a class="el" href="class_lib_ftp.html#ae95acb1db9fdeabfef2c5b131a24ec66">LibFtp::dirList</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00085">85</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00822">getDirList()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>、<a class="el" href="libftp_8cpp_source.html#l00688">mlst()</a>及<a class="el" href="libftp_8cpp_source.html#l01231">stat()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97f40509a1f07db5e61fadb2d84dbe6b"></a><!-- doxytag: member="LibFtp::encoding" ref="a97f40509a1f07db5e61fadb2d84dbe6b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">LibFtp::encoding</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00089">89</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a159eb93054e836ace2bf565e0a0d753a"></a><!-- doxytag: member="LibFtp::errmsg" ref="a159eb93054e836ace2bf565e0a0d753a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_lib_ftp.html#a159eb93054e836ace2bf565e0a0d753a">LibFtp::errmsg</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00088">88</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>、<a class="el" href="libftp_8cpp_source.html#l01409">errorString()</a>及<a class="el" href="libftp_8cpp_source.html#l01419">setError()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a87158b686e1ae0746e26ed25f08136fb"></a><!-- doxytag: member="LibFtp::errnum" ref="a87158b686e1ae0746e26ed25f08136fb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_lib_ftp.html#a87158b686e1ae0746e26ed25f08136fb">LibFtp::errnum</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00087">87</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>及<a class="el" href="libftp_8cpp_source.html#l01419">setError()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5e4d3a04a315540f12f4eae0a99ea84c"></a><!-- doxytag: member="LibFtp::pasvHost" ref="a5e4d3a04a315540f12f4eae0a99ea84c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_lib_ftp.html#a5e4d3a04a315540f12f4eae0a99ea84c">LibFtp::pasvHost</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00083">83</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">passive()</a>及<a class="el" href="libftp_8cpp_source.html#l01377">pasvPeer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb4d7f73bb206a16ea562c232bd3577a"></a><!-- doxytag: member="LibFtp::pasvPort" ref="afb4d7f73bb206a16ea562c232bd3577a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned short <a class="el" href="class_lib_ftp.html#afb4d7f73bb206a16ea562c232bd3577a">LibFtp::pasvPort</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00084">84</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">passive()</a>及<a class="el" href="libftp_8cpp_source.html#l01377">pasvPeer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4c8613e0603731ba5b85ee65895e4e1c"></a><!-- doxytag: member="LibFtp::qdsock" ref="a4c8613e0603731ba5b85ee65895e4e1c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSslSocket* <a class="el" href="class_lib_ftp.html#a4c8613e0603731ba5b85ee65895e4e1c">LibFtp::qdsock</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00080">80</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00260">closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l01372">getDataSocket()</a>、<a class="el" href="libftp_8cpp_source.html#l00016">LibFtp()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>及<a class="el" href="libftp_8cpp_source.html#l00950">put()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae9d1554fba1ed967f8be3f1e0871a0c5"></a><!-- doxytag: member="LibFtp::qsock" ref="ae9d1554fba1ed967f8be3f1e0871a0c5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSslSocket* <a class="el" href="class_lib_ftp.html#ae9d1554fba1ed967f8be3f1e0871a0c5">LibFtp::qsock</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00079">79</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00918">chdir()</a>、<a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">connectDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l01409">errorString()</a>、<a class="el" href="libftp_8cpp_source.html#l01007">get()</a>、<a class="el" href="libftp_8cpp_source.html#l01035">getNoWaitResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l00016">LibFtp()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">list()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">lista()</a>、<a class="el" href="libftp_8cpp_source.html#l00061">login()</a>、<a class="el" href="libftp_8cpp_source.html#l00177">logout()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">mkdir()</a>、<a class="el" href="libftp_8cpp_source.html#l00688">mlst()</a>、<a class="el" href="libftp_8cpp_source.html#l01174">noop()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">passive()</a>、<a class="el" href="libftp_8cpp_source.html#l01286">port()</a>、<a class="el" href="libftp_8cpp_source.html#l01320">portNoWaitResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l00950">put()</a>、<a class="el" href="libftp_8cpp_source.html#l00990">putNoWaitResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l00831">pwd()</a>、<a class="el" href="libftp_8cpp_source.html#l01054">remove()</a>、<a class="el" href="libftp_8cpp_source.html#l01086">rename()</a>、<a class="el" href="libftp_8cpp_source.html#l00887">rmdir()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">size()</a>、<a class="el" href="libftp_8cpp_source.html#l01231">stat()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">swallowResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l01202">system()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">type()</a>及<a class="el" href="libftp_8cpp_source.html#l01396">waitForCtrlResponse()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9fd79ee810aa59c7dd11b367684aba6e"></a><!-- doxytag: member="LibFtp::servBanner" ref="a9fd79ee810aa59c7dd11b367684aba6e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_lib_ftp.html#a9fd79ee810aa59c7dd11b367684aba6e">LibFtp::servBanner</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00086">86</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00028">connect()</a>及<a class="el" href="libftp_8cpp_source.html#l00826">getServerBanner()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a766a0a558629f648c962872e588a59a7"></a><!-- doxytag: member="LibFtp::useTLS" ref="a766a0a558629f648c962872e588a59a7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_lib_ftp.html#a766a0a558629f648c962872e588a59a7">LibFtp::useTLS</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="libftp_8h_source.html">libftp.h</a>第<a class="el" href="libftp_8h_source.html#l00091">91</a>行定义。</p>
+
+<p>参考自 <a class="el" href="libftp_8cpp_source.html#l00016">LibFtp()</a>及<a class="el" href="libftp_8cpp_source.html#l00061">login()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="libftp_8h_source.html">libftp.h</a></li>
+<li><a class="el" href="libftp_8cpp_source.html">libftp.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

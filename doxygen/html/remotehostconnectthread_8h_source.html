@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: remotehostconnectthread.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>remotehostconnectthread.h</h1><a href="remotehostconnectthread_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* remotehostconnectthread.h --- </span>
+<a name="l00002"></a>00002 <span class="comment"> * </span>
+<a name="l00003"></a>00003 <span class="comment"> * Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment"> * Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment"> * URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment"> * Created: 2008-06-16 21:11:46 +0800</span>
+<a name="l00007"></a>00007 <span class="comment"> * Version: $Id: remotehostconnectthread.h 461 2009-08-31 13:24:12Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment"> */</span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#ifndef REMOTEHOSTCONNECTTHREAD_H</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#define REMOTEHOSTCONNECTTHREAD_H</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QThread&gt;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;libssh2.h&quot;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;libssh2_sftp.h&quot;</span>
+<a name="l00018"></a>00018 
+<a name="l00020"></a><a class="code" href="class_remote_host_connect_thread.html">00020</a> <span class="keyword">class </span><a class="code" href="class_remote_host_connect_thread.html">RemoteHostConnectThread</a> : <span class="keyword">public</span> QThread
+<a name="l00021"></a>00021 {
+<a name="l00022"></a>00022     Q_OBJECT;
+<a name="l00023"></a>00023 <span class="keyword">public</span>:
+<a name="l00024"></a><a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568ae12812487f56cb8aa77a9818f6fddf6b">00024</a>     <span class="keyword">enum</span> {<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a6fce7a9ccbf7016bad09a7cc221a0345">CONN_OK</a>=0,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568ad37c1fed273c778534002c623f626cb3">CONN_REFUSE</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568ae0f801c6b7c322b9f579a5505415fabb">CONN_CANCEL</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568ac44433b4a4a7079dec87a634c47fd6e0">CONN_OTHER</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568ae12812487f56cb8aa77a9818f6fddf6b">CONN_RESOLVE_ERROR</a>,
+<a name="l00025"></a><a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568abed25a17131558ee9ebd60463df3e5ac">00025</a>           <a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a696050ca028bbac55baa973a606fe0bc">CONN_SESS_ERROR</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a0b5477d6e9f255bd3f762aacc1e86c20">CONN_AUTH_ERROR</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568abed25a17131558ee9ebd60463df3e5ac">CONN_SFTP_ERROR</a>,<a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a1ca2a342a11bb24a2e5883cc675673b2">CONN_EXEC_ERROR</a>,
+<a name="l00026"></a><a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a4d6b8aaee36a6a497a96f595ef03267d">00026</a>           <a class="code" href="class_remote_host_connect_thread.html#a7c3d7aa6df2c8e235a47cd40fca09568a4d6b8aaee36a6a497a96f595ef03267d">CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</a>};
+<a name="l00027"></a>00027     <a class="code" href="class_remote_host_connect_thread.html#a68194b2e4d1f599b9015fa6d2807561e">RemoteHostConnectThread</a>(QString <a class="code" href="class_remote_host_connect_thread.html#a3629bb1931174ebf8d24f000fc907d16">user_name</a>, QString <a class="code" href="class_remote_host_connect_thread.html#a4b2ad1a53b248f7ae72391010648d484">password</a>, QString <a class="code" href="class_remote_host_connect_thread.html#a5c6c4b42ca28f56b22a97957f7617cfe">host_name</a>, 
+<a name="l00028"></a>00028                             <span class="keywordtype">short</span> <a class="code" href="class_remote_host_connect_thread.html#a497ab84d82a8915df01aba54d96d356e">port</a>, QString pubkey, QObject *parent=0);
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030     <a class="code" href="class_remote_host_connect_thread.html#abad408f3d8ca472ab79653f7ebc3d387">~RemoteHostConnectThread</a>();
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#ad8494ed99a8bc7345c7c5549e178b7ce">run</a>();
+<a name="l00033"></a>00033     
+<a name="l00034"></a>00034     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#aaa4c4309e74f7790aef69021dc127293">do_init</a>();
+<a name="l00035"></a>00035     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#a92c1531ddcb87e3ce359de9b3a9b9b8a">diconnect_ssh_connection</a>();
+<a name="l00036"></a>00036     std::string <a class="code" href="class_remote_host_connect_thread.html#a7c4d9544fa9fd7e501a9aedb225d251f">get_user_home_path</a>();
+<a name="l00037"></a>00037     
+<a name="l00038"></a>00038     QString <a class="code" href="class_remote_host_connect_thread.html#aa64d478eb34e6bd9468d06abc2d56436">get_host_name</a>();
+<a name="l00039"></a>00039     QString <a class="code" href="class_remote_host_connect_thread.html#a8401fbf04264313172f01b28172b1dbc">get_user_name</a>();
+<a name="l00040"></a>00040     QString <a class="code" href="class_remote_host_connect_thread.html#ab4fdfbbfe02424bc5318dfec5b430dbe">get_password</a>() ;
+<a name="l00041"></a>00041     <span class="keywordtype">short</span>   <a class="code" href="class_remote_host_connect_thread.html#a70afc4e0aae22d2dcb22f1f93687fdee">get_port</a>();
+<a name="l00042"></a>00042     QString <a class="code" href="class_remote_host_connect_thread.html#abb07ddb327667b25f076c5ba77cff697">get_pubkey</a>();
+<a name="l00043"></a>00043     <span class="keywordtype">void</span> *<a class="code" href="class_remote_host_connect_thread.html#ad0afe1251838f4ce9df06a04661aca97">get_ssh2_sess</a>();
+<a name="l00044"></a>00044     <span class="keywordtype">int</span> <a class="code" href="class_remote_host_connect_thread.html#ae331d03c0b4a72a2fdcb4797471b2b37">get_ssh2_sock</a> ();
+<a name="l00045"></a>00045     <span class="keywordtype">int</span> <a class="code" href="class_remote_host_connect_thread.html#a4fd9ef175890cfb47e03ec03de83b725">get_connect_status</a>();
+<a name="l00046"></a>00046     QString <a class="code" href="class_remote_host_connect_thread.html#adf8f0ff49eaeb6ee594861e5bc06a6ee">get_status_desc</a>(<span class="keywordtype">int</span> status);
+<a name="l00047"></a>00047     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#a11a5a2d323e1dbaafc970079851c4e53">set_user_canceled</a>();
+<a name="l00048"></a>00048     
+<a name="l00049"></a>00049 signals:
+<a name="l00050"></a>00050     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#a79ae3063434feda6667a7bd353592f60">connect_state_changed</a>(QString state_desc);
+<a name="l00051"></a>00051         
+<a name="l00052"></a>00052 <span class="keyword">private</span>:
+<a name="l00053"></a><a class="code" href="class_remote_host_connect_thread.html#a3629bb1931174ebf8d24f000fc907d16">00053</a>     QString <a class="code" href="class_remote_host_connect_thread.html#a3629bb1931174ebf8d24f000fc907d16">user_name</a>;
+<a name="l00054"></a><a class="code" href="class_remote_host_connect_thread.html#a4b2ad1a53b248f7ae72391010648d484">00054</a>     QString <a class="code" href="class_remote_host_connect_thread.html#a4b2ad1a53b248f7ae72391010648d484">password</a>;   <span class="comment">//存储的密码为url编码过的</span>
+<a name="l00055"></a><a class="code" href="class_remote_host_connect_thread.html#a5c6c4b42ca28f56b22a97957f7617cfe">00055</a>     QString <a class="code" href="class_remote_host_connect_thread.html#a5c6c4b42ca28f56b22a97957f7617cfe">host_name</a>;
+<a name="l00056"></a><a class="code" href="class_remote_host_connect_thread.html#a497ab84d82a8915df01aba54d96d356e">00056</a>     <span class="keywordtype">short</span>   <a class="code" href="class_remote_host_connect_thread.html#a497ab84d82a8915df01aba54d96d356e">port</a>;
+<a name="l00057"></a><a class="code" href="class_remote_host_connect_thread.html#a64c1e30cf204f92cc1c9cf13bf01bdcc">00057</a>     QString <a class="code" href="class_remote_host_connect_thread.html#a64c1e30cf204f92cc1c9cf13bf01bdcc">pubkey_path</a>;
+<a name="l00058"></a><a class="code" href="class_remote_host_connect_thread.html#a2940cda927f3994527e5fd5160f27507">00058</a>     <span class="keywordtype">int</span> <a class="code" href="class_remote_host_connect_thread.html#a2940cda927f3994527e5fd5160f27507">connect_status</a>;
+<a name="l00059"></a><a class="code" href="class_remote_host_connect_thread.html#ace7e22a63070d0c3beb4349004866661">00059</a>     <span class="keywordtype">bool</span> <a class="code" href="class_remote_host_connect_thread.html#ace7e22a63070d0c3beb4349004866661">user_canceled</a>;
+<a name="l00060"></a>00060     
+<a name="l00061"></a><a class="code" href="class_remote_host_connect_thread.html#ac8a75f88ab4e2e59b3b94fa927916e06">00061</a>     std::string <a class="code" href="class_remote_host_connect_thread.html#ac8a75f88ab4e2e59b3b94fa927916e06">user_home_path</a>;
+<a name="l00062"></a>00062     
+<a name="l00063"></a><a class="code" href="class_remote_host_connect_thread.html#a531f2c8f5d35729207964eebca02e018">00063</a>     <span class="keywordtype">void</span> *<a class="code" href="class_remote_host_connect_thread.html#a531f2c8f5d35729207964eebca02e018">ssh2_sess</a>;
+<a name="l00064"></a><a class="code" href="class_remote_host_connect_thread.html#a95734181e3493c2312d296e362ee288b">00064</a>     <span class="keywordtype">int</span> <a class="code" href="class_remote_host_connect_thread.html#a95734181e3493c2312d296e362ee288b">ssh2_sock</a>;
+<a name="l00065"></a><a class="code" href="class_remote_host_connect_thread.html#a654ca79f34967547c5745a41cbb59128">00065</a>     <span class="keywordtype">void</span> *<a class="code" href="class_remote_host_connect_thread.html#a654ca79f34967547c5745a41cbb59128">ssh2_sftp</a> ;
+<a name="l00066"></a>00066         
+<a name="l00067"></a>00067 <span class="keyword">private</span> slots:
+<a name="l00068"></a>00068     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#ae9aefc1778f7766d246da55dd6c1c6b5">slot_finished</a>();
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 <span class="keyword">private</span>:
+<a name="l00071"></a>00071     QString <a class="code" href="class_remote_host_connect_thread.html#acc9a2cdbcd2949614c25578754af7fe6">get_server_env_vars</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *cmd);
+<a name="l00072"></a>00072     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#aba19981578618d993c96cabf247809d2">piClose</a>(<span class="keywordtype">int</span> sock);
+<a name="l00073"></a>00073         
+<a name="l00074"></a>00074 signals:
+<a name="l00075"></a>00075     <span class="keywordtype">void</span> <a class="code" href="class_remote_host_connect_thread.html#a9c1df15b25fb48ffafdd72e5358af047">connect_finished</a>(<span class="keywordtype">int</span> status, <span class="keywordtype">void</span> *<a class="code" href="class_remote_host_connect_thread.html#a531f2c8f5d35729207964eebca02e018">ssh2_sess</a>, <span class="keywordtype">int</span> <a class="code" href="class_remote_host_connect_thread.html#a95734181e3493c2312d296e362ee288b">ssh2_sock</a>);
+<a name="l00076"></a>00076 };
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078 <span class="preprocessor">#endif</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

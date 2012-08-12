@@ -1,0 +1,693 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: SSHDirRetriver类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>SSHDirRetriver类参考</h1><!-- doxytag: class="SSHDirRetriver" --><!-- doxytag: inherits="DirRetriver" -->
+<p><code>#include &lt;<a class="el" href="sshdirretriver_8h_source.html">sshdirretriver.h</a>&gt;</code></p>
+<div class="dynheader">
+继承图，类SSHDirRetriver</div>
+<div class="dynsection">
+ <div class="center">
+  <img src="class_s_s_h_dir_retriver.png" usemap="#SSHDirRetriver_map" alt=""/>
+  <map id="SSHDirRetriver_map" name="SSHDirRetriver_map">
+<area href="class_dir_retriver.html" alt="DirRetriver" shape="rect" coords="0,0,99,24"/>
+</map>
+ </div>
+</div>
+
+<p><a href="class_s_s_h_dir_retriver-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>组合类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a></td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a7805985c5de996385d540d8ad31ffbf7">enter_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#ac189cd4aa8491a8ece49bd0b047cb86b">leave_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#aba5152d3bd4886e8db0fe3face9914de">remote_dir_node_retrived</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, <a class="el" href="class_net_dir_node.html">NetDirNode</a> *newNodes)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a3530b641bfb1f84654578b58798388fe">execute_command_finished</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, int status)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a351035e05a2bcad98580550525ea1c15">SSHDirRetriver</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#af51c85c7d88a6b8772d99b82a5cad931">~SSHDirRetriver</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#af13dfe4362f6dc30e3b049df9244193a">setConnection</a> (<a class="el" href="class_connection.html">Connection</a> *<a class="el" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a4a049a58048c57f4642e90058d031970">run</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#aac7d9ffd3aca7ea5aaf83be697c0d588">add_node</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a3accc13e025a80ecbc154cd83ec0be7e">slot_execute_command</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, QString params)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a13a74ab6e78b5677968b372ce65dd5ef">retrive_dir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a5b8802120b614c35f2028d99c60438a7">mkdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a878c43da324530bee3ed05e1ca16ea25">rmdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#af803b32d81df8bc294432046ca4e5323">rm_file_or_directory_recursively</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a5893e544c676a02af117979b30d30a14">rm_file_or_directory_recursively_ex</a> (QString parent_path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a0ea8463e598c3966ce79fa614704f48a">rename</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#af2d736fe7f3f72690e6432b14c3f9a2d">keep_alive</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a0fc3dfe0201dd4c97d0d900e6fa12d45">fxp_do_ls_dir</a> (QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a91144e45e6daf5b6c96b9f553df07e7c">fxp_do_ls_dir</a> (QString parent_path, QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a3c45f4ad9811ef7f7543244ce2875fa4">fxp_realpath</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="class_net_dir_node.html">NetDirNode</a> *, void * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a8dc7b200d8b6806edef4fb32b0677874">dir_node_process_queue</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_dir_retriver.html#a330ea3cf7a170bf176437a74d5ade0ff">command_queue</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="sshdirretriver_8h_source.html">sshdirretriver.h</a>第<a class="el" href="sshdirretriver_8h_source.html#l00037">37</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a351035e05a2bcad98580550525ea1c15"></a><!-- doxytag: member="SSHDirRetriver::SSHDirRetriver" ref="a351035e05a2bcad98580550525ea1c15" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SSHDirRetriver::SSHDirRetriver </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00029">29</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="af51c85c7d88a6b8772d99b82a5cad931"></a><!-- doxytag: member="SSHDirRetriver::~SSHDirRetriver" ref="af51c85c7d88a6b8772d99b82a5cad931" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SSHDirRetriver::~SSHDirRetriver </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00034">34</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="aac7d9ffd3aca7ea5aaf83be697c0d588"></a><!-- doxytag: member="SSHDirRetriver::add_node" ref="aac7d9ffd3aca7ea5aaf83be697c0d588" args="(NetDirNode *parent_item, void *parent_persistent_index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::add_node </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00499">499</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="rfsdirnode_8h_source.html#l00023">POP_UPDATING</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>及<a class="el" href="sftp-const_8h_source.html#l00046">SSH2_FXP_READDIR</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00196">mkdir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00333">rename()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">rm_file_or_directory_recursively()</a>及<a class="el" href="sshdirretriver_8cpp_source.html#l00214">rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7805985c5de996385d540d8ad31ffbf7"></a><!-- doxytag: member="SSHDirRetriver::enter_remote_dir_retrive_loop" ref="a7805985c5de996385d540d8ad31ffbf7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::enter_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a894c113663a49ed5af7c61f53002e608">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3530b641bfb1f84654578b58798388fe"></a><!-- doxytag: member="SSHDirRetriver::execute_command_finished" ref="a3530b641bfb1f84654578b58798388fe" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::execute_command_finished </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a4aa9be2b37042d29087a091fca0478d3">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a91144e45e6daf5b6c96b9f553df07e7c"></a><!-- doxytag: member="SSHDirRetriver::fxp_do_ls_dir" ref="a91144e45e6daf5b6c96b9f553df07e7c" args="(QString parent_path, QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::fxp_do_ls_dir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a168b253607d356a4873dc6af566e7e8a">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00441">441</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0fc3dfe0201dd4c97d0d900e6fa12d45"></a><!-- doxytag: member="SSHDirRetriver::fxp_do_ls_dir" ref="a0fc3dfe0201dd4c97d0d900e6fa12d45" args="(QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::fxp_do_ls_dir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00384">384</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>及<a class="el" href="utils_8cpp_source.html#l00024">strmode()</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00277">rm_file_or_directory_recursively_ex()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3c45f4ad9811ef7f7543244ce2875fa4"></a><!-- doxytag: member="SSHDirRetriver::fxp_realpath" ref="a3c45f4ad9811ef7f7543244ce2875fa4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::fxp_realpath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a74f2425706a3754dcd00f201eebfc844">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00473">473</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af2d736fe7f3f72690e6432b14c3f9a2d"></a><!-- doxytag: member="SSHDirRetriver::keep_alive" ref="af2d736fe7f3f72690e6432b14c3f9a2d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::keep_alive </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a494d623465f877880a4b9a686d836af4">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00366">366</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac189cd4aa8491a8ece49bd0b047cb86b"></a><!-- doxytag: member="SSHDirRetriver::leave_remote_dir_retrive_loop" ref="ac189cd4aa8491a8ece49bd0b047cb86b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::leave_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a2b588b7dbda4cb79e0530c9404104dab">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5b8802120b614c35f2028d99c60438a7"></a><!-- doxytag: member="SSHDirRetriver::mkdir" ref="a5b8802120b614c35f2028d99c60438a7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::mkdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a692dbfc6c54c8d7230871f606dc3eabe">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00196">196</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">add_node()</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aba5152d3bd4886e8db0fe3face9914de"></a><!-- doxytag: member="SSHDirRetriver::remote_dir_node_retrived" ref="aba5152d3bd4886e8db0fe3face9914de" args="(NetDirNode *parent_item, void *parent_persistent_index, NetDirNode *newNodes)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::remote_dir_node_retrived </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>newNodes</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a45cfd88a96fea80994605d65ad8cc4cb">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0ea8463e598c3966ce79fa614704f48a"></a><!-- doxytag: member="SSHDirRetriver::rename" ref="a0ea8463e598c3966ce79fa614704f48a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::rename </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#ae0753eaeb00b5cfbc8d21806bfc84d90">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00333">333</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">add_node()</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a13a74ab6e78b5677968b372ce65dd5ef"></a><!-- doxytag: member="SSHDirRetriver::retrive_dir" ref="a13a74ab6e78b5677968b372ce65dd5ef" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::retrive_dir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a5114f664bca4ece1c7c0aa18b1ecd351">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00102">102</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="rfsdirnode_8h_source.html#l00075">NetDirNode::attrib</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00120">NetDirNode::childAt()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00048">NetDirNode::childCount()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="rfsdirnode_8h_source.html#l00046">NetDirNode::deleted</a>、<a class="el" href="sshdirretriver_8h_source.html#l00099">dir_node_process_queue</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00070">NetDirNode::findChindByName()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00032">NetDirNode::isDir()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00039">NetDirNode::isSymLink()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00065">NetDirNode::pNode</a>、<a class="el" href="rfsdirnode_8h_source.html#l00024">POP_NEWEST</a>、<a class="el" href="rfsdirnode_8h_source.html#l00020">POP_NO_NEED_NO_DATA</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="class_s_s_h_dir_retriver.html#aba5152d3bd4886e8db0fe3face9914de">remote_dir_node_retrived()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00100">NetDirNode::setDeleteFlag()</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af803b32d81df8bc294432046ca4e5323"></a><!-- doxytag: member="SSHDirRetriver::rm_file_or_directory_recursively" ref="af803b32d81df8bc294432046ca4e5323" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::rm_file_or_directory_recursively </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a8073e5a7104e47e25a28766aec9cc678">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00240">240</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00499">add_node()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>及<a class="el" href="sshdirretriver_8cpp_source.html#l00277">rm_file_or_directory_recursively_ex()</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5893e544c676a02af117979b30d30a14"></a><!-- doxytag: member="SSHDirRetriver::rm_file_or_directory_recursively_ex" ref="a5893e544c676a02af117979b30d30a14" args="(QString parent_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::rm_file_or_directory_recursively_ex </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00277">277</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshdirretriver_8cpp_source.html#l00384">fxp_do_ls_dir()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00240">rm_file_or_directory_recursively()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a878c43da324530bee3ed05e1ca16ea25"></a><!-- doxytag: member="SSHDirRetriver::rmdir" ref="a878c43da324530bee3ed05e1ca16ea25" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHDirRetriver::rmdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#aa78d7026f8b28c3821a1d23b6265e622">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00214">214</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">add_node()</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a049a58048c57f4642e90058d031970"></a><!-- doxytag: member="SSHDirRetriver::run" ref="a4a049a58048c57f4642e90058d031970" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::run </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a95d43e6a95a7f228c8ccf51e16f3613a">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00052">52</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="sshdirretriver_8h_source.html#l00099">dir_node_process_queue</a>、<a class="el" href="class_s_s_h_dir_retriver.html#a7805985c5de996385d540d8ad31ffbf7">enter_remote_dir_retrive_loop()</a>、<a class="el" href="class_s_s_h_dir_retriver.html#a3530b641bfb1f84654578b58798388fe">execute_command_finished()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00473">fxp_realpath()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00366">keep_alive()</a>、<a class="el" href="class_s_s_h_dir_retriver.html#ac189cd4aa8491a8ece49bd0b047cb86b">leave_remote_dir_retrive_loop()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00196">mkdir()</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00333">rename()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">retrive_dir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">rm_file_or_directory_recursively()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00214">rmdir()</a>、<a class="el" href="dirretriver_8h_source.html#l00022">SSH2_FXP_KEEP_ALIVE</a>、<a class="el" href="sftp-const_8h_source.html#l00048">SSH2_FXP_MKDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00046">SSH2_FXP_READDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00050">SSH2_FXP_REALPATH</a>、<a class="el" href="sftp-const_8h_source.html#l00047">SSH2_FXP_REMOVE</a>、<a class="el" href="sftp-const_8h_source.html#l00052">SSH2_FXP_RENAME</a>及<a class="el" href="sftp-const_8h_source.html#l00049">SSH2_FXP_RMDIR</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af13dfe4362f6dc30e3b049df9244193a"></a><!-- doxytag: member="SSHDirRetriver::setConnection" ref="af13dfe4362f6dc30e3b049df9244193a" args="(Connection *conn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::setConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#adfe5e9113a4aa6792abdf57fda6afa99">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00039">39</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="dirretriver_8h_source.html#l00096">DirRetriver::ssh2_sess</a>及<a class="el" href="dirretriver_8h_source.html#l00097">DirRetriver::ssh2_sftp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3accc13e025a80ecbc154cd83ec0be7e"></a><!-- doxytag: member="SSHDirRetriver::slot_execute_command" ref="a3accc13e025a80ecbc154cd83ec0be7e" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, QString params)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHDirRetriver::slot_execute_command </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>params</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#adebd4f6ee6686e4200ecdc16535aec11">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a>第<a class="el" href="sshdirretriver_8cpp_source.html#l00517">517</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="sshdirretriver_8h_source.html#l00100">command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>及<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a330ea3cf7a170bf176437a74d5ade0ff"></a><!-- doxytag: member="SSHDirRetriver::command_queue" ref="a330ea3cf7a170bf176437a74d5ade0ff" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a>*&gt; <a class="el" href="class_s_s_h_dir_retriver.html#a330ea3cf7a170bf176437a74d5ade0ff">SSHDirRetriver::command_queue</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8h_source.html">sshdirretriver.h</a>第<a class="el" href="sshdirretriver_8h_source.html#l00100">100</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">add_node()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00473">fxp_realpath()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00196">mkdir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00333">rename()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">rm_file_or_directory_recursively()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00214">rmdir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>及<a class="el" href="sshdirretriver_8cpp_source.html#l00517">slot_execute_command()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8dc7b200d8b6806edef4fb32b0677874"></a><!-- doxytag: member="SSHDirRetriver::dir_node_process_queue" ref="a8dc7b200d8b6806edef4fb32b0677874" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="class_net_dir_node.html">NetDirNode</a> *, void *&gt; <a class="el" href="class_s_s_h_dir_retriver.html#a8dc7b200d8b6806edef4fb32b0677874">SSHDirRetriver::dir_node_process_queue</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a252e897928ceef7d7ce18421adedc674">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="sshdirretriver_8h_source.html">sshdirretriver.h</a>第<a class="el" href="sshdirretriver_8h_source.html#l00099">99</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">retrive_dir()</a>及<a class="el" href="sshdirretriver_8cpp_source.html#l00052">run()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="sshdirretriver_8h_source.html">sshdirretriver.h</a></li>
+<li><a class="el" href="sshdirretriver_8cpp_source.html">sshdirretriver.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

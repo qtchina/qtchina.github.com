@@ -1,0 +1,449 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: SSHConnection类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>SSHConnection类参考</h1><!-- doxytag: class="SSHConnection" --><!-- doxytag: inherits="Connection" -->
+<p><code>#include &lt;<a class="el" href="sshconnection_8h_source.html">sshconnection.h</a>&gt;</code></p>
+<div class="dynheader">
+继承图，类SSHConnection</div>
+<div class="dynsection">
+ <div class="center">
+  <img src="class_s_s_h_connection.png" usemap="#SSHConnection_map" alt=""/>
+  <map id="SSHConnection_map" name="SSHConnection_map">
+<area href="class_connection.html" alt="Connection" shape="rect" coords="0,0,101,24"/>
+</map>
+ </div>
+</div>
+
+<p><a href="class_s_s_h_connection-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a661b893585c4720f42686b38e8a24747">alivePing</a> ()</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#abd23c5dd69bdc8a765bff2e3e3d4ad86">SSHConnection</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a9383c2fcc20f751c59ae9c0287350bf0">~SSHConnection</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a737f6d12076a6cc9a7998812c9ab6e00">connect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a62f802160730c860eacb53c27450c56f">disconnect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a4a1cdd3ba1b4380db5a0bac139b1c5f3">reconnect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#aafe2316e6a1698d7c39f18a41ecc0ebf">isConnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a3b088ae172403c477a750e5d339e82a3">isRealConnected</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QTextCodec *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#aad56a7cf83faeaf2b6190eaa0166dd01">codecForEnv</a> (QString env)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">根据环境信息字符串,获取编码.  <a href="#aad56a7cf83faeaf2b6190eaa0166dd01"></a><br/></td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a1f57169e38f1b966fcca15df4f9bdc06">initSocket</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#adb45645ef4fdf95119113ddefb89c729">piClose</a> (int <a class="el" href="class_connection.html#acccd0099e1f8360fa0a0b04d7a5abe93">sock</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#a45bfde17a2e820e4817848028f7cd6da">initSSHSession</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#ac683fbf2f5a98910e428a7f8c34a5c2c">sshAuth</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#aff016fa0d40368fb683914dbac67c11f">sshHomePath</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#ae6125696fbe4ddefa76e480b6111b2e7">get_server_env_vars</a> (const char *cmd)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_s_h_connection.html#ac7c7f7733f27ca07f40f03ac9230f9b5">libssh2SessionLastErrorString</a> ()</td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="sshconnection_8h_source.html">sshconnection.h</a>第<a class="el" href="sshconnection_8h_source.html#l00015">15</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="abd23c5dd69bdc8a765bff2e3e3d4ad86"></a><!-- doxytag: member="SSHConnection::SSHConnection" ref="abd23c5dd69bdc8a765bff2e3e3d4ad86" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SSHConnection::SSHConnection </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00067">67</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a9383c2fcc20f751c59ae9c0287350bf0"></a><!-- doxytag: member="SSHConnection::~SSHConnection" ref="a9383c2fcc20f751c59ae9c0287350bf0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SSHConnection::~SSHConnection </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00072">72</a>行定义。</p>
+
+<p>参考 <a class="el" href="sshconnection_8cpp_source.html#l00041">gLibssh2Inited</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="connection_8h_source.html#l00072">Connection::qdsock</a>及<a class="el" href="connection_8h_source.html#l00071">Connection::qsock</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a661b893585c4720f42686b38e8a24747"></a><!-- doxytag: member="SSHConnection::alivePing" ref="a661b893585c4720f42686b38e8a24747" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::alivePing </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#a053249f8bb18ce880bb3e1a8d22fdd5e">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00143">143</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aad56a7cf83faeaf2b6190eaa0166dd01"></a><!-- doxytag: member="SSHConnection::codecForEnv" ref="aad56a7cf83faeaf2b6190eaa0166dd01" args="(QString env)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTextCodec * SSHConnection::codecForEnv </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>env</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>根据环境信息字符串,获取编码. </p>
+
+<p>重载<a class="el" href="class_connection.html#ab9bf75eb6a3a41d47129f343168ad90d">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00147">147</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a737f6d12076a6cc9a7998812c9ab6e00"></a><!-- doxytag: member="SSHConnection::connect" ref="a737f6d12076a6cc9a7998812c9ab6e00" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::connect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#af358690532761001fbebed6f97bd908b">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00085">85</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00077">Connection::codec</a>、<a class="el" href="sshconnection_8cpp_source.html#l00147">codecForEnv()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00526">get_server_env_vars()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00172">initSocket()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00295">initSSHSession()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">sshHomePath()</a>.</p>
+
+<p>参考自 <a class="el" href="synctransferthread_8cpp_source.html#l00365">SyncTransferThread::connectToRemoteHost()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00172">initSocket()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a62f802160730c860eacb53c27450c56f"></a><!-- doxytag: member="SSHConnection::disconnect" ref="a62f802160730c860eacb53c27450c56f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::disconnect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#ae76eb02ef90780042db86ceb9e106d63">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00126">126</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ae6125696fbe4ddefa76e480b6111b2e7"></a><!-- doxytag: member="SSHConnection::get_server_env_vars" ref="ae6125696fbe4ddefa76e480b6111b2e7" args="(const char *cmd)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString SSHConnection::get_server_env_vars </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>cmd</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00526">526</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f57169e38f1b966fcca15df4f9bdc06"></a><!-- doxytag: member="SSHConnection::initSocket" ref="a1f57169e38f1b966fcca15df4f9bdc06" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::initSocket </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00172">172</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00077">Connection::codec</a>、<a class="el" href="connection_8h_source.html#l00027">Connection::CONN_CANCEL</a>、<a class="el" href="connection_8h_source.html#l00027">Connection::CONN_REFUSE</a>、<a class="el" href="connection_8h_source.html#l00027">Connection::CONN_RESOLVE_ERROR</a>、<a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>、<a class="el" href="class_connection.html#a799a0274919c0fb47bf8e7fc5e730356">Connection::connect_state_changed()</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="globaloption_8h_source.html#l00031">GlobalOption::locale_codec</a>、<a class="el" href="sshconnection_8cpp_source.html#l00454">piClose()</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="connection_8h_source.html#l00069">Connection::sock</a>及<a class="el" href="connection_8h_source.html#l00074">Connection::user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a45bfde17a2e820e4817848028f7cd6da"></a><!-- doxytag: member="SSHConnection::initSSHSession" ref="a45bfde17a2e820e4817848028f7cd6da" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::initSSHSession </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00295">295</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8h_source.html#l00029">Connection::CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</a>、<a class="el" href="connection_8h_source.html#l00028">Connection::CONN_SESS_ERROR</a>、<a class="el" href="class_connection.html#a799a0274919c0fb47bf8e7fc5e730356">Connection::connect_state_changed()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00454">piClose()</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>及<a class="el" href="connection_8h_source.html#l00069">Connection::sock</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aafe2316e6a1698d7c39f18a41ecc0ebf"></a><!-- doxytag: member="SSHConnection::isConnected" ref="aafe2316e6a1698d7c39f18a41ecc0ebf" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SSHConnection::isConnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#a68536d10cc8bc26964a0e7eccfaab52c">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00134">134</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b088ae172403c477a750e5d339e82a3"></a><!-- doxytag: member="SSHConnection::isRealConnected" ref="a3b088ae172403c477a750e5d339e82a3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SSHConnection::isRealConnected </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#aa4a94450e09dc3280884e4f1d5624f10">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00138">138</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ac7c7f7733f27ca07f40f03ac9230f9b5"></a><!-- doxytag: member="SSHConnection::libssh2SessionLastErrorString" ref="ac7c7f7733f27ca07f40f03ac9230f9b5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString SSHConnection::libssh2SessionLastErrorString </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00560">560</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00463">sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adb45645ef4fdf95119113ddefb89c729"></a><!-- doxytag: member="SSHConnection::piClose" ref="adb45645ef4fdf95119113ddefb89c729" args="(int sock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSHConnection::piClose </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>sock</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00454">454</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00172">initSocket()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00295">initSSHSession()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00334">sshAuth()</a>及<a class="el" href="sshconnection_8cpp_source.html#l00463">sshHomePath()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a1cdd3ba1b4380db5a0bac139b1c5f3"></a><!-- doxytag: member="SSHConnection::reconnect" ref="a4a1cdd3ba1b4380db5a0bac139b1c5f3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::reconnect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_connection.html#adb00ee1614f8f69b0cc2df2656e4cb68">Connection</a>。</p>
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00130">130</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ac683fbf2f5a98910e428a7f8c34a5c2c"></a><!-- doxytag: member="SSHConnection::sshAuth" ref="ac683fbf2f5a98910e428a7f8c34a5c2c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::sshAuth </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00334">334</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00028">Connection::CONN_AUTH_ERROR</a>、<a class="el" href="connection_8h_source.html#l00027">Connection::CONN_CANCEL</a>、<a class="el" href="class_connection.html#a799a0274919c0fb47bf8e7fc5e730356">Connection::connect_state_changed()</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="sshconnection_8cpp_source.html#l00048">kbd_callback()</a>、<a class="el" href="connection_8h_source.html#l00061">Connection::password</a>、<a class="el" href="sshconnection_8cpp_source.html#l00454">piClose()</a>、<a class="el" href="connection_8h_source.html#l00065">Connection::pubkey</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="connection_8h_source.html#l00069">Connection::sock</a>、<a class="el" href="sshconnection_8cpp_source.html#l00044">ssh2_kbd_cb_mutex</a>、<a class="el" href="sshconnection_8cpp_source.html#l00046">ssh2_password</a>、<a class="el" href="connection_8h_source.html#l00074">Connection::user_canceled</a>及<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aff016fa0d40368fb683914dbac67c11f"></a><!-- doxytag: member="SSHConnection::sshHomePath" ref="aff016fa0d40368fb683914dbac67c11f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SSHConnection::sshHomePath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a>第<a class="el" href="sshconnection_8cpp_source.html#l00463">463</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_CANCEL</a>、<a class="el" href="connection_8h_source.html#l00028">Connection::CONN_SFTP_ERROR</a>、<a class="el" href="class_connection.html#a799a0274919c0fb47bf8e7fc5e730356">Connection::connect_state_changed()</a>、<a class="el" href="connection_8h_source.html#l00066">Connection::homePath</a>、<a class="el" href="sshconnection_8cpp_source.html#l00560">libssh2SessionLastErrorString()</a>、<a class="el" href="sshconnection_8cpp_source.html#l00454">piClose()</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="connection_8h_source.html#l00069">Connection::sock</a>及<a class="el" href="connection_8h_source.html#l00074">Connection::user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="sshconnection_8cpp_source.html#l00085">connect()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="sshconnection_8h_source.html">sshconnection.h</a></li>
+<li><a class="el" href="sshconnection_8cpp_source.html">sshconnection.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

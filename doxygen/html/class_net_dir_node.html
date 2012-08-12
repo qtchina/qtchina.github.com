@@ -1,0 +1,818 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: NetDirNode类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>NetDirNode类参考</h1><!-- doxytag: class="NetDirNode" -->
+<p><code>#include &lt;<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>&gt;</code></p>
+
+<p><a href="class_net_dir_node-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a709b67722422352e767a9b00a0b1d281">NetDirNode</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#aed4ff57634d070a16ae1c83311f8b438">~NetDirNode</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a93a5ef4d27f9bca538b4a0ffb59caeb6">isDir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a9a6e4897dbdb737aae4cded49f47fbb8">isSymLink</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#abd6d97e0c517ca3577f87049f835a36b">isSymLinkToDir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ad0348a72af478acd97fea56c9c6edcf9">childCount</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a2d638c0d6551358745bd1f655a00e09e">hasChild</a> (QString name)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ad885e90bce1e13ab2f117937d3af195d">findChindByName</a> (QString name)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a21ff7fadb66085a2a1626ea7f00a5d10">matchChecksum</a> (QDateTime mdate, quint64 fsize)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a70e9dfc5a2a1085ca0b9d46b2c5ba845">matchChecksum</a> (LIBSSH2_SFTP_ATTRIBUTES *attr)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ab1a4bec6ab63bb0c4120d4939285ebac">setDeleteFlag</a> (QString name, bool del)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ae13cba0d05fae2a18bb9f44866502ec2">setDeleteFlag</a> (bool <a class="el" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">deleted</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#af99bd1b157c63df650f597c5b43b9655">parent</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#afdf956f9c6fc8b39004902ce18094046">childAt</a> (int index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a8710cad8771981a41ccf68656608ac70">filePath</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ac98ba3cd1dd7f3521b102e7f7b00a08e">fileName</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a430ff4d523de72b8112730a637b4e90b">fileMode</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#aba8f07abb43b518a63d80d7f61ebb0da">fileMDate</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a3aec026d940a2b49a193b21c8768f2a9">fileADate</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint64&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a0fcb68a3c5d4f47dd207269d580698d0">fileSize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#af1b553b6604e8cd17ec92edca7f129d6">strFileSize</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#aeb6f2598a3728cdcfe41647c64a0a860">fileType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a3bd1f79134a9337c3805691d56174223">copyFrom</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *node)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ae7ffef5c2de38bc57e39e5d94c5f2272">dumpTreeRecursive</a> ()</td></tr>
+<tr><td colspan="2"><h2>公有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">deleted</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QHash&lt; int, <a class="el" href="class_net_dir_node.html">NetDirNode</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ac14b75fbc9ddb9c04a25c0e9381a4ce1">pNode</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">short&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#ab48c3fca335e99090077abdc9de5e6d8">onRow</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a49650ef72fbb71cdbb3a8cd5f5477e66">linkToDir</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP_ATTRIBUTES&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00029">29</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a709b67722422352e767a9b00a0b1d281"></a><!-- doxytag: member="NetDirNode::NetDirNode" ref="a709b67722422352e767a9b00a0b1d281" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">NetDirNode::NetDirNode </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00032">32</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>、<a class="el" href="rfsdirnode_8h_source.html#l00046">deleted</a>、<a class="el" href="rfsdirnode_8h_source.html#l00073">linkToDir</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">onRow</a>、<a class="el" href="rfsdirnode_8h_source.html#l00065">pNode</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">prevFlag</a>及<a class="el" href="rfsdirnode_8h_source.html#l00045">retrFlag</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aed4ff57634d070a16ae1c83311f8b438"></a><!-- doxytag: member="NetDirNode::~NetDirNode" ref="aed4ff57634d070a16ae1c83311f8b438" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">NetDirNode::~NetDirNode </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00019">19</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">childNodes</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="afdf956f9c6fc8b39004902ce18094046"></a><!-- doxytag: member="NetDirNode::childAt" ref="afdf956f9c6fc8b39004902ce18094046" args="(int index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_net_dir_node.html">NetDirNode</a> * NetDirNode::childAt </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00120">120</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">childNodes</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad0348a72af478acd97fea56c9c6edcf9"></a><!-- doxytag: member="NetDirNode::childCount" ref="ad0348a72af478acd97fea56c9c6edcf9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int NetDirNode::childCount </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00048">48</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00062">childNodes</a>.</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>及<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3bd1f79134a9337c3805691d56174223"></a><!-- doxytag: member="NetDirNode::copyFrom" ref="a3bd1f79134a9337c3805691d56174223" args="(NetDirNode *node)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::copyFrom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>node</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00193">193</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">_fileName</a>、<a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>、<a class="el" href="rfsdirnode_8h_source.html#l00046">deleted</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">fullPath</a>、<a class="el" href="rfsdirnode_8h_source.html#l00073">linkToDir</a>、<a class="el" href="rfsdirnode_8h_source.html#l00066">onRow</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">prevFlag</a>及<a class="el" href="rfsdirnode_8h_source.html#l00045">retrFlag</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00488">RemoteDirModel::setData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7ffef5c2de38bc57e39e5d94c5f2272"></a><!-- doxytag: member="NetDirNode::dumpTreeRecursive" ref="ae7ffef5c2de38bc57e39e5d94c5f2272" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NetDirNode::dumpTreeRecursive </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00209">209</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">_fileName</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00209">dumpTreeRecursive()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">fullPath</a>及<a class="el" href="rfsdirnode_8h_source.html#l00065">pNode</a>.</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00209">dumpTreeRecursive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3aec026d940a2b49a193b21c8768f2a9"></a><!-- doxytag: member="NetDirNode::fileADate" ref="a3aec026d940a2b49a193b21c8768f2a9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::fileADate </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00159">159</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aba8f07abb43b518a63d80d7f61ebb0da"></a><!-- doxytag: member="NetDirNode::fileMDate" ref="aba8f07abb43b518a63d80d7f61ebb0da" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::fileMDate </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00143">143</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>及<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a430ff4d523de72b8112730a637b4e90b"></a><!-- doxytag: member="NetDirNode::fileMode" ref="a430ff4d523de72b8112730a637b4e90b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::fileMode </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00137">137</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>及<a class="el" href="utils_8cpp_source.html#l00024">strmode()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac98ba3cd1dd7f3521b102e7f7b00a08e"></a><!-- doxytag: member="NetDirNode::fileName" ref="ac98ba3cd1dd7f3521b102e7f7b00a08e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::fileName </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00133">133</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">_fileName</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00925">RemoteDirModel::fileName()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00198">DirTableSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00101">DirTreeSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="remoteview_8cpp_source.html#l00298">RemoteView::get_selected_directory()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>及<a class="el" href="remoteview_8cpp_source.html#l00401">RemoteView::update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8710cad8771981a41ccf68656608ac70"></a><!-- doxytag: member="NetDirNode::filePath" ref="a8710cad8771981a41ccf68656608ac70" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::filePath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00129">129</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00071">fullPath</a>.</p>
+
+<p>参考自 <a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00917">RemoteDirModel::filePath()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00198">DirTableSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00101">DirTreeSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">RemoteDirModel::rowCount()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00225">FileProperties::set_file_info_model_list()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">RemoteDirModel::slot_execute_command()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00776">RemoteDirModel::slot_remote_dir_node_clicked()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0fcb68a3c5d4f47dd207269d580698d0"></a><!-- doxytag: member="NetDirNode::fileSize" ref="a0fcb68a3c5d4f47dd207269d580698d0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint64 NetDirNode::fileSize </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00177">177</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb6f2598a3728cdcfe41647c64a0a860"></a><!-- doxytag: member="NetDirNode::fileType" ref="aeb6f2598a3728cdcfe41647c64a0a860" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::fileType </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00187">187</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>及<a class="el" href="sshfileinfo_8cpp_source.html#l00076">SSHFileInfo::stringMode()</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00735">RemoteDirModel::mimeData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad885e90bce1e13ab2f117937d3af195d"></a><!-- doxytag: member="NetDirNode::findChindByName" ref="ad885e90bce1e13ab2f117937d3af195d" args="(QString name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_net_dir_node.html">NetDirNode</a> * NetDirNode::findChindByName </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>name</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00070">70</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>及<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2d638c0d6551358745bd1f655a00e09e"></a><!-- doxytag: member="NetDirNode::hasChild" ref="a2d638c0d6551358745bd1f655a00e09e" args="(QString name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::hasChild </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>name</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00059">59</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a93a5ef4d27f9bca538b4a0ffb59caeb6"></a><!-- doxytag: member="NetDirNode::isDir" ref="a93a5ef4d27f9bca538b4a0ffb59caeb6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::isDir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00032">32</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+<p>参考自 <a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00101">DirTreeSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00468">RemoteDirModel::hasChildren()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00164">DirTableSortFilterModel::hasChildren()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00067">DirTreeSortFilterModel::hasChildren()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00934">RemoteDirModel::isDir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>及<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9a6e4897dbdb737aae4cded49f47fbb8"></a><!-- doxytag: member="NetDirNode::isSymLink" ref="a9a6e4897dbdb737aae4cded49f47fbb8" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::isSymLink </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00039">39</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00945">RemoteDirModel::isSymLink()</a>及<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abd6d97e0c517ca3577f87049f835a36b"></a><!-- doxytag: member="NetDirNode::isSymLinkToDir" ref="abd6d97e0c517ca3577f87049f835a36b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::isSymLinkToDir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00043">43</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00073">linkToDir</a>.</p>
+
+<p>参考自 <a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00101">DirTreeSortFilterModel::filterAcceptsRow()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00468">RemoteDirModel::hasChildren()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00164">DirTableSortFilterModel::hasChildren()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00067">DirTreeSortFilterModel::hasChildren()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00956">RemoteDirModel::isSymLinkToDir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a70e9dfc5a2a1085ca0b9d46b2c5ba845"></a><!-- doxytag: member="NetDirNode::matchChecksum" ref="a70e9dfc5a2a1085ca0b9d46b2c5ba845" args="(LIBSSH2_SFTP_ATTRIBUTES *attr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::matchChecksum </td>
+          <td>(</td>
+          <td class="paramtype">LIBSSH2_SFTP_ATTRIBUTES *&nbsp;</td>
+          <td class="paramname"> <em>attr</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00090">90</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a21ff7fadb66085a2a1626ea7f00a5d10"></a><!-- doxytag: member="NetDirNode::matchChecksum" ref="a21ff7fadb66085a2a1626ea7f00a5d10" args="(QDateTime mdate, quint64 fsize)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::matchChecksum </td>
+          <td>(</td>
+          <td class="paramtype">QDateTime&nbsp;</td>
+          <td class="paramname"> <em>mdate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">quint64&nbsp;</td>
+          <td class="paramname"> <em>fsize</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00081">81</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af99bd1b157c63df650f597c5b43b9655"></a><!-- doxytag: member="NetDirNode::parent" ref="af99bd1b157c63df650f597c5b43b9655" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_net_dir_node.html">NetDirNode</a> * NetDirNode::parent </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00054">54</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00065">pNode</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae13cba0d05fae2a18bb9f44866502ec2"></a><!-- doxytag: member="NetDirNode::setDeleteFlag" ref="ae13cba0d05fae2a18bb9f44866502ec2" args="(bool deleted)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::setDeleteFlag </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>deleted</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00111">111</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab1a4bec6ab63bb0c4120d4939285ebac"></a><!-- doxytag: member="NetDirNode::setDeleteFlag" ref="ab1a4bec6ab63bb0c4120d4939285ebac" args="(QString name, bool del)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NetDirNode::setDeleteFlag </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>del</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00100">100</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>及<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af1b553b6604e8cd17ec92edca7f129d6"></a><!-- doxytag: member="NetDirNode::strFileSize" ref="af1b553b6604e8cd17ec92edca7f129d6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NetDirNode::strFileSize </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a>第<a class="el" href="rfsdirnode_8cpp_source.html#l00182">182</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00075">attrib</a>.</p>
+
+<p>参考自 <a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>及<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="af589fc25e6ccefb7d600026d658abc92"></a><!-- doxytag: member="NetDirNode::_fileName" ref="af589fc25e6ccefb7d600026d658abc92" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">NetDirNode::_fileName</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00072">72</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00209">dumpTreeRecursive()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00133">fileName()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00264">RemoteDirModel::find_node_item_by_path_elements()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">SSHDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">RemoteView::rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">FTPDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00249">DirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">RemoteDirModel::rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00488">RemoteDirModel::setData()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">RemoteView::slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>及<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a16354dce615375a4128176ca878b37d6"></a><!-- doxytag: member="NetDirNode::attrib" ref="a16354dce615375a4128176ca878b37d6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP_ATTRIBUTES <a class="el" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">NetDirNode::attrib</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00075">75</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00159">fileADate()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00143">fileMDate()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00137">fileMode()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00177">fileSize()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00187">fileType()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00032">isDir()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00039">isSymLink()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00081">matchChecksum()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>及<a class="el" href="rfsdirnode_8cpp_source.html#l00182">strFileSize()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a934ced4c6df6267af9dc611a42a6fa4e"></a><!-- doxytag: member="NetDirNode::childNodes" ref="a934ced4c6df6267af9dc611a42a6fa4e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;int, <a class="el" href="class_net_dir_node.html">NetDirNode</a>*&gt; <a class="el" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">NetDirNode::childNodes</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00062">62</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00120">childAt()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00048">childCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00264">RemoteDirModel::find_node_item_by_path_elements()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00180">RemoteDirModel::index()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">RemoteDirModel::insertRows()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00569">RemoteDirModel::removeRows()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">SSHDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">FTPDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00249">DirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">RemoteDirModel::rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00091">vdump_node()</a>及<a class="el" href="rfsdirnode_8cpp_source.html#l00019">~NetDirNode()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f065fb508d94fcc9a53bd1094362544"></a><!-- doxytag: member="NetDirNode::deleted" ref="a3f065fb508d94fcc9a53bd1094362544" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">NetDirNode::deleted</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00046">46</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>及<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a79f52fea137d5073dd4fb653527a94b4"></a><!-- doxytag: member="NetDirNode::fullPath" ref="a79f52fea137d5073dd4fb653527a94b4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">NetDirNode::fullPath</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00071">71</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00209">dumpTreeRecursive()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00129">filePath()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00473">SSHDirRetriver::fxp_realpath()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00481">DirRetriver::fxp_realpath()</a>、<a class="el" href="remoteview_8cpp_source.html#l00298">RemoteView::get_selected_directory()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00735">RemoteDirModel::mimeData()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00196">SSHDirRetriver::mkdir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00253">FTPDirRetriver::mkdir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00205">DirRetriver::mkdir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00333">SSHDirRetriver::rename()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00401">FTPDirRetriver::rename()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00342">DirRetriver::rename()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00240">SSHDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">FTPDirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00249">DirRetriver::rm_file_or_directory_recursively()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00214">SSHDirRetriver::rmdir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">FTPDirRetriver::rmdir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00223">DirRetriver::rmdir()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">RemoteDirModel::rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00488">RemoteDirModel::setData()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">RemoteView::slot_copy_path()</a>、<a class="el" href="ftpview_8cpp_source.html#l00606">FTPView::slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">RemoteView::slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">RemoteView::slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">RemoteView::slot_new_transfer()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">RemoteView::update_layout()</a>、<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00091">vdump_node()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a49650ef72fbb71cdbb3a8cd5f5477e66"></a><!-- doxytag: member="NetDirNode::linkToDir" ref="a49650ef72fbb71cdbb3a8cd5f5477e66" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_net_dir_node.html#a49650ef72fbb71cdbb3a8cd5f5477e66">NetDirNode::linkToDir</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00073">73</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00826">RemoteDirModel::execute_command_finished()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00043">isSymLinkToDir()</a>及<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab48c3fca335e99090077abdc9de5e6d8"></a><!-- doxytag: member="NetDirNode::onRow" ref="ab48c3fca335e99090077abdc9de5e6d8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short <a class="el" href="class_net_dir_node.html#ab48c3fca335e99090077abdc9de5e6d8">NetDirNode::onRow</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00066">66</a>行定义。</p>
+
+<p>参考自 <a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">RemoteDirModel::insertRows()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00292">RemoteDirModel::parent()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00569">RemoteDirModel::removeRows()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00091">vdump_node()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac14b75fbc9ddb9c04a25c0e9381a4ce1"></a><!-- doxytag: member="NetDirNode::pNode" ref="ac14b75fbc9ddb9c04a25c0e9381a4ce1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_net_dir_node.html">NetDirNode</a>* <a class="el" href="class_net_dir_node.html#ac14b75fbc9ddb9c04a25c0e9381a4ce1">NetDirNode::pNode</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00065">65</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00209">dumpTreeRecursive()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00528">RemoteDirModel::insertRows()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00054">parent()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00292">RemoteDirModel::parent()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00488">RemoteDirModel::setData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2a93d246bd4a6426a0bbc20b5ae377f"></a><!-- doxytag: member="NetDirNode::prevFlag" ref="ab2a93d246bd4a6426a0bbc20b5ae377f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">NetDirNode::prevFlag</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00044">44</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">SSHDirRetriver::add_node()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00462">FTPDirRetriver::add_node()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00505">DirRetriver::add_node()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00826">RemoteDirModel::execute_command_finished()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">RemoteView::update_layout()</a>及<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a40925f2136f09136ef226e1d13113ee4"></a><!-- doxytag: member="NetDirNode::retrFlag" ref="a40925f2136f09136ef226e1d13113ee4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">NetDirNode::retrFlag</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a>第<a class="el" href="rfsdirnode_8h_source.html#l00045">45</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sshdirretriver_8cpp_source.html#l00499">SSHDirRetriver::add_node()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00462">FTPDirRetriver::add_node()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00505">DirRetriver::add_node()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00193">copyFrom()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00620">RemoteDirModel::dump_tree_node_item()</a>、<a class="el" href="netdirsortfiltermodel_8cpp_source.html#l00020">dump_tree_node_item()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00826">RemoteDirModel::execute_command_finished()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00032">NetDirNode()</a>、<a class="el" href="sshdirretriver_8cpp_source.html#l00102">SSHDirRetriver::retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">FTPDirRetriver::retrive_dir()</a>、<a class="el" href="dirretriver_8cpp_source.html#l00109">DirRetriver::retrive_dir()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00427">RemoteDirModel::rowCount()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00103">RemoteDirModel::set_user_home_path()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00776">RemoteDirModel::slot_remote_dir_node_clicked()</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00641">RemoteDirModel::slot_remote_dir_node_retrived()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">RemoteView::update_layout()</a>及<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="rfsdirnode_8h_source.html">rfsdirnode.h</a></li>
+<li><a class="el" href="rfsdirnode_8cpp_source.html">rfsdirnode.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

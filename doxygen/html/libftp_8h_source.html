@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: libftp.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>libftp.h</h1><a href="libftp_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// libftp.h --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2009-09-08 00:50:41 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: libftp.h 623 2010-05-04 06:46:47Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#ifndef _LIBFTP_H_</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#define _LIBFTP_H_</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QtNetwork&gt;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a><a class="code" href="class_lib_ftp.html">00016</a> <span class="keyword">class </span><a class="code" href="class_lib_ftp.html">LibFtp</a> : <span class="keyword">public</span> QObject
+<a name="l00017"></a>00017 {
+<a name="l00018"></a>00018     Q_OBJECT;
+<a name="l00019"></a>00019 <span class="keyword">public</span>:
+<a name="l00020"></a>00020     <a class="code" href="class_lib_ftp.html#a1b1c3380b658d39871f1d8a96af118e9">LibFtp</a>(QObject *parent = 0);
+<a name="l00021"></a>00021     <span class="keyword">virtual</span> <a class="code" href="class_lib_ftp.html#ab8d74c18deb861d55c0791308f754639">~LibFtp</a>();
+<a name="l00022"></a><a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea973fa2bde6202733573c9facde0b8862">00022</a>     <span class="keyword">enum</span> {<a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea973fa2bde6202733573c9facde0b8862">TYPE_MIN</a> = 0, <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057eac429bb51e206484b5417a2fc6c6d5d84">TYPE_ASCII</a>, <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057eac1061aed98171cc02427d59b5dee2ced">TYPE_EBCID</a>, <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea360a43b4365fb698f9fb52efcb8b7498">TYPE_BIN</a>,
+<a name="l00023"></a><a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea1b009c99aa1c77b696c791828ac182e3">00023</a>           <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea3adcff191ddbe2a96b20cb91cbcb1afe">TYPE_IMAGE</a>, <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea1b009c99aa1c77b696c791828ac182e3">TYPE_LOCAL_BYTE</a>,
+<a name="l00024"></a><a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea0317c625a2cb0808017ab9d0cacce464">00024</a>           <a class="code" href="class_lib_ftp.html#afb044fc326403c0137c74a4be25e057ea0317c625a2cb0808017ab9d0cacce464">TYPE_MAX</a>};
+<a name="l00025"></a>00025     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a2a5a18caccdad4886157c4039aa939a2">connect</a>(<span class="keyword">const</span> QString host, <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a> = 21);
+<a name="l00026"></a>00026     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a6c7b2e7ff1b7bd240e97878960d0e94d">login</a>(<span class="keyword">const</span> QString &amp;user = QString(), <span class="keyword">const</span> QString &amp;password = QString());
+<a name="l00027"></a>00027     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a3702bfa3262b65fcc114d03112e632cf">logout</a>();
+<a name="l00028"></a>00028     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a86e10a4c18a6e1555d6a1717fb16e5bc">connectDataChannel</a>();
+<a name="l00029"></a>00029     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a3b8d5c72e6bab4964f6d521f2c40b5e3">closeDataChannel</a>();
+<a name="l00030"></a>00030     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a2944e7a0d9ac005a59069d5a9805ce5e">list</a>(QString path);
+<a name="l00031"></a>00031     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a54b79158a2a73685d09b6266e051f6dc">lista</a>(QString path);
+<a name="l00032"></a>00032     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a3aaaaa75e4bbf7712507e591ff867ecf">nlist</a>(QString path);
+<a name="l00033"></a>00033     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a500c09744e0350a80350dd9269ed01c8">mlst</a>(QString path);
+<a name="l00034"></a>00034     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a79606e7b173ca52c579952d5b35dd465">pwd</a>(QString &amp;path); <span class="comment">// returned path</span>
+<a name="l00035"></a>00035     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a11a2d7283c0ece611a1c2a05fe55a691">mkdir</a>(QString path);
+<a name="l00036"></a>00036     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a1d714e73c057dbec04da0a86bd75d9e7">rmdir</a>(QString path);
+<a name="l00037"></a>00037     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#abea6be9423770fd41dd6c24158ddc496">chdir</a>(QString path);
+<a name="l00038"></a>00038     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a8401355ddf1bc0d9081bbecc722bb05e">put</a>(<span class="keyword">const</span> QString fileName);
+<a name="l00039"></a>00039     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ae3e89d61394e5410b80155538a806d2d">putNoWaitResponse</a>(<span class="keyword">const</span> QString fileName);
+<a name="l00040"></a>00040     <span class="keywordtype">int</span> <span class="keyword">get</span>(<span class="keyword">const</span> QString fileName);
+<a name="l00041"></a>00041     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a0aea008a4d477d83d0ddaacccfde9c9a">getNoWaitResponse</a>(<span class="keyword">const</span> QString fileName);
+<a name="l00042"></a>00042     <span class="keywordtype">int</span> <span class="keyword">remove</span>(<span class="keyword">const</span> QString path);
+<a name="l00043"></a>00043     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ab03a221c4d88e2519bbecac826bb3581">rename</a>(<span class="keyword">const</span> QString src, <span class="keyword">const</span> QString dest);
+<a name="l00044"></a>00044     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a742822415dcf04adf1434f872d601db0">passive</a>();
+<a name="l00045"></a>00045     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#aa1c3d143f2acf8e6e42c11255f4eb83b">rein</a>(<span class="keyword">const</span> QString &amp;user = QString(), <span class="keyword">const</span> QString &amp;password = QString()); <span class="comment">// 重新登陆</span>
+<a name="l00046"></a>00046     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ab8af1b603cb6f9684469f5c173ea4e4e">type</a>(<span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ab8af1b603cb6f9684469f5c173ea4e4e">type</a>);
+<a name="l00047"></a>00047     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a47dfb7a6f1e060c1bbdc5ad8bab5fb1e">noop</a>();
+<a name="l00048"></a>00048     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#af9e17c150939dde1df0a7719eb7328d7">system</a>(QString &amp;<a class="code" href="class_lib_ftp.html#ab8af1b603cb6f9684469f5c173ea4e4e">type</a>);
+<a name="l00049"></a>00049     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a178474742ca671b2fb1f96910aa6a09c">stat</a>(QString path);
+<a name="l00050"></a>00050     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a>(<span class="keyword">const</span> QString hostip, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a>); <span class="comment">// fxp</span>
+<a name="l00051"></a>00051     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#aeef69e405379d0eed14c43ee994fcd00">portNoWaitResponse</a>(<span class="keyword">const</span> QString hostip, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a>);
+<a name="l00052"></a>00052     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a76ab9b702c11dcab680030b2fef0b4e3">size</a>(QString path, quint64 &amp;siz);
+<a name="l00053"></a>00053     
+<a name="l00054"></a>00054     <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_lib_ftp.html#a8cf63a7677c4adf83f8572b362390b42">pasvPeer</a>(QString &amp;hostip); <span class="comment">// get passive peer ip</span>
+<a name="l00055"></a>00055     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a05e935dc983cb1c02c8cd060a5ac8c48">swallowResponse</a>();
+<a name="l00056"></a>00056     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a504ec6cf4342307999980e3bde30986f">waitForCtrlResponse</a>();
+<a name="l00057"></a>00057     
+<a name="l00058"></a>00058     QVector&lt;QUrlInfo&gt; <a class="code" href="class_lib_ftp.html#a4776347f3686cc380c356636697680a3">getDirList</a>();
+<a name="l00059"></a>00059     QString <a class="code" href="class_lib_ftp.html#af534dcf5e00c9ec12db5f1773a11eb6b">getServerBanner</a>();
+<a name="l00060"></a>00060     QTcpSocket *<a class="code" href="class_lib_ftp.html#afdbd69fb55b4bf4854eff45b2b2fade6">getDataSocket</a>();
+<a name="l00061"></a>00061     QString <a class="code" href="class_lib_ftp.html#a2cb70c0933fad6f86cee3caeeb208c74">errorString</a>();
+<a name="l00062"></a>00062     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a92099a427264cde6f723beed0d3888ba">setEncoding</a>(QString <a class="code" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">encoding</a>);
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="keyword">private</span> slots:
+<a name="l00065"></a>00065     <span class="keywordtype">void</span> <a class="code" href="class_lib_ftp.html#ae17935d9839af65c75a557cfd5c51e56">onDataSockConnected</a>();
+<a name="l00066"></a>00066     <span class="keywordtype">void</span> <a class="code" href="class_lib_ftp.html#a47e402b8454c4a7ab412a28d0c84a05b">onDataSockDisconnected</a>();
+<a name="l00067"></a>00067     <span class="keywordtype">void</span> <a class="code" href="class_lib_ftp.html#ae5f9283dab87fdf796836306763721bd">onDataSockError</a>(QAbstractSocket::SocketError socketError);
+<a name="l00068"></a>00068     <span class="keywordtype">void</span> <a class="code" href="class_lib_ftp.html#a5f678e6d081350e0733e00e4a43dae8e">onDataSockStateChanged</a>(QAbstractSocket::SocketState socketState);
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 <span class="keyword">private</span>:
+<a name="l00071"></a>00071     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#ab609ef38cc57913d510257a29699bf65">parsePasvPort</a>(QString &amp;host, <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> &amp;<a class="code" href="class_lib_ftp.html#ac70981184e3ee0be152a547a1ac2eb49">port</a>);
+<a name="l00072"></a>00072     QByteArray <a class="code" href="class_lib_ftp.html#a29f485e623db8b28fee05a8f2a8f9bd2">readAll</a>(QTcpSocket *sock);
+<a name="l00073"></a>00073     QByteArray <a class="code" href="class_lib_ftp.html#a1c875c9ef986d20cd2d55a3503aa1335">readAllByEndSymbol</a>(QTcpSocket *sock);
+<a name="l00074"></a>00074     <span class="keywordtype">bool</span> <a class="code" href="class_lib_ftp.html#ae570c2aa77744e1af377fd7b7c6e72c1">parseDir</a>(<span class="keyword">const</span> QByteArray &amp;buffer, <span class="keyword">const</span> QString &amp;userName, QUrlInfo *info);
+<a name="l00075"></a>00075     <span class="keywordtype">void</span> <a class="code" href="class_lib_ftp.html#ab7b9dfd352d935aaa4eab16d4967eb47" title="private">setError</a>(<span class="keywordtype">int</span> okno, QString msg);
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078 <span class="keyword">private</span>:
+<a name="l00079"></a><a class="code" href="class_lib_ftp.html#ae9d1554fba1ed967f8be3f1e0871a0c5">00079</a>     QSslSocket *<a class="code" href="class_lib_ftp.html#ae9d1554fba1ed967f8be3f1e0871a0c5">qsock</a>;
+<a name="l00080"></a><a class="code" href="class_lib_ftp.html#a4c8613e0603731ba5b85ee65895e4e1c">00080</a>     QSslSocket *<a class="code" href="class_lib_ftp.html#a4c8613e0603731ba5b85ee65895e4e1c">qdsock</a>;
+<a name="l00081"></a>00081     <span class="comment">// QSslSocket *qSslSock;</span>
+<a name="l00082"></a>00082     <span class="comment">// QSslSocket *qdSslSock;</span>
+<a name="l00083"></a><a class="code" href="class_lib_ftp.html#a5e4d3a04a315540f12f4eae0a99ea84c">00083</a>     QString <a class="code" href="class_lib_ftp.html#a5e4d3a04a315540f12f4eae0a99ea84c">pasvHost</a>;
+<a name="l00084"></a><a class="code" href="class_lib_ftp.html#afb4d7f73bb206a16ea562c232bd3577a">00084</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_lib_ftp.html#afb4d7f73bb206a16ea562c232bd3577a">pasvPort</a>;
+<a name="l00085"></a><a class="code" href="class_lib_ftp.html#ae95acb1db9fdeabfef2c5b131a24ec66">00085</a>     QVector&lt;QUrlInfo&gt; <a class="code" href="class_lib_ftp.html#ae95acb1db9fdeabfef2c5b131a24ec66">dirList</a>;
+<a name="l00086"></a><a class="code" href="class_lib_ftp.html#a9fd79ee810aa59c7dd11b367684aba6e">00086</a>     QString <a class="code" href="class_lib_ftp.html#a9fd79ee810aa59c7dd11b367684aba6e">servBanner</a>;
+<a name="l00087"></a><a class="code" href="class_lib_ftp.html#a87158b686e1ae0746e26ed25f08136fb">00087</a>     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a87158b686e1ae0746e26ed25f08136fb">errnum</a>;
+<a name="l00088"></a><a class="code" href="class_lib_ftp.html#a159eb93054e836ace2bf565e0a0d753a">00088</a>     QString <a class="code" href="class_lib_ftp.html#a159eb93054e836ace2bf565e0a0d753a">errmsg</a>;
+<a name="l00089"></a><a class="code" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">00089</a>     QString <a class="code" href="class_lib_ftp.html#a97f40509a1f07db5e61fadb2d84dbe6b">encoding</a>;
+<a name="l00090"></a><a class="code" href="class_lib_ftp.html#a587a7f9ffe331dce15febe32b64f75d6">00090</a>     QTextCodec *<a class="code" href="class_lib_ftp.html#a587a7f9ffe331dce15febe32b64f75d6">codec</a>;
+<a name="l00091"></a><a class="code" href="class_lib_ftp.html#a766a0a558629f648c962872e588a59a7">00091</a>     <span class="keywordtype">int</span> <a class="code" href="class_lib_ftp.html#a766a0a558629f648c962872e588a59a7">useTLS</a>;
+<a name="l00092"></a>00092 };
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094         
+<a name="l00095"></a>00095 <span class="preprocessor">#endif </span><span class="comment">/* _LIBFTP_H_ */</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

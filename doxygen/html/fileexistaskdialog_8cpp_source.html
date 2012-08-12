@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: fileexistaskdialog.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>fileexistaskdialog.cpp</h1><a href="fileexistaskdialog_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// fileexistaskdialog.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-05-05 21:59:50 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: fileexistaskdialog.cpp 489 2009-09-09 13:30:50Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;<a class="code" href="transportor_8h.html">transportor.h</a>&quot;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;<a class="code" href="fileexistaskdialog_8h.html">fileexistaskdialog.h</a>&quot;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a><a class="code" href="class_file_exist_ask_dialog.html#aab90e2f20c601f8e44fd2d515d3c2bfa">00013</a> <a class="code" href="class_file_exist_ask_dialog.html#aab90e2f20c601f8e44fd2d515d3c2bfa">FileExistAskDialog::FileExistAskDialog</a>(QWidget *parent)
+<a name="l00014"></a>00014   :QDialog(parent)
+<a name="l00015"></a>00015 {
+<a name="l00016"></a>00016   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.setupUi(<span class="keyword">this</span>);
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00019"></a>00019   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_2, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00020"></a>00020   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_3, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00021"></a>00021   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_4, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00022"></a>00022   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_5, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00023"></a>00023   QObject::connect(this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_6, SIGNAL(clicked()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">slot_reponse_button_clicked</a>()));
+<a name="l00024"></a>00024 }
+<a name="l00025"></a>00025 
+<a name="l00026"></a><a class="code" href="class_file_exist_ask_dialog.html#a392539d1a2d2cca07add705339502e2b">00026</a> <a class="code" href="class_file_exist_ask_dialog.html#a392539d1a2d2cca07add705339502e2b">FileExistAskDialog::~FileExistAskDialog</a>()
+<a name="l00027"></a>00027 {
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 }
+<a name="l00030"></a>00030 
+<a name="l00031"></a><a class="code" href="class_file_exist_ask_dialog.html#aa1d2eed2b47576e92811cbf4b9f1698a">00031</a> <span class="keywordtype">void</span> <a class="code" href="class_file_exist_ask_dialog.html#aa1d2eed2b47576e92811cbf4b9f1698a">FileExistAskDialog::set_files</a>(QString src_path, QString src_file_size, QString src_file_date, QString dest_path, QString dest_file_size, QString dest_file_date)
+<a name="l00032"></a>00032 {
+<a name="l00033"></a>00033   QString fmt_prefix = QString(<span class="stringliteral">&quot;        &quot;</span>);
+<a name="l00034"></a>00034   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_4-&gt;setText(fmt_prefix+src_path);
+<a name="l00035"></a>00035   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_5-&gt;setText(fmt_prefix+src_file_size);
+<a name="l00036"></a>00036   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_6-&gt;setText(fmt_prefix+src_file_date);
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_8-&gt;setText(fmt_prefix+dest_path);
+<a name="l00039"></a>00039   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_9-&gt;setText(fmt_prefix+dest_file_size);
+<a name="l00040"></a>00040   this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.label_10-&gt;setText(fmt_prefix+dest_file_date);
+<a name="l00041"></a>00041   
+<a name="l00042"></a>00042 }
+<a name="l00043"></a>00043   
+<a name="l00044"></a><a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">00044</a> <span class="keywordtype">void</span> <a class="code" href="class_file_exist_ask_dialog.html#aac02b6c171610120c1194970081570a1">FileExistAskDialog::slot_reponse_button_clicked</a>()
+<a name="l00045"></a>00045 {
+<a name="l00046"></a>00046   QWidget *sender_widget = (QWidget*)sender();
+<a name="l00047"></a>00047   <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton){
+<a name="l00048"></a>00048     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa044d103ae04e139ee617f9d838244eb6">Transportor::OW_YES</a>);
+<a name="l00049"></a>00049   }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_2){
+<a name="l00050"></a>00050     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa7ae968efd876249e166489687890ffae">Transportor::OW_YES_ALL</a>); 
+<a name="l00051"></a>00051   }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_3){
+<a name="l00052"></a>00052     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa85e5c8bc079ff4650c2a554fd30fa373">Transportor::OW_RESUME</a>); 
+<a name="l00053"></a>00053   }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_4){
+<a name="l00054"></a>00054     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa8e42726874744267278640121816e732">Transportor::OW_NO</a>);
+<a name="l00055"></a>00055   }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_5){
+<a name="l00056"></a>00056     emit    this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa42fe2dc3fa52b1532a003915755b7cfc">Transportor::OW_NO_ALL</a>);
+<a name="l00057"></a>00057   }<span class="keywordflow">else</span> <span class="keywordflow">if</span>(sender_widget == this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a94a23b2366bf189744160ff9303e5e2e">ui_dlg</a>.pushButton_6){
+<a name="l00058"></a>00058     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781">Transportor::OW_CANCEL</a>);
+<a name="l00059"></a>00059   }<span class="keywordflow">else</span>{
+<a name="l00060"></a>00060     emit this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781">Transportor::OW_CANCEL</a>);
+<a name="l00061"></a>00061   }
+<a name="l00062"></a>00062   this-&gt;reject();
+<a name="l00063"></a>00063 }
+<a name="l00064"></a>00064 
+<a name="l00065"></a><a class="code" href="class_file_exist_ask_dialog.html#ae0a09ed7d44dc870b83defd76f15c066">00065</a> <span class="keywordtype">void</span> <a class="code" href="class_file_exist_ask_dialog.html#ae0a09ed7d44dc870b83defd76f15c066">FileExistAskDialog::close</a>()
+<a name="l00066"></a>00066 {
+<a name="l00067"></a>00067   emit  this-&gt;<a class="code" href="class_file_exist_ask_dialog.html#a690eda2bc81765791f968204efc64aec">acceptedOne</a>(<a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781">Transportor::OW_CANCEL</a>);
+<a name="l00068"></a>00068   this-&gt;reject();
+<a name="l00069"></a>00069 }
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

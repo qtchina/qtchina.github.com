@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: rfsdirnode.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>rfsdirnode.cpp</h1><a href="rfsdirnode_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// rfsdirnode.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-08-09 11:50:49 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: rfsdirnode.cpp 639 2010-05-31 03:08:56Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="sshfileinfo_8h.html">sshfileinfo.h</a>&quot;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="rfsdirnode_8h.html">rfsdirnode.h</a>&quot;</span>
+<a name="l00017"></a>00017 
+<a name="l00019"></a><a class="code" href="class_net_dir_node.html#aed4ff57634d070a16ae1c83311f8b438">00019</a> <a class="code" href="class_net_dir_node.html#aed4ff57634d070a16ae1c83311f8b438">NetDirNode::~NetDirNode</a>()
+<a name="l00020"></a>00020 {
+<a name="l00021"></a>00021     <span class="comment">// qDebug()&lt;&lt;&quot;Deleting now, with childs number:&quot;&lt;&lt;this-&gt;childNodes.count();</span>
+<a name="l00022"></a>00022     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *node = NULL;
+<a name="l00023"></a>00023     <span class="keywordtype">int</span> line = this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.count();
+<a name="l00024"></a>00024     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = line -1 ; i &gt;=0 ; i --) {
+<a name="l00025"></a>00025         Q_ASSERT(this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.contains(i));
+<a name="l00026"></a>00026         node = this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.value(i);
+<a name="l00027"></a>00027         <span class="keyword">delete</span> node;
+<a name="l00028"></a>00028     }
+<a name="l00029"></a>00029     this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.clear();
+<a name="l00030"></a>00030 }
+<a name="l00031"></a>00031 
+<a name="l00032"></a><a class="code" href="class_net_dir_node.html#a93a5ef4d27f9bca538b4a0ffb59caeb6">00032</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a93a5ef4d27f9bca538b4a0ffb59caeb6">NetDirNode::isDir</a>()
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034     <span class="keywordflow">return</span> LIBSSH2_SFTP_S_ISDIR(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.permissions);
+<a name="l00035"></a>00035     <span class="keywordflow">return</span> LIBSSH2_SFTP_S_ISDIR(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.permissions) 
+<a name="l00036"></a>00036         || LIBSSH2_SFTP_S_ISLNK(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.permissions);
+<a name="l00037"></a>00037 }
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="class_net_dir_node.html#a9a6e4897dbdb737aae4cded49f47fbb8">00039</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a9a6e4897dbdb737aae4cded49f47fbb8">NetDirNode::isSymLink</a>()
+<a name="l00040"></a>00040 {
+<a name="l00041"></a>00041     <span class="keywordflow">return</span> LIBSSH2_SFTP_S_ISLNK(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.permissions);
+<a name="l00042"></a>00042 }
+<a name="l00043"></a><a class="code" href="class_net_dir_node.html#abd6d97e0c517ca3577f87049f835a36b">00043</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#abd6d97e0c517ca3577f87049f835a36b">NetDirNode::isSymLinkToDir</a>()
+<a name="l00044"></a>00044 {
+<a name="l00045"></a>00045     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#a49650ef72fbb71cdbb3a8cd5f5477e66">linkToDir</a>;
+<a name="l00046"></a>00046     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00047"></a>00047 }
+<a name="l00048"></a><a class="code" href="class_net_dir_node.html#ad0348a72af478acd97fea56c9c6edcf9">00048</a> <span class="keywordtype">int</span> <a class="code" href="class_net_dir_node.html#ad0348a72af478acd97fea56c9c6edcf9">NetDirNode::childCount</a>()
+<a name="l00049"></a>00049 {
+<a name="l00050"></a>00050     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.count();
+<a name="l00051"></a>00051     <span class="keywordflow">return</span> 0;
+<a name="l00052"></a>00052 }
+<a name="l00053"></a>00053 
+<a name="l00054"></a><a class="code" href="class_net_dir_node.html#af99bd1b157c63df650f597c5b43b9655">00054</a> <a class="code" href="class_net_dir_node.html">NetDirNode</a> *<a class="code" href="class_net_dir_node.html#af99bd1b157c63df650f597c5b43b9655">NetDirNode::parent</a>()
+<a name="l00055"></a>00055 {
+<a name="l00056"></a>00056     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#ac14b75fbc9ddb9c04a25c0e9381a4ce1">pNode</a>;
+<a name="l00057"></a>00057 }
+<a name="l00058"></a>00058 
+<a name="l00059"></a><a class="code" href="class_net_dir_node.html#a2d638c0d6551358745bd1f655a00e09e">00059</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a2d638c0d6551358745bd1f655a00e09e">NetDirNode::hasChild</a>(QString name)
+<a name="l00060"></a>00060 {
+<a name="l00061"></a>00061     <span class="comment">// for (unsigned int i = 0 ; i &lt; this-&gt;childItems.count(); i++) {</span>
+<a name="l00062"></a>00062     <span class="comment">//     if (this-&gt;childItems.at(i)-&gt;file_name == name) {</span>
+<a name="l00063"></a>00063     <span class="comment">//         return true;</span>
+<a name="l00064"></a>00064     <span class="comment">//     }</span>
+<a name="l00065"></a>00065     <span class="comment">// }</span>
+<a name="l00066"></a>00066     
+<a name="l00067"></a>00067     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00068"></a>00068 }
+<a name="l00069"></a>00069 
+<a name="l00070"></a><a class="code" href="class_net_dir_node.html#ad885e90bce1e13ab2f117937d3af195d">00070</a> <a class="code" href="class_net_dir_node.html">NetDirNode</a> *<a class="code" href="class_net_dir_node.html#ad885e90bce1e13ab2f117937d3af195d">NetDirNode::findChindByName</a>(QString name)
+<a name="l00071"></a>00071 {
+<a name="l00072"></a>00072     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *child = NULL;
+<a name="l00073"></a>00073     <span class="comment">// for (unsigned int i = 0 ; i &lt; this-&gt;childItems.count(); i++) {</span>
+<a name="l00074"></a>00074     <span class="comment">//     if (this-&gt;childItems.at(i)-&gt;file_name == name) {</span>
+<a name="l00075"></a>00075     <span class="comment">//         child = childItems.at(i);</span>
+<a name="l00076"></a>00076     <span class="comment">//         break;</span>
+<a name="l00077"></a>00077     <span class="comment">//     }</span>
+<a name="l00078"></a>00078     <span class="comment">// } </span>
+<a name="l00079"></a>00079     <span class="keywordflow">return</span> child;
+<a name="l00080"></a>00080 }
+<a name="l00081"></a><a class="code" href="class_net_dir_node.html#a21ff7fadb66085a2a1626ea7f00a5d10">00081</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a21ff7fadb66085a2a1626ea7f00a5d10">NetDirNode::matchChecksum</a>(QDateTime mdate, quint64 fsize)
+<a name="l00082"></a>00082 {
+<a name="l00083"></a>00083     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.mtime == mdate.toTime_t()
+<a name="l00084"></a>00084         &amp;&amp; fsize == this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.filesize) {
+<a name="l00085"></a>00085         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00086"></a>00086     }
+<a name="l00087"></a>00087     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00088"></a>00088 }
+<a name="l00089"></a>00089 
+<a name="l00090"></a><a class="code" href="class_net_dir_node.html#a70e9dfc5a2a1085ca0b9d46b2c5ba845">00090</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a21ff7fadb66085a2a1626ea7f00a5d10">NetDirNode::matchChecksum</a>(LIBSSH2_SFTP_ATTRIBUTES *attr)
+<a name="l00091"></a>00091 {
+<a name="l00092"></a>00092     Q_ASSERT(attr != NULL);
+<a name="l00093"></a>00093     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.mtime == attr-&gt;mtime
+<a name="l00094"></a>00094         &amp;&amp; this-&gt;attrib.filesize == attr-&gt;filesize) {
+<a name="l00095"></a>00095         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00096"></a>00096     }
+<a name="l00097"></a>00097     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00098"></a>00098 }
+<a name="l00099"></a>00099 
+<a name="l00100"></a><a class="code" href="class_net_dir_node.html#ab1a4bec6ab63bb0c4120d4939285ebac">00100</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#ab1a4bec6ab63bb0c4120d4939285ebac">NetDirNode::setDeleteFlag</a>(QString name, <span class="keywordtype">bool</span> del)
+<a name="l00101"></a>00101 {
+<a name="l00102"></a>00102     <span class="comment">// for (unsigned int i = 0 ; i &lt; this-&gt;childItems.count(); i++) {</span>
+<a name="l00103"></a>00103     <span class="comment">//     if (this-&gt;childItems.at(i)-&gt;file_name == name) {</span>
+<a name="l00104"></a>00104     <span class="comment">//         this-&gt;childItems.at(i)-&gt;delete_flag = del;</span>
+<a name="l00105"></a>00105     <span class="comment">//         return true;</span>
+<a name="l00106"></a>00106     <span class="comment">//     }</span>
+<a name="l00107"></a>00107     <span class="comment">// } </span>
+<a name="l00108"></a>00108     
+<a name="l00109"></a>00109     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00110"></a>00110 }
+<a name="l00111"></a><a class="code" href="class_net_dir_node.html#ae13cba0d05fae2a18bb9f44866502ec2">00111</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#ab1a4bec6ab63bb0c4120d4939285ebac">NetDirNode::setDeleteFlag</a>(<span class="keywordtype">bool</span> deleted)
+<a name="l00112"></a>00112 {
+<a name="l00113"></a>00113     <span class="keywordflow">if</span> (this-&gt;deleted) {
+<a name="l00114"></a>00114         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;flag is already deleted state&quot;</span>;
+<a name="l00115"></a>00115     }
+<a name="l00116"></a>00116     this-&gt;deleted = deleted;
+<a name="l00117"></a>00117     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00118"></a>00118 }
+<a name="l00119"></a>00119 
+<a name="l00120"></a><a class="code" href="class_net_dir_node.html#afdf956f9c6fc8b39004902ce18094046">00120</a> <a class="code" href="class_net_dir_node.html">NetDirNode</a> *<a class="code" href="class_net_dir_node.html#afdf956f9c6fc8b39004902ce18094046">NetDirNode::childAt</a>(<span class="keywordtype">int</span> index)
+<a name="l00121"></a>00121 {
+<a name="l00122"></a>00122     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.contains(index)) {
+<a name="l00123"></a>00123         <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.value(index);
+<a name="l00124"></a>00124     } <span class="keywordflow">else</span> {
+<a name="l00125"></a>00125         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;can not find child at:&quot;</span>&lt;&lt;index;
+<a name="l00126"></a>00126     }
+<a name="l00127"></a>00127     <span class="keywordflow">return</span> NULL;
+<a name="l00128"></a>00128 }
+<a name="l00129"></a><a class="code" href="class_net_dir_node.html#a8710cad8771981a41ccf68656608ac70">00129</a> QString <a class="code" href="class_net_dir_node.html#a8710cad8771981a41ccf68656608ac70">NetDirNode::filePath</a>()
+<a name="l00130"></a>00130 {
+<a name="l00131"></a>00131     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00132"></a>00132 }
+<a name="l00133"></a><a class="code" href="class_net_dir_node.html#ac98ba3cd1dd7f3521b102e7f7b00a08e">00133</a> QString <a class="code" href="class_net_dir_node.html#ac98ba3cd1dd7f3521b102e7f7b00a08e">NetDirNode::fileName</a>()
+<a name="l00134"></a>00134 {
+<a name="l00135"></a>00135     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a>;
+<a name="l00136"></a>00136 }
+<a name="l00137"></a><a class="code" href="class_net_dir_node.html#a430ff4d523de72b8112730a637b4e90b">00137</a> QString <a class="code" href="class_net_dir_node.html#a430ff4d523de72b8112730a637b4e90b">NetDirNode::fileMode</a>()
+<a name="l00138"></a>00138 {
+<a name="l00139"></a>00139     <span class="keywordtype">char</span> mem[32] = {0};
+<a name="l00140"></a>00140     <a class="code" href="utils_8cpp.html#a5e3ce1ddbaec9bf324e051a2038483d9">strmode</a>(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.permissions, mem);
+<a name="l00141"></a>00141     <span class="keywordflow">return</span> QString(mem);
+<a name="l00142"></a>00142 }
+<a name="l00143"></a><a class="code" href="class_net_dir_node.html#aba8f07abb43b518a63d80d7f61ebb0da">00143</a> QString <a class="code" href="class_net_dir_node.html#aba8f07abb43b518a63d80d7f61ebb0da">NetDirNode::fileMDate</a>()
+<a name="l00144"></a>00144 {
+<a name="l00145"></a>00145     <span class="keywordtype">char</span> file_date[PATH_MAX+1];
+<a name="l00146"></a>00146 <span class="preprocessor">#ifndef _MSC_VER</span>
+<a name="l00147"></a>00147 <span class="preprocessor"></span>    <span class="keyword">struct </span>tm *ltime = localtime((time_t*)&amp;this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.mtime);
+<a name="l00148"></a>00148     <span class="keywordflow">if</span> (ltime != NULL) {
+<a name="l00149"></a>00149         <span class="keywordflow">if</span> (time(NULL) - this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.mtime &lt; (365*24*60*60) / 2)
+<a name="l00150"></a>00150             strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00151"></a>00151         <span class="keywordflow">else</span>
+<a name="l00152"></a>00152             strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00153"></a>00153     }
+<a name="l00154"></a>00154 <span class="preprocessor">#else</span>
+<a name="l00155"></a>00155 <span class="preprocessor"></span>    _snprintf(file_date, <span class="keyword">sizeof</span>(file_date) - 1, <span class="stringliteral">&quot;0000/00/00 00:00:00&quot;</span>);
+<a name="l00156"></a>00156 <span class="preprocessor">#endif    </span>
+<a name="l00157"></a>00157 <span class="preprocessor"></span>    <span class="keywordflow">return</span> QString(file_date);
+<a name="l00158"></a>00158 }
+<a name="l00159"></a><a class="code" href="class_net_dir_node.html#a3aec026d940a2b49a193b21c8768f2a9">00159</a> QString <a class="code" href="class_net_dir_node.html#a3aec026d940a2b49a193b21c8768f2a9">NetDirNode::fileADate</a>()
+<a name="l00160"></a>00160 {
+<a name="l00161"></a>00161     <span class="keywordflow">return</span> QString();
+<a name="l00162"></a>00162     <span class="keywordtype">char</span> file_date[PATH_MAX+1];
+<a name="l00163"></a>00163 <span class="preprocessor">#ifndef _MSC_VER</span>
+<a name="l00164"></a>00164 <span class="preprocessor"></span>    <span class="keyword">struct </span>tm *ltime = localtime((time_t*)&amp;this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.atime);
+<a name="l00165"></a>00165     <span class="keywordflow">if</span> (ltime != NULL) {
+<a name="l00166"></a>00166         <span class="keywordflow">if</span> (time(NULL) - this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.atime &lt; (365*24*60*60) / 2)
+<a name="l00167"></a>00167             strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00168"></a>00168         <span class="keywordflow">else</span>
+<a name="l00169"></a>00169             strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00170"></a>00170     }
+<a name="l00171"></a>00171 <span class="preprocessor">#else</span>
+<a name="l00172"></a>00172 <span class="preprocessor"></span>    _snprintf(file_date, <span class="keyword">sizeof</span>(file_date) - 1, <span class="stringliteral">&quot;0000/00/00 00:00:00&quot;</span>);
+<a name="l00173"></a>00173 <span class="preprocessor">#endif    </span>
+<a name="l00174"></a>00174 <span class="preprocessor"></span>    <span class="keywordflow">return</span> QString(file_date);
+<a name="l00175"></a>00175 }
+<a name="l00176"></a>00176 
+<a name="l00177"></a><a class="code" href="class_net_dir_node.html#a0fcb68a3c5d4f47dd207269d580698d0">00177</a> quint64 <a class="code" href="class_net_dir_node.html#a0fcb68a3c5d4f47dd207269d580698d0">NetDirNode::fileSize</a>()
+<a name="l00178"></a>00178 {
+<a name="l00179"></a>00179     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.filesize;
+<a name="l00180"></a>00180 }
+<a name="l00181"></a>00181 
+<a name="l00182"></a><a class="code" href="class_net_dir_node.html#af1b553b6604e8cd17ec92edca7f129d6">00182</a> QString <a class="code" href="class_net_dir_node.html#af1b553b6604e8cd17ec92edca7f129d6">NetDirNode::strFileSize</a>()
+<a name="l00183"></a>00183 {
+<a name="l00184"></a>00184     <span class="keywordflow">return</span> QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>.filesize);
+<a name="l00185"></a>00185 }
+<a name="l00186"></a>00186 
+<a name="l00187"></a><a class="code" href="class_net_dir_node.html#aeb6f2598a3728cdcfe41647c64a0a860">00187</a> QString <a class="code" href="class_net_dir_node.html#aeb6f2598a3728cdcfe41647c64a0a860">NetDirNode::fileType</a>()
+<a name="l00188"></a>00188 {
+<a name="l00189"></a>00189     <a class="code" href="class_s_s_h_file_info.html">SSHFileInfo</a> fi(this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>);
+<a name="l00190"></a>00190     <span class="keywordflow">return</span> fi.<a class="code" href="class_s_s_h_file_info.html#a83ccc5b8a6bf33094370ad3e7b4c5234">stringMode</a>();
+<a name="l00191"></a>00191 }
+<a name="l00192"></a>00192 
+<a name="l00193"></a><a class="code" href="class_net_dir_node.html#a3bd1f79134a9337c3805691d56174223">00193</a> <span class="keywordtype">bool</span> <a class="code" href="class_net_dir_node.html#a3bd1f79134a9337c3805691d56174223">NetDirNode::copyFrom</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *node)
+<a name="l00194"></a>00194 {
+<a name="l00195"></a>00195     this-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> = node-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00196"></a>00196     this-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a> = node-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a>;
+<a name="l00197"></a>00197     this-&gt;<a class="code" href="class_net_dir_node.html#a49650ef72fbb71cdbb3a8cd5f5477e66">linkToDir</a> = node-&gt;<a class="code" href="class_net_dir_node.html#a49650ef72fbb71cdbb3a8cd5f5477e66">linkToDir</a>;
+<a name="l00198"></a>00198     this-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a> = node-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a>;
+<a name="l00199"></a>00199     this-&gt;<a class="code" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a> = node-&gt;<a class="code" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a>;
+<a name="l00200"></a>00200     this-&gt;<a class="code" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">deleted</a> = node-&gt;<a class="code" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">deleted</a>;
+<a name="l00201"></a>00201     this-&gt;<a class="code" href="class_net_dir_node.html#ab48c3fca335e99090077abdc9de5e6d8">onRow</a> = node-&gt;<a class="code" href="class_net_dir_node.html#ab48c3fca335e99090077abdc9de5e6d8">onRow</a>;
+<a name="l00202"></a>00202     <span class="comment">// this-&gt;pNode = node-&gt;pNode;</span>
+<a name="l00203"></a>00203     
+<a name="l00204"></a>00204     memcpy(&amp;this-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>, &amp;node-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a>, <span class="keyword">sizeof</span>(this-&gt;attrib));
+<a name="l00205"></a>00205 
+<a name="l00206"></a>00206     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00207"></a>00207 }
+<a name="l00208"></a>00208 
+<a name="l00209"></a><a class="code" href="class_net_dir_node.html#ae7ffef5c2de38bc57e39e5d94c5f2272">00209</a> <span class="keywordtype">void</span> <a class="code" href="class_net_dir_node.html#ae7ffef5c2de38bc57e39e5d94c5f2272">NetDirNode::dumpTreeRecursive</a>()
+<a name="l00210"></a>00210 {
+<a name="l00211"></a>00211     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *pnode = this-&gt;<a class="code" href="class_net_dir_node.html#ac14b75fbc9ddb9c04a25c0e9381a4ce1">pNode</a>;
+<a name="l00212"></a>00212     <span class="keywordflow">if</span> (pnode != NULL) {
+<a name="l00213"></a>00213         pnode-&gt;<a class="code" href="class_net_dir_node.html#ae7ffef5c2de38bc57e39e5d94c5f2272">dumpTreeRecursive</a>();
+<a name="l00214"></a>00214     }
+<a name="l00215"></a>00215     <span class="keywordtype">int</span> depth = this-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>.split(<span class="charliteral">&#39;/&#39;</span>).count();
+<a name="l00216"></a>00216     QString prepad;
+<a name="l00217"></a>00217     prepad.fill(<span class="charliteral">&#39; &#39;</span>, depth);
+<a name="l00218"></a>00218     qDebug()&lt;&lt;prepad&lt;&lt;this-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a>;
+<a name="l00219"></a>00219 }
+<a name="l00220"></a>00220 
+<a name="l00221"></a>00221 
+<a name="l00222"></a>00222 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

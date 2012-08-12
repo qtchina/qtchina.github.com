@@ -1,0 +1,1826 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: Transportor类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>Transportor类参考</h1><!-- doxytag: class="Transportor" -->
+<p><code>#include &lt;<a class="el" href="transportor_8h_source.html">transportor.h</a>&gt;</code></p>
+
+<p><a href="class_transportor-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a56cb0b233d71c022cc69ce2d83f7d352">TRANSFER_MIN</a>, 
+<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a970ecb146ab80aa5fcb08a59227a1000">TRANSFER_GET</a>, 
+<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a6f58fce1707fc07b381b6c310bc0416f">TRANSFER_PUT</a>, 
+<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a663232dcfa832304d954c0703ef8329a">TRANSFER_EXCHANGE</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a5354e2e0f5231a018197c1e0b391e118">TRANSFER_RETRIVE_TO_LOCAL</a>, 
+<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a3739e6ed3d08347ddf6436aab9262eaa">TRANSFER_RETRIVE_TO_REMOTE</a>, 
+<a class="el" href="class_transportor.html#afab9e8c68f154ef51e0942b61d4427d3a17df630ba17a07a6de7538d9e91fd78e">TRANSFER_MAX</a>
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aab881d4c7aa6752e73926c2099fbfd837">OW_UNKNOWN</a>, 
+<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781">OW_CANCEL</a>, 
+<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa044d103ae04e139ee617f9d838244eb6">OW_YES</a>, 
+<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa7ae968efd876249e166489687890ffae">OW_YES_ALL</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa85e5c8bc079ff4650c2a554fd30fa373">OW_RESUME</a>, 
+<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa8e42726874744267278640121816e732">OW_NO</a>, 
+<a class="el" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa42fe2dc3fa52b1532a003915755b7cfc">OW_NO_ALL</a>
+<br/>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_transportor.html#a61dea693b65f9710cf8d8f6f07cc5f0ba43417c7bc7535be40563e604af0628dc">ERRNO_BASE</a> = 100
+ }</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed</a> (int percent, int total_transfered, int transfer_delta)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started</a> (QString new_file_name)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size</a> (int size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log</a> (QString log)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a5240276df56a117866f3f9e463832cb7">dest_file_exists</a> (QString src_file, QString src_file_size, QString src_file_date, QString dest_file, QString dest_file_size, QString dest_file_date)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a83d481d2105647d543035c21dd262885">Transportor</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a938827cce7fdc6928a1e53c6fbfc226f">~Transportor</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a1e421550076cd4c91b56b8e4a6a19458">run</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#af4ee0108b8ebbd627be0bf282d3d11bd">set_transport_info</a> (<a class="el" href="class_task_package.html">TaskPackage</a> <a class="el" href="class_transportor.html#a603c7d81514809015a556b7ba93837c1">src_pkg</a>, <a class="el" href="class_task_package.html">TaskPackage</a> <a class="el" href="class_transportor.html#ac3523f08af1c42efef7701c912455b68">dest_pkg</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#adeb23d21fee9b3fc8dc2ec9e8d40a631">do_upload</a> (QString src_path, QString dest_path, int pflag)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a425501c4da05e7ac14f5e05dccf9727b">do_download</a> (QString src_path, QString dest_path, int pflag)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a9f3eb39e70528a2824d362f7682b50b4">do_nrsftp_exchange</a> (QString src_path, QString dest_path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a8425f6352e47df527ba20256aa460077">get_error_code</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a80df080ffa3a32df7e9c632aa59f6f11">get_error_message</a> (int <a class="el" href="class_transportor.html#ad93446be03b02b904df3c5fdc94c0516">error_code</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#aa842ebf653e460cb34ea1a20acb0d86b">set_user_cancel</a> (bool cancel)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#aa8594cacb58a936edf447ec7a8bf1e72">user_response_result</a> (int result)</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a641d9683f2fb2846c5212bd750c3581a">remote_is_dir</a> (LIBSSH2_SFTP *ssh2_sftp, QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a96020a48a36d75972ffd4a4c4f22b2ef">remote_is_reg</a> (LIBSSH2_SFTP *ssh2_sftp, QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a4a5b8c9cbab994acd9b974b7ce6a8aa5">fxp_do_ls_dir</a> (LIBSSH2_SFTP *ssh2_sftp, QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a7810c36143aad3e09171653b0aae533e">isFTPDir</a> (<a class="el" href="class_connection.html">Connection</a> *conn, QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a8fcd186537c35080c3e0fc0cfc08fe52">isFTPFile</a> (<a class="el" href="class_connection.html">Connection</a> *conn, QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a9d72142252e07ed284e6be560a12f138">wait_user_response</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a48f95497d95994e47c9c73e1512b1007">getHostInfo</a> (<a class="el" href="class_task_package.html">TaskPackage</a> &amp;pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ab6cf9d29e9616ea61dd8761d32bd8556">run_FILE_to_SFTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#add277e79c01ae75fd5b88472edfab530">run_SFTP_to_FILE</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a53371589059a4835a240fd8bbbb4a741">run_SFTP_to_SFTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a716e999e380662231260bd5e9d2338c7">run_FILE_to_FTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a2c608353ffa5ac73f0c2ed34b1d04511">run_FTP_to_FILE</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a07dbb8eea09ca026abbc250252d5996c">run_FTP_to_FTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a5b5307b620de93b61f5df26bfac7bd5f">run_SFTP_to_FTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a8bcad41406e438398878c3c9c988b349">run_FTP_to_SFTP</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#aaec6ab5e7ee1d4b9b645fb9942f78290">run_FILE_to_SFTP</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a7eaad76074a54a14759433807664c2f6">run_SFTP_to_FILE</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a7b51fa282ea0a468ce2fe0d09732a80e">run_SFTP_to_SFTP</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a5285ac7f2a05ce25fd8e2e213c71091f">run_FILE_to_FTP</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a665be695e020e68e1c7d09ff7db3c872">run_FTP_to_FILE</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a9342e7fc941ddd6e355dd3ca5dd371bd">run_FTP_to_FTP_relay</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a1124dd6575a5fe18e1a61633ddcab317">run_FTP_to_FTP_fxp</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a211225bc705e55102208f5cff5e1213e">run_SFTP_to_FTP</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a83dc5f5e2e7e3a5d0347df4404d08008">run_FTP_to_SFTP</a> (QString srcFile, QString destFile)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ad148ac29ace7dfde614a6585ef20240b">setLocalCurrentDirByFullPath</a> (QString path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ac95807fe15e70ca73f6b4b4dcd3a36b1">setFTPCurrentDirByFullPath</a> (<a class="el" href="class_connection.html">Connection</a> *conn, QString path)</td></tr>
+<tr><td colspan="2"><h2>保护属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SESSION *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a26f82e6cbb0316fa9ace91530b0db1be">dest_ssh2_sess</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ad76cac923eb8b915c84779456929f12a">dest_ssh2_sftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SESSION *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a1eec9935cb93f88c088fd82cfef5e6de">src_ssh2_sess</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#af7e83cf072de6dc30e3eb71f0d423a2e">src_ssh2_sftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a92aeb97ee26735336da9dbd203a465dc">user_canceled</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a5d56c33f092dd6e70e683caff7edf086">file_conflict_resolve_method</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a603c7d81514809015a556b7ba93837c1">src_pkg</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ac3523f08af1c42efef7701c912455b68">dest_pkg</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint64&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ac79f3b797d45d3c39db271b254d1c75c">total_file_size</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint64&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a3f0e2b280e557fa508c3c168ca59c8ec">total_transfered_file_length</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint32&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#af40c1e0be3eb02c42537a5fd39423090">total_file_count</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint32&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#aa7c57071b130ffba2a13d179bc76a7fe">total_transfered_file_count</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint64&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a8e5c1c7318667758a384fec57d1e10fe">current_file_size</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">quint64&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a9c61a93c42e634395c60f31a802c0113">current_file_transfered_length</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a5060b592e052591f5083ca6d54197b65">current_src_file_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#af00b07549b422b11b53640a10c59723a">current_dest_file_name</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QPair&lt; <a class="el" href="class_task_package.html">TaskPackage</a>, <br class="typebreak"/>
+<a class="el" href="class_task_package.html">TaskPackage</a> &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a4353f03bead168c7619aed5713664567">transfer_ready_queue</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QPair&lt; <a class="el" href="class_task_package.html">TaskPackage</a>, <br class="typebreak"/>
+<a class="el" href="class_task_package.html">TaskPackage</a> &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a9e293725b572026496977dd516e4b27d">transfer_done_queue</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ad93446be03b02b904df3c5fdc94c0516">error_code</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#aab7904741add81ed970f3be9ec5791ec">errorString</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QWaitCondition&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a4e8d5787a0662e845fc2d66d9895829d">wait_user_response_cond</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMutex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a0485156b01b3c3736fc8bf941d4ec283">wait_user_response_mutex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#a73011ec6e8bc25a0a4a7b0a37fd13da0">sconn</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_transportor.html#ac42c780f1e13d8958179bcd2829707a3">dconn</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<dl class="author"><dt><b>作者:</b></dt><dd>liuguangzhao &lt;<a href="mailto:liuguangzhao@users.sf.net">liuguangzhao@users.sf.net</a>&gt;</dd></dl>
+<p>此类实现不同主机之间的文件传输功能 由于libssh2协议库的限制，程序无法在一个ssh连接上打开两个或者以上SFTP传输，在此类中选择每次传输 都会创建一个新的SSH连接会话（注：并不是每个文件创建一个连接），这样就不会与目录操作冲突了。 引起的问题是连接速度不容乐观，对于小文件及少量文件传输很不合适，大多数时间都用在了创建新的 SSH连接上了。 另一个选择是使用连接池，预先创建一定数量的SSH连接，在此类中选择空闲的连接即可。如何定义预连接的数目， 如果管理这些连接，相当的复杂。 最后，使用最先使用的方式，对某远程主机，同一时刻只准执行一个SSH命令操作，也就是在这个唯一的SSH连接 上执行同步操作，顺序操作，所有的命令序列及响应都是顺序的，不会发生死锁问题。 还有其他的方案吗？ </p>
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00041">41</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3"></a><!-- doxytag: member="Transportor::@19" ref="afab9e8c68f154ef51e0942b61d4427d3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a56cb0b233d71c022cc69ce2d83f7d352"></a><!-- doxytag: member="TRANSFER_MIN" ref="afab9e8c68f154ef51e0942b61d4427d3a56cb0b233d71c022cc69ce2d83f7d352" args="" -->TRANSFER_MIN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a970ecb146ab80aa5fcb08a59227a1000"></a><!-- doxytag: member="TRANSFER_GET" ref="afab9e8c68f154ef51e0942b61d4427d3a970ecb146ab80aa5fcb08a59227a1000" args="" -->TRANSFER_GET</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a6f58fce1707fc07b381b6c310bc0416f"></a><!-- doxytag: member="TRANSFER_PUT" ref="afab9e8c68f154ef51e0942b61d4427d3a6f58fce1707fc07b381b6c310bc0416f" args="" -->TRANSFER_PUT</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a663232dcfa832304d954c0703ef8329a"></a><!-- doxytag: member="TRANSFER_EXCHANGE" ref="afab9e8c68f154ef51e0942b61d4427d3a663232dcfa832304d954c0703ef8329a" args="" -->TRANSFER_EXCHANGE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a5354e2e0f5231a018197c1e0b391e118"></a><!-- doxytag: member="TRANSFER_RETRIVE_TO_LOCAL" ref="afab9e8c68f154ef51e0942b61d4427d3a5354e2e0f5231a018197c1e0b391e118" args="" -->TRANSFER_RETRIVE_TO_LOCAL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a3739e6ed3d08347ddf6436aab9262eaa"></a><!-- doxytag: member="TRANSFER_RETRIVE_TO_REMOTE" ref="afab9e8c68f154ef51e0942b61d4427d3a3739e6ed3d08347ddf6436aab9262eaa" args="" -->TRANSFER_RETRIVE_TO_REMOTE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="afab9e8c68f154ef51e0942b61d4427d3a17df630ba17a07a6de7538d9e91fd78e"></a><!-- doxytag: member="TRANSFER_MAX" ref="afab9e8c68f154ef51e0942b61d4427d3a17df630ba17a07a6de7538d9e91fd78e" args="" -->TRANSFER_MAX</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00045">45</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a14c04850e839e9885006b5c8c951bd6a"></a><!-- doxytag: member="Transportor::@20" ref="a14c04850e839e9885006b5c8c951bd6a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aab881d4c7aa6752e73926c2099fbfd837"></a><!-- doxytag: member="OW_UNKNOWN" ref="a14c04850e839e9885006b5c8c951bd6aab881d4c7aa6752e73926c2099fbfd837" args="" -->OW_UNKNOWN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781"></a><!-- doxytag: member="OW_CANCEL" ref="a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781" args="" -->OW_CANCEL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aa044d103ae04e139ee617f9d838244eb6"></a><!-- doxytag: member="OW_YES" ref="a14c04850e839e9885006b5c8c951bd6aa044d103ae04e139ee617f9d838244eb6" args="" -->OW_YES</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aa7ae968efd876249e166489687890ffae"></a><!-- doxytag: member="OW_YES_ALL" ref="a14c04850e839e9885006b5c8c951bd6aa7ae968efd876249e166489687890ffae" args="" -->OW_YES_ALL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aa85e5c8bc079ff4650c2a554fd30fa373"></a><!-- doxytag: member="OW_RESUME" ref="a14c04850e839e9885006b5c8c951bd6aa85e5c8bc079ff4650c2a554fd30fa373" args="" -->OW_RESUME</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aa8e42726874744267278640121816e732"></a><!-- doxytag: member="OW_NO" ref="a14c04850e839e9885006b5c8c951bd6aa8e42726874744267278640121816e732" args="" -->OW_NO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a14c04850e839e9885006b5c8c951bd6aa42fe2dc3fa52b1532a003915755b7cfc"></a><!-- doxytag: member="OW_NO_ALL" ref="a14c04850e839e9885006b5c8c951bd6aa42fe2dc3fa52b1532a003915755b7cfc" args="" -->OW_NO_ALL</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00046">46</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a61dea693b65f9710cf8d8f6f07cc5f0b"></a><!-- doxytag: member="Transportor::@21" ref="a61dea693b65f9710cf8d8f6f07cc5f0b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a61dea693b65f9710cf8d8f6f07cc5f0ba43417c7bc7535be40563e604af0628dc"></a><!-- doxytag: member="ERRNO_BASE" ref="a61dea693b65f9710cf8d8f6f07cc5f0ba43417c7bc7535be40563e604af0628dc" args="" -->ERRNO_BASE</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00047">47</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a83d481d2105647d543035c21dd262885"></a><!-- doxytag: member="Transportor::Transportor" ref="a83d481d2105647d543035c21dd262885" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transportor::Transportor </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00042">42</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_UNKNOWN</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>及<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a938827cce7fdc6928a1e53c6fbfc226f"></a><!-- doxytag: member="Transportor::~Transportor" ref="a938827cce7fdc6928a1e53c6fbfc226f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transportor::~Transportor </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00054">54</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a5240276df56a117866f3f9e463832cb7"></a><!-- doxytag: member="Transportor::dest_file_exists" ref="a5240276df56a117866f3f9e463832cb7" args="(QString src_file, QString src_file_size, QString src_file_date, QString dest_file, QString dest_file_size, QString dest_file_date)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::dest_file_exists </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_file_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_file_date</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_file_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_file_date</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l00364">run_FILE_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00678">run_SFTP_to_FILE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a425501c4da05e7ac14f5e05dccf9727b"></a><!-- doxytag: member="Transportor::do_download" ref="a425501c4da05e7ac14f5e05dccf9727b" args="(QString src_path, QString dest_path, int pflag)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::do_download </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>pflag</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02241">2241</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_transportor.html#a5240276df56a117866f3f9e463832cb7">dest_file_exists()</a>、<a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_CANCEL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO_ALL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_RESUME</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_UNKNOWN</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_YES</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9f3eb39e70528a2824d362f7682b50b4"></a><!-- doxytag: member="Transportor::do_nrsftp_exchange" ref="a9f3eb39e70528a2824d362f7682b50b4" args="(QString src_path, QString dest_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::do_nrsftp_exchange </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02447">2447</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adeb23d21fee9b3fc8dc2ec9e8d40a631"></a><!-- doxytag: member="Transportor::do_upload" ref="adeb23d21fee9b3fc8dc2ec9e8d40a631" args="(QString src_path, QString dest_path, int pflag)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::do_upload </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>src_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>dest_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>pflag</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02329">2329</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_transportor.html#a5240276df56a117866f3f9e463832cb7">dest_file_exists()</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00047">ERRNO_BASE</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00271">SSHFileInfo::fromQFileInfo()</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00194">SSHFileInfo::mode()</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_CANCEL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO_ALL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_RESUME</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_UNKNOWN</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_YES</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a5b8c9cbab994acd9b974b7ce6a8aa5"></a><!-- doxytag: member="Transportor::fxp_do_ls_dir" ref="a4a5b8c9cbab994acd9b974b7ce6a8aa5" args="(LIBSSH2_SFTP *ssh2_sftp, QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::fxp_do_ls_dir </td>
+          <td>(</td>
+          <td class="paramtype">LIBSSH2_SFTP *&nbsp;</td>
+          <td class="paramname"> <em>ssh2_sftp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00104">104</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00057">SSHFileInfo::lastModified()</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00071">SSHFileInfo::size()</a>及<a class="el" href="sshfileinfo_8cpp_source.html#l00076">SSHFileInfo::stringMode()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8425f6352e47df527ba20256aa460077"></a><!-- doxytag: member="Transportor::get_error_code" ref="a8425f6352e47df527ba20256aa460077" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int Transportor::get_error_code </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00065">65</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00149">error_code</a>.</p>
+
+<p>参考自 <a class="el" href="progressdialog_8cpp_source.html#l00207">ProgressDialog::closeEvent()</a>及<a class="el" href="progressdialog_8cpp_source.html#l00148">ProgressDialog::slot_transfer_thread_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a80df080ffa3a32df7e9c632aa59f6f11"></a><!-- doxytag: member="Transportor::get_error_message" ref="a80df080ffa3a32df7e9c632aa59f6f11" args="(int error_code)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QString Transportor::get_error_message </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>error_code</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00066">66</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00150">errorString</a>.</p>
+
+<p>参考自 <a class="el" href="progressdialog_8cpp_source.html#l00148">ProgressDialog::slot_transfer_thread_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a48f95497d95994e47c9c73e1512b1007"></a><!-- doxytag: member="Transportor::getHostInfo" ref="a48f95497d95994e47c9c73e1512b1007" args="(TaskPackage &amp;pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; QString, QString &gt; Transportor::getHostInfo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>pkg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02512">2512</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>、<a class="el" href="taskpackage_8h_source.html#l00018">PROTO_FTP</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="taskpackage_8h_source.html#l00051">TaskPackage::pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00045">TaskPackage::scheme</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7810c36143aad3e09171653b0aae533e"></a><!-- doxytag: member="Transportor::isFTPDir" ref="a7810c36143aad3e09171653b0aae533e" args="(Connection *conn, QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::isFTPDir </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00147">147</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00918">LibFtp::chdir()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00156">isFTPFile()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8fcd186537c35080c3e0fc0cfc08fe52"></a><!-- doxytag: member="Transportor::isFTPFile" ref="a8fcd186537c35080c3e0fc0cfc08fe52" args="(Connection *conn, QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::isFTPFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00156">156</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a641d9683f2fb2846c5212bd750c3581a"></a><!-- doxytag: member="Transportor::remote_is_dir" ref="a641d9683f2fb2846c5212bd750c3581a" args="(LIBSSH2_SFTP *ssh2_sftp, QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::remote_is_dir </td>
+          <td>(</td>
+          <td class="paramtype">LIBSSH2_SFTP *&nbsp;</td>
+          <td class="paramname"> <em>ssh2_sftp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00059">59</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>及<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a96020a48a36d75972ffd4a4c4f22b2ef"></a><!-- doxytag: member="Transportor::remote_is_reg" ref="a96020a48a36d75972ffd4a4c4f22b2ef" args="(LIBSSH2_SFTP *ssh2_sftp, QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::remote_is_reg </td>
+          <td>(</td>
+          <td class="paramtype">LIBSSH2_SFTP *&nbsp;</td>
+          <td class="paramname"> <em>ssh2_sftp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00079">79</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>及<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1e421550076cd4c91b56b8e4a6a19458"></a><!-- doxytag: member="Transportor::run" ref="a1e421550076cd4c91b56b8e4a6a19458" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::run </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00167">167</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00135">dest_pkg</a>、<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>、<a class="el" href="taskpackage_8h_source.html#l00018">PROTO_FTP</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>、<a class="el" href="taskpackage_8h_source.html#l00045">TaskPackage::scheme</a>及<a class="el" href="transportor_8h_source.html#l00134">src_pkg</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5285ac7f2a05ce25fd8e2e213c71091f"></a><!-- doxytag: member="Transportor::run_FILE_to_FTP" ref="a5285ac7f2a05ce25fd8e2e213c71091f" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FILE_to_FTP </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01158">1158</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01372">LibFtp::getDataSocket()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="libftp_8cpp_source.html#l00950">LibFtp::put()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="transportor_8cpp_source.html#l01225">setLocalCurrentDirByFullPath()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a716e999e380662231260bd5e9d2338c7"></a><!-- doxytag: member="Transportor::run_FILE_to_FTP" ref="a716e999e380662231260bd5e9d2338c7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FILE_to_FTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01040">1040</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="utils_8cpp_source.html#l00219">fxp_local_do_ls()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">getHostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">LibFtp::mkdir()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaec6ab5e7ee1d4b9b645fb9942f78290"></a><!-- doxytag: member="Transportor::run_FILE_to_SFTP" ref="aaec6ab5e7ee1d4b9b645fb9942f78290" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FILE_to_SFTP </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00364">364</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_transportor.html#a5240276df56a117866f3f9e463832cb7">dest_file_exists()</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00047">ERRNO_BASE</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00271">SSHFileInfo::fromQFileInfo()</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00194">SSHFileInfo::mode()</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_CANCEL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO_ALL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_RESUME</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_UNKNOWN</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_YES</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6cf9d29e9616ea61dd8761d32bd8556"></a><!-- doxytag: member="Transportor::run_FILE_to_SFTP" ref="ab6cf9d29e9616ea61dd8761d32bd8556" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FILE_to_SFTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00204">204</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00135">dest_pkg</a>、<a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="utils_8cpp_source.html#l00219">fxp_local_do_ls()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">TaskPackage::hostInfo()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="transportor_8cpp_source.html#l00059">remote_is_dir()</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a665be695e020e68e1c7d09ff7db3c872"></a><!-- doxytag: member="Transportor::run_FTP_to_FILE" ref="a665be695e020e68e1c7d09ff7db3c872" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_FILE </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01361">1361</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01007">LibFtp::get()</a>、<a class="el" href="libftp_8cpp_source.html#l01372">LibFtp::getDataSocket()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="transportor_8cpp_source.html#l01225">setLocalCurrentDirByFullPath()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">LibFtp::size()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2c608353ffa5ac73f0c2ed34b1d04511"></a><!-- doxytag: member="Transportor::run_FTP_to_FILE" ref="a2c608353ffa5ac73f0c2ed34b1d04511" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_FILE </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01248">1248</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">getHostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>、<a class="el" href="transportor_8cpp_source.html#l00156">isFTPFile()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">LibFtp::list()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a07dbb8eea09ca026abbc250252d5996c"></a><!-- doxytag: member="Transportor::run_FTP_to_FTP" ref="a07dbb8eea09ca026abbc250252d5996c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_FTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01437">1437</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">getHostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>、<a class="el" href="transportor_8cpp_source.html#l00156">isFTPFile()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">LibFtp::list()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">LibFtp::mkdir()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1124dd6575a5fe18e1a61633ddcab317"></a><!-- doxytag: member="Transportor::run_FTP_to_FTP_fxp" ref="a1124dd6575a5fe18e1a61633ddcab317" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_FTP_fxp </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01669">1669</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01035">LibFtp::getNoWaitResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="libftp_8cpp_source.html#l01377">LibFtp::pasvPeer()</a>、<a class="el" href="libftp_8cpp_source.html#l01320">LibFtp::portNoWaitResponse()</a>、<a class="el" href="libftp_8cpp_source.html#l00990">LibFtp::putNoWaitResponse()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">LibFtp::size()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="libftp_8cpp_source.html#l01396">LibFtp::waitForCtrlResponse()</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9342e7fc941ddd6e355dd3ca5dd371bd"></a><!-- doxytag: member="Transportor::run_FTP_to_FTP_relay" ref="a9342e7fc941ddd6e355dd3ca5dd371bd" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_FTP_relay </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01577">1577</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01007">LibFtp::get()</a>、<a class="el" href="libftp_8cpp_source.html#l01372">LibFtp::getDataSocket()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="libftp_8cpp_source.html#l00950">LibFtp::put()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">LibFtp::size()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a83dc5f5e2e7e3a5d0347df4404d08008"></a><!-- doxytag: member="Transportor::run_FTP_to_SFTP" ref="a83dc5f5e2e7e3a5d0347df4404d08008" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_SFTP </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02097">2097</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00047">ERRNO_BASE</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00271">SSHFileInfo::fromQFileInfo()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01007">LibFtp::get()</a>、<a class="el" href="libftp_8cpp_source.html#l01372">LibFtp::getDataSocket()</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="sshfileinfo_8cpp_source.html#l00194">SSHFileInfo::mode()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="libftp_8cpp_source.html#l01343">LibFtp::size()</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8bcad41406e438398878c3c9c988b349"></a><!-- doxytag: member="Transportor::run_FTP_to_SFTP" ref="a8bcad41406e438398878c3c9c988b349" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_FTP_to_SFTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01954">1954</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00135">dest_pkg</a>、<a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">getHostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">TaskPackage::hostInfo()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>、<a class="el" href="transportor_8cpp_source.html#l00156">isFTPFile()</a>、<a class="el" href="libftp_8cpp_source.html#l00530">LibFtp::list()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l00059">remote_is_dir()</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7eaad76074a54a14759433807664c2f6"></a><!-- doxytag: member="Transportor::run_SFTP_to_FILE" ref="a7eaad76074a54a14759433807664c2f6" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_FILE </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00678">678</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_transportor.html#a5240276df56a117866f3f9e463832cb7">dest_file_exists()</a>、<a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_CANCEL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO_ALL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_RESUME</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_UNKNOWN</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_YES</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="add277e79c01ae75fd5b88472edfab530"></a><!-- doxytag: member="Transportor::run_SFTP_to_FILE" ref="add277e79c01ae75fd5b88472edfab530" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_FILE </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00524">524</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="transportor_8cpp_source.html#l00104">fxp_do_ls_dir()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">TaskPackage::hostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="transportor_8cpp_source.html#l00059">remote_is_dir()</a>、<a class="el" href="transportor_8cpp_source.html#l00079">remote_is_reg()</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00134">src_pkg</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a211225bc705e55102208f5cff5e1213e"></a><!-- doxytag: member="Transportor::run_SFTP_to_FTP" ref="a211225bc705e55102208f5cff5e1213e" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_FTP </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01879">1879</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l01372">LibFtp::getDataSocket()</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="libftp_8cpp_source.html#l00950">LibFtp::put()</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8cpp_source.html#l01232">setFTPCurrentDirByFullPath()</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="libftp_8cpp_source.html#l01383">LibFtp::swallowResponse()</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>、<a class="el" href="libftp_8cpp_source.html#l01132">LibFtp::type()</a>、<a class="el" href="libftp_8h_source.html#l00022">LibFtp::TYPE_BIN</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5b5307b620de93b61f5df26bfac7bd5f"></a><!-- doxytag: member="Transportor::run_SFTP_to_FTP" ref="a5b5307b620de93b61f5df26bfac7bd5f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_FTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01747">1747</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="transportor_8cpp_source.html#l00104">fxp_do_ls_dir()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="transportor_8cpp_source.html#l02512">getHostInfo()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">TaskPackage::hostInfo()</a>、<a class="el" href="transportor_8cpp_source.html#l00147">isFTPDir()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">LibFtp::mkdir()</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l00059">remote_is_dir()</a>、<a class="el" href="transportor_8cpp_source.html#l00079">remote_is_reg()</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00134">src_pkg</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>、<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7b51fa282ea0a468ce2fe0d09732a80e"></a><!-- doxytag: member="Transportor::run_SFTP_to_SFTP" ref="a7b51fa282ea0a468ce2fe0d09732a80e" args="(QString srcFile, QString destFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_SFTP </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>srcFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>destFile</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00957">957</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="globaloption_8cpp_source.html#l00017">gOpt</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="class_transportor.html#a0f6ec6ebea008612484e618627f50e2a">transfer_got_file_size()</a>、<a class="el" href="class_transportor.html#a193ec00827802e80503c5e48382f1446">transfer_percent_changed()</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a53371589059a4835a240fd8bbbb4a741"></a><!-- doxytag: member="Transportor::run_SFTP_to_SFTP" ref="a53371589059a4835a240fd8bbbb4a741" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::run_SFTP_to_SFTP </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l00793">793</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00027">Connection::CONN_OK</a>、<a class="el" href="connection_8cpp_source.html#l00031">Connection::connect()</a>、<a class="el" href="transportor_8h_source.html#l00144">current_dest_file_name</a>、<a class="el" href="transportor_8h_source.html#l00143">current_src_file_name</a>、<a class="el" href="transportor_8h_source.html#l00155">dconn</a>、<a class="el" href="transportor_8h_source.html#l00135">dest_pkg</a>、<a class="el" href="transportor_8h_source.html#l00125">dest_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00126">dest_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00149">error_code</a>、<a class="el" href="transportor_8h_source.html#l00150">errorString</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="transportor_8cpp_source.html#l00104">fxp_do_ls_dir()</a>、<a class="el" href="connection_8cpp_source.html#l00094">Connection::get_status_desc()</a>、<a class="el" href="taskpackage_8cpp_source.html#l00158">TaskPackage::hostInfo()</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="transportor_8cpp_source.html#l00059">remote_is_dir()</a>、<a class="el" href="transportor_8cpp_source.html#l00079">remote_is_reg()</a>、<a class="el" href="transportor_8h_source.html#l00154">sconn</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="taskpackage_8cpp_source.html#l00027">TaskPackage::setFile()</a>、<a class="el" href="connection_8cpp_source.html#l00058">Connection::setHostInfo()</a>、<a class="el" href="transportor_8h_source.html#l00134">src_pkg</a>、<a class="el" href="transportor_8h_source.html#l00128">src_ssh2_sess</a>、<a class="el" href="transportor_8h_source.html#l00129">src_ssh2_sftp</a>、<a class="el" href="transportor_8h_source.html#l00147">transfer_done_queue</a>、<a class="el" href="class_transportor.html#afe41d2bc346d134c11da2b3ed5fc2532">transfer_log()</a>、<a class="el" href="class_transportor.html#ac7cb258e36952c44683f1c468cff2a0c">transfer_new_file_started()</a>、<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>及<a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af4ee0108b8ebbd627be0bf282d3d11bd"></a><!-- doxytag: member="Transportor::set_transport_info" ref="af4ee0108b8ebbd627be0bf282d3d11bd" args="(TaskPackage src_pkg, TaskPackage dest_pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::set_transport_info </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>src_pkg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>dest_pkg</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02215">2215</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>及<a class="el" href="transportor_8h_source.html#l00146">transfer_ready_queue</a>.</p>
+
+<p>参考自 <a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa842ebf653e460cb34ea1a20acb0d86b"></a><!-- doxytag: member="Transportor::set_user_cancel" ref="aa842ebf653e460cb34ea1a20acb0d86b" args="(bool cancel)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::set_user_cancel </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>cancel</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02534">2534</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00131">user_canceled</a>.</p>
+
+<p>参考自 <a class="el" href="progressdialog_8cpp_source.html#l00207">ProgressDialog::closeEvent()</a>及<a class="el" href="transportor_8cpp_source.html#l02544">user_response_result()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac95807fe15e70ca73f6b4b4dcd3a36b1"></a><!-- doxytag: member="Transportor::setFTPCurrentDirByFullPath" ref="ac95807fe15e70ca73f6b4b4dcd3a36b1" args="(Connection *conn, QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::setFTPCurrentDirByFullPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01232">1232</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00918">LibFtp::chdir()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l00831">LibFtp::pwd()</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01879">run_SFTP_to_FTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad148ac29ace7dfde614a6585ef20240b"></a><!-- doxytag: member="Transportor::setLocalCurrentDirByFullPath" ref="ad148ac29ace7dfde614a6585ef20240b" args="(QString path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Transportor::setLocalCurrentDirByFullPath </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l01225">1225</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01158">run_FILE_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l01361">run_FTP_to_FILE()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0f6ec6ebea008612484e618627f50e2a"></a><!-- doxytag: member="Transportor::transfer_got_file_size" ref="a0f6ec6ebea008612484e618627f50e2a" args="(int size)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::transfer_got_file_size </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>size</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l01158">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00364">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00678">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01879">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00957">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afe41d2bc346d134c11da2b3ed5fc2532"></a><!-- doxytag: member="Transportor::transfer_log" ref="afe41d2bc346d134c11da2b3ed5fc2532" args="(QString log)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::transfer_log </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>log</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac7cb258e36952c44683f1c468cff2a0c"></a><!-- doxytag: member="Transportor::transfer_new_file_started" ref="ac7cb258e36952c44683f1c468cff2a0c" args="(QString new_file_name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::transfer_new_file_started </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>new_file_name</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a193ec00827802e80503c5e48382f1446"></a><!-- doxytag: member="Transportor::transfer_percent_changed" ref="a193ec00827802e80503c5e48382f1446" args="(int percent, int total_transfered, int transfer_delta)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::transfer_percent_changed </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>percent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>total_transfered</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>transfer_delta</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l01158">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00364">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01361">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l02097">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00678">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01879">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00957">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa8594cacb58a936edf447ec7a8bf1e72"></a><!-- doxytag: member="Transportor::user_response_result" ref="aa8594cacb58a936edf447ec7a8bf1e72" args="(int result)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::user_response_result </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>result</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02544">2544</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00132">file_conflict_resolve_method</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_CANCEL</a>、<a class="el" href="transportor_8h_source.html#l00046">OW_NO_ALL</a>、<a class="el" href="transportor_8cpp_source.html#l02534">set_user_cancel()</a>、<a class="el" href="transportor_8h_source.html#l00152">wait_user_response_cond</a>及<a class="el" href="transportor_8h_source.html#l00153">wait_user_response_mutex</a>.</p>
+
+<p>参考自 <a class="el" href="progressdialog_8cpp_source.html#l00315">ProgressDialog::slot_ask_accepted()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9d72142252e07ed284e6be560a12f138"></a><!-- doxytag: member="Transportor::wait_user_response" ref="a9d72142252e07ed284e6be560a12f138" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Transportor::wait_user_response </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8cpp_source.html">transportor.cpp</a>第<a class="el" href="transportor_8cpp_source.html#l02539">2539</a>行定义。</p>
+
+<p>参考 <a class="el" href="transportor_8h_source.html#l00152">wait_user_response_cond</a>及<a class="el" href="transportor_8h_source.html#l00153">wait_user_response_mutex</a>.</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l00364">run_FILE_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00678">run_SFTP_to_FILE()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="af00b07549b422b11b53640a10c59723a"></a><!-- doxytag: member="Transportor::current_dest_file_name" ref="af00b07549b422b11b53640a10c59723a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_transportor.html#af00b07549b422b11b53640a10c59723a">Transportor::current_dest_file_name</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00144">144</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8e5c1c7318667758a384fec57d1e10fe"></a><!-- doxytag: member="Transportor::current_file_size" ref="a8e5c1c7318667758a384fec57d1e10fe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint64 <a class="el" href="class_transportor.html#a8e5c1c7318667758a384fec57d1e10fe">Transportor::current_file_size</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00141">141</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a9c61a93c42e634395c60f31a802c0113"></a><!-- doxytag: member="Transportor::current_file_transfered_length" ref="a9c61a93c42e634395c60f31a802c0113" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint64 <a class="el" href="class_transportor.html#a9c61a93c42e634395c60f31a802c0113">Transportor::current_file_transfered_length</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00142">142</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a5060b592e052591f5083ca6d54197b65"></a><!-- doxytag: member="Transportor::current_src_file_name" ref="a5060b592e052591f5083ca6d54197b65" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_transportor.html#a5060b592e052591f5083ca6d54197b65">Transportor::current_src_file_name</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00143">143</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac42c780f1e13d8958179bcd2829707a3"></a><!-- doxytag: member="Transportor::dconn" ref="ac42c780f1e13d8958179bcd2829707a3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_connection.html">Connection</a>* <a class="el" href="class_transportor.html#ac42c780f1e13d8958179bcd2829707a3">Transportor::dconn</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00155">155</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac3523f08af1c42efef7701c912455b68"></a><!-- doxytag: member="Transportor::dest_pkg" ref="ac3523f08af1c42efef7701c912455b68" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_task_package.html">TaskPackage</a> <a class="el" href="class_transportor.html#ac3523f08af1c42efef7701c912455b68">Transportor::dest_pkg</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00135">135</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a26f82e6cbb0316fa9ace91530b0db1be"></a><!-- doxytag: member="Transportor::dest_ssh2_sess" ref="a26f82e6cbb0316fa9ace91530b0db1be" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SESSION* <a class="el" href="class_transportor.html#a26f82e6cbb0316fa9ace91530b0db1be">Transportor::dest_ssh2_sess</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00125">125</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad76cac923eb8b915c84779456929f12a"></a><!-- doxytag: member="Transportor::dest_ssh2_sftp" ref="ad76cac923eb8b915c84779456929f12a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP* <a class="el" href="class_transportor.html#ad76cac923eb8b915c84779456929f12a">Transportor::dest_ssh2_sftp</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00126">126</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad93446be03b02b904df3c5fdc94c0516"></a><!-- doxytag: member="Transportor::error_code" ref="ad93446be03b02b904df3c5fdc94c0516" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_transportor.html#ad93446be03b02b904df3c5fdc94c0516">Transportor::error_code</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00149">149</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8h_source.html#l00065">get_error_code()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aab7904741add81ed970f3be9ec5791ec"></a><!-- doxytag: member="Transportor::errorString" ref="aab7904741add81ed970f3be9ec5791ec" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_transportor.html#aab7904741add81ed970f3be9ec5791ec">Transportor::errorString</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00150">150</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8h_source.html#l00066">get_error_message()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5d56c33f092dd6e70e683caff7edf086"></a><!-- doxytag: member="Transportor::file_conflict_resolve_method" ref="a5d56c33f092dd6e70e683caff7edf086" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char <a class="el" href="class_transportor.html#a5d56c33f092dd6e70e683caff7edf086">Transportor::file_conflict_resolve_method</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00132">132</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l00364">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00678">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>及<a class="el" href="transportor_8cpp_source.html#l02544">user_response_result()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a73011ec6e8bc25a0a4a7b0a37fd13da0"></a><!-- doxytag: member="Transportor::sconn" ref="a73011ec6e8bc25a0a4a7b0a37fd13da0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_connection.html">Connection</a>* <a class="el" href="class_transportor.html#a73011ec6e8bc25a0a4a7b0a37fd13da0">Transportor::sconn</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00154">154</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01669">run_FTP_to_FTP_fxp()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a603c7d81514809015a556b7ba93837c1"></a><!-- doxytag: member="Transportor::src_pkg" ref="a603c7d81514809015a556b7ba93837c1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_task_package.html">TaskPackage</a> <a class="el" href="class_transportor.html#a603c7d81514809015a556b7ba93837c1">Transportor::src_pkg</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00134">134</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l00167">run()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1eec9935cb93f88c088fd82cfef5e6de"></a><!-- doxytag: member="Transportor::src_ssh2_sess" ref="a1eec9935cb93f88c088fd82cfef5e6de" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SESSION* <a class="el" href="class_transportor.html#a1eec9935cb93f88c088fd82cfef5e6de">Transportor::src_ssh2_sess</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00128">128</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af7e83cf072de6dc30e3eb71f0d423a2e"></a><!-- doxytag: member="Transportor::src_ssh2_sftp" ref="af7e83cf072de6dc30e3eb71f0d423a2e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP* <a class="el" href="class_transportor.html#af7e83cf072de6dc30e3eb71f0d423a2e">Transportor::src_ssh2_sftp</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00129">129</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00042">Transportor()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af40c1e0be3eb02c42537a5fd39423090"></a><!-- doxytag: member="Transportor::total_file_count" ref="af40c1e0be3eb02c42537a5fd39423090" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint32 <a class="el" href="class_transportor.html#af40c1e0be3eb02c42537a5fd39423090">Transportor::total_file_count</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00139">139</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ac79f3b797d45d3c39db271b254d1c75c"></a><!-- doxytag: member="Transportor::total_file_size" ref="ac79f3b797d45d3c39db271b254d1c75c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint64 <a class="el" href="class_transportor.html#ac79f3b797d45d3c39db271b254d1c75c">Transportor::total_file_size</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00137">137</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aa7c57071b130ffba2a13d179bc76a7fe"></a><!-- doxytag: member="Transportor::total_transfered_file_count" ref="aa7c57071b130ffba2a13d179bc76a7fe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint32 <a class="el" href="class_transportor.html#aa7c57071b130ffba2a13d179bc76a7fe">Transportor::total_transfered_file_count</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00140">140</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f0e2b280e557fa508c3c168ca59c8ec"></a><!-- doxytag: member="Transportor::total_transfered_file_length" ref="a3f0e2b280e557fa508c3c168ca59c8ec" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">quint64 <a class="el" href="class_transportor.html#a3f0e2b280e557fa508c3c168ca59c8ec">Transportor::total_transfered_file_length</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00138">138</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a9e293725b572026496977dd516e4b27d"></a><!-- doxytag: member="Transportor::transfer_done_queue" ref="a9e293725b572026496977dd516e4b27d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QPair&lt;<a class="el" href="class_task_package.html">TaskPackage</a>, <a class="el" href="class_task_package.html">TaskPackage</a>&gt; &gt; <a class="el" href="class_transportor.html#a9e293725b572026496977dd516e4b27d">Transportor::transfer_done_queue</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00147">147</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>及<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4353f03bead168c7619aed5713664567"></a><!-- doxytag: member="Transportor::transfer_ready_queue" ref="a4353f03bead168c7619aed5713664567" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QPair&lt;<a class="el" href="class_task_package.html">TaskPackage</a>, <a class="el" href="class_task_package.html">TaskPackage</a>&gt; &gt; <a class="el" href="class_transportor.html#a4353f03bead168c7619aed5713664567">Transportor::transfer_ready_queue</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00146">146</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l02215">set_transport_info()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a92aeb97ee26735336da9dbd203a465dc"></a><!-- doxytag: member="Transportor::user_canceled" ref="a92aeb97ee26735336da9dbd203a465dc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_transportor.html#a92aeb97ee26735336da9dbd203a465dc">Transportor::user_canceled</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00131">131</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02241">do_download()</a>、<a class="el" href="transportor_8cpp_source.html#l02447">do_nrsftp_exchange()</a>、<a class="el" href="transportor_8cpp_source.html#l02329">do_upload()</a>、<a class="el" href="transportor_8cpp_source.html#l01040">run_FILE_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00204">run_FILE_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01248">run_FTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01437">run_FTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l01577">run_FTP_to_FTP_relay()</a>、<a class="el" href="transportor_8cpp_source.html#l01954">run_FTP_to_SFTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00524">run_SFTP_to_FILE()</a>、<a class="el" href="transportor_8cpp_source.html#l01747">run_SFTP_to_FTP()</a>、<a class="el" href="transportor_8cpp_source.html#l00793">run_SFTP_to_SFTP()</a>及<a class="el" href="transportor_8cpp_source.html#l02534">set_user_cancel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4e8d5787a0662e845fc2d66d9895829d"></a><!-- doxytag: member="Transportor::wait_user_response_cond" ref="a4e8d5787a0662e845fc2d66d9895829d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QWaitCondition <a class="el" href="class_transportor.html#a4e8d5787a0662e845fc2d66d9895829d">Transportor::wait_user_response_cond</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00152">152</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02544">user_response_result()</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0485156b01b3c3736fc8bf941d4ec283"></a><!-- doxytag: member="Transportor::wait_user_response_mutex" ref="a0485156b01b3c3736fc8bf941d4ec283" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMutex <a class="el" href="class_transportor.html#a0485156b01b3c3736fc8bf941d4ec283">Transportor::wait_user_response_mutex</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="transportor_8h_source.html">transportor.h</a>第<a class="el" href="transportor_8h_source.html#l00153">153</a>行定义。</p>
+
+<p>参考自 <a class="el" href="transportor_8cpp_source.html#l02544">user_response_result()</a>及<a class="el" href="transportor_8cpp_source.html#l02539">wait_user_response()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="transportor_8h_source.html">transportor.h</a></li>
+<li><a class="el" href="transportor_8cpp_source.html">transportor.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

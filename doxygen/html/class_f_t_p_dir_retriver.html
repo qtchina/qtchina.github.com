@@ -1,0 +1,635 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: FTPDirRetriver类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>FTPDirRetriver类参考</h1><!-- doxytag: class="FTPDirRetriver" --><!-- doxytag: inherits="DirRetriver" -->
+<p>ftp dir and file list retrive thread  
+<a href="#_details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ftpdirretriver_8h_source.html">ftpdirretriver.h</a>&gt;</code></p>
+<div class="dynheader">
+继承图，类FTPDirRetriver</div>
+<div class="dynsection">
+ <div class="center">
+  <img src="class_f_t_p_dir_retriver.png" usemap="#FTPDirRetriver_map" alt=""/>
+  <map id="FTPDirRetriver_map" name="FTPDirRetriver_map">
+<area href="class_dir_retriver.html" alt="DirRetriver" shape="rect" coords="0,0,97,24"/>
+</map>
+ </div>
+</div>
+
+<p><a href="class_f_t_p_dir_retriver-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#aa62fb25a4496a5e956e60bd489ab6b8b">enter_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a8edcd2b5f34817576996b4a7f36a2ad9">leave_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a3fecde2a17dc98bf009d5e3a45b28153">remote_dir_node_retrived</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a8edb1c7f8e4c14dfce7cb8385fb10fc9">execute_command_finished</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, int status)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#adac0a9a36abd8cb1354c336bc85051bb">FTPDirRetriver</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a201d54bbadf4b4292f2819585fa9139b">~FTPDirRetriver</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a694332f3c3f0857a82a8c5f8e04e3669">setConnection</a> (<a class="el" href="class_connection.html">Connection</a> *<a class="el" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a2286e861d71870cf312cdce9435a4c33">run</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a1f7975386ced2911c75bee3d01771bf5">add_node</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a5c03fe314df17f3dbfa9e045e3e00290">slot_execute_command</a> (<a class="el" href="class_net_dir_node.html">NetDirNode</a> *parent_item, void *parent_persistent_index, int cmd, QString params)</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a1ccbca28be9959906c79c5548103d767">retrive_dir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a2b78047c107301b6d4dfe79c3cdafbda">mkdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#acc3b264a3e219a73d84aa5aa36c04733">rmdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#ade10e699bf37a963d1b3267fbacdbaea">rm_file_or_directory_recursively</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#ac0f08e51c4d6fe55f4bffd5eb801f600">rm_file_or_directory_recursively_ex</a> (QString parent_path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#afb0d59cd1a66b67de4fca927e7918890">rename</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a40233784c998df9477bc7757fd7c1679">keep_alive</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#ae0b1fdc9cdbfed96a56cae77b1d6e252">fxp_do_ls_dir</a> (QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a12d0b04f67c4cd8212da8fe0a2f6d21a">fxp_do_ls_dir</a> (QString parent_path, QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;fileinfos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_t_p_dir_retriver.html#a9eae2c3422ef4743f941b6c7cabf71f3">fxp_realpath</a> ()</td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<p>ftp dir and file list retrive thread </p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8h_source.html">ftpdirretriver.h</a>第<a class="el" href="ftpdirretriver_8h_source.html#l00026">26</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="adac0a9a36abd8cb1354c336bc85051bb"></a><!-- doxytag: member="FTPDirRetriver::FTPDirRetriver" ref="adac0a9a36abd8cb1354c336bc85051bb" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FTPDirRetriver::FTPDirRetriver </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00025">25</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a201d54bbadf4b4292f2819585fa9139b"></a><!-- doxytag: member="FTPDirRetriver::~FTPDirRetriver" ref="a201d54bbadf4b4292f2819585fa9139b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FTPDirRetriver::~FTPDirRetriver </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00030">30</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a1f7975386ced2911c75bee3d01771bf5"></a><!-- doxytag: member="FTPDirRetriver::add_node" ref="a1f7975386ced2911c75bee3d01771bf5" args="(NetDirNode *parent_item, void *parent_persistent_index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::add_node </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00462">462</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="rfsdirnode_8h_source.html#l00023">POP_UPDATING</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>及<a class="el" href="sftp-const_8h_source.html#l00046">SSH2_FXP_READDIR</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00253">mkdir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00401">rename()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">rm_file_or_directory_recursively()</a>及<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa62fb25a4496a5e956e60bd489ab6b8b"></a><!-- doxytag: member="FTPDirRetriver::enter_remote_dir_retrive_loop" ref="aa62fb25a4496a5e956e60bd489ab6b8b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::enter_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a894c113663a49ed5af7c61f53002e608">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8edb1c7f8e4c14dfce7cb8385fb10fc9"></a><!-- doxytag: member="FTPDirRetriver::execute_command_finished" ref="a8edb1c7f8e4c14dfce7cb8385fb10fc9" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, int status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::execute_command_finished </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a4aa9be2b37042d29087a091fca0478d3">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a12d0b04f67c4cd8212da8fe0a2f6d21a"></a><!-- doxytag: member="FTPDirRetriver::fxp_do_ls_dir" ref="a12d0b04f67c4cd8212da8fe0a2f6d21a" args="(QString parent_path, QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::fxp_do_ls_dir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QPair&lt; QString, LIBSSH2_SFTP_ATTRIBUTES * &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a168b253607d356a4873dc6af566e7e8a">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00451">451</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ae0b1fdc9cdbfed96a56cae77b1d6e252"></a><!-- doxytag: member="FTPDirRetriver::fxp_do_ls_dir" ref="ae0b1fdc9cdbfed96a56cae77b1d6e252" args="(QString parent_path, QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;fileinfos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::fxp_do_ls_dir </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; QMap&lt; char, QString &gt; &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>fileinfos</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00445">445</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a9eae2c3422ef4743f941b6c7cabf71f3"></a><!-- doxytag: member="FTPDirRetriver::fxp_realpath" ref="a9eae2c3422ef4743f941b6c7cabf71f3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::fxp_realpath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a74f2425706a3754dcd00f201eebfc844">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00456">456</a>行定义。</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a40233784c998df9477bc7757fd7c1679"></a><!-- doxytag: member="FTPDirRetriver::keep_alive" ref="a40233784c998df9477bc7757fd7c1679" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::keep_alive </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a494d623465f877880a4b9a686d836af4">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00432">432</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>及<a class="el" href="libftp_8cpp_source.html#l01174">LibFtp::noop()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8edcd2b5f34817576996b4a7f36a2ad9"></a><!-- doxytag: member="FTPDirRetriver::leave_remote_dir_retrive_loop" ref="a8edcd2b5f34817576996b4a7f36a2ad9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::leave_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a2b588b7dbda4cb79e0530c9404104dab">DirRetriver</a>。</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2b78047c107301b6d4dfe79c3cdafbda"></a><!-- doxytag: member="FTPDirRetriver::mkdir" ref="a2b78047c107301b6d4dfe79c3cdafbda" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::mkdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a692dbfc6c54c8d7230871f606dc3eabe">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00253">253</a>行定义。</p>
+
+<p>参考 <a class="el" href="ftpdirretriver_8cpp_source.html#l00462">add_node()</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="libftp_8cpp_source.html#l00860">LibFtp::mkdir()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>及<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3fecde2a17dc98bf009d5e3a45b28153"></a><!-- doxytag: member="FTPDirRetriver::remote_dir_node_retrived" ref="a3fecde2a17dc98bf009d5e3a45b28153" args="(NetDirNode *parent_item, void *parent_persistent_index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::remote_dir_node_retrived </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00187">retrive_dir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb0d59cd1a66b67de4fca927e7918890"></a><!-- doxytag: member="FTPDirRetriver::rename" ref="afb0d59cd1a66b67de4fca927e7918890" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::rename </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#ae0753eaeb00b5cfbc8d21806bfc84d90">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00401">401</a>行定义。</p>
+
+<p>参考 <a class="el" href="ftpdirretriver_8cpp_source.html#l00462">add_node()</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>及<a class="el" href="libftp_8cpp_source.html#l01086">LibFtp::rename()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1ccbca28be9959906c79c5548103d767"></a><!-- doxytag: member="FTPDirRetriver::retrive_dir" ref="a1ccbca28be9959906c79c5548103d767" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::retrive_dir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a5114f664bca4ece1c7c0aa18b1ecd351">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">187</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00120">NetDirNode::childAt()</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00048">NetDirNode::childCount()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00046">NetDirNode::deleted</a>、<a class="el" href="dirretriver_8h_source.html#l00093">DirRetriver::dir_node_process_queue</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00163">dirListToTreeNode()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="libftp_8cpp_source.html#l00822">LibFtp::getDirList()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">LibFtp::lista()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00024">POP_NEWEST</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="class_f_t_p_dir_retriver.html#a3fecde2a17dc98bf009d5e3a45b28153">remote_dir_node_retrived()</a>及<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade10e699bf37a963d1b3267fbacdbaea"></a><!-- doxytag: member="FTPDirRetriver::rm_file_or_directory_recursively" ref="ade10e699bf37a963d1b3267fbacdbaea" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::rm_file_or_directory_recursively </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a8073e5a7104e47e25a28766aec9cc678">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">299</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00462">add_node()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00062">NetDirNode::childNodes</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>及<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">rm_file_or_directory_recursively_ex()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac0f08e51c4d6fe55f4bffd5eb801f600"></a><!-- doxytag: member="FTPDirRetriver::rm_file_or_directory_recursively_ex" ref="ac0f08e51c4d6fe55f4bffd5eb801f600" args="(QString parent_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::rm_file_or_directory_recursively_ex </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>parent_path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00336">336</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00918">LibFtp::chdir()</a>、<a class="el" href="libftp_8cpp_source.html#l00260">LibFtp::closeDataChannel()</a>、<a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="libftp_8cpp_source.html#l00205">LibFtp::connectDataChannel()</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l00822">LibFtp::getDirList()</a>、<a class="el" href="libftp_8cpp_source.html#l00608">LibFtp::lista()</a>、<a class="el" href="libftp_8cpp_source.html#l00783">LibFtp::passive()</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>、<a class="el" href="libftp_8cpp_source.html#l01054">LibFtp::remove()</a>及<a class="el" href="libftp_8cpp_source.html#l00887">LibFtp::rmdir()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00299">rm_file_or_directory_recursively()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acc3b264a3e219a73d84aa5aa36c04733"></a><!-- doxytag: member="FTPDirRetriver::rmdir" ref="acc3b264a3e219a73d84aa5aa36c04733" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int FTPDirRetriver::rmdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#aa78d7026f8b28c3821a1d23b6265e622">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">272</a>行定义。</p>
+
+<p>参考 <a class="el" href="ftpdirretriver_8cpp_source.html#l00462">add_node()</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00098">DirRetriver::conn</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>及<a class="el" href="libftp_8cpp_source.html#l00887">LibFtp::rmdir()</a>.</p>
+
+<p>参考自 <a class="el" href="ftpdirretriver_8cpp_source.html#l00058">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2286e861d71870cf312cdce9435a4c33"></a><!-- doxytag: member="FTPDirRetriver::run" ref="a2286e861d71870cf312cdce9435a4c33" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::run </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#a95d43e6a95a7f228c8ccf51e16f3613a">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00058">58</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00093">DirRetriver::dir_node_process_queue</a>、<a class="el" href="class_f_t_p_dir_retriver.html#aa62fb25a4496a5e956e60bd489ab6b8b">enter_remote_dir_retrive_loop()</a>、<a class="el" href="class_f_t_p_dir_retriver.html#a8edb1c7f8e4c14dfce7cb8385fb10fc9">execute_command_finished()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00456">fxp_realpath()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00432">keep_alive()</a>、<a class="el" href="class_f_t_p_dir_retriver.html#a8edcd2b5f34817576996b4a7f36a2ad9">leave_remote_dir_retrive_loop()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00253">mkdir()</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>、<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00401">rename()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00187">retrive_dir()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00299">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpdirretriver_8cpp_source.html#l00272">rmdir()</a>、<a class="el" href="dirretriver_8h_source.html#l00022">SSH2_FXP_KEEP_ALIVE</a>、<a class="el" href="sftp-const_8h_source.html#l00048">SSH2_FXP_MKDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00046">SSH2_FXP_READDIR</a>、<a class="el" href="sftp-const_8h_source.html#l00050">SSH2_FXP_REALPATH</a>、<a class="el" href="sftp-const_8h_source.html#l00047">SSH2_FXP_REMOVE</a>、<a class="el" href="sftp-const_8h_source.html#l00052">SSH2_FXP_RENAME</a>及<a class="el" href="sftp-const_8h_source.html#l00049">SSH2_FXP_RMDIR</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a694332f3c3f0857a82a8c5f8e04e3669"></a><!-- doxytag: member="FTPDirRetriver::setConnection" ref="a694332f3c3f0857a82a8c5f8e04e3669" args="(Connection *conn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::setConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#adfe5e9113a4aa6792abdf57fda6afa99">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00045">45</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c03fe314df17f3dbfa9e045e3e00290"></a><!-- doxytag: member="FTPDirRetriver::slot_execute_command" ref="a5c03fe314df17f3dbfa9e045e3e00290" args="(NetDirNode *parent_item, void *parent_persistent_index, int cmd, QString params)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTPDirRetriver::slot_execute_command </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_net_dir_node.html">NetDirNode</a> *&nbsp;</td>
+          <td class="paramname"> <em>parent_item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>parent_persistent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>params</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>重载<a class="el" href="class_dir_retriver.html#adebd4f6ee6686e4200ecdc16535aec11">DirRetriver</a>。</p>
+
+<p>在文件<a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a>第<a class="el" href="ftpdirretriver_8cpp_source.html#l00479">479</a>行定义。</p>
+
+<p>参考 <a class="el" href="dirretriver_8h_source.html#l00063">DirRetriver::command_queue_elem::cmd</a>、<a class="el" href="dirretriver_8h_source.html#l00094">DirRetriver::command_queue</a>、<a class="el" href="dirretriver_8h_source.html#l00064">DirRetriver::command_queue_elem::params</a>、<a class="el" href="dirretriver_8h_source.html#l00061">DirRetriver::command_queue_elem::parent_item</a>及<a class="el" href="dirretriver_8h_source.html#l00062">DirRetriver::command_queue_elem::parent_persistent_index</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="ftpdirretriver_8h_source.html">ftpdirretriver.h</a></li>
+<li><a class="el" href="ftpdirretriver_8cpp_source.html">ftpdirretriver.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

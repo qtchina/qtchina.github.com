@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: FilePropertiesRetriveThread类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>FilePropertiesRetriveThread类参考</h1><!-- doxytag: class="FilePropertiesRetriveThread" -->
+<p><code>#include &lt;<a class="el" href="fileproperties_8h_source.html">fileproperties.h</a>&gt;</code></p>
+
+<p><a href="class_file_properties_retrive_thread-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#a8be7120d8bb02058e7cbcbf780c27398">file_attr_abtained</a> (QString file_name, void *attr)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#a5862fca0f340e7a5a1035f0620bb935e">FilePropertiesRetriveThread</a> (<a class="el" href="class_connection.html">Connection</a> *<a class="el" href="class_file_properties_retrive_thread.html#adaa53680b0059d8dc20e1805d0119cfe">conn</a>, LIBSSH2_SFTP *<a class="el" href="class_file_properties_retrive_thread.html#a3674181d9c8982d468b6131de94980a6">ssh2_sftp</a>, QString <a class="el" href="class_file_properties_retrive_thread.html#aaaa862f608147383fc2efdf113a8fbb1">file_path</a>, QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#ab51e1db4e2ca685de7b52904617cd338">~FilePropertiesRetriveThread</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#a34b3a7812b984eecd69e40ed5c5c4072">run</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#aa0257491df0631175e0fafaeabe6f71d">run_sftp</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#a291d88b0dc80f9f30d7b292262ea1a77">run_ftp</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#adaa53680b0059d8dc20e1805d0119cfe">conn</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#a3674181d9c8982d468b6131de94980a6">ssh2_sftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_file_properties_retrive_thread.html#aaaa862f608147383fc2efdf113a8fbb1">file_path</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="fileproperties_8h_source.html">fileproperties.h</a>第<a class="el" href="fileproperties_8h_source.html#l00024">24</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a5862fca0f340e7a5a1035f0620bb935e"></a><!-- doxytag: member="FilePropertiesRetriveThread::FilePropertiesRetriveThread" ref="a5862fca0f340e7a5a1035f0620bb935e" args="(Connection *conn, LIBSSH2_SFTP *ssh2_sftp, QString file_path, QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FilePropertiesRetriveThread::FilePropertiesRetriveThread </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LIBSSH2_SFTP *&nbsp;</td>
+          <td class="paramname"> <em>ssh2_sftp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>file_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00086">86</a>行定义。</p>
+
+<p>参考 <a class="el" href="globaloption_8cpp_source.html#l00021">GlobalOption::instance()</a>及<a class="el" href="globaloption_8h_source.html#l00030">GlobalOption::remote_codec</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab51e1db4e2ca685de7b52904617cd338"></a><!-- doxytag: member="FilePropertiesRetriveThread::~FilePropertiesRetriveThread" ref="ab51e1db4e2ca685de7b52904617cd338" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FilePropertiesRetriveThread::~FilePropertiesRetriveThread </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00094">94</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a8be7120d8bb02058e7cbcbf780c27398"></a><!-- doxytag: member="FilePropertiesRetriveThread::file_attr_abtained" ref="a8be7120d8bb02058e7cbcbf780c27398" args="(QString file_name, void *attr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePropertiesRetriveThread::file_attr_abtained </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>file_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&nbsp;</td>
+          <td class="paramname"> <em>attr</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00125">run_ftp()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00110">run_sftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a34b3a7812b984eecd69e40ed5c5c4072"></a><!-- doxytag: member="FilePropertiesRetriveThread::run" ref="a34b3a7812b984eecd69e40ed5c5c4072" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePropertiesRetriveThread::run </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00098">98</a>行定义。</p>
+
+<p>参考 <a class="el" href="fileproperties_8h_source.html#l00037">conn</a>、<a class="el" href="connection_8h_source.html#l00031">Connection::PROTO_FTP</a>、<a class="el" href="connection_8h_source.html#l00031">Connection::PROTO_SFTP</a>、<a class="el" href="connection_8cpp_source.html#l00081">Connection::protocolType()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00125">run_ftp()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00110">run_sftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a291d88b0dc80f9f30d7b292262ea1a77"></a><!-- doxytag: member="FilePropertiesRetriveThread::run_ftp" ref="a291d88b0dc80f9f30d7b292262ea1a77" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePropertiesRetriveThread::run_ftp </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00125">125</a>行定义。</p>
+
+<p>参考 <a class="el" href="libftp_8cpp_source.html#l00918">LibFtp::chdir()</a>、<a class="el" href="fileproperties_8h_source.html#l00037">conn</a>、<a class="el" href="class_file_properties_retrive_thread.html#a8be7120d8bb02058e7cbcbf780c27398">file_attr_abtained()</a>、<a class="el" href="fileproperties_8h_source.html#l00039">file_path</a>、<a class="el" href="connection_8h_source.html#l00076">Connection::ftp</a>、<a class="el" href="libftp_8cpp_source.html#l00822">LibFtp::getDirList()</a>、<a class="el" href="libftp_8cpp_source.html#l00688">LibFtp::mlst()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00032">QUrlInfo2LIBSSH2_SFTP_ATTRIBUTES()</a>.</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00098">run()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa0257491df0631175e0fafaeabe6f71d"></a><!-- doxytag: member="FilePropertiesRetriveThread::run_sftp" ref="aa0257491df0631175e0fafaeabe6f71d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePropertiesRetriveThread::run_sftp </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a>第<a class="el" href="fileproperties_8cpp_source.html#l00110">110</a>行定义。</p>
+
+<p>参考 <a class="el" href="class_file_properties_retrive_thread.html#a8be7120d8bb02058e7cbcbf780c27398">file_attr_abtained()</a>、<a class="el" href="fileproperties_8h_source.html#l00039">file_path</a>及<a class="el" href="fileproperties_8h_source.html#l00038">ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00098">run()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="adaa53680b0059d8dc20e1805d0119cfe"></a><!-- doxytag: member="FilePropertiesRetriveThread::conn" ref="adaa53680b0059d8dc20e1805d0119cfe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_connection.html">Connection</a>* <a class="el" href="class_file_properties_retrive_thread.html#adaa53680b0059d8dc20e1805d0119cfe">FilePropertiesRetriveThread::conn</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8h_source.html">fileproperties.h</a>第<a class="el" href="fileproperties_8h_source.html#l00037">37</a>行定义。</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00098">run()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00125">run_ftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaaa862f608147383fc2efdf113a8fbb1"></a><!-- doxytag: member="FilePropertiesRetriveThread::file_path" ref="aaaa862f608147383fc2efdf113a8fbb1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_file_properties_retrive_thread.html#aaaa862f608147383fc2efdf113a8fbb1">FilePropertiesRetriveThread::file_path</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8h_source.html">fileproperties.h</a>第<a class="el" href="fileproperties_8h_source.html#l00039">39</a>行定义。</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00125">run_ftp()</a>及<a class="el" href="fileproperties_8cpp_source.html#l00110">run_sftp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3674181d9c8982d468b6131de94980a6"></a><!-- doxytag: member="FilePropertiesRetriveThread::ssh2_sftp" ref="a3674181d9c8982d468b6131de94980a6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP* <a class="el" href="class_file_properties_retrive_thread.html#a3674181d9c8982d468b6131de94980a6">FilePropertiesRetriveThread::ssh2_sftp</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="fileproperties_8h_source.html">fileproperties.h</a>第<a class="el" href="fileproperties_8h_source.html#l00038">38</a>行定义。</p>
+
+<p>参考自 <a class="el" href="fileproperties_8cpp_source.html#l00110">run_sftp()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="fileproperties_8h_source.html">fileproperties.h</a></li>
+<li><a class="el" href="fileproperties_8cpp_source.html">fileproperties.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

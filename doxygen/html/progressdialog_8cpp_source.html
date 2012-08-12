@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: progressdialog.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>progressdialog.cpp</h1><a href="progressdialog_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// progressdialog.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-05-06 22:14:59 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: progressdialog.cpp 604 2010-03-29 14:04:18Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;cassert&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;cerrno&gt;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;cstdarg&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;cstdio&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;cstring&gt;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017 <span class="preprocessor">#ifdef HAVE_SYS_STAT_H</span>
+<a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor"># include &lt;sys/stat.h&gt;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#endif</span>
+<a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#ifdef HAVE_SYS_TIME_H</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor"># include &lt;sys/time.h&gt;</span>
+<a name="l00022"></a>00022 <span class="preprocessor">#endif</span>
+<a name="l00023"></a>00023 <span class="preprocessor"></span>
+<a name="l00024"></a>00024 <span class="preprocessor">#ifdef WIN32</span>
+<a name="l00025"></a>00025 <span class="preprocessor"></span><span class="preprocessor">#define jjjjjjjjj</span>
+<a name="l00026"></a>00026 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00027"></a>00027 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/uio.h&gt;</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#endif</span>
+<a name="l00029"></a>00029 <span class="preprocessor"></span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include &quot;<a class="code" href="globaloption_8h.html">globaloption.h</a>&quot;</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &quot;<a class="code" href="progressdialog_8h.html">progressdialog.h</a>&quot;</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include &quot;<a class="code" href="fileexistaskdialog_8h.html">fileexistaskdialog.h</a>&quot;</span>
+<a name="l00034"></a>00034 <span class="comment">// #include &quot;sshtransportor.h&quot;</span>
+<a name="l00035"></a>00035 <span class="comment">// #include &quot;ftptransportor.h&quot;</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#include &quot;<a class="code" href="transportor_8h.html">transportor.h</a>&quot;</span>
+<a name="l00037"></a>00037 <span class="preprocessor">#include &quot;<a class="code" href="taskqueuemodel_8h.html">taskqueuemodel.h</a>&quot;</span>
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="class_progress_dialog.html#ad3c9e811386729b38e78da44eb2cd0d0">00039</a> <a class="code" href="class_progress_dialog.html#ad3c9e811386729b38e78da44eb2cd0d0">ProgressDialog::ProgressDialog</a>(QWidget *parent )
+<a name="l00040"></a>00040     : QWidget(parent )
+<a name="l00041"></a>00041 {
+<a name="l00042"></a>00042     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.setupUi(<span class="keyword">this</span>);
+<a name="l00043"></a>00043     this-&gt;setObjectName(<span class="stringliteral">&quot;pv&quot;</span>);
+<a name="l00045"></a>00045     <span class="comment">// this-&gt;sftp_transfer_thread = new TransferThread();</span>
+<a name="l00046"></a>00046     this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a> = <span class="keyword">new</span> <a class="code" href="class_transportor.html">Transportor</a>();
+<a name="l00047"></a>00047     
+<a name="l00048"></a>00048     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>,SIGNAL(finished()),
+<a name="l00049"></a>00049             <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#a1fbabe3836881c65a43921fc35f8798c">slot_transfer_thread_finished</a>()));
+<a name="l00050"></a>00050     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>,SIGNAL(transfer_percent_changed(<span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>)),
+<a name="l00051"></a>00051                      <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#a05ed5578c223fe9d50878dc5c9542971">slot_set_transfer_percent</a>(<span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>)));
+<a name="l00052"></a>00052     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>,SIGNAL(transfer_new_file_started(QString)),
+<a name="l00053"></a>00053                      <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#a2d1e61890280064f436d373b65e83ef8">slot_new_file_transfer_started</a>(QString)));
+<a name="l00054"></a>00054     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.pushButton,SIGNAL( clicked()),
+<a name="l00055"></a>00055                      <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#afbcdba990cbc4c4090dc1fc254d21883">slot_cancel_button_clicked</a>()));
+<a name="l00056"></a>00056     QObject::connect( this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>,SIGNAL(transfer_got_file_size(<span class="keywordtype">int</span>)),
+<a name="l00057"></a>00057                       <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#a783f7ada3ed314efc575990e29802df0">slot_transfer_got_file_size</a>(<span class="keywordtype">int</span>)));
+<a name="l00058"></a>00058     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>,SIGNAL(transfer_log(QString)),
+<a name="l00059"></a>00059                      <span class="keyword">this</span>,SLOT(<a class="code" href="class_progress_dialog.html#ae1bb7c45843d5e20eae2c84f70912d34">slot_transfer_log</a>(QString)) );
+<a name="l00060"></a>00060 
+<a name="l00061"></a>00061     QObject::connect(this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>, 
+<a name="l00062"></a>00062                      SIGNAL(dest_file_exists(QString, QString, QString, QString, QString, QString)),
+<a name="l00063"></a>00063                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_progress_dialog.html#a3c2c45632b5c7f162635ed2c129489d1">slot_dest_file_exists</a>(QString, QString, QString, QString, QString, QString)));
+<a name="l00064"></a>00064     
+<a name="l00065"></a>00065     this-&gt;<a class="code" href="class_progress_dialog.html#a32f2a545ec181ff02da2629007a43caf">first_show</a> = 1 ;
+<a name="l00066"></a>00066     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.progressBar-&gt;setValue(0);
+<a name="l00067"></a>00067     this-&gt;<a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a> = 0 ;
+<a name="l00068"></a>00068     this-&gt;<a class="code" href="class_progress_dialog.html#a81643295e80a46371f2ebfb4f58ecd15">total_files_count</a> = 0 ;
+<a name="l00069"></a>00069     this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a> = 0 ;
+<a name="l00070"></a>00070     this-&gt;<a class="code" href="class_progress_dialog.html#ad4bd7531c68306df310b6edc8446af39">abtained_files_count</a> = 0 ;
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     this-&gt;<a class="code" href="class_progress_dialog.html#a5a9ef9af58b95729043471b1d2c589af">time_cacl_timer</a>.setInterval(1000*1);
+<a name="l00073"></a>00073     QObject::connect(&amp;this-&gt;<a class="code" href="class_progress_dialog.html#a5a9ef9af58b95729043471b1d2c589af">time_cacl_timer</a>, SIGNAL(timeout()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_progress_dialog.html#a4801380604cd4a0f8959536d79fcd7fa">slot_speed_timer_timeout</a>()));
+<a name="l00074"></a>00074 }
+<a name="l00075"></a>00075 
+<a name="l00076"></a><a class="code" href="class_progress_dialog.html#a6e479e85631a101a90d58211c52bf098">00076</a> <a class="code" href="class_progress_dialog.html#a6e479e85631a101a90d58211c52bf098">ProgressDialog::~ProgressDialog</a>()
+<a name="l00077"></a>00077 {
+<a name="l00078"></a>00078     <span class="keyword">delete</span> this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>;
+<a name="l00079"></a>00079 }
+<a name="l00080"></a>00080 
+<a name="l00081"></a><a class="code" href="class_progress_dialog.html#a8a89cb8a1d2f60d4e18b6f80ac70a647">00081</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a8a89cb8a1d2f60d4e18b6f80ac70a647">ProgressDialog::set_transfer_info</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg, <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg)
+<a name="l00082"></a>00082 {
+<a name="l00083"></a>00083     QString local_file_name;
+<a name="l00084"></a>00084     QString remote_file_name;
+<a name="l00085"></a>00085     QString tmp_str;
+<a name="l00086"></a>00086     
+<a name="l00087"></a>00087     this-&gt;local_pkg = local_pkg;
+<a name="l00088"></a>00088     this-&gt;remote_pkg = remote_pkg;
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090     <span class="comment">// transportor 对象应该是哪个呢？ 只应该有一个Transportor, </span>
+<a name="l00091"></a>00091     <span class="comment">// 在这个唯一的Transportor中根据不同的协议调用不同的传输</span>
+<a name="l00092"></a>00092     <span class="comment">/*</span>
+<a name="l00093"></a>00093 <span class="comment">      FILE -&gt; SFTP  SSHTransportor</span>
+<a name="l00094"></a>00094 <span class="comment">      FILE -&gt; FTP   FTPTransportor</span>
+<a name="l00095"></a>00095 <span class="comment">      FTP -&gt; FILE   FTPTransportor</span>
+<a name="l00096"></a>00096 <span class="comment">      SFTP -&gt; FILE  SSHTransportor</span>
+<a name="l00097"></a>00097 <span class="comment">      FTP -&gt; SFTP   ???</span>
+<a name="l00098"></a>00098 <span class="comment">      SFTP -&gt; FTP   ???</span>
+<a name="l00099"></a>00099 <span class="comment">      FTP -&gt; FTP    FTPTransportor</span>
+<a name="l00100"></a>00100 <span class="comment">      SFTP -&gt; SFTP  SSHTransportor</span>
+<a name="l00101"></a>00101 <span class="comment">     */</span>
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103     this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#af4ee0108b8ebbd627be0bf282d3d11bd">set_transport_info</a>(local_pkg, remote_pkg);
+<a name="l00104"></a>00104     
+<a name="l00105"></a>00105     QString local_full_path;
+<a name="l00106"></a>00106     
+<a name="l00107"></a>00107     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;clear();
+<a name="l00108"></a>00108     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox_2-&gt;clear();
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; remote_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>.count(); i ++) {
+<a name="l00111"></a>00111         remote_file_name = remote_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>.at(i);
+<a name="l00112"></a>00112         local_full_path = local_file_name + <span class="stringliteral">&quot;/&quot;</span>
+<a name="l00113"></a>00113             + remote_file_name.split(<span class="stringliteral">&quot;/&quot;</span>).at(remote_file_name.split(<span class="stringliteral">&quot;/&quot;</span>).count()-1);
+<a name="l00114"></a>00114         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit-&gt;setText(local_pkg.<a class="code" href="class_task_package.html#a1e4993334beb941b4de2fa2d6ec15598">getProtocolNameById</a>(local_pkg.<a class="code" href="class_task_package.html#a0637cf0aa04d92726c983a78b89d3b09">scheme</a>)
+<a name="l00115"></a>00115                                                    + <span class="stringliteral">&quot;--&gt;&quot;</span> 
+<a name="l00116"></a>00116                                                    + remote_pkg.<a class="code" href="class_task_package.html#a1e4993334beb941b4de2fa2d6ec15598">getProtocolNameById</a>(remote_pkg.<a class="code" href="class_task_package.html#a0637cf0aa04d92726c983a78b89d3b09">scheme</a>));
+<a name="l00117"></a>00117         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox_2-&gt;addItem(remote_file_name);
+<a name="l00118"></a>00118     }
+<a name="l00119"></a>00119 }
+<a name="l00120"></a>00120 
+<a name="l00121"></a><a class="code" href="class_progress_dialog.html#a05ed5578c223fe9d50878dc5c9542971">00121</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a05ed5578c223fe9d50878dc5c9542971">ProgressDialog::slot_set_transfer_percent</a>(<span class="keywordtype">int</span> percent, <span class="keywordtype">int</span> total_transfered, <span class="keywordtype">int</span> transfer_delta)
+<a name="l00122"></a>00122 {
+<a name="l00123"></a>00123     <span class="comment">//qDebug() &lt;&lt;__FUNCTION__&lt;&lt;&quot;: &quot;&lt;&lt;__LINE__&lt;&lt;&quot;:&quot;&lt;&lt; __FILE__; </span>
+<a name="l00124"></a>00124     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.progressBar-&gt;setValue(percent);
+<a name="l00125"></a>00125     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_5-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(total_transfered));
+<a name="l00126"></a>00126     this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a> += transfer_delta ;<span class="comment">//TODO no right logic</span>
+<a name="l00127"></a>00127     <span class="keywordflow">if</span> (percent == 100) {
+<a name="l00128"></a>00128         this-&gt;<a class="code" href="class_progress_dialog.html#ad4bd7531c68306df310b6edc8446af39">abtained_files_count</a> += 1 ;
+<a name="l00129"></a>00129     }
+<a name="l00130"></a>00130     <span class="keywordflow">if</span> (!<a class="code" href="class_progress_dialog.html#aae0eb8dd8118f5a85d82c0c98782e59c">start_time</a>.isValid()) {
+<a name="l00131"></a>00131         <a class="code" href="class_progress_dialog.html#aae0eb8dd8118f5a85d82c0c98782e59c">start_time</a> = QDateTime::currentDateTime();
+<a name="l00132"></a>00132         <a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a> = 0 ;
+<a name="l00133"></a>00133         this-&gt;<a class="code" href="class_progress_dialog.html#a5a9ef9af58b95729043471b1d2c589af">time_cacl_timer</a>.start();
+<a name="l00134"></a>00134     } <span class="keywordflow">else</span> {
+<a name="l00135"></a>00135         <a class="code" href="class_progress_dialog.html#a72f0f9e9f860cf21eceb2f9a71cda17a">end_time</a> = QDateTime::currentDateTime();
+<a name="l00136"></a>00136         <span class="keywordflow">if</span> ((<a class="code" href="class_progress_dialog.html#a72f0f9e9f860cf21eceb2f9a71cda17a">end_time</a>.toTime_t()-<a class="code" href="class_progress_dialog.html#aae0eb8dd8118f5a85d82c0c98782e59c">start_time</a>.toTime_t()) != 0) {
+<a name="l00137"></a>00137             <a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a> = this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>/(<a class="code" href="class_progress_dialog.html#a72f0f9e9f860cf21eceb2f9a71cda17a">end_time</a>.toTime_t()-<a class="code" href="class_progress_dialog.html#aae0eb8dd8118f5a85d82c0c98782e59c">start_time</a>.toTime_t());
+<a name="l00138"></a>00138         } <span class="keywordflow">else</span> {
+<a name="l00139"></a>00139             <a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a> = this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>/1;
+<a name="l00140"></a>00140         }
+<a name="l00141"></a>00141         <a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a> /= 1024;
+<a name="l00142"></a>00142     }
+<a name="l00143"></a>00143     this-&gt;<a class="code" href="class_progress_dialog.html#ac976b14140dc92dc72e0d434db846bb2">update_transfer_state</a>();
+<a name="l00144"></a>00144 
+<a name="l00145"></a>00145     this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a>-&gt;<a class="code" href="class_task_queue_model.html#abaa7dee1e18c5db8e135c7a337417782">slot_set_transfer_percent</a>(this-&gt;<a class="code" href="class_progress_dialog.html#ac73da7d030bafc828a98d81615c89c25">modelId</a>, percent, this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>, this-&gt;<a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a>);
+<a name="l00146"></a>00146 }
+<a name="l00147"></a>00147 
+<a name="l00148"></a><a class="code" href="class_progress_dialog.html#a1fbabe3836881c65a43921fc35f8798c">00148</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a1fbabe3836881c65a43921fc35f8798c">ProgressDialog::slot_transfer_thread_finished</a>()
+<a name="l00149"></a>00149 {
+<a name="l00150"></a>00150     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__; 
+<a name="l00151"></a>00151     
+<a name="l00152"></a>00152     <span class="comment">//this-&gt;done(QDialog::Accepted);</span>
+<a name="l00153"></a>00153     <span class="keywordtype">int</span> error_code = this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#a8425f6352e47df527ba20256aa460077">get_error_code</a>();
+<a name="l00154"></a>00154     QString errorString = this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#a80df080ffa3a32df7e9c632aa59f6f11">get_error_message</a>(error_code);
+<a name="l00155"></a>00155     emit this-&gt;<a class="code" href="class_progress_dialog.html#a8861410aef01a30276bcf0f0d4064979">transfer_finished</a>(error_code, errorString);
+<a name="l00156"></a>00156 
+<a name="l00157"></a>00157     this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a>-&gt;<a class="code" href="class_task_queue_model.html#a2841bc68d6d8d9a64675c9fc88da01ae">slot_transfer_thread_finished</a>(this-&gt;<a class="code" href="class_progress_dialog.html#ac73da7d030bafc828a98d81615c89c25">modelId</a>);
+<a name="l00158"></a>00158 }
+<a name="l00159"></a>00159 
+<a name="l00160"></a><a class="code" href="class_progress_dialog.html#a184fdc655fdca84e2640b1537b170494">00160</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a184fdc655fdca84e2640b1537b170494">ProgressDialog::exec</a>()
+<a name="l00161"></a>00161 {
+<a name="l00162"></a>00162     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__; 
+<a name="l00163"></a>00163     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_progress_dialog.html#a32f2a545ec181ff02da2629007a43caf">first_show</a>) {
+<a name="l00164"></a>00164         this-&gt;<a class="code" href="class_progress_dialog.html#a32f2a545ec181ff02da2629007a43caf">first_show</a> = 0 ;
+<a name="l00165"></a>00165         this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;start(); 
+<a name="l00166"></a>00166     }
+<a name="l00167"></a>00167     <span class="comment">//QDialog::exec();</span>
+<a name="l00168"></a>00168 }
+<a name="l00169"></a><a class="code" href="class_progress_dialog.html#ac58c52c90f88aeba2b3dd648a1c3c823">00169</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#ac58c52c90f88aeba2b3dd648a1c3c823">ProgressDialog::show</a>() 
+<a name="l00170"></a>00170 {
+<a name="l00171"></a>00171     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__; 
+<a name="l00172"></a>00172     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_progress_dialog.html#a32f2a545ec181ff02da2629007a43caf">first_show</a>) {
+<a name="l00173"></a>00173         this-&gt;<a class="code" href="class_progress_dialog.html#a32f2a545ec181ff02da2629007a43caf">first_show</a> = 0;
+<a name="l00174"></a>00174         this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a> = <a class="code" href="class_task_queue_model.html#a01322d7a1bd37ba679447b05e0f65929">TaskQueueModel::instance</a>();
+<a name="l00175"></a>00175         this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;start(); 
+<a name="l00176"></a>00176     }
+<a name="l00177"></a>00177     <a class="code" href="class_progress_dialog.html#ac58c52c90f88aeba2b3dd648a1c3c823">QWidget::show</a>(); 
+<a name="l00178"></a>00178 }
+<a name="l00179"></a>00179 
+<a name="l00180"></a><a class="code" href="class_progress_dialog.html#a2d1e61890280064f436d373b65e83ef8">00180</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a2d1e61890280064f436d373b65e83ef8">ProgressDialog::slot_new_file_transfer_started</a>(QString new_file_name)
+<a name="l00181"></a>00181 {
+<a name="l00182"></a>00182     QString u_new_file_name =  new_file_name;
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184     <span class="keywordtype">bool</span> found = 0;
+<a name="l00185"></a>00185     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;count(); i ++) {
+<a name="l00186"></a>00186         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;itemText(i) == u_new_file_name) {
+<a name="l00187"></a>00187             this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;setCurrentIndex(i);
+<a name="l00188"></a>00188             found = 1;
+<a name="l00189"></a>00189             <span class="keywordflow">break</span>;
+<a name="l00190"></a>00190         }
+<a name="l00191"></a>00191     }
+<a name="l00192"></a>00192     <span class="keywordflow">if</span> (found == 0) {
+<a name="l00193"></a>00193         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;addItem(u_new_file_name);
+<a name="l00194"></a>00194         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;setCurrentIndex(this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.comboBox-&gt;count()-1);
+<a name="l00195"></a>00195     }
+<a name="l00196"></a>00196     u_new_file_name = QString(tr(<span class="stringliteral">&quot;processing: %1&quot;</span>)).arg(u_new_file_name);
+<a name="l00197"></a>00197     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.progressBar-&gt;setStatusTip(u_new_file_name);
+<a name="l00199"></a>00199     this-&gt;<a class="code" href="class_progress_dialog.html#a81643295e80a46371f2ebfb4f58ecd15">total_files_count</a> ++;
+<a name="l00200"></a>00200     this-&gt;<a class="code" href="class_progress_dialog.html#ac976b14140dc92dc72e0d434db846bb2">update_transfer_state</a>();
+<a name="l00201"></a>00201     <span class="comment">//this-&gt;setToolTip(u_new_file_name);</span>
+<a name="l00202"></a>00202     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_4-&gt;setText(this-&gt;<a class="code" href="class_progress_dialog.html#aef6937a1d21624fb1925f88cb4d50c62">type</a>(u_new_file_name));
+<a name="l00203"></a>00203 
+<a name="l00204"></a>00204     this-&gt;<a class="code" href="class_progress_dialog.html#ac73da7d030bafc828a98d81615c89c25">modelId</a> = this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a>-&gt;<a class="code" href="class_task_queue_model.html#ad0b29887ab8fa78e2a0e4d3f62356685">slot_new_file_transfer_started</a>(new_file_name);
+<a name="l00205"></a>00205 }
+<a name="l00206"></a>00206 
+<a name="l00207"></a><a class="code" href="class_progress_dialog.html#aa083e6c01aec14e4869ab8f89958d0bf">00207</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#aa083e6c01aec14e4869ab8f89958d0bf">ProgressDialog::closeEvent</a>(QCloseEvent * event) 
+<a name="l00208"></a>00208 {
+<a name="l00209"></a>00209     <span class="keywordtype">int</span> rv = 0;
+<a name="l00210"></a>00210     
+<a name="l00211"></a>00211     <span class="comment">//this-&gt;setVisible(false);</span>
+<a name="l00212"></a>00212     rv = QMessageBox::information(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Attemp to close this window?&quot;</span>),
+<a name="l00213"></a>00213                                    tr(<span class="stringliteral">&quot;Are you sure to stop the transfomition ?&quot;</span>),
+<a name="l00214"></a>00214                                    QMessageBox::Ok | QMessageBox::Cancel );
+<a name="l00215"></a>00215     <span class="keywordflow">if</span> (rv == QMessageBox::Ok) {
+<a name="l00216"></a>00216         this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#aa842ebf653e460cb34ea1a20acb0d86b">set_user_cancel</a>(<span class="keyword">true</span>);
+<a name="l00217"></a>00217         <span class="comment">//event-&gt;ignore();</span>
+<a name="l00218"></a>00218         this-&gt;setVisible(<span class="keyword">false</span>);
+<a name="l00219"></a>00219         <span class="comment">//emit this-&gt;transfer_finished(this-&gt;transportor-&gt;get_error_code());</span>
+<a name="l00220"></a>00220         qDebug()&lt;&lt;<span class="stringliteral">&quot;Transfer error: &quot;</span>&lt;&lt;this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#a8425f6352e47df527ba20256aa460077">get_error_code</a>();
+<a name="l00221"></a>00221     } <span class="keywordflow">else</span> {
+<a name="l00222"></a>00222         <span class="keyword">event</span>-&gt;ignore();
+<a name="l00223"></a>00223     }
+<a name="l00224"></a>00224 }
+<a name="l00225"></a>00225 
+<a name="l00226"></a><a class="code" href="class_progress_dialog.html#afbcdba990cbc4c4090dc1fc254d21883">00226</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#afbcdba990cbc4c4090dc1fc254d21883">ProgressDialog::slot_cancel_button_clicked</a>()
+<a name="l00227"></a>00227 {
+<a name="l00228"></a>00228     this-&gt;close();
+<a name="l00229"></a>00229 }
+<a name="l00230"></a><a class="code" href="class_progress_dialog.html#ac976b14140dc92dc72e0d434db846bb2">00230</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#ac976b14140dc92dc72e0d434db846bb2">ProgressDialog::update_transfer_state</a>()
+<a name="l00231"></a>00231 {
+<a name="l00232"></a>00232     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_8-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a>));
+<a name="l00233"></a>00233     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_9-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_progress_dialog.html#ad4bd7531c68306df310b6edc8446af39">abtained_files_count</a>));
+<a name="l00234"></a>00234     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_10-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_progress_dialog.html#a81643295e80a46371f2ebfb4f58ecd15">total_files_count</a>));
+<a name="l00235"></a>00235     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_11-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>));
+<a name="l00236"></a>00236     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_12-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a>));
+<a name="l00237"></a>00237     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a> == 0) {
+<a name="l00238"></a>00238         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.progressBar_2-&gt;setValue(100);
+<a name="l00239"></a>00239     } <span class="keywordflow">else</span> {
+<a name="l00240"></a>00240         this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.progressBar_2-&gt;setValue(100.0*((<span class="keywordtype">double</span>)this-&gt;<a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>/(<span class="keywordtype">double</span>)this-&gt;<a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a>));
+<a name="l00241"></a>00241     }
+<a name="l00242"></a>00242 }
+<a name="l00243"></a><a class="code" href="class_progress_dialog.html#a783f7ada3ed314efc575990e29802df0">00243</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a783f7ada3ed314efc575990e29802df0">ProgressDialog::slot_transfer_got_file_size</a>(<span class="keywordtype">int</span> size)
+<a name="l00244"></a>00244 {
+<a name="l00245"></a>00245     this-&gt;<a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a> += size;
+<a name="l00246"></a>00246     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_13-&gt;setText(QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(size));
+<a name="l00247"></a>00247     this-&gt;<a class="code" href="class_progress_dialog.html#ac976b14140dc92dc72e0d434db846bb2">update_transfer_state</a>();
+<a name="l00248"></a>00248 
+<a name="l00249"></a>00249     this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a>-&gt;<a class="code" href="class_task_queue_model.html#aee5a1f155e5248cc5961efe2840e9145">slot_transfer_got_file_size</a>(this-&gt;<a class="code" href="class_progress_dialog.html#ac73da7d030bafc828a98d81615c89c25">modelId</a>, size);
+<a name="l00250"></a>00250 }
+<a name="l00251"></a><a class="code" href="class_progress_dialog.html#ae1bb7c45843d5e20eae2c84f70912d34">00251</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#ae1bb7c45843d5e20eae2c84f70912d34">ProgressDialog::slot_transfer_log</a>(QString log)
+<a name="l00252"></a>00252 {
+<a name="l00253"></a>00253     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_14-&gt;setText(log);
+<a name="l00254"></a>00254 }
+<a name="l00255"></a>00255 
+<a name="l00256"></a><a class="code" href="class_progress_dialog.html#aef6937a1d21624fb1925f88cb4d50c62">00256</a> QString <a class="code" href="class_progress_dialog.html#aef6937a1d21624fb1925f88cb4d50c62">ProgressDialog::type</a>(QString file_name)
+<a name="l00257"></a>00257 {
+<a name="l00258"></a>00258     QFileInfo info(file_name);
+<a name="l00259"></a>00259     
+<a name="l00260"></a>00260     <span class="keywordflow">if</span> (file_name == <span class="stringliteral">&quot;/&quot;</span>)
+<a name="l00261"></a>00261         <span class="keywordflow">return</span> QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>, <span class="stringliteral">&quot;Drive&quot;</span>);
+<a name="l00262"></a>00262 <span class="comment">//     if (info.isFile()) {</span>
+<a name="l00263"></a>00263     <span class="keywordflow">if</span> (1) {
+<a name="l00264"></a>00264         <span class="keywordflow">if</span> (!info.suffix().isEmpty())
+<a name="l00265"></a>00265             <span class="keywordflow">return</span> info.suffix() + QLatin1Char(<span class="charliteral">&#39; &#39;</span>) + QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>, <span class="stringliteral">&quot;File&quot;</span>);
+<a name="l00266"></a>00266         <span class="keywordflow">return</span> QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>, <span class="stringliteral">&quot;File&quot;</span>);
+<a name="l00267"></a>00267     }
+<a name="l00268"></a>00268 
+<a name="l00269"></a>00269     <span class="keywordflow">if</span> (info.isDir())
+<a name="l00270"></a>00270         <span class="keywordflow">return</span> QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>,
+<a name="l00271"></a>00271 #ifdef Q_WS_WIN
+<a name="l00272"></a>00272                                        <span class="stringliteral">&quot;File Folder&quot;</span>, <span class="stringliteral">&quot;Match Windows Explorer&quot;</span>
+<a name="l00273"></a>00273 #<span class="keywordflow">else</span>
+<a name="l00274"></a>00274                                        <span class="stringliteral">&quot;Folder&quot;</span>, <span class="stringliteral">&quot;All other platforms&quot;</span>
+<a name="l00275"></a>00275 #endif
+<a name="l00276"></a>00276             );
+<a name="l00277"></a>00277     <span class="comment">// Windows   - &quot;File Folder&quot;</span>
+<a name="l00278"></a>00278     <span class="comment">// OS X      - &quot;Folder&quot;</span>
+<a name="l00279"></a>00279     <span class="comment">// Konqueror - &quot;Folder&quot;</span>
+<a name="l00280"></a>00280     <span class="comment">// Nautilus  - &quot;folder&quot;</span>
+<a name="l00281"></a>00281 
+<a name="l00282"></a>00282     <span class="keywordflow">if</span> (info.isSymLink())
+<a name="l00283"></a>00283         <span class="keywordflow">return</span> QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>,
+<a name="l00284"></a>00284 #ifdef Q_OS_MAC
+<a name="l00285"></a>00285                                        <span class="stringliteral">&quot;Alias&quot;</span>, <span class="stringliteral">&quot;Mac OS X Finder&quot;</span>
+<a name="l00286"></a>00286 #<span class="keywordflow">else</span>
+<a name="l00287"></a>00287                                        <span class="stringliteral">&quot;Shortcut&quot;</span>, <span class="stringliteral">&quot;All other platforms&quot;</span>
+<a name="l00288"></a>00288 #endif
+<a name="l00289"></a>00289             );
+<a name="l00290"></a>00290     <span class="comment">// OS X      - &quot;Alias&quot;</span>
+<a name="l00291"></a>00291     <span class="comment">// Windows   - &quot;Shortcut&quot;</span>
+<a name="l00292"></a>00292     <span class="comment">// Konqueror - &quot;Folder&quot; or &quot;TXT File&quot; i.e. what it is pointing to</span>
+<a name="l00293"></a>00293     <span class="comment">// Nautilus  - &quot;link to folder&quot; or &quot;link to object file&quot;, same as Konqueror</span>
+<a name="l00294"></a>00294 
+<a name="l00295"></a>00295     <span class="keywordflow">return</span> QApplication::translate(<span class="stringliteral">&quot;QFileDialog&quot;</span>, <span class="stringliteral">&quot;Unknown&quot;</span>);
+<a name="l00296"></a>00296 }
+<a name="l00297"></a>00297 
+<a name="l00298"></a><a class="code" href="class_progress_dialog.html#a3c2c45632b5c7f162635ed2c129489d1">00298</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a3c2c45632b5c7f162635ed2c129489d1">ProgressDialog::slot_dest_file_exists</a>(QString src_path, QString src_file_size, 
+<a name="l00299"></a>00299                                            QString src_file_date, QString dest_path, 
+<a name="l00300"></a>00300                                            QString dest_file_size, QString dest_file_date)
+<a name="l00301"></a>00301 {
+<a name="l00302"></a>00302     qDebug()&lt;&lt;<span class="stringliteral">&quot;Dest file exists: &quot;</span>&lt;&lt;dest_path&lt;&lt;<span class="stringliteral">&quot;. src path:&quot;</span>&lt;&lt;src_path;
+<a name="l00303"></a>00303     <a class="code" href="class_file_exist_ask_dialog.html">FileExistAskDialog</a> *ask_dlg;
+<a name="l00304"></a>00304     <span class="keywordtype">int</span> rv = 0;
+<a name="l00305"></a>00305 
+<a name="l00306"></a>00306     ask_dlg = <span class="keyword">new</span> <a class="code" href="class_file_exist_ask_dialog.html">FileExistAskDialog</a>(<span class="keyword">this</span>);
+<a name="l00307"></a>00307     ask_dlg-&gt;<a class="code" href="class_file_exist_ask_dialog.html#aa1d2eed2b47576e92811cbf4b9f1698a">set_files</a>(src_path, src_file_size, src_file_date, dest_path, dest_file_size, dest_file_date);
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309     QObject::connect(ask_dlg, SIGNAL(acceptedOne(<span class="keywordtype">int</span>)), <span class="keyword">this</span>, SLOT(<a class="code" href="class_progress_dialog.html#ac95f12cbcaea7db76c2b2af65feaa384">slot_ask_accepted</a>(<span class="keywordtype">int</span>)));
+<a name="l00310"></a>00310 
+<a name="l00311"></a>00311     rv = ask_dlg-&gt;exec();
+<a name="l00312"></a>00312     <span class="keyword">delete</span> ask_dlg;
+<a name="l00313"></a>00313 }
+<a name="l00314"></a>00314 
+<a name="l00315"></a><a class="code" href="class_progress_dialog.html#ac95f12cbcaea7db76c2b2af65feaa384">00315</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#ac95f12cbcaea7db76c2b2af65feaa384">ProgressDialog::slot_ask_accepted</a>(<span class="keywordtype">int</span> which)
+<a name="l00316"></a>00316 {
+<a name="l00317"></a>00317   <span class="keywordflow">if</span> (which &gt;= <a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aaefc9d0091a01c863c77d45afb92bd781">Transportor::OW_CANCEL</a> &amp;&amp; which &lt;= <a class="code" href="class_transportor.html#a14c04850e839e9885006b5c8c951bd6aa42fe2dc3fa52b1532a003915755b7cfc">Transportor::OW_NO_ALL</a>)
+<a name="l00318"></a>00318       this-&gt;<a class="code" href="class_progress_dialog.html#a856daafefba0fda791d8d8865854b8f0">transportor</a>-&gt;<a class="code" href="class_transportor.html#aa8594cacb58a936edf447ec7a8bf1e72">user_response_result</a>(which);
+<a name="l00319"></a>00319   <span class="keywordflow">else</span>
+<a name="l00320"></a>00320       qDebug()&lt;&lt;<span class="stringliteral">&quot;No care response&quot;</span>;
+<a name="l00321"></a>00321 }
+<a name="l00322"></a>00322 
+<a name="l00323"></a><a class="code" href="class_progress_dialog.html#a4801380604cd4a0f8959536d79fcd7fa">00323</a> <span class="keywordtype">void</span> <a class="code" href="class_progress_dialog.html#a4801380604cd4a0f8959536d79fcd7fa">ProgressDialog::slot_speed_timer_timeout</a>()
+<a name="l00324"></a>00324 {
+<a name="l00325"></a>00325     QDateTime now_time = QDateTime::currentDateTime();
+<a name="l00326"></a>00326     <span class="keywordtype">int</span> days = 0;
+<a name="l00327"></a>00327     <span class="keywordtype">int</span> hours = 0;
+<a name="l00328"></a>00328     <span class="keywordtype">int</span> minites = 0;
+<a name="l00329"></a>00329     <span class="keywordtype">int</span> seconds = 0;
+<a name="l00330"></a>00330     <span class="keywordtype">int</span> total_seconds = 0;
+<a name="l00331"></a>00331     <span class="keywordtype">int</span> left_size = 0;
+<a name="l00332"></a>00332     <span class="keywordtype">float</span> speed_value = 0.0;
+<a name="l00333"></a>00333     QString time_str;
+<a name="l00334"></a>00334     QString eclapsed_time_str, left_time_str;
+<a name="l00335"></a>00335 
+<a name="l00336"></a>00336     total_seconds = this-&gt;<a class="code" href="class_progress_dialog.html#aae0eb8dd8118f5a85d82c0c98782e59c">start_time</a>.secsTo(now_time);
+<a name="l00337"></a>00337 
+<a name="l00338"></a>00338     days = total_seconds/(24*3600);
+<a name="l00339"></a>00339     hours = total_seconds%(24*3600)/3600;
+<a name="l00340"></a>00340     minites = total_seconds%3600/60;
+<a name="l00341"></a>00341     seconds = total_seconds%60;    
+<a name="l00342"></a>00342     <span class="keywordflow">if</span> (days &gt; 0) {
+<a name="l00343"></a>00343         time_str = QString(<span class="stringliteral">&quot;%1d%2:%3:%4&quot;</span>).arg(days).arg( hours).arg(minites).arg(seconds);
+<a name="l00344"></a>00344     } <span class="keywordflow">else</span> {
+<a name="l00345"></a>00345         time_str = QString(<span class="stringliteral">&quot;%1:%2:%3&quot;</span>).arg( hours).arg(minites).arg(seconds);
+<a name="l00346"></a>00346     }
+<a name="l00347"></a>00347     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_6-&gt;setText(time_str);
+<a name="l00348"></a>00348     eclapsed_time_str = time_str;
+<a name="l00349"></a>00349 
+<a name="l00351"></a>00351     speed_value = this-&gt;<a class="code" href="class_progress_dialog.html#acd8fed069be08646a9e02366610ee90d">transfer_speed</a> * 1024;
+<a name="l00352"></a>00352     left_size = <a class="code" href="class_progress_dialog.html#a3703e581b3248b60c7d984839bccf72a">total_files_size</a> - <a class="code" href="class_progress_dialog.html#a8b5cf2ec17ed6c471420d0d72439cf2d">abtained_files_size</a>;
+<a name="l00353"></a>00353 
+<a name="l00354"></a>00354     total_seconds = left_size/speed_value;
+<a name="l00355"></a>00355 
+<a name="l00356"></a>00356     days = total_seconds/(24*3600);
+<a name="l00357"></a>00357     hours = total_seconds%(24*3600)/3600;
+<a name="l00358"></a>00358     minites = total_seconds%3600/60;
+<a name="l00359"></a>00359     seconds = total_seconds%60;    
+<a name="l00360"></a>00360 
+<a name="l00361"></a>00361     <span class="keywordflow">if</span> (days &gt; 0) {
+<a name="l00362"></a>00362         time_str = QString(<span class="stringliteral">&quot;%1d%2:%3:%4&quot;</span>).arg(days).arg( hours).arg(minites).arg(seconds);
+<a name="l00363"></a>00363     } <span class="keywordflow">else</span> {
+<a name="l00364"></a>00364         time_str = QString(<span class="stringliteral">&quot;%1:%2:%3&quot;</span>).arg( hours).arg(minites).arg(seconds);
+<a name="l00365"></a>00365     }
+<a name="l00366"></a>00366     this-&gt;<a class="code" href="class_progress_dialog.html#a9fc1de8cfabf2bded115df0e1c85f3d2">ui_progress_dialog</a>.lineEdit_7-&gt;setText(time_str);
+<a name="l00367"></a>00367     left_time_str = time_str;
+<a name="l00368"></a>00368     
+<a name="l00369"></a>00369     this-&gt;<a class="code" href="class_progress_dialog.html#a6c929ebcc448fc861a206798b876139e">taskQueueModel</a>-&gt;<a class="code" href="class_task_queue_model.html#afa63d41c6dc79cac22dde8ad47d452dd">slot_transfer_time_update</a>(this-&gt;<a class="code" href="class_progress_dialog.html#ac73da7d030bafc828a98d81615c89c25">modelId</a>, eclapsed_time_str, left_time_str);
+<a name="l00370"></a>00370 }
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

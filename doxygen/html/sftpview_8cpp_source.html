@@ -1,0 +1,1044 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sftpview.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sftpview.cpp</h1><a href="sftpview_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// sftpview.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-05-05 21:49:36 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: sftpview.cpp 646 2010-06-01 12:45:53Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;QtGui&gt;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;info.h&quot;</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="globaloption_8h.html">globaloption.h</a>&quot;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;<a class="code" href="progressdialog_8h.html">progressdialog.h</a>&quot;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#include &quot;<a class="code" href="localview_8h.html">localview.h</a>&quot;</span>
+<a name="l00020"></a>00020 <span class="preprocessor">#include &quot;<a class="code" href="sftpview_8h.html">sftpview.h</a>&quot;</span>
+<a name="l00021"></a>00021 <span class="preprocessor">#include &quot;<a class="code" href="netdirsortfiltermodel_8h.html">netdirsortfiltermodel.h</a>&quot;</span>
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="preprocessor">#include &quot;<a class="code" href="fileproperties_8h.html">fileproperties.h</a>&quot;</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include &quot;<a class="code" href="encryptiondetailfocuslabel_8h.html">encryptiondetailfocuslabel.h</a>&quot;</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include &quot;<a class="code" href="encryptiondetaildialog_8h.html">encryptiondetaildialog.h</a>&quot;</span>
+<a name="l00026"></a>00026 <span class="preprocessor">#include &quot;<a class="code" href="systeminfodialog_8h.html">systeminfodialog.h</a>&quot;</span>
+<a name="l00027"></a>00027 
+<a name="l00028"></a>00028 <span class="preprocessor">#ifndef _MSC_VER</span>
+<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="preprocessor">#warning &quot;wrapper lower class, drop this include&quot;</span>
+<a name="l00030"></a>00030 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00031"></a>00031 <span class="preprocessor"></span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &quot;<a class="code" href="rfsdirnode_8h.html">rfsdirnode.h</a>&quot;</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include &quot;<a class="code" href="completelineeditdelegate_8h.html">completelineeditdelegate.h</a>&quot;</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include &quot;<a class="code" href="connection_8h.html">connection.h</a>&quot;</span>
+<a name="l00035"></a>00035 
+<a name="l00036"></a><a class="code" href="class_s_f_t_p_view.html#a3bc31bfab8547a2b5699e93fd94d7781">00036</a> <a class="code" href="class_s_f_t_p_view.html#a3bc31bfab8547a2b5699e93fd94d7781">SFTPView::SFTPView</a>(QMdiArea *main_mdi_area, <a class="code" href="class_local_view.html">LocalView</a> *local_view, QWidget *parent)
+<a name="l00037"></a>00037     : <a class="code" href="class_remote_view.html">RemoteView</a>(main_mdi_area, local_view, parent)
+<a name="l00038"></a>00038 {
+<a name="l00039"></a>00039     this-&gt;<a class="code" href="class_remote_view.html#acbc709d09022512dcba35ca1774880ad">init_popup_context_menu</a>();
+<a name="l00040"></a>00040     this-&gt;<a class="code" href="class_s_f_t_p_view.html#aaa5a2f260342e918c9bbb156128a4130">rconn</a> = NULL;
+<a name="l00041"></a>00041     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>;
+<a name="l00042"></a>00042 }
+<a name="l00043"></a>00043 
+<a name="l00044"></a><a class="code" href="class_s_f_t_p_view.html#a07a577d51be06e3d0f173eca04735784">00044</a> <a class="code" href="class_s_f_t_p_view.html#a07a577d51be06e3d0f173eca04735784">SFTPView::~SFTPView</a>()
+<a name="l00045"></a>00045 {
+<a name="l00046"></a>00046 }
+<a name="l00047"></a>00047 
+<a name="l00048"></a><a class="code" href="class_s_f_t_p_view.html#ad09954440913fe750c0df304b1dd387d">00048</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ad09954440913fe750c0df304b1dd387d">SFTPView::slot_show_fxp_command_log</a>(<span class="keywordtype">bool</span> show)
+<a name="l00049"></a>00049 {
+<a name="l00050"></a>00050     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.listView-&gt;setVisible(show);    
+<a name="l00051"></a>00051 }
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="class_s_f_t_p_view.html#aa7206c522944c4dfeac31865cddff6b7">00053</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#aa7206c522944c4dfeac31865cddff6b7">SFTPView::i_init_dir_view</a>()
+<a name="l00054"></a>00054 {
+<a name="l00055"></a>00055     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a> = <span class="keyword">new</span> <a class="code" href="class_remote_dir_model.html">RemoteDirModel</a>();
+<a name="l00058"></a>00058     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a6a8275e8a39e4eafea2ab2c7d0d6e450">setConnection</a>(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>);
+<a name="l00059"></a>00059     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a> = <span class="keyword">new</span> QStringListModel();
+<a name="l00060"></a>00060     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.listView-&gt;setModel(this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>);
+<a name="l00061"></a>00061     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>, SIGNAL(operationTriggered(QString)), 
+<a name="l00062"></a>00062                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a6c5d2f5918a44e9add994de4a722e5ae">slot_operation_triggered</a>(QString)));
+<a name="l00063"></a>00063     
+<a name="l00064"></a>00064     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a1d51629e316522fe29bbc85cf3a96c68">set_user_home_path</a>(this-&gt;<a class="code" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">user_home_path</a>);
+<a name="l00065"></a>00065     this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a> = <span class="keyword">new</span> <a class="code" href="class_dir_table_sort_filter_model.html">DirTableSortFilterModel</a>();
+<a name="l00066"></a>00066     this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;setSourceModel(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>);
+<a name="l00067"></a>00067     this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a> = <span class="keyword">new</span> <a class="code" href="class_dir_tree_sort_filter_model.html">DirTreeSortFilterModel</a>();
+<a name="l00068"></a>00068     this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;setSourceModel(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>);
+<a name="l00069"></a>00069     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setModel(this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>);
+<a name="l00070"></a>00070     <span class="comment">// this-&gt;remoteview.treeView-&gt;setModel(this-&gt;remote_dir_model);</span>
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setAcceptDrops(<span class="keyword">true</span>);
+<a name="l00073"></a>00073     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setDragEnabled(<span class="keyword">false</span>);
+<a name="l00074"></a>00074     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setDropIndicatorShown(<span class="keyword">true</span>);
+<a name="l00075"></a>00075     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setDragDropMode(QAbstractItemView::DropOnly);
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>,
+<a name="l00078"></a>00078                      SIGNAL(sig_drop_mime_data(<span class="keyword">const</span> QMimeData *, Qt::DropAction, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keyword">const</span> QModelIndex &amp;)),
+<a name="l00079"></a>00079                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a5d1532cf7f7f3dce2ecc6814b0d5d170">slot_drop_mime_data</a>(<span class="keyword">const</span> QMimeData *, Qt::DropAction, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keyword">const</span> QModelIndex &amp;)));
+<a name="l00080"></a>00080     
+<a name="l00081"></a>00081     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>, SIGNAL(enter_remote_dir_retrive_loop()),
+<a name="l00082"></a>00082                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a516c4de399377cc5bd87ec7e83a3815f">slot_enter_remote_dir_retrive_loop</a>()));
+<a name="l00083"></a>00083     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>, SIGNAL(leave_remote_dir_retrive_loop()),
+<a name="l00084"></a>00084                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a05493536babd123b0efc38f10782a8e4">slot_leave_remote_dir_retrive_loop</a>()));
+<a name="l00085"></a>00085     
+<a name="l00086"></a>00086     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;expandAll();
+<a name="l00087"></a>00087     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setColumnWidth(0, this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;columnWidth(0) * 2);
+<a name="l00088"></a>00088     
+<a name="l00089"></a>00089     <span class="comment">//这里设置为true时，导致这个treeView不能正确显示滚动条了，为什么呢?</span>
+<a name="l00090"></a>00090     <span class="comment">// this-&gt;remoteview.treeView-&gt;setColumnHidden(1, true);</span>
+<a name="l00091"></a>00091     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setColumnWidth(1, 0); <span class="comment">// 使用这种方法隐藏看上去就正常了。</span>
+<a name="l00092"></a>00092     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setColumnHidden(2, <span class="keyword">true</span>);
+<a name="l00093"></a>00093     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setColumnHidden(3, <span class="keyword">true</span>);
+<a name="l00094"></a>00094     
+<a name="l00096"></a>00096     QModelIndex homeIndex = this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a9214446987a09e4a19341b3af3443fa1">index</a>(this-&gt;<a class="code" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">user_home_path</a>);
+<a name="l00097"></a>00097     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;setModel(this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>);
+<a name="l00098"></a>00098     <span class="comment">// this-&gt;remoteview.tableView-&gt;setModel(this-&gt;remote_dir_model);</span>
+<a name="l00099"></a>00099     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;setRootIndex(this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapFromSource(homeIndex));
+<a name="l00100"></a>00100     
+<a name="l00101"></a>00101     <span class="comment">//change row height of table </span>
+<a name="l00102"></a>00102     this-&gt;<a class="code" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a> = 20; <span class="comment">// default table height</span>
+<a name="l00103"></a>00103     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a1294aa2c918dfea9aa3ed78792f3d9ff">rowCount</a>(homeIndex) &gt; 0) {
+<a name="l00104"></a>00104         this-&gt;<a class="code" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a> = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;rowHeight(0)*2/3;
+<a name="l00105"></a>00105     } <span class="keywordflow">else</span> {
+<a name="l00106"></a>00106         this-&gt;<a class="code" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a> = 20 ;
+<a name="l00107"></a>00107     }
+<a name="l00108"></a>00108     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a1294aa2c918dfea9aa3ed78792f3d9ff">rowCount</a>(homeIndex); i ++) {
+<a name="l00109"></a>00109         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;setRowHeight(i, this-&gt;<a class="code" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a>);
+<a name="l00110"></a>00110     }
+<a name="l00111"></a>00111     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;resizeColumnToContents(0);
+<a name="l00112"></a>00112     
+<a name="l00114"></a>00114     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView, SIGNAL(clicked(<span class="keyword">const</span> QModelIndex &amp;)),
+<a name="l00115"></a>00115                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3" title="index 是proxy的index">slot_dir_tree_item_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;)));
+<a name="l00116"></a>00116     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView, SIGNAL(doubleClicked(<span class="keyword">const</span> QModelIndex &amp;)),
+<a name="l00117"></a>00117                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#ad6fb1106adfeaa29be78a37bca2e28c0">slot_dir_file_view_double_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;)));
+<a name="l00118"></a>00118     QObject::connect(this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView, SIGNAL(drag_ready()),
+<a name="l00119"></a>00119                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a06a1176f8a464200d3b5be9311b91cb8">slot_drag_ready</a>()));
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121     <span class="comment">//TODO 连接remoteview.treeView 的drag信号</span>
+<a name="l00122"></a>00122     
+<a name="l00123"></a>00123     <span class="comment">//显示SSH服务器信息</span>
+<a name="l00124"></a>00124     QString ssh_server_version = libssh2_session_get_remote_version(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">sess</a>);
+<a name="l00125"></a>00125     <span class="keywordtype">int</span> ssh_sftp_version = libssh2_sftp_get_version(this-&gt;<a class="code" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a>);
+<a name="l00126"></a>00126     QString status_msg = QString(<span class="stringliteral">&quot;Ready. (%1  SFTP: V%2)&quot;</span>).arg(ssh_server_version).arg(ssh_sftp_version); 
+<a name="l00127"></a>00127     this-&gt;<a class="code" href="class_remote_view.html#a7187e462b5d1bbccc0abe2d733790c19">status_bar</a>-&gt;showMessage(status_msg);
+<a name="l00128"></a>00128 }
+<a name="l00129"></a>00129 
+<a name="l00130"></a><a class="code" href="class_s_f_t_p_view.html#a160fb607de7d767d60444c956698035b">00130</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a160fb607de7d767d60444c956698035b">SFTPView::slot_disconnect_from_remote_host</a>()
+<a name="l00131"></a>00131 {
+<a name="l00132"></a>00132     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;setModel(0);
+<a name="l00133"></a>00133     <span class="comment">// this-&gt;remote_dir_sort_filter_model-&gt;setSourceModel(0);</span>
+<a name="l00134"></a>00134     <span class="comment">// this-&gt;remote_dir_sort_filter_model_ex-&gt;setSourceModel(0);</span>
+<a name="l00135"></a>00135     <span class="keyword">delete</span> this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>;
+<a name="l00136"></a>00136     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a> = 0;
+<a name="l00137"></a>00137     <span class="comment">// delete this-&gt;remote_dir_sort_filter_model_ex;</span>
+<a name="l00138"></a>00138     <span class="comment">// delete this-&gt;remote_dir_sort_filter_model;</span>
+<a name="l00139"></a>00139 }
+<a name="l00140"></a>00140 
+<a name="l00141"></a><a class="code" href="class_s_f_t_p_view.html#afc1dbab820b8792b2656d107373d433f">00141</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#afc1dbab820b8792b2656d107373d433f">SFTPView::slot_dir_tree_customContextMenuRequested</a>(<span class="keyword">const</span> QPoint &amp; pos)
+<a name="l00142"></a>00142 {
+<a name="l00143"></a>00143     this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> = <span class="keyword">static_cast&lt;</span>QAbstractItemView*<span class="keyword">&gt;</span>(sender());
+<a name="l00144"></a>00144     QPoint real_pos = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;mapToGlobal(pos);
+<a name="l00145"></a>00145     real_pos = QPoint(real_pos.x() + 12, real_pos.y() + 36);
+<a name="l00146"></a>00146     <a class="code" href="class_remote_view.html#ac7f67ce10357ace0370fca1ed2e5e43b">attr_action</a>-&gt;setEnabled(!this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a>);
+<a name="l00147"></a>00147     this-&gt;<a class="code" href="class_remote_view.html#a61cc7e0e83dd8d60ebf3f8c3f0bb4df5">dir_tree_context_menu</a>-&gt;popup(real_pos);
+<a name="l00148"></a>00148 }
+<a name="l00149"></a>00149 
+<a name="l00150"></a><a class="code" href="class_s_f_t_p_view.html#aae78ffc1fc89fd92025f55bc91c88c23">00150</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#aae78ffc1fc89fd92025f55bc91c88c23">SFTPView::slot_new_transfer</a>()
+<a name="l00151"></a>00151 {
+<a name="l00152"></a>00152     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00153"></a>00153      
+<a name="l00154"></a>00154     QString file_path;
+<a name="l00155"></a>00155     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaa4f4aa5734e1d8f3f46f19460d8313122">PROTO_SFTP</a>);
+<a name="l00156"></a>00156     
+<a name="l00157"></a>00157     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a>) {
+<a name="l00158"></a>00158         QMessageBox::warning(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Notes:&quot;</span>), tr(<span class="stringliteral">&quot;Retriving remote directory tree,wait a minute please.&quot;</span>));
+<a name="l00159"></a>00159         return ;
+<a name="l00160"></a>00160     }
+<a name="l00161"></a>00161     
+<a name="l00162"></a>00162     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00163"></a>00163     
+<a name="l00164"></a>00164     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00165"></a>00165         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));
+<a name="l00166"></a>00166         return ;
+<a name="l00167"></a>00167     }
+<a name="l00168"></a>00168     
+<a name="l00169"></a>00169     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00170"></a>00170     
+<a name="l00171"></a>00171     <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0 ; i &lt; mil.size(); i +=4 ) {
+<a name="l00172"></a>00172         QModelIndex midx = mil.at(i);
+<a name="l00173"></a>00173         QModelIndex proxyIndex = midx;
+<a name="l00174"></a>00174         QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00175"></a>00175             ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00176"></a>00176             : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00177"></a>00177         QModelIndex useIndex = sourceIndex;
+<a name="l00178"></a>00178 
+<a name="l00179"></a>00179         qDebug()&lt;&lt;this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a982cfed28ccd714753f399274e1acc1e">fileName</a>(useIndex)&lt;&lt;<span class="stringliteral">&quot; &quot;</span>&lt;&lt;<span class="stringliteral">&quot; &quot;</span>&lt;&lt;this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex);
+<a name="l00180"></a>00180         file_path = this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex);
+<a name="l00181"></a>00181         remote_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;file_path;
+<a name="l00182"></a>00182     }
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184     remote_pkg.<a class="code" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">host</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a>;
+<a name="l00185"></a>00185     remote_pkg.<a class="code" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">port</a> = QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a>);
+<a name="l00186"></a>00186     remote_pkg.<a class="code" href="class_task_package.html#a76753cb346617152f983cb153658f69d">username</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a>;
+<a name="l00187"></a>00187     remote_pkg.<a class="code" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">password</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">password</a>;
+<a name="l00188"></a>00188     remote_pkg.<a class="code" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">pubkey</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a9a662369d7331a103503e54a623b735a">pubkey</a>;
+<a name="l00189"></a>00189 
+<a name="l00190"></a>00190     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">slot_new_download_requested</a>(remote_pkg);
+<a name="l00191"></a>00191 }
+<a name="l00192"></a>00192 
+<a name="l00193"></a><a class="code" href="class_s_f_t_p_view.html#ade9862dd744d47391612496a2a0733f3">00193</a> QString <a class="code" href="class_s_f_t_p_view.html#ade9862dd744d47391612496a2a0733f3">SFTPView::get_selected_directory</a>()
+<a name="l00194"></a>00194 {
+<a name="l00195"></a>00195     QString file_path;
+<a name="l00196"></a>00196     
+<a name="l00197"></a>00197     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;selectionModel();
+<a name="l00198"></a>00198     
+<a name="l00199"></a>00199     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00200"></a>00200         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));                
+<a name="l00201"></a>00201         <span class="keywordflow">return</span> file_path;
+<a name="l00202"></a>00202     }
+<a name="l00203"></a>00203     
+<a name="l00204"></a>00204     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00205"></a>00205 
+<a name="l00206"></a>00206     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; mil.size(); i += 4) {
+<a name="l00207"></a>00207         QModelIndex midx = mil.at(i);
+<a name="l00208"></a>00208 
+<a name="l00209"></a>00209         QModelIndex proxyIndex = midx;
+<a name="l00210"></a>00210         QModelIndex sourceIndex = this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00211"></a>00211         QModelIndex useIndex = sourceIndex;
+<a name="l00212"></a>00212 
+<a name="l00213"></a>00213         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a>(useIndex)) {
+<a name="l00214"></a>00214             file_path = this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex);
+<a name="l00215"></a>00215         } <span class="keywordflow">else</span> {
+<a name="l00216"></a>00216             file_path = <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00217"></a>00217         }
+<a name="l00218"></a>00218         <span class="keywordflow">break</span>; <span class="comment">// only use the first line</span>
+<a name="l00219"></a>00219     }
+<a name="l00220"></a>00220     
+<a name="l00221"></a>00221     <span class="keywordflow">return</span> file_path;
+<a name="l00222"></a>00222 }
+<a name="l00223"></a>00223 
+<a name="l00224"></a><a class="code" href="class_s_f_t_p_view.html#a9037cab0cec71cdf201ba4ffb1bcb171">00224</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a9037cab0cec71cdf201ba4ffb1bcb171">SFTPView::set_user_home_path</a>(QString user_home_path)
+<a name="l00225"></a>00225 {
+<a name="l00226"></a>00226     this-&gt;user_home_path = user_home_path;
+<a name="l00227"></a>00227 }
+<a name="l00228"></a><a class="code" href="class_s_f_t_p_view.html#a04c8a34dc476d4c25320e6b8c20857b2">00228</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a04c8a34dc476d4c25320e6b8c20857b2">SFTPView::setConnection</a>(<a class="code" href="class_connection.html">Connection</a> *conn)
+<a name="l00229"></a>00229 {
+<a name="l00230"></a>00230     this-&gt;conn = conn;
+<a name="l00231"></a>00231     this-&gt;<a class="code" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a> = libssh2_sftp_init(this-&gt;conn-&gt;<a class="code" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">sess</a>);
+<a name="l00232"></a>00232     assert(this-&gt;<a class="code" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a> != 0);    
+<a name="l00233"></a>00233     this-&gt;setWindowTitle(this-&gt;windowTitle() + <span class="stringliteral">&quot;: &quot;</span> + this-&gt;conn-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a> + <span class="stringliteral">&quot;@&quot;</span> + this-&gt;conn-&gt;hostName);
+<a name="l00234"></a>00234 }
+<a name="l00235"></a>00235 
+<a name="l00236"></a><a class="code" href="class_s_f_t_p_view.html#afb40d28af418d525563cd082fb67a018">00236</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#afb40d28af418d525563cd082fb67a018">SFTPView::closeEvent</a>(QCloseEvent *event)
+<a name="l00237"></a>00237 {
+<a name="l00238"></a>00238     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00239"></a>00239     <span class="keyword">event</span>-&gt;ignore();
+<a name="l00240"></a>00240     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a>) {
+<a name="l00241"></a>00241         <span class="comment">//TODO 怎么能友好的结束</span>
+<a name="l00242"></a>00242         <span class="comment">//QMessageBox::warning(this,tr(&quot;Attentions:&quot;),tr(&quot;Retriving remote directory tree, wait a minute please.&quot;) );</span>
+<a name="l00243"></a>00243         <span class="comment">//return ;</span>
+<a name="l00244"></a>00244         <span class="comment">//如果说是在上传或者下载,则强烈建议用户先关闭传输窗口，再关闭连接</span>
+<a name="l00245"></a>00245         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">own_progress_dialog</a> != 0) {
+<a name="l00246"></a>00246             QMessageBox::warning(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Attentions:&quot;</span>), tr(<span class="stringliteral">&quot;You can&#39;t close connection when transfering file.&quot;</span>));
+<a name="l00247"></a>00247             return ;
+<a name="l00248"></a>00248         }
+<a name="l00249"></a>00249     }
+<a name="l00250"></a>00250     <span class="comment">//this-&gt;setVisible(false);</span>
+<a name="l00251"></a>00251     <span class="keywordflow">if</span> (QMessageBox::question(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Attemp to close this window?&quot;</span>),tr(<span class="stringliteral">&quot;Are you sure disconnect from %1?&quot;</span>).arg(this-&gt;windowTitle()), QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok) {
+<a name="l00252"></a>00252         this-&gt;setVisible(<span class="keyword">false</span>);
+<a name="l00253"></a>00253         qDebug()&lt;&lt;<span class="stringliteral">&quot;delete remote view&quot;</span>;
+<a name="l00254"></a>00254         <span class="keyword">delete</span> this ;
+<a name="l00255"></a>00255     }
+<a name="l00256"></a>00256 }
+<a name="l00257"></a><a class="code" href="class_s_f_t_p_view.html#ab3c97d01d624060ee5a270e8dea51456">00257</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ab3c97d01d624060ee5a270e8dea51456">SFTPView::slot_custom_ui_area</a>()
+<a name="l00258"></a>00258 {
+<a name="l00259"></a>00259     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00260"></a>00260     
+<a name="l00261"></a>00261     QSizePolicy sp;
+<a name="l00262"></a>00262     sp.setVerticalPolicy(QSizePolicy::Ignored);
+<a name="l00263"></a>00263     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.listView-&gt;setSizePolicy(sp) ;
+<a name="l00264"></a>00264     <span class="comment">//这个设置必须在show之前设置才有效果</span>
+<a name="l00265"></a>00265     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter-&gt;setStretchFactor(0,1);
+<a name="l00266"></a>00266     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter-&gt;setStretchFactor(1,2);
+<a name="l00267"></a>00267 
+<a name="l00268"></a>00268     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter_2-&gt;setStretchFactor(0,6);
+<a name="l00269"></a>00269     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter_2-&gt;setStretchFactor(1,1);
+<a name="l00270"></a>00270     <span class="comment">// this-&gt;remoteview.listView-&gt;setVisible(false);// 暂时没有功能在里面先隐藏掉</span>
+<a name="l00271"></a>00271     <span class="comment">//this-&gt;remoteview.tableView-&gt;setVisible(false);</span>
+<a name="l00272"></a>00272     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;this-&gt;geometry();
+<a name="l00273"></a>00273     this-&gt;setGeometry(this-&gt;x(), this-&gt;y(), this-&gt;width(), this-&gt;height()*2);
+<a name="l00274"></a>00274     <span class="comment">// this-&gt;resize(this-&gt;width(), this-&gt;height() + 200);</span>
+<a name="l00275"></a>00275     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;this-&gt;geometry();
+<a name="l00276"></a>00276 }
+<a name="l00277"></a>00277 
+<a name="l00278"></a><a class="code" href="class_s_f_t_p_view.html#a516c4de399377cc5bd87ec7e83a3815f">00278</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a516c4de399377cc5bd87ec7e83a3815f">SFTPView::slot_enter_remote_dir_retrive_loop</a>()
+<a name="l00279"></a>00279 {
+<a name="l00280"></a>00280     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00281"></a>00281     this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a> = true ;
+<a name="l00282"></a>00282     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#ac91475bebe5716dcfea8bc47e4e78116">set_keep_alive</a>(<span class="keyword">false</span>);
+<a name="l00283"></a>00283     this-&gt;<a class="code" href="class_remote_view.html#a40b7ebf1ce8085c007f5350df3d3db65">orginal_cursor</a> = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter-&gt;cursor();
+<a name="l00284"></a>00284     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter-&gt;setCursor(Qt::BusyCursor);
+<a name="l00285"></a>00285 }
+<a name="l00286"></a>00286 
+<a name="l00287"></a><a class="code" href="class_s_f_t_p_view.html#a05493536babd123b0efc38f10782a8e4">00287</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a05493536babd123b0efc38f10782a8e4">SFTPView::slot_leave_remote_dir_retrive_loop</a>()
+<a name="l00288"></a>00288 {
+<a name="l00289"></a>00289     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00290"></a>00290 
+<a name="l00291"></a>00291     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.splitter-&gt;setCursor(this-&gt;<a class="code" href="class_remote_view.html#a40b7ebf1ce8085c007f5350df3d3db65">orginal_cursor</a>);
+<a name="l00292"></a>00292     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#ac91475bebe5716dcfea8bc47e4e78116">set_keep_alive</a>(<span class="keyword">true</span>);
+<a name="l00293"></a>00293     this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a> = false ;
+<a name="l00294"></a>00294     <span class="comment">// for (int i = 0 ; i &lt; this-&gt;remote_dir_sort_filter_model-&gt;rowCount(this-&gt;remoteview.tableView-&gt;rootIndex()); i ++) {</span>
+<a name="l00295"></a>00295     <span class="comment">//     this-&gt;remoteview.tableView-&gt;setRowHeight(i, this-&gt;table_row_height);</span>
+<a name="l00296"></a>00296     <span class="comment">// }</span>
+<a name="l00297"></a>00297     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;resizeColumnToContents(0);
+<a name="l00298"></a>00298     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">onUpdateEntriesStatus</a>();
+<a name="l00299"></a>00299 }
+<a name="l00300"></a>00300 
+<a name="l00301"></a><a class="code" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">00301</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">SFTPView::update_layout</a>()
+<a name="l00302"></a>00302 {
+<a name="l00303"></a>00303     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00304"></a>00304     
+<a name="l00305"></a>00305     QString file_path ;
+<a name="l00306"></a>00306     
+<a name="l00307"></a>00307     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;selectionModel();
+<a name="l00308"></a>00308     
+<a name="l00309"></a>00309     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00310"></a>00310         <span class="comment">//QMessageBox::critical(this,tr(&quot;waring...&quot;),tr(&quot;maybe you haven&#39;t connected&quot;));                </span>
+<a name="l00311"></a>00311         <span class="comment">//return file_path ;</span>
+<a name="l00312"></a>00312         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;   
+<a name="l00313"></a>00313         <span class="keywordflow">return</span>;
+<a name="l00314"></a>00314     }
+<a name="l00315"></a>00315     
+<a name="l00316"></a>00316     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00317"></a>00317     
+<a name="l00318"></a>00318     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00319"></a>00319         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot;why no item selected????&quot;</span>;
+<a name="l00320"></a>00320     }
+<a name="l00321"></a>00321 
+<a name="l00322"></a>00322     QModelIndex proxyIndex;
+<a name="l00323"></a>00323     QModelIndex sourceIndex;
+<a name="l00324"></a>00324     QModelIndex useIndex;
+<a name="l00325"></a>00325     
+<a name="l00326"></a>00326     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; mil.size(); i += 4) {
+<a name="l00327"></a>00327         QModelIndex midx = mil.at(i);
+<a name="l00328"></a>00328         qDebug()&lt;&lt;midx;
+<a name="l00329"></a>00329 
+<a name="l00330"></a>00330         proxyIndex = midx;
+<a name="l00331"></a>00331         sourceIndex = this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(proxyIndex);
+<a name="l00332"></a>00332         useIndex = sourceIndex;
+<a name="l00333"></a>00333 
+<a name="l00334"></a>00334         <a class="code" href="class_net_dir_node.html">NetDirNode</a> *dti = <span class="keyword">static_cast&lt;</span><a class="code" href="class_net_dir_node.html">NetDirNode</a>*<span class="keyword">&gt;</span>(useIndex.internalPointer());
+<a name="l00335"></a>00335         <span class="comment">// (this-&gt;remote_dir_sort_filter_model_ex-&gt;mapToSource(midx).internalPointer());</span>
+<a name="l00336"></a>00336         qDebug()&lt;&lt;dti-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a>&lt;&lt;<span class="stringliteral">&quot; &quot;</span>&lt;&lt; dti-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00337"></a>00337         file_path = dti-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00338"></a>00338         dti-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a> = <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388aa3cd380efeedc3fb90c73cb58276b21b">POP_NO_NEED_WITH_DATA</a>; <span class="comment">// 1;</span>
+<a name="l00339"></a>00339         dti-&gt;<a class="code" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a> = <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388a773b7bdd7695152285e4d77728675e6e">POP_NEWEST</a>; <span class="comment">// 9;</span>
+<a name="l00340"></a>00340         <span class="comment">// this-&gt;remote_dir_model-&gt;slot_remote_dir_node_clicked(this-&gt;remote_dir_sort_filter_model_ex-&gt;mapToSource(midx));</span>
+<a name="l00341"></a>00341         this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3d0637f27fcbeacbbcbb8b86f6d4701e">slot_remote_dir_node_clicked</a>(useIndex);
+<a name="l00342"></a>00342     }
+<a name="l00343"></a>00343 }
+<a name="l00344"></a>00344 
+<a name="l00345"></a><a class="code" href="class_s_f_t_p_view.html#a20a3b37d11e110a4bf90f1bff6fd0a33">00345</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a20a3b37d11e110a4bf90f1bff6fd0a33">SFTPView::slot_refresh_directory_tree</a>()
+<a name="l00346"></a>00346 {
+<a name="l00347"></a>00347     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">update_layout</a>();
+<a name="l00348"></a>00348 }
+<a name="l00349"></a>00349 
+<a name="l00350"></a><a class="code" href="class_s_f_t_p_view.html#a81323dac2cd1e67966ae3d41e8a17bb2">00350</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a81323dac2cd1e67966ae3d41e8a17bb2">SFTPView::slot_show_properties</a>()
+<a name="l00351"></a>00351 {
+<a name="l00352"></a>00352     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00353"></a>00353     
+<a name="l00354"></a>00354     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00355"></a>00355         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;        
+<a name="l00356"></a>00356         <span class="keywordflow">return</span>;
+<a name="l00357"></a>00357     }
+<a name="l00358"></a>00358     
+<a name="l00359"></a>00359     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00360"></a>00360     QModelIndexList aim_mil;
+<a name="l00361"></a>00361     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView) {
+<a name="l00362"></a>00362         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; mil.count() ; i ++) {
+<a name="l00363"></a>00363             aim_mil&lt;&lt;this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(mil.at(i));
+<a name="l00364"></a>00364             <span class="comment">// aim_mil &lt;&lt; mil.at(i);</span>
+<a name="l00365"></a>00365         }
+<a name="l00366"></a>00366     } <span class="keywordflow">else</span> {
+<a name="l00367"></a>00367         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; mil.count() ; i ++) {
+<a name="l00368"></a>00368             aim_mil&lt;&lt;this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(mil.at(i));
+<a name="l00369"></a>00369             <span class="comment">// aim_mil&lt;&lt;mil.at(i);</span>
+<a name="l00370"></a>00370         }
+<a name="l00371"></a>00371     }
+<a name="l00372"></a>00372     <span class="keywordflow">if</span> (aim_mil.count() == 0) {
+<a name="l00373"></a>00373         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00374"></a>00374         <span class="keywordflow">return</span>;
+<a name="l00375"></a>00375     }
+<a name="l00376"></a>00376     <span class="comment">//  文件类型，大小，几个时间，文件权限</span>
+<a name="l00377"></a>00377     <span class="comment">//TODO 从模型中取到这些数据并显示在属性对话框中。</span>
+<a name="l00378"></a>00378     <a class="code" href="class_file_properties.html">FileProperties</a> *fp = <span class="keyword">new</span> <a class="code" href="class_file_properties.html">FileProperties</a>(<span class="keyword">this</span>);
+<a name="l00379"></a>00379     fp-&gt;<a class="code" href="class_file_properties.html#a5ba91fb2751354ff69b3d8357b8e73b3">set_ssh2_sftp</a>(this-&gt;<a class="code" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a>);
+<a name="l00380"></a>00380     fp-&gt;<a class="code" href="class_file_properties.html#a0fcda9165af3c3082b87780bd0e3e954">setConnection</a>(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>);
+<a name="l00381"></a>00381     fp-&gt;<a class="code" href="class_file_properties.html#aa3c6f48e4555d553aec2c72cbcbd7e68">set_file_info_model_list</a>(aim_mil);
+<a name="l00382"></a>00382     fp-&gt;exec();
+<a name="l00383"></a>00383     <span class="keyword">delete</span> fp;
+<a name="l00384"></a>00384 }
+<a name="l00385"></a>00385 
+<a name="l00386"></a><a class="code" href="class_s_f_t_p_view.html#a5dd922829dff8c39a1ba9766595c1b71">00386</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a5dd922829dff8c39a1ba9766595c1b71">SFTPView::slot_mkdir</a>()
+<a name="l00387"></a>00387 {
+<a name="l00388"></a>00388     QString dir_name;
+<a name="l00389"></a>00389     
+<a name="l00390"></a>00390     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00391"></a>00391     
+<a name="l00392"></a>00392     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00393"></a>00393         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00394"></a>00394         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));                
+<a name="l00395"></a>00395         <span class="keywordflow">return</span>;
+<a name="l00396"></a>00396     }
+<a name="l00397"></a>00397     
+<a name="l00398"></a>00398     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00399"></a>00399     
+<a name="l00400"></a>00400     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00401"></a>00401         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot;why no item selected????&quot;</span>;
+<a name="l00402"></a>00402         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;No item selected&quot;</span>));
+<a name="l00403"></a>00403         <span class="keywordflow">return</span>;
+<a name="l00404"></a>00404     }
+<a name="l00405"></a>00405     
+<a name="l00406"></a>00406     QModelIndex midx = mil.at(0);
+<a name="l00407"></a>00407     QModelIndex proxyIndex = midx;
+<a name="l00408"></a>00408     QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00409"></a>00409         ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00410"></a>00410         : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00411"></a>00411     QModelIndex useIndex = sourceIndex;
+<a name="l00412"></a>00412     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *dti = (<a class="code" href="class_net_dir_node.html">NetDirNode</a>*)(useIndex.internalPointer());
+<a name="l00413"></a>00413     
+<a name="l00414"></a>00414     <span class="comment">//检查所选择的项是不是目录</span>
+<a name="l00415"></a>00415     <span class="keywordflow">if</span> (!this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a>(useIndex)) {
+<a name="l00416"></a>00416         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;waring...&quot;</span>), tr(<span class="stringliteral">&quot;The selected item is not a directory.&quot;</span>));
+<a name="l00417"></a>00417         <span class="keywordflow">return</span>;
+<a name="l00418"></a>00418     }
+<a name="l00419"></a>00419     
+<a name="l00420"></a>00420     dir_name = QInputDialog::getText(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Create directory:&quot;</span>),
+<a name="l00421"></a>00421                                      tr(<span class="stringliteral">&quot;Input directory name:&quot;</span>).leftJustified(80, <span class="charliteral">&#39; &#39;</span>),
+<a name="l00422"></a>00422                                      QLineEdit::Normal,
+<a name="l00423"></a>00423                                      tr(<span class="stringliteral">&quot;new_direcotry&quot;</span>));
+<a name="l00424"></a>00424     <span class="keywordflow">if</span> (dir_name == QString::null) {
+<a name="l00425"></a>00425         <span class="keywordflow">return</span>; <span class="comment">// user canceled</span>
+<a name="l00426"></a>00426     } 
+<a name="l00427"></a>00427     <span class="keywordflow">if</span> (dir_name.length() == 0) {
+<a name="l00428"></a>00428         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot;why no item selected????&quot;</span>;
+<a name="l00429"></a>00429         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;waring...&quot;</span>), tr(<span class="stringliteral">&quot;no directory name supplyed &quot;</span>));
+<a name="l00430"></a>00430         <span class="keywordflow">return</span>;
+<a name="l00431"></a>00431     }
+<a name="l00432"></a>00432     <span class="comment">//TODO 将 file_path 转换编码再执行下面的操作</span>
+<a name="l00433"></a>00433     QPersistentModelIndex *persisIndex = <span class="keyword">new</span> QPersistentModelIndex(useIndex);
+<a name="l00434"></a>00434     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;persisIndex-&gt;parent();
+<a name="l00435"></a>00435     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a>(dti, persisIndex, <a class="code" href="sftp-const_8h.html#a6257da98122a32fd8e15877cbf63aecd">SSH2_FXP_MKDIR</a>, dir_name);
+<a name="l00436"></a>00436     
+<a name="l00437"></a>00437 }
+<a name="l00438"></a>00438 
+<a name="l00439"></a><a class="code" href="class_s_f_t_p_view.html#a73b242c3cd5bd9bc521b9920afc114e7">00439</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a73b242c3cd5bd9bc521b9920afc114e7">SFTPView::slot_rmdir</a>()
+<a name="l00440"></a>00440 {
+<a name="l00441"></a>00441     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00442"></a>00442     
+<a name="l00443"></a>00443     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00444"></a>00444     
+<a name="l00445"></a>00445     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00446"></a>00446         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00447"></a>00447         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));                
+<a name="l00448"></a>00448         <span class="keywordflow">return</span>;
+<a name="l00449"></a>00449     }
+<a name="l00450"></a>00450     
+<a name="l00451"></a>00451     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00452"></a>00452     
+<a name="l00453"></a>00453     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00454"></a>00454         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot;why no item selected????&quot;</span>;
+<a name="l00455"></a>00455         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;No item selected&quot;</span>).leftJustified(50, <span class="charliteral">&#39; &#39;</span>));
+<a name="l00456"></a>00456         <span class="keywordflow">return</span>;
+<a name="l00457"></a>00457     }
+<a name="l00458"></a>00458     
+<a name="l00459"></a>00459     QModelIndex midx = mil.at(0);
+<a name="l00460"></a>00460     QModelIndex proxyIndex = midx;
+<a name="l00461"></a>00461     QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00462"></a>00462         ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00463"></a>00463         : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00464"></a>00464     QModelIndex useIndex = sourceIndex;
+<a name="l00465"></a>00465     QModelIndex parent_model =  useIndex.parent();
+<a name="l00466"></a>00466     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item = (<a class="code" href="class_net_dir_node.html">NetDirNode</a>*)parent_model.internalPointer();
+<a name="l00467"></a>00467     
+<a name="l00468"></a>00468     <span class="comment">//TODO 检查所选择的项是不是目录</span>
+<a name="l00469"></a>00469     QPersistentModelIndex *persisIndex = <span class="keyword">new</span> QPersistentModelIndex(parent_model);
+<a name="l00470"></a>00470     this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a>(parent_item, persisIndex,
+<a name="l00471"></a>00471                                                  <a class="code" href="sftp-const_8h.html#a0a27724313f2dab3cd6e2801282a35bd">SSH2_FXP_RMDIR</a>, this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a982cfed28ccd714753f399274e1acc1e">fileName</a>(useIndex));
+<a name="l00472"></a>00472     
+<a name="l00473"></a>00473 }
+<a name="l00474"></a>00474 
+<a name="l00475"></a><a class="code" href="class_s_f_t_p_view.html#a60329c8fa4cd36b8b737107fb99cb780">00475</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a60329c8fa4cd36b8b737107fb99cb780">SFTPView::rm_file_or_directory_recursively</a>()
+<a name="l00476"></a>00476 {
+<a name="l00477"></a>00477     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00478"></a>00478     
+<a name="l00479"></a>00479     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00480"></a>00480     
+<a name="l00481"></a>00481     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00482"></a>00482         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00483"></a>00483         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));                
+<a name="l00484"></a>00484         <span class="keywordflow">return</span>;
+<a name="l00485"></a>00485     }
+<a name="l00486"></a>00486     
+<a name="l00487"></a>00487     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00488"></a>00488     
+<a name="l00489"></a>00489     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00490"></a>00490         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot;why no item selected????&quot;</span>;
+<a name="l00491"></a>00491         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;No item selected&quot;</span>));
+<a name="l00492"></a>00492         <span class="keywordflow">return</span>;
+<a name="l00493"></a>00493     }
+<a name="l00494"></a>00494 
+<a name="l00495"></a>00495     <span class="comment">// TODO magic number</span>
+<a name="l00496"></a>00496     <span class="keywordtype">bool</span> firstWarning = <span class="keyword">true</span>;
+<a name="l00497"></a>00497     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = mil.count() - 1 - 3; i &gt;= 0; i -= 4) {
+<a name="l00498"></a>00498         QModelIndex midx = mil.at(i);
+<a name="l00499"></a>00499         QModelIndex proxyIndex = midx;
+<a name="l00500"></a>00500         QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00501"></a>00501             ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00502"></a>00502             : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00503"></a>00503         QModelIndex useIndex = sourceIndex;
+<a name="l00504"></a>00504         QModelIndex parent_model =  useIndex.parent();
+<a name="l00505"></a>00505         <a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item = (<a class="code" href="class_net_dir_node.html">NetDirNode</a>*)parent_model.internalPointer();
+<a name="l00506"></a>00506 
+<a name="l00507"></a>00507         <span class="keywordflow">if</span> (firstWarning) { <span class="comment">// 只有第一次提示用户操作，其他的不管</span>
+<a name="l00508"></a>00508             QString hintMsg;
+<a name="l00509"></a>00509             <span class="keywordflow">if</span> (mil.count()/4 &gt; 1) {
+<a name="l00510"></a>00510                 hintMsg = QString(tr(<span class="stringliteral">&quot;Are you sure remove all of these files/directories?&quot;</span>));
+<a name="l00511"></a>00511             } <span class="keywordflow">else</span> {
+<a name="l00512"></a>00512                 hintMsg = this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a>(useIndex) 
+<a name="l00513"></a>00513                     ? QString(tr(<span class="stringliteral">&quot;Are you sure remove this directory and it&#39;s subnodes?\n    %1/&quot;</span>))
+<a name="l00514"></a>00514                     .arg(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex))
+<a name="l00515"></a>00515                     : QString(tr(<span class="stringliteral">&quot;Are you sure remove this file?\n    %1&quot;</span>))
+<a name="l00516"></a>00516                     .arg(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex));
+<a name="l00517"></a>00517             }
+<a name="l00518"></a>00518             <span class="keywordflow">if</span> (QMessageBox::warning(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Warning:&quot;</span>), hintMsg,
+<a name="l00519"></a>00519                                      QMessageBox::Yes, QMessageBox::Cancel) == QMessageBox::Yes) {
+<a name="l00520"></a>00520             } <span class="keywordflow">else</span> {
+<a name="l00521"></a>00521                 <span class="keywordflow">break</span>;
+<a name="l00522"></a>00522             }
+<a name="l00523"></a>00523             firstWarning = <span class="keyword">false</span>;
+<a name="l00524"></a>00524         }
+<a name="l00525"></a>00525 
+<a name="l00526"></a>00526         QPersistentModelIndex *persisIndex = <span class="keyword">new</span> QPersistentModelIndex(parent_model);
+<a name="l00527"></a>00527         this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a>(parent_item, persisIndex,
+<a name="l00528"></a>00528                                                      <a class="code" href="sftp-const_8h.html#a8c52e060a80a0900f29012048062c954">SSH2_FXP_REMOVE</a>, this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a982cfed28ccd714753f399274e1acc1e">fileName</a>(useIndex));
+<a name="l00529"></a>00529     }
+<a name="l00530"></a>00530 }
+<a name="l00531"></a>00531 
+<a name="l00532"></a><a class="code" href="class_s_f_t_p_view.html#ab46579ef7b05d092118f1dc331aa9203">00532</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ab46579ef7b05d092118f1dc331aa9203">SFTPView::slot_rename</a>()
+<a name="l00533"></a>00533 {
+<a name="l00534"></a>00534     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00535"></a>00535     
+<a name="l00536"></a>00536     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00537"></a>00537     
+<a name="l00538"></a>00538     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00539"></a>00539         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00540"></a>00540         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;waring...&quot;</span>), tr(<span class="stringliteral">&quot;maybe you haven&#39;t connected&quot;</span>));                
+<a name="l00541"></a>00541         <span class="keywordflow">return</span>;
+<a name="l00542"></a>00542     }
+<a name="l00543"></a>00543     
+<a name="l00544"></a>00544     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00545"></a>00545     
+<a name="l00546"></a>00546     <span class="keywordflow">if</span> (mil.count() == 0 ) {
+<a name="l00547"></a>00547         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt;mil.count()&lt;&lt;<span class="stringliteral">&quot; why no item selected????&quot;</span>;
+<a name="l00548"></a>00548         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;waring...&quot;</span>), tr(<span class="stringliteral">&quot;no item selected&quot;</span>));
+<a name="l00549"></a>00549         <span class="keywordflow">return</span>;
+<a name="l00550"></a>00550     }
+<a name="l00551"></a>00551     this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;edit(mil.at(0));
+<a name="l00552"></a>00552 }
+<a name="l00553"></a><a class="code" href="class_s_f_t_p_view.html#a601ec28c3cdbd6e099e06d3833aae130">00553</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a601ec28c3cdbd6e099e06d3833aae130">SFTPView::slot_copy_path</a>()
+<a name="l00554"></a>00554 {
+<a name="l00555"></a>00555     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00556"></a>00556     
+<a name="l00557"></a>00557     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00558"></a>00558         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00559"></a>00559         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));
+<a name="l00560"></a>00560         <span class="keywordflow">return</span>;
+<a name="l00561"></a>00561     }
+<a name="l00562"></a>00562     
+<a name="l00563"></a>00563     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00564"></a>00564     
+<a name="l00565"></a>00565     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00566"></a>00566         qDebug()&lt;&lt;<span class="stringliteral">&quot;selectedIndexes count :&quot;</span>&lt;&lt; mil.count() &lt;&lt; <span class="stringliteral">&quot; why no item selected????&quot;</span>;
+<a name="l00567"></a>00567         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;No item selected&quot;</span>).leftJustified(50, <span class="charliteral">&#39; &#39;</span>));
+<a name="l00568"></a>00568         <span class="keywordflow">return</span>;
+<a name="l00569"></a>00569     }
+<a name="l00570"></a>00570     
+<a name="l00571"></a>00571     QModelIndex midx = mil.at(0);
+<a name="l00572"></a>00572     QModelIndex proxyIndex = midx;
+<a name="l00573"></a>00573     QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00574"></a>00574         ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00575"></a>00575         : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00576"></a>00576     QModelIndex useIndex = sourceIndex;
+<a name="l00577"></a>00577 
+<a name="l00578"></a>00578     QApplication::clipboard()-&gt;setText(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex));
+<a name="l00579"></a>00579 }
+<a name="l00580"></a>00580 
+<a name="l00581"></a><a class="code" href="class_s_f_t_p_view.html#abe3755538ec4aa7fbf1a9b9e4c99bebb">00581</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#abe3755538ec4aa7fbf1a9b9e4c99bebb">SFTPView::slot_copy_url</a>()
+<a name="l00582"></a>00582 {
+<a name="l00583"></a>00583     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a>-&gt;selectionModel();
+<a name="l00584"></a>00584     
+<a name="l00585"></a>00585     <span class="keywordflow">if</span> (ism == 0) {
+<a name="l00586"></a>00586         qDebug()&lt;&lt;<span class="stringliteral">&quot;why???? no QItemSelectionModel??&quot;</span>;
+<a name="l00587"></a>00587         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;Maybe you haven&#39;t connected&quot;</span>));
+<a name="l00588"></a>00588         <span class="keywordflow">return</span>;
+<a name="l00589"></a>00589     }
+<a name="l00590"></a>00590     
+<a name="l00591"></a>00591     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00592"></a>00592     
+<a name="l00593"></a>00593     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00594"></a>00594         qDebug()&lt;&lt;<span class="stringliteral">&quot; selectedIndexes count :&quot;</span>&lt;&lt; mil.count() &lt;&lt; <span class="stringliteral">&quot; why no item selected????&quot;</span>;
+<a name="l00595"></a>00595         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;No item selected&quot;</span>).leftJustified(50, <span class="charliteral">&#39; &#39;</span>));
+<a name="l00596"></a>00596         <span class="keywordflow">return</span>;
+<a name="l00597"></a>00597     }
+<a name="l00598"></a>00598     
+<a name="l00599"></a>00599     QModelIndex midx = mil.at(0);
+<a name="l00600"></a>00600     QModelIndex proxyIndex = midx;
+<a name="l00601"></a>00601     QModelIndex sourceIndex = (this-&gt;<a class="code" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a> == this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView)
+<a name="l00602"></a>00602         ? this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(midx)
+<a name="l00603"></a>00603         : this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(midx);
+<a name="l00604"></a>00604     QModelIndex useIndex = sourceIndex;
+<a name="l00605"></a>00605 
+<a name="l00606"></a>00606     
+<a name="l00607"></a>00607     QString url = QString(<span class="stringliteral">&quot;sftp://%1@%2:%3%4&quot;</span>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a>)
+<a name="l00608"></a>00608         .arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a>)
+<a name="l00609"></a>00609         .arg(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a985b414ee9bc714c25aa11f417360412">filePath</a>(useIndex));
+<a name="l00610"></a>00610     QApplication::clipboard()-&gt;setText(url);
+<a name="l00611"></a>00611 }
+<a name="l00612"></a>00612 
+<a name="l00613"></a>00613 
+<a name="l00614"></a><a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">00614</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">SFTPView::slot_new_upload_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg, <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg)
+<a name="l00615"></a>00615 {
+<a name="l00616"></a>00616     <a class="code" href="class_s_f_t_p_view.html">SFTPView</a> *remote_view = <span class="keyword">this</span>;
+<a name="l00617"></a>00617     <a class="code" href="class_progress_dialog.html">ProgressDialog</a> *pdlg = <span class="keyword">new</span> <a class="code" href="class_progress_dialog.html">ProgressDialog</a>();
+<a name="l00618"></a>00618 
+<a name="l00619"></a>00619     pdlg-&gt;<a class="code" href="class_progress_dialog.html#a8a89cb8a1d2f60d4e18b6f80ac70a647">set_transfer_info</a>(local_pkg, remote_pkg);
+<a name="l00620"></a>00620 
+<a name="l00621"></a>00621     QObject::connect(pdlg, SIGNAL(transfer_finished(<span class="keywordtype">int</span>, QString)),
+<a name="l00622"></a>00622                      remote_view, SLOT(<a class="code" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">slot_transfer_finished</a> (<span class="keywordtype">int</span>, QString)));
+<a name="l00623"></a>00623 
+<a name="l00624"></a>00624     this-&gt;<a class="code" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a>-&gt;addSubWindow(pdlg);
+<a name="l00625"></a>00625     pdlg-&gt;<a class="code" href="class_progress_dialog.html#ac58c52c90f88aeba2b3dd648a1c3c823">show</a>();
+<a name="l00626"></a>00626     this-&gt;<a class="code" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">own_progress_dialog</a> = pdlg;
+<a name="l00627"></a>00627 
+<a name="l00628"></a>00628 }
+<a name="l00629"></a><a class="code" href="class_s_f_t_p_view.html#a70979ee3690bead6a13a3f77b5462b8c">00629</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">SFTPView::slot_new_upload_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg)
+<a name="l00630"></a>00630 {
+<a name="l00631"></a>00631     QString remote__fileName ;
+<a name="l00632"></a>00632     <a class="code" href="class_s_f_t_p_view.html">SFTPView</a> *remote_view = this ;
+<a name="l00633"></a>00633     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaa4f4aa5734e1d8f3f46f19460d8313122">PROTO_SFTP</a>);
+<a name="l00634"></a>00634 
+<a name="l00635"></a>00635     qDebug()&lt;&lt;<span class="stringliteral">&quot; window title :&quot;</span> &lt;&lt; remote_view-&gt;windowTitle();
+<a name="l00636"></a>00636 
+<a name="l00637"></a>00637     remote__fileName = remote_view-&gt;<a class="code" href="class_s_f_t_p_view.html#ade9862dd744d47391612496a2a0733f3">get_selected_directory</a>();    
+<a name="l00638"></a>00638 
+<a name="l00639"></a>00639     <span class="keywordflow">if</span> (remote__fileName.length() == 0) {
+<a name="l00640"></a>00640         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Waring...&quot;</span>), tr(<span class="stringliteral">&quot;you should selecte a remote file directory.&quot;</span>));
+<a name="l00641"></a>00641     } <span class="keywordflow">else</span> {
+<a name="l00642"></a>00642         remote_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;remote__fileName;
+<a name="l00643"></a>00643 
+<a name="l00644"></a>00644         remote_pkg.<a class="code" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">host</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a>;
+<a name="l00645"></a>00645         remote_pkg.<a class="code" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">port</a> = QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a>);
+<a name="l00646"></a>00646         remote_pkg.<a class="code" href="class_task_package.html#a76753cb346617152f983cb153658f69d">username</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a>;
+<a name="l00647"></a>00647         remote_pkg.<a class="code" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">password</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">password</a>;
+<a name="l00648"></a>00648         remote_pkg.<a class="code" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">pubkey</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a9a662369d7331a103503e54a623b735a">pubkey</a>;
+<a name="l00649"></a>00649 
+<a name="l00650"></a>00650         this-&gt;<a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">slot_new_upload_requested</a>(local_pkg, remote_pkg);
+<a name="l00651"></a>00651     }
+<a name="l00652"></a>00652 }
+<a name="l00653"></a>00653 
+<a name="l00654"></a><a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">00654</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">SFTPView::slot_new_download_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg, <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg)
+<a name="l00655"></a>00655 {
+<a name="l00656"></a>00656     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00657"></a>00657     <a class="code" href="class_s_f_t_p_view.html">SFTPView</a> *remote_view = this ;
+<a name="l00658"></a>00658         
+<a name="l00659"></a>00659     <a class="code" href="class_progress_dialog.html">ProgressDialog</a> *pdlg = <span class="keyword">new</span> <a class="code" href="class_progress_dialog.html">ProgressDialog</a>(0);
+<a name="l00660"></a>00660     <span class="comment">// src is remote file , dest if localfile </span>
+<a name="l00661"></a>00661     pdlg-&gt;<a class="code" href="class_progress_dialog.html#a8a89cb8a1d2f60d4e18b6f80ac70a647">set_transfer_info</a>(remote_pkg, local_pkg);
+<a name="l00662"></a>00662     QObject::connect(pdlg, SIGNAL(transfer_finished(<span class="keywordtype">int</span>, QString)),
+<a name="l00663"></a>00663                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">slot_transfer_finished</a>(<span class="keywordtype">int</span>, QString)));
+<a name="l00664"></a>00664     this-&gt;<a class="code" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a>-&gt;addSubWindow(pdlg);
+<a name="l00665"></a>00665     pdlg-&gt;<a class="code" href="class_progress_dialog.html#ac58c52c90f88aeba2b3dd648a1c3c823">show</a>();
+<a name="l00666"></a>00666     this-&gt;<a class="code" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">own_progress_dialog</a> = pdlg;
+<a name="l00667"></a>00667 }
+<a name="l00668"></a><a class="code" href="class_s_f_t_p_view.html#ab085a955493087e8808a43527092310d">00668</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">SFTPView::slot_new_download_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg) 
+<a name="l00669"></a>00669 {
+<a name="l00670"></a>00670     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00671"></a>00671     
+<a name="l00672"></a>00672     QString local_file_path;
+<a name="l00673"></a>00673     <a class="code" href="class_s_f_t_p_view.html">SFTPView</a> *remote_view = <span class="keyword">this</span>;
+<a name="l00674"></a>00674     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaaadb7277e159a98fbefed281de7f82bfd">PROTO_FILE</a>);
+<a name="l00675"></a>00675     
+<a name="l00676"></a>00676     local_file_path = this-&gt;<a class="code" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">local_view</a>-&gt;<a class="code" href="class_local_view.html#a93d85be58368456b7b07ce1e1a749d5a">get_selected_directory</a>();
+<a name="l00677"></a>00677     
+<a name="l00678"></a>00678     qDebug()&lt;&lt;local_file_path;
+<a name="l00679"></a>00679     <span class="keywordflow">if</span> (local_file_path.length() == 0 
+<a name="l00680"></a>00680         || !QFileInfo(local_file_path).isDir()) {
+<a name="l00681"></a>00681         <span class="comment">//        || !is_dir(GlobalOption::instance()-&gt;locale_codec-&gt;fromUnicode(local_file_path).data())) {</span>
+<a name="l00682"></a>00682         qDebug()&lt;&lt;<span class="stringliteral">&quot; selected a local file directory  please&quot;</span>;
+<a name="l00683"></a>00683         QMessageBox::critical(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;waring...&quot;</span>), tr(<span class="stringliteral">&quot;you should selecte a local file directory.&quot;</span>));
+<a name="l00684"></a>00684     } <span class="keywordflow">else</span> {
+<a name="l00685"></a>00685         local_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;local_file_path;
+<a name="l00686"></a>00686         this-&gt;<a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">slot_new_download_requested</a>(local_pkg, remote_pkg);
+<a name="l00687"></a>00687     }
+<a name="l00688"></a>00688 }
+<a name="l00689"></a>00689 
+<a name="l00690"></a><a class="code" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">00690</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">SFTPView::slot_transfer_finished</a>(<span class="keywordtype">int</span> status, QString errorString)
+<a name="l00691"></a>00691 {
+<a name="l00692"></a>00692     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__; 
+<a name="l00693"></a>00693     <a class="code" href="class_s_f_t_p_view.html">SFTPView</a> *remote_view = this ;
+<a name="l00694"></a>00694     
+<a name="l00695"></a>00695     <a class="code" href="class_progress_dialog.html">ProgressDialog</a> *pdlg = (<a class="code" href="class_progress_dialog.html">ProgressDialog</a>*)sender();
+<a name="l00696"></a>00696 
+<a name="l00697"></a>00697     <span class="keywordflow">if</span> (status == 0 || status ==3) {
+<a name="l00698"></a>00698         <span class="comment">//TODO 通知UI更新目录结构,在某些情况下会导致左侧树目录变空。</span>
+<a name="l00699"></a>00699         <span class="comment">//int transfer_type = pdlg-&gt;get_transfer_type();</span>
+<a name="l00700"></a>00700         <span class="comment">//if ( transfer_type == TransferThread::TRANSFER_GET )</span>
+<a name="l00701"></a>00701         {
+<a name="l00702"></a>00702             this-&gt;<a class="code" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">local_view</a>-&gt;<a class="code" href="class_local_view.html#ab569919b0fb6871bb07ca38ff112a750">update_layout</a>();
+<a name="l00703"></a>00703         }
+<a name="l00704"></a>00704         <span class="comment">//else if ( transfer_type == TransferThread::TRANSFER_PUT )</span>
+<a name="l00705"></a>00705         {
+<a name="l00706"></a>00706             remote_view-&gt;<a class="code" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">update_layout</a>();
+<a name="l00707"></a>00707         }
+<a name="l00708"></a>00708         <span class="comment">//else</span>
+<a name="l00709"></a>00709         {
+<a name="l00710"></a>00710             <span class="comment">// xxxxx: 没有预期到的错误</span>
+<a name="l00711"></a>00711             <span class="comment">//assert ( 1== 2 );</span>
+<a name="l00712"></a>00712         }
+<a name="l00713"></a>00713     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (status != 0 &amp;&amp; status != 3) {
+<a name="l00714"></a>00714         QString errmsg = QString(errorString).arg(status);
+<a name="l00715"></a>00715         <span class="keywordflow">if</span> (errmsg.length() &lt; 50) errmsg = errmsg.leftJustified(50);
+<a name="l00716"></a>00716         QMessageBox::critical(<span class="keyword">this</span>, QString(tr(<span class="stringliteral">&quot;Error: &quot;</span>)), errmsg);
+<a name="l00717"></a>00717     }
+<a name="l00718"></a>00718     this-&gt;<a class="code" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a>-&gt;removeSubWindow(pdlg-&gt;parentWidget());
+<a name="l00719"></a>00719 
+<a name="l00720"></a>00720     <span class="keyword">delete</span> pdlg;
+<a name="l00721"></a>00721     this-&gt;<a class="code" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">own_progress_dialog</a> = 0;
+<a name="l00722"></a>00722     <span class="comment">//     remote_view-&gt;slot_leave_remote_dir_retrive_loop();</span>
+<a name="l00723"></a>00723 }
+<a name="l00724"></a>00724 
+<a name="l00729"></a><a class="code" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3">00729</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3" title="index 是proxy的index">SFTPView::slot_dir_tree_item_clicked</a>(<span class="keyword">const</span> QModelIndex &amp; index)
+<a name="l00730"></a>00730 {
+<a name="l00731"></a>00731     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__&lt;&lt;index&lt;&lt;index.row();
+<a name="l00732"></a>00732     QString file_path;
+<a name="l00733"></a>00733     QModelIndex proxyIndex;
+<a name="l00734"></a>00734     QModelIndex sourceIndex;
+<a name="l00735"></a>00735     QModelIndex useIndex;
+<a name="l00736"></a>00736 
+<a name="l00737"></a>00737     proxyIndex = index;
+<a name="l00738"></a>00738     sourceIndex = this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapToSource(index);
+<a name="l00739"></a>00739     <span class="comment">// sourceIndex = index;</span>
+<a name="l00740"></a>00740     useIndex = sourceIndex;
+<a name="l00741"></a>00741 
+<a name="l00742"></a>00742     <span class="comment">// NetDirNode *pnode = static_cast&lt;NetDirNode*&gt;(useIndex.internalPointer());</span>
+<a name="l00743"></a>00743     <span class="comment">// NetDirNode *node = NULL;</span>
+<a name="l00744"></a>00744     <span class="comment">// this-&gt;remote_dir_model-&gt;dump_tree_node_item(pnode);</span>
+<a name="l00745"></a>00745 
+<a name="l00746"></a>00746     <span class="comment">// qDebug()&lt;&lt;&quot;root childs:&quot;&lt;&lt;this-&gt;remote_dir_model-&gt;rowCount(useIndex);</span>
+<a name="l00747"></a>00747     <span class="comment">// node = static_cast&lt;NetDirNode*&gt;(this-&gt;remote_dir_model-&gt;parent(useIndex).internalPointer());</span>
+<a name="l00748"></a>00748     <span class="comment">// if (node == NULL) {</span>
+<a name="l00749"></a>00749     <span class="comment">//     qDebug()&lt;&lt;&quot;this is the top root node&quot;;</span>
+<a name="l00750"></a>00750     <span class="comment">// } else {</span>
+<a name="l00751"></a>00751     <span class="comment">//     this-&gt;remote_dir_model-&gt;dump_tree_node_item(node);</span>
+<a name="l00752"></a>00752     <span class="comment">// }</span>
+<a name="l00753"></a>00753     
+<a name="l00754"></a>00754     <a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3d0637f27fcbeacbbcbb8b86f6d4701e">slot_remote_dir_node_clicked</a>(useIndex);
+<a name="l00755"></a>00755 
+<a name="l00756"></a>00756     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;setRootIndex(this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapFromSource(useIndex));
+<a name="l00757"></a>00757     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a1294aa2c918dfea9aa3ed78792f3d9ff">rowCount</a>(useIndex); ++i) {
+<a name="l00758"></a>00758         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;setRowHeight(i, this-&gt;<a class="code" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a>);
+<a name="l00759"></a>00759     }
+<a name="l00760"></a>00760 
+<a name="l00761"></a>00761     <span class="comment">// file_path = this-&gt;remote_dir_model-&gt;filePath(useIndex);</span>
+<a name="l00762"></a>00762     <span class="comment">// this-&gt;remoteview.tableView-&gt;setRootIndex(this-&gt;remote_dir_model-&gt;index(file_path));</span>
+<a name="l00763"></a>00763     <span class="comment">// for (int i = 0 ; i &lt; this-&gt;remote_dir_model-&gt;rowCount(this-&gt;remote_dir_model-&gt;index(file_path)); i ++ ) {</span>
+<a name="l00764"></a>00764     <span class="comment">//     this-&gt;remoteview.tableView-&gt;setRowHeight(i, this-&gt;table_row_height);</span>
+<a name="l00765"></a>00765     <span class="comment">// }</span>
+<a name="l00766"></a>00766     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;resizeColumnToContents(0);
+<a name="l00767"></a>00767 
+<a name="l00768"></a>00768     <span class="comment">// useIndex = this-&gt;remoteview.tableView-&gt;rootIndex();</span>
+<a name="l00769"></a>00769     <span class="comment">// qDebug()&lt;&lt;useIndex&lt;&lt;this-&gt;remote_dir_model-&gt;rowCount(useIndex);</span>
+<a name="l00770"></a>00770     <span class="comment">// node = static_cast&lt;NetDirNode*&gt;(useIndex.internalPointer());</span>
+<a name="l00771"></a>00771     <span class="comment">// this-&gt;remote_dir_model-&gt;dump_tree_node_item(pnode);</span>
+<a name="l00772"></a>00772 
+<a name="l00773"></a>00773     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">onUpdateEntriesStatus</a>();
+<a name="l00774"></a>00774 }
+<a name="l00775"></a>00775 
+<a name="l00776"></a><a class="code" href="class_s_f_t_p_view.html#ad6fb1106adfeaa29be78a37bca2e28c0">00776</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ad6fb1106adfeaa29be78a37bca2e28c0">SFTPView::slot_dir_file_view_double_clicked</a>(<span class="keyword">const</span> QModelIndex &amp; index)
+<a name="l00777"></a>00777 {
+<a name="l00778"></a>00778     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00779"></a>00779     <span class="comment">// TODO if the clicked item is direcotry ,</span>
+<a name="l00780"></a>00780     <span class="comment">// expand left tree dir and update right table view</span>
+<a name="l00781"></a>00781     <span class="comment">// got the file path , tell tree &#39; model , then expand it</span>
+<a name="l00782"></a>00782     <span class="comment">// 文件列表中的双击事件</span>
+<a name="l00783"></a>00783     <span class="comment">//1。本地主机，如果是目录，则打开这个目录，如果是文件，则使用本机的程序打开这个文件</span>
+<a name="l00784"></a>00784     <span class="comment">//2。对于远程主机，　如果是目录，则打开这个目录，如果是文件，则提示是否要下载它(或者也可以直接打开这个文件）。</span>
+<a name="l00785"></a>00785 
+<a name="l00786"></a>00786     QModelIndex proxyIndex = index;
+<a name="l00787"></a>00787     QModelIndex sourceIndex = this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(proxyIndex);
+<a name="l00788"></a>00788     QModelIndex useIndex = sourceIndex;
+<a name="l00789"></a>00789 
+<a name="l00790"></a>00790     QString file_path;
+<a name="l00791"></a>00791     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a428e2f47d4d3ca217b0a458e699a0ac5">isDir</a>(useIndex) || this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a21e1797cf0ead9473679813487750a17">isSymLinkToDir</a>(useIndex)) {
+<a name="l00792"></a>00792         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;expand(this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapFromSource(useIndex).parent());
+<a name="l00793"></a>00793         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;expand(this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapFromSource(useIndex));
+<a name="l00794"></a>00794         this-&gt;<a class="code" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3" title="index 是proxy的index">slot_dir_tree_item_clicked</a>(this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapFromSource(useIndex));
+<a name="l00795"></a>00795 
+<a name="l00796"></a>00796         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;selectionModel()-&gt;clearSelection();
+<a name="l00797"></a>00797         this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;selectionModel()-&gt;select(this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>-&gt;mapFromSource(useIndex), 
+<a name="l00798"></a>00798                                                             QItemSelectionModel::Select);
+<a name="l00799"></a>00799     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#ad3a15a7d01902f2adfaf0199030b4b8b">isSymLink</a>(useIndex)) {
+<a name="l00800"></a>00800         <a class="code" href="class_net_dir_node.html">NetDirNode</a> *node_item = (<a class="code" href="class_net_dir_node.html">NetDirNode</a>*)useIndex.internalPointer();
+<a name="l00801"></a>00801         QPersistentModelIndex *persisIndex = <span class="keyword">new</span> QPersistentModelIndex(useIndex);
+<a name="l00802"></a>00802         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;node_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00803"></a>00803         this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#af2c078253e98032acb869d40f5bf9c08">dump_tree_node_item</a>(node_item);
+<a name="l00804"></a>00804         this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#a3c8fa50295a92af8ae184d8c6f1872c0">slot_execute_command</a>(node_item, persisIndex,
+<a name="l00805"></a>00805                                                      <a class="code" href="sftp-const_8h.html#a00b40338343f1a0ad6314c12e3407ced">SSH2_FXP_REALPATH</a>, QString(<span class="stringliteral">&quot;&quot;</span>));
+<a name="l00806"></a>00806     } <span class="keywordflow">else</span> {
+<a name="l00807"></a>00807         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;double clicked a regular file, no op now, only now&quot;</span>;
+<a name="l00808"></a>00808     }
+<a name="l00809"></a>00809 }
+<a name="l00810"></a>00810 
+<a name="l00811"></a><a class="code" href="class_s_f_t_p_view.html#a06a1176f8a464200d3b5be9311b91cb8">00811</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a06a1176f8a464200d3b5be9311b91cb8">SFTPView::slot_drag_ready</a>()
+<a name="l00812"></a>00812 {
+<a name="l00813"></a>00813     <span class="comment">//qDebug() &lt;&lt;__FUNCTION__&lt;&lt;&quot;: &quot;&lt;&lt;__LINE__&lt;&lt;&quot;:&quot;&lt;&lt; __FILE__;</span>
+<a name="l00814"></a>00814     <span class="comment">//TODO 处理从树目录及文件列表视图中的情况</span>
+<a name="l00815"></a>00815     <span class="comment">//QAbstractItemView * sender_view = qobject_cast&lt;QAbstractItemView*&gt;(sender());</span>
+<a name="l00816"></a>00816     QString  temp_file_path, remote__fileName;
+<a name="l00817"></a>00817     QDrag *drag = <span class="keyword">new</span> QDrag(<span class="keyword">this</span>);
+<a name="l00818"></a>00818     QMimeData *mimeData = <span class="keyword">new</span> QMimeData;
+<a name="l00819"></a>00819     
+<a name="l00820"></a>00820     <span class="comment">//这个视图中所选择的目录优先，如果没有则查找左侧目录树是是否有选择的目录，如果再找不到，则使用右侧表视图的根</span>
+<a name="l00821"></a>00821     QItemSelectionModel *ism = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;selectionModel();
+<a name="l00822"></a>00822     QModelIndexList mil = ism-&gt;selectedIndexes();
+<a name="l00823"></a>00823     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00824"></a>00824         ism = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.treeView-&gt;selectionModel();
+<a name="l00825"></a>00825         mil = ism-&gt;selectedIndexes();
+<a name="l00826"></a>00826     }
+<a name="l00827"></a>00827 
+<a name="l00828"></a>00828     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> tpkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaa4f4aa5734e1d8f3f46f19460d8313122">PROTO_SFTP</a>);
+<a name="l00829"></a>00829 
+<a name="l00830"></a>00830     tpkg.<a class="code" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">host</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a>;
+<a name="l00831"></a>00831     tpkg.<a class="code" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">port</a> = QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a>);
+<a name="l00832"></a>00832     tpkg.<a class="code" href="class_task_package.html#a76753cb346617152f983cb153658f69d">username</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a>;
+<a name="l00833"></a>00833     tpkg.<a class="code" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">password</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">password</a>;
+<a name="l00834"></a>00834     tpkg.<a class="code" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">pubkey</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a9a662369d7331a103503e54a623b735a">pubkey</a>;
+<a name="l00835"></a>00835 
+<a name="l00836"></a>00836 
+<a name="l00837"></a>00837     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i&lt; mil.count() ;i += this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>-&gt;<a class="code" href="class_remote_dir_model.html#ad8c2c4981648f6fd57c141f1ce319afc">columnCount</a>()) {
+<a name="l00838"></a>00838         QModelIndex midx = mil.at(i);
+<a name="l00839"></a>00839         temp_file_path = (qobject_cast&lt;<a class="code" href="class_remote_dir_model.html">RemoteDirModel</a>*&gt;(this-&gt;<a class="code" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a>))
+<a name="l00840"></a>00840             -&gt;filePath(midx);
+<a name="l00841"></a>00841         tpkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;temp_file_path;
+<a name="l00842"></a>00842     }
+<a name="l00843"></a>00843     
+<a name="l00844"></a>00844     mimeData-&gt;setData(<span class="stringliteral">&quot;application/task-package&quot;</span>, tpkg.<a class="code" href="class_task_package.html#ad908de0c43a430c6e1aec054da45770b">toRawData</a>());
+<a name="l00845"></a>00845     drag-&gt;setMimeData(mimeData);
+<a name="l00846"></a>00846     
+<a name="l00847"></a>00847     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00848"></a>00848         Qt::DropAction dropAction = drag-&gt;exec(Qt::CopyAction | Qt::MoveAction);
+<a name="l00849"></a>00849         Q_UNUSED(dropAction);
+<a name="l00850"></a>00850     }
+<a name="l00851"></a>00851     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__&lt;&lt;<span class="stringliteral">&quot;drag-&gt;exec returned&quot;</span>;
+<a name="l00852"></a>00852 }
+<a name="l00853"></a>00853 
+<a name="l00854"></a><a class="code" href="class_s_f_t_p_view.html#a5d1532cf7f7f3dce2ecc6814b0d5d170">00854</a> <span class="keywordtype">bool</span> <a class="code" href="class_s_f_t_p_view.html#a5d1532cf7f7f3dce2ecc6814b0d5d170">SFTPView::slot_drop_mime_data</a>(<span class="keyword">const</span> QMimeData *data, Qt::DropAction action,
+<a name="l00855"></a>00855                                      <span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column, <span class="keyword">const</span> QModelIndex &amp;parent)
+<a name="l00856"></a>00856 {
+<a name="l00857"></a>00857     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00858"></a>00858     Q_UNUSED(row);
+<a name="l00859"></a>00859     Q_UNUSED(column);
+<a name="l00860"></a>00860     
+<a name="l00861"></a>00861     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaaadb7277e159a98fbefed281de7f82bfd">PROTO_FILE</a>);
+<a name="l00862"></a>00862     <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg(<a class="code" href="taskpackage_8h.html#a6b7b47dd702d9e331586d485013fd1eaa4f4aa5734e1d8f3f46f19460d8313122">PROTO_SFTP</a>);
+<a name="l00863"></a>00863    
+<a name="l00864"></a>00864     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *aim_item = <span class="keyword">static_cast&lt;</span><a class="code" href="class_net_dir_node.html">NetDirNode</a>*<span class="keyword">&gt;</span>(parent.internalPointer());        
+<a name="l00865"></a>00865     QString remote_file_name = aim_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00866"></a>00866 
+<a name="l00867"></a>00867     remote_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;remote_file_name;
+<a name="l00868"></a>00868 
+<a name="l00869"></a>00869     remote_pkg.<a class="code" href="class_task_package.html#affb1386a5f3573c3c48f7bd885d0df10">host</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ab1463d5c936a08b12dab5386743ccc87">hostName</a>;
+<a name="l00870"></a>00870     remote_pkg.<a class="code" href="class_task_package.html#a70888cc4edfdab1d8e98a4d5e3cf7656">port</a> = QString(<span class="stringliteral">&quot;%1&quot;</span>).arg(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a1f7aa8ba99884066f8aca74f8e125cd1">port</a>);
+<a name="l00871"></a>00871     remote_pkg.<a class="code" href="class_task_package.html#a76753cb346617152f983cb153658f69d">username</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a998f3974f5813cb8bb56ca750bcab76b">userName</a>;
+<a name="l00872"></a>00872     remote_pkg.<a class="code" href="class_task_package.html#a97f9c97e9ccaa5a432a7cbfc081e40c4">password</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a30ccbac90456347e8470e3243cc98c3c">password</a>;
+<a name="l00873"></a>00873     remote_pkg.<a class="code" href="class_task_package.html#ae1821b7260e07503db99e07be6298d40">pubkey</a> = this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#a9a662369d7331a103503e54a623b735a">pubkey</a>;
+<a name="l00874"></a>00874 
+<a name="l00875"></a>00875     <span class="keywordflow">if</span> (data-&gt;hasFormat(<span class="stringliteral">&quot;application/task-package&quot;</span>)) {
+<a name="l00876"></a>00876         local_pkg = <a class="code" href="class_task_package.html#a6da99efc383400043b595950bab3f0dc">TaskPackage::fromRawData</a>(data-&gt;data(<span class="stringliteral">&quot;application/task-package&quot;</span>));
+<a name="l00877"></a>00877         <span class="keywordflow">if</span> (local_pkg.<a class="code" href="class_task_package.html#a29bfdef9fb0aeb0f7ffefa10debb99cc">isValid</a>(local_pkg)) {
+<a name="l00878"></a>00878             <span class="comment">// TODO 两个sftp服务器间拖放的情况</span>
+<a name="l00879"></a>00879             this-&gt;<a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">slot_new_upload_requested</a>(local_pkg, remote_pkg);
+<a name="l00880"></a>00880         }
+<a name="l00881"></a>00881     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (data-&gt;hasFormat(<span class="stringliteral">&quot;text/uri-list&quot;</span>)) {
+<a name="l00882"></a>00882         <span class="comment">// from localview</span>
+<a name="l00883"></a>00883         QList&lt;QUrl&gt; files = data-&gt;urls();
+<a name="l00884"></a>00884         <span class="keywordflow">if</span> (files.count() == 0) {
+<a name="l00885"></a>00885             <span class="comment">// return false;</span>
+<a name="l00886"></a>00886             assert(0);
+<a name="l00887"></a>00887         } <span class="keywordflow">else</span> {
+<a name="l00888"></a>00888             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; files.count(); i++) {
+<a name="l00889"></a>00889                 QString path = files.at(i).path();
+<a name="l00890"></a>00890 <span class="preprocessor">                #ifdef WIN32</span>
+<a name="l00891"></a>00891 <span class="preprocessor"></span>                <span class="comment">// because on win32, now path=/C:/xxxxx</span>
+<a name="l00892"></a>00892                 path = path.right(path.length() - 1);
+<a name="l00893"></a>00893 <span class="preprocessor">                #endif</span>
+<a name="l00894"></a>00894 <span class="preprocessor"></span>                local_pkg.<a class="code" href="class_task_package.html#ae78aadb0bcc3389d94be5aff50b9f80b">files</a>&lt;&lt;path;
+<a name="l00895"></a>00895             }
+<a name="l00896"></a>00896             this-&gt;<a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">slot_new_upload_requested</a>(local_pkg, remote_pkg);
+<a name="l00897"></a>00897         }        
+<a name="l00898"></a>00898     } <span class="keywordflow">else</span> {
+<a name="l00899"></a>00899         qDebug()&lt;&lt;<span class="stringliteral">&quot;invalid mime type:&quot;</span>&lt;&lt;data-&gt;formats();
+<a name="l00900"></a>00900     }
+<a name="l00901"></a>00901     qDebug()&lt;&lt;<span class="stringliteral">&quot;drop mime data processed&quot;</span>;
+<a name="l00902"></a>00902     
+<a name="l00903"></a>00903     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00904"></a>00904 }
+<a name="l00905"></a>00905 
+<a name="l00906"></a><a class="code" href="class_s_f_t_p_view.html#a8ce815a592a020044d0d28971b69d320">00906</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a8ce815a592a020044d0d28971b69d320">SFTPView::slot_show_hidden</a>(<span class="keywordtype">bool</span> show)
+<a name="l00907"></a>00907 {
+<a name="l00908"></a>00908     <a class="code" href="class_dir_tree_sort_filter_model.html">DirTreeSortFilterModel</a> *tree = (<a class="code" href="class_dir_tree_sort_filter_model.html">DirTreeSortFilterModel</a>*)this-&gt;<a class="code" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a>;
+<a name="l00909"></a>00909     <a class="code" href="class_dir_table_sort_filter_model.html">DirTableSortFilterModel</a> *table = (<a class="code" href="class_dir_table_sort_filter_model.html">DirTableSortFilterModel</a>*)this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>;
+<a name="l00910"></a>00910     <span class="keywordflow">if</span> (show) {
+<a name="l00911"></a>00911         tree-&gt;<a class="code" href="class_dir_tree_sort_filter_model.html#a0b79fc95de4e91d4d3423729c9c33cd7">setFilter</a>(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+<a name="l00912"></a>00912         table-&gt;<a class="code" href="class_dir_table_sort_filter_model.html#afc6636c1586c06ba32f729c45337585f">setFilter</a>(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+<a name="l00913"></a>00913     } <span class="keywordflow">else</span> {
+<a name="l00914"></a>00914         tree-&gt;<a class="code" href="class_dir_tree_sort_filter_model.html#a0b79fc95de4e91d4d3423729c9c33cd7">setFilter</a>(QDir::AllEntries | QDir::NoDotAndDotDot);
+<a name="l00915"></a>00915         table-&gt;<a class="code" href="class_dir_table_sort_filter_model.html#afc6636c1586c06ba32f729c45337585f">setFilter</a>(QDir::AllEntries | QDir::NoDotAndDotDot);
+<a name="l00916"></a>00916     }
+<a name="l00917"></a>00917     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">onUpdateEntriesStatus</a>();
+<a name="l00918"></a>00918 }
+<a name="l00919"></a>00919 
+<a name="l00920"></a><a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">00920</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">SFTPView::onUpdateEntriesStatus</a>()
+<a name="l00921"></a>00921 {
+<a name="l00922"></a>00922     QModelIndex proxyIndex = this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.tableView-&gt;rootIndex();
+<a name="l00923"></a>00923     QModelIndex sourceIndex = this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;mapToSource(proxyIndex);
+<a name="l00924"></a>00924     QModelIndex useIndex = sourceIndex;
+<a name="l00925"></a>00925     <span class="keywordtype">int</span> entries = this-&gt;<a class="code" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a>-&gt;rowCount(proxyIndex);
+<a name="l00926"></a>00926     QString msg = QString(<span class="stringliteral">&quot;%1 entries&quot;</span>).arg(entries);
+<a name="l00927"></a>00927     this-&gt;<a class="code" href="class_remote_view.html#ac224cfddfc4e0643c40db8264685ac90">entriesLabel</a>-&gt;setText(msg);
+<a name="l00928"></a>00928 }
+<a name="l00929"></a>00929 
+<a name="l00930"></a><a class="code" href="class_s_f_t_p_view.html#a6c5d2f5918a44e9add994de4a722e5ae">00930</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a6c5d2f5918a44e9add994de4a722e5ae">SFTPView::slot_operation_triggered</a>(QString text)
+<a name="l00931"></a>00931 {
+<a name="l00932"></a>00932     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a> == NULL) {
+<a name="l00933"></a>00933         this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a> = <span class="keyword">new</span> QStringListModel();
+<a name="l00934"></a>00934     }
+<a name="l00935"></a>00935     <span class="keywordtype">int</span> rc = this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;rowCount();
+<a name="l00936"></a>00936     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;insertRows(rc, 1, QModelIndex());
+<a name="l00937"></a>00937     QModelIndex useIndex = this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;index(rc, 0, QModelIndex());
+<a name="l00938"></a>00938     this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;setData(useIndex, QVariant(text));
+<a name="l00939"></a>00939     this-&gt;<a class="code" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a>.listView-&gt;scrollTo(useIndex);
+<a name="l00940"></a>00940 
+<a name="l00941"></a>00941     <span class="keywordflow">if</span> (rc &gt; 300) {
+<a name="l00942"></a>00942         useIndex = this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;index(0, 0, QModelIndex());
+<a name="l00943"></a>00943         this-&gt;<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>-&gt;removeRows(0, 1, QModelIndex());
+<a name="l00944"></a>00944     }
+<a name="l00945"></a>00945 }
+<a name="l00946"></a>00946 
+<a name="l00947"></a><a class="code" href="class_s_f_t_p_view.html#a64d9cb7ffc35fdac2492c975d80447ef">00947</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a64d9cb7ffc35fdac2492c975d80447ef">SFTPView::encryption_focus_label_double_clicked</a>()
+<a name="l00948"></a>00948 {
+<a name="l00949"></a>00949     <span class="comment">//qDebug()&lt;&lt;__FILE__&lt;&lt;&quot;:&quot;&lt;&lt;__LINE__;</span>
+<a name="l00950"></a>00950     <a class="code" href="class_encryption_detail_dialog.html">EncryptionDetailDialog</a> *enc_dlg = 0;
+<a name="l00951"></a>00951     <span class="keywordtype">char</span> **server_info, **pptr, *p;
+<a name="l00952"></a>00952     <span class="keywordtype">int</span> sftp_version;
+<a name="l00953"></a>00953 
+<a name="l00954"></a>00954     server_info = (<span class="keywordtype">char</span>**)malloc(10 * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*));
+<a name="l00955"></a>00955     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 10; i++) {
+<a name="l00956"></a>00956         server_info[i] = (<span class="keywordtype">char</span>*)malloc(512);
+<a name="l00957"></a>00957     }
+<a name="l00958"></a>00958     pptr = server_info = libssh2_session_get_remote_info(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">sess</a>, server_info);
+<a name="l00959"></a>00959     sftp_version = libssh2_sftp_get_version(this-&gt;<a class="code" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a>); 
+<a name="l00960"></a>00960 
+<a name="l00961"></a>00961     enc_dlg = <span class="keyword">new</span> <a class="code" href="class_encryption_detail_dialog.html">EncryptionDetailDialog</a>(server_info, <span class="keyword">this</span>);
+<a name="l00962"></a>00962     enc_dlg-&gt;exec();
+<a name="l00963"></a>00963 
+<a name="l00964"></a>00964     <span class="comment">//if(server_info != NULL) free(server_info);</span>
+<a name="l00965"></a>00965     <span class="keyword">delete</span> enc_dlg;
+<a name="l00966"></a>00966 
+<a name="l00967"></a>00967     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 10; i++) {
+<a name="l00968"></a>00968         p = server_info[i];
+<a name="l00969"></a>00969         free(p);
+<a name="l00970"></a>00970     }
+<a name="l00971"></a>00971     free(server_info);
+<a name="l00972"></a>00972 }
+<a name="l00973"></a>00973 
+<a name="l00974"></a><a class="code" href="class_s_f_t_p_view.html#a15a0d97a720874abe1f50ee1ef6fd39a">00974</a> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a15a0d97a720874abe1f50ee1ef6fd39a">SFTPView::host_info_focus_label_double_clicked</a>()
+<a name="l00975"></a>00975 {
+<a name="l00976"></a>00976     <a class="code" href="class_host_info_detail_focus_label.html">HostInfoDetailFocusLabel</a> *hi_label = (<a class="code" href="class_host_info_detail_focus_label.html">HostInfoDetailFocusLabel</a>*)sender();
+<a name="l00977"></a>00977     qDebug()&lt;&lt;<span class="stringliteral">&quot;hehe&quot;</span>&lt;&lt;hi_label;
+<a name="l00978"></a>00978 
+<a name="l00979"></a>00979     LIBSSH2_CHANNEL *ssh2_channel = 0;
+<a name="l00980"></a>00980     <span class="keywordtype">int</span> rv = -1;
+<a name="l00981"></a>00981     <span class="keywordtype">char</span> buff[1024] ;
+<a name="l00982"></a>00982     QString evn_output;
+<a name="l00983"></a>00983     QString uname_output;
+<a name="l00984"></a>00984     <span class="keyword">const</span> <span class="keywordtype">char</span> *cmd = <span class="stringliteral">&quot;uname -a&quot;</span>;
+<a name="l00985"></a>00985 
+<a name="l00986"></a>00986     ssh2_channel = libssh2_channel_open_session(this-&gt;<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>-&gt;<a class="code" href="class_connection.html#ac3055d7d6c5cc14a86dd8bff3aa00a2e">sess</a>);
+<a name="l00987"></a>00987     <span class="comment">//libssh2_channel_set_blocking(ssh2_channel, 1);</span>
+<a name="l00988"></a>00988     rv = libssh2_channel_exec(ssh2_channel, cmd);
+<a name="l00989"></a>00989     qDebug()&lt;&lt;<span class="stringliteral">&quot;SSH2 exec: &quot;</span>&lt;&lt;rv;
+<a name="l00990"></a>00990   
+<a name="l00991"></a>00991     memset(buff, 0, <span class="keyword">sizeof</span>(buff));
+<a name="l00992"></a>00992     <span class="keywordflow">while</span> ((rv = libssh2_channel_read(ssh2_channel, buff, 1000)) &gt; 0) {
+<a name="l00993"></a>00993         qDebug()&lt;&lt;<span class="stringliteral">&quot;Channel read: &quot;</span>&lt;&lt;rv&lt;&lt;<span class="stringliteral">&quot; --&gt;&quot;</span>&lt;&lt;buff;
+<a name="l00994"></a>00994         uname_output += QString(buff);
+<a name="l00995"></a>00995         memset(buff, 0, <span class="keyword">sizeof</span>(buff));
+<a name="l00996"></a>00996     }
+<a name="l00997"></a>00997 
+<a name="l00998"></a>00998     libssh2_channel_close(ssh2_channel);
+<a name="l00999"></a>00999     libssh2_channel_free(ssh2_channel);
+<a name="l01000"></a>01000     
+<a name="l01001"></a>01001     qDebug()&lt;&lt;<span class="stringliteral">&quot;Host Info: &quot;</span>&lt;&lt;uname_output;
+<a name="l01002"></a>01002     hi_label-&gt;setToolTip(uname_output);
+<a name="l01003"></a>01003 
+<a name="l01004"></a>01004     <a class="code" href="class_system_info_dialog.html">SystemInfoDialog</a> *sysInfoDlg = <span class="keyword">new</span> <a class="code" href="class_system_info_dialog.html">SystemInfoDialog</a>(<span class="keyword">this</span>);    
+<a name="l01005"></a>01005     sysInfoDlg-&gt;<a class="code" href="class_system_info_dialog.html#a531c0b7b04e53e339ad0f7a187f59e8d">setSystemInfo</a>(uname_output);
+<a name="l01006"></a>01006     sysInfoDlg-&gt;exec();
+<a name="l01007"></a>01007     <span class="keyword">delete</span> sysInfoDlg;
+<a name="l01008"></a>01008 }
+<a name="l01009"></a>01009 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

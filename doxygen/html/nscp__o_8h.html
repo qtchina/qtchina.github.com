@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: nscp_o.h文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>nscp_o.h文件参考</h1>
+<p><a href="nscp__o_8h_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>组合类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnscp__path.html">nscp_path</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnscp__option.html">nscp_option</a></td></tr>
+<tr><td colspan="2"><h2>类型定义</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structnscp__path.html">nscp_path</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a99562798a7af91da7f8b81f0c260eca9">nscp_path_t</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structnscp__option.html">nscp_option</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a9e4e885eb60a6fa1d45acf664d5feda9">nscp_option_t</a></td></tr>
+<tr><td colspan="2"><h2>枚举</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="nscp__o_8h.html#a61dadd085c1777f559549e05962b2c9ea8fb5aa78ea6b6e871dfbe6ba191b34f1">DIRECT_UNKNOWN</a> =  0, 
+<a class="el" href="nscp__o_8h.html#a61dadd085c1777f559549e05962b2c9eaeeb773b3e4cc83da2878f005b3464443">DIRECT_UPLOAD</a>, 
+<a class="el" href="nscp__o_8h.html#a61dadd085c1777f559549e05962b2c9ea40e5317f7ddd4a2a46de22f5ee6d2c3e">DIRECT_DOWNLOAD</a>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="nscp__o_8h.html#a726ca809ffd3d67ab4b8476646f26635aab7705312088e6f495980b848520b0b6">PATH_UNKNOWN</a> =  0, 
+<a class="el" href="nscp__o_8h.html#a726ca809ffd3d67ab4b8476646f26635a3b303f74b103b851f110575bedce0aa0">PATH_FILE</a>, 
+<a class="el" href="nscp__o_8h.html#a726ca809ffd3d67ab4b8476646f26635aea13029b94bf3a2465e8a1c998ff0dda">PATH_SSH</a>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="nscp__o_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2da2a5081d3691fd7f9e9a67d3f0bf8ed37">DEBUG_LEVEL_NONE</a> =  0, 
+<a class="el" href="nscp__o_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2da3849ab144f4ec0bc1433ce1ccfa389f4">DEBUG_LEVEL_DEBUG</a>, 
+<a class="el" href="nscp__o_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2dad190887353b0664ff091b83d6387aa9b">DEBUG_LEVEL_INFO</a>, 
+<a class="el" href="nscp__o_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2da6da5b1135c296de895da2e697979c976">DEBUG_LEVEL_All</a>
+ }</td></tr>
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#aca13ddb68c09e32fad3d80f6155bdda2">nscp_option_delete</a> (<a class="el" href="structnscp__option.html">nscp_option_t</a> *nopt)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnscp__path.html">nscp_path_t</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a1adafde954db9548a7af555fddeb7395">nscp_path_new</a> (char *u, char *p, char *h, char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a75ed0babad7102fc66f51c994391d789">nscp_path_delete</a> (<a class="el" href="structnscp__path.html">nscp_path_t</a> *np)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#ae5ad5cbeccaedc03a48d3c7eaa803e79">print_usage</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a6a2dad75cb888005c4e6b7a040d6adb6">nscp_option_set_default</a> (<a class="el" href="structnscp__option.html">nscp_option_t</a> *nopt)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#a62e4c8b3a075d64bd0822e7df1b6ecad">nscp_option_check_validation</a> (<a class="el" href="structnscp__option.html">nscp_option_t</a> *nopt)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="nscp__o_8h.html#aeb42485a8caa836ad939c0d9d57c8dbd">nscp_option_parse_path</a> (int argc, char **argv, <a class="el" href="structnscp__option.html">nscp_option_t</a> *nopt)</td></tr>
+</table>
+<hr/><h2>类型定义文档</h2>
+<a class="anchor" id="a9e4e885eb60a6fa1d45acf664d5feda9"></a><!-- doxytag: member="nscp_o.h::nscp_option_t" ref="a9e4e885eb60a6fa1d45acf664d5feda9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structnscp__option.html">nscp_option</a>  <a class="el" href="structnscp__option.html">nscp_option_t</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a99562798a7af91da7f8b81f0c260eca9"></a><!-- doxytag: member="nscp_o.h::nscp_path_t" ref="a99562798a7af91da7f8b81f0c260eca9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structnscp__path.html">nscp_path</a>  <a class="el" href="structnscp__path.html">nscp_path_t</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>枚举类型文档</h2>
+<a class="anchor" id="a61dadd085c1777f559549e05962b2c9e"></a><!-- doxytag: member="nscp_o.h::@5" ref="a61dadd085c1777f559549e05962b2c9e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a61dadd085c1777f559549e05962b2c9ea8fb5aa78ea6b6e871dfbe6ba191b34f1"></a><!-- doxytag: member="DIRECT_UNKNOWN" ref="a61dadd085c1777f559549e05962b2c9ea8fb5aa78ea6b6e871dfbe6ba191b34f1" args="" -->DIRECT_UNKNOWN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a61dadd085c1777f559549e05962b2c9eaeeb773b3e4cc83da2878f005b3464443"></a><!-- doxytag: member="DIRECT_UPLOAD" ref="a61dadd085c1777f559549e05962b2c9eaeeb773b3e4cc83da2878f005b3464443" args="" -->DIRECT_UPLOAD</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a61dadd085c1777f559549e05962b2c9ea40e5317f7ddd4a2a46de22f5ee6d2c3e"></a><!-- doxytag: member="DIRECT_DOWNLOAD" ref="a61dadd085c1777f559549e05962b2c9ea40e5317f7ddd4a2a46de22f5ee6d2c3e" args="" -->DIRECT_DOWNLOAD</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="nscp__o_8h_source.html">nscp_o.h</a>第<a class="el" href="nscp__o_8h_source.html#l00039">39</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a726ca809ffd3d67ab4b8476646f26635"></a><!-- doxytag: member="nscp_o.h::@6" ref="a726ca809ffd3d67ab4b8476646f26635" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a726ca809ffd3d67ab4b8476646f26635aab7705312088e6f495980b848520b0b6"></a><!-- doxytag: member="PATH_UNKNOWN" ref="a726ca809ffd3d67ab4b8476646f26635aab7705312088e6f495980b848520b0b6" args="" -->PATH_UNKNOWN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a726ca809ffd3d67ab4b8476646f26635a3b303f74b103b851f110575bedce0aa0"></a><!-- doxytag: member="PATH_FILE" ref="a726ca809ffd3d67ab4b8476646f26635a3b303f74b103b851f110575bedce0aa0" args="" -->PATH_FILE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a726ca809ffd3d67ab4b8476646f26635aea13029b94bf3a2465e8a1c998ff0dda"></a><!-- doxytag: member="PATH_SSH" ref="a726ca809ffd3d67ab4b8476646f26635aea13029b94bf3a2465e8a1c998ff0dda" args="" -->PATH_SSH</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="nscp__o_8h_source.html">nscp_o.h</a>第<a class="el" href="nscp__o_8h_source.html#l00042">42</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a0411cd49bb5b71852cecd93bcbf0ca2d"></a><!-- doxytag: member="nscp_o.h::@7" ref="a0411cd49bb5b71852cecd93bcbf0ca2d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a0411cd49bb5b71852cecd93bcbf0ca2da2a5081d3691fd7f9e9a67d3f0bf8ed37"></a><!-- doxytag: member="DEBUG_LEVEL_NONE" ref="a0411cd49bb5b71852cecd93bcbf0ca2da2a5081d3691fd7f9e9a67d3f0bf8ed37" args="" -->DEBUG_LEVEL_NONE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0411cd49bb5b71852cecd93bcbf0ca2da3849ab144f4ec0bc1433ce1ccfa389f4"></a><!-- doxytag: member="DEBUG_LEVEL_DEBUG" ref="a0411cd49bb5b71852cecd93bcbf0ca2da3849ab144f4ec0bc1433ce1ccfa389f4" args="" -->DEBUG_LEVEL_DEBUG</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0411cd49bb5b71852cecd93bcbf0ca2dad190887353b0664ff091b83d6387aa9b"></a><!-- doxytag: member="DEBUG_LEVEL_INFO" ref="a0411cd49bb5b71852cecd93bcbf0ca2dad190887353b0664ff091b83d6387aa9b" args="" -->DEBUG_LEVEL_INFO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0411cd49bb5b71852cecd93bcbf0ca2da6da5b1135c296de895da2e697979c976"></a><!-- doxytag: member="DEBUG_LEVEL_All" ref="a0411cd49bb5b71852cecd93bcbf0ca2da6da5b1135c296de895da2e697979c976" args="" -->DEBUG_LEVEL_All</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="nscp__o_8h_source.html">nscp_o.h</a>第<a class="el" href="nscp__o_8h_source.html#l00045">45</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="a62e4c8b3a075d64bd0822e7df1b6ecad"></a><!-- doxytag: member="nscp_o.h::nscp_option_check_validation" ref="a62e4c8b3a075d64bd0822e7df1b6ecad" args="(nscp_option_t *nopt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int nscp_option_check_validation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnscp__option.html">nscp_option_t</a> *&nbsp;</td>
+          <td class="paramname"> <em>nopt</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00051">51</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00031">nscp_option::direct</a>、<a class="el" href="nscp__o_8h_source.html#l00039">DIRECT_DOWNLOAD</a>、<a class="el" href="nscp__o_8h_source.html#l00039">DIRECT_UPLOAD</a>、<a class="el" href="nscp__o_8h_source.html#l00028">nscp_option::password</a>、<a class="el" href="nscp__o_8h_source.html#l00030">nscp_option::port</a>及<a class="el" href="nscp__o_8h_source.html#l00027">nscp_option::user_name</a>.</p>
+
+<p>参考自 <a class="el" href="nscp_8c_source.html#l00019">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca13ddb68c09e32fad3d80f6155bdda2"></a><!-- doxytag: member="nscp_o.h::nscp_option_delete" ref="aca13ddb68c09e32fad3d80f6155bdda2" args="(nscp_option_t *nopt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nscp_option_delete </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnscp__option.html">nscp_option_t</a> *&nbsp;</td>
+          <td class="paramname"> <em>nopt</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00031">31</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00033">nscp_option::d_path</a>、<a class="el" href="nscp__o_8c_source.html#l00099">nscp_path_delete()</a>、<a class="el" href="nscp__o_8h_source.html#l00035">nscp_option::s_path_count</a>及<a class="el" href="nscp__o_8h_source.html#l00034">nscp_option::s_paths</a>.</p>
+
+<p>参考自 <a class="el" href="nscp_8c_source.html#l00019">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb42485a8caa836ad939c0d9d57c8dbd"></a><!-- doxytag: member="nscp_o.h::nscp_option_parse_path" ref="aeb42485a8caa836ad939c0d9d57c8dbd" args="(int argc, char **argv, nscp_option_t *nopt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int nscp_option_parse_path </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&nbsp;</td>
+          <td class="paramname"> <em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structnscp__option.html">nscp_option_t</a> *&nbsp;</td>
+          <td class="paramname"> <em>nopt</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00117">117</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00033">nscp_option::d_path</a>、<a class="el" href="nscp__o_8h_source.html#l00031">nscp_option::direct</a>、<a class="el" href="nscp__o_8h_source.html#l00039">DIRECT_DOWNLOAD</a>、<a class="el" href="nscp__o_8h_source.html#l00039">DIRECT_UPLOAD</a>、<a class="el" href="nscp__o_8h_source.html#l00032">nscp_option::none_path_count</a>、<a class="el" href="nscp__o_8c_source.html#l00081">nscp_path_new()</a>、<a class="el" href="nscp__o_8h_source.html#l00035">nscp_option::s_path_count</a>、<a class="el" href="nscp__o_8h_source.html#l00034">nscp_option::s_paths</a>及<a class="el" href="nscp__o_8h_source.html#l00027">nscp_option::user_name</a>.</p>
+
+<p>参考自 <a class="el" href="nscp_8c_source.html#l00019">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a2dad75cb888005c4e6b7a040d6adb6"></a><!-- doxytag: member="nscp_o.h::nscp_option_set_default" ref="a6a2dad75cb888005c4e6b7a040d6adb6" args="(nscp_option_t *nopt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nscp_option_set_default </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnscp__option.html">nscp_option_t</a> *&nbsp;</td>
+          <td class="paramname"> <em>nopt</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00024">24</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00030">nscp_option::port</a>.</p>
+
+<p>参考自 <a class="el" href="nscp_8c_source.html#l00019">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a75ed0babad7102fc66f51c994391d789"></a><!-- doxytag: member="nscp_o.h::nscp_path_delete" ref="a75ed0babad7102fc66f51c994391d789" args="(nscp_path_t *np)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nscp_path_delete </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnscp__path.html">nscp_path_t</a> *&nbsp;</td>
+          <td class="paramname"> <em>np</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00099">99</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00016">nscp_path::host</a>、<a class="el" href="nscp__o_8h_source.html#l00015">nscp_path::password</a>、<a class="el" href="nscp__o_8h_source.html#l00018">nscp_path::path</a>及<a class="el" href="nscp__o_8h_source.html#l00014">nscp_path::user_name</a>.</p>
+
+<p>参考自 <a class="el" href="nscp__o_8c_source.html#l00031">nscp_option_delete()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1adafde954db9548a7af555fddeb7395"></a><!-- doxytag: member="nscp_o.h::nscp_path_new" ref="a1adafde954db9548a7af555fddeb7395" args="(char *u, char *p, char *h, char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structnscp__path.html">nscp_path_t</a>* nscp_path_new </td>
+          <td>(</td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramname"> <em>path</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00081">81</a>行定义。</p>
+
+<p>参考 <a class="el" href="nscp__o_8h_source.html#l00016">nscp_path::host</a>、<a class="el" href="nscp__o_8h_source.html#l00015">nscp_path::password</a>、<a class="el" href="nscp__o_8h_source.html#l00018">nscp_path::path</a>、<a class="el" href="nscp__o_8h_source.html#l00042">PATH_FILE</a>、<a class="el" href="nscp__o_8h_source.html#l00042">PATH_SSH</a>、<a class="el" href="nscp__o_8h_source.html#l00019">nscp_path::path_type</a>及<a class="el" href="nscp__o_8h_source.html#l00014">nscp_path::user_name</a>.</p>
+
+<p>参考自 <a class="el" href="nscp__o_8c_source.html#l00117">nscp_option_parse_path()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae5ad5cbeccaedc03a48d3c7eaa803e79"></a><!-- doxytag: member="nscp_o.h::print_usage" ref="ae5ad5cbeccaedc03a48d3c7eaa803e79" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void print_usage </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="nscp__o_8c_source.html">nscp_o.c</a>第<a class="el" href="nscp__o_8c_source.html#l00018">18</a>行定义。</p>
+
+<p>参考自 <a class="el" href="nscp_8c_source.html#l00019">main()</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sftpview.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sftpview.h</h1><a href="sftpview_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* sftpview.h --- </span>
+<a name="l00002"></a>00002 <span class="comment"> * </span>
+<a name="l00003"></a>00003 <span class="comment"> * Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment"> * Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment"> * URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment"> * Created: 2008-05-31 22:09:15 +0800</span>
+<a name="l00007"></a>00007 <span class="comment"> * Version: $Id: sftpview.h 567 2009-11-01 08:12:00Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment"> */</span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="preprocessor">#ifndef SFTPVIEW_H</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span><span class="preprocessor">#define SFTPVIEW_H</span>
+<a name="l00013"></a>00013 <span class="preprocessor"></span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;QWidget&gt;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &lt;QVector&gt;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &lt;QPair&gt;</span>
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019 <span class="preprocessor">#include &quot;libssh2.h&quot;</span>
+<a name="l00020"></a>00020 <span class="preprocessor">#include &quot;libssh2_sftp.h&quot;</span>
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 <span class="preprocessor">#include &quot;<a class="code" href="taskpackage_8h.html">taskpackage.h</a>&quot;</span>
+<a name="l00023"></a>00023 <span class="preprocessor">#include &quot;<a class="code" href="remotedirmodel_8h.html">remotedirmodel.h</a>&quot;</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include &quot;<a class="code" href="remoteview_8h.html">remoteview.h</a>&quot;</span>
+<a name="l00025"></a>00025 
+<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="class_progress_dialog.html">ProgressDialog</a>;
+<a name="l00027"></a>00027 <span class="keyword">class </span><a class="code" href="class_local_view.html">LocalView</a>;
+<a name="l00028"></a>00028 <span class="keyword">class </span><a class="code" href="class_encryption_detail_focus_label.html">EncryptionDetailFocusLabel</a>;
+<a name="l00029"></a>00029 <span class="keyword">class </span><a class="code" href="class_connection.html">Connection</a>;
+<a name="l00030"></a>00030 <span class="keyword">class </span><a class="code" href="class_s_s_h_connection.html">SSHConnection</a>;
+<a name="l00031"></a>00031 
+<a name="l00032"></a><a class="code" href="class_s_f_t_p_view.html">00032</a> <span class="keyword">class </span><a class="code" href="class_s_f_t_p_view.html">SFTPView</a> : <span class="keyword">public</span> <a class="code" href="class_remote_view.html">RemoteView</a>
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034     Q_OBJECT;
+<a name="l00035"></a>00035 <span class="keyword">public</span>:
+<a name="l00036"></a>00036     <a class="code" href="class_s_f_t_p_view.html#a3bc31bfab8547a2b5699e93fd94d7781">SFTPView</a>(QMdiArea *<a class="code" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a>, <a class="code" href="class_local_view.html">LocalView</a> *<a class="code" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">local_view</a>, QWidget *parent = 0);
+<a name="l00037"></a>00037     <span class="keyword">virtual</span> <a class="code" href="class_s_f_t_p_view.html#a07a577d51be06e3d0f173eca04735784">~SFTPView</a>();
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039     <span class="keyword">virtual</span> QString <a class="code" href="class_s_f_t_p_view.html#ade9862dd744d47391612496a2a0733f3">get_selected_directory</a>();
+<a name="l00040"></a>00040     <span class="comment">//</span>
+<a name="l00041"></a>00041     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a9037cab0cec71cdf201ba4ffb1bcb171">set_user_home_path</a>(QString <a class="code" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">user_home_path</a>);
+<a name="l00042"></a>00042     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a04c8a34dc476d4c25320e6b8c20857b2">setConnection</a>(<a class="code" href="class_connection.html">Connection</a> *<a class="code" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>);
+<a name="l00043"></a>00043     
+<a name="l00044"></a><a class="code" href="class_s_f_t_p_view.html#a9c1654dc9ea92dbff6f5e1ee647ad82c">00044</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_s_f_t_p_view.html#a9c1654dc9ea92dbff6f5e1ee647ad82c">is_in_remote_dir_retrive_loop</a>() 
+<a name="l00045"></a>00045     { <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a> ; }
+<a name="l00046"></a>00046     
+<a name="l00047"></a>00047     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">update_layout</a>();
+<a name="l00048"></a>00048     
+<a name="l00049"></a>00049 <span class="keyword">protected</span>:
+<a name="l00050"></a><a class="code" href="class_s_f_t_p_view.html#aaa5a2f260342e918c9bbb156128a4130">00050</a>     <a class="code" href="class_s_s_h_connection.html">SSHConnection</a> *<a class="code" href="class_s_f_t_p_view.html#aaa5a2f260342e918c9bbb156128a4130">rconn</a>;
+<a name="l00051"></a><a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">00051</a>     QStringListModel *<a class="code" href="class_s_f_t_p_view.html#a63e2da132f29358b5be57c91c4dbc113">m_operationLogModel</a>;
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 <span class="keyword">public</span> slots:
+<a name="l00054"></a>00054     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#aa7206c522944c4dfeac31865cddff6b7">i_init_dir_view</a>();
+<a name="l00055"></a>00055     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a160fb607de7d767d60444c956698035b">slot_disconnect_from_remote_host</a>();
+<a name="l00056"></a>00056         
+<a name="l00057"></a>00057     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#afc1dbab820b8792b2656d107373d433f">slot_dir_tree_customContextMenuRequested</a>(<span class="keyword">const</span> QPoint &amp;pos);
+<a name="l00058"></a>00058     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#aae78ffc1fc89fd92025f55bc91c88c23">slot_new_transfer</a>();
+<a name="l00059"></a>00059     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">slot_new_upload_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg, <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg);
+<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">slot_new_upload_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg);
+<a name="l00061"></a>00061     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">slot_new_download_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> local_pkg, <a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg);
+<a name="l00062"></a>00062     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">slot_new_download_requested</a>(<a class="code" href="class_task_package.html" title="这个类存储的值都为unicode编码的值。">TaskPackage</a> remote_pkg);
+<a name="l00063"></a>00063         
+<a name="l00065"></a>00065     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ad09954440913fe750c0df304b1dd387d">slot_show_fxp_command_log</a>(<span class="keywordtype">bool</span> show);
+<a name="l00066"></a>00066         
+<a name="l00067"></a>00067     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ab3c97d01d624060ee5a270e8dea51456">slot_custom_ui_area</a>();
+<a name="l00068"></a>00068         
+<a name="l00069"></a>00069     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a516c4de399377cc5bd87ec7e83a3815f">slot_enter_remote_dir_retrive_loop</a>();
+<a name="l00070"></a>00070     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a05493536babd123b0efc38f10782a8e4">slot_leave_remote_dir_retrive_loop</a>();
+<a name="l00071"></a>00071         
+<a name="l00072"></a>00072     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">slot_transfer_finished</a>(<span class="keywordtype">int</span> status, QString errorString);
+<a name="l00073"></a>00073         
+<a name="l00074"></a>00074     <span class="comment">//view drag</span>
+<a name="l00075"></a>00075     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a06a1176f8a464200d3b5be9311b91cb8">slot_drag_ready</a>();
+<a name="l00076"></a>00076         
+<a name="l00077"></a>00077     <span class="comment">//</span>
+<a name="l00078"></a>00078     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_s_f_t_p_view.html#a5d1532cf7f7f3dce2ecc6814b0d5d170">slot_drop_mime_data</a>(<span class="keyword">const</span> QMimeData *data, Qt::DropAction action,
+<a name="l00079"></a>00079                  <span class="keywordtype">int</span> row, <span class="keywordtype">int</span> column, <span class="keyword">const</span> QModelIndex &amp;parent);
+<a name="l00080"></a>00080     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a8ce815a592a020044d0d28971b69d320">slot_show_hidden</a>(<span class="keywordtype">bool</span> show);
+<a name="l00081"></a>00081     
+<a name="l00082"></a>00082     <span class="comment">// log msg handler</span>
+<a name="l00083"></a>00083     <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a6c5d2f5918a44e9add994de4a722e5ae">slot_operation_triggered</a>(QString text);
+<a name="l00084"></a>00084 
+<a name="l00085"></a>00085 signals:
+<a name="l00086"></a>00086         
+<a name="l00087"></a>00087 <span class="keyword">private</span> slots:
+<a name="l00088"></a>00088     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a20a3b37d11e110a4bf90f1bff6fd0a33">slot_refresh_directory_tree</a>();
+<a name="l00089"></a>00089     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a81323dac2cd1e67966ae3d41e8a17bb2">slot_show_properties</a>();
+<a name="l00090"></a>00090     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a5dd922829dff8c39a1ba9766595c1b71">slot_mkdir</a>();
+<a name="l00091"></a>00091     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a73b242c3cd5bd9bc521b9920afc114e7">slot_rmdir</a>();        
+<a name="l00092"></a>00092     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ab46579ef7b05d092118f1dc331aa9203">slot_rename</a>();
+<a name="l00093"></a>00093     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a601ec28c3cdbd6e099e06d3833aae130">slot_copy_path</a>();
+<a name="l00094"></a>00094     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#abe3755538ec4aa7fbf1a9b9e4c99bebb">slot_copy_url</a>();
+<a name="l00095"></a>00095         
+<a name="l00096"></a>00096     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a60329c8fa4cd36b8b737107fb99cb780">rm_file_or_directory_recursively</a>();
+<a name="l00097"></a>00097 
+<a name="l00098"></a>00098     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3" title="index 是proxy的index">slot_dir_tree_item_clicked</a>( <span class="keyword">const</span> QModelIndex &amp;index);
+<a name="l00099"></a>00099     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#ad6fb1106adfeaa29be78a37bca2e28c0">slot_dir_file_view_double_clicked</a>( <span class="keyword">const</span> QModelIndex &amp; index );
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a64d9cb7ffc35fdac2492c975d80447ef">encryption_focus_label_double_clicked</a>();
+<a name="l00102"></a>00102     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a15a0d97a720874abe1f50ee1ef6fd39a">host_info_focus_label_double_clicked</a>();
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104     <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">onUpdateEntriesStatus</a>();
+<a name="l00105"></a>00105         
+<a name="l00106"></a>00106 <span class="keyword">protected</span>:
+<a name="l00107"></a>00107     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_s_f_t_p_view.html#afb40d28af418d525563cd082fb67a018">closeEvent</a>(QCloseEvent *event);
+<a name="l00108"></a>00108 };
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 <span class="preprocessor">#endif</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

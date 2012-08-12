@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: ForwardDebugWindow类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>ForwardDebugWindow类参考</h1><!-- doxytag: class="ForwardDebugWindow" -->
+<p>Port Forward <a class="el" href="class_connection.html">Connection</a> Debug Message Window Class.  
+<a href="#_details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>&gt;</code></p>
+
+<p><a href="class_forward_debug_window-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a68108565ba30a21ad41980b738342db1">slot_log_debug_message</a> (QString key, int level, QString msg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#aca1532c1474833533244e36b743b2b6f">slot_reload_message</a> (QString key, int level)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a72e36edc940a2c9c76c87d02f91b9995">slot_currentIndexChanged</a> (int index)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#ac6cfbf7842ad5a806fe270f8106b88ae">ForwardDebugWindow</a> (QWidget *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a644fb8d5b28e4e70929762c2afa87181">~ForwardDebugWindow</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui::ForwardDebugWindow&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a5fbfafaadf43955dafa0ab8ba34eabcf">fdw</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a5a6ddf970e8de669c5a37b52c02030d0">curr_show_level</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#a8783c810641832763f0a56d0ed297159">curr_show_key</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="class_debug_message.html">DebugMessage</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_forward_debug_window.html#ad1ee30c22910f2142fa3f3c7fa8b1282">msg_vec</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+<p>Port Forward <a class="el" href="class_connection.html">Connection</a> Debug Message Window Class. </p>
+<dl class="author"><dt><b>作者:</b></dt><dd>liuguangzhao &lt;<a href="mailto:liuguangzhao@users.sf.net">liuguangzhao@users.sf.net</a>&gt; </dd></dl>
+
+<p>在文件<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>第<a class="el" href="forwarddebugwindow_8h_source.html#l00037">37</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="ac6cfbf7842ad5a806fe270f8106b88ae"></a><!-- doxytag: member="ForwardDebugWindow::ForwardDebugWindow" ref="ac6cfbf7842ad5a806fe270f8106b88ae" args="(QWidget *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ForwardDebugWindow::ForwardDebugWindow </td>
+          <td>(</td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a>第<a class="el" href="forwarddebugwindow_8cpp_source.html#l00012">12</a>行定义。</p>
+
+<p>参考 <a class="el" href="forwarddebugwindow_8h_source.html#l00046">curr_show_level</a>、<a class="el" href="forwarddebugwindow_8h_source.html#l00045">fdw</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00071">slot_currentIndexChanged()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a644fb8d5b28e4e70929762c2afa87181"></a><!-- doxytag: member="ForwardDebugWindow::~ForwardDebugWindow" ref="a644fb8d5b28e4e70929762c2afa87181" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ForwardDebugWindow::~ForwardDebugWindow </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a>第<a class="el" href="forwarddebugwindow_8cpp_source.html#l00026">26</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a72e36edc940a2c9c76c87d02f91b9995"></a><!-- doxytag: member="ForwardDebugWindow::slot_currentIndexChanged" ref="a72e36edc940a2c9c76c87d02f91b9995" args="(int index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ForwardDebugWindow::slot_currentIndexChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a>第<a class="el" href="forwarddebugwindow_8cpp_source.html#l00071">71</a>行定义。</p>
+
+<p>参考 <a class="el" href="forwarddebugwindow_8h_source.html#l00045">fdw</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00058">slot_reload_message()</a>.</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00012">ForwardDebugWindow()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a68108565ba30a21ad41980b738342db1"></a><!-- doxytag: member="ForwardDebugWindow::slot_log_debug_message" ref="a68108565ba30a21ad41980b738342db1" args="(QString key, int level, QString msg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ForwardDebugWindow::slot_log_debug_message </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>msg</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a>第<a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">30</a>行定义。</p>
+
+<p>参考 <a class="el" href="forwarddebugwindow_8h_source.html#l00047">curr_show_key</a>、<a class="el" href="forwarddebugwindow_8h_source.html#l00046">curr_show_level</a>、<a class="el" href="forwarddebugwindow_8h_source.html#l00045">fdw</a>、<a class="el" href="forwarddebugwindow_8h_source.html#l00049">msg_vec</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00058">slot_reload_message()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca1532c1474833533244e36b743b2b6f"></a><!-- doxytag: member="ForwardDebugWindow::slot_reload_message" ref="aca1532c1474833533244e36b743b2b6f" args="(QString key, int level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ForwardDebugWindow::slot_reload_message </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>level</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a>第<a class="el" href="forwarddebugwindow_8cpp_source.html#l00058">58</a>行定义。</p>
+
+<p>参考 <a class="el" href="forwarddebugwindow_8h_source.html#l00045">fdw</a>及<a class="el" href="forwarddebugwindow_8h_source.html#l00049">msg_vec</a>.</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00071">slot_currentIndexChanged()</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">slot_log_debug_message()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a8783c810641832763f0a56d0ed297159"></a><!-- doxytag: member="ForwardDebugWindow::curr_show_key" ref="a8783c810641832763f0a56d0ed297159" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_forward_debug_window.html#a8783c810641832763f0a56d0ed297159">ForwardDebugWindow::curr_show_key</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>第<a class="el" href="forwarddebugwindow_8h_source.html#l00047">47</a>行定义。</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">slot_log_debug_message()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5a6ddf970e8de669c5a37b52c02030d0"></a><!-- doxytag: member="ForwardDebugWindow::curr_show_level" ref="a5a6ddf970e8de669c5a37b52c02030d0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="class_forward_debug_window.html#a5a6ddf970e8de669c5a37b52c02030d0">ForwardDebugWindow::curr_show_level</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>第<a class="el" href="forwarddebugwindow_8h_source.html#l00046">46</a>行定义。</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00012">ForwardDebugWindow()</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">slot_log_debug_message()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5fbfafaadf43955dafa0ab8ba34eabcf"></a><!-- doxytag: member="ForwardDebugWindow::fdw" ref="a5fbfafaadf43955dafa0ab8ba34eabcf" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui::ForwardDebugWindow <a class="el" href="class_forward_debug_window.html#a5fbfafaadf43955dafa0ab8ba34eabcf">ForwardDebugWindow::fdw</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>第<a class="el" href="forwarddebugwindow_8h_source.html#l00045">45</a>行定义。</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00012">ForwardDebugWindow()</a>、<a class="el" href="forwarddebugwindow_8cpp_source.html#l00071">slot_currentIndexChanged()</a>、<a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">slot_log_debug_message()</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00058">slot_reload_message()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad1ee30c22910f2142fa3f3c7fa8b1282"></a><!-- doxytag: member="ForwardDebugWindow::msg_vec" ref="ad1ee30c22910f2142fa3f3c7fa8b1282" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;<a class="el" href="class_debug_message.html">DebugMessage</a>&gt; <a class="el" href="class_forward_debug_window.html#ad1ee30c22910f2142fa3f3c7fa8b1282">ForwardDebugWindow::msg_vec</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a>第<a class="el" href="forwarddebugwindow_8h_source.html#l00049">49</a>行定义。</p>
+
+<p>参考自 <a class="el" href="forwarddebugwindow_8cpp_source.html#l00030">slot_log_debug_message()</a>及<a class="el" href="forwarddebugwindow_8cpp_source.html#l00058">slot_reload_message()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="forwarddebugwindow_8h_source.html">forwarddebugwindow.h</a></li>
+<li><a class="el" href="forwarddebugwindow_8cpp_source.html">forwarddebugwindow.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

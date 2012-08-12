@@ -1,0 +1,813 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: LocalView类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>LocalView类参考</h1><!-- doxytag: class="LocalView" -->
+<p><code>#include &lt;<a class="el" href="localview_8h_source.html">localview.h</a>&gt;</code></p>
+
+<p><a href="class_local_view-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a37520703efdd1c2fe8bb8494ff07b00d">slot_local_dir_tree_context_menu_request</a> (const QPoint &amp;pos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#af47d32e9efe3ddcc35243bef538ace78">slot_local_new_upload_requested</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a29abe3adc7ab1966b11bcc03c3ef2268">slot_refresh_directory_tree</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a8cfc9f4ea0a0cc2a56158917cc25910b">slot_show_hidden</a> (bool show)</td></tr>
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a6faa0c05b444135d97876dbd3e4e53c4">new_upload_requested</a> (<a class="el" href="class_task_package.html">TaskPackage</a> pkg)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a8bcf914d7164d7f632cee56ade182646">LocalView</a> (QWidget *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#aba24a035f6eab8736bd918b6e8b6d555">~LocalView</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a93d85be58368456b7b07ce1e1a749d5a">get_selected_directory</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ab569919b0fb6871bb07ca38ff112a750">update_layout</a> ()</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a63c3ab8027cdd5c636542bb669f08377">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#aab33f6b1e68c1195232910dd8000b0d3">slot_dir_tree_item_clicked</a> (const QModelIndex &amp;index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a74a98ba789097b94369557ad01747180">slot_dir_file_view_double_clicked</a> (const QModelIndex &amp;index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a1787d06b5fd420d5e8892483edbc7eb6">slot_show_properties</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#abf1b7f70e847971b8d2f7a5af6234e21">slot_mkdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a6a43a841b8b7ebb14c679ca420f4bd01">slot_rmdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a799c10ef8defb8f6fc05752cc748f6a9">slot_remove</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ac345059bdffe180580acf0c74c25d526">slot_rename</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a1415f790ea028a96609fcc9c51bbdffe">rm_file_or_directory_recursively</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a820b7618d76d717b70d2277826ad2e99">slot_copy_path_url</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ac7b76af29fb12fa90129056f50b2235d">onUpdateEntriesStatus</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a4a8510e504a880dbf8f19a7e8a73e4e6">onDirectoryLoaded</a> (const QString &amp;path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a199fe2c27a6f171e21e41500aabd2116">onFileRenamed</a> (const QString &amp;path, const QString &amp;oldName, const QString &amp;newName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a8e871595197a769682b1cb01f02d4153">onRootPathChanged</a> (const QString &amp;newPath)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a4e43e40bbff1c6c6034f94dcb2a44e3a">expand_to_home_directory</a> (QModelIndex parent_model, int level)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#af565f1d5d1b0714cab414f91b23e0b48">init_local_dir_tree_context_menu</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStatusBar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a22a28719ab301b4ba327aee7098557f7">status_bar</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QFileSystemModel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#adc3f7eafbcd421b2f9a2f358db152445">model</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui::LocalView&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ae318e83382090080246012533df5edfe">localView</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_local_dir_sort_filter_model.html">LocalDirSortFilterModel</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ae728416f6cb8967c6a34ba1d7d6fd835">dir_file_model</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a4b3cabba6256d187d2d9b7160ed15870">table_row_height</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QAbstractItemView *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#ac806c380d0e7c28b52f1b2b06ea41a72">curr_item_view</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMenu *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_local_view.html#a5284a5d19e1d8360195eb61dd5a293a5">local_dir_tree_context_menu</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00029">29</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a8bcf914d7164d7f632cee56ade182646"></a><!-- doxytag: member="LocalView::LocalView" ref="a8bcf914d7164d7f632cee56ade182646" args="(QWidget *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LocalView::LocalView </td>
+          <td>(</td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00019">19</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localview_8cpp_source.html#l00165">expand_to_home_directory()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00051">LocalDirSortFilterModel::index()</a>、<a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="localview_8cpp_source.html#l00535">onDirectoryLoaded()</a>、<a class="el" href="localview_8cpp_source.html#l00544">onFileRenamed()</a>、<a class="el" href="localview_8cpp_source.html#l00549">onRootPathChanged()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00060">LocalDirSortFilterModel::setSourceModel()</a>、<a class="el" href="localview_8cpp_source.html#l00304">slot_dir_file_view_double_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>、<a class="el" href="localview_8h_source.html#l00068">status_bar</a>及<a class="el" href="localview_8h_source.html#l00072">table_row_height</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aba24a035f6eab8736bd918b6e8b6d555"></a><!-- doxytag: member="LocalView::~LocalView" ref="aba24a035f6eab8736bd918b6e8b6d555" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LocalView::~LocalView </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00089">89</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a63c3ab8027cdd5c636542bb669f08377"></a><!-- doxytag: member="LocalView::closeEvent" ref="a63c3ab8027cdd5c636542bb669f08377" args="(QCloseEvent *event)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&nbsp;</td>
+          <td class="paramname"> <em>event</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00281">281</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a4e43e40bbff1c6c6034f94dcb2a44e3a"></a><!-- doxytag: member="LocalView::expand_to_home_directory" ref="a4e43e40bbff1c6c6034f94dcb2a44e3a" args="(QModelIndex parent_model, int level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::expand_to_home_directory </td>
+          <td>(</td>
+          <td class="paramtype">QModelIndex&nbsp;</td>
+          <td class="paramname"> <em>parent_model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>level</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><p>qDebug()&lt;&lt;tmpPath&lt;&lt;stepPathParts; </p>
+</p>
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00165">165</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00051">LocalDirSortFilterModel::index()</a>及<a class="el" href="localview_8h_source.html#l00070">localView</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a93d85be58368456b7b07ce1e1a749d5a"></a><!-- doxytag: member="LocalView::get_selected_directory" ref="a93d85be58368456b7b07ce1e1a749d5a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString LocalView::get_selected_directory </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00228">228</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>及<a class="el" href="localview_8h_source.html#l00070">localView</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00668">SFTPView::slot_new_download_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00732">RemoteView::slot_new_download_requested()</a>及<a class="el" href="ftpview_8cpp_source.html#l00720">FTPView::slot_new_download_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af565f1d5d1b0714cab414f91b23e0b48"></a><!-- doxytag: member="LocalView::init_local_dir_tree_context_menu" ref="af565f1d5d1b0714cab414f91b23e0b48" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::init_local_dir_tree_context_menu </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00092">92</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00074">local_dir_tree_context_menu</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8cpp_source.html#l00485">slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00194">slot_local_dir_tree_context_menu_request()</a>、<a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>、<a class="el" href="localview_8cpp_source.html#l00328">slot_show_hidden()</a>及<a class="el" href="localview_8cpp_source.html#l00505">slot_show_properties()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6faa0c05b444135d97876dbd3e4e53c4"></a><!-- doxytag: member="LocalView::new_upload_requested" ref="a6faa0c05b444135d97876dbd3e4e53c4" args="(TaskPackage pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::new_upload_requested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>pkg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a8510e504a880dbf8f19a7e8a73e4e6"></a><!-- doxytag: member="LocalView::onDirectoryLoaded" ref="a4a8510e504a880dbf8f19a7e8a73e4e6" args="(const QString &amp;path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::onDirectoryLoaded </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00535">535</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="localview_8cpp_source.html#l00554">onUpdateEntriesStatus()</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a199fe2c27a6f171e21e41500aabd2116"></a><!-- doxytag: member="LocalView::onFileRenamed" ref="a199fe2c27a6f171e21e41500aabd2116" args="(const QString &amp;path, const QString &amp;oldName, const QString &amp;newName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::onFileRenamed </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>oldName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>newName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00544">544</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8e871595197a769682b1cb01f02d4153"></a><!-- doxytag: member="LocalView::onRootPathChanged" ref="a8e871595197a769682b1cb01f02d4153" args="(const QString &amp;newPath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::onRootPathChanged </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>newPath</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00549">549</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac7b76af29fb12fa90129056f50b2235d"></a><!-- doxytag: member="LocalView::onUpdateEntriesStatus" ref="ac7b76af29fb12fa90129056f50b2235d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::onUpdateEntriesStatus </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00554">554</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>及<a class="el" href="localview_8h_source.html#l00068">status_bar</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00535">onDirectoryLoaded()</a>及<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1415f790ea028a96609fcc9c51bbdffe"></a><!-- doxytag: member="LocalView::rm_file_or_directory_recursively" ref="a1415f790ea028a96609fcc9c51bbdffe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::rm_file_or_directory_recursively </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00530">530</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a820b7618d76d717b70d2277826ad2e99"></a><!-- doxytag: member="LocalView::slot_copy_path_url" ref="a820b7618d76d717b70d2277826ad2e99" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_copy_path_url </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00485">485</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>及<a class="el" href="localview_8h_source.html#l00069">model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a74a98ba789097b94369557ad01747180"></a><!-- doxytag: member="LocalView::slot_dir_file_view_double_clicked" ref="a74a98ba789097b94369557ad01747180" args="(const QModelIndex &amp;index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_dir_file_view_double_clicked </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00304">304</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00051">LocalDirSortFilterModel::index()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>及<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aab33f6b1e68c1195232910dd8000b0d3"></a><!-- doxytag: member="LocalView::slot_dir_tree_item_clicked" ref="aab33f6b1e68c1195232910dd8000b0d3" args="(const QModelIndex &amp;index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_dir_tree_item_clicked </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00291">291</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>及<a class="el" href="localview_8cpp_source.html#l00554">onUpdateEntriesStatus()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>、<a class="el" href="localview_8cpp_source.html#l00304">slot_dir_file_view_double_clicked()</a>及<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a37520703efdd1c2fe8bb8494ff07b00d"></a><!-- doxytag: member="LocalView::slot_local_dir_tree_context_menu_request" ref="a37520703efdd1c2fe8bb8494ff07b00d" args="(const QPoint &amp;pos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_local_dir_tree_context_menu_request </td>
+          <td>(</td>
+          <td class="paramtype">const QPoint &amp;&nbsp;</td>
+          <td class="paramname"> <em>pos</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00194">194</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>及<a class="el" href="localview_8h_source.html#l00074">local_dir_tree_context_menu</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af47d32e9efe3ddcc35243bef538ace78"></a><!-- doxytag: member="LocalView::slot_local_new_upload_requested" ref="af47d32e9efe3ddcc35243bef538ace78" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_local_new_upload_requested </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00204">204</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="class_local_view.html#a6faa0c05b444135d97876dbd3e4e53c4">new_upload_requested()</a>及<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abf1b7f70e847971b8d2f7a5af6234e21"></a><!-- doxytag: member="LocalView::slot_mkdir" ref="abf1b7f70e847971b8d2f7a5af6234e21" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_mkdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00337">337</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>及<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29abe3adc7ab1966b11bcc03c3ef2268"></a><!-- doxytag: member="LocalView::slot_refresh_directory_tree" ref="a29abe3adc7ab1966b11bcc03c3ef2268" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_refresh_directory_tree </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00256">256</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00080">LocalDirSortFilterModel::refresh()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>及<a class="el" href="localview_8cpp_source.html#l00273">update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a799c10ef8defb8f6fc05752cc748f6a9"></a><!-- doxytag: member="LocalView::slot_remove" ref="a799c10ef8defb8f6fc05752cc748f6a9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_remove </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00417">417</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac345059bdffe180580acf0c74c25d526"></a><!-- doxytag: member="LocalView::slot_rename" ref="ac345059bdffe180580acf0c74c25d526" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_rename </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00441">441</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00071">LocalDirSortFilterModel::fileName()</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a43a841b8b7ebb14c679ca420f4bd01"></a><!-- doxytag: member="LocalView::slot_rmdir" ref="a6a43a841b8b7ebb14c679ca420f4bd01" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_rmdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00379">379</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>、<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>及<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8cfc9f4ea0a0cc2a56158917cc25910b"></a><!-- doxytag: member="LocalView::slot_show_hidden" ref="a8cfc9f4ea0a0cc2a56158917cc25910b" args="(bool show)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_show_hidden </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>show</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00328">328</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00069">model</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1787d06b5fd420d5e8892483edbc7eb6"></a><!-- doxytag: member="LocalView::slot_show_properties" ref="a1787d06b5fd420d5e8892483edbc7eb6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::slot_show_properties </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00505">505</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8h_source.html#l00073">curr_item_view</a>、<a class="el" href="localview_8h_source.html#l00071">dir_file_model</a>、<a class="el" href="localdirsortfiltermodel_8cpp_source.html#l00067">LocalDirSortFilterModel::filePath()</a>、<a class="el" href="localview_8h_source.html#l00070">localView</a>、<a class="el" href="localview_8h_source.html#l00069">model</a>及<a class="el" href="fileproperties_8cpp_source.html#l00425">LocalFileProperties::set_file_info_model_list()</a>.</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab569919b0fb6871bb07ca38ff112a750"></a><!-- doxytag: member="LocalView::update_layout" ref="ab569919b0fb6871bb07ca38ff112a750" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LocalView::update_layout </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8cpp_source.html">localview.cpp</a>第<a class="el" href="localview_8cpp_source.html#l00273">273</a>行定义。</p>
+
+<p>参考 <a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00690">SFTPView::slot_transfer_finished()</a>、<a class="el" href="remoteview_8cpp_source.html#l00754">RemoteView::slot_transfer_finished()</a>及<a class="el" href="ftpview_8cpp_source.html#l00742">FTPView::slot_transfer_finished()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ac806c380d0e7c28b52f1b2b06ea41a72"></a><!-- doxytag: member="LocalView::curr_item_view" ref="ac806c380d0e7c28b52f1b2b06ea41a72" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QAbstractItemView* <a class="el" href="class_local_view.html#ac806c380d0e7c28b52f1b2b06ea41a72">LocalView::curr_item_view</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00073">73</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00485">slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00194">slot_local_dir_tree_context_menu_request()</a>、<a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>及<a class="el" href="localview_8cpp_source.html#l00505">slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae728416f6cb8967c6a34ba1d7d6fd835"></a><!-- doxytag: member="LocalView::dir_file_model" ref="ae728416f6cb8967c6a34ba1d7d6fd835" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_local_dir_sort_filter_model.html">LocalDirSortFilterModel</a>* <a class="el" href="class_local_view.html#ae728416f6cb8967c6a34ba1d7d6fd835">LocalView::dir_file_model</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00071">71</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00165">expand_to_home_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00228">get_selected_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>、<a class="el" href="localview_8cpp_source.html#l00485">slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00304">slot_dir_file_view_double_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>及<a class="el" href="localview_8cpp_source.html#l00505">slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5284a5d19e1d8360195eb61dd5a293a5"></a><!-- doxytag: member="LocalView::local_dir_tree_context_menu" ref="a5284a5d19e1d8360195eb61dd5a293a5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMenu* <a class="el" href="class_local_view.html#a5284a5d19e1d8360195eb61dd5a293a5">LocalView::local_dir_tree_context_menu</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00074">74</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>及<a class="el" href="localview_8cpp_source.html#l00194">slot_local_dir_tree_context_menu_request()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae318e83382090080246012533df5edfe"></a><!-- doxytag: member="LocalView::localView" ref="ae318e83382090080246012533df5edfe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui::LocalView <a class="el" href="class_local_view.html#ae318e83382090080246012533df5edfe">LocalView::localView</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00070">70</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00165">expand_to_home_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00228">get_selected_directory()</a>、<a class="el" href="localview_8cpp_source.html#l00092">init_local_dir_tree_context_menu()</a>、<a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>、<a class="el" href="localview_8cpp_source.html#l00535">onDirectoryLoaded()</a>、<a class="el" href="localview_8cpp_source.html#l00554">onUpdateEntriesStatus()</a>、<a class="el" href="localview_8cpp_source.html#l00485">slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00304">slot_dir_file_view_double_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00256">slot_refresh_directory_tree()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>及<a class="el" href="localview_8cpp_source.html#l00505">slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adc3f7eafbcd421b2f9a2f358db152445"></a><!-- doxytag: member="LocalView::model" ref="adc3f7eafbcd421b2f9a2f358db152445" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QFileSystemModel* <a class="el" href="class_local_view.html#adc3f7eafbcd421b2f9a2f358db152445">LocalView::model</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00069">69</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>、<a class="el" href="localview_8cpp_source.html#l00535">onDirectoryLoaded()</a>、<a class="el" href="localview_8cpp_source.html#l00554">onUpdateEntriesStatus()</a>、<a class="el" href="localview_8cpp_source.html#l00485">slot_copy_path_url()</a>、<a class="el" href="localview_8cpp_source.html#l00304">slot_dir_file_view_double_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00291">slot_dir_tree_item_clicked()</a>、<a class="el" href="localview_8cpp_source.html#l00204">slot_local_new_upload_requested()</a>、<a class="el" href="localview_8cpp_source.html#l00337">slot_mkdir()</a>、<a class="el" href="localview_8cpp_source.html#l00417">slot_remove()</a>、<a class="el" href="localview_8cpp_source.html#l00441">slot_rename()</a>、<a class="el" href="localview_8cpp_source.html#l00379">slot_rmdir()</a>、<a class="el" href="localview_8cpp_source.html#l00328">slot_show_hidden()</a>及<a class="el" href="localview_8cpp_source.html#l00505">slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22a28719ab301b4ba327aee7098557f7"></a><!-- doxytag: member="LocalView::status_bar" ref="a22a28719ab301b4ba327aee7098557f7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStatusBar* <a class="el" href="class_local_view.html#a22a28719ab301b4ba327aee7098557f7">LocalView::status_bar</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00068">68</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>及<a class="el" href="localview_8cpp_source.html#l00554">onUpdateEntriesStatus()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4b3cabba6256d187d2d9b7160ed15870"></a><!-- doxytag: member="LocalView::table_row_height" ref="a4b3cabba6256d187d2d9b7160ed15870" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_local_view.html#a4b3cabba6256d187d2d9b7160ed15870">LocalView::table_row_height</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="localview_8h_source.html">localview.h</a>第<a class="el" href="localview_8h_source.html#l00072">72</a>行定义。</p>
+
+<p>参考自 <a class="el" href="localview_8cpp_source.html#l00019">LocalView()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="localview_8h_source.html">localview.h</a></li>
+<li><a class="el" href="localview_8cpp_source.html">localview.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

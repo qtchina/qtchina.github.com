@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: kuftplib.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>kuftplib.h</h1><a href="kuftplib_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/***************************************************************************</span>
+<a name="l00002"></a>00002 <span class="comment"> *   This file is part of the KuFTP project                                *</span>
+<a name="l00003"></a>00003 <span class="comment"> *   Copyright (C) 2008 by kuftp                       *</span>
+<a name="l00004"></a>00004 <span class="comment"> *   kuftp.dev@gmail.com                                                   *</span>
+<a name="l00005"></a>00005 <span class="comment"> *                                                                         *</span>
+<a name="l00006"></a>00006 <span class="comment"> *   This program is free software; you can redistribute it and/or modify  *</span>
+<a name="l00007"></a>00007 <span class="comment"> *   it under the terms of the GNU General Public License as published by  *</span>
+<a name="l00008"></a>00008 <span class="comment"> *   the Free Software Foundation; either version 2 of the License, or     *</span>
+<a name="l00009"></a>00009 <span class="comment"> *   (at your option) any later version.                                   *</span>
+<a name="l00010"></a>00010 <span class="comment"> *                                                                         *</span>
+<a name="l00011"></a>00011 <span class="comment"> *   This program is distributed in the hope that it will be useful,       *</span>
+<a name="l00012"></a>00012 <span class="comment"> *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *</span>
+<a name="l00013"></a>00013 <span class="comment"> *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *</span>
+<a name="l00014"></a>00014 <span class="comment"> *   GNU General Public License for more details.                          *</span>
+<a name="l00015"></a>00015 <span class="comment"> *                                                                         *</span>
+<a name="l00016"></a>00016 <span class="comment"> *   You should have received a copy of the GNU General Public License     *</span>
+<a name="l00017"></a>00017 <span class="comment"> *   along with this program; if not, write to the                         *</span>
+<a name="l00018"></a>00018 <span class="comment"> *   Free Software Foundation, Inc.,                                       *</span>
+<a name="l00019"></a>00019 <span class="comment"> *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *</span>
+<a name="l00020"></a>00020 <span class="comment"> ***************************************************************************/</span>
+<a name="l00021"></a>00021 <span class="comment">/* original copyright notes */</span>
+<a name="l00022"></a>00022 <span class="comment">/***************************************************************************</span>
+<a name="l00023"></a>00023 <span class="comment">    copyright            : (C) 2003 by mkulke</span>
+<a name="l00024"></a>00024 <span class="comment">    email                : sikor_sxe@radicalapproach.de</span>
+<a name="l00025"></a>00025 <span class="comment">*****************************************************************************</span>
+<a name="l00026"></a>00026 <span class="comment">    ftplib.c - callable ftp access routines</span>
+<a name="l00027"></a>00027 <span class="comment">    Copyright (C) 1996, 1997, 1998 Thomas Pfau, pfau@cnj.digex.net</span>
+<a name="l00028"></a>00028 <span class="comment">    73 Catherine Street, South Bound Brook, NJ, 08880</span>
+<a name="l00029"></a>00029 <span class="comment">*****************************************************************************/</span>
+<a name="l00030"></a>00030  
+<a name="l00031"></a>00031 <span class="preprocessor">#ifndef KUFTPLIB_H</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span><span class="preprocessor">#define KUFTPLIB_H</span>
+<a name="l00033"></a>00033 <span class="preprocessor"></span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 <span class="preprocessor">#include &lt;openssl/ssl.h&gt;</span>
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">00039</a> <span class="preprocessor">#define off64_t __off64_t</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a>00041 <span class="keyword">using namespace </span>std;
+<a name="l00042"></a>00042 
+<a name="l00043"></a><a class="code" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">00043</a> <span class="keyword">typedef</span> int (*<a class="code" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a>)(<a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> xfered, <span class="keywordtype">void</span> *arg);
+<a name="l00044"></a><a class="code" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">00044</a> <span class="keyword">typedef</span> int (*<a class="code" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a>)(<span class="keywordtype">void</span> *arg);
+<a name="l00045"></a><a class="code" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">00045</a> <span class="keyword">typedef</span> void (*<a class="code" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a>)(<span class="keywordtype">char</span> *str, <span class="keywordtype">void</span>* arg, <span class="keywordtype">int</span> out);
+<a name="l00046"></a><a class="code" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">00046</a> <span class="keyword">typedef</span> bool (*<a class="code" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a>)(<span class="keywordtype">void</span> *arg, X509 *cert);
+<a name="l00047"></a>00047 
+<a name="l00048"></a><a class="code" href="structftphandle.html">00048</a> <span class="keyword">struct </span><a class="code" href="structftphandle.html">ftphandle</a> {
+<a name="l00049"></a><a class="code" href="structftphandle.html#a51c05ace2e3e45a94993f44c2fcc9198">00049</a>     <span class="keywordtype">char</span> *<a class="code" href="structftphandle.html#a51c05ace2e3e45a94993f44c2fcc9198">cput</a>,*<a class="code" href="structftphandle.html#a9bba944a50c2bd906e2e7b4033e5d9dc">cget</a>;
+<a name="l00050"></a><a class="code" href="structftphandle.html#a21d1e9fe4be560a56dce3fcfc8eb9f9e">00050</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#a21d1e9fe4be560a56dce3fcfc8eb9f9e">handle</a>;
+<a name="l00051"></a><a class="code" href="structftphandle.html#a0a88089abea5ec5c54160c0a0dbbcbe9">00051</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#aca63f3fdf12a30dd227b217a2d27116f">cavail</a>,<a class="code" href="structftphandle.html#a0a88089abea5ec5c54160c0a0dbbcbe9">cleft</a>;
+<a name="l00052"></a><a class="code" href="structftphandle.html#a7ff4064b68311d54a900ce4fbacd9cc0">00052</a>     <span class="keywordtype">char</span> *<a class="code" href="structftphandle.html#a7ff4064b68311d54a900ce4fbacd9cc0">buf</a>;
+<a name="l00053"></a><a class="code" href="structftphandle.html#a73a5c3326264e83228f215275a6c4512">00053</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#a73a5c3326264e83228f215275a6c4512">dir</a>;
+<a name="l00054"></a><a class="code" href="structftphandle.html#a20b92ec14826abc59e0a603e859d3da5">00054</a>     <a class="code" href="structftphandle.html">ftphandle</a> *<a class="code" href="structftphandle.html#a20b92ec14826abc59e0a603e859d3da5">ctrl</a>;
+<a name="l00055"></a><a class="code" href="structftphandle.html#afbb689db72c53795aac741e397a96706">00055</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#afbb689db72c53795aac741e397a96706">cmode</a>;
+<a name="l00056"></a><a class="code" href="structftphandle.html#a869bd8c996f850b88eabe37a8a180438">00056</a>     <span class="keyword">struct </span>timeval <a class="code" href="structftphandle.html#a869bd8c996f850b88eabe37a8a180438">idletime</a>;
+<a name="l00057"></a><a class="code" href="structftphandle.html#aef1fd3d3706f305fca05e3476298ca7e">00057</a>     <a class="code" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a> <a class="code" href="structftphandle.html#aef1fd3d3706f305fca05e3476298ca7e">xfercb</a>;
+<a name="l00058"></a><a class="code" href="structftphandle.html#af8ca8359f25c5c7ce0afc38dcf6a9884">00058</a>     <a class="code" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a> <a class="code" href="structftphandle.html#af8ca8359f25c5c7ce0afc38dcf6a9884">idlecb</a>;
+<a name="l00059"></a><a class="code" href="structftphandle.html#a17db920385aeeec357c2b5c92ecc381f">00059</a>     <a class="code" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a> <a class="code" href="structftphandle.html#a17db920385aeeec357c2b5c92ecc381f">logcb</a>;
+<a name="l00060"></a><a class="code" href="structftphandle.html#a338164dbd57a2b16ffb1241fdd8c99a7">00060</a>     <span class="keywordtype">void</span> *<a class="code" href="structftphandle.html#a338164dbd57a2b16ffb1241fdd8c99a7">cbarg</a>;
+<a name="l00061"></a><a class="code" href="structftphandle.html#a95b82a76d6628694b58735a8d40a7651">00061</a>     <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> <a class="code" href="structftphandle.html#a95b82a76d6628694b58735a8d40a7651">xfered</a>;
+<a name="l00062"></a><a class="code" href="structftphandle.html#a92a705dac36b529f48434184d338d8a1">00062</a>     <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> <a class="code" href="structftphandle.html#a92a705dac36b529f48434184d338d8a1">cbbytes</a>;
+<a name="l00063"></a><a class="code" href="structftphandle.html#a4c4c2fc33d621f66a5385a73f90368e3">00063</a>     <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> <a class="code" href="structftphandle.html#a4c4c2fc33d621f66a5385a73f90368e3">xfered1</a>;
+<a name="l00064"></a><a class="code" href="structftphandle.html#a171635f6197bd87a5a9b896946fbeec3">00064</a>     <span class="keywordtype">char</span> <a class="code" href="structftphandle.html#a171635f6197bd87a5a9b896946fbeec3">response</a>[256];
+<a name="l00065"></a><a class="code" href="structftphandle.html#af0ee9006c5c1c8ecb2c85897dda437e0">00065</a>     SSL* <a class="code" href="structftphandle.html#af0ee9006c5c1c8ecb2c85897dda437e0">ssl</a>;
+<a name="l00066"></a><a class="code" href="structftphandle.html#a9312a4321d62059062c5fc67993d0b4c">00066</a>     SSL_CTX* <a class="code" href="structftphandle.html#a9312a4321d62059062c5fc67993d0b4c">ctx</a>;
+<a name="l00067"></a><a class="code" href="structftphandle.html#a81b39c86945f2c766f2e3868a9c447f4">00067</a>     BIO* <a class="code" href="structftphandle.html#a81b39c86945f2c766f2e3868a9c447f4">sbio</a>;
+<a name="l00068"></a><a class="code" href="structftphandle.html#a7ee5da8fcd2c7682ba15eb0087072200">00068</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#a7ee5da8fcd2c7682ba15eb0087072200">tlsctrl</a>;
+<a name="l00069"></a><a class="code" href="structftphandle.html#ad0137e28d6f7b600269ac4c15e28b040">00069</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#ad0137e28d6f7b600269ac4c15e28b040">tlsdata</a>;
+<a name="l00070"></a><a class="code" href="structftphandle.html#ac98cd3525021ed667852d48675c89ede">00070</a>     <a class="code" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a> <a class="code" href="structftphandle.html#ac98cd3525021ed667852d48675c89ede">certcb</a>;
+<a name="l00071"></a><a class="code" href="structftphandle.html#a65bc41a38aa0d2d451b543bda76c200f">00071</a>     <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> <a class="code" href="structftphandle.html#a65bc41a38aa0d2d451b543bda76c200f">offset</a>;
+<a name="l00072"></a><a class="code" href="structftphandle.html#a5c5928b1ac63f085f4a546aec864f845">00072</a>     <span class="keywordtype">bool</span> <a class="code" href="structftphandle.html#a5c5928b1ac63f085f4a546aec864f845">correctpasv</a>;
+<a name="l00073"></a><a class="code" href="structftphandle.html#a0b4a6b7bbe9f65903008eb1bfe162291">00073</a>     <span class="keywordtype">bool</span> <a class="code" href="structftphandle.html#a0b4a6b7bbe9f65903008eb1bfe162291">stoptransfer</a>;
+<a name="l00074"></a><a class="code" href="structftphandle.html#a6b6e1413b0cc82a5629bba824232cbbc">00074</a>     <span class="keywordtype">bool</span> <a class="code" href="structftphandle.html#a6b6e1413b0cc82a5629bba824232cbbc">useProxy</a>;
+<a name="l00075"></a><a class="code" href="structftphandle.html#af8b48c5016b89be4d9b72fc1142cab71">00075</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#af8b48c5016b89be4d9b72fc1142cab71">maxUploadSpeed</a>;  <span class="comment">// maxUploadSpeed KB/s</span>
+<a name="l00076"></a><a class="code" href="structftphandle.html#afd6558d49ff31b402a9b816ceb2e5be6">00076</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#afd6558d49ff31b402a9b816ceb2e5be6">maxDownloadSpeed</a>;
+<a name="l00077"></a><a class="code" href="structftphandle.html#a9c66417be6830c4795e51e6427a6e54a">00077</a>     <span class="keywordtype">bool</span> <a class="code" href="structftphandle.html#a9c66417be6830c4795e51e6427a6e54a">checkTimeout</a>; <span class="comment">// session idle and be kicked</span>
+<a name="l00078"></a><a class="code" href="structftphandle.html#a7d2fb1907312b7b3d3e11df995fbce03">00078</a>     <span class="keywordtype">bool</span> <a class="code" href="structftphandle.html#a7d2fb1907312b7b3d3e11df995fbce03">timeout</a>; <span class="comment">// network timeout</span>
+<a name="l00079"></a><a class="code" href="structftphandle.html#a1496ac84b46d232fcaee2c38962d5c04">00079</a>     <span class="keywordtype">char</span> *<a class="code" href="structftphandle.html#a1496ac84b46d232fcaee2c38962d5c04">proxyHost</a>;
+<a name="l00080"></a><a class="code" href="structftphandle.html#a7d4c979c58aac9a72e6ed1853caa44a9">00080</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="structftphandle.html#a7d4c979c58aac9a72e6ed1853caa44a9">proxyPort</a>;
+<a name="l00081"></a><a class="code" href="structftphandle.html#aff456a55d8178c0a5305451790c68f8e">00081</a>     <span class="keywordtype">char</span> *<a class="code" href="structftphandle.html#aff456a55d8178c0a5305451790c68f8e">proxyUser</a>;
+<a name="l00082"></a><a class="code" href="structftphandle.html#abef2b5b3fc06d62a891a230f09fb907f">00082</a>     <span class="keywordtype">char</span> *<a class="code" href="structftphandle.html#abef2b5b3fc06d62a891a230f09fb907f">proxyPass</a>;
+<a name="l00083"></a><a class="code" href="structftphandle.html#a8c00ae8697f5055be386e3fa819d1844">00083</a>     <span class="keywordtype">int</span> <a class="code" href="structftphandle.html#a8c00ae8697f5055be386e3fa819d1844">proxyType</a>;
+<a name="l00084"></a>00084 };
+<a name="l00085"></a>00085 
+<a name="l00086"></a><a class="code" href="class_ku_ftp_lib.html">00086</a> <span class="keyword">class </span><a class="code" href="class_ku_ftp_lib.html">KuFtpLib</a>
+<a name="l00087"></a>00087 {
+<a name="l00088"></a>00088     <span class="keyword">public</span>:
+<a name="l00089"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">00089</a>         <span class="keyword">enum</span> <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a>
+<a name="l00090"></a>00090         {
+<a name="l00091"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db">00091</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db">dir</a> = 1,
+<a name="l00092"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363ac8e0db5e388484b0d66f94f60942adcf">00092</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363ac8e0db5e388484b0d66f94f60942adcf">dirverbose</a>,
+<a name="l00093"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a3f94f3b141c7015858e4f97b51eaf58a">00093</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a3f94f3b141c7015858e4f97b51eaf58a">fileread</a>,
+<a name="l00094"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a74e5a69ef1b3e5895be0b0c6e8d2a5f7">00094</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a74e5a69ef1b3e5895be0b0c6e8d2a5f7">filewrite</a>,
+<a name="l00095"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a0082b79cf70fddc2b6a635cd96642002">00095</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363a0082b79cf70fddc2b6a635cd96642002">filereadappend</a>,
+<a name="l00096"></a><a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363abceb88cca24174b006ce13b86e75511d">00096</a>             <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363abceb88cca24174b006ce13b86e75511d">filewriteappend</a>
+<a name="l00097"></a>00097         }; 
+<a name="l00098"></a><a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">00098</a>         <span class="keyword">enum</span> <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a>
+<a name="l00099"></a>00099         {
+<a name="l00100"></a><a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543fa7ff2f661c53be0553d62d2156857d927">00100</a>             <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543fa7ff2f661c53be0553d62d2156857d927">ascii</a> = <span class="charliteral">&#39;A&#39;</span>,
+<a name="l00101"></a><a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543faefc0c977bb39d8893733204e3abb347b">00101</a>             <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543faefc0c977bb39d8893733204e3abb347b">image</a> = <span class="charliteral">&#39;I&#39;</span>
+<a name="l00102"></a>00102         };
+<a name="l00103"></a><a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">00103</a>         <span class="keyword">enum</span> <a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">connmode</a>
+<a name="l00104"></a>00104         {
+<a name="l00105"></a><a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a8d973b52c43943151502aeec50eaf076">00105</a>             <a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a8d973b52c43943151502aeec50eaf076">pasv</a> = 1,
+<a name="l00106"></a><a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0">00106</a>             <a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0">port</a>
+<a name="l00107"></a>00107         };
+<a name="l00108"></a><a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">00108</a>         <span class="keyword">enum</span> <a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">fxpmethod</a>
+<a name="l00109"></a>00109         {
+<a name="l00110"></a><a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849a3f55c2e4763019c028b0c2aebff20219">00110</a>             <a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849a3f55c2e4763019c028b0c2aebff20219">defaultfxp</a> = 0,
+<a name="l00111"></a><a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849ab915d3de9faaf96ed81859ac05c24667">00111</a>                 <a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849ab915d3de9faaf96ed81859ac05c24667">alternativefxp</a>
+<a name="l00112"></a>00112         };
+<a name="l00113"></a><a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">00113</a>             <span class="keyword">enum</span> <a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">dataencryption</a>
+<a name="l00114"></a>00114             {
+<a name="l00115"></a><a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88ae5285759726eb1131ffb6b6fe82b4993">00115</a>             <a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88ae5285759726eb1131ffb6b6fe82b4993">unencrypted</a> = 0,
+<a name="l00116"></a><a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88a03a557276e62e3fb8cdd97a9bbe80390">00116</a>             <a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88a03a557276e62e3fb8cdd97a9bbe80390">secure</a>
+<a name="l00117"></a>00117             };
+<a name="l00118"></a>00118         <a class="code" href="class_ku_ftp_lib.html#ad1dca686552df0c4e4ee739a93868311">KuFtpLib</a>();
+<a name="l00119"></a>00119         <a class="code" href="class_ku_ftp_lib.html#abc270ca3cbf228bc97efbe6915e2a39c">~KuFtpLib</a>();
+<a name="l00120"></a>00120             <span class="keywordtype">char</span>* <a class="code" href="class_ku_ftp_lib.html#a4eb5050fc6816654d0c2290ca999e695">LastResponse</a>();
+<a name="l00121"></a>00121             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ac094a9af5e487576fb90a92c08965205">Connect</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *host,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0">port</a>);<span class="comment">// ftpserver</span>
+<a name="l00122"></a>00122             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ac094a9af5e487576fb90a92c08965205">Connect</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *host,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960a3fa6feec243155855f6fc025859d90f0">port</a>,<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyHost,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> proxyPort,<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyUser,<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyPass,<span class="keywordtype">int</span> proxyType);
+<a name="l00123"></a>00123             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a05fc7f38e0e5b9de902468d235e5b799">Login</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *user, <span class="keyword">const</span> <span class="keywordtype">char</span> *pass);
+<a name="l00124"></a>00124             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#af969f34a88a785906aa043b9be981440">Site</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *cmd);
+<a name="l00125"></a>00125             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a10c7410e531067011f6092a120476632">Raw</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *cmd);
+<a name="l00126"></a>00126             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a3695a83f5f942b811f2cc2fa68b7857a">SysType</a>(<span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> max);
+<a name="l00127"></a>00127             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aed7e9a6d776b9a467e49cca10089a1dd">Feat</a>();
+<a name="l00128"></a>00128             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aa7fa4191d3624b33d82fbb6d41471fb2">Mkdir</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00129"></a>00129             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#acb19946112927af41be2f597fc48a9b0">Chdir</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00130"></a>00130             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aadf40518cc4dd832383cb59dfa76fba9">Cdup</a>();
+<a name="l00131"></a>00131             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aac82004a868dbaffa18cd0bcd3a34faa">Rmdir</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00132"></a>00132             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a47625dcb17cfce3afe39fbc32715e031">Pwd</a>(<span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> max);
+<a name="l00133"></a>00133             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aead8c211dfc9d2140c1a5d4f0136dd80">Nlst</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *outputfile, <span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00134"></a>00134             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#af545717647a565d1315af74e86ee9ec2">Dir</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *outputfile, <span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00135"></a>00135             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a1a468afaac78efafa5957ebd1b2bcc52">Size</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> *size, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode);
+<a name="l00136"></a>00136             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a3e57dbe4288568903e960499f6f8ace0">ModDate</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">char</span> *dt, <span class="keywordtype">int</span> max);
+<a name="l00137"></a>00137             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a981e9554d53481ba91e9e399a0ab3f56">Get</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *outputfile, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> offset = 0);
+<a name="l00138"></a>00138             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aa0948fc5fdf3e8e5a95330c72ca21f61">Put</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *inputfile, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> offset = 0);
+<a name="l00139"></a>00139             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a32fd77b375f489f3e7f7f735ae8f2fd9">Rename</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *src, <span class="keyword">const</span> <span class="keywordtype">char</span> *dst);
+<a name="l00140"></a>00140             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a64b54ecf377e38e375cc60c42646bff9">Delete</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);
+<a name="l00141"></a>00141         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ae202c543934ce26a8fc7e50f8bd02830">Noop</a>();
+<a name="l00142"></a>00142         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a2ea992c1f3c08059a098f23533459401">Timeout</a>();
+<a name="l00143"></a>00143         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#af0a0fbb09a0d96fac704792f87604ac9">ConnectionLost</a>();
+<a name="l00144"></a>00144         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a64207f2332116beebef4b27be2defc61">SetFtpUseProxy</a>(<span class="keywordtype">bool</span>);
+<a name="l00145"></a>00145         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#aa708138ee5c49f13b0c177ec1283e0f6">SetCheckTimeout</a>(<span class="keywordtype">bool</span>);
+<a name="l00146"></a>00146         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#afb8ed0b54e018b4d6df77455b8cb965a">SetDataEncryption</a>(<a class="code" href="class_ku_ftp_lib.html#a919efce7b95c70e0d0b66ee168e54b88">dataencryption</a> enc);
+<a name="l00147"></a>00147         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a5b5dca979fcf197437434d374131a1fa">NegotiateEncryption</a>();
+<a name="l00148"></a>00148         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a8457224a7754bd88506ecfc03dc6d40c">SetCallbackCertFunction</a>(<a class="code" href="kuftplib_8h.html#a184082f86aa56aaa084623d1e90f068d">FtpCallbackCert</a> pointer);
+<a name="l00149"></a>00149             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a4454156fe4e70c101329ea76b674d933">Quit</a>();
+<a name="l00150"></a>00150         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#aa112f206cfdc0b5222011c506d8cdef4">StopTransfer</a>();
+<a name="l00151"></a><a class="code" href="class_ku_ftp_lib.html#aa1d039d641e4f7ae08d16c4149c6f056">00151</a>         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#aa1d039d641e4f7ae08d16c4149c6f056">SetMaxUploadSpeed</a>(<span class="keywordtype">int</span> i){<a class="code" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">mp_ftphandle</a>-&gt;<a class="code" href="structftphandle.html#af8b48c5016b89be4d9b72fc1142cab71">maxUploadSpeed</a>=i;}
+<a name="l00152"></a><a class="code" href="class_ku_ftp_lib.html#aa745dbe4b5a28fbda3b61fc6f7570cb3">00152</a>         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#aa745dbe4b5a28fbda3b61fc6f7570cb3">SetMaxDownloadSpeed</a>(<span class="keywordtype">int</span> i){<a class="code" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">mp_ftphandle</a>-&gt;<a class="code" href="structftphandle.html#afd6558d49ff31b402a9b816ceb2e5be6">maxDownloadSpeed</a>=i;}
+<a name="l00153"></a>00153             <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a8da2715c817da3e7e98e2c370465b1c0">SetCallbackIdleFunction</a>(<a class="code" href="kuftplib_8h.html#a4e5444202e0d9df4032cbdf746c7c27d">FtpCallbackIdle</a> pointer);
+<a name="l00154"></a>00154             <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a6fc20c1a9f5f7e54ed05614d4411d2db">SetCallbackLogFunction</a>(<a class="code" href="kuftplib_8h.html#a39ae77543e8b929d3f41716430d58a7a">FtpCallbackLog</a> pointer);
+<a name="l00155"></a>00155         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a6f347e49e18156b58c0090355ecffc06">SetCallbackXferFunction</a>(<a class="code" href="kuftplib_8h.html#a54a04f09763f04d9430983cf8f13d24b">FtpCallbackXfer</a> pointer);
+<a name="l00156"></a>00156         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a10b03365addcdd0c799add6bab4c847b">SetCallbackArg</a>(<span class="keywordtype">void</span> *arg);
+<a name="l00157"></a>00157             <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a675d925685ba7432de455ac212e2821d">SetCallbackBytes</a>(<a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> bytes);
+<a name="l00158"></a><a class="code" href="class_ku_ftp_lib.html#afbf52cb282ab3022d799bad1bbdf1991">00158</a>         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#afbf52cb282ab3022d799bad1bbdf1991">SetCorrectPasv</a>(<span class="keywordtype">bool</span> b) { <a class="code" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">mp_ftphandle</a>-&gt;<a class="code" href="structftphandle.html#a5c5928b1ac63f085f4a546aec864f845">correctpasv</a> = b; };
+<a name="l00159"></a>00159             <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#ab8475d19790406d60a7595e39242f3ad">SetCallbackIdletime</a>(<span class="keywordtype">int</span> time);
+<a name="l00160"></a>00160             <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a9a8e2049a5f1b46fc3f46e45eb44d0d2">SetConnmode</a>(<a class="code" href="class_ku_ftp_lib.html#ae68ccea0dfc206740e939d35706af960">connmode</a> mode);
+<a name="l00161"></a>00161             <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a1d031d6af82252cb1ef9423c7b65be5c">Fxp</a>(<a class="code" href="class_ku_ftp_lib.html">KuFtpLib</a> *src,<a class="code" href="class_ku_ftp_lib.html">KuFtpLib</a> *dst,<span class="keyword">const</span> <span class="keywordtype">char</span> *pathSrc,<span class="keyword">const</span> <span class="keywordtype">char</span> *pathDst,<a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode,<a class="code" href="class_ku_ftp_lib.html#a11ccc951f35a8e2b930d6d5e63cc3849">fxpmethod</a> method);
+<a name="l00162"></a>00162         <a class="code" href="structftphandle.html">ftphandle</a>* <a class="code" href="class_ku_ftp_lib.html#a31d1fff08283f41649676b98030fe19a">RawOpen</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode);
+<a name="l00163"></a>00163         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ac8c7b140dd65d967c297f0f89a287591">RawClose</a>(<a class="code" href="structftphandle.html">ftphandle</a>* handle); 
+<a name="l00164"></a>00164         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a856329c06d3a78342edbbc599e69f057">RawWrite</a>(<span class="keywordtype">void</span>* buf, <span class="keywordtype">int</span> len, <a class="code" href="structftphandle.html">ftphandle</a>* handle);
+<a name="l00165"></a>00165         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a047ce4199417a89e334bad2b871c0ced">RawRead</a>(<span class="keywordtype">void</span>* buf, <span class="keywordtype">int</span> max, <a class="code" href="structftphandle.html">ftphandle</a>* handle); 
+<a name="l00166"></a>00166     <span class="keyword">private</span>:
+<a name="l00167"></a><a class="code" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">00167</a>             <a class="code" href="structftphandle.html">ftphandle</a>* <a class="code" href="class_ku_ftp_lib.html#a3de74a12bdef63c0f3c81097c036311d">mp_ftphandle</a>;
+<a name="l00168"></a>00168         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a5a54d1dd799969766c56a97d16a36fca">base64Encode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>,<span class="keywordtype">char</span> *encoded);
+<a name="l00169"></a>00169         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ad449d8d036075cf42378ccb885900f78">ReadCrLfLine</a>(<span class="keywordtype">int</span> fd,<span class="keywordtype">void</span> *buf,<span class="keywordtype">int</span> size);
+<a name="l00170"></a>00170         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a61c479001c68e6b84352c21d47fdd8f8">LogHttpProxyReturn</a>(<span class="keywordtype">int</span> fd);
+<a name="l00171"></a>00171         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a4be72f5561e940df08d19ee15c47825b">LogSocks5ProxyError</a>(<span class="keywordtype">int</span> error);
+<a name="l00172"></a>00172         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a18e6ea4aac876219c6dd3e6be98f91d6">SleepMicroseconds</a>(<a class="code" href="kuftplib_8h.html#aab4076a15253ffe4c39cdc85a9ed812a">off64_t</a> t);
+<a name="l00173"></a>00173         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ab7ed6a0a79bcd60f48049e92585fada2">DoHttpProxy</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyUser,<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyPass,<span class="keyword">const</span> <span class="keywordtype">char</span> *ftpHost,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> ftpPort,<span class="keywordtype">int</span> fd=0);
+<a name="l00174"></a>00174         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a8698070c24ec5c1bf2a632112f9ac633">DoSocks4Proxy</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *ftpHost,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> ftpPort,<span class="keywordtype">int</span> fd=0);
+<a name="l00175"></a>00175         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ac5352155d433258d3994da9088c241c1">DoSocks5Proxy</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyUser,<span class="keyword">const</span> <span class="keywordtype">char</span> *proxyPass,<span class="keyword">const</span> <span class="keywordtype">char</span> *ftpHost,<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> ftpPort,<span class="keywordtype">int</span> fd=0);
+<a name="l00176"></a>00176             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ab2e063c034ef9af67e482b8060125f41">FtpXfer</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *localfile,<span class="keyword">const</span> <span class="keywordtype">char</span> *path,<a class="code" href="structftphandle.html">ftphandle</a> *nControl,<a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type,<a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode);
+<a name="l00177"></a>00177             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a97ea50bce23a2c92df8171d205dc8b04">FtpOpenPasv</a>(<a class="code" href="structftphandle.html">ftphandle</a> *nControl, <a class="code" href="structftphandle.html">ftphandle</a> **nData, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db">dir</a>, <span class="keywordtype">char</span> *cmd);
+<a name="l00178"></a>00178             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a626183b4d43ce09708d89af41ac860d5">FtpSendCmd</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *cmd, <span class="keywordtype">char</span> expresp, <a class="code" href="structftphandle.html">ftphandle</a> *nControl);
+<a name="l00179"></a>00179             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#aaa0fc9e5438fd3f0970b0e5756642434">FtpAcceptConnection</a>(<a class="code" href="structftphandle.html">ftphandle</a> *nData, <a class="code" href="structftphandle.html">ftphandle</a> *nControl);
+<a name="l00180"></a>00180             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a3984573092a518d4c2f556cf541f3801">FtpOpenPort</a>(<a class="code" href="structftphandle.html">ftphandle</a> *nControl, <a class="code" href="structftphandle.html">ftphandle</a> **nData, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363af65b8890a2b0dda89ae836bb2e1e74db">dir</a>, <span class="keywordtype">char</span> *cmd);
+<a name="l00181"></a>00181             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a52da069a967027405f3db3937d753a27">FtpRead</a>(<span class="keywordtype">void</span> *buf, <span class="keywordtype">int</span> max, <a class="code" href="structftphandle.html">ftphandle</a> *nData);
+<a name="l00182"></a>00182             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a12a0f77915d042e241bfe64c1dfce1b2">FtpWrite</a>(<span class="keywordtype">void</span> *buf, <span class="keywordtype">int</span> len, <a class="code" href="structftphandle.html">ftphandle</a> *nData);
+<a name="l00183"></a>00183             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a0f5228d717dac677c2b36d1d55ea7b78">FtpAccess</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <a class="code" href="class_ku_ftp_lib.html#a017a7687791fb578963135cb52d14363">accesstype</a> type, <a class="code" href="class_ku_ftp_lib.html#a5604f19d60d06cf06acadceaa3aa543f">transfermode</a> mode, <a class="code" href="structftphandle.html">ftphandle</a> *nControl, <a class="code" href="structftphandle.html">ftphandle</a> **nData);
+<a name="l00184"></a>00184             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a09272d4b48b04cb82fa9c5f7436f3545">FtpClose</a>(<a class="code" href="structftphandle.html">ftphandle</a> *nData);
+<a name="l00185"></a>00185         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ab1a4d9725a55dbaab2c614335d48ed5a">socket_wait</a>(<a class="code" href="structftphandle.html">ftphandle</a> *ctl);
+<a name="l00186"></a>00186             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#ae51ab97cc7d88a28bc31191081f3f4e1">readline</a>(<span class="keywordtype">char</span> *buf,<span class="keywordtype">int</span> max,<a class="code" href="structftphandle.html">ftphandle</a> *ctl);
+<a name="l00187"></a>00187             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a602aba21207a13bd14e41e11cb98f84a">writeline</a>(<span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> len, <a class="code" href="structftphandle.html">ftphandle</a> *nData);
+<a name="l00188"></a>00188             <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a9f4a8374263db6f765e32e155926da3a">readresp</a>(<span class="keywordtype">char</span> c, <a class="code" href="structftphandle.html">ftphandle</a> *nControl);
+<a name="l00189"></a>00189         <span class="keywordtype">void</span> <a class="code" href="class_ku_ftp_lib.html#a2e1c984453973d77f7047295107b13e3">ClearHandle</a>();
+<a name="l00190"></a>00190         <span class="keywordtype">int</span> <a class="code" href="class_ku_ftp_lib.html#a0e186c0ad509d04eabaabaaa72d0c510">CorrectPasvResponse</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *v);
+<a name="l00191"></a>00191 };
+<a name="l00192"></a>00192 
+<a name="l00193"></a>00193 <span class="preprocessor">#endif</span>
+<a name="l00194"></a>00194 <span class="preprocessor"></span>
+<a name="l00195"></a>00195 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

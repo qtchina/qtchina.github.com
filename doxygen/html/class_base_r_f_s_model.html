@@ -1,0 +1,692 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: BaseRFSModel类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>BaseRFSModel类参考</h1><!-- doxytag: class="BaseRFSModel" -->
+<p><code>#include &lt;<a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a>&gt;</code></p>
+
+<p><a href="class_base_r_f_s_model-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>组合类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_base_r_f_s_model_1_1_r_f_s_dir_node.html">RFSDirNode</a></td></tr>
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#aaea77d8ab0bc4e2d49e286a678dbd133">submit</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#ace5a025ebad782c4b1a1c8d21206f2bb">revert</a> ()</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a7ee53ad3adb249970bf48f38c6ec1e40">BaseRFSModel</a> (QObject *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a06fe4a36b15a65448a5983af2f47e1ec">~BaseRFSModel</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a47634d519136dd511932f905bf82cfa2">index</a> (int row, int <a class="el" href="class_base_r_f_s_model.html#a587a871df2a83014899c3d8799eb2ab9">column</a>, const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QModelIndex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#aaed88603cdaa13afd3784ff44330c445">parent</a> (const QModelIndex &amp;child) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a87c510770d866c8dbcbbcb0fd6853bf6">hasChildren</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#abea0e1b400b5694653a0dfb635078ac8">columnCount</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a4f9ac9fa52efe97afc3310b0fb69564f">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVariant&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#ab272616e9d49f9b906d46161d1e8301f">data</a> (const QModelIndex &amp;index, int role=Qt::DisplayRole) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a3cb183ada884f22bcdb1c66e60596fb0">setData</a> (const QModelIndex &amp;index, const QVariant &amp;value, int role=Qt::EditRole) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Qt::ItemFlags&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a305c54419db9a9255a0560f7515a3c43">flags</a> (const QModelIndex &amp;index) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QVariant&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a20282a657f20ca4de52b9129d947fd13">headerData</a> (int section, Qt::Orientation orienation, int role=Qt::DisplayRole) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a9420bc68db048cff38265a4cb4f78bb8">dropMimeData</a> (const QMimeData *data, Qt::DropAction action, int row, int <a class="el" href="class_base_r_f_s_model.html#a587a871df2a83014899c3d8799eb2ab9">column</a>, const QModelIndex &amp;parent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMimeData *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a30581ca376b0232fc7d4031199c64f83">mimeData</a> (const QModelIndexList &amp;indexes) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStringList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#aa2edbc9ce3c4e8499ea8c4454cad5411">mimeTypes</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Qt::DropActions&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#ad865c39235a40d0f4519b97df31534b8">supportedDropActions</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#af202c9bae957e774997f2aaf117a9b70">insertRows</a> (int row, int count, const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#acd8353a3097f237783cca118abdb2445">removeRows</a> (int row, int count, const QModelIndex &amp;parent=QModelIndex())</td></tr>
+<tr><td colspan="2"><h2>私有类型</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="class_base_r_f_s_model.html#a1412f1f52588ac558902da07073b20c7aa94f903d07151150e8d561790ec06eb3">POP_NO_NEED_NO_DATA</a> =  0, 
+<a class="el" href="class_base_r_f_s_model.html#a1412f1f52588ac558902da07073b20c7a1daf280dd5e0ce3a8da7d225a056112a">POP_NO_NEED_WITH_DATA</a> =  1, 
+<a class="el" href="class_base_r_f_s_model.html#a1412f1f52588ac558902da07073b20c7a7e64974f169df0d524e4193aac649418">POP_WITH_NEED_WANT_UPDATE</a> =  2, 
+<a class="el" href="class_base_r_f_s_model.html#a1412f1f52588ac558902da07073b20c7a70b7f247744df3db820910b7c73b5a96">POP_UPDATING</a> =  8, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="class_base_r_f_s_model.html#a1412f1f52588ac558902da07073b20c7a0f656ddd8c249c644e6c98cf4a49e579">POP_NEWEST</a> =  9
+<br/>
+ }</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#abde5bd42c384deee72c41403abf34945">init</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_base_r_f_s_model_1_1_r_f_s_dir_node.html">RFSDirNode</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a20957017e185a339723c4e9b0b909b0f">root</a></td></tr>
+<tr><td colspan="2"><h2>静态私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_r_f_s_model.html#a587a871df2a83014899c3d8799eb2ab9">column</a> = 4</td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a>第<a class="el" href="baserfsmodel_8h_source.html#l00018">18</a>行定义。</p>
+<hr/><h2>成员枚举类型文档</h2>
+<a class="anchor" id="a1412f1f52588ac558902da07073b20c7"></a><!-- doxytag: member="BaseRFSModel::@0" ref="a1412f1f52588ac558902da07073b20c7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum<code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>枚举值: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a1412f1f52588ac558902da07073b20c7aa94f903d07151150e8d561790ec06eb3"></a><!-- doxytag: member="POP_NO_NEED_NO_DATA" ref="a1412f1f52588ac558902da07073b20c7aa94f903d07151150e8d561790ec06eb3" args="" -->POP_NO_NEED_NO_DATA</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1412f1f52588ac558902da07073b20c7a1daf280dd5e0ce3a8da7d225a056112a"></a><!-- doxytag: member="POP_NO_NEED_WITH_DATA" ref="a1412f1f52588ac558902da07073b20c7a1daf280dd5e0ce3a8da7d225a056112a" args="" -->POP_NO_NEED_WITH_DATA</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1412f1f52588ac558902da07073b20c7a7e64974f169df0d524e4193aac649418"></a><!-- doxytag: member="POP_WITH_NEED_WANT_UPDATE" ref="a1412f1f52588ac558902da07073b20c7a7e64974f169df0d524e4193aac649418" args="" -->POP_WITH_NEED_WANT_UPDATE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1412f1f52588ac558902da07073b20c7a70b7f247744df3db820910b7c73b5a96"></a><!-- doxytag: member="POP_UPDATING" ref="a1412f1f52588ac558902da07073b20c7a70b7f247744df3db820910b7c73b5a96" args="" -->POP_UPDATING</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a1412f1f52588ac558902da07073b20c7a0f656ddd8c249c644e6c98cf4a49e579"></a><!-- doxytag: member="POP_NEWEST" ref="a1412f1f52588ac558902da07073b20c7a0f656ddd8c249c644e6c98cf4a49e579" args="" -->POP_NEWEST</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>在文件<a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a>第<a class="el" href="baserfsmodel_8h_source.html#l00054">54</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a7ee53ad3adb249970bf48f38c6ec1e40"></a><!-- doxytag: member="BaseRFSModel::BaseRFSModel" ref="a7ee53ad3adb249970bf48f38c6ec1e40" args="(QObject *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BaseRFSModel::BaseRFSModel </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00015">15</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8cpp_source.html#l00024">init()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a06fe4a36b15a65448a5983af2f47e1ec"></a><!-- doxytag: member="BaseRFSModel::~BaseRFSModel" ref="a06fe4a36b15a65448a5983af2f47e1ec" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BaseRFSModel::~BaseRFSModel </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00021">21</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="abea0e1b400b5694653a0dfb635078ac8"></a><!-- doxytag: member="BaseRFSModel::columnCount" ref="abea0e1b400b5694653a0dfb635078ac8" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BaseRFSModel::columnCount </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00083">83</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00078">column</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab272616e9d49f9b906d46161d1e8301f"></a><!-- doxytag: member="BaseRFSModel::data" ref="ab272616e9d49f9b906d46161d1e8301f" args="(const QModelIndex &amp;index, int role=Qt::DisplayRole) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant BaseRFSModel::data </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em> = <code>Qt::DisplayRole</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00100">100</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00063">BaseRFSModel::RFSDirNode::name</a>.</p>
+
+<p>参考自 <a class="el" href="baserfsmodel_8cpp_source.html#l00147">mimeData()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9420bc68db048cff38265a4cb4f78bb8"></a><!-- doxytag: member="BaseRFSModel::dropMimeData" ref="a9420bc68db048cff38265a4cb4f78bb8" args="(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::dropMimeData </td>
+          <td>(</td>
+          <td class="paramtype">const QMimeData *&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::DropAction&nbsp;</td>
+          <td class="paramname"> <em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00143">143</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a305c54419db9a9255a0560f7515a3c43"></a><!-- doxytag: member="BaseRFSModel::flags" ref="a305c54419db9a9255a0560f7515a3c43" args="(const QModelIndex &amp;index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Qt::ItemFlags BaseRFSModel::flags </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00124">124</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a87c510770d866c8dbcbbcb0fd6853bf6"></a><!-- doxytag: member="BaseRFSModel::hasChildren" ref="a87c510770d866c8dbcbbcb0fd6853bf6" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::hasChildren </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00071">71</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00072">BaseRFSModel::RFSDirNode::children</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a20282a657f20ca4de52b9129d947fd13"></a><!-- doxytag: member="BaseRFSModel::headerData" ref="a20282a657f20ca4de52b9129d947fd13" args="(int section, Qt::Orientation orienation, int role=Qt::DisplayRole) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant BaseRFSModel::headerData </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>section</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::Orientation&nbsp;</td>
+          <td class="paramname"> <em>orienation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em> = <code>Qt::DisplayRole</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00130">130</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a47634d519136dd511932f905bf82cfa2"></a><!-- doxytag: member="BaseRFSModel::index" ref="a47634d519136dd511932f905bf82cfa2" args="(int row, int column, const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex BaseRFSModel::index </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00036">36</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00072">BaseRFSModel::RFSDirNode::children</a>及<a class="el" href="baserfsmodel_8h_source.html#l00079">root</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abde5bd42c384deee72c41403abf34945"></a><!-- doxytag: member="BaseRFSModel::init" ref="abde5bd42c384deee72c41403abf34945" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::init </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00024">24</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00073">BaseRFSModel::RFSDirNode::md5</a>、<a class="el" href="baserfsmodel_8h_source.html#l00063">BaseRFSModel::RFSDirNode::name</a>、<a class="el" href="baserfsmodel_8h_source.html#l00064">BaseRFSModel::RFSDirNode::path</a>、<a class="el" href="baserfsmodel_8h_source.html#l00054">POP_NO_NEED_NO_DATA</a>、<a class="el" href="baserfsmodel_8h_source.html#l00055">POP_NO_NEED_WITH_DATA</a>、<a class="el" href="baserfsmodel_8h_source.html#l00074">BaseRFSModel::RFSDirNode::pstatus</a>、<a class="el" href="baserfsmodel_8h_source.html#l00079">root</a>、<a class="el" href="baserfsmodel_8h_source.html#l00067">BaseRFSModel::RFSDirNode::size</a>及<a class="el" href="baserfsmodel_8h_source.html#l00075">BaseRFSModel::RFSDirNode::status</a>.</p>
+
+<p>参考自 <a class="el" href="baserfsmodel_8cpp_source.html#l00015">BaseRFSModel()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af202c9bae957e774997f2aaf117a9b70"></a><!-- doxytag: member="BaseRFSModel::insertRows" ref="af202c9bae957e774997f2aaf117a9b70" args="(int row, int count, const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::insertRows </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00165">165</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a30581ca376b0232fc7d4031199c64f83"></a><!-- doxytag: member="BaseRFSModel::mimeData" ref="a30581ca376b0232fc7d4031199c64f83" args="(const QModelIndexList &amp;indexes) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMimeData * BaseRFSModel::mimeData </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndexList &amp;&nbsp;</td>
+          <td class="paramname"> <em>indexes</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00147">147</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8cpp_source.html#l00100">data()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa2edbc9ce3c4e8499ea8c4454cad5411"></a><!-- doxytag: member="BaseRFSModel::mimeTypes" ref="aa2edbc9ce3c4e8499ea8c4454cad5411" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList BaseRFSModel::mimeTypes </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00153">153</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aaed88603cdaa13afd3784ff44330c445"></a><!-- doxytag: member="BaseRFSModel::parent" ref="aaed88603cdaa13afd3784ff44330c445" args="(const QModelIndex &amp;child) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QModelIndex BaseRFSModel::parent </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>child</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00054">54</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00071">BaseRFSModel::RFSDirNode::parent</a>、<a class="el" href="baserfsmodel_8h_source.html#l00079">root</a>及<a class="el" href="baserfsmodel_8h_source.html#l00076">BaseRFSModel::RFSDirNode::rowNum</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acd8353a3097f237783cca118abdb2445"></a><!-- doxytag: member="BaseRFSModel::removeRows" ref="acd8353a3097f237783cca118abdb2445" args="(int row, int count, const QModelIndex &amp;parent=QModelIndex())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::removeRows </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00170">170</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ace5a025ebad782c4b1a1c8d21206f2bb"></a><!-- doxytag: member="BaseRFSModel::revert" ref="ace5a025ebad782c4b1a1c8d21206f2bb" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseRFSModel::revert </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00179">179</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a4f9ac9fa52efe97afc3310b0fb69564f"></a><!-- doxytag: member="BaseRFSModel::rowCount" ref="a4f9ac9fa52efe97afc3310b0fb69564f" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BaseRFSModel::rowCount </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>QModelIndex()</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00087">87</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00072">BaseRFSModel::RFSDirNode::children</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3cb183ada884f22bcdb1c66e60596fb0"></a><!-- doxytag: member="BaseRFSModel::setData" ref="a3cb183ada884f22bcdb1c66e60596fb0" args="(const QModelIndex &amp;index, const QVariant &amp;value, int role=Qt::EditRole) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::setData </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVariant &amp;&nbsp;</td>
+          <td class="paramname"> <em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>role</em> = <code>Qt::EditRole</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00114">114</a>行定义。</p>
+
+<p>参考 <a class="el" href="baserfsmodel_8h_source.html#l00063">BaseRFSModel::RFSDirNode::name</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaea77d8ab0bc4e2d49e286a678dbd133"></a><!-- doxytag: member="BaseRFSModel::submit" ref="aaea77d8ab0bc4e2d49e286a678dbd133" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseRFSModel::submit </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00175">175</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="ad865c39235a40d0f4519b97df31534b8"></a><!-- doxytag: member="BaseRFSModel::supportedDropActions" ref="ad865c39235a40d0f4519b97df31534b8" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Qt::DropActions BaseRFSModel::supportedDropActions </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a>第<a class="el" href="baserfsmodel_8cpp_source.html#l00160">160</a>行定义。</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a587a871df2a83014899c3d8799eb2ab9"></a><!-- doxytag: member="BaseRFSModel::column" ref="a587a871df2a83014899c3d8799eb2ab9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="class_base_r_f_s_model.html#a587a871df2a83014899c3d8799eb2ab9">BaseRFSModel::column</a> = 4<code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a>第<a class="el" href="baserfsmodel_8h_source.html#l00078">78</a>行定义。</p>
+
+<p>参考自 <a class="el" href="baserfsmodel_8cpp_source.html#l00083">columnCount()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a20957017e185a339723c4e9b0b909b0f"></a><!-- doxytag: member="BaseRFSModel::root" ref="a20957017e185a339723c4e9b0b909b0f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_base_r_f_s_model_1_1_r_f_s_dir_node.html">RFSDirNode</a>* <a class="el" href="class_base_r_f_s_model.html#a20957017e185a339723c4e9b0b909b0f">BaseRFSModel::root</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a>第<a class="el" href="baserfsmodel_8h_source.html#l00079">79</a>行定义。</p>
+
+<p>参考自 <a class="el" href="baserfsmodel_8cpp_source.html#l00036">index()</a>、<a class="el" href="baserfsmodel_8cpp_source.html#l00024">init()</a>及<a class="el" href="baserfsmodel_8cpp_source.html#l00054">parent()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="baserfsmodel_8h_source.html">baserfsmodel.h</a></li>
+<li><a class="el" href="baserfsmodel_8cpp_source.html">baserfsmodel.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

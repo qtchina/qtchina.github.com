@@ -1,0 +1,1489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: RemoteView类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>RemoteView类参考</h1><!-- doxytag: class="RemoteView" -->
+<p><code>#include &lt;<a class="el" href="remoteview_8h_source.html">remoteview.h</a>&gt;</code></p>
+<div class="dynheader">
+继承图，类RemoteView</div>
+<div class="dynsection">
+ <div class="center">
+  <img src="class_remote_view.png" usemap="#RemoteView_map" alt=""/>
+  <map id="RemoteView_map" name="RemoteView_map">
+<area href="class_f_t_p_view.html" alt="FTPView" shape="rect" coords="0,56,81,80"/>
+<area href="class_s_f_t_p_view.html" alt="SFTPView" shape="rect" coords="91,56,172,80"/>
+</map>
+ </div>
+</div>
+
+<p><a href="class_remote_view-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a4ebb88578a13d866f1fd0b81080da66e">i_init_dir_view</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a5fc080a8c446170e0f2394011a2ecb74">slot_disconnect_from_remote_host</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a2831b7441df1466b387661d9bb639c2e">slot_dir_tree_customContextMenuRequested</a> (const QPoint &amp;pos)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a9b777c0c581e7181ef783de3d14f4973">slot_new_transfer</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aeb84dccf955d781a205ae434a5a2faaa">slot_new_upload_requested</a> (<a class="el" href="class_task_package.html">TaskPackage</a> local_pkg, <a class="el" href="class_task_package.html">TaskPackage</a> remote_pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a4bc3ff882c51f1aadcea44a668c21371">slot_new_upload_requested</a> (<a class="el" href="class_task_package.html">TaskPackage</a> local_pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aed9deb726d5b4206b9ce2d9ef44557f6">slot_new_download_requested</a> (<a class="el" href="class_task_package.html">TaskPackage</a> local_pkg, <a class="el" href="class_task_package.html">TaskPackage</a> remote_pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a947de58691db95dcbd217843324ed821">slot_new_download_requested</a> (<a class="el" href="class_task_package.html">TaskPackage</a> remote_pkg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a515998adee32eb9a6917fd1504ba955b">slot_show_fxp_command_log</a> (bool show)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aa43c482f5514d75b640a1a23cc948100">slot_custom_ui_area</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ac57ccbb7ce797f98608c76a514deabbd">slot_enter_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aa4aa6abe29e4eafc240d3d8087c21b75">slot_leave_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a2e2d9de324269c0e5f95b09a8f1b70b8">slot_transfer_finished</a> (int status, QString errorString)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#af4e908337f5e4791dcd7e9836481fdbb">slot_drag_ready</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#adeaa75ce87ac530779a8d16a646cacb0">slot_drop_mime_data</a> (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#af4ffeebbbc808b5b431ada0a45565bc8">slot_show_hidden</a> (bool show)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a81214e4d9a213039aedb75dcdafa082e">RemoteView</a> (QMdiArea *<a class="el" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a>, <a class="el" href="class_local_view.html">LocalView</a> *<a class="el" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">local_view</a>, QWidget *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a403b1afd4a1d4f7c1ca2c35609629429">~RemoteView</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a3cc6d7c9ba84021097a44f7c7a163112">get_selected_directory</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a71c2800c518f14886f67252a81c5f914">set_user_home_path</a> (QString <a class="el" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">user_home_path</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aa9e4344a360b719c1b58d6c518c3df42">setConnection</a> (<a class="el" href="class_connection.html">Connection</a> *<a class="el" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a2e1380bc016835d5f29f20d4c3ca5d85">is_in_remote_dir_retrive_loop</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a0baad28ab0522c1bd40f6c6fcfa64c66">update_layout</a> ()</td></tr>
+<tr><td colspan="2"><h2>保护成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#acbc709d09022512dcba35ca1774880ad">init_popup_context_menu</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a737ce68f68ab80fd5b81724559c445a5">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QMenu *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a9d64c0d86c99b60a8c15a5b4dd770062">encodingMenu</a> ()</td></tr>
+<tr><td colspan="2"><h2>保护属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_local_view.html">LocalView</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">local_view</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMdiArea *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">main_mdi_area</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStatusBar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a7187e462b5d1bbccc0abe2d733790c19">status_bar</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui::remoteview&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">remoteview</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_remote_dir_model.html">RemoteDirModel</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">remote_dir_model</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">table_row_height</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QSortFilterProxyModel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">m_treeProxyModel</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QSortFilterProxyModel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">m_tableProxyModel</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QAbstractItemView *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">curr_item_view</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMenu *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a61cc7e0e83dd8d60ebf3f8c3f0bb4df5">dir_tree_context_menu</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">user_home_path</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QCursor&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a40b7ebf1ce8085c007f5350df3d3db65">orginal_cursor</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">in_remote_dir_retrive_loop</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_progress_dialog.html">ProgressDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">own_progress_dialog</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">LIBSSH2_SFTP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">ssh2_sftp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">conn</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QAction *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ac7f67ce10357ace0370fca1ed2e5e43b">attr_action</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_encryption_detail_focus_label.html">EncryptionDetailFocusLabel</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ad7c7b45986d103caccf8be3df7e77eff">enc_label</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QLabel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ac224cfddfc4e0643c40db8264685ac90">entriesLabel</a></td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a261ece88fac108612b509cb72b5ec363">slot_refresh_directory_tree</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#aba0e94db8fe2c476f1a480bde5834fa1">slot_show_properties</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a366dc5db83d672df34f95ff3c391b535">slot_mkdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ad10e2911235dfd513557919d779b8bf9">slot_rmdir</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a62ce02741a1c566640656b120355d007">slot_rename</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a55e73b56be02741e9e5814e161d7df20">slot_copy_path</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a0974b5f2391af5b8f36c5c1ffecfa8db">slot_copy_url</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ac3b73d08d70a957765b86760aad78cb4">rm_file_or_directory_recursively</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ad641866918386f1b1dd4a63024a5b415">slot_dir_tree_item_clicked</a> (const QModelIndex &amp;index)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">index 是proxy的index  <a href="#ad641866918386f1b1dd4a63024a5b415"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#ad982ecf658c7a01e43f2e6ce4eb8cbe8">slot_dir_file_view_double_clicked</a> (const QModelIndex &amp;index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#abd2f3a661de1ec9cee373583a37a4157">encryption_focus_label_double_clicked</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a20c0c1268ab3d0b7bc8ce7085e70e989">host_info_focus_label_double_clicked</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_remote_view.html#a4398cd2ab537b6b63375ef01f576f196">onUpdateEntriesStatus</a> ()</td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00032">32</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="a81214e4d9a213039aedb75dcdafa082e"></a><!-- doxytag: member="RemoteView::RemoteView" ref="a81214e4d9a213039aedb75dcdafa082e" args="(QMdiArea *main_mdi_area, LocalView *local_view, QWidget *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RemoteView::RemoteView </td>
+          <td>(</td>
+          <td class="paramtype">QMdiArea *&nbsp;</td>
+          <td class="paramname"> <em>main_mdi_area</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_local_view.html">LocalView</a> *&nbsp;</td>
+          <td class="paramname"> <em>local_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00035">35</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00078">enc_label</a>、<a class="el" href="remoteview_8cpp_source.html#l00958">encryption_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8h_source.html#l00079">entriesLabel</a>、<a class="el" href="remoteview_8cpp_source.html#l00991">host_info_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remoteview_8cpp_source.html#l00242">slot_dir_tree_customContextMenuRequested()</a>及<a class="el" href="remoteview_8h_source.html#l00052">status_bar</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a403b1afd4a1d4f7c1ca2c35609629429"></a><!-- doxytag: member="RemoteView::~RemoteView" ref="a403b1afd4a1d4f7c1ca2c35609629429" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RemoteView::~RemoteView </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00080">80</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>及<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a737ce68f68ab80fd5b81724559c445a5"></a><!-- doxytag: member="RemoteView::closeEvent" ref="a737ce68f68ab80fd5b81724559c445a5" args="(QCloseEvent *event)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&nbsp;</td>
+          <td class="paramname"> <em>event</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#abc094b320eccecfbbb0ed87369693e0e">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#afb40d28af418d525563cd082fb67a018">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00338">338</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>及<a class="el" href="remoteview_8h_source.html#l00070">own_progress_dialog</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9d64c0d86c99b60a8c15a5b4dd770062"></a><!-- doxytag: member="RemoteView::encodingMenu" ref="a9d64c0d86c99b60a8c15a5b4dd770062" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMenu * RemoteView::encodingMenu </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a763cb3c61dd97e382d616f3ae4239694">FTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00153">153</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="abd2f3a661de1ec9cee373583a37a4157"></a><!-- doxytag: member="RemoteView::encryption_focus_label_double_clicked" ref="abd2f3a661de1ec9cee373583a37a4157" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::encryption_focus_label_double_clicked </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#acb6d13c168821e8074d7a00bd631d2a7">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a64d9cb7ffc35fdac2492c975d80447ef">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00958">958</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>及<a class="el" href="remoteview_8h_source.html#l00073">ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3cc6d7c9ba84021097a44f7c7a163112"></a><!-- doxytag: member="RemoteView::get_selected_directory" ref="a3cc6d7c9ba84021097a44f7c7a163112" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString RemoteView::get_selected_directory </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#ac02b93448c0f417af97add8aae25e8df">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ade9862dd744d47391612496a2a0733f3">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00298">298</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00133">NetDirNode::fileName()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>及<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00687">slot_new_upload_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a20c0c1268ab3d0b7bc8ce7085e70e989"></a><!-- doxytag: member="RemoteView::host_info_focus_label_double_clicked" ref="a20c0c1268ab3d0b7bc8ce7085e70e989" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::host_info_focus_label_double_clicked </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aad3683bc525498ab2030199f19f6a026">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a15a0d97a720874abe1f50ee1ef6fd39a">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00991">991</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>及<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4ebb88578a13d866f1fd0b81080da66e"></a><!-- doxytag: member="RemoteView::i_init_dir_view" ref="a4ebb88578a13d866f1fd0b81080da66e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::i_init_dir_view </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a8f972b31bb8c9a11ba733e0fbd1aa85d">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#aa7206c522944c4dfeac31865cddff6b7">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00163">163</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00059">RemoteDirModel::setConnection()</a>、<a class="el" href="remoteview_8cpp_source.html#l00808">slot_dir_file_view_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00793">slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8h_source.html#l00073">ssh2_sftp</a>及<a class="el" href="remoteview_8h_source.html#l00052">status_bar</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00307">NullFXP::slot_connect_remote_host_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acbc709d09022512dcba35ca1774880ad"></a><!-- doxytag: member="RemoteView::init_popup_context_menu" ref="acbc709d09022512dcba35ca1774880ad" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::init_popup_context_menu </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#adf2ec89befa011378e79d724a9503270">FTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00086">86</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00077">attr_action</a>、<a class="el" href="remoteview_8h_source.html#l00062">dir_tree_context_menu</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00436">slot_refresh_directory_tree()</a>、<a class="el" href="remoteview_8cpp_source.html#l00594">slot_rename()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00942">slot_show_hidden()</a>及<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>.</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00036">SFTPView::SFTPView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e1380bc016835d5f29f20d4c3ca5d85"></a><!-- doxytag: member="RemoteView::is_in_remote_dir_retrive_loop" ref="a2e1380bc016835d5f29f20d4c3ca5d85" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool RemoteView::is_in_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_s_f_t_p_view.html#a9c1654dc9ea92dbff6f5e1ee647ad82c">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00044">44</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4398cd2ab537b6b63375ef01f576f196"></a><!-- doxytag: member="RemoteView::onUpdateEntriesStatus" ref="a4398cd2ab537b6b63375ef01f576f196" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::onUpdateEntriesStatus </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_s_f_t_p_view.html#a0889941d216ebf54278b55d60ce61492">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00953">953</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac3b73d08d70a957765b86760aad78cb4"></a><!-- doxytag: member="RemoteView::rm_file_or_directory_recursively" ref="ac3b73d08d70a957765b86760aad78cb4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::rm_file_or_directory_recursively </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aed73026055f43c19a264ca39894c3459">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a60329c8fa4cd36b8b737107fb99cb780">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00558">558</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">RemoteDirModel::slot_execute_command()</a>及<a class="el" href="sftp-const_8h_source.html#l00047">SSH2_FXP_REMOVE</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a71c2800c518f14886f67252a81c5f914"></a><!-- doxytag: member="RemoteView::set_user_home_path" ref="a71c2800c518f14886f67252a81c5f914" args="(QString user_home_path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::set_user_home_path </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>user_home_path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_s_f_t_p_view.html#a9037cab0cec71cdf201ba4ffb1bcb171">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00326">326</a>行定义。</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00307">NullFXP::slot_connect_remote_host_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa9e4344a360b719c1b58d6c518c3df42"></a><!-- doxytag: member="RemoteView::setConnection" ref="aa9e4344a360b719c1b58d6c518c3df42" args="(Connection *conn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::setConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_connection.html">Connection</a> *&nbsp;</td>
+          <td class="paramname"> <em>conn</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#adca3bf71861f76086d865433359516ab">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a04c8a34dc476d4c25320e6b8c20857b2">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00330">330</a>行定义。</p>
+
+<p>参考 <a class="el" href="connection_8h_source.html#l00068">Connection::sess</a>、<a class="el" href="remoteview_8h_source.html#l00073">ssh2_sftp</a>及<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00307">NullFXP::slot_connect_remote_host_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a55e73b56be02741e9e5814e161d7df20"></a><!-- doxytag: member="RemoteView::slot_copy_path" ref="a55e73b56be02741e9e5814e161d7df20" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_copy_path </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a5d32661bbbf69a9a725a7c83ca6c28ed">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a601ec28c3cdbd6e099e06d3833aae130">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00615">615</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>及<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0974b5f2391af5b8f36c5c1ffecfa8db"></a><!-- doxytag: member="RemoteView::slot_copy_url" ref="a0974b5f2391af5b8f36c5c1ffecfa8db" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_copy_url </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a8a2291081accdad663062a2b8a0ddeef">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#abe3755538ec4aa7fbf1a9b9e4c99bebb">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00642">642</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>及<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa43c482f5514d75b640a1a23cc948100"></a><!-- doxytag: member="RemoteView::slot_custom_ui_area" ref="aa43c482f5514d75b640a1a23cc948100" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_custom_ui_area </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#af408830bf1ebc486f415e609c2545406">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ab3c97d01d624060ee5a270e8dea51456">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00359">359</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00307">NullFXP::slot_connect_remote_host_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad982ecf658c7a01e43f2e6ce4eb8cbe8"></a><!-- doxytag: member="RemoteView::slot_dir_file_view_double_clicked" ref="ad982ecf658c7a01e43f2e6ce4eb8cbe8" args="(const QModelIndex &amp;index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_dir_file_view_double_clicked </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aea40c3ab5095e251ccdf833bd7c43de4">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ad6fb1106adfeaa29be78a37bca2e28c0">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00808">808</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2831b7441df1466b387661d9bb639c2e"></a><!-- doxytag: member="RemoteView::slot_dir_tree_customContextMenuRequested" ref="a2831b7441df1466b387661d9bb639c2e" args="(const QPoint &amp;pos)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_dir_tree_customContextMenuRequested </td>
+          <td>(</td>
+          <td class="paramtype">const QPoint &amp;&nbsp;</td>
+          <td class="paramname"> <em>pos</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aa7037e7317f21d79dba5c4e767bfb3c4">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#afc1dbab820b8792b2656d107373d433f">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00242">242</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00077">attr_action</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="remoteview_8h_source.html#l00062">dir_tree_context_menu</a>及<a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad641866918386f1b1dd4a63024a5b415"></a><!-- doxytag: member="RemoteView::slot_dir_tree_item_clicked" ref="ad641866918386f1b1dd4a63024a5b415" args="(const QModelIndex &amp;index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_dir_tree_item_clicked </td>
+          <td>(</td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>index 是proxy的index </p>
+
+<p>被<a class="el" href="class_f_t_p_view.html#a7db830fbcc0fb971fabf8a7725ff1250">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a1fc671293e6d9c58e86bcd9e574e94e3">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00793">793</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00776">RemoteDirModel::slot_remote_dir_node_clicked()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5fc080a8c446170e0f2394011a2ecb74"></a><!-- doxytag: member="RemoteView::slot_disconnect_from_remote_host" ref="a5fc080a8c446170e0f2394011a2ecb74" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_disconnect_from_remote_host </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a42672caedd17e4a5425b2c5d7f00eaf9">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a160fb607de7d767d60444c956698035b">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00235">235</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>及<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af4e908337f5e4791dcd7e9836481fdbb"></a><!-- doxytag: member="RemoteView::slot_drag_ready" ref="af4e908337f5e4791dcd7e9836481fdbb" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_drag_ready </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#ad0935dae3a5adaf26794feeb9d9dfbdd">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a06a1176f8a464200d3b5be9311b91cb8">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00835">835</a>行定义。</p>
+
+<p>参考 <a class="el" href="remotedirmodel_8cpp_source.html#l00420">RemoteDirModel::columnCount()</a>、<a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="connection_8h_source.html#l00061">Connection::password</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="connection_8h_source.html#l00065">Connection::pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00051">TaskPackage::pubkey</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="taskpackage_8cpp_source.html#l00105">TaskPackage::toRawData()</a>、<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adeaa75ce87ac530779a8d16a646cacb0"></a><!-- doxytag: member="RemoteView::slot_drop_mime_data" ref="adeaa75ce87ac530779a8d16a646cacb0" args="(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &amp;parent)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RemoteView::slot_drop_mime_data </td>
+          <td>(</td>
+          <td class="paramtype">const QMimeData *&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::DropAction&nbsp;</td>
+          <td class="paramname"> <em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QModelIndex &amp;&nbsp;</td>
+          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a51ce57c1de051d96898f4ce42e6d0a05">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a5d1532cf7f7f3dce2ecc6814b0d5d170">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00884">884</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="taskpackage_8cpp_source.html#l00136">TaskPackage::fromRawData()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="taskpackage_8cpp_source.html#l00044">TaskPackage::isValid()</a>、<a class="el" href="connection_8h_source.html#l00061">Connection::password</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="connection_8h_source.html#l00065">Connection::pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00051">TaskPackage::pubkey</a>、<a class="el" href="remoteview_8cpp_source.html#l00672">slot_new_upload_requested()</a>、<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac57ccbb7ce797f98608c76a514deabbd"></a><!-- doxytag: member="RemoteView::slot_enter_remote_dir_retrive_loop" ref="ac57ccbb7ce797f98608c76a514deabbd" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_enter_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a94e66779ba27cabaefe40797dc95b6ed">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a516c4de399377cc5bd87ec7e83a3815f">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00379">379</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>、<a class="el" href="remoteview_8h_source.html#l00068">orginal_cursor</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00889">RemoteDirModel::set_keep_alive()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4aa6abe29e4eafc240d3d8087c21b75"></a><!-- doxytag: member="RemoteView::slot_leave_remote_dir_retrive_loop" ref="aa4aa6abe29e4eafc240d3d8087c21b75" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_leave_remote_dir_retrive_loop </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aa2f2212cff9bcc41f3ee50971027eeea">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a05493536babd123b0efc38f10782a8e4">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00388">388</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00068">orginal_cursor</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00889">RemoteDirModel::set_keep_alive()</a>及<a class="el" href="remoteview_8h_source.html#l00056">table_row_height</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a366dc5db83d672df34f95ff3c391b535"></a><!-- doxytag: member="RemoteView::slot_mkdir" ref="a366dc5db83d672df34f95ff3c391b535" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_mkdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#ad085deada66ad053b3373e2ea7d134e5">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a5dd922829dff8c39a1ba9766595c1b71">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00475">475</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00934">RemoteDirModel::isDir()</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">RemoteDirModel::slot_execute_command()</a>及<a class="el" href="sftp-const_8h_source.html#l00048">SSH2_FXP_MKDIR</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a947de58691db95dcbd217843324ed821"></a><!-- doxytag: member="RemoteView::slot_new_download_requested" ref="a947de58691db95dcbd217843324ed821" args="(TaskPackage remote_pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_new_download_requested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>remote_pkg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#af2bc09b172cc381b83f972140190af4a">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ab085a955493087e8808a43527092310d">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00732">732</a>行定义。</p>
+
+<p>参考 <a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="localview_8cpp_source.html#l00228">LocalView::get_selected_directory()</a>、<a class="el" href="remoteview_8h_source.html#l00050">local_view</a>、<a class="el" href="taskpackage_8h_source.html#l00016">PROTO_FILE</a>及<a class="el" href="remoteview_8cpp_source.html#l00718">slot_new_download_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aed9deb726d5b4206b9ce2d9ef44557f6"></a><!-- doxytag: member="RemoteView::slot_new_download_requested" ref="aed9deb726d5b4206b9ce2d9ef44557f6" args="(TaskPackage local_pkg, TaskPackage remote_pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_new_download_requested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>local_pkg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>remote_pkg</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#ac8605d0b7a6415db9252d7e142116bf9">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a234ad036763e230a142e0c36d9d97f87">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00718">718</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00051">main_mdi_area</a>、<a class="el" href="remoteview_8h_source.html#l00070">own_progress_dialog</a>、<a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>、<a class="el" href="progressdialog_8cpp_source.html#l00169">ProgressDialog::show()</a>及<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00732">slot_new_download_requested()</a>及<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b777c0c581e7181ef783de3d14f4973"></a><!-- doxytag: member="RemoteView::slot_new_transfer" ref="a9b777c0c581e7181ef783de3d14f4973" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_new_transfer </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aa1602139f0d932809e9b6bdf5c1f00a5">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#aae78ffc1fc89fd92025f55bc91c88c23">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00251">251</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="rfsdirnode_8cpp_source.html#l00133">NetDirNode::fileName()</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="remoteview_8h_source.html#l00069">in_remote_dir_retrive_loop</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="connection_8h_source.html#l00061">Connection::password</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="connection_8h_source.html#l00065">Connection::pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00051">TaskPackage::pubkey</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remoteview_8cpp_source.html#l00718">slot_new_download_requested()</a>、<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4bc3ff882c51f1aadcea44a668c21371"></a><!-- doxytag: member="RemoteView::slot_new_upload_requested" ref="a4bc3ff882c51f1aadcea44a668c21371" args="(TaskPackage local_pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_new_upload_requested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>local_pkg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a2f7d30c3b55d81484377eceff2b0e6ef">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a70979ee3690bead6a13a3f77b5462b8c">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00687">687</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="taskpackage_8h_source.html#l00046">TaskPackage::files</a>、<a class="el" href="remoteview_8cpp_source.html#l00298">get_selected_directory()</a>、<a class="el" href="taskpackage_8h_source.html#l00047">TaskPackage::host</a>、<a class="el" href="connection_8h_source.html#l00063">Connection::hostName</a>、<a class="el" href="connection_8h_source.html#l00061">Connection::password</a>、<a class="el" href="taskpackage_8h_source.html#l00050">TaskPackage::password</a>、<a class="el" href="connection_8h_source.html#l00064">Connection::port</a>、<a class="el" href="taskpackage_8h_source.html#l00048">TaskPackage::port</a>、<a class="el" href="taskpackage_8h_source.html#l00017">PROTO_SFTP</a>、<a class="el" href="connection_8h_source.html#l00065">Connection::pubkey</a>、<a class="el" href="taskpackage_8h_source.html#l00051">TaskPackage::pubkey</a>、<a class="el" href="remoteview_8cpp_source.html#l00672">slot_new_upload_requested()</a>、<a class="el" href="connection_8h_source.html#l00060">Connection::userName</a>及<a class="el" href="taskpackage_8h_source.html#l00049">TaskPackage::username</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb84dccf955d781a205ae434a5a2faaa"></a><!-- doxytag: member="RemoteView::slot_new_upload_requested" ref="aeb84dccf955d781a205ae434a5a2faaa" args="(TaskPackage local_pkg, TaskPackage remote_pkg)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_new_upload_requested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>local_pkg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_task_package.html">TaskPackage</a>&nbsp;</td>
+          <td class="paramname"> <em>remote_pkg</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a8c61f524660662fdd7355e3fa0809712">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#af7be1bc8042fb88aea6fa44ab7241002">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00672">672</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00051">main_mdi_area</a>、<a class="el" href="remoteview_8h_source.html#l00070">own_progress_dialog</a>、<a class="el" href="progressdialog_8cpp_source.html#l00081">ProgressDialog::set_transfer_info()</a>、<a class="el" href="progressdialog_8cpp_source.html#l00169">ProgressDialog::show()</a>及<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00884">slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">slot_new_upload_requested()</a>及<a class="el" href="nullfxp_8cpp_source.html#l00378">NullFXP::slot_new_upload_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a261ece88fac108612b509cb72b5ec363"></a><!-- doxytag: member="RemoteView::slot_refresh_directory_tree" ref="a261ece88fac108612b509cb72b5ec363" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_refresh_directory_tree </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a4cf11e4fb559d0a4f26f2703213b0dca">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a20a3b37d11e110a4bf90f1bff6fd0a33">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00436">436</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8cpp_source.html#l00401">update_layout()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a62ce02741a1c566640656b120355d007"></a><!-- doxytag: member="RemoteView::slot_rename" ref="a62ce02741a1c566640656b120355d007" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_rename </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a83e05548ca9049f8276b2dc13b599811">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ab46579ef7b05d092118f1dc331aa9203">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00594">594</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad10e2911235dfd513557919d779b8bf9"></a><!-- doxytag: member="RemoteView::slot_rmdir" ref="ad10e2911235dfd513557919d779b8bf9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_rmdir </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aa6dae804cc197bbee6b183610443d89f">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a73b242c3cd5bd9bc521b9920afc114e7">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00523">523</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8h_source.html#l00072">NetDirNode::_fileName</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="remotedirmodel_8cpp_source.html#l00796">RemoteDirModel::slot_execute_command()</a>及<a class="el" href="sftp-const_8h_source.html#l00049">SSH2_FXP_RMDIR</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a515998adee32eb9a6917fd1504ba955b"></a><!-- doxytag: member="RemoteView::slot_show_fxp_command_log" ref="a515998adee32eb9a6917fd1504ba955b" args="(bool show)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_show_fxp_command_log </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>show</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#afab5dd36e20301d10dbd9869eb91e516">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#ad09954440913fe750c0df304b1dd387d">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00158">158</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00395">NullFXP::slot_show_fxp_command_log()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af4ffeebbbc808b5b431ada0a45565bc8"></a><!-- doxytag: member="RemoteView::slot_show_hidden" ref="af4ffeebbbc808b5b431ada0a45565bc8" args="(bool show)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_show_hidden </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>show</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#aa8662df7a6302b0c95c055840a2a2a49">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a8ce815a592a020044d0d28971b69d320">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00942">942</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aba0e94db8fe2c476f1a480bde5834fa1"></a><!-- doxytag: member="RemoteView::slot_show_properties" ref="aba0e94db8fe2c476f1a480bde5834fa1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_show_properties </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a72a9a285661fd157d90595d93c45c3e2">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a81323dac2cd1e67966ae3d41e8a17bb2">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00441">441</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00074">conn</a>、<a class="el" href="remoteview_8h_source.html#l00060">curr_item_view</a>、<a class="el" href="remoteview_8h_source.html#l00058">m_tableProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="fileproperties_8cpp_source.html#l00225">FileProperties::set_file_info_model_list()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00216">FileProperties::set_ssh2_sftp()</a>、<a class="el" href="fileproperties_8cpp_source.html#l00220">FileProperties::setConnection()</a>及<a class="el" href="remoteview_8h_source.html#l00073">ssh2_sftp</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2e2d9de324269c0e5f95b09a8f1b70b8"></a><!-- doxytag: member="RemoteView::slot_transfer_finished" ref="a2e2d9de324269c0e5f95b09a8f1b70b8" args="(int status, QString errorString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::slot_transfer_finished </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>status</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>errorString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a6eb331c891d6cc2f5c6b4267231239c3">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a46b4607842c63bce38aa007a536a9341">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00754">754</a>行定义。</p>
+
+<p>参考 <a class="el" href="remoteview_8h_source.html#l00050">local_view</a>、<a class="el" href="remoteview_8h_source.html#l00051">main_mdi_area</a>、<a class="el" href="remoteview_8h_source.html#l00070">own_progress_dialog</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">update_layout()</a>及<a class="el" href="localview_8cpp_source.html#l00273">LocalView::update_layout()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00718">slot_new_download_requested()</a>及<a class="el" href="remoteview_8cpp_source.html#l00672">slot_new_upload_requested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0baad28ab0522c1bd40f6c6fcfa64c66"></a><!-- doxytag: member="RemoteView::update_layout" ref="a0baad28ab0522c1bd40f6c6fcfa64c66" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RemoteView::update_layout </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>被<a class="el" href="class_f_t_p_view.html#a876f1cbf1e4db02270b9ca32e6de730e">FTPView</a>及<a class="el" href="class_s_f_t_p_view.html#a10aa450accbecf7edcade08f8fb5341d">SFTPView</a>重载。</p>
+
+<p>在文件<a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a>第<a class="el" href="remoteview_8cpp_source.html#l00401">401</a>行定义。</p>
+
+<p>参考 <a class="el" href="rfsdirnode_8cpp_source.html#l00133">NetDirNode::fileName()</a>、<a class="el" href="rfsdirnode_8h_source.html#l00071">NetDirNode::fullPath</a>、<a class="el" href="remoteview_8h_source.html#l00057">m_treeProxyModel</a>、<a class="el" href="rfsdirnode_8h_source.html#l00044">NetDirNode::prevFlag</a>、<a class="el" href="remoteview_8h_source.html#l00055">remote_dir_model</a>、<a class="el" href="remoteview_8h_source.html#l00054">remoteview</a>、<a class="el" href="rfsdirnode_8h_source.html#l00045">NetDirNode::retrFlag</a>及<a class="el" href="remotedirmodel_8cpp_source.html#l00776">RemoteDirModel::slot_remote_dir_node_clicked()</a>.</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00436">slot_refresh_directory_tree()</a>及<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ac7f67ce10357ace0370fca1ed2e5e43b"></a><!-- doxytag: member="RemoteView::attr_action" ref="ac7f67ce10357ace0370fca1ed2e5e43b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QAction* <a class="el" href="class_remote_view.html#ac7f67ce10357ace0370fca1ed2e5e43b">RemoteView::attr_action</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00077">77</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>、<a class="el" href="sftpview_8cpp_source.html#l00141">SFTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00242">slot_dir_tree_customContextMenuRequested()</a>及<a class="el" href="ftpview_8cpp_source.html#l00181">FTPView::slot_dir_tree_customContextMenuRequested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a166e9b1baa62172239c0bd6c0909040c"></a><!-- doxytag: member="RemoteView::conn" ref="a166e9b1baa62172239c0bd6c0909040c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_connection.html">Connection</a>* <a class="el" href="class_remote_view.html#a166e9b1baa62172239c0bd6c0909040c">RemoteView::conn</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00074">74</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00947">SFTPView::encryption_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00958">encryption_focus_label_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00974">SFTPView::host_info_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00991">host_info_focus_label_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00854">SFTPView::slot_drop_mime_data()</a>、<a class="el" href="remoteview_8cpp_source.html#l00884">slot_drop_mime_data()</a>、<a class="el" href="ftpview_8cpp_source.html#l00865">FTPView::slot_drop_mime_data()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00629">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00687">slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00678">FTPView::slot_new_upload_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>、<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>及<a class="el" href="ftpview_8cpp_source.html#l00412">FTPView::slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a01bce4697eab96bc6a3869cc2a78dd82"></a><!-- doxytag: member="RemoteView::curr_item_view" ref="a01bce4697eab96bc6a3869cc2a78dd82" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QAbstractItemView* <a class="el" href="class_remote_view.html#a01bce4697eab96bc6a3869cc2a78dd82">RemoteView::curr_item_view</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00060">60</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">slot_copy_path()</a>、<a class="el" href="ftpview_8cpp_source.html#l00606">FTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00141">SFTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00242">slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00181">FTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00532">SFTPView::slot_rename()</a>、<a class="el" href="remoteview_8cpp_source.html#l00594">slot_rename()</a>、<a class="el" href="ftpview_8cpp_source.html#l00585">FTPView::slot_rename()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>、<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>及<a class="el" href="ftpview_8cpp_source.html#l00412">FTPView::slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61cc7e0e83dd8d60ebf3f8c3f0bb4df5"></a><!-- doxytag: member="RemoteView::dir_tree_context_menu" ref="a61cc7e0e83dd8d60ebf3f8c3f0bb4df5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMenu* <a class="el" href="class_remote_view.html#a61cc7e0e83dd8d60ebf3f8c3f0bb4df5">RemoteView::dir_tree_context_menu</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00062">62</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00086">init_popup_context_menu()</a>、<a class="el" href="ftpview_8cpp_source.html#l00045">FTPView::init_popup_context_menu()</a>、<a class="el" href="sftpview_8cpp_source.html#l00141">SFTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00242">slot_dir_tree_customContextMenuRequested()</a>及<a class="el" href="ftpview_8cpp_source.html#l00181">FTPView::slot_dir_tree_customContextMenuRequested()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad7c7b45986d103caccf8be3df7e77eff"></a><!-- doxytag: member="RemoteView::enc_label" ref="ad7c7b45986d103caccf8be3df7e77eff" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_encryption_detail_focus_label.html">EncryptionDetailFocusLabel</a>* <a class="el" href="class_remote_view.html#ad7c7b45986d103caccf8be3df7e77eff">RemoteView::enc_label</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00078">78</a>行定义。</p>
+
+<p>参考自 <a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac224cfddfc4e0643c40db8264685ac90"></a><!-- doxytag: member="RemoteView::entriesLabel" ref="ac224cfddfc4e0643c40db8264685ac90" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QLabel* <a class="el" href="class_remote_view.html#ac224cfddfc4e0643c40db8264685ac90">RemoteView::entriesLabel</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00079">79</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00920">SFTPView::onUpdateEntriesStatus()</a>及<a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a107a1f5ae5c31d4ac2ed93d2c017f554"></a><!-- doxytag: member="RemoteView::in_remote_dir_retrive_loop" ref="a107a1f5ae5c31d4ac2ed93d2c017f554" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_remote_view.html#a107a1f5ae5c31d4ac2ed93d2c017f554">RemoteView::in_remote_dir_retrive_loop</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00069">69</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00236">SFTPView::closeEvent()</a>、<a class="el" href="remoteview_8cpp_source.html#l00338">closeEvent()</a>、<a class="el" href="ftpview_8cpp_source.html#l00310">FTPView::closeEvent()</a>、<a class="el" href="sftpview_8h_source.html#l00044">SFTPView::is_in_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8h_source.html#l00044">is_in_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>、<a class="el" href="sftpview_8cpp_source.html#l00141">SFTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00242">slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00181">FTPView::slot_dir_tree_customContextMenuRequested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00278">SFTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00351">FTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00287">SFTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>及<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a57d2d78e0efa629df93f9abd5872bb1c"></a><!-- doxytag: member="RemoteView::local_view" ref="a57d2d78e0efa629df93f9abd5872bb1c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_local_view.html">LocalView</a>* <a class="el" href="class_remote_view.html#a57d2d78e0efa629df93f9abd5872bb1c">RemoteView::local_view</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00050">50</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00668">SFTPView::slot_new_download_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00732">slot_new_download_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00720">FTPView::slot_new_download_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00690">SFTPView::slot_transfer_finished()</a>、<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>及<a class="el" href="ftpview_8cpp_source.html#l00742">FTPView::slot_transfer_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7adcc7be4370f3ccbf541ce8d5726964"></a><!-- doxytag: member="RemoteView::m_tableProxyModel" ref="a7adcc7be4370f3ccbf541ce8d5726964" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSortFilterProxyModel* <a class="el" href="class_remote_view.html#a7adcc7be4370f3ccbf541ce8d5726964">RemoteView::m_tableProxyModel</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00058">58</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00920">SFTPView::onUpdateEntriesStatus()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">slot_copy_path()</a>、<a class="el" href="ftpview_8cpp_source.html#l00606">FTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00906">SFTPView::slot_show_hidden()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>、<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>及<a class="el" href="ftpview_8cpp_source.html#l00412">FTPView::slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5776a88a60f30f26d855e7689435abde"></a><!-- doxytag: member="RemoteView::m_treeProxyModel" ref="a5776a88a60f30f26d855e7689435abde" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSortFilterProxyModel* <a class="el" href="class_remote_view.html#a5776a88a60f30f26d855e7689435abde">RemoteView::m_treeProxyModel</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00057">57</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00193">SFTPView::get_selected_directory()</a>、<a class="el" href="remoteview_8cpp_source.html#l00298">get_selected_directory()</a>、<a class="el" href="ftpview_8cpp_source.html#l00232">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">slot_copy_path()</a>、<a class="el" href="ftpview_8cpp_source.html#l00606">FTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00793">slot_dir_tree_item_clicked()</a>、<a class="el" href="ftpview_8cpp_source.html#l00781">FTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00906">SFTPView::slot_show_hidden()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>、<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>、<a class="el" href="ftpview_8cpp_source.html#l00412">FTPView::slot_show_properties()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">update_layout()</a>及<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af2ba1ed132173c8dab5a772ef93b7bbf"></a><!-- doxytag: member="RemoteView::main_mdi_area" ref="af2ba1ed132173c8dab5a772ef93b7bbf" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMdiArea* <a class="el" href="class_remote_view.html#af2ba1ed132173c8dab5a772ef93b7bbf">RemoteView::main_mdi_area</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00051">51</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00654">SFTPView::slot_new_download_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00718">slot_new_download_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00706">FTPView::slot_new_download_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00614">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00672">slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00663">FTPView::slot_new_upload_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00690">SFTPView::slot_transfer_finished()</a>、<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>及<a class="el" href="ftpview_8cpp_source.html#l00742">FTPView::slot_transfer_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a40b7ebf1ce8085c007f5350df3d3db65"></a><!-- doxytag: member="RemoteView::orginal_cursor" ref="a40b7ebf1ce8085c007f5350df3d3db65" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QCursor <a class="el" href="class_remote_view.html#a40b7ebf1ce8085c007f5350df3d3db65">RemoteView::orginal_cursor</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00068">68</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00278">SFTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00351">FTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00287">SFTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>及<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aefc2e4b8855619ae8eff94a80d76ae0f"></a><!-- doxytag: member="RemoteView::own_progress_dialog" ref="aefc2e4b8855619ae8eff94a80d76ae0f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_progress_dialog.html">ProgressDialog</a>* <a class="el" href="class_remote_view.html#aefc2e4b8855619ae8eff94a80d76ae0f">RemoteView::own_progress_dialog</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00070">70</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00236">SFTPView::closeEvent()</a>、<a class="el" href="remoteview_8cpp_source.html#l00338">closeEvent()</a>、<a class="el" href="ftpview_8cpp_source.html#l00310">FTPView::closeEvent()</a>、<a class="el" href="sftpview_8cpp_source.html#l00654">SFTPView::slot_new_download_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00718">slot_new_download_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00706">FTPView::slot_new_download_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00614">SFTPView::slot_new_upload_requested()</a>、<a class="el" href="remoteview_8cpp_source.html#l00672">slot_new_upload_requested()</a>、<a class="el" href="ftpview_8cpp_source.html#l00663">FTPView::slot_new_upload_requested()</a>、<a class="el" href="sftpview_8cpp_source.html#l00690">SFTPView::slot_transfer_finished()</a>、<a class="el" href="remoteview_8cpp_source.html#l00754">slot_transfer_finished()</a>及<a class="el" href="ftpview_8cpp_source.html#l00742">FTPView::slot_transfer_finished()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a724a2d8de149be039d32bede4d138825"></a><!-- doxytag: member="RemoteView::remote_dir_model" ref="a724a2d8de149be039d32bede4d138825" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_remote_dir_model.html">RemoteDirModel</a>* <a class="el" href="class_remote_view.html#a724a2d8de149be039d32bede4d138825">RemoteView::remote_dir_model</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00055">55</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00193">SFTPView::get_selected_directory()</a>、<a class="el" href="ftpview_8cpp_source.html#l00232">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00793">slot_dir_tree_item_clicked()</a>、<a class="el" href="ftpview_8cpp_source.html#l00781">FTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00130">SFTPView::slot_disconnect_from_remote_host()</a>、<a class="el" href="remoteview_8cpp_source.html#l00235">slot_disconnect_from_remote_host()</a>、<a class="el" href="ftpview_8cpp_source.html#l00174">FTPView::slot_disconnect_from_remote_host()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00278">SFTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00351">FTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00287">SFTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">update_layout()</a>、<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>及<a class="el" href="remoteview_8cpp_source.html#l00080">~RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a58f552370132bb72cf992ad791c6f81b"></a><!-- doxytag: member="RemoteView::remoteview" ref="a58f552370132bb72cf992ad791c6f81b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui::remoteview <a class="el" href="class_remote_view.html#a58f552370132bb72cf992ad791c6f81b">RemoteView::remoteview</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00054">54</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00193">SFTPView::get_selected_directory()</a>、<a class="el" href="remoteview_8cpp_source.html#l00298">get_selected_directory()</a>、<a class="el" href="ftpview_8cpp_source.html#l00232">FTPView::get_selected_directory()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00920">SFTPView::onUpdateEntriesStatus()</a>、<a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>、<a class="el" href="sftpview_8cpp_source.html#l00475">SFTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="remoteview_8cpp_source.html#l00558">rm_file_or_directory_recursively()</a>、<a class="el" href="ftpview_8cpp_source.html#l00530">FTPView::rm_file_or_directory_recursively()</a>、<a class="el" href="sftpview_8cpp_source.html#l00553">SFTPView::slot_copy_path()</a>、<a class="el" href="remoteview_8cpp_source.html#l00615">slot_copy_path()</a>、<a class="el" href="ftpview_8cpp_source.html#l00606">FTPView::slot_copy_path()</a>、<a class="el" href="sftpview_8cpp_source.html#l00581">SFTPView::slot_copy_url()</a>、<a class="el" href="remoteview_8cpp_source.html#l00642">slot_copy_url()</a>、<a class="el" href="ftpview_8cpp_source.html#l00633">FTPView::slot_copy_url()</a>、<a class="el" href="sftpview_8cpp_source.html#l00257">SFTPView::slot_custom_ui_area()</a>、<a class="el" href="remoteview_8cpp_source.html#l00359">slot_custom_ui_area()</a>、<a class="el" href="ftpview_8cpp_source.html#l00331">FTPView::slot_custom_ui_area()</a>、<a class="el" href="sftpview_8cpp_source.html#l00776">SFTPView::slot_dir_file_view_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00793">slot_dir_tree_item_clicked()</a>、<a class="el" href="ftpview_8cpp_source.html#l00781">FTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00130">SFTPView::slot_disconnect_from_remote_host()</a>、<a class="el" href="remoteview_8cpp_source.html#l00235">slot_disconnect_from_remote_host()</a>、<a class="el" href="ftpview_8cpp_source.html#l00174">FTPView::slot_disconnect_from_remote_host()</a>、<a class="el" href="sftpview_8cpp_source.html#l00811">SFTPView::slot_drag_ready()</a>、<a class="el" href="remoteview_8cpp_source.html#l00835">slot_drag_ready()</a>、<a class="el" href="ftpview_8cpp_source.html#l00823">FTPView::slot_drag_ready()</a>、<a class="el" href="sftpview_8cpp_source.html#l00278">SFTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00379">slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00351">FTPView::slot_enter_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00287">SFTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>、<a class="el" href="sftpview_8cpp_source.html#l00386">SFTPView::slot_mkdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00475">slot_mkdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00446">FTPView::slot_mkdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00150">SFTPView::slot_new_transfer()</a>、<a class="el" href="remoteview_8cpp_source.html#l00251">slot_new_transfer()</a>、<a class="el" href="ftpview_8cpp_source.html#l00190">FTPView::slot_new_transfer()</a>、<a class="el" href="sftpview_8cpp_source.html#l00930">SFTPView::slot_operation_triggered()</a>、<a class="el" href="sftpview_8cpp_source.html#l00439">SFTPView::slot_rmdir()</a>、<a class="el" href="remoteview_8cpp_source.html#l00523">slot_rmdir()</a>、<a class="el" href="ftpview_8cpp_source.html#l00495">FTPView::slot_rmdir()</a>、<a class="el" href="sftpview_8cpp_source.html#l00048">SFTPView::slot_show_fxp_command_log()</a>、<a class="el" href="remoteview_8cpp_source.html#l00158">slot_show_fxp_command_log()</a>、<a class="el" href="ftpview_8cpp_source.html#l00100">FTPView::slot_show_fxp_command_log()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>、<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>、<a class="el" href="ftpview_8cpp_source.html#l00412">FTPView::slot_show_properties()</a>、<a class="el" href="sftpview_8cpp_source.html#l00301">SFTPView::update_layout()</a>、<a class="el" href="remoteview_8cpp_source.html#l00401">update_layout()</a>、<a class="el" href="ftpview_8cpp_source.html#l00373">FTPView::update_layout()</a>及<a class="el" href="remoteview_8cpp_source.html#l00080">~RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a091d8058960faa5a51d39de37924b09f"></a><!-- doxytag: member="RemoteView::ssh2_sftp" ref="a091d8058960faa5a51d39de37924b09f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LIBSSH2_SFTP* <a class="el" href="class_remote_view.html#a091d8058960faa5a51d39de37924b09f">RemoteView::ssh2_sftp</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00073">73</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00947">SFTPView::encryption_focus_label_double_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00958">encryption_focus_label_double_clicked()</a>、<a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00228">SFTPView::setConnection()</a>、<a class="el" href="remoteview_8cpp_source.html#l00330">setConnection()</a>、<a class="el" href="sftpview_8cpp_source.html#l00350">SFTPView::slot_show_properties()</a>及<a class="el" href="remoteview_8cpp_source.html#l00441">slot_show_properties()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7187e462b5d1bbccc0abe2d733790c19"></a><!-- doxytag: member="RemoteView::status_bar" ref="a7187e462b5d1bbccc0abe2d733790c19" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStatusBar* <a class="el" href="class_remote_view.html#a7187e462b5d1bbccc0abe2d733790c19">RemoteView::status_bar</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00052">52</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="remoteview_8cpp_source.html#l00163">i_init_dir_view()</a>及<a class="el" href="remoteview_8cpp_source.html#l00035">RemoteView()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e725739299fddd31157d3ef339da93e"></a><!-- doxytag: member="RemoteView::table_row_height" ref="a7e725739299fddd31157d3ef339da93e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_remote_view.html#a7e725739299fddd31157d3ef339da93e">RemoteView::table_row_height</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00056">56</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>、<a class="el" href="sftpview_8cpp_source.html#l00729">SFTPView::slot_dir_tree_item_clicked()</a>、<a class="el" href="remoteview_8cpp_source.html#l00388">slot_leave_remote_dir_retrive_loop()</a>及<a class="el" href="ftpview_8cpp_source.html#l00360">FTPView::slot_leave_remote_dir_retrive_loop()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b92800fec364e582c22df549fbcaf20"></a><!-- doxytag: member="RemoteView::user_home_path" ref="a9b92800fec364e582c22df549fbcaf20" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_remote_view.html#a9b92800fec364e582c22df549fbcaf20">RemoteView::user_home_path</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="remoteview_8h_source.html">remoteview.h</a>第<a class="el" href="remoteview_8h_source.html#l00066">66</a>行定义。</p>
+
+<p>参考自 <a class="el" href="sftpview_8cpp_source.html#l00053">SFTPView::i_init_dir_view()</a>及<a class="el" href="ftpview_8cpp_source.html#l00105">FTPView::i_init_dir_view()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="remoteview_8h_source.html">remoteview.h</a></li>
+<li><a class="el" href="remoteview_8cpp_source.html">remoteview.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

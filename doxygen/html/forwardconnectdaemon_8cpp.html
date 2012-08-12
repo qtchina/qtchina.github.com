@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: forwardconnectdaemon.cpp文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>forwardconnectdaemon.cpp文件参考</h1><code>#include &lt;cstdlib&gt;</code><br/>
+<code>#include &lt;cstdio&gt;</code><br/>
+<code>#include &lt;sys/stat.h&gt;</code><br/>
+<code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;cerrno&gt;</code><br/>
+<code>#include &lt;sys/socket.h&gt;</code><br/>
+<code>#include &lt;arpa/inet.h&gt;</code><br/>
+<code>#include &lt;netdb.h&gt;</code><br/>
+<code>#include &lt;netinet/in.h&gt;</code><br/>
+<code>#include &lt;cassert&gt;</code><br/>
+<code>#include &quot;libssh2.h&quot;</code><br/>
+<code>#include &quot;libssh2_sftp.h&quot;</code><br/>
+<code>#include &quot;<a class="el" href="forwardconnectdaemon_8cpp_source.html">forwardconnectdaemon.h</a>&quot;</code><br/>
+<code>#include &lt;QtCore&gt;</code><br/>
+<code>#include &lt;QtGui&gt;</code><br/>
+<code>#include &lt;QWidget&gt;</code><br/>
+<code>#include &quot;ui_forwardconnectdaemon.h&quot;</code><br/>
+<code>#include &quot;ui_forwarddebugwindow.h&quot;</code><br/>
+<code>#include &quot;ui_forwardconnectinfodialog.h&quot;</code><br/>
+
+<p><a href="forwardconnectdaemon_8cpp_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="forwardconnectdaemon_8cpp.html#a4af58d979156f32b46fbd32be6adb567">kbd_callback</a> (const char *name, int name_len, const char *instruction, int instruction_len, int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts, LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses, void **abstract)</td></tr>
+<tr><td colspan="2"><h2>变量</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static QMutex&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="forwardconnectdaemon_8cpp.html#a67755ecf41dbe5b4c488d71c1e606001">ssh2_kbd_cb_mutex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="forwardconnectdaemon_8cpp.html#a4d3aee93e9fec26b09cee0a4946d80be">ssh2_password</a> [60]</td></tr>
+</table>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="a4af58d979156f32b46fbd32be6adb567"></a><!-- doxytag: member="forwardconnectdaemon.cpp::kbd_callback" ref="a4af58d979156f32b46fbd32be6adb567" args="(const char *name, int name_len, const char *instruction, int instruction_len, int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts, LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses, void **abstract)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void kbd_callback </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>name_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>instruction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>instruction_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>num_prompts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const LIBSSH2_USERAUTH_KBDINT_PROMPT *&nbsp;</td>
+          <td class="paramname"> <em>prompts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LIBSSH2_USERAUTH_KBDINT_RESPONSE *&nbsp;</td>
+          <td class="paramname"> <em>responses</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void **&nbsp;</td>
+          <td class="paramname"> <em>abstract</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwardconnectdaemon_8cpp_source.html">forwardconnectdaemon.cpp</a>第<a class="el" href="forwardconnectdaemon_8cpp_source.html#l00041">41</a>行定义。</p>
+
+<p>参考 <a class="el" href="forwardconnectdaemon_8cpp_source.html#l00039">ssh2_password</a>.</p>
+
+</div>
+</div>
+<hr/><h2>变量文档</h2>
+<a class="anchor" id="a67755ecf41dbe5b4c488d71c1e606001"></a><!-- doxytag: member="forwardconnectdaemon.cpp::ssh2_kbd_cb_mutex" ref="a67755ecf41dbe5b4c488d71c1e606001" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMutex <a class="el" href="sshconnection_8cpp.html#a67755ecf41dbe5b4c488d71c1e606001">ssh2_kbd_cb_mutex</a><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwardconnectdaemon_8cpp_source.html">forwardconnectdaemon.cpp</a>第<a class="el" href="forwardconnectdaemon_8cpp_source.html#l00037">37</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a4d3aee93e9fec26b09cee0a4946d80be"></a><!-- doxytag: member="forwardconnectdaemon.cpp::ssh2_password" ref="a4d3aee93e9fec26b09cee0a4946d80be" args="[60]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="sshconnection_8cpp.html#a4d3aee93e9fec26b09cee0a4946d80be">ssh2_password</a>[60]<code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="forwardconnectdaemon_8cpp_source.html">forwardconnectdaemon.cpp</a>第<a class="el" href="forwardconnectdaemon_8cpp_source.html#l00039">39</a>行定义。</p>
+
+<p>参考自 <a class="el" href="forwardconnectdaemon_8cpp_source.html#l00041">kbd_callback()</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

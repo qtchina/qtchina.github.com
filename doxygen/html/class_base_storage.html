@@ -1,0 +1,603 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: BaseStorage类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>BaseStorage类参考</h1><!-- doxytag: class="BaseStorage" -->
+<p><code>#include &lt;<a class="el" href="basestorage_8h_source.html">basestorage.h</a>&gt;</code></p>
+
+<p><a href="class_base_storage-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>信号</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a15d81769926f7ced05d0141c3078e3b0">hostListChanged</a> (QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a682f74f30ffee33e8ceb98d2a41b8b74">hostLIstChanged</a> (QString show_name, QString catPath=QString::null)</td></tr>
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#abc9ca5137e50f35b33b5674ed11c9920">~BaseStorage</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a81b27307035decd2f23b1e78b9ff56ad">addHost</a> (QMap&lt; QString, QString &gt; host, QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a0138683efd43ec527d9514aacc687d9d">removeHost</a> (QString show_name, QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#aca712e402c6e190db29d9c1d468402a7">updateHost</a> (QMap&lt; QString, QString &gt; host, QString newName=QString::null, QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a928a71f2b19c0f79b2d1efb4579f7a68">clearHost</a> (QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#acd94bf7c35aa6484c4a3a618400caf4b">containsHost</a> (QString show_name, QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QMap&lt; QString, <br class="typebreak"/>
+QString &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a2ab08b71e96c7f4679eb6b2971c61ae2">getAllHost</a> (QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">getHost</a> (QString show_name, QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QStringList&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#ac76901f2ab053cf2857bfbeea0209268">getNameList</a> (QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a9f6c1f70457e0b4a31f5af91c1782cee">hostCount</a> (QString catPath=QString::null)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a586a5fc3923adb9b9b26df9b835446e5">getSessionPath</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a52529adb4735cb9b9c6ad1e5657ee902">getConfigPath</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a2fb57a55f5b05bf6d934846362576152">saveOptions</a> (QMap&lt; QString, QMap&lt; QString, QString &gt; &gt; options)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a3dd0a62f060a52b2af9ed91c93ddc919">saveOptions</a> (QString section, QMap&lt; QString, QString &gt; options)</td></tr>
+<tr><td colspan="2"><h2>静态公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_base_storage.html">BaseStorage</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a1f27e298c09b394d68ad136b68dd0782">instance</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#abe60eaee66cef03e952b5d671670f500">BaseStorage</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a342f99e71fabb576232f801164ed6d5a">init</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a></td></tr>
+<tr><td colspan="2"><h2>静态私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_base_storage.html">BaseStorage</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_storage.html#ae2f479980c05cb7c2c3e7fdf057cd755">mInstance</a> = NULL</td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="basestorage_8h_source.html">basestorage.h</a>第<a class="el" href="basestorage_8h_source.html#l00013">13</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="abc9ca5137e50f35b33b5674ed11c9920"></a><!-- doxytag: member="BaseStorage::~BaseStorage" ref="abc9ca5137e50f35b33b5674ed11c9920" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BaseStorage::~BaseStorage </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00028">28</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="abe60eaee66cef03e952b5d671670f500"></a><!-- doxytag: member="BaseStorage::BaseStorage" ref="abe60eaee66cef03e952b5d671670f500" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BaseStorage::BaseStorage </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00023">23</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8cpp_source.html#l00032">init()</a>.</p>
+
+<p>参考自 <a class="el" href="basestorage_8cpp_source.html#l00015">instance()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a81b27307035decd2f23b1e78b9ff56ad"></a><!-- doxytag: member="BaseStorage::addHost" ref="a81b27307035decd2f23b1e78b9ff56ad" args="(QMap&lt; QString, QString &gt; host, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::addHost </td>
+          <td>(</td>
+          <td class="paramtype">QMap&lt; QString, QString &gt;&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00063">63</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00174">NullFXP::connect_to_remote_host()</a>及<a class="el" href="testnullfxp_8cpp_source.html#l00033">TestNullfxp::storageTest()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a928a71f2b19c0f79b2d1efb4579f7a68"></a><!-- doxytag: member="BaseStorage::clearHost" ref="a928a71f2b19c0f79b2d1efb4579f7a68" args="(QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::clearHost </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00167">167</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="acd94bf7c35aa6484c4a3a618400caf4b"></a><!-- doxytag: member="BaseStorage::containsHost" ref="acd94bf7c35aa6484c4a3a618400caf4b" args="(QString show_name, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::containsHost </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>show_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00115">115</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00174">NullFXP::connect_to_remote_host()</a>、<a class="el" href="basestorage_8cpp_source.html#l00142">getHost()</a>及<a class="el" href="testnullfxp_8cpp_source.html#l00033">TestNullfxp::storageTest()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2ab08b71e96c7f4679eb6b2971c61ae2"></a><!-- doxytag: member="BaseStorage::getAllHost" ref="a2ab08b71e96c7f4679eb6b2971c61ae2" args="(QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; QString, QMap&lt; QString, QString &gt; &gt; BaseStorage::getAllHost </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00125">125</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a52529adb4735cb9b9c6ad1e5657ee902"></a><!-- doxytag: member="BaseStorage::getConfigPath" ref="a52529adb4735cb9b9c6ad1e5657ee902" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString BaseStorage::getConfigPath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00058">58</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a760d3524380b7ef982962ffbeaecbe0c"></a><!-- doxytag: member="BaseStorage::getHost" ref="a760d3524380b7ef982962ffbeaecbe0c" args="(QString show_name, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; QString, QString &gt; BaseStorage::getHost </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>show_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00142">142</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8cpp_source.html#l00115">containsHost()</a>及<a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00174">NullFXP::connect_to_remote_host()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00365">SyncTransferThread::connectToRemoteHost()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>、<a class="el" href="sessiondialog_8cpp_source.html#l00130">SessionDialog::slot_conntect_selected_host()</a>、<a class="el" href="sessiondialog_8cpp_source.html#l00179">SessionDialog::slot_edit_selected_host()</a>及<a class="el" href="sessiondialog_8cpp_source.html#l00211">SessionDialog::slot_rename_selected_host()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac76901f2ab053cf2857bfbeea0209268"></a><!-- doxytag: member="BaseStorage::getNameList" ref="ac76901f2ab053cf2857bfbeea0209268" args="(QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList BaseStorage::getNameList </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00132">132</a>行定义。</p>
+
+<p>参考自 <a class="el" href="synchronizeoptiondialog_8cpp_source.html#l00045">SynchronizeOptionDialog::slot_show_session_list()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a586a5fc3923adb9b9b26df9b835446e5"></a><!-- doxytag: member="BaseStorage::getSessionPath" ref="a586a5fc3923adb9b9b26df9b835446e5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString BaseStorage::getSessionPath </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00053">53</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="sessiondialog_8cpp_source.html#l00038">SessionDialog::SessionDialog()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9f6c1f70457e0b4a31f5af91c1782cee"></a><!-- doxytag: member="BaseStorage::hostCount" ref="a9f6c1f70457e0b4a31f5af91c1782cee" args="(QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BaseStorage::hostCount </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00160">160</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00042">NullFXP::NullFXP()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a682f74f30ffee33e8ceb98d2a41b8b74"></a><!-- doxytag: member="BaseStorage::hostLIstChanged" ref="a682f74f30ffee33e8ceb98d2a41b8b74" args="(QString show_name, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseStorage::hostLIstChanged </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>show_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a15d81769926f7ced05d0141c3078e3b0"></a><!-- doxytag: member="BaseStorage::hostListChanged" ref="a15d81769926f7ced05d0141c3078e3b0" args="(QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseStorage::hostListChanged </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a342f99e71fabb576232f801164ed6d5a"></a><!-- doxytag: member="BaseStorage::init" ref="a342f99e71fabb576232f801164ed6d5a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::init </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00032">32</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="basestorage_8cpp_source.html#l00023">BaseStorage()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f27e298c09b394d68ad136b68dd0782"></a><!-- doxytag: member="BaseStorage::instance" ref="a1f27e298c09b394d68ad136b68dd0782" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_base_storage.html">BaseStorage</a> * BaseStorage::instance </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00015">15</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8cpp_source.html#l00023">BaseStorage()</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00174">NullFXP::connect_to_remote_host()</a>、<a class="el" href="synctransferthread_8cpp_source.html#l00365">SyncTransferThread::connectToRemoteHost()</a>、<a class="el" href="synchronizewindow_8cpp_source.html#l00041">SyncWalker::connectToRemoteHost()</a>、<a class="el" href="nullfxp_8cpp_source.html#l00042">NullFXP::NullFXP()</a>、<a class="el" href="sessiondialog_8cpp_source.html#l00038">SessionDialog::SessionDialog()</a>、<a class="el" href="synchronizeoptiondialog_8cpp_source.html#l00045">SynchronizeOptionDialog::slot_show_session_list()</a>及<a class="el" href="testnullfxp_8cpp_source.html#l00033">TestNullfxp::storageTest()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0138683efd43ec527d9514aacc687d9d"></a><!-- doxytag: member="BaseStorage::removeHost" ref="a0138683efd43ec527d9514aacc687d9d" args="(QString show_name, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::removeHost </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>show_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00079">79</a>行定义。</p>
+
+<p>参考 <a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="sessiondialog_8cpp_source.html#l00257">SessionDialog::slot_remove_selected_host()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3dd0a62f060a52b2af9ed91c93ddc919"></a><!-- doxytag: member="BaseStorage::saveOptions" ref="a3dd0a62f060a52b2af9ed91c93ddc919" args="(QString section, QMap&lt; QString, QString &gt; options)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::saveOptions </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>section</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QMap&lt; QString, QString &gt;&nbsp;</td>
+          <td class="paramname"> <em>options</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00182">182</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a2fb57a55f5b05bf6d934846362576152"></a><!-- doxytag: member="BaseStorage::saveOptions" ref="a2fb57a55f5b05bf6d934846362576152" args="(QMap&lt; QString, QMap&lt; QString, QString &gt; &gt; options)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::saveOptions </td>
+          <td>(</td>
+          <td class="paramtype">QMap&lt; QString, QMap&lt; QString, QString &gt; &gt;&nbsp;</td>
+          <td class="paramname"> <em>options</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00176">176</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="aca712e402c6e190db29d9c1d468402a7"></a><!-- doxytag: member="BaseStorage::updateHost" ref="aca712e402c6e190db29d9c1d468402a7" args="(QMap&lt; QString, QString &gt; host, QString newName=QString::null, QString catPath=QString::null)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BaseStorage::updateHost </td>
+          <td>(</td>
+          <td class="paramtype">QMap&lt; QString, QString &gt;&nbsp;</td>
+          <td class="paramname"> <em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>newName</em> = <code>QString::null</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>catPath</em> = <code>QString::null</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a>第<a class="el" href="basestorage_8cpp_source.html#l00089">89</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="basestorage_8h_source.html#l00050">storagePath</a>.</p>
+
+<p>参考自 <a class="el" href="nullfxp_8cpp_source.html#l00174">NullFXP::connect_to_remote_host()</a>、<a class="el" href="sessiondialog_8cpp_source.html#l00179">SessionDialog::slot_edit_selected_host()</a>、<a class="el" href="sessiondialog_8cpp_source.html#l00211">SessionDialog::slot_rename_selected_host()</a>及<a class="el" href="testnullfxp_8cpp_source.html#l00033">TestNullfxp::storageTest()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="ae2f479980c05cb7c2c3e7fdf057cd755"></a><!-- doxytag: member="BaseStorage::mInstance" ref="ae2f479980c05cb7c2c3e7fdf057cd755" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_base_storage.html">BaseStorage</a> * <a class="el" href="class_base_storage.html#ae2f479980c05cb7c2c3e7fdf057cd755">BaseStorage::mInstance</a> = NULL<code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8h_source.html">basestorage.h</a>第<a class="el" href="basestorage_8h_source.html#l00047">47</a>行定义。</p>
+
+</div>
+</div>
+<a class="anchor" id="a1dce5595492543db99ace1196be56c8f"></a><!-- doxytag: member="BaseStorage::storagePath" ref="a1dce5595492543db99ace1196be56c8f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">BaseStorage::storagePath</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="basestorage_8h_source.html">basestorage.h</a>第<a class="el" href="basestorage_8h_source.html#l00050">50</a>行定义。</p>
+
+<p>参考自 <a class="el" href="basestorage_8cpp_source.html#l00063">addHost()</a>、<a class="el" href="basestorage_8cpp_source.html#l00115">containsHost()</a>、<a class="el" href="basestorage_8cpp_source.html#l00058">getConfigPath()</a>、<a class="el" href="basestorage_8cpp_source.html#l00142">getHost()</a>、<a class="el" href="basestorage_8cpp_source.html#l00053">getSessionPath()</a>、<a class="el" href="basestorage_8cpp_source.html#l00160">hostCount()</a>、<a class="el" href="basestorage_8cpp_source.html#l00032">init()</a>、<a class="el" href="basestorage_8cpp_source.html#l00079">removeHost()</a>及<a class="el" href="basestorage_8cpp_source.html#l00089">updateHost()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="basestorage_8h_source.html">basestorage.h</a></li>
+<li><a class="el" href="basestorage_8cpp_source.html">basestorage.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

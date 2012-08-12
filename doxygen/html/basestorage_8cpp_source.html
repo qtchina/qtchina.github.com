@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: basestorage.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>basestorage.cpp</h1><a href="basestorage_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// basestorage.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-04-04 14:39:04 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: basestorage.cpp 579 2010-01-09 04:09:25Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;<a class="code" href="basestorage_8h.html">basestorage.h</a>&quot;</span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 <a class="code" href="class_base_storage.html">BaseStorage</a> * <a class="code" href="class_base_storage.html#ae2f479980c05cb7c2c3e7fdf057cd755">BaseStorage::mInstance</a> = NULL;
+<a name="l00015"></a><a class="code" href="class_base_storage.html#a1f27e298c09b394d68ad136b68dd0782">00015</a> <a class="code" href="class_base_storage.html">BaseStorage</a> * <a class="code" href="class_base_storage.html#a1f27e298c09b394d68ad136b68dd0782">BaseStorage::instance</a>()
+<a name="l00016"></a>00016 {
+<a name="l00017"></a>00017     <span class="keywordflow">if</span>(BaseStorage::mInstance == NULL) {
+<a name="l00018"></a>00018         BaseStorage::mInstance = <span class="keyword">new</span> <a class="code" href="class_base_storage.html#abe60eaee66cef03e952b5d671670f500">BaseStorage</a>();
+<a name="l00019"></a>00019     }
+<a name="l00020"></a>00020     <span class="keywordflow">return</span> BaseStorage::mInstance;
+<a name="l00021"></a>00021 }
+<a name="l00022"></a>00022 
+<a name="l00023"></a><a class="code" href="class_base_storage.html#abe60eaee66cef03e952b5d671670f500">00023</a> <a class="code" href="class_base_storage.html#abe60eaee66cef03e952b5d671670f500">BaseStorage::BaseStorage</a>()
+<a name="l00024"></a>00024 {
+<a name="l00025"></a>00025     this-&gt;<a class="code" href="class_base_storage.html#a342f99e71fabb576232f801164ed6d5a">init</a>();
+<a name="l00026"></a>00026 }
+<a name="l00027"></a>00027 
+<a name="l00028"></a><a class="code" href="class_base_storage.html#abc9ca5137e50f35b33b5674ed11c9920">00028</a> <a class="code" href="class_base_storage.html#abc9ca5137e50f35b33b5674ed11c9920">BaseStorage::~BaseStorage</a>()
+<a name="l00029"></a>00029 {
+<a name="l00030"></a>00030 }
+<a name="l00031"></a>00031 
+<a name="l00032"></a><a class="code" href="class_base_storage.html#a342f99e71fabb576232f801164ed6d5a">00032</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a342f99e71fabb576232f801164ed6d5a">BaseStorage::init</a>()
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034 <span class="preprocessor">#ifdef Q_OS_MAC</span>
+<a name="l00035"></a>00035 <span class="preprocessor"></span>    this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> = QDir::homePath()+QString(<span class="stringliteral">&quot;/.nullfxp/sessions&quot;</span>);
+<a name="l00036"></a>00036 <span class="preprocessor">#else</span>
+<a name="l00037"></a>00037 <span class="preprocessor"></span><span class="preprocessor"># ifdef Q_OS_WIN32</span>
+<a name="l00038"></a>00038 <span class="preprocessor"></span>    this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> = QCoreApplication::applicationDirPath() + QString(<span class="stringliteral">&quot;/.nullfxp/sessions&quot;</span>);
+<a name="l00039"></a>00039 <span class="preprocessor">#else</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>    <span class="comment">// qDebug()&lt;&lt;&quot;else????&quot;;</span>
+<a name="l00041"></a>00041     this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> = QDir::homePath()+QString(<span class="stringliteral">&quot;/.nullfxp/sessions&quot;</span>);
+<a name="l00042"></a>00042 <span class="preprocessor">#endif</span>
+<a name="l00043"></a>00043 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span>
+<a name="l00045"></a>00045     <span class="keywordflow">if</span> (!QDir().exists(this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a>)) {
+<a name="l00046"></a>00046         <span class="keywordflow">if</span> (!QDir().mkpath(this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a>)) {
+<a name="l00047"></a>00047             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00048"></a>00048         }
+<a name="l00049"></a>00049     }    
+<a name="l00050"></a>00050     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00051"></a>00051 }
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="class_base_storage.html#a586a5fc3923adb9b9b26df9b835446e5">00053</a> QString <a class="code" href="class_base_storage.html#a586a5fc3923adb9b9b26df9b835446e5">BaseStorage::getSessionPath</a>()
+<a name="l00054"></a>00054 {
+<a name="l00055"></a>00055     <span class="keywordflow">return</span> this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a>;
+<a name="l00056"></a>00056 }
+<a name="l00057"></a>00057 
+<a name="l00058"></a><a class="code" href="class_base_storage.html#a52529adb4735cb9b9c6ad1e5657ee902">00058</a> QString <a class="code" href="class_base_storage.html#a52529adb4735cb9b9c6ad1e5657ee902">BaseStorage::getConfigPath</a>()
+<a name="l00059"></a>00059 {
+<a name="l00060"></a>00060     <span class="keywordflow">return</span> QDir(this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a>+<span class="stringliteral">&quot;/..&quot;</span>).absolutePath();
+<a name="l00061"></a>00061 }
+<a name="l00062"></a>00062 
+<a name="l00063"></a><a class="code" href="class_base_storage.html#a81b27307035decd2f23b1e78b9ff56ad">00063</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a81b27307035decd2f23b1e78b9ff56ad">BaseStorage::addHost</a>(QMap&lt;QString, QString&gt; host, QString catPath)
+<a name="l00064"></a>00064 {
+<a name="l00065"></a>00065     <span class="keywordflow">if</span> (catPath != QString::null &amp;&amp; !QDir().mkpath(catPath)) {
+<a name="l00066"></a>00066         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00067"></a>00067     }
+<a name="l00068"></a>00068     QString sessName = host[<span class="stringliteral">&quot;show_name&quot;</span>];
+<a name="l00069"></a>00069     QString sessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + sessName;
+<a name="l00070"></a>00070     QSettings settings(sessFile, QSettings::IniFormat);
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     QMap&lt;QString, QString&gt;::iterator it;
+<a name="l00073"></a>00073     <span class="keywordflow">for</span> (it = host.begin(); it != host.end(); it++) {
+<a name="l00074"></a>00074         settings.setValue(it.key(), it.value());
+<a name="l00075"></a>00075     }
+<a name="l00076"></a>00076     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00077"></a>00077 }
+<a name="l00078"></a>00078 
+<a name="l00079"></a><a class="code" href="class_base_storage.html#a0138683efd43ec527d9514aacc687d9d">00079</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a0138683efd43ec527d9514aacc687d9d">BaseStorage::removeHost</a>(QString show_name, QString catPath)
+<a name="l00080"></a>00080 {
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082     QString sessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + show_name;
+<a name="l00083"></a>00083     <span class="keywordflow">if</span> (QFile(sessFile).exists()) {
+<a name="l00084"></a>00084         <span class="keywordflow">return</span> QFile(sessFile).remove();
+<a name="l00085"></a>00085     } 
+<a name="l00086"></a>00086     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00087"></a>00087 }
+<a name="l00088"></a>00088 
+<a name="l00089"></a><a class="code" href="class_base_storage.html#aca712e402c6e190db29d9c1d468402a7">00089</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#aca712e402c6e190db29d9c1d468402a7">BaseStorage::updateHost</a>(QMap&lt;QString,QString&gt; host, QString newName, QString catPath)
+<a name="l00090"></a>00090 {
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092     QString sessName = host[<span class="stringliteral">&quot;show_name&quot;</span>];
+<a name="l00093"></a>00093     <span class="keywordflow">if</span> (newName == QString::null) {
+<a name="l00094"></a>00094         newName = sessName;
+<a name="l00095"></a>00095     }
+<a name="l00096"></a>00096     QString sessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + sessName;
+<a name="l00097"></a>00097     QString newSessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + newName;
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099     <span class="keywordflow">if</span> (sessName != newName) {
+<a name="l00100"></a>00100         <span class="keywordflow">if</span> (!QFile().rename(sessFile, newSessFile)) {
+<a name="l00101"></a>00101             <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;rename error&quot;</span>;
+<a name="l00102"></a>00102             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00103"></a>00103         }
+<a name="l00104"></a>00104     }
+<a name="l00105"></a>00105     QSettings settings(newSessFile, QSettings::IniFormat);
+<a name="l00106"></a>00106     QMap&lt;QString, QString&gt;::iterator it;
+<a name="l00107"></a>00107     <span class="keywordflow">for</span> (it = host.begin(); it != host.end(); it++) {
+<a name="l00108"></a>00108         settings.setValue(it.key(), it.value());
+<a name="l00109"></a>00109     }
+<a name="l00110"></a>00110     settings.setValue(<span class="stringliteral">&quot;show_name&quot;</span>, newName);
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00113"></a>00113 }
+<a name="l00114"></a>00114 
+<a name="l00115"></a><a class="code" href="class_base_storage.html#acd94bf7c35aa6484c4a3a618400caf4b">00115</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#acd94bf7c35aa6484c4a3a618400caf4b">BaseStorage::containsHost</a>(QString show_name, QString catPath)
+<a name="l00116"></a>00116 {
+<a name="l00117"></a>00117     QString sessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + show_name;
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119     <span class="keywordflow">if</span> (QFile(sessFile).exists()) {
+<a name="l00120"></a>00120         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00121"></a>00121     }
+<a name="l00122"></a>00122     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00123"></a>00123 }
+<a name="l00124"></a>00124 
+<a name="l00125"></a><a class="code" href="class_base_storage.html#a2ab08b71e96c7f4679eb6b2971c61ae2">00125</a> QMap&lt;QString, QMap&lt;QString,QString&gt; &gt; <a class="code" href="class_base_storage.html#a2ab08b71e96c7f4679eb6b2971c61ae2">BaseStorage::getAllHost</a>(QString catPath)
+<a name="l00126"></a>00126 {
+<a name="l00127"></a>00127     Q_UNUSED(catPath);
+<a name="l00128"></a>00128     QMap&lt;QString, QMap&lt;QString,QString&gt; &gt; hosts;
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130     <span class="keywordflow">return</span> hosts;
+<a name="l00131"></a>00131 }
+<a name="l00132"></a><a class="code" href="class_base_storage.html#ac76901f2ab053cf2857bfbeea0209268">00132</a> QStringList <a class="code" href="class_base_storage.html#ac76901f2ab053cf2857bfbeea0209268">BaseStorage::getNameList</a>(QString catPath)
+<a name="l00133"></a>00133 {
+<a name="l00134"></a>00134     Q_UNUSED(catPath);
+<a name="l00135"></a>00135     QStringList nlist;
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137     <span class="comment">// nlist = this-&gt;hosts.keys();</span>
+<a name="l00138"></a>00138 
+<a name="l00139"></a>00139     <span class="keywordflow">return</span> nlist;
+<a name="l00140"></a>00140 }
+<a name="l00141"></a>00141 
+<a name="l00142"></a><a class="code" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">00142</a> QMap&lt;QString,QString&gt; <a class="code" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">BaseStorage::getHost</a>(QString show_name, QString catPath)
+<a name="l00143"></a>00143 {
+<a name="l00144"></a>00144     QMap&lt;QString,QString&gt; host;
+<a name="l00145"></a>00145 
+<a name="l00146"></a>00146     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_base_storage.html#acd94bf7c35aa6484c4a3a618400caf4b">containsHost</a>(show_name, catPath)) {
+<a name="l00147"></a>00147         QString sessFile = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath) + <span class="stringliteral">&quot;/&quot;</span> + show_name;
+<a name="l00148"></a>00148         QSettings settings(sessFile, QSettings::IniFormat);
+<a name="l00149"></a>00149         QStringList keys = settings.allKeys();
+<a name="l00150"></a>00150         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; keys.count(); i ++) {
+<a name="l00151"></a>00151             host[keys.at(i)] = settings.value(keys.at(i)).toString();
+<a name="l00152"></a>00152         }
+<a name="l00153"></a>00153         <span class="keywordflow">return</span> host;
+<a name="l00154"></a>00154     }
+<a name="l00155"></a>00155     <span class="keywordflow">else</span> {
+<a name="l00156"></a>00156         <span class="keywordflow">return</span> host;
+<a name="l00157"></a>00157     }
+<a name="l00158"></a>00158 }
+<a name="l00159"></a>00159 
+<a name="l00160"></a><a class="code" href="class_base_storage.html#a9f6c1f70457e0b4a31f5af91c1782cee">00160</a> <span class="keywordtype">int</span> <a class="code" href="class_base_storage.html#a9f6c1f70457e0b4a31f5af91c1782cee">BaseStorage::hostCount</a>(QString catPath)
+<a name="l00161"></a>00161 {
+<a name="l00162"></a>00162     QString sessPath = (catPath == QString::null ? this-&gt;<a class="code" href="class_base_storage.html#a1dce5595492543db99ace1196be56c8f">storagePath</a> : catPath);
+<a name="l00163"></a>00163     
+<a name="l00164"></a>00164     <span class="keywordflow">return</span> QDir(sessPath).entryList().count() - 2;
+<a name="l00165"></a>00165 }
+<a name="l00166"></a>00166 
+<a name="l00167"></a><a class="code" href="class_base_storage.html#a928a71f2b19c0f79b2d1efb4579f7a68">00167</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a928a71f2b19c0f79b2d1efb4579f7a68">BaseStorage::clearHost</a>(QString catPath)
+<a name="l00168"></a>00168 {
+<a name="l00169"></a>00169     Q_UNUSED(catPath);
+<a name="l00170"></a>00170 
+<a name="l00171"></a>00171     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00172"></a>00172 }
+<a name="l00173"></a>00173 
+<a name="l00174"></a>00174 
+<a name="l00175"></a>00175 <span class="comment">// global options method</span>
+<a name="l00176"></a><a class="code" href="class_base_storage.html#a2fb57a55f5b05bf6d934846362576152">00176</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a2fb57a55f5b05bf6d934846362576152">BaseStorage::saveOptions</a>(QMap&lt;QString, QMap&lt;QString, QString&gt; &gt; options)
+<a name="l00177"></a>00177 {
+<a name="l00178"></a>00178     Q_UNUSED(options);
+<a name="l00179"></a>00179     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00180"></a>00180 }
+<a name="l00181"></a>00181 
+<a name="l00182"></a><a class="code" href="class_base_storage.html#a3dd0a62f060a52b2af9ed91c93ddc919">00182</a> <span class="keywordtype">bool</span> <a class="code" href="class_base_storage.html#a2fb57a55f5b05bf6d934846362576152">BaseStorage::saveOptions</a>(QString section, QMap&lt;QString, QString&gt; options)
+<a name="l00183"></a>00183 {
+<a name="l00184"></a>00184     Q_UNUSED(section);
+<a name="l00185"></a>00185     Q_UNUSED(options);
+<a name="l00186"></a>00186 
+<a name="l00187"></a>00187     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00188"></a>00188 }
+<a name="l00189"></a>00189 
+<a name="l00190"></a>00190 <span class="comment">// </span>
+<a name="l00191"></a>00191 <span class="comment">// basestorage.cpp ends here</span>
+<a name="l00192"></a>00192 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

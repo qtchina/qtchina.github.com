@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: gccfeatures.cpp文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>gccfeatures.cpp文件参考</h1><code>#include &lt;stdio.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="gccfeatures_8cpp_source.html">gccfeatures.h</a>&quot;</code><br/>
+
+<p><a href="gccfeatures_8cpp_source.html">浏览该文件的源代码。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>宏定义</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="gccfeatures_8cpp.html#a9bc5de8b5a7981703725e416cb8444de">maxint_sd_express</a>(a, b)</td></tr>
+<tr><td colspan="2"><h2>函数</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="gccfeatures_8cpp.html#a3cd65b0077007b79700d4738aef92c1e">gcc_feature_statements_and_declarations_in_expressions</a> ()</td></tr>
+</table>
+<hr/><h2>宏定义文档</h2>
+<a class="anchor" id="a9bc5de8b5a7981703725e416cb8444de"></a><!-- doxytag: member="gccfeatures.cpp::maxint_sd_express" ref="a9bc5de8b5a7981703725e416cb8444de" args="(a, b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define maxint_sd_express</td>
+          <td>(</td>
+          <td class="paramtype">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">b&nbsp;</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<b>值:</b><div class="fragment"><pre class="fragment">({        \
+            __typeof__(a) __return_value;  \
+            if (a &gt; b) __return_value = a; \
+            else __return_value = b;       \
+            __return_value;                \
+        })
+</pre></div>
+<p>参考自 <a class="el" href="gccfeatures_8cpp_source.html#l00015">gcc_feature_statements_and_declarations_in_expressions()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>函数文档</h2>
+<a class="anchor" id="a3cd65b0077007b79700d4738aef92c1e"></a><!-- doxytag: member="gccfeatures.cpp::gcc_feature_statements_and_declarations_in_expressions" ref="a3cd65b0077007b79700d4738aef92c1e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gcc_feature_statements_and_declarations_in_expressions </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="gccfeatures_8cpp_source.html">gccfeatures.cpp</a>第<a class="el" href="gccfeatures_8cpp_source.html#l00015">15</a>行定义。</p>
+
+<p>参考 <a class="el" href="gccfeatures_8cpp.html#a9bc5de8b5a7981703725e416cb8444de">maxint_sd_express</a>.</p>
+
+</div>
+</div>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

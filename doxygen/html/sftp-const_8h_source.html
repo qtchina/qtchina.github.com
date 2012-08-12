@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sftp-const.h源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sftp-const.h</h1><a href="sftp-const_8h.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* $OpenBSD: sftp.h,v 1.5 2006/03/25 22:22:43 djm Exp $ */</span>
+<a name="l00002"></a>00002 
+<a name="l00003"></a>00003 <span class="comment">/*</span>
+<a name="l00004"></a>00004 <span class="comment"> * Copyright (c) 2001 Markus Friedl.  All rights reserved.</span>
+<a name="l00005"></a>00005 <span class="comment"> *</span>
+<a name="l00006"></a>00006 <span class="comment"> * Redistribution and use in source and binary forms, with or without</span>
+<a name="l00007"></a>00007 <span class="comment"> * modification, are permitted provided that the following conditions</span>
+<a name="l00008"></a>00008 <span class="comment"> * are met:</span>
+<a name="l00009"></a>00009 <span class="comment"> * 1. Redistributions of source code must retain the above copyright</span>
+<a name="l00010"></a>00010 <span class="comment"> *    notice, this list of conditions and the following disclaimer.</span>
+<a name="l00011"></a>00011 <span class="comment"> * 2. Redistributions in binary form must reproduce the above copyright</span>
+<a name="l00012"></a>00012 <span class="comment"> *    notice, this list of conditions and the following disclaimer in the</span>
+<a name="l00013"></a>00013 <span class="comment"> *    documentation and/or other materials provided with the distribution.</span>
+<a name="l00014"></a>00014 <span class="comment"> *</span>
+<a name="l00015"></a>00015 <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&#39;&#39; AND ANY EXPRESS OR</span>
+<a name="l00016"></a>00016 <span class="comment"> * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES</span>
+<a name="l00017"></a>00017 <span class="comment"> * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.</span>
+<a name="l00018"></a>00018 <span class="comment"> * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,</span>
+<a name="l00019"></a>00019 <span class="comment"> * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT</span>
+<a name="l00020"></a>00020 <span class="comment"> * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<a name="l00021"></a>00021 <span class="comment"> * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<a name="l00022"></a>00022 <span class="comment"> * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<a name="l00023"></a>00023 <span class="comment"> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</span>
+<a name="l00024"></a>00024 <span class="comment"> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<a name="l00025"></a>00025 <span class="comment"> */</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="comment">/*</span>
+<a name="l00028"></a>00028 <span class="comment"> * draft-ietf-secsh-filexfer-01.txt</span>
+<a name="l00029"></a>00029 <span class="comment"> */</span>
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="comment">/* version */</span>
+<a name="l00032"></a><a class="code" href="sftp-const_8h.html#a6c38d3ecd1b343e0d0af6d06144b7ca1">00032</a> <span class="preprocessor">#define SSH2_FILEXFER_VERSION       3</span>
+<a name="l00033"></a>00033 <span class="preprocessor"></span>
+<a name="l00034"></a>00034 <span class="comment">/* client to server */</span>
+<a name="l00035"></a><a class="code" href="sftp-const_8h.html#ad56559e5b7b81f7b0b8f73759dd4668e">00035</a> <span class="preprocessor">#define SSH2_FXP_INIT           1</span>
+<a name="l00036"></a><a class="code" href="sftp-const_8h.html#a163a6ea158b79a0b062099d5d1318844">00036</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_OPEN           3</span>
+<a name="l00037"></a><a class="code" href="sftp-const_8h.html#a903fa24ef816c7a4e2f7fab118180850">00037</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_CLOSE          4</span>
+<a name="l00038"></a><a class="code" href="sftp-const_8h.html#a561fd06fadf90f3f891f8ecad3a44650">00038</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_READ           5</span>
+<a name="l00039"></a><a class="code" href="sftp-const_8h.html#a54357f1961a38ed0e0c969e3e13d6cc1">00039</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_WRITE          6</span>
+<a name="l00040"></a><a class="code" href="sftp-const_8h.html#af74bb62c876a797ed39bc0835f92fc73">00040</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_LSTAT          7</span>
+<a name="l00041"></a><a class="code" href="sftp-const_8h.html#a80f7f1436a52223d93ddfa06f00afa83">00041</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_STAT_VERSION_0     7</span>
+<a name="l00042"></a><a class="code" href="sftp-const_8h.html#ad8917e289f75355c3ba5b4c5a29e5744">00042</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_FSTAT          8</span>
+<a name="l00043"></a><a class="code" href="sftp-const_8h.html#aacce4abb98d6c639dbe8d274619d2b69">00043</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_SETSTAT        9</span>
+<a name="l00044"></a><a class="code" href="sftp-const_8h.html#afe58a420ac3f8eb8b712d20b2da2a901">00044</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_FSETSTAT       10</span>
+<a name="l00045"></a><a class="code" href="sftp-const_8h.html#a46f2e95e28f00b91038e18ab9245b5b5">00045</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_OPENDIR        11</span>
+<a name="l00046"></a><a class="code" href="sftp-const_8h.html#a953a9ba77aac4d2ad754d0587b9a6b63">00046</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_READDIR        12</span>
+<a name="l00047"></a><a class="code" href="sftp-const_8h.html#a8c52e060a80a0900f29012048062c954">00047</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_REMOVE         13</span>
+<a name="l00048"></a><a class="code" href="sftp-const_8h.html#a6257da98122a32fd8e15877cbf63aecd">00048</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_MKDIR          14</span>
+<a name="l00049"></a><a class="code" href="sftp-const_8h.html#a0a27724313f2dab3cd6e2801282a35bd">00049</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_RMDIR          15</span>
+<a name="l00050"></a><a class="code" href="sftp-const_8h.html#a00b40338343f1a0ad6314c12e3407ced">00050</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_REALPATH       16</span>
+<a name="l00051"></a><a class="code" href="sftp-const_8h.html#aef5cb1b9e0186153fd086cd385406a5f">00051</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_STAT           17</span>
+<a name="l00052"></a><a class="code" href="sftp-const_8h.html#a4125a298c39ea4aeb90e4778192e8e80">00052</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_RENAME         18</span>
+<a name="l00053"></a><a class="code" href="sftp-const_8h.html#af85d9a1cbe0570f0a13b768fd27a2c3b">00053</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_READLINK       19</span>
+<a name="l00054"></a><a class="code" href="sftp-const_8h.html#a79f0f73534d21b28719f7eb051a6e736">00054</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_SYMLINK        20</span>
+<a name="l00055"></a>00055 <span class="preprocessor"></span>
+<a name="l00056"></a>00056 <span class="comment">/* server to client */</span>
+<a name="l00057"></a><a class="code" href="sftp-const_8h.html#ae663c6ee24f6f410647bd8771bb23bc6">00057</a> <span class="preprocessor">#define SSH2_FXP_VERSION        2</span>
+<a name="l00058"></a><a class="code" href="sftp-const_8h.html#a52435b4666b1c114a04543629ef36b51">00058</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_STATUS         101</span>
+<a name="l00059"></a><a class="code" href="sftp-const_8h.html#a37495694ffb39cf5e02fd6a8d7b0fb93">00059</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_HANDLE         102</span>
+<a name="l00060"></a><a class="code" href="sftp-const_8h.html#a64323395f500c20f8cfe16a880a12877">00060</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_DATA           103</span>
+<a name="l00061"></a><a class="code" href="sftp-const_8h.html#a02594184014bcdcdcfe2fd989febe706">00061</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_NAME           104</span>
+<a name="l00062"></a><a class="code" href="sftp-const_8h.html#a59ab4b91836e5191b848f4bcb5b15153">00062</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_ATTRS          105</span>
+<a name="l00063"></a>00063 <span class="preprocessor"></span>
+<a name="l00064"></a><a class="code" href="sftp-const_8h.html#a96ac801a5641bd1b5feb84a0153f9309">00064</a> <span class="preprocessor">#define SSH2_FXP_EXTENDED       200</span>
+<a name="l00065"></a><a class="code" href="sftp-const_8h.html#ad3cedc25fbbf09352aa100107f1c5014">00065</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXP_EXTENDED_REPLY     201</span>
+<a name="l00066"></a>00066 <span class="preprocessor"></span>
+<a name="l00067"></a>00067 <span class="comment">/* attributes */</span>
+<a name="l00068"></a><a class="code" href="sftp-const_8h.html#a4513791e294712679a30cbd6538bae14">00068</a> <span class="preprocessor">#define SSH2_FILEXFER_ATTR_SIZE     0x00000001</span>
+<a name="l00069"></a><a class="code" href="sftp-const_8h.html#a65109ac2ecdcc691db25b1d0522a4bc3">00069</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FILEXFER_ATTR_UIDGID   0x00000002</span>
+<a name="l00070"></a><a class="code" href="sftp-const_8h.html#a5684dbb0373e3f76e45a1fd67f8985d9">00070</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FILEXFER_ATTR_PERMISSIONS  0x00000004</span>
+<a name="l00071"></a><a class="code" href="sftp-const_8h.html#ad5d8927dd3b58b020e8cad7a81dcc940">00071</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FILEXFER_ATTR_ACMODTIME    0x00000008</span>
+<a name="l00072"></a><a class="code" href="sftp-const_8h.html#a0808d2d256ba7d10c1df290942a5ad26">00072</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FILEXFER_ATTR_EXTENDED 0x80000000</span>
+<a name="l00073"></a>00073 <span class="preprocessor"></span>
+<a name="l00074"></a>00074 <span class="comment">/* portable open modes */</span>
+<a name="l00075"></a><a class="code" href="sftp-const_8h.html#a073fb222ca5de32a1fbff3ef54873f4f">00075</a> <span class="preprocessor">#define SSH2_FXF_READ           0x00000001</span>
+<a name="l00076"></a><a class="code" href="sftp-const_8h.html#ad9f000261a5ec2e00faabeb38f760e8f">00076</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXF_WRITE          0x00000002</span>
+<a name="l00077"></a><a class="code" href="sftp-const_8h.html#a36a292fe1acd2eda017a667345638713">00077</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXF_APPEND         0x00000004</span>
+<a name="l00078"></a><a class="code" href="sftp-const_8h.html#a1e788c1e09799f56b6a7c438ca8aa51b">00078</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXF_CREAT          0x00000008</span>
+<a name="l00079"></a><a class="code" href="sftp-const_8h.html#a57516eb8595ceee42317ce9eec593359">00079</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXF_TRUNC          0x00000010</span>
+<a name="l00080"></a><a class="code" href="sftp-const_8h.html#ab27d98fb6f1bf5c0651f5cc82755aada">00080</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FXF_EXCL           0x00000020</span>
+<a name="l00081"></a>00081 <span class="preprocessor"></span>
+<a name="l00082"></a>00082 <span class="comment">/* status messages */</span>
+<a name="l00083"></a><a class="code" href="sftp-const_8h.html#a9482f053f086f83ac08b58d6a2efee6a">00083</a> <span class="preprocessor">#define SSH2_FX_OK          0</span>
+<a name="l00084"></a><a class="code" href="sftp-const_8h.html#a8bbe18ab4371b6b407645baecb3589f7">00084</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_EOF         1</span>
+<a name="l00085"></a><a class="code" href="sftp-const_8h.html#a1748a2eda141d7968518497e6beec6e3">00085</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_NO_SUCH_FILE        2</span>
+<a name="l00086"></a><a class="code" href="sftp-const_8h.html#ab85b0fc71f40587ba5b50aa9b2469679">00086</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_PERMISSION_DENIED   3</span>
+<a name="l00087"></a><a class="code" href="sftp-const_8h.html#a70207ce9b771cd791a26a142bb736374">00087</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_FAILURE         4</span>
+<a name="l00088"></a><a class="code" href="sftp-const_8h.html#af9e711ced8180f84d5e7afa7e7bca618">00088</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_BAD_MESSAGE     5</span>
+<a name="l00089"></a><a class="code" href="sftp-const_8h.html#a7b1ee305cc6971042fa61f38ea2edc0b">00089</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_NO_CONNECTION       6</span>
+<a name="l00090"></a><a class="code" href="sftp-const_8h.html#a3fa2a37b5de8d5226c1b142f9bfb49ea">00090</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_CONNECTION_LOST     7</span>
+<a name="l00091"></a><a class="code" href="sftp-const_8h.html#aa5ae48e8e7f80b7db69dcdb4d0ffdeb6">00091</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_OP_UNSUPPORTED      8</span>
+<a name="l00092"></a><a class="code" href="sftp-const_8h.html#a7e33ac43eae7bfd059728b4a176a31e0">00092</a> <span class="preprocessor"></span><span class="preprocessor">#define SSH2_FX_MAX         8</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

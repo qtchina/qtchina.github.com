@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: UpdateDialog类参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>组合类型列表</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>组合类型成员</span></a></li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h1>UpdateDialog类参考</h1><!-- doxytag: class="UpdateDialog" -->
+<p><code>#include &lt;<a class="el" href="updatedialog_8h_source.html">updatedialog.h</a>&gt;</code></p>
+
+<p><a href="class_update_dialog-members.html">所有成员的列表。</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><h2>公有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#ae1c456e35a8f36650742a2bfcb7fa9a6">UpdateDialog</a> (QWidget *parent=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#adb09ffd13f9830477c580e5248a38f8d">~UpdateDialog</a> ()</td></tr>
+<tr><td colspan="2"><h2>私有槽</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#ae9d69ecf396d40d90a1e0569a40c2290">slotStartCheck</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a9e7a5185e76d2c0ffb22d10369821bae">slotCancelCheck</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a626c346fbb845508c1579cce398c21bd">slotDataReadProgress</a> (int done, int total)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a22a125b33fce45cacceb47bb1d38e429">slotDone</a> (bool error)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a379e4e37e2f60acafdb379236f9499e5">slotReadyRead</a> (const QHttpResponseHeader &amp;resp)</td></tr>
+<tr><td colspan="2"><h2>私有成员</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a5d3035a7c5029e7d1f7e2c0f30ef174f">hasUpdate</a> (QString lastestVersion)</td></tr>
+<tr><td colspan="2"><h2>私有属性</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Ui_UpdateDialog&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#aef86be6d57b3ffe190b978a94732a73e">ui_win</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a0ed752f02b68ec5c9bf12516fba4bcbf">inChecking</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QHttp *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_update_dialog.html#a0a263fc695896ba4117bafd97748b4b9">http</a></td></tr>
+</table>
+<hr/><a name="_details"></a><h2>详细描述</h2>
+
+<p>在文件<a class="el" href="updatedialog_8h_source.html">updatedialog.h</a>第<a class="el" href="updatedialog_8h_source.html#l00017">17</a>行定义。</p>
+<hr/><h2>构造及析构函数文档</h2>
+<a class="anchor" id="ae1c456e35a8f36650742a2bfcb7fa9a6"></a><!-- doxytag: member="UpdateDialog::UpdateDialog" ref="ae1c456e35a8f36650742a2bfcb7fa9a6" args="(QWidget *parent=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">UpdateDialog::UpdateDialog </td>
+          <td>(</td>
+          <td class="paramtype">QWidget *&nbsp;</td>
+          <td class="paramname"> <em>parent</em> = <code>0</code></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00014">14</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8h_source.html#l00038">http</a>、<a class="el" href="updatedialog_8h_source.html#l00037">inChecking</a>、<a class="el" href="updatedialog_8cpp_source.html#l00072">slotCancelCheck()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>及<a class="el" href="updatedialog_8h_source.html#l00036">ui_win</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adb09ffd13f9830477c580e5248a38f8d"></a><!-- doxytag: member="UpdateDialog::~UpdateDialog" ref="adb09ffd13f9830477c580e5248a38f8d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">UpdateDialog::~UpdateDialog </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00033">33</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8h_source.html#l00038">http</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员函数文档</h2>
+<a class="anchor" id="a5d3035a7c5029e7d1f7e2c0f30ef174f"></a><!-- doxytag: member="UpdateDialog::hasUpdate" ref="a5d3035a7c5029e7d1f7e2c0f30ef174f" args="(QString lastestVersion)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool UpdateDialog::hasUpdate </td>
+          <td>(</td>
+          <td class="paramtype">QString&nbsp;</td>
+          <td class="paramname"> <em>lastestVersion</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00120">120</a>行定义。</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00099">slotReadyRead()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9e7a5185e76d2c0ffb22d10369821bae"></a><!-- doxytag: member="UpdateDialog::slotCancelCheck" ref="a9e7a5185e76d2c0ffb22d10369821bae" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateDialog::slotCancelCheck </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00072">72</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8h_source.html#l00038">http</a>.</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00014">UpdateDialog()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a626c346fbb845508c1579cce398c21bd"></a><!-- doxytag: member="UpdateDialog::slotDataReadProgress" ref="a626c346fbb845508c1579cce398c21bd" args="(int done, int total)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateDialog::slotDataReadProgress </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>done</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>total</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00080">80</a>行定义。</p>
+
+<p>参考 <a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="updatedialog_8h_source.html#l00036">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22a125b33fce45cacceb47bb1d38e429"></a><!-- doxytag: member="UpdateDialog::slotDone" ref="a22a125b33fce45cacceb47bb1d38e429" args="(bool error)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateDialog::slotDone </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>error</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00090">90</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8h_source.html#l00038">http</a>、<a class="el" href="updatedialog_8h_source.html#l00037">inChecking</a>及<a class="el" href="utils_8h_source.html#l00122">q_debug</a>.</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a379e4e37e2f60acafdb379236f9499e5"></a><!-- doxytag: member="UpdateDialog::slotReadyRead" ref="a379e4e37e2f60acafdb379236f9499e5" args="(const QHttpResponseHeader &amp;resp)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateDialog::slotReadyRead </td>
+          <td>(</td>
+          <td class="paramtype">const QHttpResponseHeader &amp;&nbsp;</td>
+          <td class="paramname"> <em>resp</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00099">99</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8cpp_source.html#l00120">hasUpdate()</a>、<a class="el" href="updatedialog_8h_source.html#l00038">http</a>、<a class="el" href="utils_8h_source.html#l00122">q_debug</a>及<a class="el" href="updatedialog_8h_source.html#l00036">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae9d69ecf396d40d90a1e0569a40c2290"></a><!-- doxytag: member="UpdateDialog::slotStartCheck" ref="ae9d69ecf396d40d90a1e0569a40c2290" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UpdateDialog::slotStartCheck </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private, slot]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a>第<a class="el" href="updatedialog_8cpp_source.html#l00041">41</a>行定义。</p>
+
+<p>参考 <a class="el" href="updatedialog_8h_source.html#l00038">http</a>、<a class="el" href="updatedialog_8h_source.html#l00037">inChecking</a>、<a class="el" href="updatedialog_8cpp_source.html#l00080">slotDataReadProgress()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00090">slotDone()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00099">slotReadyRead()</a>及<a class="el" href="updatedialog_8h_source.html#l00036">ui_win</a>.</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00014">UpdateDialog()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>成员数据文档</h2>
+<a class="anchor" id="a0a263fc695896ba4117bafd97748b4b9"></a><!-- doxytag: member="UpdateDialog::http" ref="a0a263fc695896ba4117bafd97748b4b9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHttp* <a class="el" href="class_update_dialog.html#a0a263fc695896ba4117bafd97748b4b9">UpdateDialog::http</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8h_source.html">updatedialog.h</a>第<a class="el" href="updatedialog_8h_source.html#l00038">38</a>行定义。</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00072">slotCancelCheck()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00090">slotDone()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00099">slotReadyRead()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00014">UpdateDialog()</a>及<a class="el" href="updatedialog_8cpp_source.html#l00033">~UpdateDialog()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0ed752f02b68ec5c9bf12516fba4bcbf"></a><!-- doxytag: member="UpdateDialog::inChecking" ref="a0ed752f02b68ec5c9bf12516fba4bcbf" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_update_dialog.html#a0ed752f02b68ec5c9bf12516fba4bcbf">UpdateDialog::inChecking</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8h_source.html">updatedialog.h</a>第<a class="el" href="updatedialog_8h_source.html#l00037">37</a>行定义。</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00090">slotDone()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>及<a class="el" href="updatedialog_8cpp_source.html#l00014">UpdateDialog()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aef86be6d57b3ffe190b978a94732a73e"></a><!-- doxytag: member="UpdateDialog::ui_win" ref="aef86be6d57b3ffe190b978a94732a73e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ui_UpdateDialog <a class="el" href="class_update_dialog.html#aef86be6d57b3ffe190b978a94732a73e">UpdateDialog::ui_win</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>在文件<a class="el" href="updatedialog_8h_source.html">updatedialog.h</a>第<a class="el" href="updatedialog_8h_source.html#l00036">36</a>行定义。</p>
+
+<p>参考自 <a class="el" href="updatedialog_8cpp_source.html#l00080">slotDataReadProgress()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00099">slotReadyRead()</a>、<a class="el" href="updatedialog_8cpp_source.html#l00041">slotStartCheck()</a>及<a class="el" href="updatedialog_8cpp_source.html#l00014">UpdateDialog()</a>.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成：<ul>
+<li><a class="el" href="updatedialog_8h_source.html">updatedialog.h</a></li>
+<li><a class="el" href="updatedialog_8cpp_source.html">updatedialog.cpp</a></li>
+</ul>
+</div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

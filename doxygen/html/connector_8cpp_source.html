@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: connector.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>connector.cpp</h1><a href="connector_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// connector.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2009-09-06 12:53:42 +0800</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: connector.cpp 530 2009-10-06 03:30:19Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;assert.h&gt;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;<a class="code" href="connector_8h.html">connector.h</a>&quot;</span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="sshconnection_8h.html">sshconnection.h</a>&quot;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="ftpconnection_8h.html">ftpconnection.h</a>&quot;</span>
+<a name="l00016"></a>00016 
+<a name="l00017"></a><a class="code" href="class_connector.html#a8432eadba1a2c462ee0a023daccc7414">00017</a> <a class="code" href="class_connector.html#a8432eadba1a2c462ee0a023daccc7414">Connector::Connector</a>(QObject *parent)
+<a name="l00018"></a>00018     : QThread(parent)
+<a name="l00019"></a>00019 {
+<a name="l00020"></a>00020     this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> = NULL;
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022     this-&gt;<a class="code" href="class_connector.html#a57e7fddb632cef54709d30690b5220b2">connect_status</a> = <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a91b4f84e687f7d6e0db3b64221b9e3f9">Connection::CONN_OK</a>;
+<a name="l00023"></a>00023     this-&gt;<a class="code" href="class_connector.html#a9c4ad5c5e703a81b6b147f44f5d614b8">user_canceled</a> = <span class="keyword">false</span>;
+<a name="l00025"></a>00025     QObject::connect(<span class="keyword">this</span>, SIGNAL(finished()), <span class="keyword">this</span>, SLOT(<a class="code" href="class_connector.html#afe2cdd75b99a8e66e8f474decdba2e4a">slot_finished</a>()));
+<a name="l00026"></a>00026 }
+<a name="l00027"></a>00027 
+<a name="l00028"></a><a class="code" href="class_connector.html#a0f084edc18ed6e3a25314689d5bf9244">00028</a> <a class="code" href="class_connector.html#a0f084edc18ed6e3a25314689d5bf9244">Connector::~Connector</a>()
+<a name="l00029"></a>00029 {
+<a name="l00030"></a>00030 }
+<a name="l00031"></a><a class="code" href="class_connector.html#a461fab31bba5ac25a16cd552096b33f0">00031</a> <span class="keywordtype">void</span> <a class="code" href="class_connector.html#a461fab31bba5ac25a16cd552096b33f0">Connector::setHostInfo</a>(QMap&lt;QString, QString&gt; host)
+<a name="l00032"></a>00032 {
+<a name="l00033"></a>00033     QString protocol = host[<span class="stringliteral">&quot;protocol&quot;</span>];
+<a name="l00034"></a>00034     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> == NULL) {
+<a name="l00035"></a>00035         <span class="keywordflow">if</span> (protocol == <span class="stringliteral">&quot;FTPS&quot;</span>) {
+<a name="l00036"></a>00036             <span class="comment">// not impled</span>
+<a name="l00037"></a>00037         } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (protocol == <span class="stringliteral">&quot;FTP&quot;</span>) {
+<a name="l00038"></a>00038             this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> = <span class="keyword">new</span> <a class="code" href="class_f_t_p_connection.html">FTPConnection</a>();
+<a name="l00039"></a>00039         } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (protocol == <span class="stringliteral">&quot;SFTP&quot;</span>) {
+<a name="l00040"></a>00040             this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> = <span class="keyword">new</span> <a class="code" href="class_s_s_h_connection.html">SSHConnection</a>();
+<a name="l00041"></a>00041         } <span class="keywordflow">else</span> {
+<a name="l00042"></a>00042         }
+<a name="l00043"></a>00043         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> != NULL) {
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045             QObject::connect(this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a>, SIGNAL(<a class="code" href="class_connector.html#a70151270d755858af33de52cd8ddf983">connect_state_changed</a>(QString)),
+<a name="l00046"></a>00046                              <span class="keyword">this</span>, SIGNAL(<a class="code" href="class_connector.html#a70151270d755858af33de52cd8ddf983">connect_state_changed</a>(QString)));
+<a name="l00047"></a>00047         }
+<a name="l00048"></a>00048     }
+<a name="l00049"></a>00049     assert(this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> != NULL);
+<a name="l00050"></a>00050     this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a>-&gt;<a class="code" href="class_connection.html#a11eabb062ab01ea60ebfa65ca9d1a192">setHostInfo</a>(host);
+<a name="l00051"></a>00051 }
+<a name="l00052"></a><a class="code" href="class_connector.html#a1356f05fe0b854994e8a7cdbe2ef1cdd">00052</a> <span class="keywordtype">void</span> <a class="code" href="class_connector.html#a1356f05fe0b854994e8a7cdbe2ef1cdd">Connector::setUserCanceled</a>()
+<a name="l00053"></a>00053 {
+<a name="l00054"></a>00054     assert(this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> != NULL);
+<a name="l00055"></a>00055     this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a>-&gt;<a class="code" href="class_connection.html#a30ecd96362af7634bc871f8052668507">setUserCanceled</a>();
+<a name="l00056"></a>00056 }
+<a name="l00057"></a>00057 
+<a name="l00058"></a><a class="code" href="class_connector.html#aa232a7b3b96fda6fadb24c674f119075">00058</a> <span class="keywordtype">void</span> <a class="code" href="class_connector.html#aa232a7b3b96fda6fadb24c674f119075">Connector::run</a>()
+<a name="l00059"></a>00059 {
+<a name="l00060"></a>00060     assert(this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a> != NULL);
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062     <span class="keywordtype">int</span> iret = this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a>-&gt;<a class="code" href="class_connection.html#af358690532761001fbebed6f97bd908b">connect</a>();
+<a name="l00063"></a>00063     <span class="keywordflow">if</span> (iret == 0) {
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065     } <span class="keywordflow">else</span> {
+<a name="l00066"></a>00066         this-&gt;<a class="code" href="class_connector.html#a57e7fddb632cef54709d30690b5220b2">connect_status</a> = <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ab039708a1db8b5305aecbcd4e8323a1a">Connection::CONN_OTHER</a>;
+<a name="l00067"></a>00067     }
+<a name="l00068"></a>00068 }
+<a name="l00069"></a>00069 
+<a name="l00070"></a><a class="code" href="class_connector.html#afe2cdd75b99a8e66e8f474decdba2e4a">00070</a> <span class="keywordtype">void</span> <a class="code" href="class_connector.html#afe2cdd75b99a8e66e8f474decdba2e4a">Connector::slot_finished</a>()
+<a name="l00071"></a>00071 {
+<a name="l00072"></a>00072     emit this-&gt;<a class="code" href="class_connector.html#a01ace75c431375b7c2288514412ff922">connect_finished</a>(this-&gt;<a class="code" href="class_connector.html#a57e7fddb632cef54709d30690b5220b2">connect_status</a>, this-&gt;<a class="code" href="class_connector.html#aeacb8eefc313d7c354dae57583d25d90">conn</a>);
+<a name="l00073"></a>00073 }
+<a name="l00074"></a>00074 
+<a name="l00075"></a><a class="code" href="class_connector.html#afce3738964130e60fd0e8de7ae3ebe4c">00075</a> QString <a class="code" href="class_connector.html#afce3738964130e60fd0e8de7ae3ebe4c">Connector::get_status_desc</a>(<span class="keywordtype">int</span> status)
+<a name="l00076"></a>00076 {
+<a name="l00077"></a>00077     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *status_desc[] = {
+<a name="l00078"></a>00078         <span class="stringliteral">&quot;CONN_OK&quot;</span>,
+<a name="l00079"></a>00079         <span class="stringliteral">&quot;CONN_REFUSE&quot;</span>,
+<a name="l00080"></a>00080         <span class="stringliteral">&quot;CONN_CANCEL&quot;</span>,
+<a name="l00081"></a>00081         <span class="stringliteral">&quot;CONN_OTHER&quot;</span>,
+<a name="l00082"></a>00082         <span class="stringliteral">&quot;CONN_RESOLVE_ERROR&quot;</span>,
+<a name="l00083"></a>00083         <span class="stringliteral">&quot;CONN_SESS_ERROR&quot;</span>,
+<a name="l00084"></a>00084         <span class="stringliteral">&quot;CONN_AUTH_ERROR&quot;</span>,
+<a name="l00085"></a>00085         <span class="stringliteral">&quot;CONN_SFTP_ERROR&quot;</span>,
+<a name="l00086"></a>00086         <span class="stringliteral">&quot;CONN_EXEC_ERROR&quot;</span>
+<a name="l00087"></a>00087     };
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089     QString emsg = QString(tr(<span class="stringliteral">&quot;No error.&quot;</span>));
+<a name="l00090"></a>00090     <span class="keywordflow">switch</span> (status) {
+<a name="l00091"></a>00091     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ae1154c0751684b0b66678239a51a730e">Connection::CONN_REFUSE</a>:
+<a name="l00092"></a>00092         emsg = QString(tr(<span class="stringliteral">&quot;Remote host not usable.&quot;</span>));
+<a name="l00093"></a>00093         <span class="keywordflow">break</span>;
+<a name="l00094"></a>00094     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a512285b740c88cb0849a9f553da6e7f8">Connection::CONN_AUTH_ERROR</a>:
+<a name="l00095"></a>00095         emsg = QString(tr(<span class="stringliteral">&quot;Auth faild. Check your name and password and retry again.&quot;</span>));
+<a name="l00096"></a>00096         <span class="keywordflow">break</span>;
+<a name="l00097"></a>00097     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a1c685ded6c80ebfc22ab78cee6c2299c">Connection::CONN_RESOLVE_ERROR</a>:
+<a name="l00098"></a>00098         emsg = QString(tr(<span class="stringliteral">&quot;Can not resolve host name.&quot;</span>));
+<a name="l00099"></a>00099         <span class="keywordflow">break</span>;
+<a name="l00100"></a>00100     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ac0e83cc787cf8eea1dc71ebbf1ec111c">Connection::CONN_SESS_ERROR</a>:
+<a name="l00101"></a>00101         emsg = QString(tr(<span class="stringliteral">&quot;Can not initial SSH session.&quot;</span>));
+<a name="l00102"></a>00102         <span class="keywordflow">break</span>;
+<a name="l00103"></a>00103     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29a1fec530f8a00c96cbbeb6ff8c270ab95">Connection::CONN_SFTP_ERROR</a>:
+<a name="l00104"></a>00104         emsg = QString(tr(<span class="stringliteral">&quot;Can not initial SFTP handle.&quot;</span>));
+<a name="l00105"></a>00105         <span class="keywordflow">break</span>;
+<a name="l00106"></a>00106     <span class="keywordflow">case</span> <a class="code" href="class_connection.html#aee4d9c51e911c33770e17f719da73c29ac9c32e6fc83264ad426354bb6e827ce0">Connection::CONN_PROTOCOL_VERSION_NOT_MATCH_ERROR</a>:
+<a name="l00107"></a>00107         emsg = QString(tr(<span class="stringliteral">&quot;Server protocol version not match. Is it 1.x ?&quot;</span>));
+<a name="l00108"></a>00108         <span class="keywordflow">break</span>;
+<a name="l00109"></a>00109     <span class="keywordflow">default</span>:
+<a name="l00110"></a>00110         emsg = QString(tr(<span class="stringliteral">&quot;Unknown error.&quot;</span>));
+<a name="l00111"></a>00111         <span class="keywordflow">break</span>;
+<a name="l00112"></a>00112     }
+<a name="l00113"></a>00113     
+<a name="l00114"></a>00114     <span class="keywordflow">if</span> ((<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)status &gt; <span class="keyword">sizeof</span>(status_desc)/<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*)) {
+<a name="l00115"></a>00115         <span class="keywordflow">return</span> <span class="stringliteral">&quot;Unknown status&quot;</span>;
+<a name="l00116"></a>00116     } <span class="keywordflow">else</span> {
+<a name="l00117"></a>00117         <span class="keywordflow">return</span> emsg;
+<a name="l00118"></a>00118     }
+<a name="l00119"></a>00119 }
+<a name="l00120"></a>00120 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

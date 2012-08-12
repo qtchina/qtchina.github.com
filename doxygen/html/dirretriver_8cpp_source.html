@@ -1,0 +1,579 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: dirretriver.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>dirretriver.cpp</h1><a href="dirretriver_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// dirretriver.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-05-25 09:50:50 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: dirretriver.cpp 635 2010-05-30 07:47:12Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;QtCore&gt;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="preprocessor">#ifdef WIN32</span>
+<a name="l00013"></a>00013 <span class="preprocessor"></span><span class="preprocessor">#include &lt;winsock2.h&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#endif</span>
+<a name="l00015"></a>00015 <span class="preprocessor"></span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;<a class="code" href="globaloption_8h.html">globaloption.h</a>&quot;</span>
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;<a class="code" href="dirretriver_8h.html">dirretriver.h</a>&quot;</span>
+<a name="l00019"></a>00019 
+<a name="l00020"></a>00020 <span class="preprocessor">#include &quot;<a class="code" href="rfsdirnode_8h.html">rfsdirnode.h</a>&quot;</span>
+<a name="l00021"></a>00021 <span class="preprocessor">#include &quot;<a class="code" href="connection_8h.html">connection.h</a>&quot;</span>
+<a name="l00022"></a>00022 
+<a name="l00024"></a><a class="code" href="class_dir_retriver.html#ab77cd378543ab7152b0bad350884ec8b">00024</a> <a class="code" href="class_dir_retriver.html#ab77cd378543ab7152b0bad350884ec8b">DirRetriver::DirRetriver</a>(QObject *parent)
+<a name="l00025"></a>00025     : QThread(parent)
+<a name="l00026"></a>00026 {
+<a name="l00027"></a>00027     this-&gt;<a class="code" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a> = NULL;
+<a name="l00028"></a>00028 }
+<a name="l00029"></a>00029 
+<a name="l00030"></a><a class="code" href="class_dir_retriver.html#a807b709c2ade027215ef7e157e9a6a85">00030</a> <a class="code" href="class_dir_retriver.html#a807b709c2ade027215ef7e157e9a6a85">DirRetriver::~DirRetriver</a>()
+<a name="l00031"></a>00031 {
+<a name="l00032"></a>00032     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt;__FILE__;
+<a name="l00033"></a>00033     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;this-&gt;<a class="code" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a>;
+<a name="l00034"></a>00034     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a>) {
+<a name="l00035"></a>00035         <span class="keyword">delete</span> this-&gt;<a class="code" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a>;
+<a name="l00036"></a>00036         this-&gt;<a class="code" href="class_dir_retriver.html#aa43e396f78ddc727efae9f3890b25c01">conn</a> = NULL;
+<a name="l00037"></a>00037     }
+<a name="l00038"></a>00038     <span class="comment">// why this-&gt;conn is NULL?</span>
+<a name="l00039"></a>00039     <span class="comment">// if (this-&gt;conn-&gt;protocolType() == Connection::PROTO_SFTP) {</span>
+<a name="l00040"></a>00040     <span class="comment">//     libssh2_sftp_shutdown(this-&gt;ssh2_sftp);</span>
+<a name="l00041"></a>00041     <span class="comment">//     libssh2_session_disconnect(this-&gt;ssh2_sess, &quot;SSH_DISCONNECT_BY_APPLICATION&quot;);</span>
+<a name="l00042"></a>00042     <span class="comment">//     libssh2_session_free(this-&gt;ssh2_sess);</span>
+<a name="l00043"></a>00043     <span class="comment">// }</span>
+<a name="l00044"></a>00044 }
+<a name="l00045"></a>00045 
+<a name="l00046"></a><a class="code" href="class_dir_retriver.html#adfe5e9113a4aa6792abdf57fda6afa99">00046</a> <span class="keywordtype">void</span> <a class="code" href="class_dir_retriver.html#adfe5e9113a4aa6792abdf57fda6afa99">DirRetriver::setConnection</a>(<a class="code" href="class_connection.html">Connection</a> *conn)
+<a name="l00047"></a>00047 {
+<a name="l00048"></a>00048     this-&gt;conn = conn;
+<a name="l00049"></a>00049     <span class="comment">// this-&gt;ssh2_sess = this-&gt;conn-&gt;sess;</span>
+<a name="l00050"></a>00050     <span class="comment">// this-&gt;ssh2_sftp = libssh2_sftp_init(this-&gt;ssh2_sess);</span>
+<a name="l00051"></a>00051     <span class="comment">// assert(this-&gt;ssh2_sftp != 0);</span>
+<a name="l00052"></a>00052 }
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="comment">// LIBSSH2_SFTP *DirRetriver::get_ssh2_sftp()</span>
+<a name="l00055"></a>00055 <span class="comment">// {</span>
+<a name="l00056"></a>00056 <span class="comment">//     return this-&gt;ssh2_sftp;</span>
+<a name="l00057"></a>00057 <span class="comment">// }</span>
+<a name="l00058"></a>00058 
+<a name="l00059"></a><a class="code" href="class_dir_retriver.html#a95d43e6a95a7f228c8ccf51e16f3613a">00059</a> <span class="keywordtype">void</span> <a class="code" href="class_dir_retriver.html#a95d43e6a95a7f228c8ccf51e16f3613a">DirRetriver::run</a>()
+<a name="l00060"></a>00060 {
+<a name="l00061"></a>00061     emit <a class="code" href="class_dir_retriver.html#a894c113663a49ed5af7c61f53002e608">enter_remote_dir_retrive_loop</a>();
+<a name="l00062"></a>00062     
+<a name="l00063"></a>00063     <span class="keywordtype">int</span> exec_ret_code = -1 ;
+<a name="l00064"></a>00064     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_elem;
+<a name="l00065"></a>00065     <span class="keywordflow">while</span> (this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.size() &gt; 0) {
+<a name="l00066"></a>00066         cmd_elem = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00067"></a>00067         <span class="keywordflow">switch</span>(cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#aaa8beb9f9f09df671e413f778009683f">cmd</a>) {
+<a name="l00068"></a>00068         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a953a9ba77aac4d2ad754d0587b9a6b63">SSH2_FXP_READDIR</a>:
+<a name="l00069"></a>00069             this-&gt;<a class="code" href="class_dir_retriver.html#a252e897928ceef7d7ce18421adedc674">dir_node_process_queue</a>.insert(std::make_pair(cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>));
+<a name="l00070"></a>00070             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#a5114f664bca4ece1c7c0aa18b1ecd351">retrive_dir</a>();
+<a name="l00071"></a>00071             <span class="keywordflow">break</span>;
+<a name="l00072"></a>00072         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a6257da98122a32fd8e15877cbf63aecd">SSH2_FXP_MKDIR</a>:
+<a name="l00073"></a>00073             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#a692dbfc6c54c8d7230871f606dc3eabe">mkdir</a>();
+<a name="l00074"></a>00074             <span class="keywordflow">break</span>;
+<a name="l00075"></a>00075         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a0a27724313f2dab3cd6e2801282a35bd">SSH2_FXP_RMDIR</a>:
+<a name="l00076"></a>00076             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#aa78d7026f8b28c3821a1d23b6265e622">rmdir</a>();
+<a name="l00077"></a>00077             <span class="keywordflow">break</span>;
+<a name="l00078"></a>00078         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a8c52e060a80a0900f29012048062c954">SSH2_FXP_REMOVE</a>:
+<a name="l00079"></a>00079             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#a8073e5a7104e47e25a28766aec9cc678">rm_file_or_directory_recursively</a>();
+<a name="l00080"></a>00080             <span class="keywordflow">break</span>;
+<a name="l00081"></a>00081         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a4125a298c39ea4aeb90e4778192e8e80">SSH2_FXP_RENAME</a>:
+<a name="l00082"></a>00082             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#ae0753eaeb00b5cfbc8d21806bfc84d90">rename</a>();
+<a name="l00083"></a>00083             break ;
+<a name="l00084"></a>00084         <span class="keywordflow">case</span> <a class="code" href="dirretriver_8h.html#a0ae337450ed514879769d63c2be1393c">SSH2_FXP_KEEP_ALIVE</a>:
+<a name="l00085"></a>00085             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#a494d623465f877880a4b9a686d836af4">keep_alive</a>();
+<a name="l00086"></a>00086             <span class="keywordflow">break</span>;
+<a name="l00087"></a>00087         <span class="keywordflow">case</span> <a class="code" href="sftp-const_8h.html#a00b40338343f1a0ad6314c12e3407ced">SSH2_FXP_REALPATH</a>:
+<a name="l00088"></a>00088             exec_ret_code = this-&gt;<a class="code" href="class_dir_retriver.html#a74f2425706a3754dcd00f201eebfc844">fxp_realpath</a>();
+<a name="l00089"></a>00089             <span class="keywordflow">break</span>;
+<a name="l00090"></a>00090         <span class="keywordflow">default</span>:    
+<a name="l00091"></a>00091             qDebug()&lt;&lt;tr(<span class="stringliteral">&quot;unknown command:&quot;</span>)&lt;&lt;cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#aaa8beb9f9f09df671e413f778009683f">cmd</a>;                
+<a name="l00092"></a>00092             <span class="keywordflow">break</span>;
+<a name="l00093"></a>00093         }
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095         <span class="comment">// 通知其他人命令执行完成</span>
+<a name="l00096"></a>00096         emit <a class="code" href="class_dir_retriver.html#a4aa9be2b37042d29087a091fca0478d3">execute_command_finished</a>(cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>,
+<a name="l00097"></a>00097                                       cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#aaa8beb9f9f09df671e413f778009683f">cmd</a>, exec_ret_code);
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099         <span class="comment">//delet item form queue , stopping infinite cycle</span>
+<a name="l00100"></a>00100         this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.erase(this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.begin());
+<a name="l00101"></a>00101         <span class="keyword">delete</span> cmd_elem;
+<a name="l00102"></a>00102         cmd_elem = 0;
+<a name="l00103"></a>00103         exec_ret_code = -1;
+<a name="l00104"></a>00104     }
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106     emit this-&gt;<a class="code" href="class_dir_retriver.html#a2b588b7dbda4cb79e0530c9404104dab">leave_remote_dir_retrive_loop</a>();
+<a name="l00107"></a>00107 }
+<a name="l00108"></a>00108 
+<a name="l00109"></a><a class="code" href="class_dir_retriver.html#a5114f664bca4ece1c7c0aa18b1ecd351">00109</a> <span class="keywordtype">int</span>  <a class="code" href="class_dir_retriver.html#a5114f664bca4ece1c7c0aa18b1ecd351">DirRetriver::retrive_dir</a>()
+<a name="l00110"></a>00110 {
+<a name="l00111"></a>00111     <span class="comment">// TODO clean this</span>
+<a name="l00112"></a>00112     Q_ASSERT(1 == 2);
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00115"></a>00115     
+<a name="l00116"></a>00116     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item, *new_item, *tmp_item;
+<a name="l00117"></a>00117     <span class="keywordtype">void</span> *parent_persistent_index;
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119     QString tmp;
+<a name="l00120"></a>00120     QVector&lt;NetDirNode*&gt; deltaItems;
+<a name="l00121"></a>00121     QVector&lt;QMap&lt;char, QString&gt; &gt; fileinfos;
+<a name="l00122"></a>00122     <span class="keywordtype">char</span> file_name[PATH_MAX+1];
+<a name="l00123"></a>00123     <span class="keywordtype">int</span> fxp_ls_ret = 0;
+<a name="l00124"></a>00124  
+<a name="l00125"></a>00125     <span class="keywordflow">while</span> (this-&gt;<a class="code" href="class_dir_retriver.html#a252e897928ceef7d7ce18421adedc674">dir_node_process_queue</a>.size() &gt;0) {
+<a name="l00126"></a>00126         std::map&lt;NetDirNode*,void * &gt;::iterator mit;
+<a name="l00127"></a>00127         mit = this-&gt;<a class="code" href="class_dir_retriver.html#a252e897928ceef7d7ce18421adedc674">dir_node_process_queue</a>.begin();
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129         parent_item = mit-&gt;first;
+<a name="l00130"></a>00130         parent_persistent_index = mit-&gt;second;
+<a name="l00131"></a>00131        
+<a name="l00132"></a>00132         fileinfos.clear();
+<a name="l00133"></a>00133         <span class="comment">// 状态初始化,假设所有的条目都是要删掉的</span>
+<a name="l00134"></a>00134         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; parent_item-&gt;<a class="code" href="class_net_dir_node.html#ad0348a72af478acd97fea56c9c6edcf9">childCount</a>(); i++) {
+<a name="l00135"></a>00135             parent_item-&gt;<a class="code" href="class_net_dir_node.html#afdf956f9c6fc8b39004902ce18094046">childAt</a>(i)-&gt;<a class="code" href="class_net_dir_node.html#a3f065fb508d94fcc9a53bd1094362544">deleted</a> = <span class="keyword">true</span>;
+<a name="l00136"></a>00136         }
+<a name="l00137"></a>00137 
+<a name="l00138"></a>00138         LIBSSH2_SFTP_ATTRIBUTES ssh2_sftp_attrib;
+<a name="l00139"></a>00139         LIBSSH2_SFTP_HANDLE *ssh2_sftp_handle = 0;
+<a name="l00140"></a>00140         ssh2_sftp_handle = libssh2_sftp_opendir(this-&gt;<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>,
+<a name="l00141"></a>00141                                                 <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(parent_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>+ ( <span class="stringliteral">&quot;/&quot;</span> )).data());
+<a name="l00142"></a>00142 
+<a name="l00143"></a>00143         <span class="comment">// ssh2_sftp_handle == 0 是怎么回事呢？ 返回值 应该是</span>
+<a name="l00144"></a>00144         <span class="comment">// 1 . 这个file_name 是一个链接，但这个链接指向的是一个普通文件而不是目录时libssh2_sftp_opendir返回0 , 而 libssh2_sftp_last_error 返回值为 2 == SSH2_FX_NO_SUCH_FILE</span>
+<a name="l00145"></a>00145         <span class="keywordflow">if</span>( ssh2_sftp_handle == 0 ) {
+<a name="l00146"></a>00146             qDebug()&lt;&lt;<span class="stringliteral">&quot;sftp last error: &quot;</span>&lt;&lt; libssh2_sftp_last_error(this-&gt;<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>)
+<a name="l00147"></a>00147                     &lt;&lt;(parent_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + (<span class="stringliteral">&quot;/&quot;</span>))
+<a name="l00148"></a>00148                     &lt;&lt;<a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;<a class="code" href="class_global_option.html#a07c6749e6ef5897a215791722730f3a7">remote_codec</a>
+<a name="l00149"></a>00149                 -&gt;fromUnicode(parent_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + (<span class="stringliteral">&quot;/&quot;</span>)).data();
+<a name="l00150"></a>00150         }
+<a name="l00151"></a>00151         fxp_ls_ret = 0;
+<a name="l00152"></a>00152         <span class="keywordflow">while</span> (ssh2_sftp_handle != 0 &amp;&amp;
+<a name="l00153"></a>00153                libssh2_sftp_readdir(ssh2_sftp_handle, file_name, PATH_MAX, &amp;ssh2_sftp_attrib) &gt; 0)
+<a name="l00154"></a>00154         {
+<a name="l00155"></a>00155             <span class="keywordflow">if</span> (strlen(file_name) == 1 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span>) <span class="keywordflow">continue</span>;
+<a name="l00156"></a>00156             <span class="keywordflow">if</span> (strlen(file_name) == 2 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span> &amp;&amp; file_name[1] == <span class="charliteral">&#39;.&#39;</span>) <span class="keywordflow">continue</span>;
+<a name="l00157"></a>00157             <span class="comment">//不处理隐藏文件? 处理隐藏文件,在这要提供隐藏文件，上层使用过滤代理模型提供显示隐藏文件的功能。</span>
+<a name="l00158"></a>00158             tmp = QString(<a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;toUnicode(file_name));
+<a name="l00159"></a>00159             tmp_item = parent_item-&gt;<a class="code" href="class_net_dir_node.html#ad885e90bce1e13ab2f117937d3af195d">findChindByName</a>(tmp);
+<a name="l00160"></a>00160             <span class="keywordflow">if</span> (tmp_item != NULL &amp;&amp; tmp_item-&gt;matchChecksum(&amp;ssh2_sftp_attrib)) {
+<a name="l00161"></a>00161                 tmp_item-&gt;<a class="code" href="class_net_dir_node.html#ab1a4bec6ab63bb0c4120d4939285ebac">setDeleteFlag</a>(<span class="keyword">false</span>);
+<a name="l00162"></a>00162                 <span class="keywordflow">if</span> (fxp_ls_ret++ == 0) {
+<a name="l00163"></a>00163                     printf(<span class="stringliteral">&quot;Already in list, omited %d&quot;</span>, fxp_ls_ret), 
+<a name="l00164"></a>00164                         fxp_ls_ret = fxp_ls_ret | 1&lt;&lt;16;
+<a name="l00165"></a>00165                 } <span class="keywordflow">else</span> {
+<a name="l00166"></a>00166                     printf(<span class="stringliteral">&quot; %d&quot;</span>, fxp_ls_ret&lt;&lt;16&gt;&gt;16);
+<a name="l00167"></a>00167                 }
+<a name="l00168"></a>00168             } <span class="keywordflow">else</span> {
+<a name="l00169"></a>00169                 new_item = <span class="keyword">new</span> <a class="code" href="class_net_dir_node.html">NetDirNode</a>();
+<a name="l00170"></a>00170                 new_item-&gt;<a class="code" href="class_net_dir_node.html#ac14b75fbc9ddb9c04a25c0e9381a4ce1">pNode</a> = parent_item;
+<a name="l00171"></a>00171                 <span class="comment">// new_item-&gt;fullPath = parent_item-&gt;fullPath + QString(&quot;/&quot;) + file_name ;</span>
+<a name="l00172"></a>00172                 new_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> = parent_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + QString(<span class="stringliteral">&quot;/&quot;</span>) + tmp ; <span class="comment">// this is unicode</span>
+<a name="l00173"></a>00173                 new_item-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a> = tmp;
+<a name="l00174"></a>00174                 new_item-&gt;<a class="code" href="class_net_dir_node.html#a16354dce615375a4128176ca878b37d6">attrib</a> = ssh2_sftp_attrib;
+<a name="l00175"></a>00175                 new_item-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a> = (new_item-&gt;<a class="code" href="class_net_dir_node.html#a93a5ef4d27f9bca538b4a0ffb59caeb6">isDir</a>()) ? <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388a8e89d4f2b055a6b98f8b52631425de1c">POP_NO_NEED_NO_DATA</a> : <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388a773b7bdd7695152285e4d77728675e6e">POP_NEWEST</a>;
+<a name="l00176"></a>00176                 deltaItems.append(new_item);
+<a name="l00177"></a>00177             }
+<a name="l00178"></a>00178         }  
+<a name="l00179"></a>00179         <span class="keywordflow">if</span> (fxp_ls_ret &amp; (1 &lt;&lt; 16))   printf(<span class="stringliteral">&quot;\n&quot;</span>);
+<a name="l00180"></a>00180         fflush(stdout);
+<a name="l00181"></a>00181     
+<a name="l00182"></a>00182         <span class="comment">//将多出的记录插入到树中</span>
+<a name="l00183"></a>00183         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ;i &lt; deltaItems.count(); i ++) {
+<a name="l00184"></a>00184             <span class="comment">// deltaItems.at(i)-&gt;onRow = parent_item-&gt;childCount();</span>
+<a name="l00185"></a>00185             <span class="comment">// parent_item-&gt;child_items.insert(std::make_pair(parent_item-&gt;childCount(), deltaItems.at(i)));</span>
+<a name="l00186"></a>00186             <span class="comment">// parent_item-&gt;child_items.insert(parent_item-&gt;childCount(), deltaItems.at(i));</span>
+<a name="l00187"></a>00187             <span class="comment">// parent_item-&gt;childNodes.insert(deltaItems.at(i)-&gt;onRow, deltaItems.at(i));</span>
+<a name="l00188"></a>00188         }
+<a name="l00189"></a>00189 
+<a name="l00190"></a>00190         deltaItems.clear();
+<a name="l00191"></a>00191         parent_item-&gt;<a class="code" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a> = parent_item-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a>;
+<a name="l00192"></a>00192         parent_item-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a> = <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388a773b7bdd7695152285e4d77728675e6e">POP_NEWEST</a>;
+<a name="l00193"></a>00193 
+<a name="l00194"></a>00194         <span class="comment">//         //////</span>
+<a name="l00195"></a>00195         this-&gt;<a class="code" href="class_dir_retriver.html#a252e897928ceef7d7ce18421adedc674">dir_node_process_queue</a>.erase(parent_item);
+<a name="l00196"></a>00196         emit this-&gt;<a class="code" href="class_dir_retriver.html#a45cfd88a96fea80994605d65ad8cc4cb">remote_dir_node_retrived</a>(parent_item, parent_persistent_index, 0);
+<a name="l00197"></a>00197 
+<a name="l00198"></a>00198         <span class="keywordflow">if</span> (ssh2_sftp_handle != 0) <span class="comment">//TODO 应该在循环上面检测到为0就continue才对啊。</span>
+<a name="l00199"></a>00199             libssh2_sftp_closedir(ssh2_sftp_handle);
+<a name="l00200"></a>00200     }
+<a name="l00201"></a>00201 
+<a name="l00202"></a>00202     <span class="keywordflow">return</span> exec_ret;
+<a name="l00203"></a>00203 }
+<a name="l00204"></a>00204 
+<a name="l00205"></a><a class="code" href="class_dir_retriver.html#a692dbfc6c54c8d7230871f606dc3eabe">00205</a> <span class="keywordtype">int</span>  <a class="code" href="class_dir_retriver.html#a692dbfc6c54c8d7230871f606dc3eabe">DirRetriver::mkdir</a>()
+<a name="l00206"></a>00206 {
+<a name="l00207"></a>00207     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00208"></a>00208     
+<a name="l00209"></a>00209     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00210"></a>00210     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_item = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00211"></a>00211     
+<a name="l00212"></a>00212     QString abs_path = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + QString(<span class="stringliteral">&quot;/&quot;</span>) + cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>;
+<a name="l00213"></a>00213     
+<a name="l00214"></a>00214     qDebug()&lt;&lt; <span class="stringliteral">&quot;abs  path :&quot;</span>&lt;&lt; abs_path;
+<a name="l00215"></a>00215     
+<a name="l00216"></a>00216     exec_ret = libssh2_sftp_mkdir(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(abs_path).data(), 0777);
+<a name="l00217"></a>00217 
+<a name="l00218"></a>00218     this-&gt;<a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">add_node</a>(cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>);
+<a name="l00219"></a>00219     
+<a name="l00220"></a>00220     <span class="keywordflow">return</span> exec_ret ;
+<a name="l00221"></a>00221 }
+<a name="l00222"></a>00222 
+<a name="l00223"></a><a class="code" href="class_dir_retriver.html#aa78d7026f8b28c3821a1d23b6265e622">00223</a> <span class="keywordtype">int</span>  <a class="code" href="class_dir_retriver.html#aa78d7026f8b28c3821a1d23b6265e622">DirRetriver::rmdir</a>()
+<a name="l00224"></a>00224 {
+<a name="l00225"></a>00225     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00226"></a>00226     
+<a name="l00227"></a>00227     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00228"></a>00228     QStringList  sys_dirs;
+<a name="l00229"></a>00229     sys_dirs&lt;&lt;<span class="stringliteral">&quot;/usr&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/bin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sbin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/lib&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/etc&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/dev&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/proc&quot;</span>
+<a name="l00230"></a>00230             &lt;&lt;<span class="stringliteral">&quot;/mnt&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sys&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/var&quot;</span>;
+<a name="l00231"></a>00231     
+<a name="l00232"></a>00232     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_item = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00233"></a>00233     
+<a name="l00234"></a>00234     QString abs_path = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + <span class="stringliteral">&quot;/&quot;</span> + cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>;
+<a name="l00235"></a>00235 
+<a name="l00236"></a>00236     qDebug()&lt;&lt; <span class="stringliteral">&quot;abs  path :&quot;</span>&lt;&lt; abs_path;
+<a name="l00237"></a>00237     
+<a name="l00238"></a>00238     <span class="keywordflow">if</span> (sys_dirs.contains(abs_path)) {
+<a name="l00239"></a>00239         qDebug()&lt;&lt;<span class="stringliteral">&quot; rm system directory , this is danger.&quot;</span>;
+<a name="l00240"></a>00240     } <span class="keywordflow">else</span> {
+<a name="l00241"></a>00241         exec_ret = libssh2_sftp_rmdir(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(abs_path).data());
+<a name="l00242"></a>00242     }
+<a name="l00243"></a>00243     <span class="comment">//cmd_item-&gt;parent_item-&gt;retrived = 2 ;   //让上层视图更新这个结点</span>
+<a name="l00244"></a>00244     this-&gt;<a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">add_node</a>(cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>);
+<a name="l00245"></a>00245     
+<a name="l00246"></a>00246     <span class="keywordflow">return</span> exec_ret;
+<a name="l00247"></a>00247 }
+<a name="l00248"></a>00248 
+<a name="l00249"></a><a class="code" href="class_dir_retriver.html#a8073e5a7104e47e25a28766aec9cc678">00249</a> <span class="keywordtype">int</span>  <a class="code" href="class_dir_retriver.html#a8073e5a7104e47e25a28766aec9cc678">DirRetriver::rm_file_or_directory_recursively</a>()
+<a name="l00250"></a>00250 {
+<a name="l00251"></a>00251     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00252"></a>00252     
+<a name="l00253"></a>00253     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00254"></a>00254     QStringList  sys_dirs;
+<a name="l00255"></a>00255     sys_dirs&lt;&lt;<span class="stringliteral">&quot;/usr&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/bin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sbin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/lib&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/etc&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/dev&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/proc&quot;</span>
+<a name="l00256"></a>00256             &lt;&lt;<span class="stringliteral">&quot;/mnt&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sys&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/var&quot;</span>;
+<a name="l00257"></a>00257     
+<a name="l00258"></a>00258     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *child_item = 0;
+<a name="l00259"></a>00259     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item = 0;
+<a name="l00260"></a>00260     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_item = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00261"></a>00261     parent_item = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>;
+<a name="l00262"></a>00262     
+<a name="l00263"></a>00263     QString abs_path = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + <span class="stringliteral">&quot;/&quot;</span> +  cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>;
+<a name="l00264"></a>00264     qDebug()&lt;&lt; <span class="stringliteral">&quot;abs  path :&quot;</span>&lt;&lt; abs_path;
+<a name="l00265"></a>00265     
+<a name="l00266"></a>00266     <span class="keywordflow">if</span> (sys_dirs.contains(abs_path)) {
+<a name="l00267"></a>00267         qDebug()&lt;&lt;<span class="stringliteral">&quot; rm  system directory recusively , this is danger.&quot;</span>;
+<a name="l00268"></a>00268     } <span class="keywordflow">else</span> {
+<a name="l00269"></a>00269         <span class="comment">//找到这个要删除的结点并删除</span>
+<a name="l00270"></a>00270         <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>  i = 0 ; i &lt; parent_item-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.count(); i ++) {
+<a name="l00271"></a>00271             child_item = parent_item-&gt;<a class="code" href="class_net_dir_node.html#a934ced4c6df6267af9dc611a42a6fa4e">childNodes</a>.value(i);
+<a name="l00272"></a>00272             <span class="keywordflow">if</span> (child_item-&gt;<a class="code" href="class_net_dir_node.html#af589fc25e6ccefb7d600026d658abc92">_fileName</a>.compare(cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a> ) == 0) {
+<a name="l00273"></a>00273                 qDebug()&lt;&lt;<span class="stringliteral">&quot;found whill remove file:&quot;</span>&lt;&lt;child_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>;
+<a name="l00274"></a>00274                 this-&gt;<a class="code" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">rm_file_or_directory_recursively_ex</a>(child_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>);
+<a name="l00275"></a>00275                 break ;
+<a name="l00276"></a>00276             }
+<a name="l00277"></a>00277         }
+<a name="l00278"></a>00278     }
+<a name="l00279"></a>00279 
+<a name="l00280"></a>00280     this-&gt;<a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">add_node</a>(cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>);
+<a name="l00281"></a>00281     
+<a name="l00282"></a>00282     <span class="keywordflow">return</span> exec_ret;
+<a name="l00283"></a>00283 }
+<a name="l00284"></a>00284 
+<a name="l00285"></a>00285 <span class="comment">//TODO 现在删除隐藏文件或者目录还有问题：即以  .  字符开头的项</span>
+<a name="l00286"></a><a class="code" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">00286</a> <span class="keywordtype">int</span> <a class="code" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">DirRetriver::rm_file_or_directory_recursively_ex</a>(QString parent_path)  <span class="comment">// &lt;==&gt; rm -rf</span>
+<a name="l00287"></a>00287 {
+<a name="l00288"></a>00288     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00289"></a>00289     
+<a name="l00290"></a>00290     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00291"></a>00291    
+<a name="l00292"></a>00292     QString abs_path;
+<a name="l00293"></a>00293     QVector&lt;QMap&lt;char, QString&gt; &gt; fileinfos;
+<a name="l00294"></a>00294     
+<a name="l00295"></a>00295     <span class="comment">//再次从服务器列出目录，然后处理</span>
+<a name="l00296"></a>00296     <span class="comment">//int lflag = 0 ;    </span>
+<a name="l00297"></a>00297     <span class="comment">//     lflag = LS_LONG_VIEW;</span>
+<a name="l00298"></a>00298     <span class="comment">//     lflag |= LS_SHOW_ALL ;</span>
+<a name="l00299"></a>00299     
+<a name="l00300"></a>00300     exec_ret = this-&gt;<a class="code" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">fxp_do_ls_dir</a>(parent_path + (<span class="stringliteral">&quot;/&quot;</span>), fileinfos);
+<a name="l00301"></a>00301     
+<a name="l00302"></a>00302     <span class="keywordtype">int</span> file_count = fileinfos.size();
+<a name="l00303"></a>00303     <span class="comment">//qDebug()&lt;&lt;&quot; rm ex :&quot; &lt;&lt; file_count;</span>
+<a name="l00304"></a>00304     
+<a name="l00305"></a>00305     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = file_count -1 ; i &gt;= 0 ; i --) {
+<a name="l00306"></a>00306         <span class="comment">//qDebug()&lt;&lt;&quot; lsed file:&quot;&lt;&lt; fileinfos.at(i)[&#39;N&#39;] ;</span>
+<a name="l00307"></a>00307         <span class="keywordflow">if</span> (fileinfos.at(i)[<span class="charliteral">&#39;T&#39;</span>].at(0) == <span class="charliteral">&#39;d&#39;</span>) {
+<a name="l00308"></a>00308             <span class="keywordflow">if</span> (fileinfos.at(i)[<span class="charliteral">&#39;N&#39;</span>].compare(<span class="stringliteral">&quot;.&quot;</span>) == 0 
+<a name="l00309"></a>00309                 || fileinfos.at(i)[<span class="charliteral">&#39;N&#39;</span>].compare(<span class="stringliteral">&quot;..&quot;</span>) == 0)
+<a name="l00310"></a>00310             {
+<a name="l00311"></a>00311                 <span class="comment">//qDebug()&lt;&lt;&quot;do ... ls shown . and .. ???&quot;;</span>
+<a name="l00312"></a>00312                 <span class="keywordflow">continue</span>;
+<a name="l00313"></a>00313             } <span class="keywordflow">else</span> {
+<a name="l00314"></a>00314                 this-&gt;<a class="code" href="class_dir_retriver.html#a684150a7340e2a3dfd3983c5c8a3c3b9">rm_file_or_directory_recursively_ex</a>( parent_path + (<span class="stringliteral">&quot;/&quot;</span>) + fileinfos.at(i)[<span class="charliteral">&#39;N&#39;</span>]);
+<a name="l00315"></a>00315             }
+<a name="l00316"></a>00316         } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (fileinfos.at(i)[<span class="charliteral">&#39;T&#39;</span>].at(0) == <span class="charliteral">&#39;l&#39;</span> || fileinfos.at(i)[<span class="charliteral">&#39;T&#39;</span>].at(0) == <span class="charliteral">&#39;-&#39;</span>) {
+<a name="l00317"></a>00317             abs_path = parent_path + <span class="stringliteral">&quot;/&quot;</span> + fileinfos.at(i)[<span class="charliteral">&#39;N&#39;</span>] ;<span class="comment">//+ &quot;/&quot; + child_item-&gt;file_name ;</span>
+<a name="l00318"></a>00318             <span class="comment">//strcpy( remote_path , abs_path.toAscii().data() );</span>
+<a name="l00319"></a>00319             <span class="comment">//qDebug()&lt;&lt;QString(tr(&quot;Removing %1&quot;)).arg( remote_path );</span>
+<a name="l00320"></a>00320             exec_ret = libssh2_sftp_unlink( <a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(abs_path));
+<a name="l00321"></a>00321         } <span class="keywordflow">else</span> {
+<a name="l00322"></a>00322             qDebug()&lt;&lt;<span class="stringliteral">&quot; unknow file type ,don&#39;t know how to remove it&quot;</span>;
+<a name="l00323"></a>00323         }
+<a name="l00324"></a>00324     }
+<a name="l00325"></a>00325     
+<a name="l00326"></a>00326     <span class="comment">//删除这个目录</span>
+<a name="l00327"></a>00327     abs_path = <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;<a class="code" href="class_global_option.html#a07c6749e6ef5897a215791722730f3a7">remote_codec</a>-&gt;fromUnicode(parent_path) ;<span class="comment">//+ &quot;/&quot; + parent_item-&gt;file_name ;</span>
+<a name="l00328"></a>00328     <span class="comment">//qDebug()&lt;&lt;&quot;rmdir: &quot;&lt;&lt; abs_path;</span>
+<a name="l00329"></a>00329     exec_ret = libssh2_sftp_rmdir(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, abs_path.toAscii().data());
+<a name="l00330"></a>00330     <span class="keywordflow">if</span> (exec_ret != 0) <span class="comment">//可能这是一个文件，不是目录，那么使用删除文件的指令</span>
+<a name="l00331"></a>00331     {
+<a name="l00332"></a>00332         exec_ret = libssh2_sftp_unlink(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, abs_path.toAscii().data());
+<a name="l00333"></a>00333         <span class="keywordflow">if</span> (exec_ret != 0) {
+<a name="l00334"></a>00334             qDebug()&lt;&lt; <span class="stringliteral">&quot;Can&#39;t remove file or directory (&quot;</span>&lt;&lt; libssh2_sftp_last_error(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>) &lt;&lt;<span class="stringliteral">&quot;): &quot;</span>&lt;&lt; abs_path ;
+<a name="l00335"></a>00335         }
+<a name="l00336"></a>00336     }
+<a name="l00337"></a>00337     
+<a name="l00338"></a>00338     <span class="keywordflow">return</span> exec_ret ;
+<a name="l00339"></a>00339 }
+<a name="l00340"></a>00340 
+<a name="l00341"></a>00341 <span class="comment">// linux 路径名中不能出现的字符： ! </span>
+<a name="l00342"></a><a class="code" href="class_dir_retriver.html#ae0753eaeb00b5cfbc8d21806bfc84d90">00342</a> <span class="keywordtype">int</span>  <a class="code" href="class_dir_retriver.html#ae0753eaeb00b5cfbc8d21806bfc84d90">DirRetriver::rename</a>()
+<a name="l00343"></a>00343 {
+<a name="l00344"></a>00344     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00345"></a>00345     
+<a name="l00346"></a>00346     <span class="keywordtype">int</span> exec_ret = -1;
+<a name="l00347"></a>00347     QStringList  sys_dirs;
+<a name="l00348"></a>00348     sys_dirs&lt;&lt;<span class="stringliteral">&quot;/usr&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/bin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sbin&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/lib&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/etc&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/dev&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/proc&quot;</span>
+<a name="l00349"></a>00349             &lt;&lt;<span class="stringliteral">&quot;/mnt&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/sys&quot;</span>&lt;&lt;<span class="stringliteral">&quot;/var&quot;</span>;
+<a name="l00350"></a>00350     
+<a name="l00351"></a>00351     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> * cmd_item = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00352"></a>00352     
+<a name="l00353"></a>00353     <span class="keywordtype">size_t</span> sep_pos = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>.indexOf(<span class="charliteral">&#39;!&#39;</span>);
+<a name="l00354"></a>00354     
+<a name="l00355"></a>00355     QString abs_path = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + <span class="stringliteral">&quot;/&quot;</span> +  cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>.mid(0,sep_pos);
+<a name="l00356"></a>00356     QString abs_path_rename_to = cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a> + <span class="stringliteral">&quot;/&quot;</span> + cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a>.mid(sep_pos+1,-1);
+<a name="l00357"></a>00357     
+<a name="l00358"></a>00358     qDebug()&lt;&lt; <span class="stringliteral">&quot;abs  path :&quot;</span>&lt;&lt; abs_path  
+<a name="l00359"></a>00359             &lt;&lt; <span class="stringliteral">&quot; abs path rename to ;&quot;</span>&lt;&lt; abs_path_rename_to;
+<a name="l00360"></a>00360     
+<a name="l00361"></a>00361     <span class="keywordflow">if</span> (sys_dirs.contains(  abs_path )) {
+<a name="l00362"></a>00362         qDebug()&lt;&lt;<span class="stringliteral">&quot; rm system directory , this is danger.&quot;</span>;
+<a name="l00363"></a>00363     } <span class="keywordflow">else</span> {
+<a name="l00364"></a>00364         exec_ret = libssh2_sftp_rename(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>,
+<a name="l00365"></a>00365                                        <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(abs_path).data(),
+<a name="l00366"></a>00366                                        <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;<a class="code" href="class_global_option.html#a07c6749e6ef5897a215791722730f3a7">remote_codec</a>-&gt;fromUnicode(abs_path_rename_to));
+<a name="l00367"></a>00367     }
+<a name="l00368"></a>00368 
+<a name="l00369"></a>00369     this-&gt;<a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">add_node</a>(cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>, cmd_item-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a>);
+<a name="l00370"></a>00370     
+<a name="l00371"></a>00371     <span class="keywordflow">return</span> exec_ret ;
+<a name="l00372"></a>00372 }
+<a name="l00373"></a>00373 
+<a name="l00374"></a><a class="code" href="class_dir_retriver.html#a494d623465f877880a4b9a686d836af4">00374</a> <span class="keywordtype">int</span> <a class="code" href="class_dir_retriver.html#a494d623465f877880a4b9a686d836af4">DirRetriver::keep_alive</a>()
+<a name="l00375"></a>00375 {
+<a name="l00376"></a>00376     <span class="keywordtype">int</span> exec_ret;
+<a name="l00377"></a>00377     <span class="keywordtype">char</span> full_path [PATH_MAX+1] = {0};
+<a name="l00378"></a>00378     <span class="keywordtype">char</span> fullPath [PATH_MAX+1] = {0};
+<a name="l00379"></a>00379 
+<a name="l00380"></a>00380     LIBSSH2_SFTP_ATTRIBUTES ssh2_sftp_attrib;
+<a name="l00381"></a>00381     
+<a name="l00382"></a>00382     strcpy(full_path, <span class="stringliteral">&quot;/nullfxp_keep_alive_dummy_directory&quot;</span>);
+<a name="l00383"></a>00383     strcpy(fullPath, <span class="stringliteral">&quot;/&quot;</span>);
+<a name="l00384"></a>00384 
+<a name="l00385"></a>00385     exec_ret = libssh2_sftp_stat(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>,full_path,&amp;ssh2_sftp_attrib);
+<a name="l00386"></a>00386     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__&lt;&lt; <span class="stringliteral">&quot; stat : &quot;</span>&lt;&lt; exec_ret
+<a name="l00387"></a>00387             &lt;&lt;<span class="stringliteral">&quot; sftp errno:&quot;</span>&lt;&lt; libssh2_sftp_last_error(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>) ;
+<a name="l00388"></a>00388     <span class="comment">//TODO 在网络失去连接的时候如何向上层类通知，并进行重新连接</span>
+<a name="l00389"></a>00389     <span class="keywordflow">return</span> exec_ret;
+<a name="l00390"></a>00390 }
+<a name="l00391"></a>00391 
+<a name="l00392"></a><a class="code" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">00392</a> <span class="keywordtype">int</span> <a class="code" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">DirRetriver::fxp_do_ls_dir</a>(QString path, QVector&lt;QMap&lt;char, QString&gt; &gt; &amp; fileinfos)
+<a name="l00393"></a>00393 {
+<a name="l00394"></a>00394     LIBSSH2_SFTP_HANDLE *sftp_handle = 0;
+<a name="l00395"></a>00395     LIBSSH2_SFTP_ATTRIBUTES ssh2_sftp_attrib;
+<a name="l00396"></a>00396     QMap&lt;char, QString&gt; thefile;
+<a name="l00397"></a>00397     <span class="keywordtype">char</span> file_name[PATH_MAX+1];
+<a name="l00398"></a>00398     <span class="keywordtype">char</span> file_size[PATH_MAX+1];
+<a name="l00399"></a>00399     <span class="keywordtype">char</span> file_type[PATH_MAX+1];
+<a name="l00400"></a>00400     <span class="keywordtype">char</span> file_date[PATH_MAX+1];
+<a name="l00401"></a>00401     
+<a name="l00402"></a>00402     sftp_handle = libssh2_sftp_opendir(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(path).data());
+<a name="l00403"></a>00403     <span class="keywordflow">if</span> (sftp_handle == 0) {
+<a name="l00404"></a>00404         <span class="keywordflow">return</span> 0;
+<a name="l00405"></a>00405     } <span class="keywordflow">else</span> {
+<a name="l00406"></a>00406         fileinfos.clear();
+<a name="l00407"></a>00407         memset(&amp;ssh2_sftp_attrib, 0, <span class="keyword">sizeof</span>(LIBSSH2_SFTP_ATTRIBUTES));
+<a name="l00408"></a>00408         <span class="keywordflow">while</span> (libssh2_sftp_readdir(sftp_handle, file_name, PATH_MAX, &amp;ssh2_sftp_attrib) &gt; 0) {
+<a name="l00409"></a>00409             <span class="keywordflow">if</span> (strlen(file_name) == 1 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span>) continue ;
+<a name="l00410"></a>00410             <span class="keywordflow">if</span> (strlen(file_name) == 2 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span> &amp;&amp; file_name[1] == <span class="charliteral">&#39;.&#39;</span>) <span class="keywordflow">continue</span>;
+<a name="l00411"></a>00411             <span class="comment">//不处理隐藏文件? 处理隐藏文件</span>
+<a name="l00412"></a>00412             <span class="comment">// if(file_name[0] == &#39;.&#39; ) continue;</span>
+<a name="l00413"></a>00413             
+<a name="l00414"></a>00414             memset(file_size, 0, <span class="keyword">sizeof</span>(file_size));
+<a name="l00415"></a>00415 
+<a name="l00416"></a>00416 <span class="preprocessor">#ifndef _MSC_VER</span>
+<a name="l00417"></a>00417 <span class="preprocessor"></span>            snprintf(file_size, <span class="keyword">sizeof</span>(file_size) - 1, <span class="stringliteral">&quot;%llu&quot;</span>,ssh2_sftp_attrib.filesize);
+<a name="l00418"></a>00418             
+<a name="l00419"></a>00419             <span class="keyword">struct </span>tm *ltime = localtime((time_t*)&amp;ssh2_sftp_attrib.mtime);
+<a name="l00420"></a>00420             <span class="keywordflow">if</span> (ltime != NULL) {
+<a name="l00421"></a>00421                 <span class="keywordflow">if</span> (time(NULL) - ssh2_sftp_attrib.mtime &lt; (365*24*60*60) / 2)
+<a name="l00422"></a>00422                     strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00423"></a>00423                 <span class="keywordflow">else</span>
+<a name="l00424"></a>00424                     strftime(file_date, <span class="keyword">sizeof</span> file_date, <span class="stringliteral">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, ltime);
+<a name="l00425"></a>00425             }
+<a name="l00426"></a>00426 <span class="preprocessor">#else</span>
+<a name="l00427"></a>00427 <span class="preprocessor"></span>            _snprintf(file_size, <span class="keyword">sizeof</span>(file_size) - 1 , <span class="stringliteral">&quot;%llu&quot;</span>,ssh2_sftp_attrib.filesize);
+<a name="l00428"></a>00428             _snprintf(file_date, <span class="keyword">sizeof</span>(file_date) - 1, <span class="stringliteral">&quot;0000/00/00 00:00:00&quot;</span>);
+<a name="l00429"></a>00429 <span class="preprocessor">#endif</span>
+<a name="l00430"></a>00430 <span class="preprocessor"></span>
+<a name="l00431"></a>00431             <a class="code" href="utils_8cpp.html#a5e3ce1ddbaec9bf324e051a2038483d9">strmode</a>(ssh2_sftp_attrib.permissions, file_type);
+<a name="l00432"></a>00432             <span class="comment">//printf(&quot; ls dir : %s %s , date=%s , type=%s \n&quot; , file_name , file_size , file_date , file_type );</span>
+<a name="l00433"></a>00433             thefile.insert(<span class="charliteral">&#39;N&#39;</span>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;toUnicode(file_name ));
+<a name="l00434"></a>00434             thefile.insert(<span class="charliteral">&#39;T&#39;</span>, file_type );
+<a name="l00435"></a>00435             thefile.insert(<span class="charliteral">&#39;S&#39;</span>, file_size );
+<a name="l00436"></a>00436             thefile.insert(<span class="charliteral">&#39;D&#39;</span>, file_date );  
+<a name="l00437"></a>00437 
+<a name="l00438"></a>00438             fileinfos.push_back(thefile);
+<a name="l00439"></a>00439             memset(&amp;ssh2_sftp_attrib, 0, <span class="keyword">sizeof</span>(LIBSSH2_SFTP_ATTRIBUTES));
+<a name="l00440"></a>00440             thefile.clear();
+<a name="l00441"></a>00441         }
+<a name="l00442"></a>00442         libssh2_sftp_closedir(sftp_handle);
+<a name="l00443"></a>00443         <span class="keywordflow">return</span> fileinfos.size();
+<a name="l00444"></a>00444     }
+<a name="l00445"></a>00445     
+<a name="l00446"></a>00446     <span class="keywordflow">return</span> 0;
+<a name="l00447"></a>00447 }
+<a name="l00448"></a>00448 
+<a name="l00449"></a><a class="code" href="class_dir_retriver.html#a168b253607d356a4873dc6af566e7e8a">00449</a> <span class="keywordtype">int</span> <a class="code" href="class_dir_retriver.html#a577db21c8c773d060cddcbe940cdf01b">DirRetriver::fxp_do_ls_dir</a>(QString path, QVector&lt;QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt; &gt; &amp; fileinfos)
+<a name="l00450"></a>00450 {
+<a name="l00451"></a>00451     LIBSSH2_SFTP_HANDLE *sftp_handle = 0;
+<a name="l00452"></a>00452     LIBSSH2_SFTP_ATTRIBUTES ssh2_sftp_attrib;
+<a name="l00453"></a>00453     <span class="keywordtype">char</span> file_name[PATH_MAX+1];
+<a name="l00454"></a>00454     QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt; currFile;
+<a name="l00455"></a>00455     LIBSSH2_SFTP_ATTRIBUTES *attr = NULL;
+<a name="l00456"></a>00456     
+<a name="l00457"></a>00457     sftp_handle = libssh2_sftp_opendir(<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(path).data());
+<a name="l00458"></a>00458     <span class="keywordflow">if</span> (sftp_handle == 0) {
+<a name="l00459"></a>00459         <span class="keywordflow">return</span> 0;
+<a name="l00460"></a>00460     } <span class="keywordflow">else</span> {
+<a name="l00461"></a>00461         fileinfos.clear();
+<a name="l00462"></a>00462         memset(&amp;ssh2_sftp_attrib, 0, <span class="keyword">sizeof</span>(LIBSSH2_SFTP_ATTRIBUTES));
+<a name="l00463"></a>00463         <span class="keywordflow">while</span> (libssh2_sftp_readdir(sftp_handle, file_name, PATH_MAX, &amp;ssh2_sftp_attrib) &gt; 0) {
+<a name="l00464"></a>00464             <span class="keywordflow">if</span> (strlen(file_name) == 1 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span>) continue ;
+<a name="l00465"></a>00465             <span class="keywordflow">if</span> (strlen(file_name) == 2 &amp;&amp; file_name[0] == <span class="charliteral">&#39;.&#39;</span> &amp;&amp; file_name[1] == <span class="charliteral">&#39;.&#39;</span>) <span class="keywordflow">continue</span>;
+<a name="l00466"></a>00466             <span class="comment">//不处理隐藏文件? 处理隐藏文件</span>
+<a name="l00467"></a>00467             <span class="comment">// if(file_name[0] == &#39;.&#39; ) continue;</span>
+<a name="l00468"></a>00468 
+<a name="l00469"></a>00469             attr = (LIBSSH2_SFTP_ATTRIBUTES*)calloc(1, <span class="keyword">sizeof</span>(LIBSSH2_SFTP_ATTRIBUTES));
+<a name="l00470"></a>00470             memcpy(attr, &amp;ssh2_sftp_attrib, <span class="keyword">sizeof</span>(LIBSSH2_SFTP_ATTRIBUTES));
+<a name="l00471"></a>00471 
+<a name="l00472"></a>00472             currFile = QPair&lt;QString, LIBSSH2_SFTP_ATTRIBUTES*&gt;(QString(file_name), attr);            
+<a name="l00473"></a>00473             fileinfos.push_back(currFile);
+<a name="l00474"></a>00474         }
+<a name="l00475"></a>00475         libssh2_sftp_closedir(sftp_handle);
+<a name="l00476"></a>00476         <span class="keywordflow">return</span> fileinfos.size();
+<a name="l00477"></a>00477     }
+<a name="l00478"></a>00478     <span class="keywordflow">return</span> 0;
+<a name="l00479"></a>00479 }
+<a name="l00480"></a>00480 
+<a name="l00481"></a><a class="code" href="class_dir_retriver.html#a74f2425706a3754dcd00f201eebfc844">00481</a> <span class="keywordtype">int</span> <a class="code" href="class_dir_retriver.html#a74f2425706a3754dcd00f201eebfc844">DirRetriver::fxp_realpath</a>()
+<a name="l00482"></a>00482 {
+<a name="l00483"></a>00483     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_elem = this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.at(0);
+<a name="l00484"></a>00484     LIBSSH2_SFTP_ATTRIBUTES ssh2_sftp_attrib;
+<a name="l00485"></a>00485     <a class="code" href="class_net_dir_node.html">NetDirNode</a> *node_item = cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a>;
+<a name="l00486"></a>00486     <span class="keywordtype">int</span> ret = 0;
+<a name="l00487"></a>00487 
+<a name="l00488"></a>00488     <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;<a class="code" href="class_global_option.html#a07c6749e6ef5897a215791722730f3a7">remote_codec</a>-&gt;fromUnicode(node_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>).data();
+<a name="l00489"></a>00489     <span class="comment">// stat will follow the link if it is.</span>
+<a name="l00490"></a>00490     ret = libssh2_sftp_stat(this-&gt;<a class="code" href="class_dir_retriver.html#aff7d30fbabf690bc9a77d222f1c43708">ssh2_sftp</a>, <a class="code" href="class_global_option.html#a23a5b10888b23504a10b5c7b96bddc62">GlobalOption::instance</a>()-&gt;remote_codec-&gt;fromUnicode(node_item-&gt;<a class="code" href="class_net_dir_node.html#a79f52fea137d5073dd4fb653527a94b4">fullPath</a>).data(), &amp;ssh2_sftp_attrib);
+<a name="l00491"></a>00491     <span class="keywordflow">if</span> (ret != 0) {
+<a name="l00492"></a>00492         <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;stat error.&quot;</span>;
+<a name="l00493"></a>00493     } <span class="keywordflow">else</span> {
+<a name="l00494"></a>00494         <span class="keywordflow">if</span> (S_ISDIR(ssh2_sftp_attrib.permissions)) {
+<a name="l00495"></a>00495             <span class="comment">// node_item-&gt;linkToDir = true;</span>
+<a name="l00496"></a>00496             ret = 0;
+<a name="l00497"></a>00497         } <span class="keywordflow">else</span> {
+<a name="l00498"></a>00498             ret = 1;
+<a name="l00499"></a>00499         }
+<a name="l00500"></a>00500     }
+<a name="l00501"></a>00501 
+<a name="l00502"></a>00502     <span class="keywordflow">return</span> ret;
+<a name="l00503"></a>00503 }
+<a name="l00504"></a>00504 
+<a name="l00505"></a><a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">00505</a> <span class="keywordtype">void</span> <a class="code" href="class_dir_retriver.html#a84a562912318a560a1f913efa1d2b870">DirRetriver::add_node</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item, <span class="keywordtype">void</span> *parent_persistent_index)
+<a name="l00506"></a>00506 {
+<a name="l00507"></a>00507     qDebug() &lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00508"></a>00508     
+<a name="l00509"></a>00509     parent_item-&gt;<a class="code" href="class_net_dir_node.html#ab2a93d246bd4a6426a0bbc20b5ae377f">prevFlag</a> = parent_item-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a>;
+<a name="l00510"></a>00510     parent_item-&gt;<a class="code" href="class_net_dir_node.html#a40925f2136f09136ef226e1d13113ee4">retrFlag</a> = <a class="code" href="rfsdirnode_8h.html#a385c44f6fb256e5716a2302a5b940388a7d94fa2d258cfedcb304df61a712487c">POP_UPDATING</a>;
+<a name="l00511"></a>00511     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_elem = <span class="keyword">new</span> <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a>();
+<a name="l00512"></a>00512     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a> = parent_item;
+<a name="l00513"></a>00513     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a> = parent_persistent_index;
+<a name="l00514"></a>00514     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#aaa8beb9f9f09df671e413f778009683f">cmd</a> = <a class="code" href="sftp-const_8h.html#a953a9ba77aac4d2ad754d0587b9a6b63">SSH2_FXP_READDIR</a>;
+<a name="l00515"></a>00515     this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.push_back(cmd_elem);
+<a name="l00516"></a>00516     
+<a name="l00517"></a>00517     <span class="keywordflow">if</span> (!this-&gt;isRunning()) {
+<a name="l00518"></a>00518         this-&gt;start();
+<a name="l00519"></a>00519     }
+<a name="l00520"></a>00520 }
+<a name="l00521"></a>00521 
+<a name="l00522"></a><a class="code" href="class_dir_retriver.html#adebd4f6ee6686e4200ecdc16535aec11">00522</a> <span class="keywordtype">void</span> <a class="code" href="class_dir_retriver.html#adebd4f6ee6686e4200ecdc16535aec11">DirRetriver::slot_execute_command</a>(<a class="code" href="class_net_dir_node.html">NetDirNode</a> *parent_item,
+<a name="l00523"></a>00523                                                   <span class="keywordtype">void</span> *parent_persistent_index, <span class="keywordtype">int</span> cmd, QString params)
+<a name="l00524"></a>00524 {
+<a name="l00525"></a>00525     qDebug()&lt;&lt;__FUNCTION__&lt;&lt;<span class="stringliteral">&quot;: &quot;</span>&lt;&lt;__LINE__&lt;&lt;<span class="stringliteral">&quot;:&quot;</span>&lt;&lt; __FILE__;
+<a name="l00526"></a>00526     
+<a name="l00527"></a>00527     <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a> *cmd_elem = <span class="keyword">new</span> <a class="code" href="class_dir_retriver_1_1command__queue__elem.html">command_queue_elem</a>();
+<a name="l00528"></a>00528     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#af2d88697316d25d3fadbea5b90d40d2b">parent_item</a> = parent_item;
+<a name="l00529"></a>00529     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad381fc42a4bd1acce46dffc7a8dc3e90">parent_persistent_index</a> = parent_persistent_index;
+<a name="l00530"></a>00530     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#aaa8beb9f9f09df671e413f778009683f">cmd</a> = cmd;
+<a name="l00531"></a>00531     cmd_elem-&gt;<a class="code" href="class_dir_retriver_1_1command__queue__elem.html#ad8c7553eaa04abc5b1228a8e054ec75b">params</a> = params;
+<a name="l00532"></a>00532     
+<a name="l00533"></a>00533     this-&gt;<a class="code" href="class_dir_retriver.html#a5718e8e1ec1a90605cc9e9c842050b08">command_queue</a>.push_back(cmd_elem);
+<a name="l00534"></a>00534     
+<a name="l00535"></a>00535     <span class="keywordflow">if</span> (!this-&gt;isRunning()) {
+<a name="l00536"></a>00536         this-&gt;start();
+<a name="l00537"></a>00537     }
+<a name="l00538"></a>00538 }
+<a name="l00539"></a>00539 
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>

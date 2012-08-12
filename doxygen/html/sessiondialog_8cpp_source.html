@@ -1,0 +1,555 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>nullfxp: sessiondialog.cpp源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- 制作者 Doxygen 1.6.3 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<h1>sessiondialog.cpp</h1><a href="sessiondialog_8cpp.html">浏览该文件的文档。</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// sessiondialog.cpp --- </span>
+<a name="l00002"></a>00002 <span class="comment">// </span>
+<a name="l00003"></a>00003 <span class="comment">// Author: liuguangzhao</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (C) 2007-2010 liuguangzhao@users.sf.net</span>
+<a name="l00005"></a>00005 <span class="comment">// URL: http://www.qtchina.net http://nullget.sourceforge.net</span>
+<a name="l00006"></a>00006 <span class="comment">// Created: 2008-07-16 21:35:27 +0000</span>
+<a name="l00007"></a>00007 <span class="comment">// Version: $Id: sessiondialog.cpp 541 2009-10-09 12:45:42Z liuguangzhao $</span>
+<a name="l00008"></a>00008 <span class="comment">// </span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">utils.h</a>&quot;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;<a class="code" href="quickconnectinfodialog_8h.html">quickconnectinfodialog.h</a>&quot;</span>
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="sessiondialog_8h.html">sessiondialog.h</a>&quot;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a><a class="code" href="class_session_dir_model.html#a83ece861407e3abd191628d29078a8b9">00016</a> <a class="code" href="class_session_dir_model.html#a83ece861407e3abd191628d29078a8b9">SessionDirModel::SessionDirModel</a>(<span class="keyword">const</span> QStringList &amp;nameFilters, 
+<a name="l00017"></a>00017                                  QDir::Filters filters, QDir::SortFlags sort, QObject *parent)
+<a name="l00018"></a>00018     : QDirModel(nameFilters, filters, sort, parent)
+<a name="l00019"></a>00019 {
+<a name="l00020"></a>00020     
+<a name="l00021"></a>00021 }
+<a name="l00022"></a><a class="code" href="class_session_dir_model.html#ae588243a853f55e0800fc8d656975f5d">00022</a> <a class="code" href="class_session_dir_model.html#a83ece861407e3abd191628d29078a8b9">SessionDirModel::SessionDirModel</a>(QObject *parent)
+<a name="l00023"></a>00023     : QDirModel(parent)
+<a name="l00024"></a>00024 {
+<a name="l00025"></a>00025 }
+<a name="l00026"></a><a class="code" href="class_session_dir_model.html#a956deb863c93a91c78ee47b9b852022b">00026</a> <a class="code" href="class_session_dir_model.html#a956deb863c93a91c78ee47b9b852022b">SessionDirModel::~SessionDirModel</a>()
+<a name="l00027"></a>00027 {    
+<a name="l00028"></a>00028 }
+<a name="l00029"></a>00029 
+<a name="l00030"></a><a class="code" href="class_session_dir_model.html#ad8f85daea33f20b905b2ec2b42d96428">00030</a> QVariant <a class="code" href="class_session_dir_model.html#ad8f85daea33f20b905b2ec2b42d96428">SessionDirModel::data</a>(<span class="keyword">const</span> QModelIndex &amp;index, <span class="keywordtype">int</span> role)<span class="keyword"> const</span>
+<a name="l00031"></a>00031 <span class="keyword"></span>{
+<a name="l00032"></a>00032     <span class="keywordflow">if</span> (role == Qt::DecorationRole &amp;&amp; !this-&gt;isDir(index)) {
+<a name="l00033"></a>00033         <span class="keywordflow">return</span> QIcon(<span class="stringliteral">&quot;:icons/computer.png&quot;</span>);
+<a name="l00034"></a>00034     }
+<a name="l00035"></a>00035     <span class="keywordflow">return</span> <a class="code" href="class_session_dir_model.html#ad8f85daea33f20b905b2ec2b42d96428">QDirModel::data</a>(index, role);
+<a name="l00036"></a>00036 }
+<a name="l00037"></a>00037 
+<a name="l00038"></a><a class="code" href="class_session_dialog.html#a4609743db5cca82bdfaf405b3c5afd6c">00038</a> <a class="code" href="class_session_dialog.html#a4609743db5cca82bdfaf405b3c5afd6c">SessionDialog::SessionDialog</a>(QWidget *parent)
+<a name="l00039"></a>00039     :QDialog(parent),optype(0)
+<a name="l00040"></a>00040 {
+<a name="l00041"></a>00041     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.setupUi(<span class="keyword">this</span>);
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043     this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a> = <a class="code" href="class_base_storage.html#a1f27e298c09b394d68ad136b68dd0782">BaseStorage::instance</a>();
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setEditTriggers(QAbstractItemView::NoEditTriggers);
+<a name="l00046"></a>00046     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setExpandsOnDoubleClick(<span class="keyword">false</span>);
+<a name="l00047"></a>00047     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setItemsExpandable(<span class="keyword">true</span>);
+<a name="l00048"></a>00048     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setAnimated(<span class="keyword">true</span>);
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="preprocessor">#if QT_VERTION &gt;= 0x0404000</span>
+<a name="l00051"></a>00051 <span class="preprocessor"></span>    this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setHeaderHidden(<span class="keyword">true</span>);
+<a name="l00052"></a>00052 <span class="preprocessor">#else</span>
+<a name="l00053"></a>00053 <span class="preprocessor"></span>    this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;header()-&gt;setVisible(<span class="keyword">false</span>);
+<a name="l00054"></a>00054 <span class="preprocessor">#endif</span>
+<a name="l00055"></a>00055 <span class="preprocessor"></span>
+<a name="l00056"></a>00056     this-&gt;<a class="code" href="class_session_dialog.html#aa3c41470dd1057644d8659afa4ed5523">sessPath</a> = <a class="code" href="class_base_storage.html#a1f27e298c09b394d68ad136b68dd0782">BaseStorage::instance</a>()-&gt;<a class="code" href="class_base_storage.html#a586a5fc3923adb9b9b26df9b835446e5">getSessionPath</a>();
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058     this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a> = <span class="keyword">new</span> <a class="code" href="class_session_dir_model.html">SessionDirModel</a>();
+<a name="l00059"></a>00059     this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;setReadOnly(<span class="keyword">false</span>);
+<a name="l00060"></a>00060     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setModel(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>);
+<a name="l00061"></a>00061     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setRootIndex(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;index(this-&gt;sessPath));
+<a name="l00062"></a>00062     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setColumnHidden(1, <span class="keyword">true</span>);
+<a name="l00063"></a>00063     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setColumnHidden(2, <span class="keyword">true</span>);
+<a name="l00064"></a>00064     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;setColumnHidden(3, <span class="keyword">true</span>);
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView, SIGNAL(customContextMenuRequested(<span class="keyword">const</span> QPoint&amp;)),
+<a name="l00067"></a>00067                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a75d85e93e9d7345e6195ed7ed5f6b189">slot_ctx_menu_requested</a>(<span class="keyword">const</span> QPoint &amp;)));
+<a name="l00068"></a>00068     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView, SIGNAL(doubleClicked(<span class="keyword">const</span> QModelIndex&amp;)),
+<a name="l00069"></a>00069                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>(<span class="keyword">const</span> QModelIndex&amp;)));
+<a name="l00070"></a>00070     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView, SIGNAL(clicked(<span class="keyword">const</span> QModelIndex &amp;)),
+<a name="l00071"></a>00071                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#ab4ae0a4c77a9c3b78882f7ececd3e8c0">slot_item_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;)));
+<a name="l00072"></a>00072     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton, SIGNAL(clicked()),
+<a name="l00073"></a>00073                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>()));
+<a name="l00074"></a>00074     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_2, SIGNAL(clicked()),
+<a name="l00075"></a>00075                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#ae05f2757552b1db23b5b6b9405c9e0ac">slot_quick_connect</a>()));
+<a name="l00076"></a>00076     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_3, SIGNAL(clicked()),
+<a name="l00077"></a>00077                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#ae88bc0f8ebebe1fa1d0c06d5123b5815">slot_remove_selected_host</a>()));
+<a name="l00078"></a>00078     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_6, SIGNAL(clicked()),
+<a name="l00079"></a>00079                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a57418f1ee021feb2f4043e146bbe36e9">slot_cut_selected</a>()));
+<a name="l00080"></a>00080     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_7, SIGNAL(clicked()),
+<a name="l00081"></a>00081                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#aeaa489da12560189732afdc07499707f">slot_copy_selected</a>()));
+<a name="l00082"></a>00082     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_8, SIGNAL(clicked()),
+<a name="l00083"></a>00083                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#af32384b16652740309b53195aaffe1fd">slot_paste_selected</a>()));
+<a name="l00084"></a>00084     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.toolButton_10, SIGNAL(clicked()),
+<a name="l00085"></a>00085                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a28a58094d32df2c1f0d3c5b895cc7184">slot_new_folder</a>()));
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087     QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.pushButton, SIGNAL(clicked()),
+<a name="l00088"></a>00088                      <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>()));
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090     this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a> = 0;
+<a name="l00091"></a>00091     this-&gt;<a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">info_dlg</a> = 0;
+<a name="l00092"></a>00092 }
+<a name="l00093"></a>00093 
+<a name="l00094"></a><a class="code" href="class_session_dialog.html#ad9cab9f87c2c8799d7f8588ae6f4d8b3">00094</a> <a class="code" href="class_session_dialog.html#ad9cab9f87c2c8799d7f8588ae6f4d8b3">SessionDialog::~SessionDialog</a>()
+<a name="l00095"></a>00095 {
+<a name="l00096"></a>00096 }
+<a name="l00097"></a>00097 
+<a name="l00098"></a><a class="code" href="class_session_dialog.html#a75d85e93e9d7345e6195ed7ed5f6b189">00098</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a75d85e93e9d7345e6195ed7ed5f6b189">SessionDialog::slot_ctx_menu_requested</a>(<span class="keyword">const</span> QPoint &amp; pos)
+<a name="l00099"></a>00099 {
+<a name="l00100"></a>00100     <span class="keywordflow">if</span>(this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a> == 0) {
+<a name="l00101"></a>00101         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a> = <span class="keyword">new</span> QMenu(<span class="keyword">this</span>);
+<a name="l00102"></a>00102         this-&gt;<a class="code" href="class_session_dialog.html#ac1441001fcc1bcd97dc824b4ca7cdcff">action_connect</a> = <span class="keyword">new</span> QAction(tr(<span class="stringliteral">&quot;&amp;Connect to host&quot;</span>),<span class="keyword">this</span>);
+<a name="l00103"></a>00103         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;addAction(this-&gt;<a class="code" href="class_session_dialog.html#ac1441001fcc1bcd97dc824b4ca7cdcff">action_connect</a>);
+<a name="l00104"></a>00104         this-&gt;<a class="code" href="class_session_dialog.html#a6a18a0b7bbcc7a121b2dc268fb132a05">action_edit</a> = <span class="keyword">new</span> QAction(tr(<span class="stringliteral">&quot;&amp;View host info ...&quot;</span>),<span class="keyword">this</span>);
+<a name="l00105"></a>00105         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;addAction(this-&gt;<a class="code" href="class_session_dialog.html#a6a18a0b7bbcc7a121b2dc268fb132a05">action_edit</a>);
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107         this-&gt;<a class="code" href="class_session_dialog.html#a192c1bef988adf41fe7ff5dccae10310">action_rename</a> = <span class="keyword">new</span> QAction(tr(<span class="stringliteral">&quot;&amp;Rename host ...&quot;</span>),<span class="keyword">this</span>);
+<a name="l00108"></a>00108         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;addAction(this-&gt;<a class="code" href="class_session_dialog.html#a192c1bef988adf41fe7ff5dccae10310">action_rename</a>);
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110         this-&gt;<a class="code" href="class_session_dialog.html#af0acc3b001045e895d2b2626ecd07b50">action_sep</a> = <span class="keyword">new</span> QAction(<span class="stringliteral">&quot;&quot;</span>,0);
+<a name="l00111"></a>00111         this-&gt;<a class="code" href="class_session_dialog.html#af0acc3b001045e895d2b2626ecd07b50">action_sep</a>-&gt;setSeparator(<span class="keyword">true</span>);
+<a name="l00112"></a>00112         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;addAction(this-&gt;<a class="code" href="class_session_dialog.html#af0acc3b001045e895d2b2626ecd07b50">action_sep</a>);
+<a name="l00113"></a>00113         
+<a name="l00114"></a>00114         this-&gt;<a class="code" href="class_session_dialog.html#a59f5005310743a8086a774bfd34a66fe">action_remove</a> = <span class="keyword">new</span> QAction(tr(<span class="stringliteral">&quot;&amp;Remove host ...&quot;</span>), <span class="keyword">this</span>);
+<a name="l00115"></a>00115         this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;addAction(this-&gt;<a class="code" href="class_session_dialog.html#a59f5005310743a8086a774bfd34a66fe">action_remove</a>);
+<a name="l00116"></a>00116 
+<a name="l00117"></a>00117         QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#ac1441001fcc1bcd97dc824b4ca7cdcff">action_connect</a>, SIGNAL(triggered()), 
+<a name="l00118"></a>00118                          <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>()));
+<a name="l00119"></a>00119         QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a6a18a0b7bbcc7a121b2dc268fb132a05">action_edit</a>, SIGNAL(triggered()),
+<a name="l00120"></a>00120                          <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#a0712348f907b7694605c2144ac86ba73">slot_edit_selected_host</a>()));
+<a name="l00121"></a>00121         QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a192c1bef988adf41fe7ff5dccae10310">action_rename</a>, SIGNAL(triggered()),
+<a name="l00122"></a>00122                          <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#aa4ca79bb40c6226935826ad525a8f8d6">slot_rename_selected_host</a>()));
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124         QObject::connect(this-&gt;<a class="code" href="class_session_dialog.html#a59f5005310743a8086a774bfd34a66fe">action_remove</a>, SIGNAL(triggered()),
+<a name="l00125"></a>00125                          <span class="keyword">this</span>, SLOT(<a class="code" href="class_session_dialog.html#ae88bc0f8ebebe1fa1d0c06d5123b5815">slot_remove_selected_host</a>()));
+<a name="l00126"></a>00126     }
+<a name="l00127"></a>00127     this-&gt;<a class="code" href="class_session_dialog.html#aedd70336f2233d66eb792b65dc35edf4">host_list_ctx_menu</a>-&gt;popup(this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;mapToGlobal(pos));
+<a name="l00128"></a>00128 }
+<a name="l00129"></a>00129 
+<a name="l00130"></a><a class="code" href="class_session_dialog.html#afb3c8b7e757f1eb301ad505c6c950922">00130</a> <span class="keywordtype">void</span>  <a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">SessionDialog::slot_conntect_selected_host</a>(<span class="keyword">const</span> QModelIndex &amp; index)
+<a name="l00131"></a>00131 {
+<a name="l00132"></a>00132     <span class="keywordflow">if</span> (index.isValid()){
+<a name="l00133"></a>00133         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(index)) {
+<a name="l00134"></a>00134             <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;isExpanded(index)) {
+<a name="l00135"></a>00135                 this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;collapse(index);
+<a name="l00136"></a>00136             } <span class="keywordflow">else</span> {
+<a name="l00137"></a>00137                 this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;expand(index);
+<a name="l00138"></a>00138             }
+<a name="l00139"></a>00139         } <span class="keywordflow">else</span> {
+<a name="l00140"></a>00140             QString show_name = index.data().toString();
+<a name="l00141"></a>00141             QMap&lt;QString,QString&gt; host = this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">getHost</a>(show_name);
+<a name="l00142"></a>00142             QMap&lt;QString,QString&gt; host_new = QMap&lt;QString, QString&gt;(host);
+<a name="l00143"></a>00143             this-&gt;<a class="code" href="class_session_dialog.html#af95a2b969a3a43bb9f8afbd1258a39c5">selected_host</a> = host;
+<a name="l00144"></a>00144             emit this-&gt;<a class="code" href="class_session_dialog.html#a550cd01ff13c702ecc330fea4776b257">connect_remote_host_requested</a>(host); 
+<a name="l00145"></a>00145             this-&gt;setVisible(<span class="keyword">false</span>);
+<a name="l00146"></a>00146             this-&gt;accept();
+<a name="l00147"></a>00147         }
+<a name="l00148"></a>00148     } <span class="keywordflow">else</span> {
+<a name="l00149"></a>00149         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00150"></a>00150     }
+<a name="l00151"></a>00151 }
+<a name="l00152"></a><a class="code" href="class_session_dialog.html#a94c3574df5e1a0548aa6b9204fb65a51">00152</a> QMap&lt;QString,QString&gt; <a class="code" href="class_session_dialog.html#a94c3574df5e1a0548aa6b9204fb65a51">SessionDialog::get_host_map</a>()
+<a name="l00153"></a>00153 {
+<a name="l00154"></a>00154     QMap&lt;QString,QString&gt; host;
+<a name="l00155"></a>00155     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">info_dlg</a> != 0)
+<a name="l00156"></a>00156         host = ((<a class="code" href="class_quick_connect_info_dialog.html">QuickConnectInfoDialog</a>*)this-&gt;<a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">info_dlg</a>)-&gt;get_host_map();
+<a name="l00157"></a>00157     <span class="keywordflow">else</span>
+<a name="l00158"></a>00158         host = <a class="code" href="class_session_dialog.html#af95a2b969a3a43bb9f8afbd1258a39c5">selected_host</a>;
+<a name="l00159"></a>00159     <span class="keywordflow">return</span> host;
+<a name="l00160"></a>00160 }
+<a name="l00161"></a>00161 
+<a name="l00162"></a><a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">00162</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">SessionDialog::slot_conntect_selected_host</a>()
+<a name="l00163"></a>00163 {
+<a name="l00164"></a>00164     QItemSelectionModel *ism = 0;
+<a name="l00165"></a>00165     QModelIndexList mil;
+<a name="l00166"></a>00166 
+<a name="l00167"></a>00167     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00168"></a>00168     mil = ism-&gt;selectedIndexes();
+<a name="l00169"></a>00169     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00170"></a>00170 
+<a name="l00171"></a>00171     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00172"></a>00172         <span class="comment">//qDebug()&lt;&lt;mil.at(0).data();</span>
+<a name="l00173"></a>00173         this-&gt;<a class="code" href="class_session_dialog.html#a6ee57e8ed1ab4c1224c6f32e151c4aaf">slot_conntect_selected_host</a>(mil.at(0));
+<a name="l00174"></a>00174     } <span class="keywordflow">else</span> {
+<a name="l00175"></a>00175         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00176"></a>00176     }
+<a name="l00177"></a>00177 }
+<a name="l00178"></a>00178 
+<a name="l00179"></a><a class="code" href="class_session_dialog.html#a0712348f907b7694605c2144ac86ba73">00179</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a0712348f907b7694605c2144ac86ba73">SessionDialog::slot_edit_selected_host</a>()
+<a name="l00180"></a>00180 {
+<a name="l00181"></a>00181     QItemSelectionModel *ism = 0;
+<a name="l00182"></a>00182     QModelIndexList mil;
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00185"></a>00185     mil = ism-&gt;selectedIndexes();
+<a name="l00186"></a>00186     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00187"></a>00187     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00188"></a>00188         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(mil.at(0))) {
+<a name="l00189"></a>00189         } <span class="keywordflow">else</span> {
+<a name="l00190"></a>00190             <span class="comment">//qDebug()&lt;&lt;mil.at(0).data();</span>
+<a name="l00191"></a>00191             QString show_name = mil.at(0).data().toString();
+<a name="l00192"></a>00192             <span class="comment">//qDebug()&lt;&lt;show_name;</span>
+<a name="l00193"></a>00193             QMap&lt;QString,QString&gt; host = this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">getHost</a>(show_name);
+<a name="l00194"></a>00194             QMap&lt;QString,QString&gt; host_new;
+<a name="l00195"></a>00195             <span class="comment">//qDebug()&lt;&lt;host;</span>
+<a name="l00196"></a>00196             <a class="code" href="class_quick_connect_info_dialog.html">QuickConnectInfoDialog</a> *<a class="code" href="class_session_dialog.html#acd0a55a4f6ed274e29dee9a242cbbc7c">info_dlg</a> = <span class="keyword">new</span> <a class="code" href="class_quick_connect_info_dialog.html">QuickConnectInfoDialog</a>(<span class="keyword">this</span>);
+<a name="l00197"></a>00197             info_dlg-&gt;<a class="code" href="class_quick_connect_info_dialog.html#a81811725ca88cb106e4a35e18bf0626a">set_active_host</a>(host);
+<a name="l00198"></a>00198             <span class="keywordflow">if</span> (info_dlg-&gt;exec() == QDialog::Accepted) {
+<a name="l00199"></a>00199                 host_new = info_dlg-&gt;<a class="code" href="class_quick_connect_info_dialog.html#a6d1ac479bd2410bf19d74f60e1e646e1">get_host_map</a>();
+<a name="l00200"></a>00200                 <span class="keywordflow">if</span> (host_new != host) {
+<a name="l00201"></a>00201                     this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#aca712e402c6e190db29d9c1d468402a7">updateHost</a>(host_new);
+<a name="l00202"></a>00202                 }
+<a name="l00203"></a>00203             }
+<a name="l00204"></a>00204             <span class="keyword">delete</span> info_dlg;
+<a name="l00205"></a>00205         }
+<a name="l00206"></a>00206     } <span class="keywordflow">else</span> {
+<a name="l00207"></a>00207         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00208"></a>00208     }
+<a name="l00209"></a>00209 }
+<a name="l00210"></a>00210 
+<a name="l00211"></a><a class="code" href="class_session_dialog.html#aa4ca79bb40c6226935826ad525a8f8d6">00211</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#aa4ca79bb40c6226935826ad525a8f8d6">SessionDialog::slot_rename_selected_host</a>()
+<a name="l00212"></a>00212 {
+<a name="l00213"></a>00213     QItemSelectionModel *ism = 0;
+<a name="l00214"></a>00214     QModelIndexList mil;
+<a name="l00215"></a>00215     <span class="keywordtype">bool</span> ok;
+<a name="l00216"></a>00216     QString focusPath;
+<a name="l00217"></a>00217     QString newPath;
+<a name="l00218"></a>00218     QModelIndex pidx;
+<a name="l00219"></a>00219     QModelIndex cidx;
+<a name="l00220"></a>00220     QModelIndex nidx;
+<a name="l00221"></a>00221 
+<a name="l00222"></a>00222     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00223"></a>00223     mil = ism-&gt;selectedIndexes();
+<a name="l00224"></a>00224     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00225"></a>00225 
+<a name="l00226"></a>00226     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00227"></a>00227         cidx = mil.at(0);
+<a name="l00228"></a>00228         pidx = mil.at(0).parent();
+<a name="l00229"></a>00229         
+<a name="l00230"></a>00230         QString new_name = 
+<a name="l00231"></a>00231             QInputDialog::getText(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Rename host:&quot;</span>), tr(<span class="stringliteral">&quot;Type the new name:&quot;</span>), 
+<a name="l00232"></a>00232                                   QLineEdit::Normal, cidx.data().toString(), &amp;ok);
+<a name="l00233"></a>00233         new_name = new_name.trimmed();
+<a name="l00234"></a>00234 
+<a name="l00235"></a>00235         <span class="keywordflow">if</span>(ok &amp;&amp; !new_name.isEmpty() &amp;&amp; new_name != cidx.data().toString()) {
+<a name="l00236"></a>00236             <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(mil.at(0))) {
+<a name="l00237"></a>00237                 ok = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;isExpanded(cidx);
+<a name="l00238"></a>00238                 focusPath = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(cidx);
+<a name="l00239"></a>00239                 newPath = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(pidx) + <span class="stringliteral">&quot;/&quot;</span> + new_name;                                
+<a name="l00240"></a>00240                 nidx = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;mkdir(pidx, new_name); <span class="comment">// 欺骗QDirModel, 产生新目录缓存</span>
+<a name="l00241"></a>00241                 QDir().rmdir(newPath);           <span class="comment">// 使用后端方法删除掉这个目录，QDirModel变不知道。</span>
+<a name="l00242"></a>00242                 QDir().rename(focusPath, newPath); <span class="comment">//在把旧目录移动过来,这时QDirModel认为这个目录是它创建的那个</span>
+<a name="l00243"></a>00243                 <span class="keywordflow">if</span> (ok) {
+<a name="l00244"></a>00244                     this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;expand(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;index(newPath)); <span class="comment">// maybe crash?</span>
+<a name="l00245"></a>00245                 }
+<a name="l00246"></a>00246             } <span class="keywordflow">else</span> {
+<a name="l00247"></a>00247                 QMap&lt;QString, QString&gt; host = this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#a760d3524380b7ef982962ffbeaecbe0c">getHost</a>(mil.at(0).data().toString());
+<a name="l00248"></a>00248                 this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#aca712e402c6e190db29d9c1d468402a7">updateHost</a>(host, new_name);
+<a name="l00249"></a>00249             }
+<a name="l00250"></a>00250             this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(pidx);
+<a name="l00251"></a>00251         }
+<a name="l00252"></a>00252     } <span class="keywordflow">else</span> {
+<a name="l00253"></a>00253         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00254"></a>00254     }
+<a name="l00255"></a>00255 }
+<a name="l00256"></a>00256 
+<a name="l00257"></a><a class="code" href="class_session_dialog.html#ae88bc0f8ebebe1fa1d0c06d5123b5815">00257</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ae88bc0f8ebebe1fa1d0c06d5123b5815">SessionDialog::slot_remove_selected_host</a>()
+<a name="l00258"></a>00258 {
+<a name="l00259"></a>00259     QItemSelectionModel *ism = 0;
+<a name="l00260"></a>00260     QModelIndexList mil;
+<a name="l00261"></a>00261     QModelIndex cidx;
+<a name="l00262"></a>00262     QModelIndex pidx;
+<a name="l00263"></a>00263 
+<a name="l00264"></a>00264     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00265"></a>00265     mil = ism-&gt;selectedIndexes();
+<a name="l00266"></a>00266     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00267"></a>00267     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00268"></a>00268         cidx = mil.at(0);
+<a name="l00269"></a>00269         pidx = cidx.parent();
+<a name="l00270"></a>00270 
+<a name="l00271"></a>00271         <span class="comment">//waning user</span>
+<a name="l00272"></a>00272         <span class="keywordtype">int</span> ret = QMessageBox::question(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;Remote host:&quot;</span>), tr(<span class="stringliteral">&quot;Are you sure remove it?&quot;</span>), 
+<a name="l00273"></a>00273                                         QMessageBox::Yes, QMessageBox::No);
+<a name="l00274"></a>00274         <span class="keywordflow">if</span> (ret == QMessageBox::Yes) {
+<a name="l00275"></a>00275             <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(cidx)) {
+<a name="l00276"></a>00276                 <span class="keywordflow">if</span> (!this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;rmdir(cidx)) {
+<a name="l00277"></a>00277                     qDebug()&lt;&lt;<span class="stringliteral">&quot;Dir not empty: &quot;</span>&lt;&lt;this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(cidx);
+<a name="l00278"></a>00278                 }
+<a name="l00279"></a>00279             } <span class="keywordflow">else</span> {
+<a name="l00280"></a>00280                 this-&gt;<a class="code" href="class_session_dialog.html#ab13fdd1289c8785900d2b937c4405715">storage</a>-&gt;<a class="code" href="class_base_storage.html#a0138683efd43ec527d9514aacc687d9d">removeHost</a>(cidx.data().toString(), this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(pidx));
+<a name="l00281"></a>00281             }
+<a name="l00282"></a>00282             this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(pidx);
+<a name="l00283"></a>00283         }
+<a name="l00284"></a>00284     } <span class="keywordflow">else</span> {
+<a name="l00285"></a>00285         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00286"></a>00286     }
+<a name="l00287"></a>00287 }
+<a name="l00288"></a>00288 
+<a name="l00289"></a><a class="code" href="class_session_dialog.html#ae05f2757552b1db23b5b6b9405c9e0ac">00289</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ae05f2757552b1db23b5b6b9405c9e0ac">SessionDialog::slot_quick_connect</a>()
+<a name="l00290"></a>00290 {
+<a name="l00291"></a>00291     this-&gt;setVisible(<span class="keyword">false</span>);
+<a name="l00292"></a>00292     emit <a class="code" href="class_session_dialog.html#ae3038c67dd3638779fb72d6aed6edec3">quick_connect</a>();
+<a name="l00293"></a>00293     this-&gt;reject();
+<a name="l00294"></a>00294 }
+<a name="l00295"></a>00295 
+<a name="l00296"></a><a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">00296</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">SessionDialog::slot_show_no_item_tip</a>()
+<a name="l00297"></a>00297 {
+<a name="l00298"></a>00298     QString msg = QString(<span class="stringliteral">&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&quot;</span>) + tr(<span class="stringliteral">&quot;No selected host.&quot;</span>) 
+<a name="l00299"></a>00299         + QString(<span class="stringliteral">&quot;&amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;br&gt;&quot;</span>);
+<a name="l00300"></a>00300     <span class="comment">// QPoint pos = this-&gt;ui_win.toolButton_3-&gt;pos();</span>
+<a name="l00301"></a>00301     <span class="comment">// pos.setY(pos.y() + 80);</span>
+<a name="l00302"></a>00302     <span class="comment">// QToolTip::showText(this-&gt;mapToGlobal(pos), msg, this);</span>
+<a name="l00303"></a>00303 
+<a name="l00304"></a>00304     QPoint pos = QCursor::pos();
+<a name="l00305"></a>00305     QWhatsThis::showText(pos, msg);
+<a name="l00306"></a>00306 }
+<a name="l00307"></a>00307 
+<a name="l00308"></a><a class="code" href="class_session_dialog.html#a57418f1ee021feb2f4043e146bbe36e9">00308</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a57418f1ee021feb2f4043e146bbe36e9">SessionDialog::slot_cut_selected</a>()
+<a name="l00309"></a>00309 {
+<a name="l00310"></a>00310     QItemSelectionModel *ism = 0;
+<a name="l00311"></a>00311     QModelIndexList mil;
+<a name="l00312"></a>00312     QModelIndex cidx;
+<a name="l00313"></a>00313 
+<a name="l00314"></a>00314     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00315"></a>00315     mil = ism-&gt;selectedIndexes();
+<a name="l00316"></a>00316     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00317"></a>00317     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00318"></a>00318         cidx = mil.at(0);
+<a name="l00319"></a>00319         this-&gt;<a class="code" href="class_session_dialog.html#a546eeec7680bc5555044d8e84eaf690b">opLeftFile</a> = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(cidx);
+<a name="l00320"></a>00320         this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> = <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">OP_CUT</a>;
+<a name="l00321"></a>00321     } <span class="keywordflow">else</span> {
+<a name="l00322"></a>00322         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00323"></a>00323     }
+<a name="l00324"></a>00324 }
+<a name="l00325"></a>00325 
+<a name="l00326"></a><a class="code" href="class_session_dialog.html#aeaa489da12560189732afdc07499707f">00326</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#aeaa489da12560189732afdc07499707f">SessionDialog::slot_copy_selected</a>()
+<a name="l00327"></a>00327 {
+<a name="l00328"></a>00328     QItemSelectionModel *ism = 0;
+<a name="l00329"></a>00329     QModelIndexList mil;
+<a name="l00330"></a>00330     QModelIndex cidx;
+<a name="l00331"></a>00331 
+<a name="l00332"></a>00332     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00333"></a>00333     mil = ism-&gt;selectedIndexes();
+<a name="l00334"></a>00334     <span class="comment">//qDebug()&lt;&lt;mil;</span>
+<a name="l00335"></a>00335     <span class="keywordflow">if</span> (mil.count() &gt; 0) {
+<a name="l00336"></a>00336         cidx = mil.at(0);
+<a name="l00337"></a>00337         this-&gt;<a class="code" href="class_session_dialog.html#a546eeec7680bc5555044d8e84eaf690b">opLeftFile</a> = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(cidx);
+<a name="l00338"></a>00338         this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> = <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a0e1107063191c99641ed8fa208f5376a">OP_COPY</a>;
+<a name="l00339"></a>00339     } <span class="keywordflow">else</span> {
+<a name="l00340"></a>00340         this-&gt;<a class="code" href="class_session_dialog.html#a7c79b00ad8fd255c52708c1f72a6a304">slot_show_no_item_tip</a>();
+<a name="l00341"></a>00341     }
+<a name="l00342"></a>00342 }
+<a name="l00343"></a>00343 
+<a name="l00344"></a><a class="code" href="class_session_dialog.html#af32384b16652740309b53195aaffe1fd">00344</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#af32384b16652740309b53195aaffe1fd">SessionDialog::slot_paste_selected</a>()
+<a name="l00345"></a>00345 {
+<a name="l00346"></a>00346     QItemSelectionModel *ism = 0;
+<a name="l00347"></a>00347     QModelIndexList mil;
+<a name="l00348"></a>00348     QModelIndex cidx;
+<a name="l00349"></a>00349     QModelIndex pidx;
+<a name="l00350"></a>00350     QModelIndex aidx;
+<a name="l00351"></a>00351     QString afile;
+<a name="l00352"></a>00352     QModelIndex opidx;
+<a name="l00353"></a>00353     QString show_name;
+<a name="l00354"></a>00354 
+<a name="l00355"></a>00355     <span class="keywordflow">if</span> (!(this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> &gt;= <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a0e1107063191c99641ed8fa208f5376a">OP_COPY</a> &amp;&amp; this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> &lt;= <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">OP_CUT</a>)) {
+<a name="l00356"></a>00356         return ;
+<a name="l00357"></a>00357     }
+<a name="l00358"></a>00358 
+<a name="l00359"></a>00359     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00360"></a>00360     mil = ism-&gt;selectedIndexes();
+<a name="l00361"></a>00361 
+<a name="l00362"></a>00362     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00363"></a>00363         aidx = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;rootIndex();
+<a name="l00364"></a>00364     } <span class="keywordflow">else</span> {
+<a name="l00365"></a>00365         aidx = mil.at(0);
+<a name="l00366"></a>00366     }
+<a name="l00367"></a>00367     <span class="keywordflow">if</span> (!this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(aidx)) {
+<a name="l00368"></a>00368         aidx = aidx.parent();
+<a name="l00369"></a>00369     }
+<a name="l00370"></a>00370 
+<a name="l00371"></a>00371     opidx = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;index(this-&gt;<a class="code" href="class_session_dialog.html#a546eeec7680bc5555044d8e84eaf690b">opLeftFile</a>);
+<a name="l00372"></a>00372     <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(opidx)) {
+<a name="l00373"></a>00373         <span class="keywordflow">if</span> (aidx == opidx) {
+<a name="l00374"></a>00374             <span class="comment">// can&#39;d deal with this case</span>
+<a name="l00375"></a>00375             return ;
+<a name="l00376"></a>00376         }
+<a name="l00377"></a>00377         <span class="comment">// parent can not paste to child</span>
+<a name="l00378"></a>00378         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(aidx).startsWith(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(opidx))) {
+<a name="l00379"></a>00379             <span class="comment">// </span>
+<a name="l00380"></a>00380             <a class="code" href="utils_8h.html#a387853dd138b03f9523b75ee4c7e4a78">q_debug</a>()&lt;&lt;<span class="stringliteral">&quot;parent can not paste to child&quot;</span>;
+<a name="l00381"></a>00381             <span class="keywordflow">return</span>;
+<a name="l00382"></a>00382         }
+<a name="l00383"></a>00383         afile = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(aidx);
+<a name="l00384"></a>00384         QString opfile = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(opidx);
+<a name="l00385"></a>00385         QModelIndex nidx;
+<a name="l00386"></a>00386         QModelIndex apidx;
+<a name="l00387"></a>00387         QModelIndex oppidx;
+<a name="l00388"></a>00388         apidx = aidx.parent();
+<a name="l00389"></a>00389         oppidx = opidx.parent();
+<a name="l00390"></a>00390 
+<a name="l00391"></a>00391         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> == <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">OP_CUT</a>) {
+<a name="l00392"></a>00392             nidx = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;mkdir(aidx, this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;fileName(opidx));
+<a name="l00393"></a>00393             opfile = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(nidx);
+<a name="l00394"></a>00394             QDir().rmdir(opfile);
+<a name="l00395"></a>00395             opfile = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(opidx);
+<a name="l00396"></a>00396             QDir().rename(opfile, afile + QString(<span class="stringliteral">&quot;/&quot;</span>) + this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;fileName(opidx));
+<a name="l00397"></a>00397             this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(oppidx);
+<a name="l00398"></a>00398         }
+<a name="l00399"></a>00399         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a> == <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a0e1107063191c99641ed8fa208f5376a">OP_COPY</a>) {
+<a name="l00400"></a>00400             QString dname = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;fileName(opidx);
+<a name="l00401"></a>00401             nidx = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;mkdir(aidx, dname);
+<a name="l00402"></a>00402             
+<a name="l00403"></a>00403             afile = afile + QString(<span class="stringliteral">&quot;/&quot;</span>) + dname;
+<a name="l00404"></a>00404             QDir opdir = QDir(opfile);
+<a name="l00405"></a>00405             QDir adir = QDir(afile);
+<a name="l00406"></a>00406             
+<a name="l00407"></a>00407             QStack&lt;QString&gt; entries;
+<a name="l00408"></a>00408             entries.push(<span class="stringliteral">&quot;.&quot;</span>);
+<a name="l00409"></a>00409             <span class="keywordflow">while</span> (!entries.isEmpty()) {
+<a name="l00410"></a>00410                 QString tname = entries.pop();
+<a name="l00411"></a>00411                 QString fname = opfile + <span class="stringliteral">&quot;/&quot;</span> + tname;
+<a name="l00412"></a>00412                 <span class="keywordflow">if</span> (QFileInfo(fname).isDir()) {
+<a name="l00413"></a>00413                     QStringList sl = QDir(fname).entryList();
+<a name="l00414"></a>00414                     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; sl.count(); i ++) {
+<a name="l00415"></a>00415                         <span class="keywordflow">if</span> (sl.at(i) == <span class="stringliteral">&quot;.&quot;</span> || sl.at(i) == <span class="stringliteral">&quot;..&quot;</span>) {
+<a name="l00416"></a>00416                             <span class="keywordflow">continue</span>;
+<a name="l00417"></a>00417                         }
+<a name="l00418"></a>00418                         <span class="keywordflow">if</span> (QFileInfo(fname + <span class="stringliteral">&quot;/&quot;</span> + sl.at(i)).isDir()) {
+<a name="l00419"></a>00419                             adir.mkdir(afile+QString(<span class="stringliteral">&quot;/&quot;</span>)+tname+QString(<span class="stringliteral">&quot;/&quot;</span>)+sl.at(i));
+<a name="l00420"></a>00420                             entries.push(tname+QString(<span class="stringliteral">&quot;/&quot;</span>)+sl.at(i));
+<a name="l00421"></a>00421                         } <span class="keywordflow">else</span> {
+<a name="l00422"></a>00422                             QFile(fname+ <span class="stringliteral">&quot;/&quot;</span> + sl.at(i)).copy(afile+QString(<span class="stringliteral">&quot;/&quot;</span>)+tname+QString(<span class="stringliteral">&quot;/&quot;</span>)+sl.at(i));
+<a name="l00423"></a>00423                         }
+<a name="l00424"></a>00424                     }
+<a name="l00425"></a>00425                 } <span class="keywordflow">else</span> {
+<a name="l00426"></a>00426                     QFile(fname).copy(afile+QString(<span class="stringliteral">&quot;/&quot;</span>)+tname);
+<a name="l00427"></a>00427                 }
+<a name="l00428"></a>00428             }           
+<a name="l00429"></a>00429         }
+<a name="l00430"></a>00430         this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(apidx);
+<a name="l00431"></a>00431         this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;expand(apidx);
+<a name="l00432"></a>00432     } <span class="keywordflow">else</span> {
+<a name="l00433"></a>00433         afile = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(aidx) + QString(<span class="stringliteral">&quot;/&quot;</span>) + this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;fileName(opidx);
+<a name="l00434"></a>00434         <span class="keywordflow">if</span> (afile == this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(opidx)) {
+<a name="l00435"></a>00435             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 88888 ; i++) {
+<a name="l00436"></a>00436                 <span class="keywordflow">if</span> (!QFile::exists(afile + QString(<span class="stringliteral">&quot;(%1)&quot;</span>).arg(i))) {
+<a name="l00437"></a>00437                     afile += QString(<span class="stringliteral">&quot;(%1)&quot;</span>).arg(i);
+<a name="l00438"></a>00438                     show_name = this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;fileName(opidx) + QString(<span class="stringliteral">&quot;(%1)&quot;</span>).arg(i);
+<a name="l00439"></a>00439                     <span class="keywordflow">break</span>;
+<a name="l00440"></a>00440                 }
+<a name="l00441"></a>00441             }
+<a name="l00442"></a>00442         } 
+<a name="l00443"></a>00443         
+<a name="l00444"></a>00444         QSettings fset(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;filePath(opidx), QSettings::IniFormat);
+<a name="l00445"></a>00445         QSettings tset(afile, QSettings::IniFormat);
+<a name="l00446"></a>00446         QStringList keys = fset.allKeys();
+<a name="l00447"></a>00447         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; keys.count(); i ++) {
+<a name="l00448"></a>00448             tset.setValue(keys.at(i), fset.value(keys.at(i)));
+<a name="l00449"></a>00449         }
+<a name="l00450"></a>00450         tset.setValue(<span class="stringliteral">&quot;show_name&quot;</span>, show_name);
+<a name="l00451"></a>00451         tset.sync();
+<a name="l00452"></a>00452         this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(aidx);
+<a name="l00453"></a>00453         this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;expand(aidx);
+<a name="l00454"></a>00454     }
+<a name="l00455"></a>00455 
+<a name="l00456"></a>00456     <span class="keywordflow">switch</span> (this-&gt;<a class="code" href="class_session_dialog.html#a953822a7085ee3329f4e4c9d77d13981">optype</a>) {
+<a name="l00457"></a>00457     <span class="keywordflow">case</span> <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a0e1107063191c99641ed8fa208f5376a">OP_COPY</a>:
+<a name="l00458"></a>00458         <span class="keywordflow">break</span>;
+<a name="l00459"></a>00459     <span class="keywordflow">case</span> <a class="code" href="class_session_dialog.html#a34ef6f1399d39b345c7f1864fd5f62f1a8f447806df31d67a30c31845e3b4afd1">OP_CUT</a>:
+<a name="l00460"></a>00460         <span class="keywordflow">break</span>;
+<a name="l00461"></a>00461     <span class="keywordflow">default</span>:
+<a name="l00462"></a>00462         <span class="keywordflow">break</span>;
+<a name="l00463"></a>00463     }
+<a name="l00464"></a>00464 }
+<a name="l00465"></a>00465 
+<a name="l00466"></a><a class="code" href="class_session_dialog.html#a28a58094d32df2c1f0d3c5b895cc7184">00466</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#a28a58094d32df2c1f0d3c5b895cc7184">SessionDialog::slot_new_folder</a>()
+<a name="l00467"></a>00467 {
+<a name="l00468"></a>00468     QItemSelectionModel *ism = 0;
+<a name="l00469"></a>00469     QModelIndexList mil;
+<a name="l00470"></a>00470     QModelIndex cidx;
+<a name="l00471"></a>00471     QModelIndex pidx;
+<a name="l00472"></a>00472     QModelIndex aidx;
+<a name="l00473"></a>00473     QString adir;
+<a name="l00474"></a>00474     QString afile;
+<a name="l00475"></a>00475 
+<a name="l00476"></a>00476     ism = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;selectionModel();
+<a name="l00477"></a>00477     mil = ism-&gt;selectedIndexes();
+<a name="l00478"></a>00478 
+<a name="l00479"></a>00479     <span class="keywordflow">if</span> (mil.count() == 0) {
+<a name="l00480"></a>00480         aidx = this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;rootIndex();
+<a name="l00481"></a>00481     } <span class="keywordflow">else</span> {
+<a name="l00482"></a>00482         aidx = mil.at(0);
+<a name="l00483"></a>00483         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(aidx)) {            
+<a name="l00484"></a>00484         } <span class="keywordflow">else</span> {
+<a name="l00485"></a>00485             aidx = aidx.parent();
+<a name="l00486"></a>00486         }
+<a name="l00487"></a>00487     }
+<a name="l00488"></a>00488     Q_ASSERT(this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;isDir(aidx));
+<a name="l00489"></a>00489 
+<a name="l00490"></a>00490     <span class="keywordtype">bool</span> ok = <span class="keyword">false</span>;
+<a name="l00491"></a>00491     QString new_name = 
+<a name="l00492"></a>00492         QInputDialog::getText(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;New folder:&quot;</span>), tr(<span class="stringliteral">&quot;Type the folder name:&quot;</span>), 
+<a name="l00493"></a>00493                               QLineEdit::Normal, cidx.data().toString(), &amp;ok);
+<a name="l00494"></a>00494     new_name = new_name.trimmed();
+<a name="l00495"></a>00495     
+<a name="l00496"></a>00496     <span class="keywordflow">if</span>(ok &amp;&amp; !new_name.isEmpty() &amp;&amp; new_name != cidx.data().toString()) {
+<a name="l00497"></a>00497         <span class="keywordflow">if</span> (this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;mkdir(aidx, new_name).isValid()) {
+<a name="l00498"></a>00498             this-&gt;<a class="code" href="class_session_dialog.html#a9f99c92735108565dba0b4a9b4784f5c">sessTree</a>-&gt;refresh(aidx);
+<a name="l00499"></a>00499             this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;expand(aidx);
+<a name="l00500"></a>00500         } <span class="keywordflow">else</span> {            
+<a name="l00501"></a>00501         }
+<a name="l00502"></a>00502     }    
+<a name="l00503"></a>00503 }
+<a name="l00504"></a>00504 
+<a name="l00505"></a><a class="code" href="class_session_dialog.html#ab4ae0a4c77a9c3b78882f7ececd3e8c0">00505</a> <span class="keywordtype">void</span> <a class="code" href="class_session_dialog.html#ab4ae0a4c77a9c3b78882f7ececd3e8c0">SessionDialog::slot_item_clicked</a>(<span class="keyword">const</span> QModelIndex &amp;index)
+<a name="l00506"></a>00506 {
+<a name="l00507"></a>00507     Q_UNUSED(index);
+<a name="l00508"></a>00508     <span class="keywordflow">if</span> (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+<a name="l00509"></a>00509         this-&gt;<a class="code" href="class_session_dialog.html#a6c87409792758851a283fec5933f56b5">ui_win</a>.treeView-&gt;clearSelection();
+<a name="l00510"></a>00510     }
+<a name="l00511"></a>00511 }
+<a name="l00512"></a>00512 
+<a name="l00513"></a>00513 <span class="comment">//</span>
+<a name="l00514"></a>00514 <span class="comment">// sessiondialog.cpp ends here</span>
+</pre></div></div>
+<div id="the-footer">
+
+  <p>
+    <a href="http://www.qtchina.net">www.qtchina.net</a>
+	<a href="http://sourceforge.net/donate/index.php?group_id=186258" target="_blank"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a> 
+
+    <script src='http://s34.cnzz.com/stat.php?id=626330&web_id=626330' language='JavaScript' charset='utf8'></script>
+</center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  _uacct = "UA-2849302-1";
+  urchinTracker();
+</script>
+</p>
+</div>
