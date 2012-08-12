@@ -6,354 +6,354 @@
 <title>oracle 常用维护命令</title>
 </head>
 <body>
-<p>基本操作：<br />
-启动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup force&nbsp; 忽略已存在的instance直接重起<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup mount&nbsp; 开启controlfile,用于改变日志模式、rename file、database recovery等操作，完成了DB的装载但database尚未打开,用户资料不能被读取<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup nomount 启动instance，可用于创建database和control file,但无法读取数据库的结构信息<br />
-&nbsp;&nbsp;&nbsp;&nbsp; startup open<br />
-&nbsp;&nbsp;&nbsp;&nbsp; startup restrics 只有具有restriced 权限的用户才能够登陆</p>
-<p>&nbsp;<br />
-关闭&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shutdown immediate<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shutdown abort<br />
-创建表格&nbsp;&nbsp;&nbsp; create table 表格名 (可采用自查询as select * from ;)<br />
-对表格内容操作 update 表格名 set 操作内容<br />
-执行操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commit</p>
-<p>文件状态：<br />
-以 V$ 开头的文件都是动态视图<br />
-动态视图用单数，静态视图用复数<br />
-inactive&nbsp;&nbsp;&nbsp;&nbsp; 模式下表示没有用户在访问它<br />
-current&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 模式表示当前正在被使用<br />
-unused&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 状态表示从没有被使用过<br />
-stale&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 系统的过渡状态，对系统本身没有影响<br />
-invalid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 出错</p>
-<p>Triggers</p>
-<p><br />
-control file：<br />
-控制文件一定要备份，保存在不同的分区之中。<br />
-只有close状态时文件才能拷贝。</p>
-<p><br />
-redo log file：</p>
-<p>LOG FILE：<br />
-select * from v$logfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;查看所有redo log文件<br />
-select * from v$log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;查看所有Group<br />
-select * from v$tablespace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查看表空间<br />
-select * from v$datafile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查看数据文件<br />
-alter system switch logfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;切换系统当前日志文件<br />
-alert switch log file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;切换当前使用的log文件<br />
-ALTER DATABASE DROP LOGFILE MEMBER '文件路径';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;删除 logfile<br />
-ALTER DATABASE ADD LOGFILE MEMBER '文件路径' TO GROUP #;&nbsp;&nbsp; &nbsp;添加 logfile<br />
-ALTER DATABASE CLEAR LOGFILE '文件路径';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;清除 logfile (清除文件的内容)</p>
-<p>&nbsp;</p>
-<p>CheckPoint最主要的功能就是同步control files和data files<br />
-CKPT 发生的时候将修改 control files 和 data files<br />
-CKPT发生在：<br />
-在发生log switch 之后<br />
-当search buffer达到了一定块的时候 用LOG_CHECKPOINT_INTERVAL设定<br />
-CKPT定义了一个时间，如果该时间达到了就强制性执行。用LOG_CHECKPOINT_TIMEOUT 设定</p>
-<p>数据库恢复的基本原理：<br />
-归档模式下：<br />
-Archived redo log 记录了用户的操作<br />
-当数据发生损坏的时候，首先是将最新的备份文件拷回来，然后逐个执行归档日志文件，可以恢复全部数据。<br />
-在非归档模式下，只能恢复到最后备份的数据。</p>
-<p><br />
-Redo Log Configuration<br />
-每个Member应该有一个备份<br />
-每个Group的Member应该大小一致<br />
-各个Disk上的Group应该交叉备份</p>
-<p>如何重定位或重命名Redo文件：<br />
-1.拷贝redo log 文件到新的位置<br />
-2.执行 ALTER DATABASE RENAME FILE &lsquo;原文件全路径&rsquo; to &lsquo;目标文件全路径&rsquo; (一般是在monk状态下)</p>
-<p>redo log 可能出现的错误：<br />
-1.一个组中的某些member无效<br />
-2.下一个组的所有member都无效<br />
-3.当前组的所有member都无效</p>
-<p>查看 redo log 文件的内容：<br />
-使用 LogMiner 工具 (需要安装SP4)<br />
-1 定义初始化参数文件 UTL_FILE_DIR=文件路径<br />
-2 重起数据库使参数生效<br />
-3 使用脚本创建字典文件<br />
-&nbsp; EXECUTE DBMS_LOGMNR_D.BUILD('文件名'，'文件路径')；<br />
-4 将归档日志文件添加到字典文件之中<br />
-&nbsp; EXECUTE DBMS_LOGMNR.ADD_LOGFILE('文件路径'，DBMS_LOGMNR.NEW);<br />
-EXECUTE DBMS_LOGMNR.ADD_LOGFILE('文件路径'，DBMS_LOGMNR.ADDFILE);<br />
-5 开始分析<br />
-EXECUTE DBMS_LOGMNR.START_LOGMNR(DICTFILENAME=&gt;'文件路径')；<br />
-6 查看结果<br />
-&nbsp;SELECT timestamp,username,sql_redo FROM v$logmnr_contents;<br />
-SQL_REDO文件保存了用户的操作&nbsp; SQL_UNDO用于撤销用户的操作(如经过多次改动，其undo作用可能失效)<br />
-分析成功之后还有一些结果保存于下列视图中。<br />
-v$LOGMNR_DICTIONARY<br />
-v$LOGMNR_PARAMETERS<br />
-v$LOGMNR_CONTENTS</p>
-<p>表空间和数据文件的操作(managing tablespaces and data files)：</p>
-<p>&nbsp; &nbsp; Database<br />
-&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|<br />
-&nbsp; &nbsp; Tablespace ------&lt; Data file<br />
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; | <br />
-&nbsp; Segment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br />
-Logical&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |&nbsp; Physical<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br />
-&nbsp; &nbsp; Extent &gt;-------------&nbsp; |&nbsp; <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|<br />
-&nbsp;&nbsp; &nbsp; Oracle block ----&lt; OS block</p>
-<p>tablespace ：一个逻辑对象分离了Data file 和Segment，由一个或多个对象组成，可以突破操作系统块大小的限制</p>
-<p>Segment ：一些可增长的对象如 table index</p>
-<p>Extent ：每一次空间分配称为一个Extent<br />
-创建时是在表空间下按照一定的分配策略来进行。<br />
-建表的时候初始化分配一定的空间，如果空间不够则继续扩展<br />
-每一次的都是按照一定的大小来扩展的。<br />
-Extent 不能够跨空间，且只能属于一个数据文件。</p>
-<p>Oracle block简称为 DB block ，由操作系统块(OS block)组成,必须是其整数倍。其大小由初始化参数DBblockset来决定，此参数一旦设定在数据库创建的过程中就无法更改</p>
-<p>系统和非系统表空间<br />
-系统表空间主要存储的是系统数据<br />
-非系统表空间主要存储用户数据</p>
-<p><br />
-创建Tablespaces<br />
-&nbsp; CREATE TABLESPACE 表空间名 <br />
-&nbsp; DATAFILE '文件名.dbf' SIZE 空间大小 <br />
-&nbsp; MINIMUM EXTENT 空间大小<br />
-&nbsp; DEFAULT STORAGE ( INITIAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空间大小<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NEXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空间大小<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAXEXTENTS&nbsp;&nbsp; 数目<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PCTINCEREASE 0);<br />
-&nbsp; <br />
-Tablespaces 的空间管理<br />
-数据字典管理表空间</p>
-<p><br />
-本地管理表空间<br />
-&nbsp;&nbsp; CREATE TABLESPACE 表空间名<br />
-&nbsp;&nbsp; DATAFILE '文件路径.dbf'<br />
-&nbsp;&nbsp; SIZE 文件大小<br />
-&nbsp;&nbsp; EXTENT MANAGEMENT LOCAL<br />
-&nbsp;&nbsp; UNIFORM SIZE 空间大小<br />
-优点：<br />
-不产生递归的空间管理(会导致请求响应很慢)<br />
-减少与数据字典表的联系<br />
-不产生回滚段(rollback 执行DML语句时就会产生)<br />
-不需要愈合(coalescing)</p>
-<p><br />
-临时表空间(Temporary Tablespace 不推荐使用，会产生大量碎片)</p>
-<p>&nbsp;&nbsp; CREATE TEMPORARY TABLESPACE 表空间名<br />
-&nbsp;&nbsp; TEMPFILE '文件路径.dbf'<br />
-&nbsp;&nbsp; SIZE 文件大小<br />
-&nbsp;&nbsp; EXTENT MANAGEMENT LOCAL<br />
-&nbsp;&nbsp; UNIFORM SIZE 空间大小</p>
-<p>用于排序操作<br />
-UNIFORM SIZE = SORT_AREA_SIZE * n<br />
-推荐使用本地管理表空间，可以减少碎片<br />
-可以动态地增长<br />
-如果磁盘空间较大可以不使用临时表空间，现在已经很少使用了。</p>
-<p><br />
-修改存储区设置<br />
-ALTER TABLESPACE 表空间名 ..</p>
-<p>将表空间设为 Offline 状态(此时表空间不可使用，在做备份的时候应设置为此状态)<br />
-ALTER TABLESPACE 表空间名 OFFLINE;<br />
-ALTER TABLESPACE 表空间名 ONLINE;<br />
-系统表空间和带有活动回滚段的表空间不能被 Offline</p>
-<p>使表空间只读<br />
-ALTER TABLESPACE 表空间名 READ ONLY;<br />
-表空间内的对象仍然可以被 Drop 掉(DROP时系统之修改了数据字典而不会修改表空间)<br />
-要求：<br />
-此表空间必须为 online 状态<br />
-不能包含有活动回滚段<br />
-表空间不能够卷入当前的备份</p>
-<p>删除表空间<br />
-DROP TABLESPACE 表空间名 INCLUDING CONTENTS;<br />
-表空间的定义从数据字典中删除，表空间中的对象也被删除<br />
-但是操作系统的文件仍然存在</p>
-<p><br />
-改变表空间的大小<br />
-自动和手动操作</p>
-<p>可以给表空间添加数据文件<br />
-可以通过增加文件大小和增加文件数量来增加表空间的大小<br />
-ALTER TABLESPACE 表空间名<br />
-&nbsp;ADD DATAFILE '文件名'<br />
-&nbsp;SIZE 文件大小<br />
-&nbsp;AUTOEXTEND ON<br />
-&nbsp; NEXT 每次扩展的空间大小<br />
-&nbsp; MAXSIZE 最大可扩展空间大小</p>
-<p>ALTER DATABASE<br />
-&nbsp; DATAFILE '文件名'<br />
-&nbsp; RESIZE 改变后文件的大小</p>
-<p>表空间管理原则：<br />
-尽可能使用多个表空间，将表空间的数据区分开<br />
-定义缺省的参数<br />
-创建表空间的时候一定要带路径<br />
-限制用户对空间的占用，使用 quotas 命令<br />
-使用 MINIMUM EXTENTS，可尽可能的减少碎片<br />
-尽可能使用本地管理的表空间，不推荐使用临时管理表空间<br />
-表空间的数据文件不能大于1023个</p>
-<p><br />
-第九章 数据库的逻辑结构</p>
-<p>Segments:统称可增长的对象为Segments<br />
-例如Table ,cluster ,Table partion ,Index,index-organized table,index partion,Rollback segment,Temporary segment,LOB segment,LOB index,Nested table ,Bootstrap segment</p>
-<p>Extent空间的分配和释放<br />
-分配：<br />
-当segment被<br />
-Created<br />
-Extended<br />
-Altered<br />
-时分配</p>
-<p>当segment被<br />
-Dropped<br />
-Altered<br />
-Truncated (删除某个表中所有数据并重新初始化)<br />
-Automatically resized(rollback segment only)<br />
-时释放</p>
-<p>DB block：<br />
-最小I/O单位<br />
-由OS blocks组成<br />
-通过 DB_BLOCK_SIZE 设置<br />
-在数据库建立的时候设置</p>
-<p><br />
-Block 空间的使用<br />
-每个block在其头部开辟空间记录了司务号，每个空间成为司务槽。<br />
-每个事物访问需要先申请一个司务槽。<br />
-由 INITRANS 和 MAXTRANS 设定</p>
-<p>PCTFREE = 20 意味着DB block中留有 20% 空间作以后update用<br />
-PCTUSED = 40 意味着DB block中如果使用的空间小于40%，系统就将此DB block链接到Segment头部的中的Freelist列表中去，表示这个块以后可以供用户插入数据(随机选取)</p>
-<p>MIN_EXTENTS = 20 表示系统在创建Segments时，在初始化时，连续扩充19次，生成20个EXTENTS，避免了在使用过程中动态扩充。</p>
-<p>DBA_EXTENTS<br />
-FILE_ID 绝对文件号。系统对数据库中所有的文件都进行了编号<br />
-BLOCK_ID 相对文件号。根据每个表空间来编号</p>
-<p>&nbsp;</p>
-<p>第十章 回滚段的管理</p>
-<p>一旦执行commit命令，回滚段的空间即被释放。</p>
-<p>回滚段的作用：<br />
-1.保证读一次性 Read consistency<br />
-2.事物的回滚 Transaction rollback<br />
-3.事物的恢复 Transaction recovery</p>
-<p>系统回滚段：&nbsp; 创建数据库的时候创建的，由系统使用。<br />
-非系统回滚段：系统管理员创建，供所有用户使用。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 还分为私有和公有</p>
-<p>&nbsp;</p>
-<p>第十二章 索引的管理</p>
-<p>逻辑索引和物理索引</p>
-<p>反键索引(将其ID号反置)可扩大其索引范围<br />
-位图索引(bitmap index)：为每一个候选词建立一个位图，索引时只需利用相应的位图作或与运算即可。</p>
-<p>Bitmap与B-tree索引相比较：<br />
-适合候选值种类较少时使用<br />
-特别适合或与运算<br />
-做update时系统代价非常昂贵</p>
-<p>&nbsp;<br />
-第十三章 约束</p>
-<p><br />
-数据库中的约束状态：<br />
-针对新的数据是否进行有效性的检查&nbsp;&nbsp; Disabled&nbsp;&nbsp;&nbsp;&nbsp; Enabled <br />
-是否对以前的数据进行完整性检查&nbsp;&nbsp;&nbsp; novalidate&nbsp;validata</p>
-<p>有四种状态组合：<br />
-Disabled novalidate<br />
-Disabled validata<br />
-Enabled&nbsp; novalidata<br />
-Enabled&nbsp; validate</p>
-<p>约束延时：<br />
-先插入所有的语句，然后在执行Commit时才检查所有的延时约束，如果其中有一个语句不符合要求，Commit失效，所有的语句将被回退。</p>
-<p>发出一个DML语句之后，系统先检查非延时的约束<br />
-然后在执行Commit时检查延时约束</p>
-<p>定义语句的延时：<br />
-此语句在定义约束的时候和在当前的SESSION里都被设定为可以延时，此语句才能被延时。<br />
-ALTER SESSION SET CONSTRAINT[S] = {IMMEDIATE|DEFERRED|DEFAULT};</p>
-<p>在建立 Primary Key 时必须要建立索引，有系统自动建立，但是可以指定其存储空间。<br />
-当约束为延时时只能创建非唯一性索引</p>
-<p>子表和父表可以在不同的表空间，但是不能在不同的数据库中。<br />
-对子表执行DML操作的时候必须保证父表处于online状态。</p>
-<p>在建立表时定义约束<br />
-CREATE TABLE 表名{<br />
-id NUMBER(#)<br />
-&nbsp;&nbsp; &nbsp;CONSTRAINT 约束名 PRIMARY KEY<br />
-&nbsp;DEFERRABLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否可延时<br />
-&nbsp;USING INDEX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //把索引指向另一个表空间<br />
-&nbsp;STORAGE(INITIAL 大小 NEXT 大小)<br />
-&nbsp;TABLESPACE indx，<br />
-last_name VARCHAR2(#)<br />
-&nbsp;CONSTRAINT 约束名 NOT NULL,<br />
-dept_id NUMBER(#)}<br />
-TABLESPACE data；</p>
-<p>索引加载的原则：<br />
-Primary和unique约束：<br />
-索引和数据应放在不同的表空间<br />
-如果进行大量数据加载，最好使用非唯一性的索引。<br />
-自引用的外键约束：<br />
-在初始化加载后再建立外键<br />
-定义延时的约束检查</p>
-<p><br />
-第十四章 加载数据</p>
-<p>使用SQL*Loader工具</p>
-<p>直接路径加载<br />
-INSERT /*+APPEND*/ INTO 文件名.emp<br />
-NOLOGGING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //不写入redo logfile，无法恢复 <br />
-SELECT * FROM 原有文件名.emp</p>
-<p>如果加上APPEND参数，数据将被加到高水点之后，由于其后空间连续，可加快插入速度。</p>
-<p>并行插入(依赖于CPU的数量)：<br />
-ALTER SESSION ENABLE PAALLEL DML; //修改当前环境，使其允许并&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 行操作，具体还要与硬件是否支持有关。<br />
-INSERT /*+PARALLEL(文件名，#)*/&nbsp;&nbsp; //开启#个并行度<br />
-INTO 文件名.emp<br />
-NOLOGGING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
-SELECT * FROM 原有文件名.old_emp</p>
-<p>普通路径的加载<br />
-将数据文件中的数据在内存中直接构建为数组加载到表中去的。<br />
-将数据重组，产生INSERT语句，必须使用COMMIT才能生效。<br />
-总是产生 redo<br />
-涉及到所有约束<br />
-INSERT 触发 trigger<br />
-支持cluster<br />
-其他用户可以修改</p>
-<p>直接路径加载<br />
-使用Extent管理的方式，将数据文件中的数据直接在内存中重组，然后写入表的高水点之后，速度很快，但是如果出错就很难修复。<br />
-采用Data save技术，只有当在Extent扩充的时候才产生redo<br />
-只涉及到primare key,unique，NOT NULL约束<br />
-INSERT 不触发 trigger<br />
-不支持cluster<br />
-其他用户无法修改，不能对其作DML操作</p>
-<p>SQL*Loader 注意事项：<br />
-使用参数文件来记载操作<br />
-如果数据量很小且只加载一次可以直接将数据放在控制文件中<br />
-分配足够的空间，避免动态扩充<br />
-加载大量数据到索引中时，可以先排序再加载<br />
-对于并行的加载可以定义不同的temporary segments</p>
-<p>常见错误：<br />
-空间分配不够<br />
-加载的时候insrance失败(需要查看log文件)<br />
-使用了SORTED INDEXES 参数后，有一些数据没有排好序<br />
-在直接加载时重复定义了unique index,unique或primary key<br />
-BINDSIZE 定义过小，一般可以不定义<br />
-出错超过一定的限度</p>
-<p>第十五章 重组数据<br />
-Export和Import的使用<br />
-执行逻辑备份</p>
-<p>操作步骤：<br />
-IMP<br />
-username<br />
-import file</p>
-<p>注意事项：<br />
-尽可能的使用其参数文件 pfiles<br />
-只有在输出的是一个小的文件才使用 CONSISTENT=Y，否则会占用大量的回滚段<br />
-如果有许多被删掉的行，不要使用COMPRESS=Y(将把原表的多个Extent进行叠加)<br />
-可以分配更大的buffer<br />
-可以使用直接路径的导出</p>
-<p>可传输表空间(可以将一个表空间从一个数据库传到另一个数据库):<br />
-只能由系统管理员导出</p>
-<p>具体步骤:<br />
-使此表空间只读<br />
-导出原数据<br />
-复制数据文件到指定的系统<br />
-传输export file(表空间的定义文件)<br />
-将定义文件输入到指定的系统<br />
-如必须，将表空间切换为读写状态</p>
-<p>作用和限制：<br />
-可以移动整个表空间的数据<br />
-着吃媒体的恢复<br />
-必须是相同的操作系统<br />
-必须是8i以上<br />
-要有相同的block大小<br />
-使用相同的字符集(character set)</p>
-<p>表空间中的对象必须是自包含的</p>
-<p><br />
-第十六章 密码安全管理<br />
-使用配置文件<br />
+<p>基本操作：<br /><br />
+启动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup force&nbsp; 忽略已存在的instance直接重起<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup mount&nbsp; 开启controlfile,用于改变日志模式、rename file、database recovery等操作，完成了DB的装载但database尚未打开,用户资料不能被读取<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; startup nomount 启动instance，可用于创建database和control file,但无法读取数据库的结构信息<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp; startup open<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp; startup restrics 只有具有restriced 权限的用户才能够登陆</p><br />
+<p>&nbsp;<br /><br />
+关闭&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shutdown immediate<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shutdown abort<br /><br />
+创建表格&nbsp;&nbsp;&nbsp; create table 表格名 (可采用自查询as select * from ;)<br /><br />
+对表格内容操作 update 表格名 set 操作内容<br /><br />
+执行操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commit</p><br />
+<p>文件状态：<br /><br />
+以 V$ 开头的文件都是动态视图<br /><br />
+动态视图用单数，静态视图用复数<br /><br />
+inactive&nbsp;&nbsp;&nbsp;&nbsp; 模式下表示没有用户在访问它<br /><br />
+current&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 模式表示当前正在被使用<br /><br />
+unused&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 状态表示从没有被使用过<br /><br />
+stale&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 系统的过渡状态，对系统本身没有影响<br /><br />
+invalid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 出错</p><br />
+<p>Triggers</p><br />
+<p><br /><br />
+control file：<br /><br />
+控制文件一定要备份，保存在不同的分区之中。<br /><br />
+只有close状态时文件才能拷贝。</p><br />
+<p><br /><br />
+redo log file：</p><br />
+<p>LOG FILE：<br /><br />
+select * from v$logfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;查看所有redo log文件<br /><br />
+select * from v$log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;查看所有Group<br /><br />
+select * from v$tablespace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查看表空间<br /><br />
+select * from v$datafile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查看数据文件<br /><br />
+alter system switch logfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;切换系统当前日志文件<br /><br />
+alert switch log file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;切换当前使用的log文件<br /><br />
+ALTER DATABASE DROP LOGFILE MEMBER '文件路径';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;删除 logfile<br /><br />
+ALTER DATABASE ADD LOGFILE MEMBER '文件路径' TO GROUP #;&nbsp;&nbsp; &nbsp;添加 logfile<br /><br />
+ALTER DATABASE CLEAR LOGFILE '文件路径';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;清除 logfile (清除文件的内容)</p><br />
+<p>&nbsp;</p><br />
+<p>CheckPoint最主要的功能就是同步control files和data files<br /><br />
+CKPT 发生的时候将修改 control files 和 data files<br /><br />
+CKPT发生在：<br /><br />
+在发生log switch 之后<br /><br />
+当search buffer达到了一定块的时候 用LOG_CHECKPOINT_INTERVAL设定<br /><br />
+CKPT定义了一个时间，如果该时间达到了就强制性执行。用LOG_CHECKPOINT_TIMEOUT 设定</p><br />
+<p>数据库恢复的基本原理：<br /><br />
+归档模式下：<br /><br />
+Archived redo log 记录了用户的操作<br /><br />
+当数据发生损坏的时候，首先是将最新的备份文件拷回来，然后逐个执行归档日志文件，可以恢复全部数据。<br /><br />
+在非归档模式下，只能恢复到最后备份的数据。</p><br />
+<p><br /><br />
+Redo Log Configuration<br /><br />
+每个Member应该有一个备份<br /><br />
+每个Group的Member应该大小一致<br /><br />
+各个Disk上的Group应该交叉备份</p><br />
+<p>如何重定位或重命名Redo文件：<br /><br />
+1.拷贝redo log 文件到新的位置<br /><br />
+2.执行 ALTER DATABASE RENAME FILE &lsquo;原文件全路径&rsquo; to &lsquo;目标文件全路径&rsquo; (一般是在monk状态下)</p><br />
+<p>redo log 可能出现的错误：<br /><br />
+1.一个组中的某些member无效<br /><br />
+2.下一个组的所有member都无效<br /><br />
+3.当前组的所有member都无效</p><br />
+<p>查看 redo log 文件的内容：<br /><br />
+使用 LogMiner 工具 (需要安装SP4)<br /><br />
+1 定义初始化参数文件 UTL_FILE_DIR=文件路径<br /><br />
+2 重起数据库使参数生效<br /><br />
+3 使用脚本创建字典文件<br /><br />
+&nbsp; EXECUTE DBMS_LOGMNR_D.BUILD('文件名'，'文件路径')；<br /><br />
+4 将归档日志文件添加到字典文件之中<br /><br />
+&nbsp; EXECUTE DBMS_LOGMNR.ADD_LOGFILE('文件路径'，DBMS_LOGMNR.NEW);<br /><br />
+EXECUTE DBMS_LOGMNR.ADD_LOGFILE('文件路径'，DBMS_LOGMNR.ADDFILE);<br /><br />
+5 开始分析<br /><br />
+EXECUTE DBMS_LOGMNR.START_LOGMNR(DICTFILENAME=&gt;'文件路径')；<br /><br />
+6 查看结果<br /><br />
+&nbsp;SELECT timestamp,username,sql_redo FROM v$logmnr_contents;<br /><br />
+SQL_REDO文件保存了用户的操作&nbsp; SQL_UNDO用于撤销用户的操作(如经过多次改动，其undo作用可能失效)<br /><br />
+分析成功之后还有一些结果保存于下列视图中。<br /><br />
+v$LOGMNR_DICTIONARY<br /><br />
+v$LOGMNR_PARAMETERS<br /><br />
+v$LOGMNR_CONTENTS</p><br />
+<p>表空间和数据文件的操作(managing tablespaces and data files)：</p><br />
+<p>&nbsp; &nbsp; Database<br /><br />
+&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|<br /><br />
+&nbsp; &nbsp; Tablespace ------&lt; Data file<br /><br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; | <br /><br />
+&nbsp; Segment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br /><br />
+Logical&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |&nbsp; Physical<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; |<br /><br />
+&nbsp; &nbsp; Extent &gt;-------------&nbsp; |&nbsp; <br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /|<br /><br />
+&nbsp;&nbsp; &nbsp; Oracle block ----&lt; OS block</p><br />
+<p>tablespace ：一个逻辑对象分离了Data file 和Segment，由一个或多个对象组成，可以突破操作系统块大小的限制</p><br />
+<p>Segment ：一些可增长的对象如 table index</p><br />
+<p>Extent ：每一次空间分配称为一个Extent<br /><br />
+创建时是在表空间下按照一定的分配策略来进行。<br /><br />
+建表的时候初始化分配一定的空间，如果空间不够则继续扩展<br /><br />
+每一次的都是按照一定的大小来扩展的。<br /><br />
+Extent 不能够跨空间，且只能属于一个数据文件。</p><br />
+<p>Oracle block简称为 DB block ，由操作系统块(OS block)组成,必须是其整数倍。其大小由初始化参数DBblockset来决定，此参数一旦设定在数据库创建的过程中就无法更改</p><br />
+<p>系统和非系统表空间<br /><br />
+系统表空间主要存储的是系统数据<br /><br />
+非系统表空间主要存储用户数据</p><br />
+<p><br /><br />
+创建Tablespaces<br /><br />
+&nbsp; CREATE TABLESPACE 表空间名 <br /><br />
+&nbsp; DATAFILE '文件名.dbf' SIZE 空间大小 <br /><br />
+&nbsp; MINIMUM EXTENT 空间大小<br /><br />
+&nbsp; DEFAULT STORAGE ( INITIAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空间大小<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NEXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 空间大小<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAXEXTENTS&nbsp;&nbsp; 数目<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PCTINCEREASE 0);<br /><br />
+&nbsp; <br /><br />
+Tablespaces 的空间管理<br /><br />
+数据字典管理表空间</p><br />
+<p><br /><br />
+本地管理表空间<br /><br />
+&nbsp;&nbsp; CREATE TABLESPACE 表空间名<br /><br />
+&nbsp;&nbsp; DATAFILE '文件路径.dbf'<br /><br />
+&nbsp;&nbsp; SIZE 文件大小<br /><br />
+&nbsp;&nbsp; EXTENT MANAGEMENT LOCAL<br /><br />
+&nbsp;&nbsp; UNIFORM SIZE 空间大小<br /><br />
+优点：<br /><br />
+不产生递归的空间管理(会导致请求响应很慢)<br /><br />
+减少与数据字典表的联系<br /><br />
+不产生回滚段(rollback 执行DML语句时就会产生)<br /><br />
+不需要愈合(coalescing)</p><br />
+<p><br /><br />
+临时表空间(Temporary Tablespace 不推荐使用，会产生大量碎片)</p><br />
+<p>&nbsp;&nbsp; CREATE TEMPORARY TABLESPACE 表空间名<br /><br />
+&nbsp;&nbsp; TEMPFILE '文件路径.dbf'<br /><br />
+&nbsp;&nbsp; SIZE 文件大小<br /><br />
+&nbsp;&nbsp; EXTENT MANAGEMENT LOCAL<br /><br />
+&nbsp;&nbsp; UNIFORM SIZE 空间大小</p><br />
+<p>用于排序操作<br /><br />
+UNIFORM SIZE = SORT_AREA_SIZE * n<br /><br />
+推荐使用本地管理表空间，可以减少碎片<br /><br />
+可以动态地增长<br /><br />
+如果磁盘空间较大可以不使用临时表空间，现在已经很少使用了。</p><br />
+<p><br /><br />
+修改存储区设置<br /><br />
+ALTER TABLESPACE 表空间名 ..</p><br />
+<p>将表空间设为 Offline 状态(此时表空间不可使用，在做备份的时候应设置为此状态)<br /><br />
+ALTER TABLESPACE 表空间名 OFFLINE;<br /><br />
+ALTER TABLESPACE 表空间名 ONLINE;<br /><br />
+系统表空间和带有活动回滚段的表空间不能被 Offline</p><br />
+<p>使表空间只读<br /><br />
+ALTER TABLESPACE 表空间名 READ ONLY;<br /><br />
+表空间内的对象仍然可以被 Drop 掉(DROP时系统之修改了数据字典而不会修改表空间)<br /><br />
+要求：<br /><br />
+此表空间必须为 online 状态<br /><br />
+不能包含有活动回滚段<br /><br />
+表空间不能够卷入当前的备份</p><br />
+<p>删除表空间<br /><br />
+DROP TABLESPACE 表空间名 INCLUDING CONTENTS;<br /><br />
+表空间的定义从数据字典中删除，表空间中的对象也被删除<br /><br />
+但是操作系统的文件仍然存在</p><br />
+<p><br /><br />
+改变表空间的大小<br /><br />
+自动和手动操作</p><br />
+<p>可以给表空间添加数据文件<br /><br />
+可以通过增加文件大小和增加文件数量来增加表空间的大小<br /><br />
+ALTER TABLESPACE 表空间名<br /><br />
+&nbsp;ADD DATAFILE '文件名'<br /><br />
+&nbsp;SIZE 文件大小<br /><br />
+&nbsp;AUTOEXTEND ON<br /><br />
+&nbsp; NEXT 每次扩展的空间大小<br /><br />
+&nbsp; MAXSIZE 最大可扩展空间大小</p><br />
+<p>ALTER DATABASE<br /><br />
+&nbsp; DATAFILE '文件名'<br /><br />
+&nbsp; RESIZE 改变后文件的大小</p><br />
+<p>表空间管理原则：<br /><br />
+尽可能使用多个表空间，将表空间的数据区分开<br /><br />
+定义缺省的参数<br /><br />
+创建表空间的时候一定要带路径<br /><br />
+限制用户对空间的占用，使用 quotas 命令<br /><br />
+使用 MINIMUM EXTENTS，可尽可能的减少碎片<br /><br />
+尽可能使用本地管理的表空间，不推荐使用临时管理表空间<br /><br />
+表空间的数据文件不能大于1023个</p><br />
+<p><br /><br />
+第九章 数据库的逻辑结构</p><br />
+<p>Segments:统称可增长的对象为Segments<br /><br />
+例如Table ,cluster ,Table partion ,Index,index-organized table,index partion,Rollback segment,Temporary segment,LOB segment,LOB index,Nested table ,Bootstrap segment</p><br />
+<p>Extent空间的分配和释放<br /><br />
+分配：<br /><br />
+当segment被<br /><br />
+Created<br /><br />
+Extended<br /><br />
+Altered<br /><br />
+时分配</p><br />
+<p>当segment被<br /><br />
+Dropped<br /><br />
+Altered<br /><br />
+Truncated (删除某个表中所有数据并重新初始化)<br /><br />
+Automatically resized(rollback segment only)<br /><br />
+时释放</p><br />
+<p>DB block：<br /><br />
+最小I/O单位<br /><br />
+由OS blocks组成<br /><br />
+通过 DB_BLOCK_SIZE 设置<br /><br />
+在数据库建立的时候设置</p><br />
+<p><br /><br />
+Block 空间的使用<br /><br />
+每个block在其头部开辟空间记录了司务号，每个空间成为司务槽。<br /><br />
+每个事物访问需要先申请一个司务槽。<br /><br />
+由 INITRANS 和 MAXTRANS 设定</p><br />
+<p>PCTFREE = 20 意味着DB block中留有 20% 空间作以后update用<br /><br />
+PCTUSED = 40 意味着DB block中如果使用的空间小于40%，系统就将此DB block链接到Segment头部的中的Freelist列表中去，表示这个块以后可以供用户插入数据(随机选取)</p><br />
+<p>MIN_EXTENTS = 20 表示系统在创建Segments时，在初始化时，连续扩充19次，生成20个EXTENTS，避免了在使用过程中动态扩充。</p><br />
+<p>DBA_EXTENTS<br /><br />
+FILE_ID 绝对文件号。系统对数据库中所有的文件都进行了编号<br /><br />
+BLOCK_ID 相对文件号。根据每个表空间来编号</p><br />
+<p>&nbsp;</p><br />
+<p>第十章 回滚段的管理</p><br />
+<p>一旦执行commit命令，回滚段的空间即被释放。</p><br />
+<p>回滚段的作用：<br /><br />
+1.保证读一次性 Read consistency<br /><br />
+2.事物的回滚 Transaction rollback<br /><br />
+3.事物的恢复 Transaction recovery</p><br />
+<p>系统回滚段：&nbsp; 创建数据库的时候创建的，由系统使用。<br /><br />
+非系统回滚段：系统管理员创建，供所有用户使用。<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 还分为私有和公有</p><br />
+<p>&nbsp;</p><br />
+<p>第十二章 索引的管理</p><br />
+<p>逻辑索引和物理索引</p><br />
+<p>反键索引(将其ID号反置)可扩大其索引范围<br /><br />
+位图索引(bitmap index)：为每一个候选词建立一个位图，索引时只需利用相应的位图作或与运算即可。</p><br />
+<p>Bitmap与B-tree索引相比较：<br /><br />
+适合候选值种类较少时使用<br /><br />
+特别适合或与运算<br /><br />
+做update时系统代价非常昂贵</p><br />
+<p>&nbsp;<br /><br />
+第十三章 约束</p><br />
+<p><br /><br />
+数据库中的约束状态：<br /><br />
+针对新的数据是否进行有效性的检查&nbsp;&nbsp; Disabled&nbsp;&nbsp;&nbsp;&nbsp; Enabled <br /><br />
+是否对以前的数据进行完整性检查&nbsp;&nbsp;&nbsp; novalidate&nbsp;validata</p><br />
+<p>有四种状态组合：<br /><br />
+Disabled novalidate<br /><br />
+Disabled validata<br /><br />
+Enabled&nbsp; novalidata<br /><br />
+Enabled&nbsp; validate</p><br />
+<p>约束延时：<br /><br />
+先插入所有的语句，然后在执行Commit时才检查所有的延时约束，如果其中有一个语句不符合要求，Commit失效，所有的语句将被回退。</p><br />
+<p>发出一个DML语句之后，系统先检查非延时的约束<br /><br />
+然后在执行Commit时检查延时约束</p><br />
+<p>定义语句的延时：<br /><br />
+此语句在定义约束的时候和在当前的SESSION里都被设定为可以延时，此语句才能被延时。<br /><br />
+ALTER SESSION SET CONSTRAINT[S] = {IMMEDIATE|DEFERRED|DEFAULT};</p><br />
+<p>在建立 Primary Key 时必须要建立索引，有系统自动建立，但是可以指定其存储空间。<br /><br />
+当约束为延时时只能创建非唯一性索引</p><br />
+<p>子表和父表可以在不同的表空间，但是不能在不同的数据库中。<br /><br />
+对子表执行DML操作的时候必须保证父表处于online状态。</p><br />
+<p>在建立表时定义约束<br /><br />
+CREATE TABLE 表名{<br /><br />
+id NUMBER(#)<br /><br />
+&nbsp;&nbsp; &nbsp;CONSTRAINT 约束名 PRIMARY KEY<br /><br />
+&nbsp;DEFERRABLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否可延时<br /><br />
+&nbsp;USING INDEX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //把索引指向另一个表空间<br /><br />
+&nbsp;STORAGE(INITIAL 大小 NEXT 大小)<br /><br />
+&nbsp;TABLESPACE indx，<br /><br />
+last_name VARCHAR2(#)<br /><br />
+&nbsp;CONSTRAINT 约束名 NOT NULL,<br /><br />
+dept_id NUMBER(#)}<br /><br />
+TABLESPACE data；</p><br />
+<p>索引加载的原则：<br /><br />
+Primary和unique约束：<br /><br />
+索引和数据应放在不同的表空间<br /><br />
+如果进行大量数据加载，最好使用非唯一性的索引。<br /><br />
+自引用的外键约束：<br /><br />
+在初始化加载后再建立外键<br /><br />
+定义延时的约束检查</p><br />
+<p><br /><br />
+第十四章 加载数据</p><br />
+<p>使用SQL*Loader工具</p><br />
+<p>直接路径加载<br /><br />
+INSERT /*+APPEND*/ INTO 文件名.emp<br /><br />
+NOLOGGING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //不写入redo logfile，无法恢复 <br /><br />
+SELECT * FROM 原有文件名.emp</p><br />
+<p>如果加上APPEND参数，数据将被加到高水点之后，由于其后空间连续，可加快插入速度。</p><br />
+<p>并行插入(依赖于CPU的数量)：<br /><br />
+ALTER SESSION ENABLE PAALLEL DML; //修改当前环境，使其允许并&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 行操作，具体还要与硬件是否支持有关。<br /><br />
+INSERT /*+PARALLEL(文件名，#)*/&nbsp;&nbsp; //开启#个并行度<br /><br />
+INTO 文件名.emp<br /><br />
+NOLOGGING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br /><br />
+SELECT * FROM 原有文件名.old_emp</p><br />
+<p>普通路径的加载<br /><br />
+将数据文件中的数据在内存中直接构建为数组加载到表中去的。<br /><br />
+将数据重组，产生INSERT语句，必须使用COMMIT才能生效。<br /><br />
+总是产生 redo<br /><br />
+涉及到所有约束<br /><br />
+INSERT 触发 trigger<br /><br />
+支持cluster<br /><br />
+其他用户可以修改</p><br />
+<p>直接路径加载<br /><br />
+使用Extent管理的方式，将数据文件中的数据直接在内存中重组，然后写入表的高水点之后，速度很快，但是如果出错就很难修复。<br /><br />
+采用Data save技术，只有当在Extent扩充的时候才产生redo<br /><br />
+只涉及到primare key,unique，NOT NULL约束<br /><br />
+INSERT 不触发 trigger<br /><br />
+不支持cluster<br /><br />
+其他用户无法修改，不能对其作DML操作</p><br />
+<p>SQL*Loader 注意事项：<br /><br />
+使用参数文件来记载操作<br /><br />
+如果数据量很小且只加载一次可以直接将数据放在控制文件中<br /><br />
+分配足够的空间，避免动态扩充<br /><br />
+加载大量数据到索引中时，可以先排序再加载<br /><br />
+对于并行的加载可以定义不同的temporary segments</p><br />
+<p>常见错误：<br /><br />
+空间分配不够<br /><br />
+加载的时候insrance失败(需要查看log文件)<br /><br />
+使用了SORTED INDEXES 参数后，有一些数据没有排好序<br /><br />
+在直接加载时重复定义了unique index,unique或primary key<br /><br />
+BINDSIZE 定义过小，一般可以不定义<br /><br />
+出错超过一定的限度</p><br />
+<p>第十五章 重组数据<br /><br />
+Export和Import的使用<br /><br />
+执行逻辑备份</p><br />
+<p>操作步骤：<br /><br />
+IMP<br /><br />
+username<br /><br />
+import file</p><br />
+<p>注意事项：<br /><br />
+尽可能的使用其参数文件 pfiles<br /><br />
+只有在输出的是一个小的文件才使用 CONSISTENT=Y，否则会占用大量的回滚段<br /><br />
+如果有许多被删掉的行，不要使用COMPRESS=Y(将把原表的多个Extent进行叠加)<br /><br />
+可以分配更大的buffer<br /><br />
+可以使用直接路径的导出</p><br />
+<p>可传输表空间(可以将一个表空间从一个数据库传到另一个数据库):<br /><br />
+只能由系统管理员导出</p><br />
+<p>具体步骤:<br /><br />
+使此表空间只读<br /><br />
+导出原数据<br /><br />
+复制数据文件到指定的系统<br /><br />
+传输export file(表空间的定义文件)<br /><br />
+将定义文件输入到指定的系统<br /><br />
+如必须，将表空间切换为读写状态</p><br />
+<p>作用和限制：<br /><br />
+可以移动整个表空间的数据<br /><br />
+着吃媒体的恢复<br /><br />
+必须是相同的操作系统<br /><br />
+必须是8i以上<br /><br />
+要有相同的block大小<br /><br />
+使用相同的字符集(character set)</p><br />
+<p>表空间中的对象必须是自包含的</p><br />
+<p><br /><br />
+第十六章 密码安全管理<br /><br />
+使用配置文件<br /><br />
 强制执行，始终有效。</p>
 </body>
 </html>

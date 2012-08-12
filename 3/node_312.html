@@ -6,45 +6,45 @@
 <title>编写larbin抓取到的页面处理模块</title>
 </head>
 <body>
-用户自定义的页面处理模块的入口位于文件 ./src/interf/useroutput.cc
-
-通过不同的宏控制使用哪个模块，larbin自带的几个简单模块：SIMPLE_SAVE, MIRROR_SAVE, STATS_OUTPUT, DEFAULT_OUTPUT
-
-默认开启的是DEFAULT_OUTPUT
-
-这些宏的定义在./src/options.h的开关部分，如果要新加一个模块，需要在这定义一个宏。
-
-现在编写一个直接将url，header, html 主体输出的控制台的模块，CONOSLEOUTPUT
-
-// options.h
-#define CONSOLEOUTPUT 
-
-// .src/interf/目录
-cp -v defaultuseroutput.cc consoleoutput.cc
-
-编辑consoleoutput.cc
-
-在文件上半部分添加一行
-#define BIGSTATS 1
-
-重新编译larbin
-
-再运行的话是不是满屏幕的字符飞跑了。
-
-
-关于consoleoutput.cc文件的解释：
-该文件包含四个函数：
-
-void loaded(html *page);
-void failure(url *u, FetchError reson);
-void initUserOutput();
-void outputStats(int fds);
-
-这四个函数是编写larbin用户模块必须实现的函数，larbin 在抓取到页面后根据不同的情况调用这些函数。
-
-larbin 模块的一个奇怪的地方是模块直接使用#include指令包含进 useroutput.cc的，如果这个模块有许多个.cc文件组成的话，就不好办了。
-这样包含还有一个坏处，改动自己的模块后，重新make不会编译这个模块，还要把useroutput.o删除掉才能让改动生效，因为这个模块编译进useroutput.o中去了，而这个文件没有动，所以make不会重新编译它。
-
+用户自定义的页面处理模块的入口位于文件 ./src/interf/useroutput.cc<br />
+<br />
+通过不同的宏控制使用哪个模块，larbin自带的几个简单模块：SIMPLE_SAVE, MIRROR_SAVE, STATS_OUTPUT, DEFAULT_OUTPUT<br />
+<br />
+默认开启的是DEFAULT_OUTPUT<br />
+<br />
+这些宏的定义在./src/options.h的开关部分，如果要新加一个模块，需要在这定义一个宏。<br />
+<br />
+现在编写一个直接将url，header, html 主体输出的控制台的模块，CONOSLEOUTPUT<br />
+<br />
+// options.h<br />
+#define CONSOLEOUTPUT <br />
+<br />
+// .src/interf/目录<br />
+cp -v defaultuseroutput.cc consoleoutput.cc<br />
+<br />
+编辑consoleoutput.cc<br />
+<br />
+在文件上半部分添加一行<br />
+#define BIGSTATS 1<br />
+<br />
+重新编译larbin<br />
+<br />
+再运行的话是不是满屏幕的字符飞跑了。<br />
+<br />
+<br />
+关于consoleoutput.cc文件的解释：<br />
+该文件包含四个函数：<br />
+<br />
+void loaded(html *page);<br />
+void failure(url *u, FetchError reson);<br />
+void initUserOutput();<br />
+void outputStats(int fds);<br />
+<br />
+这四个函数是编写larbin用户模块必须实现的函数，larbin 在抓取到页面后根据不同的情况调用这些函数。<br />
+<br />
+larbin 模块的一个奇怪的地方是模块直接使用#include指令包含进 useroutput.cc的，如果这个模块有许多个.cc文件组成的话，就不好办了。<br />
+这样包含还有一个坏处，改动自己的模块后，重新make不会编译这个模块，还要把useroutput.o删除掉才能让改动生效，因为这个模块编译进useroutput.o中去了，而这个文件没有动，所以make不会重新编译它。<br />
+<br />
 
 </body>
 </html>

@@ -6,99 +6,99 @@
 <title>CLISP语言中的哈希表</title>
 </head>
 <body>
-<ol>
-<li>概要
-
-<p>hash表是一种非常重要的数据结构,用于存储键/值对.
-可方便的向hash表中加入条目,使用键值取得条目.
-根据运行效率的不同, CLISP中有三种hash表类型: 标准hash表,快速hash表和稳定hash表.
-它们的区别是:
-<blockquote>
-<p class="quoted">对于快速hash表,垃圾回收器会便利其中的哈希值无效,被错误的回收了(除非所有的key值都是即对象,如常量字符串,数字等).
-对稳定hash表,垃圾绝不会对其进行错误回收,因此key值可以是任何CLISP对象.
-使用的时候注意,一般对生命周期短的hash表可以考虑使用快速hash表.</p>
-</blockquote></li>
-
-<li>hash表操作函数
-
-<ol>
-<li>make-hash-table   创建一个hash表
-
-<p>(MAKE-HASH-TABLE &amp;KEY :TEST :INITIAL-CONTENTS :SIZE
-
-<center>
-<p>:REHASH-SIZE :REHASH-THRESHOLD
-:WARN-IF-NEEDS-REHASH-AFTER-GC :WEAK)</p>
-</center>
-
-<blockquote>
-<p class="quoted">:TEST 可选参数可以为EXT:FASTHASH-EQ, STABLEHASH-EQ,分别表示创建快速hash表和稳定hash表.
-:INITIAL-CONTENTS  初始化值
-:SIZE   hash表大小</p>
-</blockquote></li>
-
-<li>gethash 取出一条
-
-<p>(gethash key  hash-table)</p></li>
-
-<li>remhash 删除一条,remove from hash的意思
-
-<p>(remhash key hash-table)</p></li>
-
-<li>clrhash  清空hash表,执行这个函数后,hash表中的元素个数为0,但大小不一定为0.
-
-<p>(clrhash  hash-table)</p></li>
-
-<li>hash-table-count  hash表中的元素个数</li>
-
-<li>hash-table-size   hash表的大小</li>
-
-<li>hash-table-p    检测一个对象是否是hash表.
-
-<p>(hash-table-p object)</p>
-
-<p>CL&gt; (hash-table-p (make-hash-table))
-T</p>
-
-<p>CL&gt; (hash-table-p 123456)
-NIL</p>
-
-<p>CL&gt; (hash-table-p &quot;abcd&quot;)
-NIL</p></li>
-
-<li>sxhash  返回一个对象的hash 值.
-
-<p>CL&gt;  (sxhash 123456)
-3950784</p></li>
-
-<li>hash-table-test   检测hash表使用哪种key值比较方式.
-
-<p>可能的比较方式有:</p>
-
-<p>EXT:FASTHASH-EQ        EXT:FASTHASH-EQUAL</p>
-
-<p>EXT:STABLEHASH-EQ       EXT:STABLEHASH-EQUAL</p>
-
-<p>EXT:FASTHASH-EQL         EQUALP</p>
-
-<p>EXT:STABLEHASH-EQL</p></li>
-</ol></li>
-
-<li>遍历hash表中的元素
-
-<p>宏 DOHASH , 与DOLIST比较类似.</p>
-
-<p>(EXT:DOHASH (key-var value-var hash-table-form [resultform])</p>
-
-<p>key-var   遍历过程中存储key的变量.</p>
-
-<p>value-var  遍历过程中存储value的变量.</p>
-
-<p>hash-table-form 表示一个hash表对象</p>
-
-<p>resultform   这个语句的值作为DOHASH表达式的值返回.</p></li>
-</ol>
-
+<ol><br />
+<li>概要<br />
+<br />
+<p>hash表是一种非常重要的数据结构,用于存储键/值对.<br />
+可方便的向hash表中加入条目,使用键值取得条目.<br />
+根据运行效率的不同, CLISP中有三种hash表类型: 标准hash表,快速hash表和稳定hash表.<br />
+它们的区别是:<br />
+<blockquote><br />
+<p class="quoted">对于快速hash表,垃圾回收器会便利其中的哈希值无效,被错误的回收了(除非所有的key值都是即对象,如常量字符串,数字等).<br />
+对稳定hash表,垃圾绝不会对其进行错误回收,因此key值可以是任何CLISP对象.<br />
+使用的时候注意,一般对生命周期短的hash表可以考虑使用快速hash表.</p><br />
+</blockquote></li><br />
+<br />
+<li>hash表操作函数<br />
+<br />
+<ol><br />
+<li>make-hash-table   创建一个hash表<br />
+<br />
+<p>(MAKE-HASH-TABLE &amp;KEY :TEST :INITIAL-CONTENTS :SIZE<br />
+<br />
+<center><br />
+<p>:REHASH-SIZE :REHASH-THRESHOLD<br />
+:WARN-IF-NEEDS-REHASH-AFTER-GC :WEAK)</p><br />
+</center><br />
+<br />
+<blockquote><br />
+<p class="quoted">:TEST 可选参数可以为EXT:FASTHASH-EQ, STABLEHASH-EQ,分别表示创建快速hash表和稳定hash表.<br />
+:INITIAL-CONTENTS  初始化值<br />
+:SIZE   hash表大小</p><br />
+</blockquote></li><br />
+<br />
+<li>gethash 取出一条<br />
+<br />
+<p>(gethash key  hash-table)</p></li><br />
+<br />
+<li>remhash 删除一条,remove from hash的意思<br />
+<br />
+<p>(remhash key hash-table)</p></li><br />
+<br />
+<li>clrhash  清空hash表,执行这个函数后,hash表中的元素个数为0,但大小不一定为0.<br />
+<br />
+<p>(clrhash  hash-table)</p></li><br />
+<br />
+<li>hash-table-count  hash表中的元素个数</li><br />
+<br />
+<li>hash-table-size   hash表的大小</li><br />
+<br />
+<li>hash-table-p    检测一个对象是否是hash表.<br />
+<br />
+<p>(hash-table-p object)</p><br />
+<br />
+<p>CL&gt; (hash-table-p (make-hash-table))<br />
+T</p><br />
+<br />
+<p>CL&gt; (hash-table-p 123456)<br />
+NIL</p><br />
+<br />
+<p>CL&gt; (hash-table-p &quot;abcd&quot;)<br />
+NIL</p></li><br />
+<br />
+<li>sxhash  返回一个对象的hash 值.<br />
+<br />
+<p>CL&gt;  (sxhash 123456)<br />
+3950784</p></li><br />
+<br />
+<li>hash-table-test   检测hash表使用哪种key值比较方式.<br />
+<br />
+<p>可能的比较方式有:</p><br />
+<br />
+<p>EXT:FASTHASH-EQ        EXT:FASTHASH-EQUAL</p><br />
+<br />
+<p>EXT:STABLEHASH-EQ       EXT:STABLEHASH-EQUAL</p><br />
+<br />
+<p>EXT:FASTHASH-EQL         EQUALP</p><br />
+<br />
+<p>EXT:STABLEHASH-EQL</p></li><br />
+</ol></li><br />
+<br />
+<li>遍历hash表中的元素<br />
+<br />
+<p>宏 DOHASH , 与DOLIST比较类似.</p><br />
+<br />
+<p>(EXT:DOHASH (key-var value-var hash-table-form [resultform])</p><br />
+<br />
+<p>key-var   遍历过程中存储key的变量.</p><br />
+<br />
+<p>value-var  遍历过程中存储value的变量.</p><br />
+<br />
+<p>hash-table-form 表示一个hash表对象</p><br />
+<br />
+<p>resultform   这个语句的值作为DOHASH表达式的值返回.</p></li><br />
+</ol><br />
+<br />
 
 </body>
 </html>

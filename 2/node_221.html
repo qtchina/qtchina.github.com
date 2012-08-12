@@ -6,104 +6,104 @@
 <title>自动升级FreeBSD系统中已经安装的包的脚本</title>
 </head>
 <body>
-updated 2008-12-30: 对几个使用whereis查不到的包进行自动处理
-
-大体思路：
-
-通过pkg_version程序查看哪些包需要升级。
-
-对需要升级的包，通过whereis找到这个ports的目录，执行
-make 
-
-在make时将输出记录到临时日志中，等make执行完后查看日志文件中是否有错误，如果没有错误则执行
-make deinstall
-make install
-make clean
-
-现在还有一些处理不好，判决错误也有时候不准。但也还算比较自动吧。
-
-[code type="bash"]
-#!/usr/local/bin/bash
-
-#############
-#INSTALLED_PORTS=`pkg_version`
-#echo $INSTALLED_PORTS
-
-function uppkg 
-{
-    pkg_name=$1
-    if [ $pkg_name == "apache" ] ; then
-         pkg_name="apache20"
-    fi
-    if [ $pkg_name == "apr-db42" ] ; then
-         pkg_name="apr-svn"
-    fi
-    if [ $pkg_name == "fvwm-imlib" ] ; then
-         pkg_name="fvwm2"
-    fi
-    if [ $pkg_name == "glib" ] ; then
-         pkg_name="glib20"
-    fi 
-    if [ $pkg_name == "gtk" ] ; then
-         pkg_name="gtk20"
-    fi
-    if [ $pkg_name == "libtool" ] ; then
-         pkg_name="libtool15"
-    fi
-    # echo $pkg_name;
-    old_path=`pwd`
-    pkg_where=`whereis $pkg_name`
-     
-    pkg_path=
-    for x in $pkg_where
-    do
-	if [ -d "$x" ] ; then
-	    pkg_path=$x
-	    break
-	fi
-    done
-
-    if [ "$pkg_path" = "" ] ; then
-	echo "pkg ports $1's dir not found"
-	return
-    fi
-    echo "pkg is in: $pkg_path"
-    cd $pkg_path
-    make 2>&1|tee compile.log
-    errstr=`cat ./compile.log|grep -i "error code"`
-    if [ "$errstr" = "" ] ; then
-	echo "compile ok"
-	make deinstall
-	make reinstall
-	make clean
-    else
-	echo "compile error"
-    fi
-	rm -fv complie.log
-    cd $old_path
-}
-
-vd=0
-cpkg=
-for npkg in `cat ./pkg_version`
-do
-    #echo $npkg
-    if [ "$vd" = "0" ] ; then
-	vd=1
-	cpkg=$npkg
-    elif [ "$vd" = "1" ] ; then
-	if [ "$npkg" = "<" ] ; then
-	    #echo "need update: $cpkg $npkg"
-	    uppkg $cpkg
-	fi
-
-	vd=0
-#	echo "$cpkg $npkg"
-	cpkg=
-    fi
-done
-
-
+updated 2008-12-30: 对几个使用whereis查不到的包进行自动处理<br />
+<br />
+大体思路：<br />
+<br />
+通过pkg_version程序查看哪些包需要升级。<br />
+<br />
+对需要升级的包，通过whereis找到这个ports的目录，执行<br />
+make <br />
+<br />
+在make时将输出记录到临时日志中，等make执行完后查看日志文件中是否有错误，如果没有错误则执行<br />
+make deinstall<br />
+make install<br />
+make clean<br />
+<br />
+现在还有一些处理不好，判决错误也有时候不准。但也还算比较自动吧。<br />
+<br />
+[code type="bash"]<br />
+#!/usr/local/bin/bash<br />
+<br />
+#############<br />
+#INSTALLED_PORTS=`pkg_version`<br />
+#echo $INSTALLED_PORTS<br />
+<br />
+function uppkg <br />
+{<br />
+    pkg_name=$1<br />
+    if [ $pkg_name == "apache" ] ; then<br />
+         pkg_name="apache20"<br />
+    fi<br />
+    if [ $pkg_name == "apr-db42" ] ; then<br />
+         pkg_name="apr-svn"<br />
+    fi<br />
+    if [ $pkg_name == "fvwm-imlib" ] ; then<br />
+         pkg_name="fvwm2"<br />
+    fi<br />
+    if [ $pkg_name == "glib" ] ; then<br />
+         pkg_name="glib20"<br />
+    fi <br />
+    if [ $pkg_name == "gtk" ] ; then<br />
+         pkg_name="gtk20"<br />
+    fi<br />
+    if [ $pkg_name == "libtool" ] ; then<br />
+         pkg_name="libtool15"<br />
+    fi<br />
+    # echo $pkg_name;<br />
+    old_path=`pwd`<br />
+    pkg_where=`whereis $pkg_name`<br />
+     <br />
+    pkg_path=<br />
+    for x in $pkg_where<br />
+    do<br />
+	if [ -d "$x" ] ; then<br />
+	    pkg_path=$x<br />
+	    break<br />
+	fi<br />
+    done<br />
+<br />
+    if [ "$pkg_path" = "" ] ; then<br />
+	echo "pkg ports $1's dir not found"<br />
+	return<br />
+    fi<br />
+    echo "pkg is in: $pkg_path"<br />
+    cd $pkg_path<br />
+    make 2>&1|tee compile.log<br />
+    errstr=`cat ./compile.log|grep -i "error code"`<br />
+    if [ "$errstr" = "" ] ; then<br />
+	echo "compile ok"<br />
+	make deinstall<br />
+	make reinstall<br />
+	make clean<br />
+    else<br />
+	echo "compile error"<br />
+    fi<br />
+	rm -fv complie.log<br />
+    cd $old_path<br />
+}<br />
+<br />
+vd=0<br />
+cpkg=<br />
+for npkg in `cat ./pkg_version`<br />
+do<br />
+    #echo $npkg<br />
+    if [ "$vd" = "0" ] ; then<br />
+	vd=1<br />
+	cpkg=$npkg<br />
+    elif [ "$vd" = "1" ] ; then<br />
+	if [ "$npkg" = "<" ] ; then<br />
+	    #echo "need update: $cpkg $npkg"<br />
+	    uppkg $cpkg<br />
+	fi<br />
+<br />
+	vd=0<br />
+#	echo "$cpkg $npkg"<br />
+	cpkg=<br />
+    fi<br />
+done<br />
+<br />
+<br />
 [/code]
 </body>
 </html>

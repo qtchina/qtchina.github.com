@@ -6,236 +6,236 @@
 <title>修改服务器版linux系统上的dummy虚拟声卡最大声道数</title>
 </head>
 <body>
-最近在一个项目中需要使用到服务器上的声卡，当然也不是需要真的物理声卡（真有物理声卡，服务器在机房中播放音乐，放电影？）。我们需要的是虚拟语音声卡，能处理客户端到服务器的语音流，不需要真正的播放。
-
-我们需要的这个虚拟声卡，在linux中作为一个内核模块存在、运行，snd-dummy。
-
-默认的snd-dummy模块的声道数是8,远少于项目需要的声道数，现在试着将其改到128.
-
-这个模块现在已经包含在内核模块中，但它是从alsa-driver包中提取出来的，与其同步，与其重新编译内核，不如使用alsa-driver包编译这个模块。
-
-下载解压alsa-driver-1.0.23.tar.bz2，转到alsa-driver-1.0.23/alsa-kernel/drivers,修改dummy.c源文件，第66行，将赋值的8改为128，
-static int pcm_substreams[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 128};
-
-转到源码根目录，cd alsa-driver-1.0.23,执行configure脚本，
-./configure --with-cards=dummy,usb-audio,hda-intel,hrtimer,rtctimer --with-card-options=all
-
-make
-
-find -name *.ko
-./pci/hda/snd-hda-codec-intelhdmi.ko
-./pci/hda/snd-hda-codec-nvhdmi.ko
-./pci/hda/snd-hda-codec-realtek.ko
-./pci/hda/snd-hda-codec-idt.ko
-./pci/hda/snd-hda-intel.ko
-./pci/hda/snd-hda-codec-ca0110.ko
-./pci/hda/snd-hda-codec-via.ko
-./pci/hda/snd-hda-codec-atihdmi.ko
-./pci/hda/snd-hda-codec-conexant.ko
-./pci/hda/snd-hda-codec.ko
-./pci/hda/snd-hda-codec-cirrus.ko
-./pci/hda/snd-hda-codec-si3054.ko
-./pci/hda/snd-hda-codec-analog.ko
-./pci/hda/snd-hda-codec-cmedia.ko
-./usb/snd-usb-audio.ko
-./usb/snd-usbmidi-lib.ko
-./acore/oss/snd-mixer-oss.ko
-./acore/oss/snd-pcm-oss.ko
-./acore/seq/oss/snd-seq-oss.ko
-./acore/seq/snd-seq-midi.ko
-./acore/seq/snd-seq-midi-event.ko
-./acore/seq/snd-seq.ko
-./acore/seq/snd-seq-device.ko
-./acore/snd-hwdep.ko
-./acore/snd-page-alloc.ko
-./acore/snd-rawmidi.ko
-./acore/snd-timer.ko
-./acore/snd.ko
-./acore/snd-pcm.ko
-./drivers/snd-dummy.ko
-./modules/snd-hda-codec-intelhdmi.ko
-./modules/snd-seq-oss.ko
-./modules/snd-hda-codec-nvhdmi.ko
-./modules/snd-hwdep.ko
-./modules/snd-seq-midi.ko
-./modules/snd-hda-codec-realtek.ko
-./modules/snd-seq-midi-event.ko
-./modules/snd-page-alloc.ko
-./modules/snd-hda-codec-idt.ko
-./modules/snd-hda-intel.ko
-./modules/snd-hda-codec-ca0110.ko
-./modules/snd-rawmidi.ko
-./modules/snd-usb-audio.ko
-./modules/snd-hda-codec-via.ko
-./modules/snd-hda-codec-atihdmi.ko
-./modules/snd-timer.ko
-./modules/snd-mixer-oss.ko
-./modules/snd-dummy.ko
-./modules/snd-hda-codec-conexant.ko
-./modules/snd-hda-codec.ko
-./modules/snd-usbmidi-lib.ko
-./modules/snd-hda-codec-cirrus.ko
-./modules/snd-hda-codec-si3054.ko
-./modules/snd.ko
-./modules/snd-pcm-oss.ko
-./modules/snd-pcm.ko
-./modules/snd-seq.ko
-./modules/snd-seq-device.ko
-./modules/snd-hda-codec-analog.ko
-./modules/snd-hda-codec-cmedia.ko
-
-snd-dummy.ko已经编译好了，首先卸载该内核模块，
-rmmod snd-dummy
-
-把modules/snd-dummy.ko拷贝到/lib/modules/`uname -r`/kernel/sound/drivers/目录，
-
-加载内核模块，insmod snd-dummy。
-
-不过这个过程可能需要同时更新其他的模块，按照相应的目录存储结构覆盖旧版本内核模块。
-直到能正常加载snd-dummy模块，
-
-最后使用aplay -L, aplay -l命令检测最新的dummy虚拟声卡及声道状态，
-debian118:~/alsa-driver-1.0.23# aplay -L
-default:CARD=Dummy
-    Dummy, Dummy PCM
-    Default Audio Device
-null
-    Discard all samples (playback) or generate zero samples (capture)
-debian118:~/alsa-driver-1.0.23# aplay -l
-**** List of PLAYBACK Hardware Devices ****
-card 0: Dummy [Dummy], device 0: Dummy PCM [Dummy PCM]
-  Subdevices: 128/128
-  Subdevice #0: subdevice #0
-  Subdevice #1: subdevice #1
-  Subdevice #2: subdevice #2
-  Subdevice #3: subdevice #3
-  Subdevice #4: subdevice #4
-  Subdevice #5: subdevice #5
-  Subdevice #6: subdevice #6
-  Subdevice #7: subdevice #7
-  Subdevice #8: subdevice #8
-  Subdevice #9: subdevice #9
-  Subdevice #10: subdevice #10
-  Subdevice #11: subdevice #11
-  Subdevice #12: subdevice #12
-  Subdevice #13: subdevice #13
-  Subdevice #14: subdevice #14
-  Subdevice #15: subdevice #15
-  Subdevice #16: subdevice #16
-  Subdevice #17: subdevice #17
-  Subdevice #18: subdevice #18
-  Subdevice #19: subdevice #19
-  Subdevice #20: subdevice #20
-  Subdevice #21: subdevice #21
-  Subdevice #22: subdevice #22
-  Subdevice #23: subdevice #23
-  Subdevice #24: subdevice #24
-  Subdevice #25: subdevice #25
-  Subdevice #26: subdevice #26
-  Subdevice #27: subdevice #27
-  Subdevice #28: subdevice #28
-  Subdevice #29: subdevice #29
-  Subdevice #30: subdevice #30
-  Subdevice #31: subdevice #31
-  Subdevice #32: subdevice #32
-  Subdevice #33: subdevice #33
-  Subdevice #34: subdevice #34
-  Subdevice #35: subdevice #35
-  Subdevice #36: subdevice #36
-  Subdevice #37: subdevice #37
-  Subdevice #38: subdevice #38
-  Subdevice #39: subdevice #39
-  Subdevice #40: subdevice #40
-  Subdevice #41: subdevice #41
-  Subdevice #42: subdevice #42
-  Subdevice #43: subdevice #43
-  Subdevice #44: subdevice #44
-  Subdevice #45: subdevice #45
-  Subdevice #46: subdevice #46
-  Subdevice #47: subdevice #47
-  Subdevice #48: subdevice #48
-  Subdevice #49: subdevice #49
-  Subdevice #50: subdevice #50
-  Subdevice #51: subdevice #51
-  Subdevice #52: subdevice #52
-  Subdevice #53: subdevice #53
-  Subdevice #54: subdevice #54
-  Subdevice #55: subdevice #55
-  Subdevice #56: subdevice #56
-  Subdevice #57: subdevice #57
-  Subdevice #58: subdevice #58
-  Subdevice #59: subdevice #59
-  Subdevice #60: subdevice #60
-  Subdevice #61: subdevice #61
-  Subdevice #62: subdevice #62
-  Subdevice #63: subdevice #63
-  Subdevice #64: subdevice #64
-  Subdevice #65: subdevice #65
-  Subdevice #66: subdevice #66
-  Subdevice #67: subdevice #67
-  Subdevice #68: subdevice #68
-  Subdevice #69: subdevice #69
-  Subdevice #70: subdevice #70
-  Subdevice #71: subdevice #71
-  Subdevice #72: subdevice #72
-  Subdevice #73: subdevice #73
-  Subdevice #74: subdevice #74
-  Subdevice #75: subdevice #75
-  Subdevice #76: subdevice #76
-  Subdevice #77: subdevice #77
-  Subdevice #78: subdevice #78
-  Subdevice #79: subdevice #79
-  Subdevice #80: subdevice #80
-  Subdevice #81: subdevice #81
-  Subdevice #82: subdevice #82
-  Subdevice #83: subdevice #83
-  Subdevice #84: subdevice #84
-  Subdevice #85: subdevice #85
-  Subdevice #86: subdevice #86
-  Subdevice #87: subdevice #87
-  Subdevice #88: subdevice #88
-  Subdevice #89: subdevice #89
-  Subdevice #90: subdevice #90
-  Subdevice #91: subdevice #91
-  Subdevice #92: subdevice #92
-  Subdevice #93: subdevice #93
-  Subdevice #94: subdevice #94
-  Subdevice #95: subdevice #95
-  Subdevice #96: subdevice #96
-  Subdevice #97: subdevice #97
-  Subdevice #98: subdevice #98
-  Subdevice #99: subdevice #99
-  Subdevice #100: subdevice #100
-  Subdevice #101: subdevice #101
-  Subdevice #102: subdevice #102
-  Subdevice #103: subdevice #103
-  Subdevice #104: subdevice #104
-  Subdevice #105: subdevice #105
-  Subdevice #106: subdevice #106
-  Subdevice #107: subdevice #107
-  Subdevice #108: subdevice #108
-  Subdevice #109: subdevice #109
-  Subdevice #110: subdevice #110
-  Subdevice #111: subdevice #111
-  Subdevice #112: subdevice #112
-  Subdevice #113: subdevice #113
-  Subdevice #114: subdevice #114
-  Subdevice #115: subdevice #115
-  Subdevice #116: subdevice #116
-  Subdevice #117: subdevice #117
-  Subdevice #118: subdevice #118
-  Subdevice #119: subdevice #119
-  Subdevice #120: subdevice #120
-  Subdevice #121: subdevice #121
-  Subdevice #122: subdevice #122
-  Subdevice #123: subdevice #123
-  Subdevice #124: subdevice #124
-  Subdevice #125: subdevice #125
-  Subdevice #126: subdevice #126
-  Subdevice #127: subdevice #127
-
-这时看到系统识别了一个dummy声卡，走道数为128,完全实现了声道数修改。
-
+最近在一个项目中需要使用到服务器上的声卡，当然也不是需要真的物理声卡（真有物理声卡，服务器在机房中播放音乐，放电影？）。我们需要的是虚拟语音声卡，能处理客户端到服务器的语音流，不需要真正的播放。<br />
+<br />
+我们需要的这个虚拟声卡，在linux中作为一个内核模块存在、运行，snd-dummy。<br />
+<br />
+默认的snd-dummy模块的声道数是8,远少于项目需要的声道数，现在试着将其改到128.<br />
+<br />
+这个模块现在已经包含在内核模块中，但它是从alsa-driver包中提取出来的，与其同步，与其重新编译内核，不如使用alsa-driver包编译这个模块。<br />
+<br />
+下载解压alsa-driver-1.0.23.tar.bz2，转到alsa-driver-1.0.23/alsa-kernel/drivers,修改dummy.c源文件，第66行，将赋值的8改为128，<br />
+static int pcm_substreams[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 128};<br />
+<br />
+转到源码根目录，cd alsa-driver-1.0.23,执行configure脚本，<br />
+./configure --with-cards=dummy,usb-audio,hda-intel,hrtimer,rtctimer --with-card-options=all<br />
+<br />
+make<br />
+<br />
+find -name *.ko<br />
+./pci/hda/snd-hda-codec-intelhdmi.ko<br />
+./pci/hda/snd-hda-codec-nvhdmi.ko<br />
+./pci/hda/snd-hda-codec-realtek.ko<br />
+./pci/hda/snd-hda-codec-idt.ko<br />
+./pci/hda/snd-hda-intel.ko<br />
+./pci/hda/snd-hda-codec-ca0110.ko<br />
+./pci/hda/snd-hda-codec-via.ko<br />
+./pci/hda/snd-hda-codec-atihdmi.ko<br />
+./pci/hda/snd-hda-codec-conexant.ko<br />
+./pci/hda/snd-hda-codec.ko<br />
+./pci/hda/snd-hda-codec-cirrus.ko<br />
+./pci/hda/snd-hda-codec-si3054.ko<br />
+./pci/hda/snd-hda-codec-analog.ko<br />
+./pci/hda/snd-hda-codec-cmedia.ko<br />
+./usb/snd-usb-audio.ko<br />
+./usb/snd-usbmidi-lib.ko<br />
+./acore/oss/snd-mixer-oss.ko<br />
+./acore/oss/snd-pcm-oss.ko<br />
+./acore/seq/oss/snd-seq-oss.ko<br />
+./acore/seq/snd-seq-midi.ko<br />
+./acore/seq/snd-seq-midi-event.ko<br />
+./acore/seq/snd-seq.ko<br />
+./acore/seq/snd-seq-device.ko<br />
+./acore/snd-hwdep.ko<br />
+./acore/snd-page-alloc.ko<br />
+./acore/snd-rawmidi.ko<br />
+./acore/snd-timer.ko<br />
+./acore/snd.ko<br />
+./acore/snd-pcm.ko<br />
+./drivers/snd-dummy.ko<br />
+./modules/snd-hda-codec-intelhdmi.ko<br />
+./modules/snd-seq-oss.ko<br />
+./modules/snd-hda-codec-nvhdmi.ko<br />
+./modules/snd-hwdep.ko<br />
+./modules/snd-seq-midi.ko<br />
+./modules/snd-hda-codec-realtek.ko<br />
+./modules/snd-seq-midi-event.ko<br />
+./modules/snd-page-alloc.ko<br />
+./modules/snd-hda-codec-idt.ko<br />
+./modules/snd-hda-intel.ko<br />
+./modules/snd-hda-codec-ca0110.ko<br />
+./modules/snd-rawmidi.ko<br />
+./modules/snd-usb-audio.ko<br />
+./modules/snd-hda-codec-via.ko<br />
+./modules/snd-hda-codec-atihdmi.ko<br />
+./modules/snd-timer.ko<br />
+./modules/snd-mixer-oss.ko<br />
+./modules/snd-dummy.ko<br />
+./modules/snd-hda-codec-conexant.ko<br />
+./modules/snd-hda-codec.ko<br />
+./modules/snd-usbmidi-lib.ko<br />
+./modules/snd-hda-codec-cirrus.ko<br />
+./modules/snd-hda-codec-si3054.ko<br />
+./modules/snd.ko<br />
+./modules/snd-pcm-oss.ko<br />
+./modules/snd-pcm.ko<br />
+./modules/snd-seq.ko<br />
+./modules/snd-seq-device.ko<br />
+./modules/snd-hda-codec-analog.ko<br />
+./modules/snd-hda-codec-cmedia.ko<br />
+<br />
+snd-dummy.ko已经编译好了，首先卸载该内核模块，<br />
+rmmod snd-dummy<br />
+<br />
+把modules/snd-dummy.ko拷贝到/lib/modules/`uname -r`/kernel/sound/drivers/目录，<br />
+<br />
+加载内核模块，insmod snd-dummy。<br />
+<br />
+不过这个过程可能需要同时更新其他的模块，按照相应的目录存储结构覆盖旧版本内核模块。<br />
+直到能正常加载snd-dummy模块，<br />
+<br />
+最后使用aplay -L, aplay -l命令检测最新的dummy虚拟声卡及声道状态，<br />
+debian118:~/alsa-driver-1.0.23# aplay -L<br />
+default:CARD=Dummy<br />
+    Dummy, Dummy PCM<br />
+    Default Audio Device<br />
+null<br />
+    Discard all samples (playback) or generate zero samples (capture)<br />
+debian118:~/alsa-driver-1.0.23# aplay -l<br />
+**** List of PLAYBACK Hardware Devices ****<br />
+card 0: Dummy [Dummy], device 0: Dummy PCM [Dummy PCM]<br />
+  Subdevices: 128/128<br />
+  Subdevice #0: subdevice #0<br />
+  Subdevice #1: subdevice #1<br />
+  Subdevice #2: subdevice #2<br />
+  Subdevice #3: subdevice #3<br />
+  Subdevice #4: subdevice #4<br />
+  Subdevice #5: subdevice #5<br />
+  Subdevice #6: subdevice #6<br />
+  Subdevice #7: subdevice #7<br />
+  Subdevice #8: subdevice #8<br />
+  Subdevice #9: subdevice #9<br />
+  Subdevice #10: subdevice #10<br />
+  Subdevice #11: subdevice #11<br />
+  Subdevice #12: subdevice #12<br />
+  Subdevice #13: subdevice #13<br />
+  Subdevice #14: subdevice #14<br />
+  Subdevice #15: subdevice #15<br />
+  Subdevice #16: subdevice #16<br />
+  Subdevice #17: subdevice #17<br />
+  Subdevice #18: subdevice #18<br />
+  Subdevice #19: subdevice #19<br />
+  Subdevice #20: subdevice #20<br />
+  Subdevice #21: subdevice #21<br />
+  Subdevice #22: subdevice #22<br />
+  Subdevice #23: subdevice #23<br />
+  Subdevice #24: subdevice #24<br />
+  Subdevice #25: subdevice #25<br />
+  Subdevice #26: subdevice #26<br />
+  Subdevice #27: subdevice #27<br />
+  Subdevice #28: subdevice #28<br />
+  Subdevice #29: subdevice #29<br />
+  Subdevice #30: subdevice #30<br />
+  Subdevice #31: subdevice #31<br />
+  Subdevice #32: subdevice #32<br />
+  Subdevice #33: subdevice #33<br />
+  Subdevice #34: subdevice #34<br />
+  Subdevice #35: subdevice #35<br />
+  Subdevice #36: subdevice #36<br />
+  Subdevice #37: subdevice #37<br />
+  Subdevice #38: subdevice #38<br />
+  Subdevice #39: subdevice #39<br />
+  Subdevice #40: subdevice #40<br />
+  Subdevice #41: subdevice #41<br />
+  Subdevice #42: subdevice #42<br />
+  Subdevice #43: subdevice #43<br />
+  Subdevice #44: subdevice #44<br />
+  Subdevice #45: subdevice #45<br />
+  Subdevice #46: subdevice #46<br />
+  Subdevice #47: subdevice #47<br />
+  Subdevice #48: subdevice #48<br />
+  Subdevice #49: subdevice #49<br />
+  Subdevice #50: subdevice #50<br />
+  Subdevice #51: subdevice #51<br />
+  Subdevice #52: subdevice #52<br />
+  Subdevice #53: subdevice #53<br />
+  Subdevice #54: subdevice #54<br />
+  Subdevice #55: subdevice #55<br />
+  Subdevice #56: subdevice #56<br />
+  Subdevice #57: subdevice #57<br />
+  Subdevice #58: subdevice #58<br />
+  Subdevice #59: subdevice #59<br />
+  Subdevice #60: subdevice #60<br />
+  Subdevice #61: subdevice #61<br />
+  Subdevice #62: subdevice #62<br />
+  Subdevice #63: subdevice #63<br />
+  Subdevice #64: subdevice #64<br />
+  Subdevice #65: subdevice #65<br />
+  Subdevice #66: subdevice #66<br />
+  Subdevice #67: subdevice #67<br />
+  Subdevice #68: subdevice #68<br />
+  Subdevice #69: subdevice #69<br />
+  Subdevice #70: subdevice #70<br />
+  Subdevice #71: subdevice #71<br />
+  Subdevice #72: subdevice #72<br />
+  Subdevice #73: subdevice #73<br />
+  Subdevice #74: subdevice #74<br />
+  Subdevice #75: subdevice #75<br />
+  Subdevice #76: subdevice #76<br />
+  Subdevice #77: subdevice #77<br />
+  Subdevice #78: subdevice #78<br />
+  Subdevice #79: subdevice #79<br />
+  Subdevice #80: subdevice #80<br />
+  Subdevice #81: subdevice #81<br />
+  Subdevice #82: subdevice #82<br />
+  Subdevice #83: subdevice #83<br />
+  Subdevice #84: subdevice #84<br />
+  Subdevice #85: subdevice #85<br />
+  Subdevice #86: subdevice #86<br />
+  Subdevice #87: subdevice #87<br />
+  Subdevice #88: subdevice #88<br />
+  Subdevice #89: subdevice #89<br />
+  Subdevice #90: subdevice #90<br />
+  Subdevice #91: subdevice #91<br />
+  Subdevice #92: subdevice #92<br />
+  Subdevice #93: subdevice #93<br />
+  Subdevice #94: subdevice #94<br />
+  Subdevice #95: subdevice #95<br />
+  Subdevice #96: subdevice #96<br />
+  Subdevice #97: subdevice #97<br />
+  Subdevice #98: subdevice #98<br />
+  Subdevice #99: subdevice #99<br />
+  Subdevice #100: subdevice #100<br />
+  Subdevice #101: subdevice #101<br />
+  Subdevice #102: subdevice #102<br />
+  Subdevice #103: subdevice #103<br />
+  Subdevice #104: subdevice #104<br />
+  Subdevice #105: subdevice #105<br />
+  Subdevice #106: subdevice #106<br />
+  Subdevice #107: subdevice #107<br />
+  Subdevice #108: subdevice #108<br />
+  Subdevice #109: subdevice #109<br />
+  Subdevice #110: subdevice #110<br />
+  Subdevice #111: subdevice #111<br />
+  Subdevice #112: subdevice #112<br />
+  Subdevice #113: subdevice #113<br />
+  Subdevice #114: subdevice #114<br />
+  Subdevice #115: subdevice #115<br />
+  Subdevice #116: subdevice #116<br />
+  Subdevice #117: subdevice #117<br />
+  Subdevice #118: subdevice #118<br />
+  Subdevice #119: subdevice #119<br />
+  Subdevice #120: subdevice #120<br />
+  Subdevice #121: subdevice #121<br />
+  Subdevice #122: subdevice #122<br />
+  Subdevice #123: subdevice #123<br />
+  Subdevice #124: subdevice #124<br />
+  Subdevice #125: subdevice #125<br />
+  Subdevice #126: subdevice #126<br />
+  Subdevice #127: subdevice #127<br />
+<br />
+这时看到系统识别了一个dummy声卡，走道数为128,完全实现了声道数修改。<br />
+<br />
 
 </body>
 </html>

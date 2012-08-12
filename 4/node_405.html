@@ -6,141 +6,141 @@
 <title>grub2最新版本1.98发布及新功能试用手记</title>
 </head>
 <body>
-<p class="first">系统引导加载程序 GNU GRUB 已发布 1.98 版本。该版本主要包含以下改进：</p>
-
-<ul>
-<li>Yeeloong 支持</li>
-<li>基于 Widget 的菜单</li>
-<li>针对 EFI 的多重引导支持</li>
-<li>支持保存默认的菜单条目（利用新的 grub-reboot 和 grub-set-default 工具）</li>
-<li>单元测试框架</li>
-<li>支持 Multiple 终端</li>
-<li>通过新工具 grub-mkpasswd-pbkdf2 支持加密密码</li>
-<li>已移除 grub-mkfloppy，利用 grub-mkrescue 可制作软驱映像</li>
-<li>为 GNU/Hurd 添加了 grub-probe 支持</li>
-<li>增添了 gettext 支持</li>
-</ul>
-
-<p>参阅 <a href="http://lists.gnu.org/archive/html/grub-devel/2010-03/msg00017.html">GRUB 1.98 发布公告</a>可了解详细情况。</p>
-
-<p>GRUB 1.98 的源代码可从<a href="http://alpha.gnu.org/gnu/grub/">这里下载</a>。</p>
-
-<p>试用系统环境为gentoo linux x86_64。
-下面的试用grub.cfg中，添加试用新功能，中文字体，分辨率设置，背景图片。
-其中wqy-zenhei.pf2是使用 grub-mkfont命令从文泉驿字体转来的。
-转换命令：
-grub-mkfont -v &mdash;output=wqy-zenhei.pf2 /usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc</p>
-
-<p>试用结果，已经能正确使用上面三个新功能了，回来把效果图拍下来。</p>
-
-<p>虽然grub2的功能强大，但其配置文件的语法也变的复杂，特别是这些涉及到特殊功能的地方。</p>
-
-<p>如果不使用这些高级功能，其实只需要几个必须用的指令即可，与 grub1.x差别并不太大。</p>
-
-<p>而且该新版本提供一些相应的工具，可自动生成grub.cfg配置文件，如grub-mkconfig等。
-使用这个工具生成基本的配置文件后，在些基础做些修改即可实现这些复杂功能了。</p>
-
-<p>
-[code type=bash]
-
-### BEGIN /etc/grub.d/00_header ###
-set default=0
-set timeout=10
-### END /etc/grub.d/00_header ###
-
-# splash for grub1
-# splashimage=(hd0,1)/boot/grub/play_gentoo.xpm.gz
-
-#splash for grub2
-# insmod terminal
-# insmod 915resolution
-# insmod gfxterm
-insmod video
-insmod vbe
-insmod font
-# insmod jpeg
-# insmod png
-
-# 915resolution 5c 1024 600
-loadfont /boot/grub/unifont.pf2
-set gfxmode=1024x768x32
-terminal_output gfxterm
-# terminal_output console
-
-# set menu_color_normal=white/black
-# set menu_color_highlight=white/dark-gray
-# background_image (hd0,1)/boot/grub/kde4_air.jpg
-
-insmod jpeg
-if background_image /boot/grub/kde4_air.jpg ; then
-  set color_normal=black/black
-  set color_highlight=magenta/black
-else
-  set menu_color_normal=cyan/blue
-  set menu_color_highlight=white/blue
-fi
-
-### BEGIN /etc/grub.d/10_linux ###
-menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.33-stable" {
-        insmod ext2
-        set root=(hd0,1)
-        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c
-        linux   /boot/kernel-genkernel-x86_64-2.6.33-gentoo root=/dev/sda1 ro resume=/dev/sda8 ra
-deon.modeset=0
-        # init=/sbin/bootchartd
-        initrd  /boot/initramfs-genkernel-x86_64-2.6.33-gentoo
-
-}
-menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.32-stable" {
-        insmod ext2
-        set root=(hd0,1)
-        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c
-        linux   /boot/kernel-genkernel-x86_64-2.6.32 root=/dev/sda1 ro resume=/dev/sda8 radeon.mo
-deset=0 init=/sbin/bootchartd
-        initrd  /boot/initramfs-genkernel-x86_64-2.6.32
-}
-menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.31-gentoo (recovery mode)" {
-        insmod ext2
-        set root=(hd0,1)
-        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c
-        linux   /boot/kernel-genkernel-x86_64-2.6.31-gentoo root=/dev/sda1 ro single
-}
-### END /etc/grub.d/10_linux ###
-
-### BEGIN /etc/grub.d/30_os-prober ###
-### END /etc/grub.d/30_os-prober ###
-
-### BEGIN /etc/grub.d/40_custom ###
-# This file provides an easy way to add custom menu entries.  Simply type the
-# menu entries you want to add after this comment.  Be careful not to change
-# the 'exec tail' line above.
-### END /etc/grub.d/40_custom ###
-
-#### myadd
-menuentry "Mac OS X 10.5.7" {
-        set root=(hd0,2)
-        insmod efiemu
-        insmod video
-        insmod vbe
-        gfxmode="1024x768x32"
-        xnu_kernel /mach_kernel rd=disk0s2
-        if [ /System/Library/Extensions.mkext -nt /System/Library/Extensions ]; then
-                xnu_mkext /System/Library/Extensions.mkext
-        else
-                xnu_kextdir /System/Library/Extensions
-        fi
-}
-
-menuentry "Windows 7" {
-        set root=(hd0,3)
-        # chainloader /boot/grub/win7.mbr
-        chainloader +1
-}
-
-
-[/code]
-
-</p>
+<p class="first">系统引导加载程序 GNU GRUB 已发布 1.98 版本。该版本主要包含以下改进：</p><br />
+<br />
+<ul><br />
+<li>Yeeloong 支持</li><br />
+<li>基于 Widget 的菜单</li><br />
+<li>针对 EFI 的多重引导支持</li><br />
+<li>支持保存默认的菜单条目（利用新的 grub-reboot 和 grub-set-default 工具）</li><br />
+<li>单元测试框架</li><br />
+<li>支持 Multiple 终端</li><br />
+<li>通过新工具 grub-mkpasswd-pbkdf2 支持加密密码</li><br />
+<li>已移除 grub-mkfloppy，利用 grub-mkrescue 可制作软驱映像</li><br />
+<li>为 GNU/Hurd 添加了 grub-probe 支持</li><br />
+<li>增添了 gettext 支持</li><br />
+</ul><br />
+<br />
+<p>参阅 <a href="http://lists.gnu.org/archive/html/grub-devel/2010-03/msg00017.html">GRUB 1.98 发布公告</a>可了解详细情况。</p><br />
+<br />
+<p>GRUB 1.98 的源代码可从<a href="http://alpha.gnu.org/gnu/grub/">这里下载</a>。</p><br />
+<br />
+<p>试用系统环境为gentoo linux x86_64。<br />
+下面的试用grub.cfg中，添加试用新功能，中文字体，分辨率设置，背景图片。<br />
+其中wqy-zenhei.pf2是使用 grub-mkfont命令从文泉驿字体转来的。<br />
+转换命令：<br />
+grub-mkfont -v &mdash;output=wqy-zenhei.pf2 /usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc</p><br />
+<br />
+<p>试用结果，已经能正确使用上面三个新功能了，回来把效果图拍下来。</p><br />
+<br />
+<p>虽然grub2的功能强大，但其配置文件的语法也变的复杂，特别是这些涉及到特殊功能的地方。</p><br />
+<br />
+<p>如果不使用这些高级功能，其实只需要几个必须用的指令即可，与 grub1.x差别并不太大。</p><br />
+<br />
+<p>而且该新版本提供一些相应的工具，可自动生成grub.cfg配置文件，如grub-mkconfig等。<br />
+使用这个工具生成基本的配置文件后，在些基础做些修改即可实现这些复杂功能了。</p><br />
+<br />
+<p><br />
+[code type=bash]<br />
+<br />
+### BEGIN /etc/grub.d/00_header ###<br />
+set default=0<br />
+set timeout=10<br />
+### END /etc/grub.d/00_header ###<br />
+<br />
+# splash for grub1<br />
+# splashimage=(hd0,1)/boot/grub/play_gentoo.xpm.gz<br />
+<br />
+#splash for grub2<br />
+# insmod terminal<br />
+# insmod 915resolution<br />
+# insmod gfxterm<br />
+insmod video<br />
+insmod vbe<br />
+insmod font<br />
+# insmod jpeg<br />
+# insmod png<br />
+<br />
+# 915resolution 5c 1024 600<br />
+loadfont /boot/grub/unifont.pf2<br />
+set gfxmode=1024x768x32<br />
+terminal_output gfxterm<br />
+# terminal_output console<br />
+<br />
+# set menu_color_normal=white/black<br />
+# set menu_color_highlight=white/dark-gray<br />
+# background_image (hd0,1)/boot/grub/kde4_air.jpg<br />
+<br />
+insmod jpeg<br />
+if background_image /boot/grub/kde4_air.jpg ; then<br />
+  set color_normal=black/black<br />
+  set color_highlight=magenta/black<br />
+else<br />
+  set menu_color_normal=cyan/blue<br />
+  set menu_color_highlight=white/blue<br />
+fi<br />
+<br />
+### BEGIN /etc/grub.d/10_linux ###<br />
+menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.33-stable" {<br />
+        insmod ext2<br />
+        set root=(hd0,1)<br />
+        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c<br />
+        linux   /boot/kernel-genkernel-x86_64-2.6.33-gentoo root=/dev/sda1 ro resume=/dev/sda8 ra<br />
+deon.modeset=0<br />
+        # init=/sbin/bootchartd<br />
+        initrd  /boot/initramfs-genkernel-x86_64-2.6.33-gentoo<br />
+<br />
+}<br />
+menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.32-stable" {<br />
+        insmod ext2<br />
+        set root=(hd0,1)<br />
+        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c<br />
+        linux   /boot/kernel-genkernel-x86_64-2.6.32 root=/dev/sda1 ro resume=/dev/sda8 radeon.mo<br />
+deset=0 init=/sbin/bootchartd<br />
+        initrd  /boot/initramfs-genkernel-x86_64-2.6.32<br />
+}<br />
+menuentry "Gentoo GNU/Linux, Linux x86_64-2.6.31-gentoo (recovery mode)" {<br />
+        insmod ext2<br />
+        set root=(hd0,1)<br />
+        search --no-floppy --fs-uuid --set 07d046c6-f894-4795-b339-108d75eab09c<br />
+        linux   /boot/kernel-genkernel-x86_64-2.6.31-gentoo root=/dev/sda1 ro single<br />
+}<br />
+### END /etc/grub.d/10_linux ###<br />
+<br />
+### BEGIN /etc/grub.d/30_os-prober ###<br />
+### END /etc/grub.d/30_os-prober ###<br />
+<br />
+### BEGIN /etc/grub.d/40_custom ###<br />
+# This file provides an easy way to add custom menu entries.  Simply type the<br />
+# menu entries you want to add after this comment.  Be careful not to change<br />
+# the 'exec tail' line above.<br />
+### END /etc/grub.d/40_custom ###<br />
+<br />
+#### myadd<br />
+menuentry "Mac OS X 10.5.7" {<br />
+        set root=(hd0,2)<br />
+        insmod efiemu<br />
+        insmod video<br />
+        insmod vbe<br />
+        gfxmode="1024x768x32"<br />
+        xnu_kernel /mach_kernel rd=disk0s2<br />
+        if [ /System/Library/Extensions.mkext -nt /System/Library/Extensions ]; then<br />
+                xnu_mkext /System/Library/Extensions.mkext<br />
+        else<br />
+                xnu_kextdir /System/Library/Extensions<br />
+        fi<br />
+}<br />
+<br />
+menuentry "Windows 7" {<br />
+        set root=(hd0,3)<br />
+        # chainloader /boot/grub/win7.mbr<br />
+        chainloader +1<br />
+}<br />
+<br />
+<br />
+[/code]<br />
+<br />
+</p><br />
 
 </body>
 </html>

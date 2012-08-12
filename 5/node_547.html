@@ -6,27 +6,27 @@
 <title>原来qt的qmake已经能使用pkgconfig功能了</title>
 </head>
 <body>
-还没确定从哪版本开始支持的，我现在用的qt 4.7.1是已经支持了的，好像是在4.7.0版本加入的这个功能。
-
-使用方法，
-
-CONFIG += link_pkgconfig # enable the PKGCONFIG feature
-PKGCONFIG += glib-2.0 # link against glib-2.0
-
-另外，还可检没某个包是否存在，
-
-packagesExist(glib-2.0) {
-    DEFINES += HAS_GLIB
-    PKGCONFIG += glib-2.0
-}
-
-// and in the code:
-#ifdef HAS_GLIB
-    // use glib here
-#endif
-
-这样使用pkgconfig的功能，已经非常简便了
-还有一点疑问，这个在非linux系统上，如mac, win上是什么表现呢。
+还没确定从哪版本开始支持的，我现在用的qt 4.7.1是已经支持了的，好像是在4.7.0版本加入的这个功能。<br />
+<br />
+使用方法，<br />
+<br />
+CONFIG += link_pkgconfig # enable the PKGCONFIG feature<br />
+PKGCONFIG += glib-2.0 # link against glib-2.0<br />
+<br />
+另外，还可检没某个包是否存在，<br />
+<br />
+packagesExist(glib-2.0) {<br />
+    DEFINES += HAS_GLIB<br />
+    PKGCONFIG += glib-2.0<br />
+}<br />
+<br />
+// and in the code:<br />
+#ifdef HAS_GLIB<br />
+    // use glib here<br />
+#endif<br />
+<br />
+这样使用pkgconfig的功能，已经非常简便了<br />
+还有一点疑问，这个在非linux系统上，如mac, win上是什么表现呢。<br />
 
 </body>
 </html>

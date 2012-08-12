@@ -6,37 +6,37 @@
 <title>在subversion中使用rcsid串自动更新功能</title>
 </head>
 <body>
-subversion中的rcsid与rcs中的格式一样，都是使用$Id$
-
-但在subversion中默认并不开启，而且是以prop的形式进行管理。
-
-对于新的文件还好办，修改.subversion/config配置文件，开启这一行，  
-表示自动处理文件的属性
-enable-auto-props = yes
-
-接下来设置要自动设置文件属性的文件类型：
-
-### Section for configuring automatic properties.
-[auto-props]
-### The format of the entries is:
-###   file-name-pattern = propname[=value][;propname[=value]...]
-### The file-name-pattern can contain wildcards (such as '*' and
-### '?').  All entries which match will be applied to the file.
-### Note that auto-props functionality must be enabled, which
-### is typically done by setting the 'enable-auto-props' option.
-*.c = svn:eol-style=native;svn:keywords=Date Author Id Revision HeadURL
-*.php = svn:keywords=Date Author Id Revision HeadURL
-
-以后新创建的文件将自动设置属性替换
-
-对于已有文件，使用命令设置文件的属性：
-
-Set svn:keywords to all .h and .hpp files
-$ find . -regex '.*\.h' -o -regex '.*\.hpp' | xargs svn propset  svn:keywords "Id"
-
-参考：
-http://mateusz.loskot.net/tag/rcs-svn-subversion-keywords-id-date/
-http://fixlinux.com/2006/07/24/subversion-and-keyword-substitution/
+subversion中的rcsid与rcs中的格式一样，都是使用$Id$<br />
+<br />
+但在subversion中默认并不开启，而且是以prop的形式进行管理。<br />
+<br />
+对于新的文件还好办，修改.subversion/config配置文件，开启这一行，  <br />
+表示自动处理文件的属性<br />
+enable-auto-props = yes<br />
+<br />
+接下来设置要自动设置文件属性的文件类型：<br />
+<br />
+### Section for configuring automatic properties.<br />
+[auto-props]<br />
+### The format of the entries is:<br />
+###   file-name-pattern = propname[=value][;propname[=value]...]<br />
+### The file-name-pattern can contain wildcards (such as '*' and<br />
+### '?').  All entries which match will be applied to the file.<br />
+### Note that auto-props functionality must be enabled, which<br />
+### is typically done by setting the 'enable-auto-props' option.<br />
+*.c = svn:eol-style=native;svn:keywords=Date Author Id Revision HeadURL<br />
+*.php = svn:keywords=Date Author Id Revision HeadURL<br />
+<br />
+以后新创建的文件将自动设置属性替换<br />
+<br />
+对于已有文件，使用命令设置文件的属性：<br />
+<br />
+Set svn:keywords to all .h and .hpp files<br />
+$ find . -regex '.*\.h' -o -regex '.*\.hpp' | xargs svn propset  svn:keywords "Id"<br />
+<br />
+参考：<br />
+http://mateusz.loskot.net/tag/rcs-svn-subversion-keywords-id-date/<br />
+http://fixlinux.com/2006/07/24/subversion-and-keyword-substitution/<br />
 
 </body>
 </html>

@@ -6,14 +6,14 @@
 <title>gentoo portage安装软件下载提速</title>
 </head>
 <body>
-默认的使用wget的方式是根本无法满足下载速度的需求的
-
-之前改成用axel会出状况（明明是能下载的，但是emerge的时候却提示不行，郁闷了一个晚上）
-
-最好的解决办法是使用aria2作为下载工具
-
-/etc/make.conf里面:
-FETCHCOMMAND="/usr/bin/aria2c -c -s 5 -d \${DISTDIR} -o \${FILE} \${URI}"
+默认的使用wget的方式是根本无法满足下载速度的需求的<br />
+<br />
+之前改成用axel会出状况（明明是能下载的，但是emerge的时候却提示不行，郁闷了一个晚上）<br />
+<br />
+最好的解决办法是使用aria2作为下载工具<br />
+<br />
+/etc/make.conf里面:<br />
+FETCHCOMMAND="/usr/bin/aria2c -c -s 5 -d \${DISTDIR} -o \${FILE} \${URI}"<br />
 RESUMECOMMAND="${FETCHCOMMAND}"
 </body>
 </html>

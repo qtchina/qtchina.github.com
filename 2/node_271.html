@@ -6,21 +6,21 @@
 <title>qt4跨平台程序发布打包命名规则</title>
 </head>
 <body>
-FreeBSD:
-
-opera-9.63-freebsd7-shared-qt3.i386.tar.bz2
-opera-9.63-freebsd7-static-qt3.i386.tar.bz2
-opera-9.63-freebsd7-shared-qt3.amd64.tar.bz2
-opera-9.63-freebsd7-static-qt3.amd64.tar.bz2
-
-
-LINUX:
-opera-9.63.gcc4-shared-qt3.i386.tar.gz
-
-packages/mkpkg.sh 不能区分cpu类型的问题
-MARCH=`uname -m`
-echo "package info: $LINK_PLATFORM $LINK_TYPE $VERSION"
-$TAR_CMD  jcvf $dirname/../nullfxp-$VERSION-$LINK_TYPE-qt4.$MARCH.$LINK_PLATFORM.tar.bz2 $dirname/../nullfxp
+FreeBSD:<br />
+<br />
+opera-9.63-freebsd7-shared-qt3.i386.tar.bz2<br />
+opera-9.63-freebsd7-static-qt3.i386.tar.bz2<br />
+opera-9.63-freebsd7-shared-qt3.amd64.tar.bz2<br />
+opera-9.63-freebsd7-static-qt3.amd64.tar.bz2<br />
+<br />
+<br />
+LINUX:<br />
+opera-9.63.gcc4-shared-qt3.i386.tar.gz<br />
+<br />
+packages/mkpkg.sh 不能区分cpu类型的问题<br />
+MARCH=`uname -m`<br />
+echo "package info: $LINK_PLATFORM $LINK_TYPE $VERSION"<br />
+$TAR_CMD  jcvf $dirname/../nullfxp-$VERSION-$LINK_TYPE-qt4.$MARCH.$LINK_PLATFORM.tar.bz2 $dirname/../nullfxp<br />
 
 </body>
 </html>

@@ -6,32 +6,32 @@
 <title>对pjsip项目中的pjsua SIP客户端的一点改动</title>
 </head>
 <body>
-为了做电话系统的自动压力测试，需要一批能自动接听的sip客户端，这个需要与pjsua比较像，但还有一点不同，自动测试中不需要命令行输入，自动测试中播放的wav文件，要循环播放。
-
-其实修改起来比较简单，在命令行处理函数console_app_main中的for循环开始位置，添加两行即可，
-for(;;) {
-sleep(2);
-continue;
-
-第二处，修改on_playfile_done
-在第一个if分支前，无条件调用文件位置重置
-pjsua_player_set_post(app_conf.wav_id, 0);
-
-这样修改一下，完全満足了自动 测试要求 。
-
-*******************************************
-pjsip 在windows上编译，
-我这两个vc，一个6.0,一个10.0，包中对10.0没有相应的工程文件，只包含6.0和9.0的工程文件，如果使用10.0转，则要从6.0的工程文件转，9.0的工程文件转不过去。最好使用vc 6.0直接编译。
-
-另外，编译中有一编译参数，可以把pjsip编译成相对静态的，即不使用msvcrxx.dll库。
-修改工程文件, 将-MD替换成-MT, 或者debug的工程中，将-MDd替换成 MTd。
-
-pjsip for windows 还需要使用platform sdk 2003 sp1版本，要在vc6中指定这个的安装目录。Tools->Option->Directories中设定。
-
-创建pjlib源码选项文件，pjlib/include/pj/config_site.h
-内容为空即可。
-
-把pjsua设置为默认项目，开始编译。
+为了做电话系统的自动压力测试，需要一批能自动接听的sip客户端，这个需要与pjsua比较像，但还有一点不同，自动测试中不需要命令行输入，自动测试中播放的wav文件，要循环播放。<br />
+<br />
+其实修改起来比较简单，在命令行处理函数console_app_main中的for循环开始位置，添加两行即可，<br />
+for(;;) {<br />
+sleep(2);<br />
+continue;<br />
+<br />
+第二处，修改on_playfile_done<br />
+在第一个if分支前，无条件调用文件位置重置<br />
+pjsua_player_set_post(app_conf.wav_id, 0);<br />
+<br />
+这样修改一下，完全満足了自动 测试要求 。<br />
+<br />
+*******************************************<br />
+pjsip 在windows上编译，<br />
+我这两个vc，一个6.0,一个10.0，包中对10.0没有相应的工程文件，只包含6.0和9.0的工程文件，如果使用10.0转，则要从6.0的工程文件转，9.0的工程文件转不过去。最好使用vc 6.0直接编译。<br />
+<br />
+另外，编译中有一编译参数，可以把pjsip编译成相对静态的，即不使用msvcrxx.dll库。<br />
+修改工程文件, 将-MD替换成-MT, 或者debug的工程中，将-MDd替换成 MTd。<br />
+<br />
+pjsip for windows 还需要使用platform sdk 2003 sp1版本，要在vc6中指定这个的安装目录。Tools->Option->Directories中设定。<br />
+<br />
+创建pjlib源码选项文件，pjlib/include/pj/config_site.h<br />
+内容为空即可。<br />
+<br />
+把pjsua设置为默认项目，开始编译。<br />
 
 </body>
 </html>

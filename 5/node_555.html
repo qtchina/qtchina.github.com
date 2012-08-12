@@ -6,130 +6,130 @@
 <title>kvm 虚拟机直接从virtualbox虚拟磁盘VDI启动的方法</title>
 </head>
 <body>
-如果同时使用两种虚拟机，像我现在用的kvm和virtualbox，是不是要分别为两种虚拟机创建两个虚拟磁盘，一般用起来都这么做。但这样多用了一个虚拟磁盘的空间，并且还不能保证两个虚拟机的系统同步，或者即使同步了，也非常麻烦。
-
-今天偶然在网上看到一种解决方法，能让kvkm直接从virtualbox的VDI格式虚拟磁盘启动，两种虚拟机操作的同虚拟磁盘上的同一系统，非常方便。
-
-这里需要用到一个工具，vdfuse，它能直接使用fuse方式挂载vbox虚拟磁盘，如ubuntu11-test.VDI。不过这个工具要自己动手编译。
-
-编译环境，gentoo amd64 系统，virtualbox-4.0.2虚拟机，fuse-2.8.5，
-
-vbox安装在/opt/VirtualBox/目录。
-
-在https://build.opensuse.org/package/files?package=vdfuse&project=Virtualization下载几个文件，放在一个目录下，如vdfuse/，然后下面安装,
-
-1.下载文件列表，
-
-VirtualBox-4.0.2-include-only.tar.bz2
-
-vdfuse-vbox4.0.patch
-
-vdfuse-v82.c
-
-2. 解压VirtualBox-4.0.2-include-only.tar.bz2，编译的时候使用vbox的头文件
-
-把该目录中的include拷贝到当前目录，
-
-3. 使用脚本编译，build_vdfuse.sh
-
-[code type="sh"]
-
-#!/bin/sh
-
-export LD_LIBRARY_PATH=/opt/VirtualBox/
-
-gcc vdfuse-v82.c -o vdfuse `pkg-config --cflags --libs fuse` \
-
-    -I./include \
-
-    -L/opt/VirtualBox/ \
-
-    -Wl,-rpath,/opt/VirtualBox/   \
-
-    -l:/opt/VirtualBox/VBoxDD.so \
-
-    -l:/opt/VirtualBox/VBoxDD2.so   \
-
-    -l:/opt/VirtualBox/VBoxDDU.so \
-
-    -Wall
-
-[/code]
-
-现在如果没有问题，会生成一个vdfuse可执行程序，
-
-./vdfuse
-
-ERROR: a single mountpoint must be specified
-
-
-
-DESCRIPTION: This Fuse module uses the VirtualBox access library to open a 
-
-VirtualBox supported VD image file and mount it as a Fuse file system.  The
-
-mount point contains a flat directory containing the files EntireDisk,
-
-Partition1 .. PartitionN.  These can then be loop mounted to access the
-
-underlying file systems
-
-
-
-USAGE: ./vdfuse [options] -f image-file mountpoint
-
-        -h      help
-
-        -r      readonly
-
-        -t      specify type (VDI, VMDK, VHD, or raw; default: auto)
-
-        -f      VDimage file
-
-        -a      allow all users to read disk
-
-        -w      allow all users to read and write to disk
-
-        -g      run in foreground
-
-        -v      verbose
-
-        -d      debug
-
-NOTE: you must add the line "user_allow_other" (without quotes)
-
-to /etc/fuse.confand set proper permissions on /etc/fuse.conf
-
-for this to work.
-
-放在这用，或者拷贝到/usr/bin/下。
-
-5.测试，
-
-mkdir /mnt/vdi
-
-vdfuse -v -d -a -w -f ubuntu11-amd64.vdi /mnt/vdi/
-
-ls -l /mnt/vdi/
-
-total 12580864
-
--rw-rw-rw- 1 gzleo wheel 6442450944 Jan 31 21:48 EntireDisk
-
--rw-rw-rw- 1 gzleo wheel 5998903296 Jan 31 21:48 Partition1
-
--rw-rw-rw- 1 gzleo wheel  441450496 Jan 31 21:48 Partition2
-
-说明挂载vbox虚拟磁盘成功。
-
-6. 使用kvm启动vbox虚拟磁盘
-上面挂载后，显示了了三个文件，只需要在kvm -drive file参数指定EntireDisk一个，这其实就是整个磁盘，仔细观察，你会发现这个文件的大小是其他分区文件大小的和。
-
-后面的使用就与kvm一相了，不再重述，可能的问题就是驱动有可能不同，可根据情况修正。
-
-PS:
-这种方法对windows有问题，启动不了。
-linux,freebsd皆可。
+如果同时使用两种虚拟机，像我现在用的kvm和virtualbox，是不是要分别为两种虚拟机创建两个虚拟磁盘，一般用起来都这么做。但这样多用了一个虚拟磁盘的空间，并且还不能保证两个虚拟机的系统同步，或者即使同步了，也非常麻烦。<br />
+<br />
+今天偶然在网上看到一种解决方法，能让kvkm直接从virtualbox的VDI格式虚拟磁盘启动，两种虚拟机操作的同虚拟磁盘上的同一系统，非常方便。<br />
+<br />
+这里需要用到一个工具，vdfuse，它能直接使用fuse方式挂载vbox虚拟磁盘，如ubuntu11-test.VDI。不过这个工具要自己动手编译。<br />
+<br />
+编译环境，gentoo amd64 系统，virtualbox-4.0.2虚拟机，fuse-2.8.5，<br />
+<br />
+vbox安装在/opt/VirtualBox/目录。<br />
+<br />
+在https://build.opensuse.org/package/files?package=vdfuse&project=Virtualization下载几个文件，放在一个目录下，如vdfuse/，然后下面安装,<br />
+<br />
+1.下载文件列表，<br />
+<br />
+VirtualBox-4.0.2-include-only.tar.bz2<br />
+<br />
+vdfuse-vbox4.0.patch<br />
+<br />
+vdfuse-v82.c<br />
+<br />
+2. 解压VirtualBox-4.0.2-include-only.tar.bz2，编译的时候使用vbox的头文件<br />
+<br />
+把该目录中的include拷贝到当前目录，<br />
+<br />
+3. 使用脚本编译，build_vdfuse.sh<br />
+<br />
+[code type="sh"]<br />
+<br />
+#!/bin/sh<br />
+<br />
+export LD_LIBRARY_PATH=/opt/VirtualBox/<br />
+<br />
+gcc vdfuse-v82.c -o vdfuse `pkg-config --cflags --libs fuse` \<br />
+<br />
+    -I./include \<br />
+<br />
+    -L/opt/VirtualBox/ \<br />
+<br />
+    -Wl,-rpath,/opt/VirtualBox/   \<br />
+<br />
+    -l:/opt/VirtualBox/VBoxDD.so \<br />
+<br />
+    -l:/opt/VirtualBox/VBoxDD2.so   \<br />
+<br />
+    -l:/opt/VirtualBox/VBoxDDU.so \<br />
+<br />
+    -Wall<br />
+<br />
+[/code]<br />
+<br />
+现在如果没有问题，会生成一个vdfuse可执行程序，<br />
+<br />
+./vdfuse<br />
+<br />
+ERROR: a single mountpoint must be specified<br />
+<br />
+<br />
+<br />
+DESCRIPTION: This Fuse module uses the VirtualBox access library to open a <br />
+<br />
+VirtualBox supported VD image file and mount it as a Fuse file system.  The<br />
+<br />
+mount point contains a flat directory containing the files EntireDisk,<br />
+<br />
+Partition1 .. PartitionN.  These can then be loop mounted to access the<br />
+<br />
+underlying file systems<br />
+<br />
+<br />
+<br />
+USAGE: ./vdfuse [options] -f image-file mountpoint<br />
+<br />
+        -h      help<br />
+<br />
+        -r      readonly<br />
+<br />
+        -t      specify type (VDI, VMDK, VHD, or raw; default: auto)<br />
+<br />
+        -f      VDimage file<br />
+<br />
+        -a      allow all users to read disk<br />
+<br />
+        -w      allow all users to read and write to disk<br />
+<br />
+        -g      run in foreground<br />
+<br />
+        -v      verbose<br />
+<br />
+        -d      debug<br />
+<br />
+NOTE: you must add the line "user_allow_other" (without quotes)<br />
+<br />
+to /etc/fuse.confand set proper permissions on /etc/fuse.conf<br />
+<br />
+for this to work.<br />
+<br />
+放在这用，或者拷贝到/usr/bin/下。<br />
+<br />
+5.测试，<br />
+<br />
+mkdir /mnt/vdi<br />
+<br />
+vdfuse -v -d -a -w -f ubuntu11-amd64.vdi /mnt/vdi/<br />
+<br />
+ls -l /mnt/vdi/<br />
+<br />
+total 12580864<br />
+<br />
+-rw-rw-rw- 1 gzleo wheel 6442450944 Jan 31 21:48 EntireDisk<br />
+<br />
+-rw-rw-rw- 1 gzleo wheel 5998903296 Jan 31 21:48 Partition1<br />
+<br />
+-rw-rw-rw- 1 gzleo wheel  441450496 Jan 31 21:48 Partition2<br />
+<br />
+说明挂载vbox虚拟磁盘成功。<br />
+<br />
+6. 使用kvm启动vbox虚拟磁盘<br />
+上面挂载后，显示了了三个文件，只需要在kvm -drive file参数指定EntireDisk一个，这其实就是整个磁盘，仔细观察，你会发现这个文件的大小是其他分区文件大小的和。<br />
+<br />
+后面的使用就与kvm一相了，不再重述，可能的问题就是驱动有可能不同，可根据情况修正。<br />
+<br />
+PS:<br />
+这种方法对windows有问题，启动不了。<br />
+linux,freebsd皆可。<br />
 
 </body>
 </html>

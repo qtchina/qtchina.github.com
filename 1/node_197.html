@@ -6,82 +6,82 @@
 <title>clisp语言中的数字</title>
 </head>
 <body>
-1. 数字数据类型
-
-  NUMRER , REAL , RATIONAL, INTEGER, FLOAT
-
-2. 数字的概念
-
-数字计算函数：
-ext:!   计算数字的阶乘
-CL> (! 2)
-2
-CL> (! 3)
-6
-CL> (! 30)
-265252859812191058636308480000000
-
-EXT:EXQUO   计算两个数字的整数商，如果不能整除，则会报错。（对整除的时候，这个函数比 / 效率高）。
-CL> (exquo 6 2)
-3
-CL> (exquo 6 5)
-*** - quotient 6 / 5 is not an integer
-
-XGCD  ???没看太明白这个计算什么的。
-
-EXT:MOD-EXPT   (mod-expt k l m) 等于 (MOD (EXPT k l) m), 但对大数情况，这个函数更有效率。
-
-浮点数相关函数：
-decode-float   ???
-float-radix   小数位数，总是返回2
-FLOAT-DIGITS number digits   将数字number强制转换为至少有digits个尾数的小数。
-下面的表达式总是为 T
-(>= (FLOAT-DIGITS (FLOAT-DIGITS number digits)) digits)
-
-函数expt  计算乘方
-CL> (expt 2 3)
-8
-CL> (expt 3 2)
-9
-
-函数log   计算log值
-
-常量PI， 该值为LONG-FLOAT
-CL> (print PI)
-3.1415926535897932385L0
-3.1415926535897932385L0
-
-复数：
-有一个实部，一个虚部。
-得数表示为#C(实部 虚部）
-CL> (sqrt -9.0)
-#C(0 3.0)
-
-使用函数complex可以构造一个得数：
-CL> (complex 2 3)
-#C(2 3)
-
-随机数：
-设置随机数种子，(SETQ *RANDOM-STATE* (MAKE-RANDOM-STATE T))
-默认随机数种子固定, 如果不调用设置种子，则产生的随机数也固定。
-生成随机数函数：random n  , 生成0-n之间的随机数。
-CL> (random 199)
-67
-CL> (random 199)
-89
-
-
-字节类型是内置类型BYTE，而不是INTEGER。
-
-
-几个数字表示的说明：
- 3.1415926535897932385L0    L是什么意思？
- 2.23343s0          这里面的s是什么意思？
-
-s0表示 SHORT-FLOAT
-L0表示 LONG-FLOAT
-d0表示 DOUBLE-FLOAT
-还有一个SINGLE-FLOAT,不知如何表示。
+1. 数字数据类型<br />
+<br />
+  NUMRER , REAL , RATIONAL, INTEGER, FLOAT<br />
+<br />
+2. 数字的概念<br />
+<br />
+数字计算函数：<br />
+ext:!   计算数字的阶乘<br />
+CL> (! 2)<br />
+2<br />
+CL> (! 3)<br />
+6<br />
+CL> (! 30)<br />
+265252859812191058636308480000000<br />
+<br />
+EXT:EXQUO   计算两个数字的整数商，如果不能整除，则会报错。（对整除的时候，这个函数比 / 效率高）。<br />
+CL> (exquo 6 2)<br />
+3<br />
+CL> (exquo 6 5)<br />
+*** - quotient 6 / 5 is not an integer<br />
+<br />
+XGCD  ???没看太明白这个计算什么的。<br />
+<br />
+EXT:MOD-EXPT   (mod-expt k l m) 等于 (MOD (EXPT k l) m), 但对大数情况，这个函数更有效率。<br />
+<br />
+浮点数相关函数：<br />
+decode-float   ???<br />
+float-radix   小数位数，总是返回2<br />
+FLOAT-DIGITS number digits   将数字number强制转换为至少有digits个尾数的小数。<br />
+下面的表达式总是为 T<br />
+(>= (FLOAT-DIGITS (FLOAT-DIGITS number digits)) digits)<br />
+<br />
+函数expt  计算乘方<br />
+CL> (expt 2 3)<br />
+8<br />
+CL> (expt 3 2)<br />
+9<br />
+<br />
+函数log   计算log值<br />
+<br />
+常量PI， 该值为LONG-FLOAT<br />
+CL> (print PI)<br />
+3.1415926535897932385L0<br />
+3.1415926535897932385L0<br />
+<br />
+复数：<br />
+有一个实部，一个虚部。<br />
+得数表示为#C(实部 虚部）<br />
+CL> (sqrt -9.0)<br />
+#C(0 3.0)<br />
+<br />
+使用函数complex可以构造一个得数：<br />
+CL> (complex 2 3)<br />
+#C(2 3)<br />
+<br />
+随机数：<br />
+设置随机数种子，(SETQ *RANDOM-STATE* (MAKE-RANDOM-STATE T))<br />
+默认随机数种子固定, 如果不调用设置种子，则产生的随机数也固定。<br />
+生成随机数函数：random n  , 生成0-n之间的随机数。<br />
+CL> (random 199)<br />
+67<br />
+CL> (random 199)<br />
+89<br />
+<br />
+<br />
+字节类型是内置类型BYTE，而不是INTEGER。<br />
+<br />
+<br />
+几个数字表示的说明：<br />
+ 3.1415926535897932385L0    L是什么意思？<br />
+ 2.23343s0          这里面的s是什么意思？<br />
+<br />
+s0表示 SHORT-FLOAT<br />
+L0表示 LONG-FLOAT<br />
+d0表示 DOUBLE-FLOAT<br />
+还有一个SINGLE-FLOAT,不知如何表示。<br />
 
 </body>
 </html>

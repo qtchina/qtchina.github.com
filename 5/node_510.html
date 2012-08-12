@@ -6,201 +6,201 @@
 <title>How Sphinx relevance ranking works</title>
 </head>
 <body>
-<div class="entry">
-				<p>Over time, we added quite a bunch of matching and ranking modes to Sphinx, and will be adding more. A number of different questions that regularly pop up, ranging from “how do I force this document ranked the 1st” from “how do I draw 1 to 5 stars depending on match quality”, do in fact boil down to matching and ranking internals. So let’s cover that: just how do matching and ranking modes work, what weighting factors contribute to the final weight and how, how does one tweak stuff, etc. And, of course, the stars, our destination.<br>
-<span id="more-110"></span><br>
-</p><h2>What are matching modes?</h2>
-<p>First of all, let’s sort out those confusing modes. SphinxAPI exposes two different methods, <a href="http://sphinxsearch.com/docs/current.html#api-func-setmatchmode">SetMatchMode()</a> and <a href="http://sphinxsearch.com/docs/current.html#api-func-setrankingmode">SetRankingMode() </a>respectively. SphinxQL, for reference, does not, it only exposes OPTION ranker, which maps to ranking mode, but not the matching mode. What is all that about?</p>
-<p>Matching modes are all about legacy and compatibility. And ranking modes are about how Sphinx computes relevance.</p>
-<p>Previously, up to version 0.9.8, Sphinx only used to have matching modes and every matching mode was implemented with a different code path. Each code path implemented a different kind of both matching <em>and</em> ranking. For instance, SPH_MATCH_ALL required all keywords to be present, and computed document weight as phrase proximity alone. SPH_MATCH_ANY required any of the keywords, and computed weight differently. And so on.</p>
-<p>In 0.9.8 we started a new, unified matching engine. To avoid breaking compatibility while we work on it, in 0.9.8 it was only exposed under a separate matching mode, called SPH_MATCH_EXTENDED2. By version 0.9.9 it became apparent that the new engine is stable and performant enough, and we removed all the legacy code paths in favor of the new engine. So starting from 0.9.9 all queries are now handled with a unified engine, which was not the case before and created maintenance difficulties. And so all the matching modes are now, in fact, just a legacy.</p>
-<p>Sphinx stays compatible with those legacy modes, of course, and when you use one of those, it automatically switches to a simplified query parsing code (that completely ignores query syntax) and automatically picks a proper ranker. But that is it. Everything else is always handled with our unified matching engine. And thus, <strong>document weight (aka, @weight) only depends on the chosen ranking mode (aka, ranker)</strong>. For instance, the following two queries will result in exactly the same weight (and exactly the same processing time, too):</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;"><span style="color: #666666; font-style: italic;">// 1st route</span>
-<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetMatchMode</span> <span style="color: #009900;">(</span> SPH_MATCH_ALL <span style="color: #009900;">)</span><span style="color: #339933;">;</span>
-<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">Query</span> <span style="color: #009900;">(</span> <span style="color: #0000ff;">"hello world"</span> <span style="color: #009900;">)</span><span style="color: #339933;">;</span>
-&nbsp;
-<span style="color: #666666; font-style: italic;">// 2nd route</span>
-<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetMatchMode</span> <span style="color: #009900;">(</span> SPH_MATCH_EXTENDED2 <span style="color: #009900;">)</span><span style="color: #339933;">;</span>
-<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetRankingMode</span> <span style="color: #009900;">(</span> SPH_RANK_PROXIMITY <span style="color: #009900;">)</span><span style="color: #339933;">;</span>
-<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">Query</span> <span style="color: #009900;">(</span> <span style="color: #0000ff;">"hello world"</span> <span style="color: #009900;">)</span><span style="color: #339933;">;</span></pre></div></div>
-
-<p>Note that second route allows you to use, say, (@title hello world) syntax because the matching mode allows for it. First one does not, because in that matching mode all special operators are ignored and @title will be interpreted as a keyword.</p>
-<p>So <a href="http://sphinxsearch.com/docs/current.html#api-func-setmatchmode">SetMatchMode()</a> does nothing more than escape the query and pick a proper ranker. It’s rather a legacy call, as there won’t be new matching modes any more (they were a temporary solution until we had a full blown query syntax in the first place, but temporary solutions are notorious for their tendency to last) and query-syntax enabled matching allows you to do everything that older modes used to provide and much more. <a href="http://sphinxsearch.com/docs/current.html#api-func-setrankingmode">SetRankingMode()</a> does even less, it just lets you explicitly pick a ranker. Which brings us to the question…</p>
-<h2>What are rankers?</h2>
-<p>Ranking modes, or <strong>rankers</strong> for short, can be formally defined as functions that <strong>compute a relevance value (weight) for a given query and document</strong> arguments.</p>
-<p>Relevance is ultimately subjective, so there’s no single one-size-fits-all ranker, and there will never be. So there can be many different factors used to compute a final weight and a myriad of ways to combine those factors into a weight, discussing that is a subject for a separate posting.</p>
-<p>The two most important weighting factors that Sphinx computes and uses as of 1.10 are 1) classic statistical BM25 factor, used by most if not all search engines since 80s, and 2) Sphinx specific phrase proximity factor.</p>
-<h2>BM25 factor</h2>
-<p><strong>BM25</strong> is a floating point value that <strong>depends on frequencies of the matched keywords only</strong>. Frequencies in question are in-document and in-collection frequencies. Basically, keywords that are more rare and/or occur many times in the document yield more weight to that document.</p>
-<p>Standard BM25 implementation is nicely covered in <a href="http://en.wikipedia.org/wiki/Okapi_BM25">Wikipedia article on BM25</a> but Sphinx uses a slightly modified variant. First, for performance reasons we account for <em>all</em> the keywords occurrences in the document, and not just the matched ones. For instance, (@title “hello world”) query that only matches a single instance of “hello world” phrase in the title will result in the same BM25 with a (hello world) query that matches all the instances of both keywords everywhere in the document. Second, we don’t enforce any document attributes and therefore don’t necessarily have a document length, so we ignore document length too (equivalent to plugging b=0 into original BM25). Both changes were intentional, as in our testing using original BM25 did not result in enough ranking improvement to justify the associated performance impact. The exact BM25 computation that Sphinx uses is, in pseudo-code, as follows:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">BM25 <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> keyword in matching_keywords <span style="color: #009900;">)</span>
-<span style="color: #009900;">{</span>
-    n <span style="color: #339933;">=</span> total_matching_documents <span style="color: #009900;">(</span> keyword <span style="color: #009900;">)</span>
-    N <span style="color: #339933;">=</span> total_documents_in_collection
-    k1 <span style="color: #339933;">=</span> <span style="color:#800080;">1.2</span>
-&nbsp;
-    TF <span style="color: #339933;">=</span> current_document_occurrence_count <span style="color: #009900;">(</span> keyword <span style="color: #009900;">)</span>
-    IDF <span style="color: #339933;">=</span> <span style="color: #990000;">log</span><span style="color: #009900;">(</span><span style="color: #009900;">(</span>N<span style="color: #339933;">-</span>n<span style="color: #339933;">+</span><span style="color: #cc66cc;">1</span><span style="color: #009900;">)</span><span style="color: #339933;">/</span>n<span style="color: #009900;">)</span> <span style="color: #339933;">/</span> <span style="color: #990000;">log</span><span style="color: #009900;">(</span><span style="color: #cc66cc;">1</span><span style="color: #339933;">+</span>N<span style="color: #009900;">)</span>
-    BM25 <span style="color: #339933;">=</span> BM25 <span style="color: #339933;">+</span> TF<span style="color: #339933;">*</span>IDF<span style="color: #339933;">/</span><span style="color: #009900;">(</span>TF<span style="color: #339933;">+</span>k1<span style="color: #009900;">)</span>
-<span style="color: #009900;">}</span>
-&nbsp;
-<span style="color: #666666; font-style: italic;">// normalize to 0..1 range</span>
-BM25 <span style="color: #339933;">=</span> <span style="color:#800080;">0.5</span> <span style="color: #339933;">+</span> BM25 <span style="color: #339933;">/</span> <span style="color: #009900;">(</span> <span style="color: #cc66cc;">2</span><span style="color: #339933;">*</span>num_keywords <span style="color: #009900;">(</span> query <span style="color: #009900;">)</span> <span style="color: #009900;">)</span></pre></div></div>
-
-<p>TF means Term Frequency in a document being ranked. It’s based on a number of occurrences within a document but smoothed with a logarithm function, so that 1000 occurrences don’t result in 1000x improvement over just 1. TF can generally vary from 0 to 1 but, with a chosen k=1.2, it actually varies from 0.4545… to 1.</p>
-<p>IDF means Inverse Document Frequency in the entire document set. IDF possesses lesser values for frequent words (such as “the” or “to” etc) and greater values for rare ones, with peak values being IDF=1 when a keyword occurs in exactly one document, and IDF=-1 when it occurs in every indexed document.</p>
-<p>So, as you can see from the code above, <strong>BM25 increases when the keywords are rare</strong> and occur many times in the document and decreases when the keywords are frequent. It should be noted that <strong>overly frequent keywords</strong> that match more than a half of indexed documents actually <strong>decrease BM25</strong>! Indeed, when a keyword occurs in 90% of the documents then the documents <em>without</em> it are rarer gems, probably more interesting as such, and deserve more weight.</p>
-<h2>Phrase proximity factor</h2>
-<p><strong>Phrase proximity</strong> factor, on the contrary, does not care about the keyword frequencies at all and accounts for the mutual disposition of query keywords in the document. Instead of keyword frequencies used for BM25, Sphinx analyzes keyword <em>positions</em> in every field and computes phrase proximity value as the <strong>longest common sub-sequence (LCS) length</strong> between the query and the document. Basically, per-field phrase proximity<strong> </strong>is <strong>a number of keywords that occurred in the document in exactly the same order as they did in the query</strong>. Here go a few examples:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;"><span style="color: #cc66cc;">1</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> one and two three
-field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span> <span style="color: #009900;">(</span>because <span style="color: #cc66cc;">2</span><span style="color: #339933;">-</span>keyword long <span style="color: #0000ff;">"two three"</span> subphrase matched<span style="color: #009900;">)</span>
-&nbsp;
-<span style="color: #cc66cc;">2</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> one and two and three
-field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span> <span style="color: #009900;">(</span>because single keywords matched but no subphrase did<span style="color: #009900;">)</span>
-&nbsp;
-<span style="color: #cc66cc;">3</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> nothing matches at all
-field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span></pre></div></div>
-
-<p>Per-field phrase weights are then multiplied by field weights specified with <a href="http://sphinxsearch.com/docs/current.html#api-func-setfieldweights">SetFieldWeights()</a> API call (or OPTION field_weights in SphinxQL) and added altogether to produce a per-document phrase weight. Field weights default at 1, and can not be set lower than 1. In pseudo-code, the entire phrase proximity calculation looks as follows:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">doc_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-<span style="color: #009900;">{</span>
-   field_phrase_weight <span style="color: #339933;">=</span> max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span>
-   doc_phrase_weight <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> field_phrase_weight
-<span style="color: #009900;">}</span></pre></div></div>
-
-<p>Example:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">doc_title <span style="color: #339933;">=</span> hello world
-doc_body <span style="color: #339933;">=</span> the world is a wonderful place
-&nbsp;
-query <span style="color: #339933;">=</span> hello world
-query_title_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">5</span>
-query_body_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">3</span>
-&nbsp;
-title_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span>
-body_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span>
-doc_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span><span style="color: #339933;">*</span><span style="color: #cc66cc;">5</span><span style="color: #339933;">+</span><span style="color: #cc66cc;">3</span><span style="color: #339933;">*</span><span style="color: #cc66cc;">1</span> <span style="color: #339933;">=</span> <span style="color: #cc66cc;">13</span></pre></div></div>
-
-<p>It’s the phrase proximity factor that <em>guarantees</em> that closer phrase matches will be ranked higher, and exact phrase matches will be ranked at the very top. One can use field weights to tweak and tune that behavior. For instance,  in the example just above, a single-keyword match in title is made worth the same as a two-keyword phrase match in body.</p>
-<p>Phrase proximity is by design somewhat more computationally intensive than BM25 because it needs to work through all the keyword occurrences in the matched documents and not just the documents only. Sphinx defaults to using proximity because we believe this yields better search quality. You can however choose to use a more lightweight ranker that omits the expensive proximity calculations.</p>
-<h2>Orbital view of the rankers</h2>
-<p>Phrase proximity and BM25 are the two most important <em>factors</em>, that is, values that contribute to the final document weight. However, the <em>final</em> weight value is determined by the <em>ranker</em>,  that is, the specific function that crunches one or more  factors into a single number (Also, there are other factors besides phrase weight and BM25 that Sphinx can compute and use.)</p>
-<p>As of 1.10-beta, Sphinx has <strong>8 different rankers</strong>, and will definitely add <strong>more in the future</strong>.  Every ranker computes weight differently and thus might or might not be  suitable for a particular scenario.</p>
-<p>There are 3 simple rankers (NONE, WORDCOUNT, FIELDMASK) that do  nothing, count keyword occurrences, and return matching fields bitmask,  respectively. Those are useful when ranking is not needed at all, or computed somehow on application side.</p>
-<p>There are 2 legacy rankers (PROXIMITY, MATCHANY) that rely on phrase proximity alone and are used to emulate MATCH_ALL and MATCH_ANY legacy modes respectively.</p>
-<p>There are 3 more rankers (BM25, PROXIMITY_BM25, SPH04) that can combine phrase proximity, BM25, and other bits. Query-syntax enabled modes and SphinxQL default to PROXIMITY_BM25 now, and PROXIMITY_BM25 is strongly suggested as a drop-in replacement for PROXIMITY, too. BM25 is recommended as a reasonably good quick ranker, and also for comparison with other systems. SPH04 builds upon PROXIMITY_BM25 but additionally ranks exact field matches and field start matches higher than “just” matches.</p>
-<p>PROXIMITY_BM25 and SPH04 are expected to yield the best quality, but your particular results may vary.</p>
-<p><strong>Choice of ranker can severely affect search query performance.</strong> NONE is obviously the quickest ranker, but what about the other ones? Processing the keyword positions (occurrences) is typically the most expensive part, so rankers that don’t need to do that (FIELDMASK, BM25) are always quicker than all the others. They utilize less disk IO too (no need to read in the positions). Rankers that process keyword positions (WORDCOUNT, PROXIMITY, MATCHANY, PROXIMITY_BM25, SPH04) only differ in CPU impact.</p>
-<h2>Nitty gritty ranker details</h2>
-<p>This section describes the exact  algorithms Sphinx rankers use and provides pseudo-code. You can skip it freely unless you want to tweak ranking, tune field weights, etc.</p>
-<p>While the factors might be integer, boolean, floating point or whatever else, the weight has to be a single scalar value. In Sphinx, the weight is not just scalar but an integer value. This isn’t a real constraint, floating point weight values can be mapped to integers in a variety of ways anyway.</p>
-<p>Let’s begin with the three simplest rankers.</p>
-<p><strong>1) SPH_RANK_NONE</strong> ranker just assigns every document weight to 1.</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span></pre></div></div>
-
-<p>Why use this and effectively skip ranking at all? The answer is performance. If you’re sorting search results by price, why spend CPU cycles doing expensive ranking you’re going to throw away anyway?</p>
-<p><strong>2) SPH_RANK_WORDCOUNT </strong>ranker counts all the keyword occurrences and multiplies them by user field weights.</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-    weight <span style="color: #339933;">+=</span> num_keyword_occurrences <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span></pre></div></div>
-
-<p>Note that it counts all <em>occurrences</em>, and not the unique <em>keywords</em>. Therefore 3 occurrences of just 1 matching keyword will contribute exactly as much as 1 occurrence of 3 different keywords.</p>
-<p><strong>3) SPH_RANK_FIELDMASK</strong> ranker returns a bit mask of matched fields.</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-    set_bit <span style="color: #009900;">(</span> weight<span style="color: #339933;">,</span> index_of <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span>
-    <span style="color: #666666; font-style: italic;">// or in other words, weight |= ( 1 &lt;&lt; index_of ( field ) )</span></pre></div></div>
-
-<p>The other five rankers are somewhat more complicated and mostly rely on phrase proximity.</p>
-<p><strong>4) SPH_RANK_PROXIMITY</strong>, the default ranker in SPH_MATCH_ALL legacy mode, simply passes the phrase proximity for a weight:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> doc_phrase_weight</pre></div></div>
-
-<p>By the definition of phrase weight, when documents do match the query  but no sequence of two keywords matches, all such documents will  receive a weight of 1. That, clearly, isn’t differentiating the results  much so using PROXIMITY_BM25 ranker instead is advised. The associated  searching performance impact should be negligible.</p>
-<p><strong>5) <strong>SPH_RANK_MATCHANY</strong></strong> ranker, used to emulate legacy  MATCH_ANY mode, combines phrase proximity and the number of matched  keywords so that, with default per-field weights, a) longer sub-phrase  match (aka bigger phrase proximity) in <em>any</em> field would rank  higher, and b) in case of agreeing phrase proximity, document with more  matched unique keywords would rank higher. In other words, we look at  max sub-phrase match length first, and a number of unique matched  keywords second. In pseudo-code,</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">k <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in all_fields <span style="color: #009900;">)</span>
-    k <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> num_keywords <span style="color: #009900;">(</span> query <span style="color: #009900;">)</span>
-&nbsp;
-weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-<span style="color: #009900;">{</span>
-   field_phrase_weight <span style="color: #339933;">=</span> max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span>
-   field_rank <span style="color: #339933;">=</span> <span style="color: #009900;">(</span> field_phrase_weight <span style="color: #339933;">*</span> k <span style="color: #339933;">+</span> num_matching_keywords <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span>
-   weight <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> field_rank
-<span style="color: #009900;">}</span></pre></div></div>
-
-<p>It does not use BM25 at all because legacy mode did not use it and we need to stay compatible.</p>
-<p><strong>6) SPH_RANK_PROXIMITY_BM25</strong>, the default SphinxQL ranker and also the default ranker when “extended” matching mode is used with SphinxAPI, computes weight as</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> doc_phrase_weight<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div>
-
-<p>So document phrase proximity is the primary factor and BM25 is an auxiliary one that additionally sorts documents sharing the same phrase proximity. BM25 belongs to 0..1 range, so last 3 decimal digits of final weight contain scaled BM25, and all the other digits are used for the phrase weight.</p>
-<p><strong>7) SPH_RANK_BM25</strong> ranker sums user weights of the matched fields and BM25.</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">field_weights <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-    field_weights <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span>
-weight <span style="color: #339933;">=</span> field_weights<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div>
-
-<p>Almost like PROXIMITY_BM25 ranker, except that user weights are <em>not</em> multiplied by per-field phrase proximities. Not using phrase proximity allows the engine to evaluate the query using document lists only, and skip the processing of keyword occurrences lists. Unless your documents are extremely short (think tweets, titles, etc), occurrence lists are somewhat bigger than the document lists and take somewhat more time to process. So BM25 is a faster ranker than any of the proximity-aware ones.</p>
-<p>Also, many other search systems either default to BM25 ranking, or even provide it as the only option. So it might make sense to use BM25 ranker when doing performance testing to make the comparison fair.</p>
-<p><strong>8) SPH_RANK_SPH04</strong> ranker further improves on PROXIMITY_BM25 ranker (and introduces numbers instead of meaningful names, too, because a name would be way too complicated). Phrase proximity is still the leading factor, but, within a given phrase proximity, matches in the beginning of the field are ranked higher, and exact matches of the entire field are ranked highest. In pseudo-code,</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">field_weights <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span>
-<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span>
-<span style="color: #009900;">{</span>
-    f <span style="color: #339933;">=</span> <span style="color: #cc66cc;">4</span><span style="color: #339933;">*</span>max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span>
-    <span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span> exact_field_match <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span>
-        f <span style="color: #339933;">+=</span> <span style="color: #cc66cc;">3</span>
-    <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span> first_keyword_matches <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span>
-        f <span style="color: #339933;">+=</span> <span style="color: #cc66cc;">2</span>
-    field_weights <span style="color: #339933;">+=</span> f <span style="color: #339933;">*</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span>
-<span style="color: #009900;">}</span>
-weight <span style="color: #339933;">=</span> field_weights<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div>
-
-<p>Thus, when querying for “Market Street”, SPH04 will basically rank a document with exact “Market Street” match in one of the fields the highest, followed by “Market Street Grocery” that begins the field with a matching keyword, then followed by “West Market Street” that has a phrase match somewhere, and then followed by all the documents that do mention both keywords but not as a phrase (such as “Flea Market on 26th Street”).</p>
-<h2>So how do I draw those stars?</h2>
-<p>Or, more formally, how do I compute the max possible weight and scale returned weights to A-F scale, or percents, or whatever else?</p>
-<p>As you can see from the previous section there’s no simple way to tell that. <strong>Maximum weight depends both on a chosen ranker and a particular query.</strong> For example, an upper weight bound with PROXIMITY_BM25 ranker would be</p>
-
-<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">max_weight <span style="color: #339933;">=</span> num_keywords <span style="color: #339933;">*</span> sum <span style="color: #009900;">(</span> user_field_weights <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> <span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> <span style="color: #cc66cc;">999</span></pre></div></div>
-
-<p>But can this upper bound <em>ever</em> be reached? Barely in practice, because that would require a) exact phrase matches b) in all the fields c) plus BM25 peaking at 999 which roughly translates to only using one-in-a-million keywords. Moreover, what if the query uses field limit operators, eg. @title hello world? In that case our upper bound can never be reached because we would never match any field except title. For this particular query the <em>practical</em> upper bound, which could possibly be reached by an “ideal” document, is different.</p>
-<p>Therefore, computing the “ideal” maximum weight (one that can actually be reached) is really, really complicated. We could possibly do that on Sphinx side but that’s a lengthy R&amp;D project with questionable outcome. So if you can’t live without percentiles (or stars!), you can either use the “absolute” upper bound estimate like the one given above (that might never be practically reached and result in “100% match”), or just use the maximum weight from your particular query, and rescale everything to that weight. Using multi-queries, the latter can be made pretty cheap.</p>
-<h2>So how do I rank exact field matches higher?</h2>
-<p>You use a ranker that does that.</p>
-<p>Both SphinxAPI-default PROXIMITY and SphinxQL-default PROXIMITY_BM25 rankers do not. They only rank a longer sub-phrase match higher, but do not care as to where in the field that match occurred, and whether it matched the entire field or not.</p>
-<p>SPH04 ranker, added in 1.10-beta, does.</p>
-<h2>So how do I force document D to rank first?</h2>
-<p>Depending on <em>why</em> document D needs to be ranked higher, you either use a ranker that fits your requirements better, or use Sphinx run-time expressions to compute what you need and sort the result set differently.</p>
-<p>Example given, boosting those exact field-equals-query matches could be emulated by sorting by an expression:</p>
-
-<div class="wp_syntax"><div class="code"><pre class="sql" style="font-family:monospace;"><span style="color: #993333; font-weight: bold;">SELECT</span> <span style="color: #66cc66;">*,</span> @weight<span style="color: #66cc66;">+</span><span style="color: #993333; font-weight: bold;">IF</span><span style="color: #66cc66;">(</span>fieldcrc<span style="color: #66cc66;">==</span>$querycrc<span style="color: #66cc66;">,</span><span style="color: #cc66cc;">1000</span><span style="color: #66cc66;">,</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">)</span> <span style="color: #993333; font-weight: bold;">AS</span> myweight <span style="color: #66cc66;">...</span>
-<span style="color: #993333; font-weight: bold;">ORDER</span> <span style="color: #993333; font-weight: bold;">BY</span> myweight <span style="color: #993333; font-weight: bold;">DESC</span></pre></div></div>
-
-<p>where fieldcrc is CRC(field) attribute computed at indexing time and stored in the index, and querycrc is CRC(query) computed at searching time.</p>
-<p>Example given, instead of checking for strict CRC match, you could index and store field lengths, and rank shorter fields higher by using an expression like</p>
-
-<div class="wp_syntax"><div class="code"><pre class="sql" style="font-family:monospace;"><span style="color: #993333; font-weight: bold;">SELECT</span> <span style="color: #66cc66;">*,</span> @weight<span style="color: #66cc66;">+</span>ln<span style="color: #66cc66;">(</span>len<span style="color: #66cc66;">+</span><span style="color: #cc66cc;">1</span><span style="color: #66cc66;">)</span><span style="color: #66cc66;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #993333; font-weight: bold;">AS</span> myweight <span style="color: #66cc66;">...</span></pre></div></div>
-
-<p>Example given, to force a document rank higher when a given keyword is searched for, you create a separate field with super-important keywords, put it there, and assign a high weight to that field. (Don’t set the weight over a million though or 32-bit weight would overlap!)</p>
-<h2>So how does Sphinx ranking compare to system XYZ?</h2>
-<p>Major Web search engines (think Google) are an entirely different story, subject to another posting, perhaps. Web-scale ranking (and spam fighting) forces them to account for hundreds and thousands of factors in their ranking. Many of those factors (PageRank, page and domain age, incoming link count, ratio of code to text, etc) are not text related, however, and can also be employed with Sphinx in a particular application by using expressions.  Sphinx itself is generic and its rankers only handle some text related factors, everything else has to be explicitly added on top.</p>
-<p>However most other full-text search systems still either default to plain old BM25 for text related factors, or even <em>limit</em> you to it. Don’t get me wrong, BM25 is great, it’s a great weighting <em>factor</em>. But using it as the <em>only</em> ranking factor is, ahem, really last century. Sphinx proximity based rankers do a step towards improving that, and we plan taking a few more steps, too. Stay tuned, interesting things are going to happen. ;)</p>
-
-			</div>
-
+<div class="entry"><br />
+				<p>Over time, we added quite a bunch of matching and ranking modes to Sphinx, and will be adding more. A number of different questions that regularly pop up, ranging from “how do I force this document ranked the 1st” from “how do I draw 1 to 5 stars depending on match quality”, do in fact boil down to matching and ranking internals. So let’s cover that: just how do matching and ranking modes work, what weighting factors contribute to the final weight and how, how does one tweak stuff, etc. And, of course, the stars, our destination.<br><br />
+<span id="more-110"></span><br><br />
+</p><h2>What are matching modes?</h2><br />
+<p>First of all, let’s sort out those confusing modes. SphinxAPI exposes two different methods, <a href="http://sphinxsearch.com/docs/current.html#api-func-setmatchmode">SetMatchMode()</a> and <a href="http://sphinxsearch.com/docs/current.html#api-func-setrankingmode">SetRankingMode() </a>respectively. SphinxQL, for reference, does not, it only exposes OPTION ranker, which maps to ranking mode, but not the matching mode. What is all that about?</p><br />
+<p>Matching modes are all about legacy and compatibility. And ranking modes are about how Sphinx computes relevance.</p><br />
+<p>Previously, up to version 0.9.8, Sphinx only used to have matching modes and every matching mode was implemented with a different code path. Each code path implemented a different kind of both matching <em>and</em> ranking. For instance, SPH_MATCH_ALL required all keywords to be present, and computed document weight as phrase proximity alone. SPH_MATCH_ANY required any of the keywords, and computed weight differently. And so on.</p><br />
+<p>In 0.9.8 we started a new, unified matching engine. To avoid breaking compatibility while we work on it, in 0.9.8 it was only exposed under a separate matching mode, called SPH_MATCH_EXTENDED2. By version 0.9.9 it became apparent that the new engine is stable and performant enough, and we removed all the legacy code paths in favor of the new engine. So starting from 0.9.9 all queries are now handled with a unified engine, which was not the case before and created maintenance difficulties. And so all the matching modes are now, in fact, just a legacy.</p><br />
+<p>Sphinx stays compatible with those legacy modes, of course, and when you use one of those, it automatically switches to a simplified query parsing code (that completely ignores query syntax) and automatically picks a proper ranker. But that is it. Everything else is always handled with our unified matching engine. And thus, <strong>document weight (aka, @weight) only depends on the chosen ranking mode (aka, ranker)</strong>. For instance, the following two queries will result in exactly the same weight (and exactly the same processing time, too):</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;"><span style="color: #666666; font-style: italic;">// 1st route</span><br />
+<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetMatchMode</span> <span style="color: #009900;">(</span> SPH_MATCH_ALL <span style="color: #009900;">)</span><span style="color: #339933;">;</span><br />
+<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">Query</span> <span style="color: #009900;">(</span> <span style="color: #0000ff;">"hello world"</span> <span style="color: #009900;">)</span><span style="color: #339933;">;</span><br />
+&nbsp;<br />
+<span style="color: #666666; font-style: italic;">// 2nd route</span><br />
+<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetMatchMode</span> <span style="color: #009900;">(</span> SPH_MATCH_EXTENDED2 <span style="color: #009900;">)</span><span style="color: #339933;">;</span><br />
+<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">SetRankingMode</span> <span style="color: #009900;">(</span> SPH_RANK_PROXIMITY <span style="color: #009900;">)</span><span style="color: #339933;">;</span><br />
+<span style="color: #000088;">$cl</span><span style="color: #339933;">-&gt;</span><span style="color: #004000;">Query</span> <span style="color: #009900;">(</span> <span style="color: #0000ff;">"hello world"</span> <span style="color: #009900;">)</span><span style="color: #339933;">;</span></pre></div></div><br />
+<br />
+<p>Note that second route allows you to use, say, (@title hello world) syntax because the matching mode allows for it. First one does not, because in that matching mode all special operators are ignored and @title will be interpreted as a keyword.</p><br />
+<p>So <a href="http://sphinxsearch.com/docs/current.html#api-func-setmatchmode">SetMatchMode()</a> does nothing more than escape the query and pick a proper ranker. It’s rather a legacy call, as there won’t be new matching modes any more (they were a temporary solution until we had a full blown query syntax in the first place, but temporary solutions are notorious for their tendency to last) and query-syntax enabled matching allows you to do everything that older modes used to provide and much more. <a href="http://sphinxsearch.com/docs/current.html#api-func-setrankingmode">SetRankingMode()</a> does even less, it just lets you explicitly pick a ranker. Which brings us to the question…</p><br />
+<h2>What are rankers?</h2><br />
+<p>Ranking modes, or <strong>rankers</strong> for short, can be formally defined as functions that <strong>compute a relevance value (weight) for a given query and document</strong> arguments.</p><br />
+<p>Relevance is ultimately subjective, so there’s no single one-size-fits-all ranker, and there will never be. So there can be many different factors used to compute a final weight and a myriad of ways to combine those factors into a weight, discussing that is a subject for a separate posting.</p><br />
+<p>The two most important weighting factors that Sphinx computes and uses as of 1.10 are 1) classic statistical BM25 factor, used by most if not all search engines since 80s, and 2) Sphinx specific phrase proximity factor.</p><br />
+<h2>BM25 factor</h2><br />
+<p><strong>BM25</strong> is a floating point value that <strong>depends on frequencies of the matched keywords only</strong>. Frequencies in question are in-document and in-collection frequencies. Basically, keywords that are more rare and/or occur many times in the document yield more weight to that document.</p><br />
+<p>Standard BM25 implementation is nicely covered in <a href="http://en.wikipedia.org/wiki/Okapi_BM25">Wikipedia article on BM25</a> but Sphinx uses a slightly modified variant. First, for performance reasons we account for <em>all</em> the keywords occurrences in the document, and not just the matched ones. For instance, (@title “hello world”) query that only matches a single instance of “hello world” phrase in the title will result in the same BM25 with a (hello world) query that matches all the instances of both keywords everywhere in the document. Second, we don’t enforce any document attributes and therefore don’t necessarily have a document length, so we ignore document length too (equivalent to plugging b=0 into original BM25). Both changes were intentional, as in our testing using original BM25 did not result in enough ranking improvement to justify the associated performance impact. The exact BM25 computation that Sphinx uses is, in pseudo-code, as follows:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">BM25 <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> keyword in matching_keywords <span style="color: #009900;">)</span><br />
+<span style="color: #009900;">{</span><br />
+    n <span style="color: #339933;">=</span> total_matching_documents <span style="color: #009900;">(</span> keyword <span style="color: #009900;">)</span><br />
+    N <span style="color: #339933;">=</span> total_documents_in_collection<br />
+    k1 <span style="color: #339933;">=</span> <span style="color:#800080;">1.2</span><br />
+&nbsp;<br />
+    TF <span style="color: #339933;">=</span> current_document_occurrence_count <span style="color: #009900;">(</span> keyword <span style="color: #009900;">)</span><br />
+    IDF <span style="color: #339933;">=</span> <span style="color: #990000;">log</span><span style="color: #009900;">(</span><span style="color: #009900;">(</span>N<span style="color: #339933;">-</span>n<span style="color: #339933;">+</span><span style="color: #cc66cc;">1</span><span style="color: #009900;">)</span><span style="color: #339933;">/</span>n<span style="color: #009900;">)</span> <span style="color: #339933;">/</span> <span style="color: #990000;">log</span><span style="color: #009900;">(</span><span style="color: #cc66cc;">1</span><span style="color: #339933;">+</span>N<span style="color: #009900;">)</span><br />
+    BM25 <span style="color: #339933;">=</span> BM25 <span style="color: #339933;">+</span> TF<span style="color: #339933;">*</span>IDF<span style="color: #339933;">/</span><span style="color: #009900;">(</span>TF<span style="color: #339933;">+</span>k1<span style="color: #009900;">)</span><br />
+<span style="color: #009900;">}</span><br />
+&nbsp;<br />
+<span style="color: #666666; font-style: italic;">// normalize to 0..1 range</span><br />
+BM25 <span style="color: #339933;">=</span> <span style="color:#800080;">0.5</span> <span style="color: #339933;">+</span> BM25 <span style="color: #339933;">/</span> <span style="color: #009900;">(</span> <span style="color: #cc66cc;">2</span><span style="color: #339933;">*</span>num_keywords <span style="color: #009900;">(</span> query <span style="color: #009900;">)</span> <span style="color: #009900;">)</span></pre></div></div><br />
+<br />
+<p>TF means Term Frequency in a document being ranked. It’s based on a number of occurrences within a document but smoothed with a logarithm function, so that 1000 occurrences don’t result in 1000x improvement over just 1. TF can generally vary from 0 to 1 but, with a chosen k=1.2, it actually varies from 0.4545… to 1.</p><br />
+<p>IDF means Inverse Document Frequency in the entire document set. IDF possesses lesser values for frequent words (such as “the” or “to” etc) and greater values for rare ones, with peak values being IDF=1 when a keyword occurs in exactly one document, and IDF=-1 when it occurs in every indexed document.</p><br />
+<p>So, as you can see from the code above, <strong>BM25 increases when the keywords are rare</strong> and occur many times in the document and decreases when the keywords are frequent. It should be noted that <strong>overly frequent keywords</strong> that match more than a half of indexed documents actually <strong>decrease BM25</strong>! Indeed, when a keyword occurs in 90% of the documents then the documents <em>without</em> it are rarer gems, probably more interesting as such, and deserve more weight.</p><br />
+<h2>Phrase proximity factor</h2><br />
+<p><strong>Phrase proximity</strong> factor, on the contrary, does not care about the keyword frequencies at all and accounts for the mutual disposition of query keywords in the document. Instead of keyword frequencies used for BM25, Sphinx analyzes keyword <em>positions</em> in every field and computes phrase proximity value as the <strong>longest common sub-sequence (LCS) length</strong> between the query and the document. Basically, per-field phrase proximity<strong> </strong>is <strong>a number of keywords that occurred in the document in exactly the same order as they did in the query</strong>. Here go a few examples:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;"><span style="color: #cc66cc;">1</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> one and two three<br />
+field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span> <span style="color: #009900;">(</span>because <span style="color: #cc66cc;">2</span><span style="color: #339933;">-</span>keyword long <span style="color: #0000ff;">"two three"</span> subphrase matched<span style="color: #009900;">)</span><br />
+&nbsp;<br />
+<span style="color: #cc66cc;">2</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> one and two and three<br />
+field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span> <span style="color: #009900;">(</span>because single keywords matched but no subphrase did<span style="color: #009900;">)</span><br />
+&nbsp;<br />
+<span style="color: #cc66cc;">3</span><span style="color: #009900;">)</span> query <span style="color: #339933;">=</span> one two three<span style="color: #339933;">,</span> field <span style="color: #339933;">=</span> nothing matches at all<br />
+field_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span></pre></div></div><br />
+<br />
+<p>Per-field phrase weights are then multiplied by field weights specified with <a href="http://sphinxsearch.com/docs/current.html#api-func-setfieldweights">SetFieldWeights()</a> API call (or OPTION field_weights in SphinxQL) and added altogether to produce a per-document phrase weight. Field weights default at 1, and can not be set lower than 1. In pseudo-code, the entire phrase proximity calculation looks as follows:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">doc_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+<span style="color: #009900;">{</span><br />
+   field_phrase_weight <span style="color: #339933;">=</span> max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span><br />
+   doc_phrase_weight <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> field_phrase_weight<br />
+<span style="color: #009900;">}</span></pre></div></div><br />
+<br />
+<p>Example:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">doc_title <span style="color: #339933;">=</span> hello world<br />
+doc_body <span style="color: #339933;">=</span> the world is a wonderful place<br />
+&nbsp;<br />
+query <span style="color: #339933;">=</span> hello world<br />
+query_title_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">5</span><br />
+query_body_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">3</span><br />
+&nbsp;<br />
+title_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span><br />
+body_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span><br />
+doc_phrase_weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">2</span><span style="color: #339933;">*</span><span style="color: #cc66cc;">5</span><span style="color: #339933;">+</span><span style="color: #cc66cc;">3</span><span style="color: #339933;">*</span><span style="color: #cc66cc;">1</span> <span style="color: #339933;">=</span> <span style="color: #cc66cc;">13</span></pre></div></div><br />
+<br />
+<p>It’s the phrase proximity factor that <em>guarantees</em> that closer phrase matches will be ranked higher, and exact phrase matches will be ranked at the very top. One can use field weights to tweak and tune that behavior. For instance,  in the example just above, a single-keyword match in title is made worth the same as a two-keyword phrase match in body.</p><br />
+<p>Phrase proximity is by design somewhat more computationally intensive than BM25 because it needs to work through all the keyword occurrences in the matched documents and not just the documents only. Sphinx defaults to using proximity because we believe this yields better search quality. You can however choose to use a more lightweight ranker that omits the expensive proximity calculations.</p><br />
+<h2>Orbital view of the rankers</h2><br />
+<p>Phrase proximity and BM25 are the two most important <em>factors</em>, that is, values that contribute to the final document weight. However, the <em>final</em> weight value is determined by the <em>ranker</em>,  that is, the specific function that crunches one or more  factors into a single number (Also, there are other factors besides phrase weight and BM25 that Sphinx can compute and use.)</p><br />
+<p>As of 1.10-beta, Sphinx has <strong>8 different rankers</strong>, and will definitely add <strong>more in the future</strong>.  Every ranker computes weight differently and thus might or might not be  suitable for a particular scenario.</p><br />
+<p>There are 3 simple rankers (NONE, WORDCOUNT, FIELDMASK) that do  nothing, count keyword occurrences, and return matching fields bitmask,  respectively. Those are useful when ranking is not needed at all, or computed somehow on application side.</p><br />
+<p>There are 2 legacy rankers (PROXIMITY, MATCHANY) that rely on phrase proximity alone and are used to emulate MATCH_ALL and MATCH_ANY legacy modes respectively.</p><br />
+<p>There are 3 more rankers (BM25, PROXIMITY_BM25, SPH04) that can combine phrase proximity, BM25, and other bits. Query-syntax enabled modes and SphinxQL default to PROXIMITY_BM25 now, and PROXIMITY_BM25 is strongly suggested as a drop-in replacement for PROXIMITY, too. BM25 is recommended as a reasonably good quick ranker, and also for comparison with other systems. SPH04 builds upon PROXIMITY_BM25 but additionally ranks exact field matches and field start matches higher than “just” matches.</p><br />
+<p>PROXIMITY_BM25 and SPH04 are expected to yield the best quality, but your particular results may vary.</p><br />
+<p><strong>Choice of ranker can severely affect search query performance.</strong> NONE is obviously the quickest ranker, but what about the other ones? Processing the keyword positions (occurrences) is typically the most expensive part, so rankers that don’t need to do that (FIELDMASK, BM25) are always quicker than all the others. They utilize less disk IO too (no need to read in the positions). Rankers that process keyword positions (WORDCOUNT, PROXIMITY, MATCHANY, PROXIMITY_BM25, SPH04) only differ in CPU impact.</p><br />
+<h2>Nitty gritty ranker details</h2><br />
+<p>This section describes the exact  algorithms Sphinx rankers use and provides pseudo-code. You can skip it freely unless you want to tweak ranking, tune field weights, etc.</p><br />
+<p>While the factors might be integer, boolean, floating point or whatever else, the weight has to be a single scalar value. In Sphinx, the weight is not just scalar but an integer value. This isn’t a real constraint, floating point weight values can be mapped to integers in a variety of ways anyway.</p><br />
+<p>Let’s begin with the three simplest rankers.</p><br />
+<p><strong>1) SPH_RANK_NONE</strong> ranker just assigns every document weight to 1.</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">1</span></pre></div></div><br />
+<br />
+<p>Why use this and effectively skip ranking at all? The answer is performance. If you’re sorting search results by price, why spend CPU cycles doing expensive ranking you’re going to throw away anyway?</p><br />
+<p><strong>2) SPH_RANK_WORDCOUNT </strong>ranker counts all the keyword occurrences and multiplies them by user field weights.</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+    weight <span style="color: #339933;">+=</span> num_keyword_occurrences <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span></pre></div></div><br />
+<br />
+<p>Note that it counts all <em>occurrences</em>, and not the unique <em>keywords</em>. Therefore 3 occurrences of just 1 matching keyword will contribute exactly as much as 1 occurrence of 3 different keywords.</p><br />
+<p><strong>3) SPH_RANK_FIELDMASK</strong> ranker returns a bit mask of matched fields.</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+    set_bit <span style="color: #009900;">(</span> weight<span style="color: #339933;">,</span> index_of <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span><br />
+    <span style="color: #666666; font-style: italic;">// or in other words, weight |= ( 1 &lt;&lt; index_of ( field ) )</span></pre></div></div><br />
+<br />
+<p>The other five rankers are somewhat more complicated and mostly rely on phrase proximity.</p><br />
+<p><strong>4) SPH_RANK_PROXIMITY</strong>, the default ranker in SPH_MATCH_ALL legacy mode, simply passes the phrase proximity for a weight:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> doc_phrase_weight</pre></div></div><br />
+<br />
+<p>By the definition of phrase weight, when documents do match the query  but no sequence of two keywords matches, all such documents will  receive a weight of 1. That, clearly, isn’t differentiating the results  much so using PROXIMITY_BM25 ranker instead is advised. The associated  searching performance impact should be negligible.</p><br />
+<p><strong>5) <strong>SPH_RANK_MATCHANY</strong></strong> ranker, used to emulate legacy  MATCH_ANY mode, combines phrase proximity and the number of matched  keywords so that, with default per-field weights, a) longer sub-phrase  match (aka bigger phrase proximity) in <em>any</em> field would rank  higher, and b) in case of agreeing phrase proximity, document with more  matched unique keywords would rank higher. In other words, we look at  max sub-phrase match length first, and a number of unique matched  keywords second. In pseudo-code,</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">k <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in all_fields <span style="color: #009900;">)</span><br />
+    k <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> num_keywords <span style="color: #009900;">(</span> query <span style="color: #009900;">)</span><br />
+&nbsp;<br />
+weight <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+<span style="color: #009900;">{</span><br />
+   field_phrase_weight <span style="color: #339933;">=</span> max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span><br />
+   field_rank <span style="color: #339933;">=</span> <span style="color: #009900;">(</span> field_phrase_weight <span style="color: #339933;">*</span> k <span style="color: #339933;">+</span> num_matching_keywords <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span><br />
+   weight <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> field_rank<br />
+<span style="color: #009900;">}</span></pre></div></div><br />
+<br />
+<p>It does not use BM25 at all because legacy mode did not use it and we need to stay compatible.</p><br />
+<p><strong>6) SPH_RANK_PROXIMITY_BM25</strong>, the default SphinxQL ranker and also the default ranker when “extended” matching mode is used with SphinxAPI, computes weight as</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">weight <span style="color: #339933;">=</span> doc_phrase_weight<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div><br />
+<br />
+<p>So document phrase proximity is the primary factor and BM25 is an auxiliary one that additionally sorts documents sharing the same phrase proximity. BM25 belongs to 0..1 range, so last 3 decimal digits of final weight contain scaled BM25, and all the other digits are used for the phrase weight.</p><br />
+<p><strong>7) SPH_RANK_BM25</strong> ranker sums user weights of the matched fields and BM25.</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">field_weights <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+    field_weights <span style="color: #339933;">+=</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span><br />
+weight <span style="color: #339933;">=</span> field_weights<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div><br />
+<br />
+<p>Almost like PROXIMITY_BM25 ranker, except that user weights are <em>not</em> multiplied by per-field phrase proximities. Not using phrase proximity allows the engine to evaluate the query using document lists only, and skip the processing of keyword occurrences lists. Unless your documents are extremely short (think tweets, titles, etc), occurrence lists are somewhat bigger than the document lists and take somewhat more time to process. So BM25 is a faster ranker than any of the proximity-aware ones.</p><br />
+<p>Also, many other search systems either default to BM25 ranking, or even provide it as the only option. So it might make sense to use BM25 ranker when doing performance testing to make the comparison fair.</p><br />
+<p><strong>8) SPH_RANK_SPH04</strong> ranker further improves on PROXIMITY_BM25 ranker (and introduces numbers instead of meaningful names, too, because a name would be way too complicated). Phrase proximity is still the leading factor, but, within a given phrase proximity, matches in the beginning of the field are ranked higher, and exact matches of the entire field are ranked highest. In pseudo-code,</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">field_weights <span style="color: #339933;">=</span> <span style="color: #cc66cc;">0</span><br />
+<span style="color: #b1b100;">foreach</span> <span style="color: #009900;">(</span> field in matching_fields <span style="color: #009900;">)</span><br />
+<span style="color: #009900;">{</span><br />
+    f <span style="color: #339933;">=</span> <span style="color: #cc66cc;">4</span><span style="color: #339933;">*</span>max_common_subsequence_length <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span><br />
+    <span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span> exact_field_match <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span><br />
+        f <span style="color: #339933;">+=</span> <span style="color: #cc66cc;">3</span><br />
+    <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span> first_keyword_matches <span style="color: #009900;">(</span> query<span style="color: #339933;">,</span> field <span style="color: #009900;">)</span> <span style="color: #009900;">)</span><br />
+        f <span style="color: #339933;">+=</span> <span style="color: #cc66cc;">2</span><br />
+    field_weights <span style="color: #339933;">+=</span> f <span style="color: #339933;">*</span> user_weight <span style="color: #009900;">(</span> field <span style="color: #009900;">)</span><br />
+<span style="color: #009900;">}</span><br />
+weight <span style="color: #339933;">=</span> field_weights<span style="color: #339933;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> integer<span style="color: #009900;">(</span>doc_bm25<span style="color: #339933;">*</span><span style="color: #cc66cc;">999</span><span style="color: #009900;">)</span></pre></div></div><br />
+<br />
+<p>Thus, when querying for “Market Street”, SPH04 will basically rank a document with exact “Market Street” match in one of the fields the highest, followed by “Market Street Grocery” that begins the field with a matching keyword, then followed by “West Market Street” that has a phrase match somewhere, and then followed by all the documents that do mention both keywords but not as a phrase (such as “Flea Market on 26th Street”).</p><br />
+<h2>So how do I draw those stars?</h2><br />
+<p>Or, more formally, how do I compute the max possible weight and scale returned weights to A-F scale, or percents, or whatever else?</p><br />
+<p>As you can see from the previous section there’s no simple way to tell that. <strong>Maximum weight depends both on a chosen ranker and a particular query.</strong> For example, an upper weight bound with PROXIMITY_BM25 ranker would be</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="php" style="font-family:monospace;">max_weight <span style="color: #339933;">=</span> num_keywords <span style="color: #339933;">*</span> sum <span style="color: #009900;">(</span> user_field_weights <span style="color: #009900;">)</span> <span style="color: #339933;">*</span> <span style="color: #cc66cc;">1000</span> <span style="color: #339933;">+</span> <span style="color: #cc66cc;">999</span></pre></div></div><br />
+<br />
+<p>But can this upper bound <em>ever</em> be reached? Barely in practice, because that would require a) exact phrase matches b) in all the fields c) plus BM25 peaking at 999 which roughly translates to only using one-in-a-million keywords. Moreover, what if the query uses field limit operators, eg. @title hello world? In that case our upper bound can never be reached because we would never match any field except title. For this particular query the <em>practical</em> upper bound, which could possibly be reached by an “ideal” document, is different.</p><br />
+<p>Therefore, computing the “ideal” maximum weight (one that can actually be reached) is really, really complicated. We could possibly do that on Sphinx side but that’s a lengthy R&amp;D project with questionable outcome. So if you can’t live without percentiles (or stars!), you can either use the “absolute” upper bound estimate like the one given above (that might never be practically reached and result in “100% match”), or just use the maximum weight from your particular query, and rescale everything to that weight. Using multi-queries, the latter can be made pretty cheap.</p><br />
+<h2>So how do I rank exact field matches higher?</h2><br />
+<p>You use a ranker that does that.</p><br />
+<p>Both SphinxAPI-default PROXIMITY and SphinxQL-default PROXIMITY_BM25 rankers do not. They only rank a longer sub-phrase match higher, but do not care as to where in the field that match occurred, and whether it matched the entire field or not.</p><br />
+<p>SPH04 ranker, added in 1.10-beta, does.</p><br />
+<h2>So how do I force document D to rank first?</h2><br />
+<p>Depending on <em>why</em> document D needs to be ranked higher, you either use a ranker that fits your requirements better, or use Sphinx run-time expressions to compute what you need and sort the result set differently.</p><br />
+<p>Example given, boosting those exact field-equals-query matches could be emulated by sorting by an expression:</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="sql" style="font-family:monospace;"><span style="color: #993333; font-weight: bold;">SELECT</span> <span style="color: #66cc66;">*,</span> @weight<span style="color: #66cc66;">+</span><span style="color: #993333; font-weight: bold;">IF</span><span style="color: #66cc66;">(</span>fieldcrc<span style="color: #66cc66;">==</span>$querycrc<span style="color: #66cc66;">,</span><span style="color: #cc66cc;">1000</span><span style="color: #66cc66;">,</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">)</span> <span style="color: #993333; font-weight: bold;">AS</span> myweight <span style="color: #66cc66;">...</span><br />
+<span style="color: #993333; font-weight: bold;">ORDER</span> <span style="color: #993333; font-weight: bold;">BY</span> myweight <span style="color: #993333; font-weight: bold;">DESC</span></pre></div></div><br />
+<br />
+<p>where fieldcrc is CRC(field) attribute computed at indexing time and stored in the index, and querycrc is CRC(query) computed at searching time.</p><br />
+<p>Example given, instead of checking for strict CRC match, you could index and store field lengths, and rank shorter fields higher by using an expression like</p><br />
+<br />
+<div class="wp_syntax"><div class="code"><pre class="sql" style="font-family:monospace;"><span style="color: #993333; font-weight: bold;">SELECT</span> <span style="color: #66cc66;">*,</span> @weight<span style="color: #66cc66;">+</span>ln<span style="color: #66cc66;">(</span>len<span style="color: #66cc66;">+</span><span style="color: #cc66cc;">1</span><span style="color: #66cc66;">)</span><span style="color: #66cc66;">*</span><span style="color: #cc66cc;">1000</span> <span style="color: #993333; font-weight: bold;">AS</span> myweight <span style="color: #66cc66;">...</span></pre></div></div><br />
+<br />
+<p>Example given, to force a document rank higher when a given keyword is searched for, you create a separate field with super-important keywords, put it there, and assign a high weight to that field. (Don’t set the weight over a million though or 32-bit weight would overlap!)</p><br />
+<h2>So how does Sphinx ranking compare to system XYZ?</h2><br />
+<p>Major Web search engines (think Google) are an entirely different story, subject to another posting, perhaps. Web-scale ranking (and spam fighting) forces them to account for hundreds and thousands of factors in their ranking. Many of those factors (PageRank, page and domain age, incoming link count, ratio of code to text, etc) are not text related, however, and can also be employed with Sphinx in a particular application by using expressions.  Sphinx itself is generic and its rankers only handle some text related factors, everything else has to be explicitly added on top.</p><br />
+<p>However most other full-text search systems still either default to plain old BM25 for text related factors, or even <em>limit</em> you to it. Don’t get me wrong, BM25 is great, it’s a great weighting <em>factor</em>. But using it as the <em>only</em> ranking factor is, ahem, really last century. Sphinx proximity based rankers do a step towards improving that, and we plan taking a few more steps, too. Stay tuned, interesting things are going to happen. ;)</p><br />
+<br />
+			</div><br />
+<br />
 引用: http://sphinxsearch.com/blog/2010/08/17/how-sphinx-relevance-ranking-works/
 </body>
 </html>

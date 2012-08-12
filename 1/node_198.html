@@ -6,111 +6,111 @@
 <title>clisp语言中的字符</title>
 </head>
 <body>
-1. 介绍
-函数：char-code  计算一个字符的ASCII值。
-函数：code-char  根据ASCII值构造一个字符。
-
-char-code 函数的返回值范围：
-binaries built        without UNICODE support     with UNICODE support
-CHAR-CODE-LIMIT          2^8 = 256                   17 * 216 = 1114112
-
-其中CHAR-CODE-LIMIT 变量为系统定义，表示可能的ASCII极限值，但不包括这个值。
-
-内置数据类型 EXT:STRING-CHAR 和 BASE-CHAR 都等价于 CHARACTER。
-
-函数 EXT:CHAR-WIDTH  计算字符的宽度，即占用的字节数。
-对于不占用空间的字符，返回值为 0 （像控制字符及其组合）
-对于东亚又字节字符，返回值为 2 
-其他所有字符，返回值皆为 1
-
-
-2. 特殊字符说明
-
-标准字符及代码
-character    code
-#\Space      #x20
-#\Newline    #x0A
-
-准标准字符及代码
-character    code
-#\Backspace   #x08
-#\Tab        #x09
-#\Linefeed   #x0A
-#\Page       #x0C
-#\Return     #x0D
-
-附加的命名字符及代码
-character    code
-#\Null       #x00
-#\Bell       #x07
-#\Escape     #x1B
-
-附加的从 #x00 到 #x1F 的字符              ASCII码
-#\^@                                       #x00
-#\^A … #\^Z                              #x01 … #x1A
-#\^[                                        #x1B
-#\^\                                        #x1C
-#\^]                                        #x1D
-#\^^                                        #x1E
-#\^_                                        #x1F
-
-
-
-3. 字符大小写
-
-函数 EXT:CHAR-INVERTCASE  改变字符的大小写，即将大写字符变为小写，或者将小写转变为大写。
-
-CL> (char-invertcase #\a)
-#\A
-CL> (char-invertcase #\A)
-#\a
-
-函数 CHAR-UPCASE  将字符转变为大写字符。如果参数为大写，则直接返回参数。
-函数 CHAR-DOWNCASE 将字符转变为小写字符。如果参数为小写，则直接返回返回。
-
-与 CHAR-INVERTCASE 对应的字符串操作函数为：  STRING-INVERTCASE 和 NSTRING-INVERTCASE
-CL> (string-invertcase "abcd")
-"ABCD"
-CL> (string-invertcase "AbCd")
-"aBcD"
-
-
-4. 字符的大小顺序，字符排序规则
-
-字符是通过其 UNICODE 代码值排序的。
-字符大小比较函数  CHAR-EQUAL CHAR-NOT-EQUAL, CHAR-LESSP, CHAR-GREATERP, CHAR-NOT-GREATERP, CHAR-NOT-LESSP
-这几个函数是不考虑字符的控制位的。
-
-5. 回车与换行字符的输入与输出
-
-回车符、换行符 是平台相关的，在各种不同的平台表现不尽相同。
-win32 {
-  写的时候 换行字符#\Newline变成CR/LF
-  读的时候，CR/LF转变为一个字符#\Newline
-}
-如果要区分CR/LF，需要使用函数 READ-BYTE 
-
-函数 READ-LINE 从文件或者流中读取一行，返回的字符串包括换行符 #\Newline
-
-
-6. 字符属性
-
-控制位属性：
-系统变量 EXT:CHAR-BIT-LIMIT  = 16
-
-属性位有 
-key                     value                            code
-:CONTROL              EXT:CHAR-CONTROL-BIT               1
-:META                EXT:CHAR-META-BIT                     2
-:SUPER               EXT:CHAR-SUPER-BIT                    4
-:HYPER               EXT:CHAR-HYPER-BIT                    8
-
-函数  EXT:CHAR-BIT char name  返回字符的控制位。
-函数  EXT:MAKE-CHAR   char [bits]     构造带控制位的字符
-
-函数  EXT:SET-CHAR-BIT char  name new-value 设置字符的控制位
-
-
+1. 介绍<br />
+函数：char-code  计算一个字符的ASCII值。<br />
+函数：code-char  根据ASCII值构造一个字符。<br />
+<br />
+char-code 函数的返回值范围：<br />
+binaries built        without UNICODE support     with UNICODE support<br />
+CHAR-CODE-LIMIT          2^8 = 256                   17 * 216 = 1114112<br />
+<br />
+其中CHAR-CODE-LIMIT 变量为系统定义，表示可能的ASCII极限值，但不包括这个值。<br />
+<br />
+内置数据类型 EXT:STRING-CHAR 和 BASE-CHAR 都等价于 CHARACTER。<br />
+<br />
+函数 EXT:CHAR-WIDTH  计算字符的宽度，即占用的字节数。<br />
+对于不占用空间的字符，返回值为 0 （像控制字符及其组合）<br />
+对于东亚又字节字符，返回值为 2 <br />
+其他所有字符，返回值皆为 1<br />
+<br />
+<br />
+2. 特殊字符说明<br />
+<br />
+标准字符及代码<br />
+character    code<br />
+#\Space      #x20<br />
+#\Newline    #x0A<br />
+<br />
+准标准字符及代码<br />
+character    code<br />
+#\Backspace   #x08<br />
+#\Tab        #x09<br />
+#\Linefeed   #x0A<br />
+#\Page       #x0C<br />
+#\Return     #x0D<br />
+<br />
+附加的命名字符及代码<br />
+character    code<br />
+#\Null       #x00<br />
+#\Bell       #x07<br />
+#\Escape     #x1B<br />
+<br />
+附加的从 #x00 到 #x1F 的字符              ASCII码<br />
+#\^@                                       #x00<br />
+#\^A … #\^Z                              #x01 … #x1A<br />
+#\^[                                        #x1B<br />
+#\^\                                        #x1C<br />
+#\^]                                        #x1D<br />
+#\^^                                        #x1E<br />
+#\^_                                        #x1F<br />
+<br />
+<br />
+<br />
+3. 字符大小写<br />
+<br />
+函数 EXT:CHAR-INVERTCASE  改变字符的大小写，即将大写字符变为小写，或者将小写转变为大写。<br />
+<br />
+CL> (char-invertcase #\a)<br />
+#\A<br />
+CL> (char-invertcase #\A)<br />
+#\a<br />
+<br />
+函数 CHAR-UPCASE  将字符转变为大写字符。如果参数为大写，则直接返回参数。<br />
+函数 CHAR-DOWNCASE 将字符转变为小写字符。如果参数为小写，则直接返回返回。<br />
+<br />
+与 CHAR-INVERTCASE 对应的字符串操作函数为：  STRING-INVERTCASE 和 NSTRING-INVERTCASE<br />
+CL> (string-invertcase "abcd")<br />
+"ABCD"<br />
+CL> (string-invertcase "AbCd")<br />
+"aBcD"<br />
+<br />
+<br />
+4. 字符的大小顺序，字符排序规则<br />
+<br />
+字符是通过其 UNICODE 代码值排序的。<br />
+字符大小比较函数  CHAR-EQUAL CHAR-NOT-EQUAL, CHAR-LESSP, CHAR-GREATERP, CHAR-NOT-GREATERP, CHAR-NOT-LESSP<br />
+这几个函数是不考虑字符的控制位的。<br />
+<br />
+5. 回车与换行字符的输入与输出<br />
+<br />
+回车符、换行符 是平台相关的，在各种不同的平台表现不尽相同。<br />
+win32 {<br />
+  写的时候 换行字符#\Newline变成CR/LF<br />
+  读的时候，CR/LF转变为一个字符#\Newline<br />
+}<br />
+如果要区分CR/LF，需要使用函数 READ-BYTE <br />
+<br />
+函数 READ-LINE 从文件或者流中读取一行，返回的字符串包括换行符 #\Newline<br />
+<br />
+<br />
+6. 字符属性<br />
+<br />
+控制位属性：<br />
+系统变量 EXT:CHAR-BIT-LIMIT  = 16<br />
+<br />
+属性位有 <br />
+key                     value                            code<br />
+:CONTROL              EXT:CHAR-CONTROL-BIT               1<br />
+:META                EXT:CHAR-META-BIT                     2<br />
+:SUPER               EXT:CHAR-SUPER-BIT                    4<br />
+:HYPER               EXT:CHAR-HYPER-BIT                    8<br />
+<br />
+函数  EXT:CHAR-BIT char name  返回字符的控制位。<br />
+函数  EXT:MAKE-CHAR   char [bits]     构造带控制位的字符<br />
+<br />
+函数  EXT:SET-CHAR-BIT char  name new-value 设置字符的控制位<br />
+<br />
+<br />
 
 </body>
 </html>

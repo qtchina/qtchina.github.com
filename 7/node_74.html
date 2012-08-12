@@ -6,33 +6,33 @@
 <title>Qt 4.3.1 编译、安装 (linux)</title>
 </head>
 <body>
-<p>Trolltech 已经发布了 Qt 4.3.1 的Release 版本，下面我们就来体验它吧</p>
-<p>首先到trolltech 站点下载&nbsp; <a target="_blank" href="http://ftp.iasi.roedu.net/mirrors/ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.1.tar.gz">qt-x11-opensource-src-4.3.1.tar.gz</a>&nbsp;&nbsp;&nbsp; , &nbsp;&nbsp;&nbsp;&nbsp;  到一个空间比较大的目录，比如超过2G的剩余空间。现在的Qt 版本在linux 下的编译参数与3.0有所不同，将几个需要注意的参数列出来：</p>
-<p>-prefix&nbsp;&nbsp; 参数：指定安装目录 , 默认是 /usr/local/Trolltech/Qt-4.3.1 , 你可以改一个其他目录，如/myopt/qt4</p>
-<p>-make &lt;part> 参数：指定要编译Qt 的哪个子集，这里的part可以是 libs tools examples demos 任何一个或者几个，不过libs肯定是需要编译的。默认情况下Qt Configure将编译所有的子集，特别消耗时间和空间。</p>
-<p>-static : 编译静态库 ， 编译出来的程序都特别大，但是发布程序的时候不需要让用户装Qt 库了，以这种模式发布的使用Qt 的程序有 opera 和 skype 等 。</p>
-<p>-shared : 编译动态共享库 .so&nbsp;&nbsp; , 这样编译出来的程序比较小巧了。</p>
-<p>-release :</p>
-<p>-debug:</p>
-<p>-debug-and-release: 这三个参数指定编译是带调试信息或者是不带调试信息的Qt 库。这要看你是否要使用它做开发了。</p>
-<p>&nbsp;</p>
-<p>主要的参数都列出来了，其他的就用默认的吧，现在编译开始了：</p>
-<p>bash> cd /myopt/</p>
-<p>bash> tar zxvf /path/to/<a target="_blank" href="http://ftp.iasi.roedu.net/mirrors/ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.1.tar.gz">qt-x11-opensource-src-4.3.1.tar.gz</a></p>
-<p>bash> cd qt-x11-opensource-src-4.3.1</p>
-<p>bash> ./configure -prefix /myopt/qt4 -release -shared -fast -make libs&nbsp; -no-qt3support</p>
-<p>bash> make</p>
-<p>bash> make install</p>
-<p>bash> ls -l&nbsp; /myopt/qt4</p>
-<p>drwxr-xr-x&nbsp; 2 root root&nbsp;&nbsp;&nbsp; 384 2007-09-04 08:16 bin<br />
-drwxr-xr-x 16 root root&nbsp;&nbsp;&nbsp; 416 2007-09-04 07:58 include<br />
-drwxr-xr-x&nbsp; 3 root root&nbsp;&nbsp; 1352 2007-09-04 08:05 lib<br />
-drwxr-xr-x 56 root root&nbsp;&nbsp; 1712 2007-09-04 08:17 mkspecs<br />
-drwxr-xr-x&nbsp; 2 root root&nbsp;&nbsp;&nbsp; 432 2007-09-04 08:05 phrasebooks<br />
-drwxr-xr-x&nbsp; 8 root root&nbsp;&nbsp;&nbsp; 232 2007-09-04 07:58 plugins<br />
--rw-r--r--&nbsp; 1 root root 331128 2007-08-07 21:08 q3porting.xml</p>
-<p>现在就可以使用bin目录下的 qmake 来编译其他qmake 项目 了。</p>
-<p>&nbsp;</p>
+<p>Trolltech 已经发布了 Qt 4.3.1 的Release 版本，下面我们就来体验它吧</p><br />
+<p>首先到trolltech 站点下载&nbsp; <a target="_blank" href="http://ftp.iasi.roedu.net/mirrors/ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.1.tar.gz">qt-x11-opensource-src-4.3.1.tar.gz</a>&nbsp;&nbsp;&nbsp; , &nbsp;&nbsp;&nbsp;&nbsp;  到一个空间比较大的目录，比如超过2G的剩余空间。现在的Qt 版本在linux 下的编译参数与3.0有所不同，将几个需要注意的参数列出来：</p><br />
+<p>-prefix&nbsp;&nbsp; 参数：指定安装目录 , 默认是 /usr/local/Trolltech/Qt-4.3.1 , 你可以改一个其他目录，如/myopt/qt4</p><br />
+<p>-make &lt;part> 参数：指定要编译Qt 的哪个子集，这里的part可以是 libs tools examples demos 任何一个或者几个，不过libs肯定是需要编译的。默认情况下Qt Configure将编译所有的子集，特别消耗时间和空间。</p><br />
+<p>-static : 编译静态库 ， 编译出来的程序都特别大，但是发布程序的时候不需要让用户装Qt 库了，以这种模式发布的使用Qt 的程序有 opera 和 skype 等 。</p><br />
+<p>-shared : 编译动态共享库 .so&nbsp;&nbsp; , 这样编译出来的程序比较小巧了。</p><br />
+<p>-release :</p><br />
+<p>-debug:</p><br />
+<p>-debug-and-release: 这三个参数指定编译是带调试信息或者是不带调试信息的Qt 库。这要看你是否要使用它做开发了。</p><br />
+<p>&nbsp;</p><br />
+<p>主要的参数都列出来了，其他的就用默认的吧，现在编译开始了：</p><br />
+<p>bash> cd /myopt/</p><br />
+<p>bash> tar zxvf /path/to/<a target="_blank" href="http://ftp.iasi.roedu.net/mirrors/ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.1.tar.gz">qt-x11-opensource-src-4.3.1.tar.gz</a></p><br />
+<p>bash> cd qt-x11-opensource-src-4.3.1</p><br />
+<p>bash> ./configure -prefix /myopt/qt4 -release -shared -fast -make libs&nbsp; -no-qt3support</p><br />
+<p>bash> make</p><br />
+<p>bash> make install</p><br />
+<p>bash> ls -l&nbsp; /myopt/qt4</p><br />
+<p>drwxr-xr-x&nbsp; 2 root root&nbsp;&nbsp;&nbsp; 384 2007-09-04 08:16 bin<br /><br />
+drwxr-xr-x 16 root root&nbsp;&nbsp;&nbsp; 416 2007-09-04 07:58 include<br /><br />
+drwxr-xr-x&nbsp; 3 root root&nbsp;&nbsp; 1352 2007-09-04 08:05 lib<br /><br />
+drwxr-xr-x 56 root root&nbsp;&nbsp; 1712 2007-09-04 08:17 mkspecs<br /><br />
+drwxr-xr-x&nbsp; 2 root root&nbsp;&nbsp;&nbsp; 432 2007-09-04 08:05 phrasebooks<br /><br />
+drwxr-xr-x&nbsp; 8 root root&nbsp;&nbsp;&nbsp; 232 2007-09-04 07:58 plugins<br /><br />
+-rw-r--r--&nbsp; 1 root root 331128 2007-08-07 21:08 q3porting.xml</p><br />
+<p>现在就可以使用bin目录下的 qmake 来编译其他qmake 项目 了。</p><br />
+<p>&nbsp;</p><br />
 <p>&nbsp;</p>
 </body>
 </html>

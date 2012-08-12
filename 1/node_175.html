@@ -6,123 +6,123 @@
 <title>把自定义物件整合到Qt设计师中</title>
 </head>
 <body>
-	在我们能在Qt设计师中使用自定义物件之前，我们必须让Qt设计师注意到它们。有两种技术完成这个：“升级“方法和插件方法。
-	升级方法是一种快速简单的方法。它包括：选择一个与我们的自定义物件有相似API的内建Qt　物件，完成Qt设计师中的关于我们的自定义物件信息的一个对话框。这个物件就能用于使用Qt设计师开发的窗体，虽然在编辑或者预览窗体的时候它被表示相关联的内建Qt物件。
-	下面是如何使用这种方法把HexSpinBox物件插入到一个窗体的步骤：
-1.通过从Qt设计师的物件盒子拖一个QSpinBox到窗体上创建一个QSpinBox 。
-2.右键点击该spin box并从上下文菜单中选择升级为自定义物件。
-3.在弹出的对话框中填入类名"HexSpinBox"，头文件"hexspinbox.h" 。
-哇！uic生成的代码将包含hexspinbox.h而不是<QSpinBox>并暗示这是一个HexSpinBox。在Qt设计师中，HexSpinBox被表示一个QSpinBox，允许我们设置QSpinBox的所有属性（例如，范围和当前值）。
-图5.6　Qt设计师的自定义物件对话框
-
-
-	升级方法的缺点是与自定义物件相关的属性无法在Qt设计师中访问到，并且物件还不是渲染为它自己的模样。这两个问题都可通过使用插件方法解决。
-	插件方法需要创建一个插件库以便Qt设计师能在运行时加载并使用它创建物件的实例。这回，在编辑窗体和预览窗体的时候Qt设计师使用的是真实的物件了，应该感谢Qt的元对象系统，Qt设计师才能够动态获得它的属性列表。为展示这是如何工作的，我们将把前面一节中的IconEditor作为一个插件整合进去。
-	第一步，我们必须创建QdesignerCustomWidgetInterface的子类并实现几个虚函数。我们假设插件的源代码位于一个叫iconeditorplugin的文件夹，而IconEditor源代码位于同级文件夹中一个叫iconeditor的文件夹内。
-	下面是类定义：
-[code type="cpp-qt"]
-#include <QDesignerCustomWidgetInterface>
-class IconEditorPlugin : public QObject,
-                         public QDesignerCustomWidgetInterface
-{
-    Q_OBJECT
-    Q_INTERFACES(QDesignerCustomWidgetInterface)
-public:
-    IconEditorPlugin(QObject *parent = 0);
-    QString name() const;
-    QString includeFile() const;
-    QString group() const;
-    QIcon icon() const;
-    QString toolTip() const;
-    QString whatsThis() const;
-    bool isContainer() const;
-    QWidget *createWidget(QWidget *parent);
-};
-[/code]
-	IconEditorPlugin子类是一个封装了IconEditor物件的工厂类。它继承了QObject 和 QdesignerCustomWidgetIterface两个类，并使用了Q_INTERFACES()宏告诉moc第二个基类是一个插件接口。这些函数被Qt设计师使用以创建这些类的实例和获取它们的相关信息。
-[code type="cpp-qt"]
-IconEditorPlugin::IconEditorPlugin(QObject *parent)
-    : QObject(parent)
-{
-}
-[/code]
-	构造函数非常普通。
-[code type="cpp-qt"]
-QString IconEditorPlugin::name() const
-{
-    return "IconEditor";
-}
-[/code]
-	name()函数返回该插件提供的相应物件的名字。
-[code type="cpp-qt"]
-QString IconEditorPlugin::includeFile() const
-{
-    return "iconeditor.h";
-}
-[/code]
-includeFile()函数返回该插件封装的指定物件的头文件名。该头包含在由uic工具生成的代码中。
-[code type="cpp-qt"]
-QString IconEditorPlugin::group() const
-{
-    return tr("Image Manipulation Widgets");
-}
-[/code]
-
-	group()函数返回这个自定义物件应该属于的物件组的名字。如果这个名字未被使用，Qt设计师将会为该物件创建一个新组。
-[code type="cpp-qt"]
-QIcon IconEditorPlugin::icon() const
-{
-    return QIcon(":/images/iconeditor.png");
-}
-[/code]
-	icon()函数返回在Qt设计师的物件盒子中表示自定义物件的图标。这里，我们假设IconEditorPlugin有一个相关带有图标编辑器图象入口的Qt资源文件。
-[code type="cpp-qt"]
-QString IconEditorPlugin::toolTip() const
-{
-    return tr("An icon editor widget");
-}
-[/code]
-	toolTip()函数返回在用户鼠标悬浮在Qt设计师的物件盒子中该自定义物件上的时候显示的小提示。
-[code type="cpp-qt"]
-QString IconEditorPlugin::whatsThis() const
-{
-    return tr("This widget is presented in Chapter 5 of <i>C++ GUI "
-              "Programming with Qt 4</i> as an example of a custom Qt "
-              "widget.");
-}
-[/code]
-
-	whatsThis()函数Qt设计师要显示的"What's This?"文本。
-[code type="cpp-qt"]
-bool IconEditorPlugin::isContainer() const
-{
-    return false;
-}
-[/code]
-	isContainer()在物件能包含其他物件的时候返回true，否则返回false。例如，QFrame是一个能够包含其他物件的物件。一般情况下，任何Qt物件都能包含其他物件，但是Qt设计师在isContainer()返回false时禁止该功能。
-[code type="cpp-qt"]
-QWidget *IconEditorPlugin::createWidget(QWidget *parent)
-{
-    return new IconEditor(parent);
-}
-[/code]
-	create()函数被Qt设计师使用给定的父物件调用以创建该物件类的实例。
-Q_EXPORT_PLUGIN2(iconeditorplugin, IconEditorPlugin)
-
-	在实现该插件类的源文件的最后，我们必须使用Q_EXPORT_PLUGIN2()宏来让该插件对Qt设计师可用。第一个参数是我们希望给该插件的名字。第二个参数是是实现它的类的名字。
-	创建该插件的.pro文件看上去像下面的这样：
-
-TEMPLATE        = lib
-CONFIG         += designer plugin release
-HEADERS         = ../iconeditor/iconeditor.h \
-                  iconeditorplugin.h
-SOURCES         = ../iconeditor/iconeditor.cpp \
-                  iconeditorplugin.cpp
-RESOURCES       = iconeditorplugin.qrc
-DESTDIR         = $(QTDIR)/plugins/designer
-
-	该.pro文件假设QtdIR环境变量被设置为Qt的安装位置。当你键入make或者nmake构建该插件的时候，它会自动安装自己到Qt设计师的plugins目的。一旦该插件被编译出来，在Qt设计师中就能像使用其他任何Qt内建物件一样使用IconEditor物件了。
-	如果你想把多个自定义物件整合到Qt设计师中，你或者为他们每一个创建一个插件，或者把他们组合进从QdesignerCustomWidgetCollectionInterface派生出来的单个插件内。
+	在我们能在Qt设计师中使用自定义物件之前，我们必须让Qt设计师注意到它们。有两种技术完成这个：“升级“方法和插件方法。<br />
+	升级方法是一种快速简单的方法。它包括：选择一个与我们的自定义物件有相似API的内建Qt　物件，完成Qt设计师中的关于我们的自定义物件信息的一个对话框。这个物件就能用于使用Qt设计师开发的窗体，虽然在编辑或者预览窗体的时候它被表示相关联的内建Qt物件。<br />
+	下面是如何使用这种方法把HexSpinBox物件插入到一个窗体的步骤：<br />
+1.通过从Qt设计师的物件盒子拖一个QSpinBox到窗体上创建一个QSpinBox 。<br />
+2.右键点击该spin box并从上下文菜单中选择升级为自定义物件。<br />
+3.在弹出的对话框中填入类名"HexSpinBox"，头文件"hexspinbox.h" 。<br />
+哇！uic生成的代码将包含hexspinbox.h而不是<QSpinBox>并暗示这是一个HexSpinBox。在Qt设计师中，HexSpinBox被表示一个QSpinBox，允许我们设置QSpinBox的所有属性（例如，范围和当前值）。<br />
+图5.6　Qt设计师的自定义物件对话框<br />
+<br />
+<br />
+	升级方法的缺点是与自定义物件相关的属性无法在Qt设计师中访问到，并且物件还不是渲染为它自己的模样。这两个问题都可通过使用插件方法解决。<br />
+	插件方法需要创建一个插件库以便Qt设计师能在运行时加载并使用它创建物件的实例。这回，在编辑窗体和预览窗体的时候Qt设计师使用的是真实的物件了，应该感谢Qt的元对象系统，Qt设计师才能够动态获得它的属性列表。为展示这是如何工作的，我们将把前面一节中的IconEditor作为一个插件整合进去。<br />
+	第一步，我们必须创建QdesignerCustomWidgetInterface的子类并实现几个虚函数。我们假设插件的源代码位于一个叫iconeditorplugin的文件夹，而IconEditor源代码位于同级文件夹中一个叫iconeditor的文件夹内。<br />
+	下面是类定义：<br />
+[code type="cpp-qt"]<br />
+#include <QDesignerCustomWidgetInterface><br />
+class IconEditorPlugin : public QObject,<br />
+                         public QDesignerCustomWidgetInterface<br />
+{<br />
+    Q_OBJECT<br />
+    Q_INTERFACES(QDesignerCustomWidgetInterface)<br />
+public:<br />
+    IconEditorPlugin(QObject *parent = 0);<br />
+    QString name() const;<br />
+    QString includeFile() const;<br />
+    QString group() const;<br />
+    QIcon icon() const;<br />
+    QString toolTip() const;<br />
+    QString whatsThis() const;<br />
+    bool isContainer() const;<br />
+    QWidget *createWidget(QWidget *parent);<br />
+};<br />
+[/code]<br />
+	IconEditorPlugin子类是一个封装了IconEditor物件的工厂类。它继承了QObject 和 QdesignerCustomWidgetIterface两个类，并使用了Q_INTERFACES()宏告诉moc第二个基类是一个插件接口。这些函数被Qt设计师使用以创建这些类的实例和获取它们的相关信息。<br />
+[code type="cpp-qt"]<br />
+IconEditorPlugin::IconEditorPlugin(QObject *parent)<br />
+    : QObject(parent)<br />
+{<br />
+}<br />
+[/code]<br />
+	构造函数非常普通。<br />
+[code type="cpp-qt"]<br />
+QString IconEditorPlugin::name() const<br />
+{<br />
+    return "IconEditor";<br />
+}<br />
+[/code]<br />
+	name()函数返回该插件提供的相应物件的名字。<br />
+[code type="cpp-qt"]<br />
+QString IconEditorPlugin::includeFile() const<br />
+{<br />
+    return "iconeditor.h";<br />
+}<br />
+[/code]<br />
+includeFile()函数返回该插件封装的指定物件的头文件名。该头包含在由uic工具生成的代码中。<br />
+[code type="cpp-qt"]<br />
+QString IconEditorPlugin::group() const<br />
+{<br />
+    return tr("Image Manipulation Widgets");<br />
+}<br />
+[/code]<br />
+<br />
+	group()函数返回这个自定义物件应该属于的物件组的名字。如果这个名字未被使用，Qt设计师将会为该物件创建一个新组。<br />
+[code type="cpp-qt"]<br />
+QIcon IconEditorPlugin::icon() const<br />
+{<br />
+    return QIcon(":/images/iconeditor.png");<br />
+}<br />
+[/code]<br />
+	icon()函数返回在Qt设计师的物件盒子中表示自定义物件的图标。这里，我们假设IconEditorPlugin有一个相关带有图标编辑器图象入口的Qt资源文件。<br />
+[code type="cpp-qt"]<br />
+QString IconEditorPlugin::toolTip() const<br />
+{<br />
+    return tr("An icon editor widget");<br />
+}<br />
+[/code]<br />
+	toolTip()函数返回在用户鼠标悬浮在Qt设计师的物件盒子中该自定义物件上的时候显示的小提示。<br />
+[code type="cpp-qt"]<br />
+QString IconEditorPlugin::whatsThis() const<br />
+{<br />
+    return tr("This widget is presented in Chapter 5 of <i>C++ GUI "<br />
+              "Programming with Qt 4</i> as an example of a custom Qt "<br />
+              "widget.");<br />
+}<br />
+[/code]<br />
+<br />
+	whatsThis()函数Qt设计师要显示的"What's This?"文本。<br />
+[code type="cpp-qt"]<br />
+bool IconEditorPlugin::isContainer() const<br />
+{<br />
+    return false;<br />
+}<br />
+[/code]<br />
+	isContainer()在物件能包含其他物件的时候返回true，否则返回false。例如，QFrame是一个能够包含其他物件的物件。一般情况下，任何Qt物件都能包含其他物件，但是Qt设计师在isContainer()返回false时禁止该功能。<br />
+[code type="cpp-qt"]<br />
+QWidget *IconEditorPlugin::createWidget(QWidget *parent)<br />
+{<br />
+    return new IconEditor(parent);<br />
+}<br />
+[/code]<br />
+	create()函数被Qt设计师使用给定的父物件调用以创建该物件类的实例。<br />
+Q_EXPORT_PLUGIN2(iconeditorplugin, IconEditorPlugin)<br />
+<br />
+	在实现该插件类的源文件的最后，我们必须使用Q_EXPORT_PLUGIN2()宏来让该插件对Qt设计师可用。第一个参数是我们希望给该插件的名字。第二个参数是是实现它的类的名字。<br />
+	创建该插件的.pro文件看上去像下面的这样：<br />
+<br />
+TEMPLATE        = lib<br />
+CONFIG         += designer plugin release<br />
+HEADERS         = ../iconeditor/iconeditor.h \<br />
+                  iconeditorplugin.h<br />
+SOURCES         = ../iconeditor/iconeditor.cpp \<br />
+                  iconeditorplugin.cpp<br />
+RESOURCES       = iconeditorplugin.qrc<br />
+DESTDIR         = $(QTDIR)/plugins/designer<br />
+<br />
+	该.pro文件假设QtdIR环境变量被设置为Qt的安装位置。当你键入make或者nmake构建该插件的时候，它会自动安装自己到Qt设计师的plugins目的。一旦该插件被编译出来，在Qt设计师中就能像使用其他任何Qt内建物件一样使用IconEditor物件了。<br />
+	如果你想把多个自定义物件整合到Qt设计师中，你或者为他们每一个创建一个插件，或者把他们组合进从QdesignerCustomWidgetCollectionInterface派生出来的单个插件内。<br />
 
 </body>
 </html>

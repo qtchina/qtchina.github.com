@@ -6,30 +6,30 @@
 <title>linux下网线接入状态检测</title>
 </head>
 <body>
-现在有两个工具软件包mii-tools和ethtool 中包含检测代码。
-
-mii-tools中的检测代码如下：
-
-[code type="c"]
-short get_flags(const char *dev)
-{
-        struct ifreq ifr;
-
-        bzero((char *)&ifr, sizeof(ifr));
-        strcpy(ifr.ifr_name, dev);
-
-        if (ioctl(ioctl_sockid,SIOCGIFFLAGS, (char *)&ifr) < 0)
-                return(0);
-        return(ifr.ifr_flags);
-}
-
-flags = get_flags(ifx->d_name);
-if ((flags & IFF_RUNNING) == 0)
-    没网线
-[/code]
-
-mii-tools下载： http://net-tools.berlios.de/
-ethtool下载： http://sourceforge.net/projects/gkernel/
+现在有两个工具软件包mii-tools和ethtool 中包含检测代码。<br />
+<br />
+mii-tools中的检测代码如下：<br />
+<br />
+[code type="c"]<br />
+short get_flags(const char *dev)<br />
+{<br />
+        struct ifreq ifr;<br />
+<br />
+        bzero((char *)&ifr, sizeof(ifr));<br />
+        strcpy(ifr.ifr_name, dev);<br />
+<br />
+        if (ioctl(ioctl_sockid,SIOCGIFFLAGS, (char *)&ifr) < 0)<br />
+                return(0);<br />
+        return(ifr.ifr_flags);<br />
+}<br />
+<br />
+flags = get_flags(ifx->d_name);<br />
+if ((flags & IFF_RUNNING) == 0)<br />
+    没网线<br />
+[/code]<br />
+<br />
+mii-tools下载： http://net-tools.berlios.de/<br />
+ethtool下载： http://sourceforge.net/projects/gkernel/<br />
 
 </body>
 </html>

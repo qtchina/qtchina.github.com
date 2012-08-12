@@ -6,68 +6,68 @@
 <title>在nginx模块中读写用户cookie</title>
 </head>
 <body>
-nginx已经提供了存储用户cookie的机制，还提供了比较方便的读写cookie的相关函数，不过文档并不好找。
-这是一点阅读nginx源代码的总结。
-这里不再说明如何编写一个完整的nginx模块，只从模块的处理函数入手。
-以hello模块为例，模块的处理函数名为：
-static ngx_int_t ngx_http_hello_handler(ngx_http_request_t *r);
-
-主要涉及的数据结构就是 处理函数的参数,ngx_http_request_t *r;
-
-在这个结构中包含两个成员：r->headers_in, r->headers_out
-其中前者中存储的请求头信息，后者存储的是响应头信息，这两个结构并不相同。
-
-1. 在r->headers_in结构有一ngx_array_t 类型成员 r->headers_in.cookies，这就是nginx存储请求cookie的变量，通过下面的方法取到cookie串的值：
-
-<code type="c">
-
-    ngx_table_elt_t ** cookies = NULL;                  
- 
-    fprintf(stderr, "Cookie count: %d\n", r->headers_in.cookies.nelts);             
-    cookies = r->headers_in.cookies.elts;                                           
-    for (int i = 0 ; i < r->headers_in.cookies.nelts; i++) {                        
-        fprintf(stderr, "Cookie line %d: %s\n", i, cookies[i]->value.data);         
-    }                                                                           
-
-</code>
-
-值得注意的是，这里输出的cookie count一定是<=1,因为nginx把所有的cookie键值对都格式化与一个字符串，如 k1=v1;k2=v2 ...
-这部分代码在任何有ngx_http_request_t *实例的地方都可以调用。
-
-2. 在r->headers_out中并没有cookies成员，需要另外一个成员r->headers_out.headers, 通过调用nginx提供的几个函数，将新的cookie写到响应头结构中。
-
-<code type="c">
-    u_char           *cookie, *p;                                                                          
-    ngx_table_elt_t  *set_cookie;                                                                          
-                                                                                                           
-    cookie = strdup("test_write_ngx_cookie=123456");                                                       
-    p = cookie + strlen(cookie);                                                                           
-
-    set_cookie = ngx_list_push(&r->headers_out.headers);
-    if (set_cookie == NULL) {                           
-        return NGX_ERROR;                               
-    }                                                   
-
-    set_cookie->hash = 1;
-    set_cookie->key.len = sizeof("Set-Cookie") - 1;
-    set_cookie->key.data = (u_char *) "Set-Cookie";
-    set_cookie->value.len = p - cookie;            
-    set_cookie->value.data = cookie;               
-
-
-</code>
-
-这段代码就能将一个cookie写入到响应头结构中，如果要写入多个，可按照这种方法适当改写即可。
-
-3. 涉及的nginx相关数据结构：
-<code type="c">
-   ngx_str_t
-   ngx_array_t
-   ngx_table_elt_t
-   ngx_list_t
-   ngx_http_request_t
-</code>
-这部分代码在nginx-0.6.xx版本上通过测试.
+nginx已经提供了存储用户cookie的机制，还提供了比较方便的读写cookie的相关函数，不过文档并不好找。<br />
+这是一点阅读nginx源代码的总结。<br />
+这里不再说明如何编写一个完整的nginx模块，只从模块的处理函数入手。<br />
+以hello模块为例，模块的处理函数名为：<br />
+static ngx_int_t ngx_http_hello_handler(ngx_http_request_t *r);<br />
+<br />
+主要涉及的数据结构就是 处理函数的参数,ngx_http_request_t *r;<br />
+<br />
+在这个结构中包含两个成员：r->headers_in, r->headers_out<br />
+其中前者中存储的请求头信息，后者存储的是响应头信息，这两个结构并不相同。<br />
+<br />
+1. 在r->headers_in结构有一ngx_array_t 类型成员 r->headers_in.cookies，这就是nginx存储请求cookie的变量，通过下面的方法取到cookie串的值：<br />
+<br />
+<code type="c"><br />
+<br />
+    ngx_table_elt_t ** cookies = NULL;                  <br />
+ <br />
+    fprintf(stderr, "Cookie count: %d\n", r->headers_in.cookies.nelts);             <br />
+    cookies = r->headers_in.cookies.elts;                                           <br />
+    for (int i = 0 ; i < r->headers_in.cookies.nelts; i++) {                        <br />
+        fprintf(stderr, "Cookie line %d: %s\n", i, cookies[i]->value.data);         <br />
+    }                                                                           <br />
+<br />
+</code><br />
+<br />
+值得注意的是，这里输出的cookie count一定是<=1,因为nginx把所有的cookie键值对都格式化与一个字符串，如 k1=v1;k2=v2 ...<br />
+这部分代码在任何有ngx_http_request_t *实例的地方都可以调用。<br />
+<br />
+2. 在r->headers_out中并没有cookies成员，需要另外一个成员r->headers_out.headers, 通过调用nginx提供的几个函数，将新的cookie写到响应头结构中。<br />
+<br />
+<code type="c"><br />
+    u_char           *cookie, *p;                                                                          <br />
+    ngx_table_elt_t  *set_cookie;                                                                          <br />
+                                                                                                           <br />
+    cookie = strdup("test_write_ngx_cookie=123456");                                                       <br />
+    p = cookie + strlen(cookie);                                                                           <br />
+<br />
+    set_cookie = ngx_list_push(&r->headers_out.headers);<br />
+    if (set_cookie == NULL) {                           <br />
+        return NGX_ERROR;                               <br />
+    }                                                   <br />
+<br />
+    set_cookie->hash = 1;<br />
+    set_cookie->key.len = sizeof("Set-Cookie") - 1;<br />
+    set_cookie->key.data = (u_char *) "Set-Cookie";<br />
+    set_cookie->value.len = p - cookie;            <br />
+    set_cookie->value.data = cookie;               <br />
+<br />
+<br />
+</code><br />
+<br />
+这段代码就能将一个cookie写入到响应头结构中，如果要写入多个，可按照这种方法适当改写即可。<br />
+<br />
+3. 涉及的nginx相关数据结构：<br />
+<code type="c"><br />
+   ngx_str_t<br />
+   ngx_array_t<br />
+   ngx_table_elt_t<br />
+   ngx_list_t<br />
+   ngx_http_request_t<br />
+</code><br />
+这部分代码在nginx-0.6.xx版本上通过测试.<br />
 
 </body>
 </html>

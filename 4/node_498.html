@@ -6,221 +6,221 @@
 <title>Asterisk Dialplan命令中文翻译</title>
 </head>
 <body>
-<div class="bct fc05 fc11 nbw-blog ztag js-fs2"><p>Asterisk的拨号计划命令，翻译自<br>http://www.voip-info.org/wiki/view/Asterisk+-+documentation+of+application+commands</p>
-<p>网上有个《asterisk app命令中文翻译》，版本比较老，内容更像是软件翻译的。我参考了下，并根据voip-info.org现有新版本做了些修正。由于内容很多名词比较专业，翻译的不够完整，英文实在不好的可以参考一下。</p>
-<p><strong>Asterisk Dialplan Commands </strong><br><strong>常规命令</strong></p>
-<ul>
-<li>Authenticate:鉴别用户 
-</li><li>VMAuthenticate:根据“voicemail.conf”鉴别用户 
-</li><li>Bridge:连接两个专用来话 (1.6+) 
-</li><li>ChannelRedirect:重定向现有的通道到拨号计划 
-</li><li>Curl:允许接受外部的URLs。并且支持POSTing，不支持CURL。 
-</li><li>DUNDiLookup:用DUNDi查寻号码 
-</li><li>Log:向日志文件中添加文件 (1.6+) 
-</li><li>JabberSend:经过Jabber发送文件消息(Jabber是一个即时通信软件) 
-</li><li>Page:Page a mobile device (new in Asterisk v1.2) 
-</li><li>SendDTMF:发送专用的DTMF数据 
-</li><li>SendImage:发送图像文件 
-</li><li>SendText:发送给客户文本消息 
-</li><li>SendURL:发送给客户URL用以显示 
-</li><li>System:执行系统命令 
-</li><li>Transfer:将呼叫方转移到另一个分机 
-</li><li>TrySystem:执行系统命令并且总是返回0 
-</li><li>Wait:稍等 
-</li><li>WaitExte:等待呼叫方拨打一个新的分机 
-</li><li>WaitForRing:等待呼叫申请 
-</li><li>WaitMusicOnHold:等待，在线拨放音乐(1.6) </li></ul>
-<p><br><strong>话单与计费</strong></p>
-<ul>
-<li>ForkCDR:将CDR分成两个独立的实体 
-</li><li>NoCDR:确保 asterisk没有把CRD保存为特定的呼叫 
-</li><li>ResetCDR:重置CDR数据 
-</li><li>SetAccount:设置帐簿号码 
-</li><li>SetAMAflags:开通AMA标志开户的渠道 
-</li><li>SetCDRUserField:建立CDR用户领域 
-</li><li>AppendCDRUserField:给CDR用户附加数据 </li></ul>
-<p><br><strong>呼叫管理(hangup, answer, dial, etc)</strong></p>
-<ul>
-<li>AMD:侦测自动应答机 
-</li><li>Answer:应答一个振铃的通道 
-</li><li>Busy:示忙，等待挂断 
-</li><li>ChanIsAvail:检测通道可用性 
-</li><li>Congestion:显示拥塞等待挂断 
-</li><li>Dial:设置一个呼叫连接当前的通道 
-</li><li>DISA:直接访问内部系统 
-</li><li>Hangup:无条件挂断 
-</li><li>RetryDial:一个电话，重试失败，允许可选的分机 
-</li><li>Ringing:显示呼叫 </li></ul>
-<p><br><strong>呼叫方描述&nbsp; (ID, Name etc)</strong></p>
-<ul>
-<li>CallingPres:更改呼叫方的身份介绍 
-</li><li>LookupBlacklist:从黑名单数据库上查询访客的身份 姓名和号码 
-</li><li>LookupCIDName:从当地的数据库查询访客的身份和姓名 
-</li><li>PrivacyManager:如果没有CallerID过来，要求输入电话号码 
-</li><li>SetCallerID:建立CallerID，发生矛盾服从CallerID 
-</li><li>SetCallerPres:建立访客资料的独立信道 
-</li><li>SetCIDName:建立呼叫者身份 姓名，发生矛盾服从CallerID 
-</li><li>SetCIDNum:只建立访客的身份号码（没有姓名），发生矛盾服从CallerID 
-</li><li>SoftHangup:请求挂断转到另一个信道 
-</li><li>Zapateller:拥SIT阻止远程商人 </li></ul>
-<p><br><strong>ADSI</strong></p>
-<ul>
-<li>ADSIProg:将Asterisk ADSI脚本加载到电话 
-</li><li>GetCPEID:获得ADSI CPE ID </li></ul>
-<p><br><strong>数据库操作</strong></p>
-<ul>
-<li>DBdel:从数据库中删除一个键 
-</li><li>DBdeltree:从数据库中删除一批数据 
-</li><li>DBget:从数据库中取出数值. 发生矛盾服从DB. 
-</li><li>DBput:在数据库中储存一个数值. 发生矛盾服从DB. 
-</li><li>MYSQL:执行不同的 mySQL 数据库行为 
-</li><li>RealTime:使用实时数据库资料填充变量 
-</li><li>RealTimeUpdate:使用实时数据库更新字段 </li></ul>
-<p><br><strong>应用程序整合</strong></p>
-<ul>
-<li>AGI:执行一套AGI应用程序 
-</li><li>DeadAGI:在中断的信道上执行AGI 
-</li><li>EAGI:在音频通道上执行一套 AGI 适应程序 
-</li><li>EnumLookup:在 ENUM 中查找号码 
-</li><li>ExternalIVR:执行扩展IVR引擎 
-</li><li>Jack:Interface to JACK audio for audio manipulation (1.6+) 
-</li><li>Macro:执行宏 
-</li><li>MacroExclusive:同一时间只有一个通道可呼叫这个宏，所有其他人只能等待(1.4) 
-</li><li>MacroExit:退出的宏，就像它已全部完成 (1.4) 
-</li><li>NoOp:不进行操作，可将数值打印到控制台进行调试 
-</li><li>Perl:res perl 是Apache 的 mod_perl, 只适用于 Asterisk 
-</li><li>PHP:res_php 不需要就可将PHP与进行一体化处理 
-</li><li>Read:读有效的DTMF变量 
-</li><li>TXTCIDName:从 TXT 记录中查找访客的姓名 
-</li><li>UserEvent:发送专用事件给管理接口 </li></ul>
-<p><br>　<br><strong>控制流与超时设定</strong></p>
-<ul>
-<li>AbsoluteTimeout:设置最长呼叫时间 
-</li><li>DigitTimeout:设置数字间的最长时间间隔 
-</li><li>Gosub:跳到一个子程序并且返回 (new in v1.2) 
-</li><li>GosubIf:有条件的跳到一个子程序并且返回 (new in v1.2) 
-</li><li>Goto:跳转到特定的priority, extension, 或context(专用名词) 
-</li><li>GotoIf:带条件判断的Goto 
-</li><li>GotoIfTime:带时间条件判断的Goto 
-</li><li>Random:在拨号栏中随机跳动 
-</li><li>ResponseTimeout:设置等候回应的最长时间 
-</li><li>Return:从Gosub或GosubIf返回(new in v1.2) 
-</li><li>StackPop:删除返回地址，但没有返回(new in v1.2) 
-</li><li>While:开始一个当循环- *1.2beta 
-</li><li>EndWhile:结束一个当循环 - *1.2beta 
-</li><li>ExecIf:条件执行 - *1.2beta 
-</li><li>ExitWhile:退出循环 </li></ul>
-<p>　<br><strong>字符串与变化处理</strong></p>
-<ul>
-<li>Imp<wbr>ortVar:变量赋值 
-</li><li>Math:进行简单的计算 
-</li><li>SetGlobalVar:赋数值变量 
-</li><li>Set:设置通道变量和功能值 
-</li><li>SetVar:赋数值变量(如果不允许，使用 Set) 
-</li><li>DBRewrite:执行的Perl兼容正则表达式和替代了一个MySQL数据库。 
-</li><li>DumpChan:清除有关这个通道的呼叫信息 </li></ul>
-<p><br><strong>语音:放音</strong></p>
-<ul>
-<li>Background:在等待分机的时候播放声音文件 
-</li><li>BackgroundDetect:通话检测背景音文件 
-</li><li>ControlPlayback:用快进，重绕和退出当前命令控制器播放声音文件 
-</li><li>DateTime:报出日期/和时间(已经废了) 
-</li><li>Echo:重复声音回复到用户端 
-</li><li>Festival:使用Festival语音合成器(Festival是一个开源的TTS)朗诵课文 
-</li><li>Milliwatt:在0分贝产生持续的1000赫兹的音调 
-</li><li>MP3Player:播放MP3声音文件 
-</li><li>MusicOnHold:无限期地播放音乐 
-</li><li>Playback:播放一个声音文件 
-</li><li>Playtones:当执行其它命令的时候播放声音列表 
-</li><li>SayUnixTime:报出日期/和时间 
-</li><li>SayAlpha:报出字母 
-</li><li>SayDigits:报出阿拉伯数字 
-</li><li>SayNumber:报出号码 
-</li><li>SayPhonetic:报出语音 
-</li><li>SetMusicOnHold:在控制系统上设置默认的音乐 
-</li><li>SetLanguage:为录音重放设置语言转换 
-</li><li>StopPlaytones:停止播放音调列表 </li></ul>
-<p><br><strong>语音:录音和监测</strong></p>
-<ul>
-<li>ALSAMonitor:监测ALSA控制台 
-</li><li>ChangeMonitor:转换监测的路线文件名 
-</li><li>ChanSpy:通用的通道插话 
-</li><li>Dictate:录音和回放 
-</li><li>MixMonitor:记录和混合呼叫语音（不同于监视器）v1.2.x 
-</li><li>Monitor:录音电话会话到声音文件 
-</li><li>Record:通话录音保存到语音文件 
-</li><li>StopMonitor:停止监测路线 
-</li><li>StopMixMonitor:停止监视通道监测MixMonitor </li></ul>
-<p><br>　<br><strong>SIP 命令</strong></p>
-<ul>
-<li>SIPdtmfMode:在SIP呼叫过程中转换DTMF模式 
-</li><li>SIP_HEADER():挑选SIP invite消息的任何header（取代了SIPGetHeader ） 
-</li><li>SIPAddHeader:填标题到外部的SIP邀请 </li></ul>
-<p>　<br><strong>DAHDI（过去的ZAP）命令</strong></p>
-<ul>
-<li>Flash:刷新到Zap中继 
-</li><li>DAHDIBarge:Barge in DAHDI 通道(原来的ZapBarge) 
-</li><li>ZapCD:ISDN call deflection (bristuff) 
-</li><li>BristuffZapEC:Echo cancellation on/off (bristuff) 
-</li><li>DAHDISendKeypadFacility:Send digits out of band over a PRI 
-</li><li>DAHDIRAS:提供ISDN数据服务 (原来的ZapRAS) 
-</li><li>DAHDIScan:扫描DAHDI通道到监控呼叫(原来的ZapScan) </li></ul>
-<p><br><strong>语音邮件和会议</strong></p>
-<ul>
-<li>Directory:规定语音邮件扩展目录 
-</li><li>HasNewVoicemail:有条件的分支到优先权＋101 
-</li><li>MailboxExists:检查邮箱是否存在 
-</li><li>MeetMe:简单的 MeetMe 会议桥 
-</li><li>MeetMeAdmin:MeetMe 会议管理 
-</li><li>MeetMeCount:MeetMe参与者统计 
-</li><li>MiniVM:Mini-Voicemail (new in v1.6) 
-</li><li>VoiceMail:语音留言 
-</li><li>VoiceMailMain:进入语音系统 
-</li><li>VMAuthenticate:基于语音邮箱鉴别用户 </li></ul>
-<p><br><strong>呼叫队列和ACD操纵</strong></p>
-<ul>
-<li>AddQueueMember:动态添加排队成员 
-</li><li>AgentCallbackLogin:呼叫座席回叫注册 
-</li><li>AgentLogin:呼叫座席注册 
-</li><li>AgentMonitorOutgoing:记录座席的对外呼叫 
-</li><li>ParkAndAnnounce:驻留通告 
-</li><li>PauseQueueMemeber:暂停一个座席 
-</li><li>ParkedCall:回复被停放的呼叫 
-</li><li>Queue:排队等代呼叫 
-</li><li>RemoveQueueMember:动态移除列队成员 
-</li><li>UnpauseQueueMemeber:恢复一个座席 </li></ul>
-<p><br><strong>警报监测/中心站</strong></p>
-<ul>
-<li>AlarmReceiver:仿效一个Ademco 连接ID的警报接受站 </li></ul>
-<p><br><strong>业余广播/转发连接</strong></p>
-<ul>
-<li>Rpt:支持业余无线电广播和商业化的两种转发器连接 </li></ul>
-<p><br><strong>外部应用（非Digium的CVS里）</strong></p>
-<ul>
-<li>Asterisk app_dbodc:用unixODBC进行拨号方案修正 
-</li><li>DynExtenDB:数据库中的存储扩充 
-</li><li>Iconv:字符转换设置 
-</li><li>app Prepaid:为Postgres 所设计的 
-</li><li>PPPD:邮件后台程序连接器 </li></ul>
-<p><br><strong>Bristuff &amp; zaphfc applications</strong></p>
-<ul>
-<li>PickUp:大多数路线是独立的；是bristuff片的一部分 
-</li><li>PickUpChan:接收指定路线 
-</li><li>BristuffPickupSIPuri 
-</li><li>PickDown:挂断长途电话 
-</li><li>Steal:接受中转电话 
-</li><li>Devstate:产生一种安装设备驱动程序状态来改变事件（忙，打电话…） 
-</li><li>Segfault:用 segfault 撞击Asterisk 
-</li><li>ZapEC:对于Zap能或者不能的回波消除 
-</li><li>Autoanswer:在指定范围内自动回话 
-</li><li>AutoanswerLogin:登陆到自动回话应用程序 </li></ul>
-<p><br><strong>ISDN应用</strong></p>
-<ul>
-<li>ISDN重叠拨号 </li></ul>
-<p><br><strong>Sirrix通道的应用</strong></p>
-<ul>
-<li>SrxEchoCan:不能/能回波消除 
-</li><li>SrxDeflect:偏转进入的电话 
+<div class="bct fc05 fc11 nbw-blog ztag js-fs2"><p>Asterisk的拨号计划命令，翻译自<br>http://www.voip-info.org/wiki/view/Asterisk+-+documentation+of+application+commands</p><br />
+<p>网上有个《asterisk app命令中文翻译》，版本比较老，内容更像是软件翻译的。我参考了下，并根据voip-info.org现有新版本做了些修正。由于内容很多名词比较专业，翻译的不够完整，英文实在不好的可以参考一下。</p><br />
+<p><strong>Asterisk Dialplan Commands </strong><br><strong>常规命令</strong></p><br />
+<ul><br />
+<li>Authenticate:鉴别用户 <br />
+</li><li>VMAuthenticate:根据“voicemail.conf”鉴别用户 <br />
+</li><li>Bridge:连接两个专用来话 (1.6+) <br />
+</li><li>ChannelRedirect:重定向现有的通道到拨号计划 <br />
+</li><li>Curl:允许接受外部的URLs。并且支持POSTing，不支持CURL。 <br />
+</li><li>DUNDiLookup:用DUNDi查寻号码 <br />
+</li><li>Log:向日志文件中添加文件 (1.6+) <br />
+</li><li>JabberSend:经过Jabber发送文件消息(Jabber是一个即时通信软件) <br />
+</li><li>Page:Page a mobile device (new in Asterisk v1.2) <br />
+</li><li>SendDTMF:发送专用的DTMF数据 <br />
+</li><li>SendImage:发送图像文件 <br />
+</li><li>SendText:发送给客户文本消息 <br />
+</li><li>SendURL:发送给客户URL用以显示 <br />
+</li><li>System:执行系统命令 <br />
+</li><li>Transfer:将呼叫方转移到另一个分机 <br />
+</li><li>TrySystem:执行系统命令并且总是返回0 <br />
+</li><li>Wait:稍等 <br />
+</li><li>WaitExte:等待呼叫方拨打一个新的分机 <br />
+</li><li>WaitForRing:等待呼叫申请 <br />
+</li><li>WaitMusicOnHold:等待，在线拨放音乐(1.6) </li></ul><br />
+<p><br><strong>话单与计费</strong></p><br />
+<ul><br />
+<li>ForkCDR:将CDR分成两个独立的实体 <br />
+</li><li>NoCDR:确保 asterisk没有把CRD保存为特定的呼叫 <br />
+</li><li>ResetCDR:重置CDR数据 <br />
+</li><li>SetAccount:设置帐簿号码 <br />
+</li><li>SetAMAflags:开通AMA标志开户的渠道 <br />
+</li><li>SetCDRUserField:建立CDR用户领域 <br />
+</li><li>AppendCDRUserField:给CDR用户附加数据 </li></ul><br />
+<p><br><strong>呼叫管理(hangup, answer, dial, etc)</strong></p><br />
+<ul><br />
+<li>AMD:侦测自动应答机 <br />
+</li><li>Answer:应答一个振铃的通道 <br />
+</li><li>Busy:示忙，等待挂断 <br />
+</li><li>ChanIsAvail:检测通道可用性 <br />
+</li><li>Congestion:显示拥塞等待挂断 <br />
+</li><li>Dial:设置一个呼叫连接当前的通道 <br />
+</li><li>DISA:直接访问内部系统 <br />
+</li><li>Hangup:无条件挂断 <br />
+</li><li>RetryDial:一个电话，重试失败，允许可选的分机 <br />
+</li><li>Ringing:显示呼叫 </li></ul><br />
+<p><br><strong>呼叫方描述&nbsp; (ID, Name etc)</strong></p><br />
+<ul><br />
+<li>CallingPres:更改呼叫方的身份介绍 <br />
+</li><li>LookupBlacklist:从黑名单数据库上查询访客的身份 姓名和号码 <br />
+</li><li>LookupCIDName:从当地的数据库查询访客的身份和姓名 <br />
+</li><li>PrivacyManager:如果没有CallerID过来，要求输入电话号码 <br />
+</li><li>SetCallerID:建立CallerID，发生矛盾服从CallerID <br />
+</li><li>SetCallerPres:建立访客资料的独立信道 <br />
+</li><li>SetCIDName:建立呼叫者身份 姓名，发生矛盾服从CallerID <br />
+</li><li>SetCIDNum:只建立访客的身份号码（没有姓名），发生矛盾服从CallerID <br />
+</li><li>SoftHangup:请求挂断转到另一个信道 <br />
+</li><li>Zapateller:拥SIT阻止远程商人 </li></ul><br />
+<p><br><strong>ADSI</strong></p><br />
+<ul><br />
+<li>ADSIProg:将Asterisk ADSI脚本加载到电话 <br />
+</li><li>GetCPEID:获得ADSI CPE ID </li></ul><br />
+<p><br><strong>数据库操作</strong></p><br />
+<ul><br />
+<li>DBdel:从数据库中删除一个键 <br />
+</li><li>DBdeltree:从数据库中删除一批数据 <br />
+</li><li>DBget:从数据库中取出数值. 发生矛盾服从DB. <br />
+</li><li>DBput:在数据库中储存一个数值. 发生矛盾服从DB. <br />
+</li><li>MYSQL:执行不同的 mySQL 数据库行为 <br />
+</li><li>RealTime:使用实时数据库资料填充变量 <br />
+</li><li>RealTimeUpdate:使用实时数据库更新字段 </li></ul><br />
+<p><br><strong>应用程序整合</strong></p><br />
+<ul><br />
+<li>AGI:执行一套AGI应用程序 <br />
+</li><li>DeadAGI:在中断的信道上执行AGI <br />
+</li><li>EAGI:在音频通道上执行一套 AGI 适应程序 <br />
+</li><li>EnumLookup:在 ENUM 中查找号码 <br />
+</li><li>ExternalIVR:执行扩展IVR引擎 <br />
+</li><li>Jack:Interface to JACK audio for audio manipulation (1.6+) <br />
+</li><li>Macro:执行宏 <br />
+</li><li>MacroExclusive:同一时间只有一个通道可呼叫这个宏，所有其他人只能等待(1.4) <br />
+</li><li>MacroExit:退出的宏，就像它已全部完成 (1.4) <br />
+</li><li>NoOp:不进行操作，可将数值打印到控制台进行调试 <br />
+</li><li>Perl:res perl 是Apache 的 mod_perl, 只适用于 Asterisk <br />
+</li><li>PHP:res_php 不需要就可将PHP与进行一体化处理 <br />
+</li><li>Read:读有效的DTMF变量 <br />
+</li><li>TXTCIDName:从 TXT 记录中查找访客的姓名 <br />
+</li><li>UserEvent:发送专用事件给管理接口 </li></ul><br />
+<p><br>　<br><strong>控制流与超时设定</strong></p><br />
+<ul><br />
+<li>AbsoluteTimeout:设置最长呼叫时间 <br />
+</li><li>DigitTimeout:设置数字间的最长时间间隔 <br />
+</li><li>Gosub:跳到一个子程序并且返回 (new in v1.2) <br />
+</li><li>GosubIf:有条件的跳到一个子程序并且返回 (new in v1.2) <br />
+</li><li>Goto:跳转到特定的priority, extension, 或context(专用名词) <br />
+</li><li>GotoIf:带条件判断的Goto <br />
+</li><li>GotoIfTime:带时间条件判断的Goto <br />
+</li><li>Random:在拨号栏中随机跳动 <br />
+</li><li>ResponseTimeout:设置等候回应的最长时间 <br />
+</li><li>Return:从Gosub或GosubIf返回(new in v1.2) <br />
+</li><li>StackPop:删除返回地址，但没有返回(new in v1.2) <br />
+</li><li>While:开始一个当循环- *1.2beta <br />
+</li><li>EndWhile:结束一个当循环 - *1.2beta <br />
+</li><li>ExecIf:条件执行 - *1.2beta <br />
+</li><li>ExitWhile:退出循环 </li></ul><br />
+<p>　<br><strong>字符串与变化处理</strong></p><br />
+<ul><br />
+<li>Imp<wbr>ortVar:变量赋值 <br />
+</li><li>Math:进行简单的计算 <br />
+</li><li>SetGlobalVar:赋数值变量 <br />
+</li><li>Set:设置通道变量和功能值 <br />
+</li><li>SetVar:赋数值变量(如果不允许，使用 Set) <br />
+</li><li>DBRewrite:执行的Perl兼容正则表达式和替代了一个MySQL数据库。 <br />
+</li><li>DumpChan:清除有关这个通道的呼叫信息 </li></ul><br />
+<p><br><strong>语音:放音</strong></p><br />
+<ul><br />
+<li>Background:在等待分机的时候播放声音文件 <br />
+</li><li>BackgroundDetect:通话检测背景音文件 <br />
+</li><li>ControlPlayback:用快进，重绕和退出当前命令控制器播放声音文件 <br />
+</li><li>DateTime:报出日期/和时间(已经废了) <br />
+</li><li>Echo:重复声音回复到用户端 <br />
+</li><li>Festival:使用Festival语音合成器(Festival是一个开源的TTS)朗诵课文 <br />
+</li><li>Milliwatt:在0分贝产生持续的1000赫兹的音调 <br />
+</li><li>MP3Player:播放MP3声音文件 <br />
+</li><li>MusicOnHold:无限期地播放音乐 <br />
+</li><li>Playback:播放一个声音文件 <br />
+</li><li>Playtones:当执行其它命令的时候播放声音列表 <br />
+</li><li>SayUnixTime:报出日期/和时间 <br />
+</li><li>SayAlpha:报出字母 <br />
+</li><li>SayDigits:报出阿拉伯数字 <br />
+</li><li>SayNumber:报出号码 <br />
+</li><li>SayPhonetic:报出语音 <br />
+</li><li>SetMusicOnHold:在控制系统上设置默认的音乐 <br />
+</li><li>SetLanguage:为录音重放设置语言转换 <br />
+</li><li>StopPlaytones:停止播放音调列表 </li></ul><br />
+<p><br><strong>语音:录音和监测</strong></p><br />
+<ul><br />
+<li>ALSAMonitor:监测ALSA控制台 <br />
+</li><li>ChangeMonitor:转换监测的路线文件名 <br />
+</li><li>ChanSpy:通用的通道插话 <br />
+</li><li>Dictate:录音和回放 <br />
+</li><li>MixMonitor:记录和混合呼叫语音（不同于监视器）v1.2.x <br />
+</li><li>Monitor:录音电话会话到声音文件 <br />
+</li><li>Record:通话录音保存到语音文件 <br />
+</li><li>StopMonitor:停止监测路线 <br />
+</li><li>StopMixMonitor:停止监视通道监测MixMonitor </li></ul><br />
+<p><br>　<br><strong>SIP 命令</strong></p><br />
+<ul><br />
+<li>SIPdtmfMode:在SIP呼叫过程中转换DTMF模式 <br />
+</li><li>SIP_HEADER():挑选SIP invite消息的任何header（取代了SIPGetHeader ） <br />
+</li><li>SIPAddHeader:填标题到外部的SIP邀请 </li></ul><br />
+<p>　<br><strong>DAHDI（过去的ZAP）命令</strong></p><br />
+<ul><br />
+<li>Flash:刷新到Zap中继 <br />
+</li><li>DAHDIBarge:Barge in DAHDI 通道(原来的ZapBarge) <br />
+</li><li>ZapCD:ISDN call deflection (bristuff) <br />
+</li><li>BristuffZapEC:Echo cancellation on/off (bristuff) <br />
+</li><li>DAHDISendKeypadFacility:Send digits out of band over a PRI <br />
+</li><li>DAHDIRAS:提供ISDN数据服务 (原来的ZapRAS) <br />
+</li><li>DAHDIScan:扫描DAHDI通道到监控呼叫(原来的ZapScan) </li></ul><br />
+<p><br><strong>语音邮件和会议</strong></p><br />
+<ul><br />
+<li>Directory:规定语音邮件扩展目录 <br />
+</li><li>HasNewVoicemail:有条件的分支到优先权＋101 <br />
+</li><li>MailboxExists:检查邮箱是否存在 <br />
+</li><li>MeetMe:简单的 MeetMe 会议桥 <br />
+</li><li>MeetMeAdmin:MeetMe 会议管理 <br />
+</li><li>MeetMeCount:MeetMe参与者统计 <br />
+</li><li>MiniVM:Mini-Voicemail (new in v1.6) <br />
+</li><li>VoiceMail:语音留言 <br />
+</li><li>VoiceMailMain:进入语音系统 <br />
+</li><li>VMAuthenticate:基于语音邮箱鉴别用户 </li></ul><br />
+<p><br><strong>呼叫队列和ACD操纵</strong></p><br />
+<ul><br />
+<li>AddQueueMember:动态添加排队成员 <br />
+</li><li>AgentCallbackLogin:呼叫座席回叫注册 <br />
+</li><li>AgentLogin:呼叫座席注册 <br />
+</li><li>AgentMonitorOutgoing:记录座席的对外呼叫 <br />
+</li><li>ParkAndAnnounce:驻留通告 <br />
+</li><li>PauseQueueMemeber:暂停一个座席 <br />
+</li><li>ParkedCall:回复被停放的呼叫 <br />
+</li><li>Queue:排队等代呼叫 <br />
+</li><li>RemoveQueueMember:动态移除列队成员 <br />
+</li><li>UnpauseQueueMemeber:恢复一个座席 </li></ul><br />
+<p><br><strong>警报监测/中心站</strong></p><br />
+<ul><br />
+<li>AlarmReceiver:仿效一个Ademco 连接ID的警报接受站 </li></ul><br />
+<p><br><strong>业余广播/转发连接</strong></p><br />
+<ul><br />
+<li>Rpt:支持业余无线电广播和商业化的两种转发器连接 </li></ul><br />
+<p><br><strong>外部应用（非Digium的CVS里）</strong></p><br />
+<ul><br />
+<li>Asterisk app_dbodc:用unixODBC进行拨号方案修正 <br />
+</li><li>DynExtenDB:数据库中的存储扩充 <br />
+</li><li>Iconv:字符转换设置 <br />
+</li><li>app Prepaid:为Postgres 所设计的 <br />
+</li><li>PPPD:邮件后台程序连接器 </li></ul><br />
+<p><br><strong>Bristuff &amp; zaphfc applications</strong></p><br />
+<ul><br />
+<li>PickUp:大多数路线是独立的；是bristuff片的一部分 <br />
+</li><li>PickUpChan:接收指定路线 <br />
+</li><li>BristuffPickupSIPuri <br />
+</li><li>PickDown:挂断长途电话 <br />
+</li><li>Steal:接受中转电话 <br />
+</li><li>Devstate:产生一种安装设备驱动程序状态来改变事件（忙，打电话…） <br />
+</li><li>Segfault:用 segfault 撞击Asterisk <br />
+</li><li>ZapEC:对于Zap能或者不能的回波消除 <br />
+</li><li>Autoanswer:在指定范围内自动回话 <br />
+</li><li>AutoanswerLogin:登陆到自动回话应用程序 </li></ul><br />
+<p><br><strong>ISDN应用</strong></p><br />
+<ul><br />
+<li>ISDN重叠拨号 </li></ul><br />
+<p><br><strong>Sirrix通道的应用</strong></p><br />
+<ul><br />
+<li>SrxEchoCan:不能/能回波消除 <br />
+</li><li>SrxDeflect:偏转进入的电话 <br />
 </li><li>SrxMWI:在Sirrix组上 设置/重新设置信息等待指示（MWI） </li></ul></div>
 </body>
 </html>

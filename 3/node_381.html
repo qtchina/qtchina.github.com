@@ -6,22 +6,22 @@
 <title>PHP 5.3.1 Released</title>
 </head>
 <body>
-The PHP development team is proud to announce the immediate release of PHP 5.3.1. This is a maintenance release in the 5.3 series, which includes a large number of bug fixes. 
-
-Security Enhancements and Fixes in PHP 5.3.1: 
-Added "max_file_uploads" INI directive, which can be set to limit the number of file uploads per-request to 20 by default, to prevent possible DOS via temporary file exhaustion.
-Added missing sanity checks around exif processing.
-Fixed a safe_mode bypass in tempnam().
-Fixed a open_basedir bypass in posix_mkfifo().
-Fixed bug #50063 (safe_mode_include_dir fails).
-Fixed bug #44683 (popen crashes when an invalid mode is passed).
-
-Key Bug Fixes in PHP 5.3.1 include: 
-Fixed crash in com_print_typeinfo when an invalid typelib is given.
-Fixed crash in SQLiteDatabase::ArrayQuery() and SQLiteDatabase::SingleQuery() when calling using Reflection.
-Fixed crash when instantiating PDORow and PDOStatement through Reflection.
-Fixed bug #49910 (no support for ././@LongLink for long filenames in phar tar support).
-Fixed bug #49908 (throwing exception in __autoload crashes when interface is not defined).
+The PHP development team is proud to announce the immediate release of PHP 5.3.1. This is a maintenance release in the 5.3 series, which includes a large number of bug fixes. <br />
+<br />
+Security Enhancements and Fixes in PHP 5.3.1: <br />
+Added "max_file_uploads" INI directive, which can be set to limit the number of file uploads per-request to 20 by default, to prevent possible DOS via temporary file exhaustion.<br />
+Added missing sanity checks around exif processing.<br />
+Fixed a safe_mode bypass in tempnam().<br />
+Fixed a open_basedir bypass in posix_mkfifo().<br />
+Fixed bug #50063 (safe_mode_include_dir fails).<br />
+Fixed bug #44683 (popen crashes when an invalid mode is passed).<br />
+<br />
+Key Bug Fixes in PHP 5.3.1 include: <br />
+Fixed crash in com_print_typeinfo when an invalid typelib is given.<br />
+Fixed crash in SQLiteDatabase::ArrayQuery() and SQLiteDatabase::SingleQuery() when calling using Reflection.<br />
+Fixed crash when instantiating PDORow and PDOStatement through Reflection.<br />
+Fixed bug #49910 (no support for ././@LongLink for long filenames in phar tar support).<br />
+Fixed bug #49908 (throwing exception in __autoload crashes when interface is not defined).<br />
 Around 100 other bug fixes
 </body>
 </html>

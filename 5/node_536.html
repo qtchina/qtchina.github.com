@@ -6,174 +6,174 @@
 <title>在x86 linux 平台编译 IPP版本的pjsip</title>
 </head>
 <body>
-debian x86 5.0.x<br />
-gcc 4.3.2<br />
-ipp: /6.0.1.071 ia32<br />
-ipp-samples: 6.0.0.142<br />
-pjproject: 1.8.10<br />
-<br />
-路径说明，<br />
-$HOME=/home/yourname<br />
-ipp安装在 $HOME/intel/<br />
-ipp-sample放在$HOME/ipp/下。<br />
-<br />
-1. 下载并安装ipp<br />
-&nbsp;&nbsp;&nbsp;&nbsp;下载地址， <a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz">http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz</a> [<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz" target="_blank">^</a>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;申请试用31天的licence文件， <a href="https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=">https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=</a> [<a href="https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=" target="_blank">^</a>]<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;解压l_ipp_ia32_p_6.0.1.071.tar.gz<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; cd l_ipp_ia32_p_6.0.1.071<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; ./install<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;注意，这里使用非root用户安装，在注册一步，选用licence文件方式，输入申请到的licence文件路径。安装后目录结构，$HOME//intel/ipp/6.0.1.071/ia32/<br />
-<br />
-2. 编译ipp-samples中的speech-codecs编码，<br />
-&nbsp;&nbsp;&nbsp;下载，<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz">http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz</a> [<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz" target="_blank">^</a>]<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;解压，l_ipp-samples_p_6.0.0.142.tgz<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; cd ipp-samples/speech-codecs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; ./build32.sh<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;生成库路径为_bin/linux32_gccx/<br />
-<br />
-3. 设置IPPROOT, IPPSAMPLES环境变量。<br />
-<br />
-&nbsp;&nbsp;&nbsp;在$HOME/.bash_profile中加入:<br />
-<br />
-export IPPROOT=$HOME/intel/ipp/6.0.1.071/ia32/<br />
-export IPPSAMPLES=$HOME/xfsdev/ipp/ipp-samples<br />
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/intel/ipp/6.0.1.071/ia32/sharedlib/<br />
-<br />
-&nbsp;&nbsp;&nbsp;&gt; source $HOME/.bash_profile<br />
-&nbsp;&nbsp;&nbsp;&gt; env | grep IPP<br />
-<br />
-4. 编译动态链接IPP库版本的pjsip<br />
-&nbsp;&nbsp;&nbsp;下载pjsip, <a href="http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2">http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2</a> [<a href="http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2" target="_blank">^</a>]<br />
-<br />
-&nbsp;&nbsp;&nbsp;解压,<br />
-&nbsp;&nbsp;&nbsp;&gt; tar xvf pjproject-1.8.10.tar.bz2<br />
-&nbsp;&nbsp;&nbsp;&gt; cd pjproject-1.8.10<br />
-&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp;&gt; vi pjlib/include/pj/config_site.h<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加一行， #define PJMEDIA_HAS_INTEL_IPP	1<br />
-<br />
-&nbsp;&nbsp;&nbsp;&gt; ./configure --enable-ipp --with-ipp=$IPPROOT --with-ipp-samples=$IPPSAMPLES<br />
-&nbsp;&nbsp;&nbsp;&gt; make<br />
-&nbsp;&nbsp;&nbsp;&gt; ldd pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linux-gate.so.1 =&gt;  (0xb7f35000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippsc.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippsc.so.6.0 (0xb7f21000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libipps.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libipps.so.6.0 (0xb7ee1000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippsr.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippsr.so.6.0 (0xb7ec8000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippcore.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippcore.so.6.0 (0xb7ebe000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libguide.so =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libguide.so (0xb7e67000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libm.so.6 =&gt; /lib/i686/cmov/libm.so.6 (0xb7e39000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libnsl.so.1 =&gt; /lib/i686/cmov/libnsl.so.1 (0xb7e20000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;librt.so.1 =&gt; /lib/i686/cmov/librt.so.1 (0xb7e16000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libpthread.so.0 =&gt; /lib/i686/cmov/libpthread.so.0 (0xb7dfd000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libcrypto.so.0.9.8 =&gt; /usr/lib/i686/cmov/libcrypto.so.0.9.8 (0xb7caa000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libssl.so.0.9.8 =&gt; /usr/lib/i686/cmov/libssl.so.0.9.8 (0xb7c63000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libc.so.6 =&gt; /lib/i686/cmov/libc.so.6 (0xb7b08000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libdl.so.2 =&gt; /lib/i686/cmov/libdl.so.2 (0xb7b03000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libiomp5.so =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libiomp5.so (0xb7aa5000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/lib/ld-linux.so.2 (0xb7f36000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7a90000)<br />
-&nbsp;&nbsp;&nbsp;&gt; ls -lh pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br />
-&nbsp;&nbsp;&nbsp;&nbsp;-rwxr-xr-x 1 test test 1.8M Dec 26 16:54 pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br />
-&nbsp;&nbsp;&nbsp;&gt; ./pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;在进入pjsua命令行控制台，输入 d 命令，如果显示有G729编码，则编译成功，<br />
-<br />
-&nbsp;&nbsp;Total number of installed codecs: 23<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 0: pt=98 (speex @16KHz/1, 27.8Kbps, 20ms vad cng plc penh)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 1: pt=97 (speex @8KHz/1, 15.0Kbps, 20ms vad cng plc penh)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 2: pt=99 (speex @32KHz/1, 29.6Kbps, 20ms vad cng plc penh)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 3: pt=104 (iLBC @8KHz/1, 13.3Kbps, 30ms vad plc penh)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 4: pt=3 (GSM @8KHz/1, 13.2Kbps, 20ms vad plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 5: pt=0 (PCMU @8KHz/1, 64.0Kbps, 20ms vad plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 6: pt=8 (PCMA @8KHz/1, 64.0Kbps, 20ms vad plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 7: pt=9 (G722 @16KHz/1, 64.0Kbps, 20ms vad plc)&lt;br />
-&nbsp;&nbsp;&nbsp;Audio codec # 8: pt=105 (AMR @8KHz/1, 7.4Kbps, 40ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec # 9: pt=106 (AMR-WB @16KHz/1, 15.8Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000010: pt=18 (G729 @8KHz/1, 8.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000011: pt=4 (G723 @8KHz/1, 6.3Kbps, 30ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000012: pt=110 (G726-32 @8KHz/1, 32.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000013: pt=2 (G721 @8KHz/1, 32.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000014: pt=15 (G728 @8KHz/1, 16.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000015: pt=113 (G7221 @16KHz/1, 24.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000016: pt=114 (G7221 @16KHz/1, 32.0Kbps, 20ms vad cng plc)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000017: pt=11 (L16 @44KHz/1, 705.6Kbps, 10ms vad plc disabled)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000018: pt=10 (L16 @44KHz/2, 1.41Mbps, 10ms vad plc disabled)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000019: pt=100 (L16 @8KHz/1, 128.0Kbps, 20ms vad plc disabled)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000020: pt=101 (L16 @8KHz/2, 256.0Kbps, 20ms vad plc disabled)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000021: pt=102 (L16 @16KHz/1, 256.0Kbps, 20ms vad plc disabled)<br />
-&nbsp;&nbsp;&nbsp;Audio codec 0000022: pt=103 (L16 @16KHz/2, 512.0Kbps, 20ms vad plc disabled)<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果在执行上一步中的pjsua命令时这样，./pjsip-apps/bin/pjsua-i686-pc-linux-gnu: error while loading shared libraries: libippsc.so.6.0: cannot open shared object file: No such file or directory<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还需要注意设置LD_LIBRARY_PATH<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动态链接IPP库编译过程完成。但是，如果其他程序想链接该版本的pjsip库时，也需要处理链接IPP的问题，非常不方便，接下来编译静态链接IPP版本的pjsip<br />
-<br />
-5. 编译静态链接IPP库版本的pjsip<br />
-<br />
-&nbsp;&nbsp;&nbsp;主要是在链接阶段对build.mak工程文件的修改，其他地方设置与前一步一致。<br />
-<br />
-&nbsp;&nbsp;&nbsp;同样，解压pjproject-1.8.10.tar.bz2到一个新的目录，<br />
-<br />
-&nbsp;&nbsp;&nbsp;&gt; cd pjproject-1.8.10-static-ipp<br />
-<br />
-&nbsp;&nbsp;&nbsp;configure一步仍旧使用上一步的命令，<br />
-&nbsp;&nbsp;&nbsp;&gt; ./configure --enable-ipp --with-ipp=$IPPROOT --with-ipp-samples=$IPPSAMPLES<br />
-&nbsp;<br />
-&nbsp;&nbsp;&nbsp;接下来要修改./build.mak, 这是configure生成的，在make时使用。对这个文件的修改在执行configure后修改消失。<br />
-<br />
-&nbsp;&nbsp;&nbsp;修改build.mak中的两个变量的值，APP_LDFLAGS, APP_LDLIBS,<br />
-<br />
-&nbsp;&nbsp;&nbsp;第一个变量APP_LDFLAGS，需要把-L$HOME/intel/ipp/6.0.1.071/ia32/sharedlib修改为，-L$HOME/intel/ipp/6.0.1.071/ia32/lib，告诉链接时搜索静态库所在目录。<br />
-<br />
-&nbsp;&nbsp;&nbsp;第二个变量APP_LDLIBS, 需要把IPP的动态库改为静态库名字，列表如下，注意，库的顺序一定按给出的顺序，否则编译的时候会有许多undefined reference问题。列表放在-lpj-$(TARGET_NAME) \行下面： （第一行和最后一行不需要修改，在这列出以便查找定位）<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lpj-$(TARGET_NAME) \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lspeech -lcore \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippdcemerged -lippdcmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippccemerged -lippccmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippacemerged -lippacmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippsremerged -lippsrmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippvcemerged -lippvcmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippiemerged -lippimerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippjemerged -lippjmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippscemerged -lippscmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippsemerged -lippsmerged \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippcore \<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lm -lnsl -lrt -lpthread -lcrypto -lssl<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在执行make编译出来的pjsua-程序即为静态链接IPP库的程序了。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; make<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&gt; ldd pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linux-gate.so.1 =&gt;  (0xb7f58000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libm.so.6 =&gt; /lib/i686/cmov/libm.so.6 (0xb7f28000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libnsl.so.1 =&gt; /lib/i686/cmov/libnsl.so.1 (0xb7f0f000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;librt.so.1 =&gt; /lib/i686/cmov/librt.so.1 (0xb7f05000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libpthread.so.0 =&gt; /lib/i686/cmov/libpthread.so.0 (0xb7eec000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libcrypto.so.0.9.8 =&gt; /usr/lib/i686/cmov/libcrypto.so.0.9.8 (0xb7d99000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libssl.so.0.9.8 =&gt; /usr/lib/i686/cmov/libssl.so.0.9.8 (0xb7d52000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libc.so.6 =&gt; /lib/i686/cmov/libc.so.6 (0xb7bf7000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/lib/ld-linux.so.2 (0xb7f59000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libdl.so.2 =&gt; /lib/i686/cmov/libdl.so.2 (0xb7bf2000)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7bdd000)<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt; ls -lh pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-rwxr-xr-x 1 test test 6.5M Dec 26 20:59 pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br />
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相比较动态链接IPP的程序，这个静态链接的版本明显变大了许多。<br />
-<br />
-6. 在使用pjsip的其他应用程序中的编译链接问题<br />
-&nbsp;&nbsp;&nbsp;对于动态链接的情况，在链接pjsip的同时，还需要维护工程文件，把IPP的include头文件路径加入到CFLAGS, 把IPP的sharedlib路径加入到LDFLAGS, 把IPP的动态库列举到工程文件中，-lippcore -lippcs等。<br />
-<br />
-&nbsp;&nbsp;&nbsp;对于静态链接的情况，其他应该程序不需要对IPP作任何设置，只把这个程序形成只依赖pjsip，无视pjsip对IPP的依赖即可，因为所有用到的IPP代码已经在pjsip的库中了。不过程序文件会变大不少。<br />
-<br />
-<br />
-参考：<br />
-<a href="http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs">http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs</a> [<a href="http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs" target="_blank">^</a>]<br />
-<a href="http://software.intel.com/en-us/forums/showthread.php?t=50294">http://software.intel.com/en-us/forums/showthread.php?t=50294</a> [<a href="http://software.intel.com/en-us/forums/showthread.php?t=50294" target="_blank">^</a>]<br />
+debian x86 5.0.x<br /><br />
+gcc 4.3.2<br /><br />
+ipp: /6.0.1.071 ia32<br /><br />
+ipp-samples: 6.0.0.142<br /><br />
+pjproject: 1.8.10<br /><br />
+<br /><br />
+路径说明，<br /><br />
+$HOME=/home/yourname<br /><br />
+ipp安装在 $HOME/intel/<br /><br />
+ipp-sample放在$HOME/ipp/下。<br /><br />
+<br /><br />
+1. 下载并安装ipp<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;下载地址， <a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz">http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz</a> [<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp_ia32_p_6.0.1.071.tar.gz" target="_blank">^</a>]<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;申请试用31天的licence文件， <a href="https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=">https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=</a> [<a href="https://registrationcenter.intel.com/RegCenter/AutoGen.aspx?ProductID=1453&amp;AccountID=&amp;EmailID=&amp;ProgramID=&amp;RequestDt=&amp;rm=EVAL&amp;lang=" target="_blank">^</a>]<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;解压l_ipp_ia32_p_6.0.1.071.tar.gz<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; cd l_ipp_ia32_p_6.0.1.071<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; ./install<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;注意，这里使用非root用户安装，在注册一步，选用licence文件方式，输入申请到的licence文件路径。安装后目录结构，$HOME//intel/ipp/6.0.1.071/ia32/<br /><br />
+<br /><br />
+2. 编译ipp-samples中的speech-codecs编码，<br /><br />
+&nbsp;&nbsp;&nbsp;下载，<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz">http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz</a> [<a href="http://registrationcenter-download.intel.com/irc_nas/1326/l_ipp-samples_p_6.0.0.142.tgz" target="_blank">^</a>]<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;解压，l_ipp-samples_p_6.0.0.142.tgz<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; cd ipp-samples/speech-codecs<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; ./build32.sh<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;生成库路径为_bin/linux32_gccx/<br /><br />
+<br /><br />
+3. 设置IPPROOT, IPPSAMPLES环境变量。<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;在$HOME/.bash_profile中加入:<br /><br />
+<br /><br />
+export IPPROOT=$HOME/intel/ipp/6.0.1.071/ia32/<br /><br />
+export IPPSAMPLES=$HOME/xfsdev/ipp/ipp-samples<br /><br />
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/intel/ipp/6.0.1.071/ia32/sharedlib/<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; source $HOME/.bash_profile<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; env | grep IPP<br /><br />
+<br /><br />
+4. 编译动态链接IPP库版本的pjsip<br /><br />
+&nbsp;&nbsp;&nbsp;下载pjsip, <a href="http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2">http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2</a> [<a href="http://www.pjsip.org/release/1.8.10/pjproject-1.8.10.tar.bz2" target="_blank">^</a>]<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;解压,<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; tar xvf pjproject-1.8.10.tar.bz2<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; cd pjproject-1.8.10<br /><br />
+&nbsp;&nbsp;&nbsp;<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; vi pjlib/include/pj/config_site.h<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加一行， #define PJMEDIA_HAS_INTEL_IPP	1<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; ./configure --enable-ipp --with-ipp=$IPPROOT --with-ipp-samples=$IPPSAMPLES<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; make<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; ldd pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linux-gate.so.1 =&gt;  (0xb7f35000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippsc.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippsc.so.6.0 (0xb7f21000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libipps.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libipps.so.6.0 (0xb7ee1000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippsr.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippsr.so.6.0 (0xb7ec8000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libippcore.so.6.0 =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libippcore.so.6.0 (0xb7ebe000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libguide.so =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libguide.so (0xb7e67000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libm.so.6 =&gt; /lib/i686/cmov/libm.so.6 (0xb7e39000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libnsl.so.1 =&gt; /lib/i686/cmov/libnsl.so.1 (0xb7e20000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;librt.so.1 =&gt; /lib/i686/cmov/librt.so.1 (0xb7e16000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libpthread.so.0 =&gt; /lib/i686/cmov/libpthread.so.0 (0xb7dfd000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libcrypto.so.0.9.8 =&gt; /usr/lib/i686/cmov/libcrypto.so.0.9.8 (0xb7caa000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libssl.so.0.9.8 =&gt; /usr/lib/i686/cmov/libssl.so.0.9.8 (0xb7c63000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libc.so.6 =&gt; /lib/i686/cmov/libc.so.6 (0xb7b08000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libdl.so.2 =&gt; /lib/i686/cmov/libdl.so.2 (0xb7b03000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libiomp5.so =&gt; $HOME/intel/ipp/6.0.1.071/ia32/sharedlib/libiomp5.so (0xb7aa5000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/lib/ld-linux.so.2 (0xb7f36000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7a90000)<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; ls -lh pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;-rwxr-xr-x 1 test test 1.8M Dec 26 16:54 pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; ./pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;在进入pjsua命令行控制台，输入 d 命令，如果显示有G729编码，则编译成功，<br /><br />
+<br /><br />
+&nbsp;&nbsp;Total number of installed codecs: 23<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 0: pt=98 (speex @16KHz/1, 27.8Kbps, 20ms vad cng plc penh)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 1: pt=97 (speex @8KHz/1, 15.0Kbps, 20ms vad cng plc penh)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 2: pt=99 (speex @32KHz/1, 29.6Kbps, 20ms vad cng plc penh)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 3: pt=104 (iLBC @8KHz/1, 13.3Kbps, 30ms vad plc penh)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 4: pt=3 (GSM @8KHz/1, 13.2Kbps, 20ms vad plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 5: pt=0 (PCMU @8KHz/1, 64.0Kbps, 20ms vad plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 6: pt=8 (PCMA @8KHz/1, 64.0Kbps, 20ms vad plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 7: pt=9 (G722 @16KHz/1, 64.0Kbps, 20ms vad plc)&lt;br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 8: pt=105 (AMR @8KHz/1, 7.4Kbps, 40ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec # 9: pt=106 (AMR-WB @16KHz/1, 15.8Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000010: pt=18 (G729 @8KHz/1, 8.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000011: pt=4 (G723 @8KHz/1, 6.3Kbps, 30ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000012: pt=110 (G726-32 @8KHz/1, 32.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000013: pt=2 (G721 @8KHz/1, 32.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000014: pt=15 (G728 @8KHz/1, 16.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000015: pt=113 (G7221 @16KHz/1, 24.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000016: pt=114 (G7221 @16KHz/1, 32.0Kbps, 20ms vad cng plc)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000017: pt=11 (L16 @44KHz/1, 705.6Kbps, 10ms vad plc disabled)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000018: pt=10 (L16 @44KHz/2, 1.41Mbps, 10ms vad plc disabled)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000019: pt=100 (L16 @8KHz/1, 128.0Kbps, 20ms vad plc disabled)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000020: pt=101 (L16 @8KHz/2, 256.0Kbps, 20ms vad plc disabled)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000021: pt=102 (L16 @16KHz/1, 256.0Kbps, 20ms vad plc disabled)<br /><br />
+&nbsp;&nbsp;&nbsp;Audio codec 0000022: pt=103 (L16 @16KHz/2, 512.0Kbps, 20ms vad plc disabled)<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果在执行上一步中的pjsua命令时这样，./pjsip-apps/bin/pjsua-i686-pc-linux-gnu: error while loading shared libraries: libippsc.so.6.0: cannot open shared object file: No such file or directory<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还需要注意设置LD_LIBRARY_PATH<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动态链接IPP库编译过程完成。但是，如果其他程序想链接该版本的pjsip库时，也需要处理链接IPP的问题，非常不方便，接下来编译静态链接IPP版本的pjsip<br /><br />
+<br /><br />
+5. 编译静态链接IPP库版本的pjsip<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;主要是在链接阶段对build.mak工程文件的修改，其他地方设置与前一步一致。<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;同样，解压pjproject-1.8.10.tar.bz2到一个新的目录，<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; cd pjproject-1.8.10-static-ipp<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;configure一步仍旧使用上一步的命令，<br /><br />
+&nbsp;&nbsp;&nbsp;&gt; ./configure --enable-ipp --with-ipp=$IPPROOT --with-ipp-samples=$IPPSAMPLES<br /><br />
+&nbsp;<br /><br />
+&nbsp;&nbsp;&nbsp;接下来要修改./build.mak, 这是configure生成的，在make时使用。对这个文件的修改在执行configure后修改消失。<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;修改build.mak中的两个变量的值，APP_LDFLAGS, APP_LDLIBS,<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;第一个变量APP_LDFLAGS，需要把-L$HOME/intel/ipp/6.0.1.071/ia32/sharedlib修改为，-L$HOME/intel/ipp/6.0.1.071/ia32/lib，告诉链接时搜索静态库所在目录。<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;第二个变量APP_LDLIBS, 需要把IPP的动态库改为静态库名字，列表如下，注意，库的顺序一定按给出的顺序，否则编译的时候会有许多undefined reference问题。列表放在-lpj-$(TARGET_NAME) \行下面： （第一行和最后一行不需要修改，在这列出以便查找定位）<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lpj-$(TARGET_NAME) \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lspeech -lcore \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippdcemerged -lippdcmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippccemerged -lippccmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippacemerged -lippacmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippsremerged -lippsrmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippvcemerged -lippvcmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippiemerged -lippimerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippjemerged -lippjmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippscemerged -lippscmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippsemerged -lippsmerged \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lippcore \<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lm -lnsl -lrt -lpthread -lcrypto -lssl<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在执行make编译出来的pjsua-程序即为静态链接IPP库的程序了。<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; make<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&gt; ldd pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linux-gate.so.1 =&gt;  (0xb7f58000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libm.so.6 =&gt; /lib/i686/cmov/libm.so.6 (0xb7f28000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libnsl.so.1 =&gt; /lib/i686/cmov/libnsl.so.1 (0xb7f0f000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;librt.so.1 =&gt; /lib/i686/cmov/librt.so.1 (0xb7f05000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libpthread.so.0 =&gt; /lib/i686/cmov/libpthread.so.0 (0xb7eec000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libcrypto.so.0.9.8 =&gt; /usr/lib/i686/cmov/libcrypto.so.0.9.8 (0xb7d99000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libssl.so.0.9.8 =&gt; /usr/lib/i686/cmov/libssl.so.0.9.8 (0xb7d52000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libc.so.6 =&gt; /lib/i686/cmov/libc.so.6 (0xb7bf7000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/lib/ld-linux.so.2 (0xb7f59000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libdl.so.2 =&gt; /lib/i686/cmov/libdl.so.2 (0xb7bf2000)<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7bdd000)<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt; ls -lh pjsip-apps/bin/pjsua-i686-pc-linux-gnu <br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-rwxr-xr-x 1 test test 6.5M Dec 26 20:59 pjsip-apps/bin/pjsua-i686-pc-linux-gnu<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相比较动态链接IPP的程序，这个静态链接的版本明显变大了许多。<br /><br />
+<br /><br />
+6. 在使用pjsip的其他应用程序中的编译链接问题<br /><br />
+&nbsp;&nbsp;&nbsp;对于动态链接的情况，在链接pjsip的同时，还需要维护工程文件，把IPP的include头文件路径加入到CFLAGS, 把IPP的sharedlib路径加入到LDFLAGS, 把IPP的动态库列举到工程文件中，-lippcore -lippcs等。<br /><br />
+<br /><br />
+&nbsp;&nbsp;&nbsp;对于静态链接的情况，其他应该程序不需要对IPP作任何设置，只把这个程序形成只依赖pjsip，无视pjsip对IPP的依赖即可，因为所有用到的IPP代码已经在pjsip的库中了。不过程序文件会变大不少。<br /><br />
+<br /><br />
+<br /><br />
+参考：<br /><br />
+<a href="http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs">http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs</a> [<a href="http://trac.pjsip.org/repos/wiki/Intel_IPP_Codecs" target="_blank">^</a>]<br /><br />
+<a href="http://software.intel.com/en-us/forums/showthread.php?t=50294">http://software.intel.com/en-us/forums/showthread.php?t=50294</a> [<a href="http://software.intel.com/en-us/forums/showthread.php?t=50294" target="_blank">^</a>]<br /><br />
 <a href="http://centosyum.com/centos/p-2452.html">http://centosyum.com/centos/p-2452.html</a> [<a href="http://centosyum.com/centos/p-2452.html" target="_blank">^</a>]<br />
 </body>
 </html>

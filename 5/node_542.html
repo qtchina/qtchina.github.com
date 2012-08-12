@@ -6,323 +6,323 @@
 <title>重拾kvm, 内核级虚拟机</title>
 </head>
 <body>
-kvm虚拟机（Kernel-based Virtual Machine）是运行与linux上的内核级虚拟机实现，相比其他的内核级虚拟级，kvm有很大优势，内核级运行，相对简单轻量，是一种关虚拟机，理论上效率更高，完全GPL。当然也有不少缺点，宿主机当然只能是linux了，客户机无所谓，没有完善易用的管理工具，需要与其他内核模块一起使用，对宿主机CPU有要求，必须支持VT技术才行。
-
-其他的虚拟机，包括老牌的vmware,企业级，个人桌面版本都比较完善，但越来越庞大，越来赶不上linux内核的发展，使用它被限制在某些特定的内核版本。virtualbox，桌面级应用非常简便，也还可以，不地以IT大颚Oracle收购，应该对企业级应用的支持变好，但桌面级应用就不知道了。这两个平台都是全虚拟化平台。还有别一个半虚拟化平台xen，这个本来很有希望的虚拟化实现，却由于对内核来说过于复杂，不有其他一些原因没能进入内核，听说也 是很强大的。
-
-关于kvm，在一年多以前试用过一回，那时的管理工具更简陋，对像windows的图形化桌面支持不好，图形界面的效率特别差，虚拟磁盘性能也不太好，网络配置麻烦，由于这些问题才一直放着没用。最近终于有了点时间，又试了一把，这次的效率还真好了不少，管理工具上，借用了qemu项目中的工具，对图形界面的支持加强，对磁盘性能，虚拟网络性能和设置都有了长足的解决方案。经过这次试用，感觉无论是虚拟机管理，易用性，图形界面效率，都到了能接受的阶段，所以把这些试用经验记录下来，以备后用。
-
-宿主机软硬件环境：
-
-Intel(R) Core(TM)2 Duo CPU T9600 @ 2.80GHz
-
-memory ddr3 4G
-
-intel 1000M网卡，
-
-gentoo linux 2.6.36-x66_64
-
-qemu-kvm-0.13.0
-
-客户机，
-
-window xp sp3 32位中文版，
-
-windows xp sp2 64位英文版，
-
-freebsd 7.3 32位, 
-
-ubuntu 8.10 32位
-
-*)   宿主机内核的配置，
-
-内核模块，
-
-kvm虚拟机核心模块，kvm, kvm-intel或者kvm-amd
-
-磁盘，网络加速模块，vhost-net,virtio*   http://www.linux-kvm.org/page/Virtio
-
-内核网桥模块，bridge stp tun
-
-modprobe kvm kvm-intel
-
-modprobe vhost-net virtio
-
-modprobe bridge stp tun
-
-这些命令需要root权限，如果缺少哪个模块，需要重新编译内核，以模块方式把这些模块编译加入到内核中，重启动进入新内核系统。内核编译参考其他文档。
-
-对于vhost-net virtio模块，这是为提高效率，改进性能时用到，默认情况也可以不使用
-
-对于bridge tun模块，是选择桥接模式网络才用到，默认情况网络模式也可以不使用
-
-*)  qemu-kvm虚拟管理命令工具介绍，
-
-qemu-img  管理虚拟机磁盘的工具，创建，改变虚拟磁盘大小，虚拟磁盘格式等
-
-qemu-kvm  用于启动虚拟机，这个命令参数非常多，并且同时支持新旧两套参数，使用时要注意。下文中都尽量使用的新参数格式，同时对旧参数做了些说明。
-
-*) 网桥工具
-
-brctl  网桥管理工具
-
-localhost ~ # brctl -h
-
-Usage: brctl [commands]
-
-commands:
-
-        addbr           <bridge>                add bridge
-
-        delbr           <bridge>                delete bridge
-
-        addif           <bridge> <device>       add interface to bridge
-
-        delif           <bridge> <device>       delete interface from bridge
-
-        setageing       <bridge> <time>         set ageing time
-
-        setbridgeprio   <bridge> <prio>         set bridge priority
-
-        setfd           <bridge> <time>         set bridge forward delay
-
-        sethello        <bridge> <time>         set hello time
-
-        setmaxage       <bridge> <time>         set max message age
-
-        setpathcost     <bridge> <port> <cost>  set path cost
-
-        setportprio     <bridge> <port> <prio>  set port priority
-
-        show                                    show a list of bridges
-
-        showmacs        <bridge>                show a list of mac addrs
-
-        showstp         <bridge>                show bridge stp info
-
-        stp             <bridge> {on|off}       turn stp on/off
-
-tunctl  tun设备管理工具
-
-localhost ~ # tunctl -h
-
-Create: tunctl [-b] [-u owner] [-g group] [-t device-name] [-p|-n] [-f tun-clone-device]
-
-Delete: tunctl -d device-name [-f tun-clone-device]
-
-The default tun clone device is /dev/net/tun - some systems use
-
-/dev/misc/net/tun instead
-
--b will result in brief output (just the device name)
-
--n will result in a point-to-point tun device,
-
--p in an ethernet tap device. Default is a tap,
-
-   except the device contains "tun" in the name.
-
-
-
-*)  开始安装 windows xp 32 位系统
-
-创建虚拟磁盘，
-
-qemu-img create kvm-winxp32.img  6G
-
-此命令创建一个6G的虚拟磁盘，格式为默认的raw格式。
-
-启动虚拟机，并开始安装，
-
-qemu-kvm -m 500 -vnc :0 -enable-kvm -sdl -soundhw ac97 -drive file=winxp32.img,cache=writeback,if=ide  -drive file=/mnt/sda7/ossetup/LiteXP-SP3.ISO,cache=unsafe,media=cdrom  -boot order=dc  -rtc base=localtime -netdev type=tap,id=kvmbnet00,ifname=kvmbnet00,script=./qemu-ifup.sh,downscript=./qemu-ifdown.sh,vhost=on -device virtio-net-pci,netdev=kvmbnet00,mac=DE:AD:BE:EF:F6:68
-
-参数说明，
-
--m 500   给虚拟机500M内存
-
--vnc :0   让qemu-kvm启动vnc服务，这样可以使用vnc客户端连接该服务
-
--enable-kvm  这个是比较老的兼容参数，现在应该不使用也可。
-
--sdl    启动sdl交互控制界面窗口
-
--soundhw ac97     为虚拟机分配一个ac97虚拟声卡，
-
--drive file=kvm-winxp32.img,cache=writeback,if=ide   虚拟机第一个硬盘, cache使用writeback，兼顾效率和安全的方式，还有一个效率高的方式unsafe,可能会丢失数据。
-
- -drive file=/mnt/sda7/ossetup/LiteXP-SP3.ISO,cache=unsafe,media=cdrom  指定安装光盘
-
--boot order=dc 设定光盘硬盘启动顺序，d为光盘，c为硬盘
-
--rtc base=localtime  使用本地时间
-
--netdev type=tap,id=kvmbnet00,ifname=kvmbnet00,script=./qemu-ifup.sh,downscript=./qemu-ifdown.sh,vhost=on    创建一tap桥接的网络设备，创建命令为script和downscript指定的脚本。vhost=on指定开启vhost-net虚拟机网络加速功能。ifname指定生成的网桥名字，成功启动后，使用ifconfig能看到这个名字。
-
--device virtio-net-pci,netdev=kvmbnet00,mac=DE:AD:BE:EF:F6:68  设置桥接设备的pci信息，mac地址。
-
-最后这两个长参数，是qemu-kvm的新参数格式，还有一种对应的老的书写方式：
--net nic,macaddr=xx:xx:xx:xx:xx
--net tap,ifname=xxxxxx,script=xxxxx.sh,model=virtio
-
-这两个长参数，完全是为了实现网络加速的需要，如果是试用不需要这功能，这个两参数可以不需要，默认会用参数，-net nic -net user代替，含意是，使用单独的vlan，最后启动的虚拟机会生成一个类似10.2.0.x的地址。
-
-如果启动没有问题，安装时如同安装一个真实的系统一样，分区，设置用户名等。
-
-
-安装完成，开始启动，这一步这客户机windows xp 先安装virtio网络卡驱动。
-
-到 http://alt.fedoraproject.org/pub/alt/virtio-win/latest/images/bin/virtio-win-1.1.11-0.iso 下载驱动光盘镜像，
-
-在启动时要多加一个添加的参数，
--drive file=/mnt/sda7/ossetup/virtio-win-1.1.11-0.iso,cache=unsafe,media=cdrom
-
-启动windows xp 后，系统会提示找到新的网络卡，但无法自动安装驱动，这时就到“硬件列表”中，找到这个设备，并“更新驱动”，指定 X:/光盘的路径，让系统搜索驱动。安装上驱动后，“硬件列表”显示网络卡为“Redhat virtio controller"，并且没有警告标识，则说明支持内核加载的网络卡驱动成功。
-
-现在到了设置网桥设备的时候了，
-
-> brctl addbr br0
-> brctl addif  br0 eth0
-
-把网桥设备br0桥接到宿主机的eth0上。
-
-重新启动客户机windows xp ，应该可以连接到网络。如果还有问题，尝试把宿主机的ip地址设置在br0上，而不是eth0，如dhcpd br0。
-
-
-现在来看一看两个脚本，qemu-ifup.sh, qemu-ifdown.sh
-
-localhost kvm # more qemu-ifup.sh
-#!/bin/sh
-set -x
-
-switch=br0
-
-if [ -n "$1" ];then
-    /usr/bin/sudo chown gzleo.wheel /dev/net/tun
-    # sleep 1s
-        /usr/bin/sudo /usr/sbin/tunctl -u `whoami` -t $1
-        /usr/bin/sudo /sbin/ip link set $1 up
-        sleep 0.5s
-        /usr/bin/sudo /sbin/brctl addif $switch $1
-        exit 0
-else
-        echo "Error: no interface specified"
-        exit 1
-fi
-
-localhost kvm # more qemu-ifdown.sh
-#!/bin/sh
-set -x
-
-switch=br0
-
-
-if [ -n "$1" ];then
-    /usr/bin/sudo /sbin/ip link set $1 down
-    sleep 0.5s
-    /usr/bin/sudo /usr/sbin/tunctl -d $1
-#       /usr/bin/sudo /sbin/brctl addif $switch $1
-    exit 0
-else
-    echo "Error: no interface specified"
-    exit 1
-fi
-
-这两个设置桥接风格的脚本通用，可以使用在其他的虚拟机中。
-
-接下来，要安装磁盘加载驱动了，这里有一个指导， http://www.linux-kvm.org/page/Boot_from_virtio_block_device
-总的来说，先在客户机加另一个virtio类型的小尺寸虚拟磁盘，客户机windows xp系统启动时会识别出来新类型的磁盘，
-使用virtio-xxx.iso安装上驱动，注意选择驱动时要指定wxp目录下的*.sys驱动文件。
-
-之后，把第一个硬盘类型设置为virtio类型，进入系统后为它安装驱动。用到的命令参数，
-
--drive file=winxp32.img,cache=writeback,if=virtio
--drive  file=fake1.img,cache=unsafe,if=virtio
--drive file=/mnt/sda7/ossetup/virtio-win-1.1.11-0.iso,cache=unsafe,media=cdrom
-
-注意，虚拟客户机第一个磁盘的类似已经从if=ide改为if=virtio了。如果安装成功，小磁盘的作用已经完成，不需要放在参数表中了。
-
-安装磁盘加速后，有兴趣可以使用磁盘工具测试客户机中磁盘效率，做个比较。
-
-
-一个虚拟客户机安装完成了，步骤很多，如果有问题，需要仔细检查每一步操作。
-
-
-*) qemu虚拟磁盘文件格式raw, qcow
-
-http://en.wikibooks.org/wiki/QEMU/Images
-
-raw 格式是一种”直读直写”的格式，不具备特殊的特性，但如其名一样，它容易被其他程序所读，比如，用户直接可以以回环（loop）设备来将它 mount 到一个目录里。 
-
-而 qcow 格式是 Qemu 的专用格式，有一些高级的特性，可以对它进行加密和压缩，以节省磁盘空间并保证数据安全，但一旦损坏将很难恢复。
-
-
-
-*) mount 含有分区信息的raw格式文件方法，
-
-Accessing raw images with partitions "inside" is a bit tricky. Still this links explains it:
-
-http://equivocation.org/node/107
-
-Basically you "simulate" a block device /dev/loop0 for your file with the command:
-
-# losetup /dev/loop0 /var/vms/image.raw
-
-Then all than needed is to use kpartx to map partitions to devices you can finally mount:
-
-# kpartx -av /dev/loop0 
-
-# ls -alF /dev/mapper
-
-brw-rw---- 1 root disk 253, 4 2007-11-24 14:56 loop0p1
-
-brw-rw---- 1 root disk 253, 5 2007-11-24 14:56 loop0p5 
-
-# mount /dev/mapper/loop0p1 /mnt/MyFileSystem
-
-
-
-上次使用遇到的最大问题，一个是磁盘性能差，另一个网络没有设置好，这次测试重点为这两点。
-
-modprobe kvm kvm-intel
-
-modprobe virtio_blk virtio_console virtio-rng virtio_net virtio_balloon virtio_pci virtio_ring
-
-qemu-img create xp-kvm.img 2G
-
-安装时使用这一写法，
-
-qemu-kvm -vnc :0 -enable-kvm -sdl -drive file=xp-kvm.img,cache=unsafe,if=ide -writeconfig xp-kvm.cfg -cdrom /mnt/sda7/ossetup/Deepin-LiteXP-SP3.ISO -boot order=dc
-
-启动命令，
-
-qemu-kvm -m 500 -vnc :0 -enable-kvm -sdl -drive file=xp-kvm.img,cache=unsafe,if=ide -writeconfig xp-kvm.cfg -drive file=/mnt/sda7/ossetup/Deepin-LiteXP-SP3.ISO,cache=writeback,media=cdrom -boot order=c -soundhw ac97
-
-对于声卡，即使下面的错误，也不影响真意，但不知道为什么会报错。声卡也可使用sb16/es1370两种。
-
-audio: Failed to create voice `ac97.pi'
-audio: Failed to create voice `ac97.mc'
-
-安装完启动，网络直接能用了，ip为10.0.0.2，这个网络默认使用的nat方式，还要研究一下使用bridge方式，获取一个与host同网段的IP地址。
-
-现在的问题，在使用vnc模式时，客户机上的鼠标位置有问题 
-
-原来这个virtio-win-1.1.11-0.iso virtio驱动不支持windows xp。怪不得就是用不了。 
-
-这个是可以驱动的，在安装驱动的时候，注意选择wxp目录下的版本可可。对于64位xp,则选择wlh/amd64目录下的驱动。
-
-http://www.linux-kvm.org/page/Boot_from_virtio_block_device
-
-http://www.linux-kvm.com/content/redhat-54-windows-virtio-drivers-part-2-block-drivers
-
-http://blog.bodhizazen.net/linux/improve-kvm-performance/
-
-有些windows程序不能安装到网上邻居目录，如ppstream
-
-安装64位xp出问题了. 原来是使用的参数不当造成的，今天偶然发现了这个问题。
-
-使用qemu-img 创建的虚拟机硬盘，有一个好处，虽然显示硬盘文件大小为分配时指定大小，但在没有真正写入数据前，实际上不占用真正的物理硬盘空间。
-
-qemu-kvm有一个-cpu参数，在不指定的情况下，为什么安装32位系统和64位系统都可以？默认的是64位系统了？所以才能安装32位的操作系统。
+kvm虚拟机（Kernel-based Virtual Machine）是运行与linux上的内核级虚拟机实现，相比其他的内核级虚拟级，kvm有很大优势，内核级运行，相对简单轻量，是一种关虚拟机，理论上效率更高，完全GPL。当然也有不少缺点，宿主机当然只能是linux了，客户机无所谓，没有完善易用的管理工具，需要与其他内核模块一起使用，对宿主机CPU有要求，必须支持VT技术才行。<br />
+<br />
+其他的虚拟机，包括老牌的vmware,企业级，个人桌面版本都比较完善，但越来越庞大，越来赶不上linux内核的发展，使用它被限制在某些特定的内核版本。virtualbox，桌面级应用非常简便，也还可以，不地以IT大颚Oracle收购，应该对企业级应用的支持变好，但桌面级应用就不知道了。这两个平台都是全虚拟化平台。还有别一个半虚拟化平台xen，这个本来很有希望的虚拟化实现，却由于对内核来说过于复杂，不有其他一些原因没能进入内核，听说也 是很强大的。<br />
+<br />
+关于kvm，在一年多以前试用过一回，那时的管理工具更简陋，对像windows的图形化桌面支持不好，图形界面的效率特别差，虚拟磁盘性能也不太好，网络配置麻烦，由于这些问题才一直放着没用。最近终于有了点时间，又试了一把，这次的效率还真好了不少，管理工具上，借用了qemu项目中的工具，对图形界面的支持加强，对磁盘性能，虚拟网络性能和设置都有了长足的解决方案。经过这次试用，感觉无论是虚拟机管理，易用性，图形界面效率，都到了能接受的阶段，所以把这些试用经验记录下来，以备后用。<br />
+<br />
+宿主机软硬件环境：<br />
+<br />
+Intel(R) Core(TM)2 Duo CPU T9600 @ 2.80GHz<br />
+<br />
+memory ddr3 4G<br />
+<br />
+intel 1000M网卡，<br />
+<br />
+gentoo linux 2.6.36-x66_64<br />
+<br />
+qemu-kvm-0.13.0<br />
+<br />
+客户机，<br />
+<br />
+window xp sp3 32位中文版，<br />
+<br />
+windows xp sp2 64位英文版，<br />
+<br />
+freebsd 7.3 32位, <br />
+<br />
+ubuntu 8.10 32位<br />
+<br />
+*)   宿主机内核的配置，<br />
+<br />
+内核模块，<br />
+<br />
+kvm虚拟机核心模块，kvm, kvm-intel或者kvm-amd<br />
+<br />
+磁盘，网络加速模块，vhost-net,virtio*   http://www.linux-kvm.org/page/Virtio<br />
+<br />
+内核网桥模块，bridge stp tun<br />
+<br />
+modprobe kvm kvm-intel<br />
+<br />
+modprobe vhost-net virtio<br />
+<br />
+modprobe bridge stp tun<br />
+<br />
+这些命令需要root权限，如果缺少哪个模块，需要重新编译内核，以模块方式把这些模块编译加入到内核中，重启动进入新内核系统。内核编译参考其他文档。<br />
+<br />
+对于vhost-net virtio模块，这是为提高效率，改进性能时用到，默认情况也可以不使用<br />
+<br />
+对于bridge tun模块，是选择桥接模式网络才用到，默认情况网络模式也可以不使用<br />
+<br />
+*)  qemu-kvm虚拟管理命令工具介绍，<br />
+<br />
+qemu-img  管理虚拟机磁盘的工具，创建，改变虚拟磁盘大小，虚拟磁盘格式等<br />
+<br />
+qemu-kvm  用于启动虚拟机，这个命令参数非常多，并且同时支持新旧两套参数，使用时要注意。下文中都尽量使用的新参数格式，同时对旧参数做了些说明。<br />
+<br />
+*) 网桥工具<br />
+<br />
+brctl  网桥管理工具<br />
+<br />
+localhost ~ # brctl -h<br />
+<br />
+Usage: brctl [commands]<br />
+<br />
+commands:<br />
+<br />
+        addbr           <bridge>                add bridge<br />
+<br />
+        delbr           <bridge>                delete bridge<br />
+<br />
+        addif           <bridge> <device>       add interface to bridge<br />
+<br />
+        delif           <bridge> <device>       delete interface from bridge<br />
+<br />
+        setageing       <bridge> <time>         set ageing time<br />
+<br />
+        setbridgeprio   <bridge> <prio>         set bridge priority<br />
+<br />
+        setfd           <bridge> <time>         set bridge forward delay<br />
+<br />
+        sethello        <bridge> <time>         set hello time<br />
+<br />
+        setmaxage       <bridge> <time>         set max message age<br />
+<br />
+        setpathcost     <bridge> <port> <cost>  set path cost<br />
+<br />
+        setportprio     <bridge> <port> <prio>  set port priority<br />
+<br />
+        show                                    show a list of bridges<br />
+<br />
+        showmacs        <bridge>                show a list of mac addrs<br />
+<br />
+        showstp         <bridge>                show bridge stp info<br />
+<br />
+        stp             <bridge> {on|off}       turn stp on/off<br />
+<br />
+tunctl  tun设备管理工具<br />
+<br />
+localhost ~ # tunctl -h<br />
+<br />
+Create: tunctl [-b] [-u owner] [-g group] [-t device-name] [-p|-n] [-f tun-clone-device]<br />
+<br />
+Delete: tunctl -d device-name [-f tun-clone-device]<br />
+<br />
+The default tun clone device is /dev/net/tun - some systems use<br />
+<br />
+/dev/misc/net/tun instead<br />
+<br />
+-b will result in brief output (just the device name)<br />
+<br />
+-n will result in a point-to-point tun device,<br />
+<br />
+-p in an ethernet tap device. Default is a tap,<br />
+<br />
+   except the device contains "tun" in the name.<br />
+<br />
+<br />
+<br />
+*)  开始安装 windows xp 32 位系统<br />
+<br />
+创建虚拟磁盘，<br />
+<br />
+qemu-img create kvm-winxp32.img  6G<br />
+<br />
+此命令创建一个6G的虚拟磁盘，格式为默认的raw格式。<br />
+<br />
+启动虚拟机，并开始安装，<br />
+<br />
+qemu-kvm -m 500 -vnc :0 -enable-kvm -sdl -soundhw ac97 -drive file=winxp32.img,cache=writeback,if=ide  -drive file=/mnt/sda7/ossetup/LiteXP-SP3.ISO,cache=unsafe,media=cdrom  -boot order=dc  -rtc base=localtime -netdev type=tap,id=kvmbnet00,ifname=kvmbnet00,script=./qemu-ifup.sh,downscript=./qemu-ifdown.sh,vhost=on -device virtio-net-pci,netdev=kvmbnet00,mac=DE:AD:BE:EF:F6:68<br />
+<br />
+参数说明，<br />
+<br />
+-m 500   给虚拟机500M内存<br />
+<br />
+-vnc :0   让qemu-kvm启动vnc服务，这样可以使用vnc客户端连接该服务<br />
+<br />
+-enable-kvm  这个是比较老的兼容参数，现在应该不使用也可。<br />
+<br />
+-sdl    启动sdl交互控制界面窗口<br />
+<br />
+-soundhw ac97     为虚拟机分配一个ac97虚拟声卡，<br />
+<br />
+-drive file=kvm-winxp32.img,cache=writeback,if=ide   虚拟机第一个硬盘, cache使用writeback，兼顾效率和安全的方式，还有一个效率高的方式unsafe,可能会丢失数据。<br />
+<br />
+ -drive file=/mnt/sda7/ossetup/LiteXP-SP3.ISO,cache=unsafe,media=cdrom  指定安装光盘<br />
+<br />
+-boot order=dc 设定光盘硬盘启动顺序，d为光盘，c为硬盘<br />
+<br />
+-rtc base=localtime  使用本地时间<br />
+<br />
+-netdev type=tap,id=kvmbnet00,ifname=kvmbnet00,script=./qemu-ifup.sh,downscript=./qemu-ifdown.sh,vhost=on    创建一tap桥接的网络设备，创建命令为script和downscript指定的脚本。vhost=on指定开启vhost-net虚拟机网络加速功能。ifname指定生成的网桥名字，成功启动后，使用ifconfig能看到这个名字。<br />
+<br />
+-device virtio-net-pci,netdev=kvmbnet00,mac=DE:AD:BE:EF:F6:68  设置桥接设备的pci信息，mac地址。<br />
+<br />
+最后这两个长参数，是qemu-kvm的新参数格式，还有一种对应的老的书写方式：<br />
+-net nic,macaddr=xx:xx:xx:xx:xx<br />
+-net tap,ifname=xxxxxx,script=xxxxx.sh,model=virtio<br />
+<br />
+这两个长参数，完全是为了实现网络加速的需要，如果是试用不需要这功能，这个两参数可以不需要，默认会用参数，-net nic -net user代替，含意是，使用单独的vlan，最后启动的虚拟机会生成一个类似10.2.0.x的地址。<br />
+<br />
+如果启动没有问题，安装时如同安装一个真实的系统一样，分区，设置用户名等。<br />
+<br />
+<br />
+安装完成，开始启动，这一步这客户机windows xp 先安装virtio网络卡驱动。<br />
+<br />
+到 http://alt.fedoraproject.org/pub/alt/virtio-win/latest/images/bin/virtio-win-1.1.11-0.iso 下载驱动光盘镜像，<br />
+<br />
+在启动时要多加一个添加的参数，<br />
+-drive file=/mnt/sda7/ossetup/virtio-win-1.1.11-0.iso,cache=unsafe,media=cdrom<br />
+<br />
+启动windows xp 后，系统会提示找到新的网络卡，但无法自动安装驱动，这时就到“硬件列表”中，找到这个设备，并“更新驱动”，指定 X:/光盘的路径，让系统搜索驱动。安装上驱动后，“硬件列表”显示网络卡为“Redhat virtio controller"，并且没有警告标识，则说明支持内核加载的网络卡驱动成功。<br />
+<br />
+现在到了设置网桥设备的时候了，<br />
+<br />
+> brctl addbr br0<br />
+> brctl addif  br0 eth0<br />
+<br />
+把网桥设备br0桥接到宿主机的eth0上。<br />
+<br />
+重新启动客户机windows xp ，应该可以连接到网络。如果还有问题，尝试把宿主机的ip地址设置在br0上，而不是eth0，如dhcpd br0。<br />
+<br />
+<br />
+现在来看一看两个脚本，qemu-ifup.sh, qemu-ifdown.sh<br />
+<br />
+localhost kvm # more qemu-ifup.sh<br />
+#!/bin/sh<br />
+set -x<br />
+<br />
+switch=br0<br />
+<br />
+if [ -n "$1" ];then<br />
+    /usr/bin/sudo chown gzleo.wheel /dev/net/tun<br />
+    # sleep 1s<br />
+        /usr/bin/sudo /usr/sbin/tunctl -u `whoami` -t $1<br />
+        /usr/bin/sudo /sbin/ip link set $1 up<br />
+        sleep 0.5s<br />
+        /usr/bin/sudo /sbin/brctl addif $switch $1<br />
+        exit 0<br />
+else<br />
+        echo "Error: no interface specified"<br />
+        exit 1<br />
+fi<br />
+<br />
+localhost kvm # more qemu-ifdown.sh<br />
+#!/bin/sh<br />
+set -x<br />
+<br />
+switch=br0<br />
+<br />
+<br />
+if [ -n "$1" ];then<br />
+    /usr/bin/sudo /sbin/ip link set $1 down<br />
+    sleep 0.5s<br />
+    /usr/bin/sudo /usr/sbin/tunctl -d $1<br />
+#       /usr/bin/sudo /sbin/brctl addif $switch $1<br />
+    exit 0<br />
+else<br />
+    echo "Error: no interface specified"<br />
+    exit 1<br />
+fi<br />
+<br />
+这两个设置桥接风格的脚本通用，可以使用在其他的虚拟机中。<br />
+<br />
+接下来，要安装磁盘加载驱动了，这里有一个指导， http://www.linux-kvm.org/page/Boot_from_virtio_block_device<br />
+总的来说，先在客户机加另一个virtio类型的小尺寸虚拟磁盘，客户机windows xp系统启动时会识别出来新类型的磁盘，<br />
+使用virtio-xxx.iso安装上驱动，注意选择驱动时要指定wxp目录下的*.sys驱动文件。<br />
+<br />
+之后，把第一个硬盘类型设置为virtio类型，进入系统后为它安装驱动。用到的命令参数，<br />
+<br />
+-drive file=winxp32.img,cache=writeback,if=virtio<br />
+-drive  file=fake1.img,cache=unsafe,if=virtio<br />
+-drive file=/mnt/sda7/ossetup/virtio-win-1.1.11-0.iso,cache=unsafe,media=cdrom<br />
+<br />
+注意，虚拟客户机第一个磁盘的类似已经从if=ide改为if=virtio了。如果安装成功，小磁盘的作用已经完成，不需要放在参数表中了。<br />
+<br />
+安装磁盘加速后，有兴趣可以使用磁盘工具测试客户机中磁盘效率，做个比较。<br />
+<br />
+<br />
+一个虚拟客户机安装完成了，步骤很多，如果有问题，需要仔细检查每一步操作。<br />
+<br />
+<br />
+*) qemu虚拟磁盘文件格式raw, qcow<br />
+<br />
+http://en.wikibooks.org/wiki/QEMU/Images<br />
+<br />
+raw 格式是一种”直读直写”的格式，不具备特殊的特性，但如其名一样，它容易被其他程序所读，比如，用户直接可以以回环（loop）设备来将它 mount 到一个目录里。 <br />
+<br />
+而 qcow 格式是 Qemu 的专用格式，有一些高级的特性，可以对它进行加密和压缩，以节省磁盘空间并保证数据安全，但一旦损坏将很难恢复。<br />
+<br />
+<br />
+<br />
+*) mount 含有分区信息的raw格式文件方法，<br />
+<br />
+Accessing raw images with partitions "inside" is a bit tricky. Still this links explains it:<br />
+<br />
+http://equivocation.org/node/107<br />
+<br />
+Basically you "simulate" a block device /dev/loop0 for your file with the command:<br />
+<br />
+# losetup /dev/loop0 /var/vms/image.raw<br />
+<br />
+Then all than needed is to use kpartx to map partitions to devices you can finally mount:<br />
+<br />
+# kpartx -av /dev/loop0 <br />
+<br />
+# ls -alF /dev/mapper<br />
+<br />
+brw-rw---- 1 root disk 253, 4 2007-11-24 14:56 loop0p1<br />
+<br />
+brw-rw---- 1 root disk 253, 5 2007-11-24 14:56 loop0p5 <br />
+<br />
+# mount /dev/mapper/loop0p1 /mnt/MyFileSystem<br />
+<br />
+<br />
+<br />
+上次使用遇到的最大问题，一个是磁盘性能差，另一个网络没有设置好，这次测试重点为这两点。<br />
+<br />
+modprobe kvm kvm-intel<br />
+<br />
+modprobe virtio_blk virtio_console virtio-rng virtio_net virtio_balloon virtio_pci virtio_ring<br />
+<br />
+qemu-img create xp-kvm.img 2G<br />
+<br />
+安装时使用这一写法，<br />
+<br />
+qemu-kvm -vnc :0 -enable-kvm -sdl -drive file=xp-kvm.img,cache=unsafe,if=ide -writeconfig xp-kvm.cfg -cdrom /mnt/sda7/ossetup/Deepin-LiteXP-SP3.ISO -boot order=dc<br />
+<br />
+启动命令，<br />
+<br />
+qemu-kvm -m 500 -vnc :0 -enable-kvm -sdl -drive file=xp-kvm.img,cache=unsafe,if=ide -writeconfig xp-kvm.cfg -drive file=/mnt/sda7/ossetup/Deepin-LiteXP-SP3.ISO,cache=writeback,media=cdrom -boot order=c -soundhw ac97<br />
+<br />
+对于声卡，即使下面的错误，也不影响真意，但不知道为什么会报错。声卡也可使用sb16/es1370两种。<br />
+<br />
+audio: Failed to create voice `ac97.pi'<br />
+audio: Failed to create voice `ac97.mc'<br />
+<br />
+安装完启动，网络直接能用了，ip为10.0.0.2，这个网络默认使用的nat方式，还要研究一下使用bridge方式，获取一个与host同网段的IP地址。<br />
+<br />
+现在的问题，在使用vnc模式时，客户机上的鼠标位置有问题 <br />
+<br />
+原来这个virtio-win-1.1.11-0.iso virtio驱动不支持windows xp。怪不得就是用不了。 <br />
+<br />
+这个是可以驱动的，在安装驱动的时候，注意选择wxp目录下的版本可可。对于64位xp,则选择wlh/amd64目录下的驱动。<br />
+<br />
+http://www.linux-kvm.org/page/Boot_from_virtio_block_device<br />
+<br />
+http://www.linux-kvm.com/content/redhat-54-windows-virtio-drivers-part-2-block-drivers<br />
+<br />
+http://blog.bodhizazen.net/linux/improve-kvm-performance/<br />
+<br />
+有些windows程序不能安装到网上邻居目录，如ppstream<br />
+<br />
+安装64位xp出问题了. 原来是使用的参数不当造成的，今天偶然发现了这个问题。<br />
+<br />
+使用qemu-img 创建的虚拟机硬盘，有一个好处，虽然显示硬盘文件大小为分配时指定大小，但在没有真正写入数据前，实际上不占用真正的物理硬盘空间。<br />
+<br />
+qemu-kvm有一个-cpu参数，在不指定的情况下，为什么安装32位系统和64位系统都可以？默认的是64位系统了？所以才能安装32位的操作系统。<br />
 
 </body>
 </html>

@@ -6,20 +6,20 @@
 <title>linux 下 iconv 函数的使用</title>
 </head>
 <body>
-
-#include <iconv.h>
-
-size_t iconv(iconv_t cd,  char **inbuf, size_t *inbytesleft,
-char **outbuf, size_t *outbytesleft);
-
-iconv -l 命令列出支持的转换码表。
-
-注意的问题：
-
-iconv的man有点问题。iconv返回的实际上不是成功的数目。0只是说明成功。
-
-iconv返回0就说明字符序列全部已经转换成功，pin和pout指针都会变化的。
-
+<br />
+#include <iconv.h><br />
+<br />
+size_t iconv(iconv_t cd,  char **inbuf, size_t *inbytesleft,<br />
+char **outbuf, size_t *outbytesleft);<br />
+<br />
+iconv -l 命令列出支持的转换码表。<br />
+<br />
+注意的问题：<br />
+<br />
+iconv的man有点问题。iconv返回的实际上不是成功的数目。0只是说明成功。<br />
+<br />
+iconv返回0就说明字符序列全部已经转换成功，pin和pout指针都会变化的。<br />
+<br />
 
 </body>
 </html>

@@ -6,53 +6,53 @@
 <title>写了个opera 用户脚本，让google结果不再经过google链接跳转</title>
 </head>
 <body>
-很简单的功能，google搜索结果访问的时候总得通过google的链接再跳转到真正的结果地址
-目前的情况，访问google次数越多，越容易网络异常，写了个脚本，在点击结果链接的时候，
-直接转到结果页面，不用多访问一次google了。
-
-写的比较乱，没有整理，但是挺管用的。
-
-还有一个不完善的地方，对于喜欢右键弹出菜单方式访问结果的用户行为没有处理。
-
-[code type="javascript"]
-var url = window.location.href.toLowerCase(); 
-if (url.indexOf("www.google.com.hk") >= 0 || url.indexOf("www.google.com") >= 0 || url.indexOf("/search") >= 0) 
-{ 
-      opera.addEventListener('BeforeEvent', function(userJSEvent) {
-        if (userJSEvent != null) {
-          
-             var evt = userJSEvent.event; 
-            if (userJSEvent.event.type == 'click') {
-                        console.log(userJSEvent.event);
-                        if (evt.srcElement.tagName == 'A' && evt.srcElement.className == 'l') {
-                                evt.srcElement.onmousedown = null;
-                                var redir_url = evt.srcElement.href;
-                                console.log(evt.srcElement.href);
-                               
-                                var rupos = redir_url.indexOf('url=');
-                                
-                                var half_real_url = redir_url.substring(rupos + 4, redir_url.length);
-                               
-                                var endpos = half_real_url.indexOf('&');
-                               
-                                var enc_real_url = half_real_url.substring(0, endpos);
-                                var real_url = decodeURIComponent(enc_real_url);
-
-                                // alert(enc_real_url + real_url);
-                                if (evt.srcElement.getAttribute('old_href') == null) {
-                                    evt.srcElement.setAttribute('old_href', evt.srcElement.href);
-                                    evt.srcElement.href = real_url;
-                                        evt.srcElement.title = real_url;
-                                }
-                                    evt.srcElement.setAttribute('onmousedown', '');
-                        }
-                }
-        }
-         },
-         false);
-}
-
-[/code]
+很简单的功能，google搜索结果访问的时候总得通过google的链接再跳转到真正的结果地址<br />
+目前的情况，访问google次数越多，越容易网络异常，写了个脚本，在点击结果链接的时候，<br />
+直接转到结果页面，不用多访问一次google了。<br />
+<br />
+写的比较乱，没有整理，但是挺管用的。<br />
+<br />
+还有一个不完善的地方，对于喜欢右键弹出菜单方式访问结果的用户行为没有处理。<br />
+<br />
+[code type="javascript"]<br />
+var url = window.location.href.toLowerCase(); <br />
+if (url.indexOf("www.google.com.hk") >= 0 || url.indexOf("www.google.com") >= 0 || url.indexOf("/search") >= 0) <br />
+{ <br />
+      opera.addEventListener('BeforeEvent', function(userJSEvent) {<br />
+        if (userJSEvent != null) {<br />
+          <br />
+             var evt = userJSEvent.event; <br />
+            if (userJSEvent.event.type == 'click') {<br />
+                        console.log(userJSEvent.event);<br />
+                        if (evt.srcElement.tagName == 'A' && evt.srcElement.className == 'l') {<br />
+                                evt.srcElement.onmousedown = null;<br />
+                                var redir_url = evt.srcElement.href;<br />
+                                console.log(evt.srcElement.href);<br />
+                               <br />
+                                var rupos = redir_url.indexOf('url=');<br />
+                                <br />
+                                var half_real_url = redir_url.substring(rupos + 4, redir_url.length);<br />
+                               <br />
+                                var endpos = half_real_url.indexOf('&');<br />
+                               <br />
+                                var enc_real_url = half_real_url.substring(0, endpos);<br />
+                                var real_url = decodeURIComponent(enc_real_url);<br />
+<br />
+                                // alert(enc_real_url + real_url);<br />
+                                if (evt.srcElement.getAttribute('old_href') == null) {<br />
+                                    evt.srcElement.setAttribute('old_href', evt.srcElement.href);<br />
+                                    evt.srcElement.href = real_url;<br />
+                                        evt.srcElement.title = real_url;<br />
+                                }<br />
+                                    evt.srcElement.setAttribute('onmousedown', '');<br />
+                        }<br />
+                }<br />
+        }<br />
+         },<br />
+         false);<br />
+}<br />
+<br />
+[/code]<br />
 
 </body>
 </html>

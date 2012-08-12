@@ -6,36 +6,36 @@
 <title>wcached永久存储快速缓存项目介绍</title>
 </head>
 <body>
-wcached是一个基于memcached 1.4.x 开发的快速高效的带永久存储的内存缓存系统。
-
-wcached的特点：
-
-完全兼容memcached协议。支持最新的memcached二进制协议。
-
-支持cache数据的永久存储。
-
-支持二进制cache值的存储。
-
-有效区别会过期的k/v和不会过期的k/v，磁盘永久存储更高效。
-
-支持memcached的flag域存取。
-
-重启时分段按需将永久存储的数据加载到内存。
-
-读取速度快，与原memcached同一级别(95+%)，写入速度能达到原memcached的85%以上。
-
-使用简单，仅比原memcached多一个命令行参数，用于指定永久存储的目录。
-
-后端永久存储库稳定高效，丢失数据可能性非常小。
-
-对于分配的内存耗尽的情况，依然能直接将数据写入磁盘或者从直接从磁盘读出数据，返回给客户端。
-
-97%通过memcached自带的测试，测试失败的用例是由于永久存储机制导致的。
-
-源代码库：
-git clone git://nullfxp.git.sourceforge.net/gitroot/nullfxp/wcached
-
-浏览源代码: http://nullfxp.git.sourceforge.net/git/gitweb.cgi?p=nullfxp/wcached;a=tree
+wcached是一个基于memcached 1.4.x 开发的快速高效的带永久存储的内存缓存系统。<br />
+<br />
+wcached的特点：<br />
+<br />
+完全兼容memcached协议。支持最新的memcached二进制协议。<br />
+<br />
+支持cache数据的永久存储。<br />
+<br />
+支持二进制cache值的存储。<br />
+<br />
+有效区别会过期的k/v和不会过期的k/v，磁盘永久存储更高效。<br />
+<br />
+支持memcached的flag域存取。<br />
+<br />
+重启时分段按需将永久存储的数据加载到内存。<br />
+<br />
+读取速度快，与原memcached同一级别(95+%)，写入速度能达到原memcached的85%以上。<br />
+<br />
+使用简单，仅比原memcached多一个命令行参数，用于指定永久存储的目录。<br />
+<br />
+后端永久存储库稳定高效，丢失数据可能性非常小。<br />
+<br />
+对于分配的内存耗尽的情况，依然能直接将数据写入磁盘或者从直接从磁盘读出数据，返回给客户端。<br />
+<br />
+97%通过memcached自带的测试，测试失败的用例是由于永久存储机制导致的。<br />
+<br />
+源代码库：<br />
+git clone git://nullfxp.git.sourceforge.net/gitroot/nullfxp/wcached<br />
+<br />
+浏览源代码: http://nullfxp.git.sourceforge.net/git/gitweb.cgi?p=nullfxp/wcached;a=tree<br />
 
 </body>
 </html>

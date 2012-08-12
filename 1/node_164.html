@@ -6,252 +6,252 @@
 <title>libev 中文手册</title>
 </head>
 <body>
-<h4>简介：</h4>
-libev是高性能事件循环/事件模型的网络库，并且包含大量新特性。 
-
-它是继lievent和Event perl module之后的一套全新网络库。它追求的目标：速度更快，bug更少，特性更多，体积更小。 
-
-它和libevent很像，按照作者的介绍，可以作为libevent的替代者，能够提供更高的性能。并不需要复杂的配置。 
-
-希望它的出现，能为高性能网络应用注入新鲜血液。 
-
-它的出现真是应了那句：很快，很强大。
-<!--break-->
-<div class="pod">
-
-<h3 id="TOP">目录</h3>
-
-
-<ul><li><a href="?q=node/165#NAME">名字</a></li>
-
-<li><a href="?q=node/165#SYNOPSIS">概要</a>
-
-<ul><li><a href="?q=node/165#EXAMPLE_PROGRAM">示例程序</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="?q=node/165#DESCRIPTION">描述</a>
-
-<ul><li><a href="?q=node/165#FEATURES">功能</a></li>
-
-<li><a href="?q=node/165#CONVENTIONS">约定</a></li>
-
-<li><a href="?q=node/165#TIME_REPRESENTATION">时间表示</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="?q=node/165#ERROR_HANDLING">错误处理</a></li>
-
-<li><a href="#GLOBAL_FUNCTIONS">全局函数</a></li>
-
-<li><a href="#FUNCTIONS_CONTROLLING_THE_EVENT_LOOP">控制事件循环的函数</a></li>
-
-<li><a href="#ANATOMY_OF_A_WATCHER">监视器(WATCHER)剖析</a>
-
-<ul><li><a href="#GENERIC_WATCHER_FUNCTIONS">通用监视器函数</a></li>
-
-<li><a href="#ASSOCIATING_CUSTOM_DATA_WITH_A_WATCH">给监视器附带自定义数据</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#WATCHER_TYPES">监视器类型</a>
-
-<ul><li><a href="#code_ev_io_code_is_this_file_descrip"><code>ev_io</code> - 这个文件描述符是可读还是可写》</a>
-
-<ul><li><a href="#The_special_problem_of_disappearing_">即将消失的文件描述符的特殊问题</a></li>
-
-<li><a href="#The_special_problem_of_dup_ed_file_d">dup出来的文件描述符的特殊问题</a></li>
-
-<li><a href="#The_special_problem_of_fork">fork的特殊问题</a></li>
-
-<li><a href="#The_special_problem_of_SIGPIPE">SIGPIPE的特殊问题</a></li>
-
-<li><a href="#Watcher_Specific_Functions">监视器相关函数</a></li>
-
-<li><a href="#Examples">示例</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_timer_code_relative_and_opti"><code>ev_timer</code> - relative and optionally repeating timeouts</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-2">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_periodic_code_to_cron_or_not"><code>ev_periodic</code> - to cron or not to cron?</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-3">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-3">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_signal_code_signal_me_when_a"><code>ev_signal</code> - signal me when a signal gets signalled!</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-4">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-4">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_child_code_watch_out_for_pro"><code>ev_child</code> - watch out for process status changes</a>
-
-<ul><li><a href="#Process_Interaction">Process Interaction</a></li>
-
-<li><a href="#Overriding_the_Built_In_Processing">Overriding the Built-In Processing</a></li>
-
-<li><a href="#Watcher_Specific_Functions_and_Data_-5">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-5">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_stat_code_did_the_file_attri"><code>ev_stat</code> - did the file attributes just change?</a>
-
-<ul><li><a href="#ABI_Issues_Largefile_Support">ABI Issues (Largefile Support)</a></li>
-
-<li><a href="#Inotify">Inotify</a></li>
-
-<li><a href="#The_special_problem_of_stat_time_res">The special problem of stat time resolution</a></li>
-
-<li><a href="#Watcher_Specific_Functions_and_Data_-6">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-6">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_idle_code_when_you_ve_got_no"><code>ev_idle</code> - when you've got nothing better to do...</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-7">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-7">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_prepare_code_and_code_ev_che"><code>ev_prepare</code> and <code>ev_check</code> - customise your event loop!</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-8">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-8">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_embed_code_when_one_backend_"><code>ev_embed</code> - when one backend isn't enough...</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-9">Watcher-Specific Functions and Data Members</a></li>
-
-<li><a href="#Examples-9">Examples</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_fork_code_the_audacity_to_re"><code>ev_fork</code> - the audacity to resume the event loop after a fork</a>
-
-<ul><li><a href="#Watcher_Specific_Functions_and_Data_-10">Watcher-Specific Functions and Data Members</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#code_ev_async_code_how_to_wake_up_an"><code>ev_async</code> - how to wake up another event loop</a>
-
-<ul><li><a href="#Queueing">Queueing</a></li>
-
-<li><a href="#Watcher_Specific_Functions_and_Data_-11">Watcher-Specific Functions and Data Members</a></li>
-
-</ul>
-
-</li>
-
-</ul>
-
-</li>
-
-<li><a href="#OTHER_FUNCTIONS">OTHER FUNCTIONS</a></li>
-
-<li><a href="#LIBEVENT_EMULATION">LIBEVENT EMULATION</a></li>
-
-<li><a href="#C_SUPPORT">C++ SUPPORT</a></li>
-
-<li><a href="#OTHER_LANGUAGE_BINDINGS">OTHER LANGUAGE BINDINGS</a></li>
-
-<li><a href="#MACRO_MAGIC">MACRO MAGIC</a></li>
-
-<li><a href="#EMBEDDING">EMBEDDING</a>
-
-<ul><li><a href="#FILESETS">FILESETS</a>
-
-<ul><li><a href="#CORE_EVENT_LOOP">CORE EVENT LOOP</a></li>
-
-<li><a href="#LIBEVENT_COMPATIBILITY_API">LIBEVENT COMPATIBILITY API</a></li>
-
-<li><a href="#AUTOCONF_SUPPORT">AUTOCONF SUPPORT</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#PREPROCESSOR_SYMBOLS_MACROS">PREPROCESSOR SYMBOLS/MACROS</a></li>
-
-<li><a href="#EXPORTED_API_SYMBOLS">EXPORTED API SYMBOLS</a></li>
-
-<li><a href="#EXAMPLES">EXAMPLES</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#THREADS_AND_COROUTINES">THREADS AND COROUTINES</a>
-
-<ul><li><a href="#THREADS">THREADS</a></li>
-
-<li><a href="#COROUTINES">COROUTINES</a></li>
-
-</ul>
-
-</li>
-
-<li><a href="#COMPLEXITIES">COMPLEXITIES</a></li>
-
-<li><a href="#Win32_platform_limitations_and_worka">Win32 platform limitations and workarounds</a></li>
-
-<li><a href="#PORTABILITY_REQUIREMENTS">PORTABILITY REQUIREMENTS</a></li>
-
-<li><a href="#COMPILER_WARNINGS">COMPILER WARNINGS</a></li>
-
-<li><a href="#VALGRIND">VALGRIND</a></li>
-
-<li><a href="#AUTHOR">AUTHOR</a>
-
-</li>
-
-</ul><hr />
-
+<h4>简介：</h4><br />
+libev是高性能事件循环/事件模型的网络库，并且包含大量新特性。 <br />
+<br />
+它是继lievent和Event perl module之后的一套全新网络库。它追求的目标：速度更快，bug更少，特性更多，体积更小。 <br />
+<br />
+它和libevent很像，按照作者的介绍，可以作为libevent的替代者，能够提供更高的性能。并不需要复杂的配置。 <br />
+<br />
+希望它的出现，能为高性能网络应用注入新鲜血液。 <br />
+<br />
+它的出现真是应了那句：很快，很强大。<br />
+<!--break--><br />
+<div class="pod"><br />
+<br />
+<h3 id="TOP">目录</h3><br />
+<br />
+<br />
+<ul><li><a href="?q=node/165#NAME">名字</a></li><br />
+<br />
+<li><a href="?q=node/165#SYNOPSIS">概要</a><br />
+<br />
+<ul><li><a href="?q=node/165#EXAMPLE_PROGRAM">示例程序</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="?q=node/165#DESCRIPTION">描述</a><br />
+<br />
+<ul><li><a href="?q=node/165#FEATURES">功能</a></li><br />
+<br />
+<li><a href="?q=node/165#CONVENTIONS">约定</a></li><br />
+<br />
+<li><a href="?q=node/165#TIME_REPRESENTATION">时间表示</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="?q=node/165#ERROR_HANDLING">错误处理</a></li><br />
+<br />
+<li><a href="#GLOBAL_FUNCTIONS">全局函数</a></li><br />
+<br />
+<li><a href="#FUNCTIONS_CONTROLLING_THE_EVENT_LOOP">控制事件循环的函数</a></li><br />
+<br />
+<li><a href="#ANATOMY_OF_A_WATCHER">监视器(WATCHER)剖析</a><br />
+<br />
+<ul><li><a href="#GENERIC_WATCHER_FUNCTIONS">通用监视器函数</a></li><br />
+<br />
+<li><a href="#ASSOCIATING_CUSTOM_DATA_WITH_A_WATCH">给监视器附带自定义数据</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#WATCHER_TYPES">监视器类型</a><br />
+<br />
+<ul><li><a href="#code_ev_io_code_is_this_file_descrip"><code>ev_io</code> - 这个文件描述符是可读还是可写》</a><br />
+<br />
+<ul><li><a href="#The_special_problem_of_disappearing_">即将消失的文件描述符的特殊问题</a></li><br />
+<br />
+<li><a href="#The_special_problem_of_dup_ed_file_d">dup出来的文件描述符的特殊问题</a></li><br />
+<br />
+<li><a href="#The_special_problem_of_fork">fork的特殊问题</a></li><br />
+<br />
+<li><a href="#The_special_problem_of_SIGPIPE">SIGPIPE的特殊问题</a></li><br />
+<br />
+<li><a href="#Watcher_Specific_Functions">监视器相关函数</a></li><br />
+<br />
+<li><a href="#Examples">示例</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_timer_code_relative_and_opti"><code>ev_timer</code> - relative and optionally repeating timeouts</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-2">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_periodic_code_to_cron_or_not"><code>ev_periodic</code> - to cron or not to cron?</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-3">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-3">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_signal_code_signal_me_when_a"><code>ev_signal</code> - signal me when a signal gets signalled!</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-4">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-4">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_child_code_watch_out_for_pro"><code>ev_child</code> - watch out for process status changes</a><br />
+<br />
+<ul><li><a href="#Process_Interaction">Process Interaction</a></li><br />
+<br />
+<li><a href="#Overriding_the_Built_In_Processing">Overriding the Built-In Processing</a></li><br />
+<br />
+<li><a href="#Watcher_Specific_Functions_and_Data_-5">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-5">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_stat_code_did_the_file_attri"><code>ev_stat</code> - did the file attributes just change?</a><br />
+<br />
+<ul><li><a href="#ABI_Issues_Largefile_Support">ABI Issues (Largefile Support)</a></li><br />
+<br />
+<li><a href="#Inotify">Inotify</a></li><br />
+<br />
+<li><a href="#The_special_problem_of_stat_time_res">The special problem of stat time resolution</a></li><br />
+<br />
+<li><a href="#Watcher_Specific_Functions_and_Data_-6">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-6">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_idle_code_when_you_ve_got_no"><code>ev_idle</code> - when you've got nothing better to do...</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-7">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-7">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_prepare_code_and_code_ev_che"><code>ev_prepare</code> and <code>ev_check</code> - customise your event loop!</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-8">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-8">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_embed_code_when_one_backend_"><code>ev_embed</code> - when one backend isn't enough...</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-9">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+<li><a href="#Examples-9">Examples</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_fork_code_the_audacity_to_re"><code>ev_fork</code> - the audacity to resume the event loop after a fork</a><br />
+<br />
+<ul><li><a href="#Watcher_Specific_Functions_and_Data_-10">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#code_ev_async_code_how_to_wake_up_an"><code>ev_async</code> - how to wake up another event loop</a><br />
+<br />
+<ul><li><a href="#Queueing">Queueing</a></li><br />
+<br />
+<li><a href="#Watcher_Specific_Functions_and_Data_-11">Watcher-Specific Functions and Data Members</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#OTHER_FUNCTIONS">OTHER FUNCTIONS</a></li><br />
+<br />
+<li><a href="#LIBEVENT_EMULATION">LIBEVENT EMULATION</a></li><br />
+<br />
+<li><a href="#C_SUPPORT">C++ SUPPORT</a></li><br />
+<br />
+<li><a href="#OTHER_LANGUAGE_BINDINGS">OTHER LANGUAGE BINDINGS</a></li><br />
+<br />
+<li><a href="#MACRO_MAGIC">MACRO MAGIC</a></li><br />
+<br />
+<li><a href="#EMBEDDING">EMBEDDING</a><br />
+<br />
+<ul><li><a href="#FILESETS">FILESETS</a><br />
+<br />
+<ul><li><a href="#CORE_EVENT_LOOP">CORE EVENT LOOP</a></li><br />
+<br />
+<li><a href="#LIBEVENT_COMPATIBILITY_API">LIBEVENT COMPATIBILITY API</a></li><br />
+<br />
+<li><a href="#AUTOCONF_SUPPORT">AUTOCONF SUPPORT</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#PREPROCESSOR_SYMBOLS_MACROS">PREPROCESSOR SYMBOLS/MACROS</a></li><br />
+<br />
+<li><a href="#EXPORTED_API_SYMBOLS">EXPORTED API SYMBOLS</a></li><br />
+<br />
+<li><a href="#EXAMPLES">EXAMPLES</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#THREADS_AND_COROUTINES">THREADS AND COROUTINES</a><br />
+<br />
+<ul><li><a href="#THREADS">THREADS</a></li><br />
+<br />
+<li><a href="#COROUTINES">COROUTINES</a></li><br />
+<br />
+</ul><br />
+<br />
+</li><br />
+<br />
+<li><a href="#COMPLEXITIES">COMPLEXITIES</a></li><br />
+<br />
+<li><a href="#Win32_platform_limitations_and_worka">Win32 platform limitations and workarounds</a></li><br />
+<br />
+<li><a href="#PORTABILITY_REQUIREMENTS">PORTABILITY REQUIREMENTS</a></li><br />
+<br />
+<li><a href="#COMPILER_WARNINGS">COMPILER WARNINGS</a></li><br />
+<br />
+<li><a href="#VALGRIND">VALGRIND</a></li><br />
+<br />
+<li><a href="#AUTHOR">AUTHOR</a><br />
+<br />
+</li><br />
+<br />
+</ul><hr /><br />
+<br />
 </div>
 </body>
 </html>

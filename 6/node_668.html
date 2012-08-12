@@ -6,309 +6,309 @@
 <title>trac 0.12 安装</title>
 </head>
 <body>
-Trac项目管理一直是我比较喜欢的，做的很强大，很精致。
-
-距离上次使用有一段时间，记得上次安装的时候还是测试版本，只安装了个standalone模式运行，带基本功能的版本。
-
-
-本次安装，还是基于trac-0.12的，不过这个版本已经非常成熟，安装起来更容易些了。
-
-本次安装相比上次完整许多，实现了大多数的必备功能，包括如下功能，
-
-*) 多resposity支持
-
-*) svn与git库支持
-
-*) 中文界面支持
-
-*) 语法高亮支持
-
-*) 与apache的整合
-
-*) trac用户与认证
-
-*) 一些钩子
-
-*) 相关的依赖都安装到该trac目录下
-
-
-1、安装环境
-
-     *)  Centos 6.2 x86_64
-
-     *)  python-2.6
-
-     *)  subversion-1.7.5
-
-     *)  apache-2.2
-
-
-2、安装目录结构
-
-      *)  /usr/local/apache 
-
-      *)  /usr/local/subversion
-
-      *)  /usr/local/trac
-
-      *)  trac实例  /usr/local/trac/env1
-
-      *)  与apache整合程序 /usr/local/trac/trac_with_apache
-
-      *) 主svn库 /data1/SVN/svnroot
-
-      *) 测试svn库 /data1/SVN/svntest
-
-      *) 测试git库  /data1/git/gittest1.git
-
-      *) 测试git库  /data1/git/gittest2.git
-
-
-3、Trac基本程序安装
-
-    下载 Trac-0.12.tar.gz，解压，进入源码目录，
-
-     python setup.py install --prefix=/usr/local/trac
-
-
-     该命令把trac基本程序安装到/usr/local/trac目录。
-
-
-4、测试Trac基本安装与standalone方式执行
-
-     创建tracenv
-
-     /usr/local/trac/bin/trac-admin initenv /usr/local/trac/env1
-
-     standalone启动，
-
-     首先设定python第三方路径环境变量，以便安装在非系统目录下的trac能正常执行。
-
-     export PYTHONPATH=/usr/local/trac/lib/python2.6/site-packages/:$PYTHONPATH
-
-     /usr/local/trac/bin/tracd -p 8000 /usr/local/trac/env1
-
-     使用浏览器访问http://localhost:8000/确定是否正常访问。
-
-     正常情况下，可浏览trac的主程序，包括wiki, timeline, ticks。
-
-     这一步非常简单，一般不会出现什么问题。
-
-     
-
-5、安装并设置中文界面支持功能
-
-     安装easy_install工具包，这个程序在python包setuptools中，
-
-            yum install setuptools
-
-    安装Babel
-
-            easy_install Babel --prefix=/usr/local/trac/
-
-    安装国际化包，返回Trac-0.12安装目录，
-
-            生成pot :  python setup.py extract_messages
-
-            编译po:  python setup.py update_catalog
-
-            检查你要的语言装了没:  python setup.py update_catalog -l zh_CN
-
-            编译为mo:  setup.py compile_catalog -f
-
-            覆盖安装trac:  python setup.py install --prefix=/usr/local/trac
-
-     再次浏览器访问，可查看或者修改界面语言。
-
-
-6、与svn/git版本库整合
-
-     现在返回到第4步中创建的trac env1目录，打开conf/trac.ini配置文件，
-
-     修改[trac]一节中的
-
-             repository_dir = /data1/SVN/svnroot
-
-             repository_type = svn
-
-     重启动tracd，可在trac界面中看到已经显示了svn库数据。
-
-     这一节设置的是trac的默认svn/git版本库，如果默认的使用git，repository_type 设置为 git。
-
-
-    安装git插件：
-
-         easy_install --prefix=/usr/local/trac http://github.com/hvr/trac-git-plugin/tarball/master
-
-    开启git功能，在该配置文件中添加一节：
-
-     [components]
-     tracext.git.* = enabled
-
-    
-
-    添加更多的svn/git版本库功能，
-
-    在配置文件中添加这一节配置信息，
-
-[repositories]
-my_repo_a.dir = /data1/SVN/svntest
-my_repo_b.dir = /data1/SVN/svntest2
-gittest1.dir = /data1/git/gittest1.git
-gittest1.type = git
-gittest2.dir = /data1/git/gittest2.git
-gittest2.type = git
-
-      注意，对于 my_repo_a 和 my_repo_b，没有指定相应的type值，表示使用[trac]配置中的版本库类型，
-
-      由于默认的是svn类型，对于gittest1和gittest2，需要显式指定其版本库类型为git。
-
-
-      重启tracd测试是否正常显示多版本库功能。
-
-
-7、代码语法高亮支持
-
-     上面添加多个版本库，如果浏览库的源代码，现在源代码是没有语法高亮的。
-
-     这个功能非常必要，安装起来也比较简单，
-
-     easy_install Pygments  --prefix=/usr/local/trac
-
-
-     重新启动tracd ，即可生效。
-
-
-8、与apache整合及认证
-
-     这个稍微复杂一点，因为不但要为trac安装一些依赖，还要为apache安装依赖模块，
-
-     还有可能要重新编译subversion，添加必要的wsgi模块。
-
-     trac与apache 的整合有两种办法，使用mod_python，或者mod_wsgi，
-
-     由于前者项目已经停止，很久没有维护，trac官方推荐使用mod_wsgi方式整合。
-
-    
-
-     安装subversion的wsgi包，进入subversion源代码目录，正常安装subversion后，
-
-          make swig-py && make install-swig-py
-
-     这一步把svn swig模块安装到subversion目录，查看/usr/local/subversion/lib/svn-python/libsvn/。
-
-
-     安装apache的mod_wsgi模块，检出模块源代码，hg clone https://code.google.com/p/modwsgi/，
-
-     cd modwsgi
-
-     ./configure --prefix=/usr/local/apache-2.2.22 --with-apxs=/usr/local/apache-2.2.22
-
-     make && make install
-
-     注意，由于我们使用的是apache-2.2.x版本，不能使用modwsgi-3.3.tar.gz包，
-
-     必须使用代码库中的，最新版本的mod_wsgi。
-
-
-     配置apache，加载mod_wsgi模块，修改httpd.conf，添加加载模块指令，
-
-        LoadModule wsgi_module modules/mod_wsgi.so
-
- 
-
-     生成与apache整合用的trac程序，
-
-     trac-admin /usr/local/trac/evn1 deploy /usr/local/trac/trac_with_apache
-
-     生成了cgi-bin中的脚本与htdocs中的页面文件。
-
-     下面一节将在apache配置中使用这些文件，实现访问trac的evn1的整合功能。
-
-
-     配置一个apache虚拟主机，添加与trac的整合访问地址：
-
-<VirtualHost *:80>
-   DocumentRoot /usr/local/trac/trac_with_apache/htdocs
-   ServerName trac.qtchina.net
-   DirectoryIndex index.php
-   #WSGIScriptAlias /trac  /usr/local/trac/trac_with_apache/cgi-bin/trac.wsgi
-   WSGIScriptAlias /  /usr/local/trac/trac_with_apache/cgi-bin/trac.wsgi
-   SetEnv TRAC_ENV /usr/local/trac/teste1
-   SetEnv PYTHONPATH /usr/local/trac/lib/python2.6/site-packages:/usr/local/subversion17/lib/svn-python/
-   <Directory "/usr/local/trac/trac_with_apache/cgi-bin">
-        WSGIApplicationGroup %{GLOBAL}
-        Order deny,allow
-        Allow from all
-   </Directory>
-       <Directory "/usr/local/trac/trac_with_apache/htdocs">
-            Options Indexes FollowSymLinks
-            AllowOverride All
-    </Directory>
-
-    <Location "/login">
-        AuthType Basic
-        AuthName "Trac"
-        AuthUserFile /data1/SVN/passwd.conf
-        Require valid-user
-    </Location>
-
-</VirtualHost>
-
-     注意，其中设置的两个环境变量，trac.wsgi脚本的路径，访问路径，登陆路径和密码文件。
-
-     这里使用的是htpasswd生成的密码文件认证方式。
-
-  
-
-     现在，可以退出tracd，使用apache的http://trac.qtchina.net:80端口访问trac了。
-
-     这一步，整合可能会出现几个问题，导致最后访问时出现500错误，请细心。
-
-     
-
-9、安装过程常见问题
-
-     httpd: Syntax error on line 54 of /usr/local/apache-2.2.22/conf/httpd.conf: Can't locate API module structure `mod_wsgi' in file /usr/local/apache-2.2.22/modules/mod_wsgi.so: /usr/local/apache-2.2.22/modules/mod_wsgi.so: undefined symbol: mod_wsgi
-
-    这个是因为modwsgi的版本低了，需要使用modwsgi-trunk中的版本。
-
-
-    ImportError: No module named trac.web.main
-
-    这个是因为apache虚拟主机配置中，没有正确设置PYTHONPATH。
-
-
-     Unsupported version control system "svn": No module named svnNo, trac uses subversion's SWIG bindings, not pysvn.
-
-     没有安装subversion的swgi-py支持包，make swig-py && make install-swig-py。
-
-
-     UnknownLocaleError: unknown locale 'zh_CN'
-
-     没有正确安装中文支持包。
-
-
-     500错误
-
-     上面几项都需要仔细检查，或者从头安装一遍更容易些。
-
-
-      提交svn后，trac显示不变
-
-      这是trac的一效率方面的策略，有一个svn版本的缓存，
-
-      在没有通知让trac更新之前，trac不会自动查看svn的版本改变。
-
-      使用trac-admin命令通知trac svn版本已经改变。
-
-      /usr/local/trac/bin/trac-admin /usr/local/trac/env1 changeset added /data1/SVN/svnroot
-
-     
-
-
-10、trac-admin命令行说明
-
+Trac项目管理一直是我比较喜欢的，做的很强大，很精致。<br />
+<br />
+距离上次使用有一段时间，记得上次安装的时候还是测试版本，只安装了个standalone模式运行，带基本功能的版本。<br />
+<br />
+<br />
+本次安装，还是基于trac-0.12的，不过这个版本已经非常成熟，安装起来更容易些了。<br />
+<br />
+本次安装相比上次完整许多，实现了大多数的必备功能，包括如下功能，<br />
+<br />
+*) 多resposity支持<br />
+<br />
+*) svn与git库支持<br />
+<br />
+*) 中文界面支持<br />
+<br />
+*) 语法高亮支持<br />
+<br />
+*) 与apache的整合<br />
+<br />
+*) trac用户与认证<br />
+<br />
+*) 一些钩子<br />
+<br />
+*) 相关的依赖都安装到该trac目录下<br />
+<br />
+<br />
+1、安装环境<br />
+<br />
+     *)  Centos 6.2 x86_64<br />
+<br />
+     *)  python-2.6<br />
+<br />
+     *)  subversion-1.7.5<br />
+<br />
+     *)  apache-2.2<br />
+<br />
+<br />
+2、安装目录结构<br />
+<br />
+      *)  /usr/local/apache <br />
+<br />
+      *)  /usr/local/subversion<br />
+<br />
+      *)  /usr/local/trac<br />
+<br />
+      *)  trac实例  /usr/local/trac/env1<br />
+<br />
+      *)  与apache整合程序 /usr/local/trac/trac_with_apache<br />
+<br />
+      *) 主svn库 /data1/SVN/svnroot<br />
+<br />
+      *) 测试svn库 /data1/SVN/svntest<br />
+<br />
+      *) 测试git库  /data1/git/gittest1.git<br />
+<br />
+      *) 测试git库  /data1/git/gittest2.git<br />
+<br />
+<br />
+3、Trac基本程序安装<br />
+<br />
+    下载 Trac-0.12.tar.gz，解压，进入源码目录，<br />
+<br />
+     python setup.py install --prefix=/usr/local/trac<br />
+<br />
+<br />
+     该命令把trac基本程序安装到/usr/local/trac目录。<br />
+<br />
+<br />
+4、测试Trac基本安装与standalone方式执行<br />
+<br />
+     创建tracenv<br />
+<br />
+     /usr/local/trac/bin/trac-admin initenv /usr/local/trac/env1<br />
+<br />
+     standalone启动，<br />
+<br />
+     首先设定python第三方路径环境变量，以便安装在非系统目录下的trac能正常执行。<br />
+<br />
+     export PYTHONPATH=/usr/local/trac/lib/python2.6/site-packages/:$PYTHONPATH<br />
+<br />
+     /usr/local/trac/bin/tracd -p 8000 /usr/local/trac/env1<br />
+<br />
+     使用浏览器访问http://localhost:8000/确定是否正常访问。<br />
+<br />
+     正常情况下，可浏览trac的主程序，包括wiki, timeline, ticks。<br />
+<br />
+     这一步非常简单，一般不会出现什么问题。<br />
+<br />
+     <br />
+<br />
+5、安装并设置中文界面支持功能<br />
+<br />
+     安装easy_install工具包，这个程序在python包setuptools中，<br />
+<br />
+            yum install setuptools<br />
+<br />
+    安装Babel<br />
+<br />
+            easy_install Babel --prefix=/usr/local/trac/<br />
+<br />
+    安装国际化包，返回Trac-0.12安装目录，<br />
+<br />
+            生成pot :  python setup.py extract_messages<br />
+<br />
+            编译po:  python setup.py update_catalog<br />
+<br />
+            检查你要的语言装了没:  python setup.py update_catalog -l zh_CN<br />
+<br />
+            编译为mo:  setup.py compile_catalog -f<br />
+<br />
+            覆盖安装trac:  python setup.py install --prefix=/usr/local/trac<br />
+<br />
+     再次浏览器访问，可查看或者修改界面语言。<br />
+<br />
+<br />
+6、与svn/git版本库整合<br />
+<br />
+     现在返回到第4步中创建的trac env1目录，打开conf/trac.ini配置文件，<br />
+<br />
+     修改[trac]一节中的<br />
+<br />
+             repository_dir = /data1/SVN/svnroot<br />
+<br />
+             repository_type = svn<br />
+<br />
+     重启动tracd，可在trac界面中看到已经显示了svn库数据。<br />
+<br />
+     这一节设置的是trac的默认svn/git版本库，如果默认的使用git，repository_type 设置为 git。<br />
+<br />
+<br />
+    安装git插件：<br />
+<br />
+         easy_install --prefix=/usr/local/trac http://github.com/hvr/trac-git-plugin/tarball/master<br />
+<br />
+    开启git功能，在该配置文件中添加一节：<br />
+<br />
+     [components]<br />
+     tracext.git.* = enabled<br />
+<br />
+    <br />
+<br />
+    添加更多的svn/git版本库功能，<br />
+<br />
+    在配置文件中添加这一节配置信息，<br />
+<br />
+[repositories]<br />
+my_repo_a.dir = /data1/SVN/svntest<br />
+my_repo_b.dir = /data1/SVN/svntest2<br />
+gittest1.dir = /data1/git/gittest1.git<br />
+gittest1.type = git<br />
+gittest2.dir = /data1/git/gittest2.git<br />
+gittest2.type = git<br />
+<br />
+      注意，对于 my_repo_a 和 my_repo_b，没有指定相应的type值，表示使用[trac]配置中的版本库类型，<br />
+<br />
+      由于默认的是svn类型，对于gittest1和gittest2，需要显式指定其版本库类型为git。<br />
+<br />
+<br />
+      重启tracd测试是否正常显示多版本库功能。<br />
+<br />
+<br />
+7、代码语法高亮支持<br />
+<br />
+     上面添加多个版本库，如果浏览库的源代码，现在源代码是没有语法高亮的。<br />
+<br />
+     这个功能非常必要，安装起来也比较简单，<br />
+<br />
+     easy_install Pygments  --prefix=/usr/local/trac<br />
+<br />
+<br />
+     重新启动tracd ，即可生效。<br />
+<br />
+<br />
+8、与apache整合及认证<br />
+<br />
+     这个稍微复杂一点，因为不但要为trac安装一些依赖，还要为apache安装依赖模块，<br />
+<br />
+     还有可能要重新编译subversion，添加必要的wsgi模块。<br />
+<br />
+     trac与apache 的整合有两种办法，使用mod_python，或者mod_wsgi，<br />
+<br />
+     由于前者项目已经停止，很久没有维护，trac官方推荐使用mod_wsgi方式整合。<br />
+<br />
+    <br />
+<br />
+     安装subversion的wsgi包，进入subversion源代码目录，正常安装subversion后，<br />
+<br />
+          make swig-py && make install-swig-py<br />
+<br />
+     这一步把svn swig模块安装到subversion目录，查看/usr/local/subversion/lib/svn-python/libsvn/。<br />
+<br />
+<br />
+     安装apache的mod_wsgi模块，检出模块源代码，hg clone https://code.google.com/p/modwsgi/，<br />
+<br />
+     cd modwsgi<br />
+<br />
+     ./configure --prefix=/usr/local/apache-2.2.22 --with-apxs=/usr/local/apache-2.2.22<br />
+<br />
+     make && make install<br />
+<br />
+     注意，由于我们使用的是apache-2.2.x版本，不能使用modwsgi-3.3.tar.gz包，<br />
+<br />
+     必须使用代码库中的，最新版本的mod_wsgi。<br />
+<br />
+<br />
+     配置apache，加载mod_wsgi模块，修改httpd.conf，添加加载模块指令，<br />
+<br />
+        LoadModule wsgi_module modules/mod_wsgi.so<br />
+<br />
+ <br />
+<br />
+     生成与apache整合用的trac程序，<br />
+<br />
+     trac-admin /usr/local/trac/evn1 deploy /usr/local/trac/trac_with_apache<br />
+<br />
+     生成了cgi-bin中的脚本与htdocs中的页面文件。<br />
+<br />
+     下面一节将在apache配置中使用这些文件，实现访问trac的evn1的整合功能。<br />
+<br />
+<br />
+     配置一个apache虚拟主机，添加与trac的整合访问地址：<br />
+<br />
+<VirtualHost *:80><br />
+   DocumentRoot /usr/local/trac/trac_with_apache/htdocs<br />
+   ServerName trac.qtchina.net<br />
+   DirectoryIndex index.php<br />
+   #WSGIScriptAlias /trac  /usr/local/trac/trac_with_apache/cgi-bin/trac.wsgi<br />
+   WSGIScriptAlias /  /usr/local/trac/trac_with_apache/cgi-bin/trac.wsgi<br />
+   SetEnv TRAC_ENV /usr/local/trac/teste1<br />
+   SetEnv PYTHONPATH /usr/local/trac/lib/python2.6/site-packages:/usr/local/subversion17/lib/svn-python/<br />
+   <Directory "/usr/local/trac/trac_with_apache/cgi-bin"><br />
+        WSGIApplicationGroup %{GLOBAL}<br />
+        Order deny,allow<br />
+        Allow from all<br />
+   </Directory><br />
+       <Directory "/usr/local/trac/trac_with_apache/htdocs"><br />
+            Options Indexes FollowSymLinks<br />
+            AllowOverride All<br />
+    </Directory><br />
+<br />
+    <Location "/login"><br />
+        AuthType Basic<br />
+        AuthName "Trac"<br />
+        AuthUserFile /data1/SVN/passwd.conf<br />
+        Require valid-user<br />
+    </Location><br />
+<br />
+</VirtualHost><br />
+<br />
+     注意，其中设置的两个环境变量，trac.wsgi脚本的路径，访问路径，登陆路径和密码文件。<br />
+<br />
+     这里使用的是htpasswd生成的密码文件认证方式。<br />
+<br />
+  <br />
+<br />
+     现在，可以退出tracd，使用apache的http://trac.qtchina.net:80端口访问trac了。<br />
+<br />
+     这一步，整合可能会出现几个问题，导致最后访问时出现500错误，请细心。<br />
+<br />
+     <br />
+<br />
+9、安装过程常见问题<br />
+<br />
+     httpd: Syntax error on line 54 of /usr/local/apache-2.2.22/conf/httpd.conf: Can't locate API module structure `mod_wsgi' in file /usr/local/apache-2.2.22/modules/mod_wsgi.so: /usr/local/apache-2.2.22/modules/mod_wsgi.so: undefined symbol: mod_wsgi<br />
+<br />
+    这个是因为modwsgi的版本低了，需要使用modwsgi-trunk中的版本。<br />
+<br />
+<br />
+    ImportError: No module named trac.web.main<br />
+<br />
+    这个是因为apache虚拟主机配置中，没有正确设置PYTHONPATH。<br />
+<br />
+<br />
+     Unsupported version control system "svn": No module named svnNo, trac uses subversion's SWIG bindings, not pysvn.<br />
+<br />
+     没有安装subversion的swgi-py支持包，make swig-py && make install-swig-py。<br />
+<br />
+<br />
+     UnknownLocaleError: unknown locale 'zh_CN'<br />
+<br />
+     没有正确安装中文支持包。<br />
+<br />
+<br />
+     500错误<br />
+<br />
+     上面几项都需要仔细检查，或者从头安装一遍更容易些。<br />
+<br />
+<br />
+      提交svn后，trac显示不变<br />
+<br />
+      这是trac的一效率方面的策略，有一个svn版本的缓存，<br />
+<br />
+      在没有通知让trac更新之前，trac不会自动查看svn的版本改变。<br />
+<br />
+      使用trac-admin命令通知trac svn版本已经改变。<br />
+<br />
+      /usr/local/trac/bin/trac-admin /usr/local/trac/env1 changeset added /data1/SVN/svnroot<br />
+<br />
+     <br />
+<br />
+<br />
+10、trac-admin命令行说明<br />
+<br />
     /usr/local/trac/bin/trac-admin /usr/local/trac/env1/   help
 </body>
 </html>

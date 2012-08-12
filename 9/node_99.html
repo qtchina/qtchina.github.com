@@ -6,99 +6,99 @@
 <title>第二章 创建对话框（信号与槽进阶）</title>
 </head>
 <body>
-<h3 style="line-height: 150%;" class="cjk">信号与槽进阶</h3>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">信号与槽的机制是 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">编程的基础。它使得应用程序程序员将对象与对象无隔阂的绑定在一起。我们已经将一些信号和槽连接在一起，声明了自己的信号和槽并实现了我们自己的槽，发出了自己信号。让我们花一些时间来仔细研究一下这一机制。</font></p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">槽和普通的 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">成员函数几乎完全相同。它们可以使虚函数；可以被重载；可以是公开、保护或私有的，它们可以象其它 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">成员函数一样被直接调用；并且参数可以是任何数据类型。不同的是一个槽可以被连接到一个信号，在这种情况下当信号发出时它可以被自动调用。</font></p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">connect()</font></font> </font></font><font size="3">语句看起来是这样的：</font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(sender, SIGNAL(signal), receiver, SLOT(slot));</font></font></p>
-<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">sender</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">receiver</font></font> </font></font><font size="3">是指向 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">QObject</font></font>s </font></font><font size="3">的指针，</font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">signal</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">slot</font></font> </font></font><font size="3">是不带参数名的函数签名。</font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">SIGNAL()</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">SLOT()</font></font> </font></font><font size="3">宏本质上将它们的参数转化成字符串。</font></p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">在我们已经看到的例子中，我们总是连接不同的信号和不同的槽，其实，还有其它可能的选择。</font></p>
-<ul>
-    <li>
-    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">一个信号可以被连接到多个槽上：</font></p>
-    </li>
-</ul>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(slider, SIGNAL(valueChanged(int)),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">spinBox, SLOT(setValue(int)));</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(slider, SIGNAL(valueChanged(int)),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(updateStatusBarIndicator(int)));</font></font></p>
-<p align="left" style="margin-left: 0.64cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;">&nbsp;</p>
-<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当信号发出时，槽会按一个非特定的顺序被轮流调用。</font></p>
-<ul>
-    <li value="1">
-    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">多个信号可以被连接到同一个槽上：</font></p>
-    </li>
-</ul>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(lcd, SIGNAL(overflow()),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(calculator, SIGNAL(divisionByZero()),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当任何一个信号发出时，槽都会被调用。</font></p>
-<ul>
-    <li value="1">
-    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><a name="iddle1860" title="iddle1860"></a><a name="iddle1952" title="iddle1952"></a><a name="iddle2127" title="iddle2127"></a><a name="iddle3929" title="iddle3929"></a><a name="iddle4590" title="iddle4590"></a><a name="iddle4596" title="iddle4596"></a><a name="iddle4606" title="iddle4606"></a><a name="iddle6294" title="iddle6294"></a><a name="iddle6298" title="iddle6298"></a><a name="iddle6306" title="iddle6306"></a><a name="iddle6313" title="iddle6313"></a><a name="iddle6360" title="iddle6360"></a><a name="iddle6364" title="iddle6364"></a><a name="iddle6371" title="iddle6371"></a><a name="iddle6378" title="iddle6378"></a><a name="iddle6635" title="iddle6635"></a> 	<font size="3">一个信号可以被连接到另一个信号上：</font></p>
-    </li>
-</ul>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(lineEdit, SIGNAL(textChanged(const QString &amp;)),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SIGNAL(updateRecord(const QString &amp;)));</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当地一个信号被发出时，第二个信号也会发出。除此之外，信号与信号的连接和信号与槽的连接没有任何不同。</font></p>
-<ul>
-    <li value="1">
-    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">连接可以被取消：</font></p>
-    </li>
-</ul>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">disconnect(lcd, SIGNAL(overflow()),</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p>
-<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">这不是必需的，因为当对象被删除后 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会自动取消与对象相关的连接。</font></p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">要成功连接一个信号到一个槽 </font><font face="宋体, SimSun"><font size="3">(</font></font><font size="3">或到另一个信号</font><font face="宋体, SimSun"><font size="3">)</font></font><font size="3">上，你必需拥相同的参数类型和顺序：</font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(processReply(int, const QString &amp;)));</font></font></p>
-<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">另外，如果一个信号比要连接槽拥有更多的参数，多余的参数会被简单的忽略掉：</font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(checkErrorCode(int)));</font></font></p>
-<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">如果参数类型不兼容，又或者信号或槽不存在，如果应用程序在调试模式下编译</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会发出一个运行时警告。同样的，如果参数名被包含进信号或者槽的签名，</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会给出一个警告。</font></p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">到目前为止，我们只用到了物件的信号与槽。但是信号与槽的机制本身是在 </font><font face="宋体, SimSun"><font size="3">QObject </font></font><font size="3">中实现的并且不仅仅用在 </font><font face="宋体, SimSun"><font size="3">GUI </font></font><font size="3">编程上。这个机制可以被 </font><font face="宋体, SimSun"><font size="3">QObject </font></font><font size="3">任何子类使用。：</font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class Employee : public QObject</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Q_OBJECT</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Employee() { mySalary = 0; }</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int salary() const { return mySalary; }</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public slots:</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void setSalary(int newSalary);</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">signals:</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void salaryChanged(int newSalary);</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">private:</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int mySalary;</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void Employee::setSalary(int newSalary)</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">if (newSalary != mySalary) {</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">mySalary = newSalary;</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">emit salaryChanged(mySalary);</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
-<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
-<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p>
-<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><a name="iddle1817" title="iddle1817"></a><a name="iddle1953" title="iddle1953"></a><a name="iddle2876" title="iddle2876"></a><a name="iddle3309" title="iddle3309"></a><a name="iddle3311" title="iddle3311"></a><a name="iddle3362" title="iddle3362"></a><a name="iddle3547" title="iddle3547"></a><a name="iddle3550" title="iddle3550"></a><a name="iddle3886" title="iddle3886"></a><a name="iddle3925" title="iddle3925"></a><a name="iddle3926" title="iddle3926"></a><a name="iddle4508" title="iddle4508"></a><a name="iddle4591" title="iddle4591"></a><a name="iddle4607" title="iddle4607"></a><a name="iddle4617" title="iddle4617"></a><a name="iddle4620" title="iddle4620"></a><a name="iddle4629" title="iddle4629"></a><a name="iddle4811" title="iddle4811"></a><a name="iddle5161" title="iddle5161"></a><a name="iddle5166" title="iddle5166"></a><a name="iddle6303" title="iddle6303"></a><a name="iddle6368" title="iddle6368"></a><a name="iddle6887" title="iddle6887"></a><a name="iddle7236" title="iddle7236"></a> <font size="3">注意 </font><font face="宋体, SimSun"><font size="3">setSalary () </font></font><font size="3">是如何实现的。 我们仅当newSalary != mySalary成立的时候才发出salaryChanged()信号。</font><font size="3">这确保循环连接不会进入死循环。</font></p>
-<table width="100%" cellspacing="0" cellpadding="5" bordercolor="#000000" border="3">
-    <tbody>
-        <tr>
-            <td width="100%">
-            <h2 style="margin-top: 0cm;" class="cjk"><a name="ch02sb01" title="ch02sb01"></a><font face="宋体, SimSun">Qt 			</font>的元对象系统</h2>
-            <p>&nbsp;&nbsp;&nbsp; Qt的一个主要特征是创建能绑定在一起但任意的组件都不需要知道它所连接的其他组件任何信息的独立软件组件的C++扩展机制。</p>
-            <p>&nbsp;&nbsp;&nbsp; 这个机制被称作元对象系统，它提供了两个关键服务：信号/槽和内省（introspection）。内省功能对实现信号和槽是必须的，它允许应用程序员在 运行期获得QObject子类的&ldquo;元信息&rdquo;，包括此对象支持的信号和槽的列表以及类名。此机制还支持属于（用于Qt 设计师）和文本翻译（用于国际化支持），它还是Qt 应用程序脚本（QSA）的基础。</p>
-            <p>&nbsp;&nbsp; 标准C++不提供Qt 元对象系统所需的动态元信息支持。Qt通过提供一个专用工具 于解析Q_OBJECT类定义和使得这些信息可在C++函数中可用的 moc 程序解决这个问题。由于moc使用纯C++实现所有的功能，Qt的元对象系统可工作在任何C++编译器上。</p>
-            <p>&bull; Q_OBJECT宏定义了一些必须在所有QObject子类中实现的内省函数：metaObject(),TR(),qt_metacall()和其他一 些函数。<br />
-            &bull; Qt 的moc工具用于生成Q_OBJECT声明的函数和所有的信号的实现。<br />
-            &bull; QObject成员函数，如connect(),disconnect(),使用相关的内省函数实现它们的功能。</p>
-            <p>&nbsp;&nbsp;&nbsp; 所有这些事都由qmake,moc和QObject自动处理，因此你不需要老虎这些。但是如果你感兴趣，你可以找到QMetaObject类 文档看看，再看看由moc生成的C++源文件中如何实现这些功能的。</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<h3 style="line-height: 150%;" class="cjk">信号与槽进阶</h3><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">信号与槽的机制是 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">编程的基础。它使得应用程序程序员将对象与对象无隔阂的绑定在一起。我们已经将一些信号和槽连接在一起，声明了自己的信号和槽并实现了我们自己的槽，发出了自己信号。让我们花一些时间来仔细研究一下这一机制。</font></p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">槽和普通的 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">成员函数几乎完全相同。它们可以使虚函数；可以被重载；可以是公开、保护或私有的，它们可以象其它 </font><font face="宋体, SimSun"><font size="3">C++ </font></font><font size="3">成员函数一样被直接调用；并且参数可以是任何数据类型。不同的是一个槽可以被连接到一个信号，在这种情况下当信号发出时它可以被自动调用。</font></p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">connect()</font></font> </font></font><font size="3">语句看起来是这样的：</font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(sender, SIGNAL(signal), receiver, SLOT(slot));</font></font></p><br />
+<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">sender</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">receiver</font></font> </font></font><font size="3">是指向 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">QObject</font></font>s </font></font><font size="3">的指针，</font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">signal</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">slot</font></font> </font></font><font size="3">是不带参数名的函数签名。</font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">SIGNAL()</font></font> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><font face="宋体, SimSun"><font size="3">SLOT()</font></font> </font></font><font size="3">宏本质上将它们的参数转化成字符串。</font></p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">在我们已经看到的例子中，我们总是连接不同的信号和不同的槽，其实，还有其它可能的选择。</font></p><br />
+<ul><br />
+    <li><br />
+    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">一个信号可以被连接到多个槽上：</font></p><br />
+    </li><br />
+</ul><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(slider, SIGNAL(valueChanged(int)),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">spinBox, SLOT(setValue(int)));</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(slider, SIGNAL(valueChanged(int)),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(updateStatusBarIndicator(int)));</font></font></p><br />
+<p align="left" style="margin-left: 0.64cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;">&nbsp;</p><br />
+<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当信号发出时，槽会按一个非特定的顺序被轮流调用。</font></p><br />
+<ul><br />
+    <li value="1"><br />
+    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">多个信号可以被连接到同一个槽上：</font></p><br />
+    </li><br />
+</ul><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(lcd, SIGNAL(overflow()),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(calculator, SIGNAL(divisionByZero()),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当任何一个信号发出时，槽都会被调用。</font></p><br />
+<ul><br />
+    <li value="1"><br />
+    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><a name="iddle1860" title="iddle1860"></a><a name="iddle1952" title="iddle1952"></a><a name="iddle2127" title="iddle2127"></a><a name="iddle3929" title="iddle3929"></a><a name="iddle4590" title="iddle4590"></a><a name="iddle4596" title="iddle4596"></a><a name="iddle4606" title="iddle4606"></a><a name="iddle6294" title="iddle6294"></a><a name="iddle6298" title="iddle6298"></a><a name="iddle6306" title="iddle6306"></a><a name="iddle6313" title="iddle6313"></a><a name="iddle6360" title="iddle6360"></a><a name="iddle6364" title="iddle6364"></a><a name="iddle6371" title="iddle6371"></a><a name="iddle6378" title="iddle6378"></a><a name="iddle6635" title="iddle6635"></a> 	<font size="3">一个信号可以被连接到另一个信号上：</font></p><br />
+    </li><br />
+</ul><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(lineEdit, SIGNAL(textChanged(const QString &amp;)),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SIGNAL(updateRecord(const QString &amp;)));</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">当地一个信号被发出时，第二个信号也会发出。除此之外，信号与信号的连接和信号与槽的连接没有任何不同。</font></p><br />
+<ul><br />
+    <li value="1"><br />
+    <p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">连接可以被取消：</font></p><br />
+    </li><br />
+</ul><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">disconnect(lcd, SIGNAL(overflow()),</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(handleMathError()));</font></font></p><br />
+<p align="left" style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">这不是必需的，因为当对象被删除后 </font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会自动取消与对象相关的连接。</font></p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">要成功连接一个信号到一个槽 </font><font face="宋体, SimSun"><font size="3">(</font></font><font size="3">或到另一个信号</font><font face="宋体, SimSun"><font size="3">)</font></font><font size="3">上，你必需拥相同的参数类型和顺序：</font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(processReply(int, const QString &amp;)));</font></font></p><br />
+<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">另外，如果一个信号比要连接槽拥有更多的参数，多余的参数会被简单的忽略掉：</font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">connect(ftp, SIGNAL(rawCommandReply(int, const QString &amp;)),</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">this, SLOT(checkErrorCode(int)));</font></font></p><br />
+<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">如果参数类型不兼容，又或者信号或槽不存在，如果应用程序在调试模式下编译</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会发出一个运行时警告。同样的，如果参数名被包含进信号或者槽的签名，</font><font face="宋体, SimSun"><font size="3">Qt </font></font><font size="3">会给出一个警告。</font></p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><font size="3">到目前为止，我们只用到了物件的信号与槽。但是信号与槽的机制本身是在 </font><font face="宋体, SimSun"><font size="3">QObject </font></font><font size="3">中实现的并且不仅仅用在 </font><font face="宋体, SimSun"><font size="3">GUI </font></font><font size="3">编程上。这个机制可以被 </font><font face="宋体, SimSun"><font size="3">QObject </font></font><font size="3">任何子类使用。：</font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class Employee : public QObject</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Q_OBJECT</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">Employee() { mySalary = 0; }</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int salary() const { return mySalary; }</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public slots:</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void setSalary(int newSalary);</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">signals:</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void salaryChanged(int newSalary);</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">private:</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int mySalary;</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">void Employee::setSalary(int newSalary)</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">if (newSalary != mySalary) {</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">mySalary = newSalary;</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">emit salaryChanged(mySalary);</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p><br />
+<p align="left" style="margin-bottom: 0cm; line-height: 150%; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p><br />
+<p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p><br />
+<p align="left" style="margin-top: 0.49cm; margin-bottom: 0.49cm; line-height: 150%; widows: 2; orphans: 2;"><a name="iddle1817" title="iddle1817"></a><a name="iddle1953" title="iddle1953"></a><a name="iddle2876" title="iddle2876"></a><a name="iddle3309" title="iddle3309"></a><a name="iddle3311" title="iddle3311"></a><a name="iddle3362" title="iddle3362"></a><a name="iddle3547" title="iddle3547"></a><a name="iddle3550" title="iddle3550"></a><a name="iddle3886" title="iddle3886"></a><a name="iddle3925" title="iddle3925"></a><a name="iddle3926" title="iddle3926"></a><a name="iddle4508" title="iddle4508"></a><a name="iddle4591" title="iddle4591"></a><a name="iddle4607" title="iddle4607"></a><a name="iddle4617" title="iddle4617"></a><a name="iddle4620" title="iddle4620"></a><a name="iddle4629" title="iddle4629"></a><a name="iddle4811" title="iddle4811"></a><a name="iddle5161" title="iddle5161"></a><a name="iddle5166" title="iddle5166"></a><a name="iddle6303" title="iddle6303"></a><a name="iddle6368" title="iddle6368"></a><a name="iddle6887" title="iddle6887"></a><a name="iddle7236" title="iddle7236"></a> <font size="3">注意 </font><font face="宋体, SimSun"><font size="3">setSalary () </font></font><font size="3">是如何实现的。 我们仅当newSalary != mySalary成立的时候才发出salaryChanged()信号。</font><font size="3">这确保循环连接不会进入死循环。</font></p><br />
+<table width="100%" cellspacing="0" cellpadding="5" bordercolor="#000000" border="3"><br />
+    <tbody><br />
+        <tr><br />
+            <td width="100%"><br />
+            <h2 style="margin-top: 0cm;" class="cjk"><a name="ch02sb01" title="ch02sb01"></a><font face="宋体, SimSun">Qt 			</font>的元对象系统</h2><br />
+            <p>&nbsp;&nbsp;&nbsp; Qt的一个主要特征是创建能绑定在一起但任意的组件都不需要知道它所连接的其他组件任何信息的独立软件组件的C++扩展机制。</p><br />
+            <p>&nbsp;&nbsp;&nbsp; 这个机制被称作元对象系统，它提供了两个关键服务：信号/槽和内省（introspection）。内省功能对实现信号和槽是必须的，它允许应用程序员在 运行期获得QObject子类的&ldquo;元信息&rdquo;，包括此对象支持的信号和槽的列表以及类名。此机制还支持属于（用于Qt 设计师）和文本翻译（用于国际化支持），它还是Qt 应用程序脚本（QSA）的基础。</p><br />
+            <p>&nbsp;&nbsp; 标准C++不提供Qt 元对象系统所需的动态元信息支持。Qt通过提供一个专用工具 于解析Q_OBJECT类定义和使得这些信息可在C++函数中可用的 moc 程序解决这个问题。由于moc使用纯C++实现所有的功能，Qt的元对象系统可工作在任何C++编译器上。</p><br />
+            <p>&bull; Q_OBJECT宏定义了一些必须在所有QObject子类中实现的内省函数：metaObject(),TR(),qt_metacall()和其他一 些函数。<br /><br />
+            &bull; Qt 的moc工具用于生成Q_OBJECT声明的函数和所有的信号的实现。<br /><br />
+            &bull; QObject成员函数，如connect(),disconnect(),使用相关的内省函数实现它们的功能。</p><br />
+            <p>&nbsp;&nbsp;&nbsp; 所有这些事都由qmake,moc和QObject自动处理，因此你不需要老虎这些。但是如果你感兴趣，你可以找到QMetaObject类 文档看看，再看看由moc生成的C++源文件中如何实现这些功能的。</p><br />
+            </td><br />
+        </tr><br />
+    </tbody><br />
+</table><br />
 <p style="margin-bottom: 0cm; line-height: 150%;">&nbsp;</p>
 </body>
 </html>

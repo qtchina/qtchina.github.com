@@ -6,17 +6,17 @@
 <title>分布式文件存储开源数据库：MongoDB</title>
 </head>
 <body>
-			<dd><div class='Description'>核心提示：MongoDB是一个基于分布式文件存储的数据库开源项目。由C++语言编写。旨在为WEB应用提供可护展的高性能数据存储解决方案。 它的特点是高性能、易部署、易使用，存储数据非常方便。主要功能特性有： *面向集合存储，易存储对象类型的数据。 *模式自由。 *支持</div></dd>
-
-			<dd class='ArticleContent'><p><img height="90" alt="mongoDB" src="/uploads/allimg/090726/1441522A0-0.png" width="217" /></p>
-<p>MongoDB是一个基于分布式文件存储的数据库开源项目。由C++语言编写。旨在为WEB应用提供可护展的高性能数据存储解决方案。</p>
-<p>它的特点是高性能、易部署、易使用，存储数据非常方便。主要功能特性有：<br />*面向集合存储，易存储对象类型的数据。 <br />*模式自由。<br />*支持动态查询。 <br />*支持完全索引，包含内部对象。 <br />*支持查询。 <br />*支持复制和故障恢复。 <br />*使用高效的二进制数据存储，包括大型对象（如视频等）。<br />*自动处理碎片，以支持云计算层次的扩展性<br />*支持RUBY，PYTHON，JAVA，C++，PHP等多种语言。<br />*文件存储格式为BSON（一种JSON的扩展）<br />*可通过网络访问</p>
-<p>所谓&ldquo;面向集合&rdquo;（Collenction-Orented），意思是数据被分组存储在数据集中，被称为一个集合（Collenction)。每个集合在数据库中都有一个唯一的标识名，并且可以包含无限数目的文档。集合的概念类似关系型数据库（RDBMS）里的表（table），不同的是它不需要定义任何模式（schema)。<br />模式自由（schema-free)，意味着对于存储在mongodb数据库中的文件，我们不需要知道它的任何结构定义。如果需要的话，你完全可以把不同结构的文件存储在同一个数据库里。<br />存储在集合中的文档，被存储为键-值对的形式。键用于唯一标识一个文档，为字符串类型，而值则可以是各中复杂的文件类型。我们称这种存储形式为BSON（Binary Serialized dOcument Format）。</p>
-<p>MongoDB服务端可运行在Linux、Windows或OS X平台，支持32位和64位应用，默认端口为27017。推荐运行在64位平台，因为MongoDB</p>
-<p>在32位模式运行时支持的最大文件尺寸为2GB。</p>
-<p>MongoDB把数据存储在文件中（默认路径为：/data/db），为提高效率使用内存映射文件进行管理。</p>
-<p>官网地址：<a href="http://www.mongodb.org">http://www.mongodb.org</a></p>
-<p>文档：<a href="http://www.mongodb.org/display/DOCS/Home">http://www.mongodb.org/display/DOCS/Home</a></p>
+			<dd><div class='Description'>核心提示：MongoDB是一个基于分布式文件存储的数据库开源项目。由C++语言编写。旨在为WEB应用提供可护展的高性能数据存储解决方案。 它的特点是高性能、易部署、易使用，存储数据非常方便。主要功能特性有： *面向集合存储，易存储对象类型的数据。 *模式自由。 *支持</div></dd><br />
+<br />
+			<dd class='ArticleContent'><p><img height="90" alt="mongoDB" src="/uploads/allimg/090726/1441522A0-0.png" width="217" /></p><br />
+<p>MongoDB是一个基于分布式文件存储的数据库开源项目。由C++语言编写。旨在为WEB应用提供可护展的高性能数据存储解决方案。</p><br />
+<p>它的特点是高性能、易部署、易使用，存储数据非常方便。主要功能特性有：<br />*面向集合存储，易存储对象类型的数据。 <br />*模式自由。<br />*支持动态查询。 <br />*支持完全索引，包含内部对象。 <br />*支持查询。 <br />*支持复制和故障恢复。 <br />*使用高效的二进制数据存储，包括大型对象（如视频等）。<br />*自动处理碎片，以支持云计算层次的扩展性<br />*支持RUBY，PYTHON，JAVA，C++，PHP等多种语言。<br />*文件存储格式为BSON（一种JSON的扩展）<br />*可通过网络访问</p><br />
+<p>所谓&ldquo;面向集合&rdquo;（Collenction-Orented），意思是数据被分组存储在数据集中，被称为一个集合（Collenction)。每个集合在数据库中都有一个唯一的标识名，并且可以包含无限数目的文档。集合的概念类似关系型数据库（RDBMS）里的表（table），不同的是它不需要定义任何模式（schema)。<br />模式自由（schema-free)，意味着对于存储在mongodb数据库中的文件，我们不需要知道它的任何结构定义。如果需要的话，你完全可以把不同结构的文件存储在同一个数据库里。<br />存储在集合中的文档，被存储为键-值对的形式。键用于唯一标识一个文档，为字符串类型，而值则可以是各中复杂的文件类型。我们称这种存储形式为BSON（Binary Serialized dOcument Format）。</p><br />
+<p>MongoDB服务端可运行在Linux、Windows或OS X平台，支持32位和64位应用，默认端口为27017。推荐运行在64位平台，因为MongoDB</p><br />
+<p>在32位模式运行时支持的最大文件尺寸为2GB。</p><br />
+<p>MongoDB把数据存储在文件中（默认路径为：/data/db），为提高效率使用内存映射文件进行管理。</p><br />
+<p>官网地址：<a href="http://www.mongodb.org">http://www.mongodb.org</a></p><br />
+<p>文档：<a href="http://www.mongodb.org/display/DOCS/Home">http://www.mongodb.org/display/DOCS/Home</a></p><br />
 <p>下载：<a href="http://www.mongodb.org/display/DOCS/Downloads">http://www.mongodb.org/display/DOCS/Downloads</a></p></dd>
 </body>
 </html>

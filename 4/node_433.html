@@ -6,80 +6,80 @@
 <title>Opera 内部命令语法</title>
 </head>
 <body>
-http://wiki.operachina.com/%E5%86%85%E9%83%A8%E5%91%BD%E4%BB%A4%E8%AF%AD%E6%B3%95
-
-内部命令语法
-目录 [隐藏]
-1 基本语法
-2 命令组合语法
-2.1 连接符 | （组合动作: 或）
-2.2 连接符 & （组合动作: 与）
-2.3 连接符 + （组合动作: 按钮附加下拉菜单或长按、短按双功能）
-2.4 连接符 > （组合动作: 循环）
-3 命令使用的特殊变量
-基本语法
-
-Opera配置文件中的单一语句遵从如下基本语法：
-命令, 参数 1, 参数 2, 标题, 图标
-示例
-Show popup menu, "Browser Menu Bar", , , "Menu"
-"Show popup menu" 是命令，"Browser Menu Bar" 是传递给命令的参数，"Menu" 是皮肤文件中定义的图标名称。注意，指定了语句标题或图标后，即使前面部分参数为空，相应逗号分隔符也不能省略。
-
-很多命令本身没有对应的图标，想在应用此语句的按钮或菜单中显示图标，就须要根据上述基本语法，专门指定一个图标。某些命令，本身已经在皮肤文件里有对应图标，例如命令 Go to homepage （到达首页）。所以尽管Opera默认的主页按钮没有特意指定图标，也会显示 Go to homepage 的对应图标。如果对此命令本身对应的图标不满意，也可以根据上述基本语法，指定其他图标。
-
-如果希望这个语句不显示图标，指定一个不存在的图标名称即可。 
-
-特殊情况：
-命令 Go to page 有到达某个网址的用途。Go to page 本身有其对应图标。但是当 Go to page 应用在按钮中，没有按上述基本语法为其指定其他图标，这个按钮的图标会显示为其指向的网址的favicon（前提是，此网址有favicon，而且已经被Opera下载）。例如：
-Button,"Opera Software ASA"=Go to page,"http://www.opera.com"
-菜单中应用命令 Go to page 不会出现此情况。
-
-
-命令组合语法
-
-Opera 允许组合多个单一语句为复合语句以实现多样的功能。一整个复合语句中的每个单一语句都遵从上述的基本语法。
-复合语句需要使用连接命令的符号，一共有4个，“&”、“|”、“>”和“+”。优先级最高的是“&”、其次是“|”和“>”，最后是“+”。在多个符号连接的语句中，优先级高的首先执行，切记不要使用多余的引号或者括号来改变优先级，那是无效的，而且将导致语句错误。
-
-连接符 | （组合动作: 或）
-| 号类似 OR 操作符: 如果第一个动作不能使用，则使用第二个。下列示例中 Opera 不能在已全屏的情况下执行 'Enter Fullscreen'。也可使用两个以上动作:
-Enter fullscreen | Leave fullscreen
-这是显示/隐藏菜单栏的语句。如果菜单栏现在是显示的，那么它执行Disable menu bar，如果菜单栏现在是隐藏的，那么它执行Enable menu bar。
-使用“|”连接的语句，按钮名称和按钮图标都以“|”前的语句1为准。如果语句1指定了按钮名称，“|”后的语句2再次指定按钮名称，没有效果。如果语句1未指定按钮名称，那么语句2所指定的按钮名称才会显示出来。但是，语句2无法指定按钮图标，即使“|”前的语句1没有指定。
-连接符 & （组合动作: 与）
-& 号为串联操作符，允许顺序执行多个命令。不过要注意实际上动作几乎是同时执行的，并非依次进行，因此下一命令的开始不依赖前一命令的结束。
-Scroll down & Scroll down & Scroll down
-使用连接符 & 来组合连续多项动作命令时，可能希望添加一个图标或者标题，这时图标必须添加在第一个可执行的单一语句中:
-Copy image, , , , "Window Document Icon" & Execute program, "i_view32.exe", "/clippaste"
-什么是第一个可执行的单一语句呢？以下面的按钮为例：
-Button55, "使用The World打开" = Copy document address, , , , "TheWorld" & Execute program, "E:\Program Files\TheWorld 3\TheWorld.exe", "%c",,"Go to page"
-这个按钮的功能是用 The World 浏览器打开当前页面。此按钮实现该功能的思路是：语句 1 复制当前页面地址，然后语句 2 启动 The World 浏览器并把剪贴板中的网址传递给 The World 浏览器。
-当前标签页是网页时，Copy document address 命令有效，按钮能显示 The World 图标（前提是当前使用的皮肤中正确地添加了 The World 图标）。但是如果当前页是快速拨号，就不存在当前网页的地址，Copy document address 命令不能执行，不能显示 The World 图标，而语句 2 能执行，于是这时按钮显示语句 2 所定义的图标：Go to page。如果语句 2 没有定义图标（即去掉 "Go to page"），在快速拨号页按钮就不显示图标，只能显示按钮名称。为了使按钮能始终如期望显示 The world 图标，应该改成
-Button55, "使用 The World 打开" = Copy document address, , , , "TheWorld" & Execute program, "E:\Program Files\TheWorld 3\TheWorld.exe", "%c", , "TheWorld"
-注：正常情况下调用 The World 浏览器打开当前页不需要上述写法，这里只是举例说明。
-连接符 + （组合动作: 按钮附加下拉菜单或长按、短按双功能）
-+ 号作为 Opera 内部命令连接符时，只能用于按钮中。
-+ 号后面跟随 Show popup menu 命令，可以给按钮增加小箭头，点击小箭头弹出菜单。
-Button, -1291441751 = "Select author mode | Select user mode, , , -2101137707 + Show popup menu, "Style Menu""
-+ 号也可用于各种动作。这时短按按钮执行 + 号前的语句，长按按钮执行 + 号后的语句。
-例如下面的按钮，短按是执行 转到地址栏所填的网址（相当于在地址栏按回车键），长按是 复制页面地址：
-Button, "转到(长按复制地址)" = Go, , , , "Resume transfer" + Copy document address
-注意：如果外观设置里皮肤取消了“启用特殊效果”，长按功能将失效。
-连接符 > （组合动作: 循环）
-> 是 v7.5 引入的循环命令 — 循环执行列表中的命令。
-当连接符 > 用于按钮中时，每个单一语句都能加入图标，确保名称/图标可在每个状态下改变:
-Set alignment, "document view toolbar", 0, "Show" > Set alignment, "document view toolbar", 6, "Hide"
-用于菜单中时，不能实现名称/图标在每个状态下改变。
-
-
-命令使用的特殊变量
-
-Opera 使用了一些特殊变量，可用于某些 INI 命令 (并非全部):
-%s 当前页面本地缓存文件地址
-%t 当前选定的文本
-%c 剪贴板中的内容
-%u 当前页面地址
-%l 右键点击的链接
-注意: 如果字母大写 (如: %S ) 则参数包含在双引号( " )之间。此功能非常有用，比如使用其他源码查看器打开缓存页面时，地址可能包含空格，这时就需要用引号进行限定。
+http://wiki.operachina.com/%E5%86%85%E9%83%A8%E5%91%BD%E4%BB%A4%E8%AF%AD%E6%B3%95<br />
+<br />
+内部命令语法<br />
+目录 [隐藏]<br />
+1 基本语法<br />
+2 命令组合语法<br />
+2.1 连接符 | （组合动作: 或）<br />
+2.2 连接符 & （组合动作: 与）<br />
+2.3 连接符 + （组合动作: 按钮附加下拉菜单或长按、短按双功能）<br />
+2.4 连接符 > （组合动作: 循环）<br />
+3 命令使用的特殊变量<br />
+基本语法<br />
+<br />
+Opera配置文件中的单一语句遵从如下基本语法：<br />
+命令, 参数 1, 参数 2, 标题, 图标<br />
+示例<br />
+Show popup menu, "Browser Menu Bar", , , "Menu"<br />
+"Show popup menu" 是命令，"Browser Menu Bar" 是传递给命令的参数，"Menu" 是皮肤文件中定义的图标名称。注意，指定了语句标题或图标后，即使前面部分参数为空，相应逗号分隔符也不能省略。<br />
+<br />
+很多命令本身没有对应的图标，想在应用此语句的按钮或菜单中显示图标，就须要根据上述基本语法，专门指定一个图标。某些命令，本身已经在皮肤文件里有对应图标，例如命令 Go to homepage （到达首页）。所以尽管Opera默认的主页按钮没有特意指定图标，也会显示 Go to homepage 的对应图标。如果对此命令本身对应的图标不满意，也可以根据上述基本语法，指定其他图标。<br />
+<br />
+如果希望这个语句不显示图标，指定一个不存在的图标名称即可。 <br />
+<br />
+特殊情况：<br />
+命令 Go to page 有到达某个网址的用途。Go to page 本身有其对应图标。但是当 Go to page 应用在按钮中，没有按上述基本语法为其指定其他图标，这个按钮的图标会显示为其指向的网址的favicon（前提是，此网址有favicon，而且已经被Opera下载）。例如：<br />
+Button,"Opera Software ASA"=Go to page,"http://www.opera.com"<br />
+菜单中应用命令 Go to page 不会出现此情况。<br />
+<br />
+<br />
+命令组合语法<br />
+<br />
+Opera 允许组合多个单一语句为复合语句以实现多样的功能。一整个复合语句中的每个单一语句都遵从上述的基本语法。<br />
+复合语句需要使用连接命令的符号，一共有4个，“&”、“|”、“>”和“+”。优先级最高的是“&”、其次是“|”和“>”，最后是“+”。在多个符号连接的语句中，优先级高的首先执行，切记不要使用多余的引号或者括号来改变优先级，那是无效的，而且将导致语句错误。<br />
+<br />
+连接符 | （组合动作: 或）<br />
+| 号类似 OR 操作符: 如果第一个动作不能使用，则使用第二个。下列示例中 Opera 不能在已全屏的情况下执行 'Enter Fullscreen'。也可使用两个以上动作:<br />
+Enter fullscreen | Leave fullscreen<br />
+这是显示/隐藏菜单栏的语句。如果菜单栏现在是显示的，那么它执行Disable menu bar，如果菜单栏现在是隐藏的，那么它执行Enable menu bar。<br />
+使用“|”连接的语句，按钮名称和按钮图标都以“|”前的语句1为准。如果语句1指定了按钮名称，“|”后的语句2再次指定按钮名称，没有效果。如果语句1未指定按钮名称，那么语句2所指定的按钮名称才会显示出来。但是，语句2无法指定按钮图标，即使“|”前的语句1没有指定。<br />
+连接符 & （组合动作: 与）<br />
+& 号为串联操作符，允许顺序执行多个命令。不过要注意实际上动作几乎是同时执行的，并非依次进行，因此下一命令的开始不依赖前一命令的结束。<br />
+Scroll down & Scroll down & Scroll down<br />
+使用连接符 & 来组合连续多项动作命令时，可能希望添加一个图标或者标题，这时图标必须添加在第一个可执行的单一语句中:<br />
+Copy image, , , , "Window Document Icon" & Execute program, "i_view32.exe", "/clippaste"<br />
+什么是第一个可执行的单一语句呢？以下面的按钮为例：<br />
+Button55, "使用The World打开" = Copy document address, , , , "TheWorld" & Execute program, "E:\Program Files\TheWorld 3\TheWorld.exe", "%c",,"Go to page"<br />
+这个按钮的功能是用 The World 浏览器打开当前页面。此按钮实现该功能的思路是：语句 1 复制当前页面地址，然后语句 2 启动 The World 浏览器并把剪贴板中的网址传递给 The World 浏览器。<br />
+当前标签页是网页时，Copy document address 命令有效，按钮能显示 The World 图标（前提是当前使用的皮肤中正确地添加了 The World 图标）。但是如果当前页是快速拨号，就不存在当前网页的地址，Copy document address 命令不能执行，不能显示 The World 图标，而语句 2 能执行，于是这时按钮显示语句 2 所定义的图标：Go to page。如果语句 2 没有定义图标（即去掉 "Go to page"），在快速拨号页按钮就不显示图标，只能显示按钮名称。为了使按钮能始终如期望显示 The world 图标，应该改成<br />
+Button55, "使用 The World 打开" = Copy document address, , , , "TheWorld" & Execute program, "E:\Program Files\TheWorld 3\TheWorld.exe", "%c", , "TheWorld"<br />
+注：正常情况下调用 The World 浏览器打开当前页不需要上述写法，这里只是举例说明。<br />
+连接符 + （组合动作: 按钮附加下拉菜单或长按、短按双功能）<br />
++ 号作为 Opera 内部命令连接符时，只能用于按钮中。<br />
++ 号后面跟随 Show popup menu 命令，可以给按钮增加小箭头，点击小箭头弹出菜单。<br />
+Button, -1291441751 = "Select author mode | Select user mode, , , -2101137707 + Show popup menu, "Style Menu""<br />
++ 号也可用于各种动作。这时短按按钮执行 + 号前的语句，长按按钮执行 + 号后的语句。<br />
+例如下面的按钮，短按是执行 转到地址栏所填的网址（相当于在地址栏按回车键），长按是 复制页面地址：<br />
+Button, "转到(长按复制地址)" = Go, , , , "Resume transfer" + Copy document address<br />
+注意：如果外观设置里皮肤取消了“启用特殊效果”，长按功能将失效。<br />
+连接符 > （组合动作: 循环）<br />
+> 是 v7.5 引入的循环命令 — 循环执行列表中的命令。<br />
+当连接符 > 用于按钮中时，每个单一语句都能加入图标，确保名称/图标可在每个状态下改变:<br />
+Set alignment, "document view toolbar", 0, "Show" > Set alignment, "document view toolbar", 6, "Hide"<br />
+用于菜单中时，不能实现名称/图标在每个状态下改变。<br />
+<br />
+<br />
+命令使用的特殊变量<br />
+<br />
+Opera 使用了一些特殊变量，可用于某些 INI 命令 (并非全部):<br />
+%s 当前页面本地缓存文件地址<br />
+%t 当前选定的文本<br />
+%c 剪贴板中的内容<br />
+%u 当前页面地址<br />
+%l 右键点击的链接<br />
+注意: 如果字母大写 (如: %S ) 则参数包含在双引号( " )之间。此功能非常有用，比如使用其他源码查看器打开缓存页面时，地址可能包含空格，这时就需要用引号进行限定。<br />
 
 </body>
 </html>

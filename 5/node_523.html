@@ -6,14 +6,14 @@
 <title>64 位ubuntu linux安装ppstream</title>
 </head>
 <body>
-需要先安装ia32-libs包,但并没有完,原因在于这个包太老了, 不包括ppstream for linux要求的qt4webkit包.
-所以,只能在gentoo的下载中找到emul-linux-x86-qtlibs-20100915.tar.bz2类似包,全部解压到ubuntu系统中,
-另外,fuse32位在这些包中不带,要在其他的32位系统中编译出来,放在ubuntu系统的/usr/lib32目录. 否则会出现找到libemscore.so.0文件的问题.
-
-现在下载ppstream_1.0.0-1_i386.deb包,安装如下,
-dpkg -i --force-all ppstream_1.0.0-1_i386.deb
-
-执行PPStream即可.
+需要先安装ia32-libs包,但并没有完,原因在于这个包太老了, 不包括ppstream for linux要求的qt4webkit包.<br />
+所以,只能在gentoo的下载中找到emul-linux-x86-qtlibs-20100915.tar.bz2类似包,全部解压到ubuntu系统中,<br />
+另外,fuse32位在这些包中不带,要在其他的32位系统中编译出来,放在ubuntu系统的/usr/lib32目录. 否则会出现找到libemscore.so.0文件的问题.<br />
+<br />
+现在下载ppstream_1.0.0-1_i386.deb包,安装如下,<br />
+dpkg -i --force-all ppstream_1.0.0-1_i386.deb<br />
+<br />
+执行PPStream即可.<br />
 
 </body>
 </html>

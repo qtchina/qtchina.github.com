@@ -6,460 +6,460 @@
 <title>larbin-2.6.3-gcc44.patch</title>
 </head>
 <body>
-larbin好久没有更新了，在现在的gcc4上无法正常编译，简单修改了一下，已经编译成功。这是对larbin-2.6.3的 gcc 4.4 的patch.
-
-patch文件下载：<a href="https://sourceforge.net/tracker/download.php?group_id=42562&atid=433525&file_id=335498&aid=2823443" target="_blank">larbin-2.6.3-gcc44.patch</a>
-
-patch使用方法:
-[code type="bash"]
-tar xvf larbin-2.6.3.tar.gz
-cd larbin-2.6.3
-patch -Np1 -i  /path/to/larbin-2.6.3-gcc44.patch
-[/code]
-
-patch文件全文：
-
-[code type="diff"]
-
-diff --git a/adns/parse.c b/adns/parse.c                                        
-index 73f53f7..b5ec61b 100644                                                   
---- a/adns/parse.c                                                              
-+++ b/adns/parse.c                                                              
-@@ -111,7 +111,7 @@ adns_status adns__findlabel_next(findlabel_state *fls,      
- }                                                                              
-                                                                                
- adns_status adns__parse_domain(adns_state ads, int serv, adns_query qu,        
--                              vbuf *vb, adns_queryflags flags,                 
-+                              vbuf *vb, parsedomain_flags flags,               
-                               const byte *dgram, int dglen, int *cbyte_io, int max) {
-   findlabel_state fls;                                                               
-                                                                                      
-diff --git a/src/fetch/checker.cc b/src/fetch/checker.cc                              
-index 6ac8f53..415efdb 100644                                                         
---- a/src/fetch/checker.cc                                                            
-+++ b/src/fetch/checker.cc                                                            
-@@ -7,7 +7,7 @@                                                                       
-  * and send them if it didn't see them before                                        
-  */                                                                                  
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <string.h>                                                                  
-                                                                                      
- #include "options.h"                                                                 
-diff --git a/src/fetch/fetchOpen.cc b/src/fetch/fetchOpen.cc                          
-index 2d3fa99..cdf0c13 100644                                                         
---- a/src/fetch/fetchOpen.cc                                                          
-+++ b/src/fetch/fetchOpen.cc                                                          
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 15-11-99 -> 04-12-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <errno.h>                                                                   
- #include <sys/types.h>                                                               
-                                                                                      
-diff --git a/src/fetch/fetchPipe.cc b/src/fetch/fetchPipe.cc                          
-index cec67d8..5a42638 100644                                                         
---- a/src/fetch/fetchPipe.cc                                                          
-+++ b/src/fetch/fetchPipe.cc                                                          
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 15-11-99 -> 19-11-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <unistd.h>                                                                  
- #include <errno.h>                                                                   
- #include <string.h>                                                                  
-diff --git a/src/fetch/file.cc b/src/fetch/file.cc                                    
-index d09ca09..3ced3de 100644                                                         
---- a/src/fetch/file.cc                                                               
-+++ b/src/fetch/file.cc                                                               
-@@ -3,7 +3,7 @@                                                                       
- // 14-12-99 -> 19-03-02                                                              
-                                                                                      
- #include <unistd.h>                                                                  
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <assert.h>                                                                  
- #include <string.h>                                                                  
- #include <ctype.h>                                                                   
-diff --git a/src/fetch/hashTable.cc b/src/fetch/hashTable.cc                          
-index 4473f8f..c1dd10a 100644                                                         
---- a/src/fetch/hashTable.cc                                                          
-+++ b/src/fetch/hashTable.cc                                                          
-@@ -2,7 +2,8 @@                                                                       
- // Sebastien Ailleret                                                                
- // 23-11-99 -> 15-02-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-+                                                                                     
- #include <stdio.h>                                                                   
- #include <sys/types.h>                                                               
- #include <sys/socket.h>                                                              
-@@ -29,7 +30,7 @@ hashTable::hashTable (bool create) {                                
-   } else {                                                                           
-        int fds = open("hashtable.bak", O_RDONLY);                                    
-        if (fds < 0) {                                                                
--         cerr << "Cannot find hashtable.bak, restart from scratch\n";                
-+         std::cerr << "Cannot find hashtable.bak, restart from scratch\n";           
-       for (ssize_t i=0; i<hashSize/8; i++) {                                         
-         table[i] = 0;                                                                
-       }                                                                              
-@@ -38,8 +39,8 @@ hashTable::hashTable (bool create) {                                
-       while (sr < total) {                                                           
-         ssize_t tmp = read(fds, table+sr, total-sr);                                 
-         if (tmp <= 0) {                                                              
--          cerr << "Cannot read hashtable.bak : "                                     
--               << strerror(errno) << endl;                                           
-+          std::cerr << "Cannot read hashtable.bak : "                                
-+               << strerror(errno) << std::endl;                                      
-           exit(1);                                                                   
-         } else {                                                                     
-           sr += tmp;                                                                 
-diff --git a/src/fetch/sequencer.cc b/src/fetch/sequencer.cc                          
-index aa51a8f..58cfbd5 100644                                                         
---- a/src/fetch/sequencer.cc                                                          
-+++ b/src/fetch/sequencer.cc                                                          
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 15-11-99 -> 04-01-02                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-                                                                                      
- #include "options.h"                                                                 
-                                                                                      
-diff --git a/src/global.cc b/src/global.cc                                            
-index dcedee2..bb5cd42 100644                                                         
---- a/src/global.cc                                                                   
-+++ b/src/global.cc                                                                   
-@@ -7,7 +7,7 @@                                                                       
- #include <netinet/in.h>                                                              
- #include <errno.h>                                                                   
- #include <fcntl.h>                                                                   
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <string.h>                                                                  
- #include <adns.h>                                                                    
- #include <netdb.h>                                                                   
-@@ -105,8 +105,8 @@ global::global (int argc, char *argv[]) {                         
-        }                                                                             
-   }                                                                                  
-   if (pos != argc) {                                                                 
--       cerr << "usage : " << argv[0];                                                
--       cerr << " [-c configFile] [-scratch]\n";                                      
-+      std::cerr << "usage : " << argv[0];                                            
-+      std::cerr << " [-c configFile] [-scratch]\n";                                  
-        exit(1);                                                                      
-   }                                                                                  
-                                                                                      
-@@ -196,7 +196,7 @@ global::global (int argc, char *argv[]) {                         
-   sn.sa_flags = SA_RESTART;                                                          
-   sn.sa_handler = SIG_IGN;                                                           
-   if (sigaction(SIGPIPE, &sn, &so)) {                                                
--    cerr << "Unable to disable SIGPIPE : " << strerror(errno) << endl;               
-+      std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;   
-   }                                                                                  
- }                                                                                    
-                                                                                      
-@@ -210,8 +210,8 @@ global::~global () {                                              
- void global::parseFile (char *file) {                                                
-   int fds = open(file, O_RDONLY);                                                    
-   if (fds < 0) {                                                                     
--       cerr << "cannot open config file (" << file << ") : "                         
--         << strerror(errno) << endl;                                                 
-+      std::cerr << "cannot open config file (" << file << ") : "                     
-+                << strerror(errno) << std::endl;                                     
-        exit(1);                                                                      
-   }                                                                                  
-   char *tmp = readfile(fds);                                                         
-@@ -238,7 +238,7 @@ void global::parseFile (char *file) {                             
-       if (u->isValid()) {                                                            
-         check(u);                                                                    
-       } else {                                                                       
--        cerr << "the start url " << tok << " is invalid\n";                          
-+          std::cerr << "the start url " << tok << " is invalid\n";                   
-         exit(1);                                                                     
-       }                                                                              
-        } else if (!strcasecmp(tok, "waitduration")) {                                
-@@ -252,7 +252,7 @@ void global::parseFile (char *file) {                             
-          memset((char *) proxyAddr, 0, sizeof (struct sockaddr_in));                 
-          if ((hp = gethostbyname(tok)) == NULL) {                                    
-                endhostent();                                                         
--               cerr << "Unable to find proxy ip address (" << tok << ")\n";          
-+        std::cerr << "Unable to find proxy ip address (" << tok << ")\n";            
-                exit(1);                                                              
-          } else {                                                                    
-                proxyAddr->sin_family = hp->h_addrtype;                               
-@@ -284,7 +284,7 @@ void global::parseFile (char *file) {                             
-        } else if (!strcasecmp(tok, "noExternalLinks")) {                             
-          externalLinks = false;                                                      
-        } else {                                                                      
--         cerr << "bad configuration file : " << tok << "\n";                         
-+        std::cerr << "bad configuration file : " << tok << "\n";                     
-          exit(1);                                                                    
-        }                                                                             
-        tok = nextToken(&posParse);                                                   
-@@ -303,7 +303,7 @@ void global::manageDomain (char **posParse) {                     
-        tok = nextToken(posParse);                                                    
-   }                                                                                  
-   if (tok == NULL) {                                                                 
--       cerr << "Bad configuration file : no end to limitToDomain\n";                 
-+      std::cerr << "Bad configuration file : no end to limitToDomain\n";             
-        exit(1);                                                                      
-   }                                                                                  
- }                                                                                    
-@@ -322,7 +322,7 @@ void global::manageExt (char **posParse) {                        
-        tok = nextToken(posParse);                                                    
-   }                                                                                  
-   if (tok == NULL) {                                                                 
--       cerr << "Bad configuration file : no end to forbiddenExtensions\n";           
-+      std::cerr << "Bad configuration file : no end to forbiddenExtensions\n";       
-        exit(1);                                                                      
-   }                                                                                  
- } 
-
-[/code]
-
-[code type="diff"]
-                                                                                   
-diff --git a/src/interf/defaultuseroutput.cc b/src/interf/defaultuseroutput.cc        
-index ed719ac..0b2ffeb 100644                                                         
---- a/src/interf/defaultuseroutput.cc                                                 
-+++ b/src/interf/defaultuseroutput.cc                                                 
-@@ -2,7 +2,8 @@                                                                       
- // Sebastien Ailleret                                                                
- // 07-12-01 -> 07-12-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-+                                                                                     
- #include <string.h>                                                                  
- #include <unistd.h>                                                                  
-                                                                                      
-diff --git a/src/interf/input.cc b/src/interf/input.cc                                
-index 2dd35cc..cf1bb4e 100644                                                         
---- a/src/interf/input.cc                                                             
-+++ b/src/interf/input.cc                                                             
-@@ -3,7 +3,7 @@                                                                       
- // 03-02-00 -> 23-11-01                                                              
-                                                                                      
- #include <unistd.h>                                                                  
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <string.h>                                                                  
- #include <sys/types.h>                                                               
- #include <sys/socket.h>                                                              
-@@ -200,7 +200,7 @@ void initInput () {                                               
-                       (char*)&allowReuse, sizeof(allowReuse))                        
-         || bind(inputFds, (struct sockaddr *) &addr, sizeof(addr)) != 0              
-         || listen(inputFds, 4) != 0) {                                               
--      cerr << "unable to get input socket (port " << global::inputPort               
-+      std::cerr << "unable to get input socket (port " << global::inputPort          
-            << ") : " << strerror(errno) << "\n";                                     
-       exit(1);                                                                       
-     }                                                                                
-diff --git a/src/interf/output.cc b/src/interf/output.cc                              
-index 2197d12..fe58792 100644                                                         
---- a/src/interf/output.cc                                                            
-+++ b/src/interf/output.cc                                                            
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 03-02-00 -> 10-12-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <string.h>                                                                  
- #include <unistd.h>                                                                  
-                                                                                      
-diff --git a/src/larbin.make b/src/larbin.make                                        
-index 055ebde..7c5ffd1 100644                                                         
---- a/src/larbin.make                                                                 
-+++ b/src/larbin.make                                                                 
-@@ -20,7 +20,7 @@ ABS-FETCH-OBJ:=fetch/site.o fetch/sequencer.o fetch/hashTable.o \   
- ABS-MAIN-OBJ:=$(MAIN-OBJ)                                                            
-                                                                                      
- CFLAGS:=-O3 -Wall -D_REENTRANT                                                       
--CXXFLAGS:= -Wno-deprecated -Wall -O3 -D_REENTRANT -I- -I$(BASEDIR) -I$(ADNSDIR)      
-+CXXFLAGS:= -Wno-deprecated -Wall -O3 -D_REENTRANT  -I$(BASEDIR) -I$(ADNSDIR)         
- RM:=rm -f                                                                            
-                                                                                      
- first: all                                                                           
-diff --git a/src/utils/PersistentFifo.cc b/src/utils/PersistentFifo.cc                
-index 01c8cec..406d5b8 100644                                                         
---- a/src/utils/PersistentFifo.cc                                                     
-+++ b/src/utils/PersistentFifo.cc                                                     
-@@ -8,7 +8,7 @@                                                                       
- #include <stdio.h>                                                                   
- #include <string.h>                                                                  
- #include <ctype.h>                                                                   
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-                                                                                      
- #include "types.h"                                                                   
- #include "global.h"                                                                  
-@@ -49,7 +49,7 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName) {      
-       fout = 0;                                                                      
-     }                                                                                
-     if (fin == fout && fin != 0) {                                                   
--      cerr << "previous crawl was too little, cannot reload state\n"                 
-+        std::cerr << "previous crawl was too little, cannot reload state\n"          
-            << "please restart larbin with -scratch option\n";                        
-       exit(1);                                                                       
-     }                                                                                
-@@ -204,7 +204,7 @@ char *PersistentFifo::readLine () {                               
-       case -1 :                                                                      
-         // We have a trouble here                                                    
-         if (errno != EINTR) {                                                        
--          cerr << "Big Problem while reading (persistentFifo.h)\n";                  
-+            std::cerr << "Big Problem while reading (persistentFifo.h)\n";           
-           perror("reason");                                                          
-           assert(false);                                                             
-         } else {                                                                     
-diff --git a/src/utils/connexion.cc b/src/utils/connexion.cc                          
-index 2a07f6f..de9be9a 100644                                                         
---- a/src/utils/connexion.cc                                                          
-+++ b/src/utils/connexion.cc                                                          
-@@ -13,7 +13,7 @@                                                                     
- #include <netdb.h>                                                                   
- #include <arpa/inet.h>                                                               
- #include <errno.h>                                                                   
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-                                                                                      
- #include "options.h"                                                                 
-                                                                                      
-diff --git a/src/utils/debug.cc b/src/utils/debug.cc                                  
-index ba578ca..9b82714 100644                                                         
---- a/src/utils/debug.cc                                                              
-+++ b/src/utils/debug.cc                                                              
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 15-11-99 -> 03-04-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-                                                                                      
- #include "options.h"                                                                 
-                                                                                      
-diff --git a/src/utils/hashDup.cc b/src/utils/hashDup.cc                              
-index 78520ca..3051b37 100644                                                         
---- a/src/utils/hashDup.cc                                                            
-+++ b/src/utils/hashDup.cc                                                            
-@@ -4,7 +4,7 @@                                                                       
-                                                                                      
- #include "config.h"                                                                  
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <sys/types.h>                                                               
- #include <sys/stat.h>                                                                
- #include <fcntl.h>                                                                   
-@@ -28,7 +28,7 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch) {         
-   } else {                                                                           
-     int fds = open(init, O_RDONLY);                                                  
-        if (fds < 0) {                                                                
--         cerr << "Cannot find " << init << ", restart from scratch\n";               
-+        std::cerr << "Cannot find " << init << ", restart from scratch\n";           
-       for (ssize_t i=0; i<size/8; i++) {                                             
-         table[i] = 0;                                                                
-       }                                                                              
-@@ -37,7 +37,7 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch) {         
-       while (sr < size) {                                                            
-         ssize_t tmp = read(fds, table+sr, size-sr);                                  
-         if (tmp <= 0) {                                                              
--          cerr << "Cannot read " << init << "\n";                                    
-+            std::cerr << "Cannot read " << init << "\n";                             
-           exit(1);                                                                   
-         } else {                                                                     
-           sr += 8*tmp;                                                               
-diff --git a/src/utils/mypthread.cc b/src/utils/mypthread.cc                          
-index de7aeb3..d622c3f 100644                                                         
---- a/src/utils/mypthread.cc                                                          
-+++ b/src/utils/mypthread.cc                                                          
-@@ -2,7 +2,7 @@                                                                       
- // Sebastien Ailleret                                                                
- // 07-12-01 -> 07-12-01                                                              
-                                                                                      
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <stdlib.h>                                                                  
-                                                                                      
- #include "utils/mypthread.h"                                                         
-@@ -17,7 +17,7 @@ void startThread (StartFun run, void *arg) {                        
-       || pthread_create(&t, &attr, run, arg) != 0                                    
-       || pthread_attr_destroy(&attr) != 0                                            
-       || pthread_detach(t) != 0) {                                                   
--    cerr << "Unable to launch a thread\n";                                           
-+      std::cerr << "Unable to launch a thread\n";                                    
-     exit(1);                                                                         
-   }                                                                                  
- }                                                                                    
-diff --git a/src/utils/string.cc b/src/utils/string.cc                                
-index e8935e4..e3ec266 100644                                                         
---- a/src/utils/string.cc                                                             
-+++ b/src/utils/string.cc                                                             
-@@ -3,7 +3,7 @@                                                                       
- // 20-12-99 -> 10-12-01                                                              
-                                                                                      
- #include <string.h>                                                                  
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
-                                                                                      
- #include "options.h"                                                                 
-                                                                                      
-diff --git a/src/utils/text.cc b/src/utils/text.cc                                    
-index 96670f4..0814d6f 100644                                                         
---- a/src/utils/text.cc                                                               
-+++ b/src/utils/text.cc                                                               
-@@ -5,7 +5,7 @@                                                                       
- #include <unistd.h>                                                                  
- #include <stdlib.h>                                                                  
- #include <errno.h>                                                                   
--#include <iostream.h>                                                                
-+#include <iostream>                                                                  
- #include <string.h>                                                                  
- #include <ctype.h>
-
-diff --git a/src/utils/webserver.cc b/src/utils/webserver.cc
-index c9ab615..f298599 100644
---- a/src/utils/webserver.cc
-+++ b/src/utils/webserver.cc
-@@ -12,7 +12,7 @@
-
- #include <string.h>
- #include <unistd.h>
--#include <iostream.h>
-+#include <iostream>
- #include <netdb.h>
- #include <sys/socket.h>
- #include <sys/types.h>
-@@ -56,8 +56,8 @@ void *startWebserver (void *none) {
-          || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))
-          || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
-          || listen(fds, 4) != 0) {
--       cerr << "Unable to get the socket for the webserver (" << global::httpPort
--         << ") : " << strerror(errno) << endl;
-+      std::cerr << "Unable to get the socket for the webserver (" << global::httpPort
-+         << ") : " << strerror(errno) << std::endl;
-        exit(1);
-   }
-   // answer requests
-@@ -67,7 +67,7 @@ void *startWebserver (void *none) {
-        uint len = sizeof(addr);
-        fdc = accept(fds, (struct sockaddr *) &addrc, &len);
-        if (fdc == -1) {
--         cerr << "Trouble with web server...\n";
-+         std::cerr << "Trouble with web server...\n";
-        } else {
-       manageAns(fdc, readRequest(fdc));
-       close(fdc);
-
-                                               
+larbin好久没有更新了，在现在的gcc4上无法正常编译，简单修改了一下，已经编译成功。这是对larbin-2.6.3的 gcc 4.4 的patch.<br />
+<br />
+patch文件下载：<a href="https://sourceforge.net/tracker/download.php?group_id=42562&atid=433525&file_id=335498&aid=2823443" target="_blank">larbin-2.6.3-gcc44.patch</a><br />
+<br />
+patch使用方法:<br />
+[code type="bash"]<br />
+tar xvf larbin-2.6.3.tar.gz<br />
+cd larbin-2.6.3<br />
+patch -Np1 -i  /path/to/larbin-2.6.3-gcc44.patch<br />
+[/code]<br />
+<br />
+patch文件全文：<br />
+<br />
+[code type="diff"]<br />
+<br />
+diff --git a/adns/parse.c b/adns/parse.c                                        <br />
+index 73f53f7..b5ec61b 100644                                                   <br />
+--- a/adns/parse.c                                                              <br />
++++ b/adns/parse.c                                                              <br />
+@@ -111,7 +111,7 @@ adns_status adns__findlabel_next(findlabel_state *fls,      <br />
+ }                                                                              <br />
+                                                                                <br />
+ adns_status adns__parse_domain(adns_state ads, int serv, adns_query qu,        <br />
+-                              vbuf *vb, adns_queryflags flags,                 <br />
++                              vbuf *vb, parsedomain_flags flags,               <br />
+                               const byte *dgram, int dglen, int *cbyte_io, int max) {<br />
+   findlabel_state fls;                                                               <br />
+                                                                                      <br />
+diff --git a/src/fetch/checker.cc b/src/fetch/checker.cc                              <br />
+index 6ac8f53..415efdb 100644                                                         <br />
+--- a/src/fetch/checker.cc                                                            <br />
++++ b/src/fetch/checker.cc                                                            <br />
+@@ -7,7 +7,7 @@                                                                       <br />
+  * and send them if it didn't see them before                                        <br />
+  */                                                                                  <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <string.h>                                                                  <br />
+                                                                                      <br />
+ #include "options.h"                                                                 <br />
+diff --git a/src/fetch/fetchOpen.cc b/src/fetch/fetchOpen.cc                          <br />
+index 2d3fa99..cdf0c13 100644                                                         <br />
+--- a/src/fetch/fetchOpen.cc                                                          <br />
++++ b/src/fetch/fetchOpen.cc                                                          <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 15-11-99 -> 04-12-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <errno.h>                                                                   <br />
+ #include <sys/types.h>                                                               <br />
+                                                                                      <br />
+diff --git a/src/fetch/fetchPipe.cc b/src/fetch/fetchPipe.cc                          <br />
+index cec67d8..5a42638 100644                                                         <br />
+--- a/src/fetch/fetchPipe.cc                                                          <br />
++++ b/src/fetch/fetchPipe.cc                                                          <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 15-11-99 -> 19-11-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <unistd.h>                                                                  <br />
+ #include <errno.h>                                                                   <br />
+ #include <string.h>                                                                  <br />
+diff --git a/src/fetch/file.cc b/src/fetch/file.cc                                    <br />
+index d09ca09..3ced3de 100644                                                         <br />
+--- a/src/fetch/file.cc                                                               <br />
++++ b/src/fetch/file.cc                                                               <br />
+@@ -3,7 +3,7 @@                                                                       <br />
+ // 14-12-99 -> 19-03-02                                                              <br />
+                                                                                      <br />
+ #include <unistd.h>                                                                  <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <assert.h>                                                                  <br />
+ #include <string.h>                                                                  <br />
+ #include <ctype.h>                                                                   <br />
+diff --git a/src/fetch/hashTable.cc b/src/fetch/hashTable.cc                          <br />
+index 4473f8f..c1dd10a 100644                                                         <br />
+--- a/src/fetch/hashTable.cc                                                          <br />
++++ b/src/fetch/hashTable.cc                                                          <br />
+@@ -2,7 +2,8 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 23-11-99 -> 15-02-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
++                                                                                     <br />
+ #include <stdio.h>                                                                   <br />
+ #include <sys/types.h>                                                               <br />
+ #include <sys/socket.h>                                                              <br />
+@@ -29,7 +30,7 @@ hashTable::hashTable (bool create) {                                <br />
+   } else {                                                                           <br />
+        int fds = open("hashtable.bak", O_RDONLY);                                    <br />
+        if (fds < 0) {                                                                <br />
+-         cerr << "Cannot find hashtable.bak, restart from scratch\n";                <br />
++         std::cerr << "Cannot find hashtable.bak, restart from scratch\n";           <br />
+       for (ssize_t i=0; i<hashSize/8; i++) {                                         <br />
+         table[i] = 0;                                                                <br />
+       }                                                                              <br />
+@@ -38,8 +39,8 @@ hashTable::hashTable (bool create) {                                <br />
+       while (sr < total) {                                                           <br />
+         ssize_t tmp = read(fds, table+sr, total-sr);                                 <br />
+         if (tmp <= 0) {                                                              <br />
+-          cerr << "Cannot read hashtable.bak : "                                     <br />
+-               << strerror(errno) << endl;                                           <br />
++          std::cerr << "Cannot read hashtable.bak : "                                <br />
++               << strerror(errno) << std::endl;                                      <br />
+           exit(1);                                                                   <br />
+         } else {                                                                     <br />
+           sr += tmp;                                                                 <br />
+diff --git a/src/fetch/sequencer.cc b/src/fetch/sequencer.cc                          <br />
+index aa51a8f..58cfbd5 100644                                                         <br />
+--- a/src/fetch/sequencer.cc                                                          <br />
++++ b/src/fetch/sequencer.cc                                                          <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 15-11-99 -> 04-01-02                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+                                                                                      <br />
+ #include "options.h"                                                                 <br />
+                                                                                      <br />
+diff --git a/src/global.cc b/src/global.cc                                            <br />
+index dcedee2..bb5cd42 100644                                                         <br />
+--- a/src/global.cc                                                                   <br />
++++ b/src/global.cc                                                                   <br />
+@@ -7,7 +7,7 @@                                                                       <br />
+ #include <netinet/in.h>                                                              <br />
+ #include <errno.h>                                                                   <br />
+ #include <fcntl.h>                                                                   <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <string.h>                                                                  <br />
+ #include <adns.h>                                                                    <br />
+ #include <netdb.h>                                                                   <br />
+@@ -105,8 +105,8 @@ global::global (int argc, char *argv[]) {                         <br />
+        }                                                                             <br />
+   }                                                                                  <br />
+   if (pos != argc) {                                                                 <br />
+-       cerr << "usage : " << argv[0];                                                <br />
+-       cerr << " [-c configFile] [-scratch]\n";                                      <br />
++      std::cerr << "usage : " << argv[0];                                            <br />
++      std::cerr << " [-c configFile] [-scratch]\n";                                  <br />
+        exit(1);                                                                      <br />
+   }                                                                                  <br />
+                                                                                      <br />
+@@ -196,7 +196,7 @@ global::global (int argc, char *argv[]) {                         <br />
+   sn.sa_flags = SA_RESTART;                                                          <br />
+   sn.sa_handler = SIG_IGN;                                                           <br />
+   if (sigaction(SIGPIPE, &sn, &so)) {                                                <br />
+-    cerr << "Unable to disable SIGPIPE : " << strerror(errno) << endl;               <br />
++      std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;   <br />
+   }                                                                                  <br />
+ }                                                                                    <br />
+                                                                                      <br />
+@@ -210,8 +210,8 @@ global::~global () {                                              <br />
+ void global::parseFile (char *file) {                                                <br />
+   int fds = open(file, O_RDONLY);                                                    <br />
+   if (fds < 0) {                                                                     <br />
+-       cerr << "cannot open config file (" << file << ") : "                         <br />
+-         << strerror(errno) << endl;                                                 <br />
++      std::cerr << "cannot open config file (" << file << ") : "                     <br />
++                << strerror(errno) << std::endl;                                     <br />
+        exit(1);                                                                      <br />
+   }                                                                                  <br />
+   char *tmp = readfile(fds);                                                         <br />
+@@ -238,7 +238,7 @@ void global::parseFile (char *file) {                             <br />
+       if (u->isValid()) {                                                            <br />
+         check(u);                                                                    <br />
+       } else {                                                                       <br />
+-        cerr << "the start url " << tok << " is invalid\n";                          <br />
++          std::cerr << "the start url " << tok << " is invalid\n";                   <br />
+         exit(1);                                                                     <br />
+       }                                                                              <br />
+        } else if (!strcasecmp(tok, "waitduration")) {                                <br />
+@@ -252,7 +252,7 @@ void global::parseFile (char *file) {                             <br />
+          memset((char *) proxyAddr, 0, sizeof (struct sockaddr_in));                 <br />
+          if ((hp = gethostbyname(tok)) == NULL) {                                    <br />
+                endhostent();                                                         <br />
+-               cerr << "Unable to find proxy ip address (" << tok << ")\n";          <br />
++        std::cerr << "Unable to find proxy ip address (" << tok << ")\n";            <br />
+                exit(1);                                                              <br />
+          } else {                                                                    <br />
+                proxyAddr->sin_family = hp->h_addrtype;                               <br />
+@@ -284,7 +284,7 @@ void global::parseFile (char *file) {                             <br />
+        } else if (!strcasecmp(tok, "noExternalLinks")) {                             <br />
+          externalLinks = false;                                                      <br />
+        } else {                                                                      <br />
+-         cerr << "bad configuration file : " << tok << "\n";                         <br />
++        std::cerr << "bad configuration file : " << tok << "\n";                     <br />
+          exit(1);                                                                    <br />
+        }                                                                             <br />
+        tok = nextToken(&posParse);                                                   <br />
+@@ -303,7 +303,7 @@ void global::manageDomain (char **posParse) {                     <br />
+        tok = nextToken(posParse);                                                    <br />
+   }                                                                                  <br />
+   if (tok == NULL) {                                                                 <br />
+-       cerr << "Bad configuration file : no end to limitToDomain\n";                 <br />
++      std::cerr << "Bad configuration file : no end to limitToDomain\n";             <br />
+        exit(1);                                                                      <br />
+   }                                                                                  <br />
+ }                                                                                    <br />
+@@ -322,7 +322,7 @@ void global::manageExt (char **posParse) {                        <br />
+        tok = nextToken(posParse);                                                    <br />
+   }                                                                                  <br />
+   if (tok == NULL) {                                                                 <br />
+-       cerr << "Bad configuration file : no end to forbiddenExtensions\n";           <br />
++      std::cerr << "Bad configuration file : no end to forbiddenExtensions\n";       <br />
+        exit(1);                                                                      <br />
+   }                                                                                  <br />
+ } <br />
+<br />
+[/code]<br />
+<br />
+[code type="diff"]<br />
+                                                                                   <br />
+diff --git a/src/interf/defaultuseroutput.cc b/src/interf/defaultuseroutput.cc        <br />
+index ed719ac..0b2ffeb 100644                                                         <br />
+--- a/src/interf/defaultuseroutput.cc                                                 <br />
++++ b/src/interf/defaultuseroutput.cc                                                 <br />
+@@ -2,7 +2,8 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 07-12-01 -> 07-12-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
++                                                                                     <br />
+ #include <string.h>                                                                  <br />
+ #include <unistd.h>                                                                  <br />
+                                                                                      <br />
+diff --git a/src/interf/input.cc b/src/interf/input.cc                                <br />
+index 2dd35cc..cf1bb4e 100644                                                         <br />
+--- a/src/interf/input.cc                                                             <br />
++++ b/src/interf/input.cc                                                             <br />
+@@ -3,7 +3,7 @@                                                                       <br />
+ // 03-02-00 -> 23-11-01                                                              <br />
+                                                                                      <br />
+ #include <unistd.h>                                                                  <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <string.h>                                                                  <br />
+ #include <sys/types.h>                                                               <br />
+ #include <sys/socket.h>                                                              <br />
+@@ -200,7 +200,7 @@ void initInput () {                                               <br />
+                       (char*)&allowReuse, sizeof(allowReuse))                        <br />
+         || bind(inputFds, (struct sockaddr *) &addr, sizeof(addr)) != 0              <br />
+         || listen(inputFds, 4) != 0) {                                               <br />
+-      cerr << "unable to get input socket (port " << global::inputPort               <br />
++      std::cerr << "unable to get input socket (port " << global::inputPort          <br />
+            << ") : " << strerror(errno) << "\n";                                     <br />
+       exit(1);                                                                       <br />
+     }                                                                                <br />
+diff --git a/src/interf/output.cc b/src/interf/output.cc                              <br />
+index 2197d12..fe58792 100644                                                         <br />
+--- a/src/interf/output.cc                                                            <br />
++++ b/src/interf/output.cc                                                            <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 03-02-00 -> 10-12-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <string.h>                                                                  <br />
+ #include <unistd.h>                                                                  <br />
+                                                                                      <br />
+diff --git a/src/larbin.make b/src/larbin.make                                        <br />
+index 055ebde..7c5ffd1 100644                                                         <br />
+--- a/src/larbin.make                                                                 <br />
++++ b/src/larbin.make                                                                 <br />
+@@ -20,7 +20,7 @@ ABS-FETCH-OBJ:=fetch/site.o fetch/sequencer.o fetch/hashTable.o \   <br />
+ ABS-MAIN-OBJ:=$(MAIN-OBJ)                                                            <br />
+                                                                                      <br />
+ CFLAGS:=-O3 -Wall -D_REENTRANT                                                       <br />
+-CXXFLAGS:= -Wno-deprecated -Wall -O3 -D_REENTRANT -I- -I$(BASEDIR) -I$(ADNSDIR)      <br />
++CXXFLAGS:= -Wno-deprecated -Wall -O3 -D_REENTRANT  -I$(BASEDIR) -I$(ADNSDIR)         <br />
+ RM:=rm -f                                                                            <br />
+                                                                                      <br />
+ first: all                                                                           <br />
+diff --git a/src/utils/PersistentFifo.cc b/src/utils/PersistentFifo.cc                <br />
+index 01c8cec..406d5b8 100644                                                         <br />
+--- a/src/utils/PersistentFifo.cc                                                     <br />
++++ b/src/utils/PersistentFifo.cc                                                     <br />
+@@ -8,7 +8,7 @@                                                                       <br />
+ #include <stdio.h>                                                                   <br />
+ #include <string.h>                                                                  <br />
+ #include <ctype.h>                                                                   <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+                                                                                      <br />
+ #include "types.h"                                                                   <br />
+ #include "global.h"                                                                  <br />
+@@ -49,7 +49,7 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName) {      <br />
+       fout = 0;                                                                      <br />
+     }                                                                                <br />
+     if (fin == fout && fin != 0) {                                                   <br />
+-      cerr << "previous crawl was too little, cannot reload state\n"                 <br />
++        std::cerr << "previous crawl was too little, cannot reload state\n"          <br />
+            << "please restart larbin with -scratch option\n";                        <br />
+       exit(1);                                                                       <br />
+     }                                                                                <br />
+@@ -204,7 +204,7 @@ char *PersistentFifo::readLine () {                               <br />
+       case -1 :                                                                      <br />
+         // We have a trouble here                                                    <br />
+         if (errno != EINTR) {                                                        <br />
+-          cerr << "Big Problem while reading (persistentFifo.h)\n";                  <br />
++            std::cerr << "Big Problem while reading (persistentFifo.h)\n";           <br />
+           perror("reason");                                                          <br />
+           assert(false);                                                             <br />
+         } else {                                                                     <br />
+diff --git a/src/utils/connexion.cc b/src/utils/connexion.cc                          <br />
+index 2a07f6f..de9be9a 100644                                                         <br />
+--- a/src/utils/connexion.cc                                                          <br />
++++ b/src/utils/connexion.cc                                                          <br />
+@@ -13,7 +13,7 @@                                                                     <br />
+ #include <netdb.h>                                                                   <br />
+ #include <arpa/inet.h>                                                               <br />
+ #include <errno.h>                                                                   <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+                                                                                      <br />
+ #include "options.h"                                                                 <br />
+                                                                                      <br />
+diff --git a/src/utils/debug.cc b/src/utils/debug.cc                                  <br />
+index ba578ca..9b82714 100644                                                         <br />
+--- a/src/utils/debug.cc                                                              <br />
++++ b/src/utils/debug.cc                                                              <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 15-11-99 -> 03-04-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+                                                                                      <br />
+ #include "options.h"                                                                 <br />
+                                                                                      <br />
+diff --git a/src/utils/hashDup.cc b/src/utils/hashDup.cc                              <br />
+index 78520ca..3051b37 100644                                                         <br />
+--- a/src/utils/hashDup.cc                                                            <br />
++++ b/src/utils/hashDup.cc                                                            <br />
+@@ -4,7 +4,7 @@                                                                       <br />
+                                                                                      <br />
+ #include "config.h"                                                                  <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <sys/types.h>                                                               <br />
+ #include <sys/stat.h>                                                                <br />
+ #include <fcntl.h>                                                                   <br />
+@@ -28,7 +28,7 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch) {         <br />
+   } else {                                                                           <br />
+     int fds = open(init, O_RDONLY);                                                  <br />
+        if (fds < 0) {                                                                <br />
+-         cerr << "Cannot find " << init << ", restart from scratch\n";               <br />
++        std::cerr << "Cannot find " << init << ", restart from scratch\n";           <br />
+       for (ssize_t i=0; i<size/8; i++) {                                             <br />
+         table[i] = 0;                                                                <br />
+       }                                                                              <br />
+@@ -37,7 +37,7 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch) {         <br />
+       while (sr < size) {                                                            <br />
+         ssize_t tmp = read(fds, table+sr, size-sr);                                  <br />
+         if (tmp <= 0) {                                                              <br />
+-          cerr << "Cannot read " << init << "\n";                                    <br />
++            std::cerr << "Cannot read " << init << "\n";                             <br />
+           exit(1);                                                                   <br />
+         } else {                                                                     <br />
+           sr += 8*tmp;                                                               <br />
+diff --git a/src/utils/mypthread.cc b/src/utils/mypthread.cc                          <br />
+index de7aeb3..d622c3f 100644                                                         <br />
+--- a/src/utils/mypthread.cc                                                          <br />
++++ b/src/utils/mypthread.cc                                                          <br />
+@@ -2,7 +2,7 @@                                                                       <br />
+ // Sebastien Ailleret                                                                <br />
+ // 07-12-01 -> 07-12-01                                                              <br />
+                                                                                      <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <stdlib.h>                                                                  <br />
+                                                                                      <br />
+ #include "utils/mypthread.h"                                                         <br />
+@@ -17,7 +17,7 @@ void startThread (StartFun run, void *arg) {                        <br />
+       || pthread_create(&t, &attr, run, arg) != 0                                    <br />
+       || pthread_attr_destroy(&attr) != 0                                            <br />
+       || pthread_detach(t) != 0) {                                                   <br />
+-    cerr << "Unable to launch a thread\n";                                           <br />
++      std::cerr << "Unable to launch a thread\n";                                    <br />
+     exit(1);                                                                         <br />
+   }                                                                                  <br />
+ }                                                                                    <br />
+diff --git a/src/utils/string.cc b/src/utils/string.cc                                <br />
+index e8935e4..e3ec266 100644                                                         <br />
+--- a/src/utils/string.cc                                                             <br />
++++ b/src/utils/string.cc                                                             <br />
+@@ -3,7 +3,7 @@                                                                       <br />
+ // 20-12-99 -> 10-12-01                                                              <br />
+                                                                                      <br />
+ #include <string.h>                                                                  <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+                                                                                      <br />
+ #include "options.h"                                                                 <br />
+                                                                                      <br />
+diff --git a/src/utils/text.cc b/src/utils/text.cc                                    <br />
+index 96670f4..0814d6f 100644                                                         <br />
+--- a/src/utils/text.cc                                                               <br />
++++ b/src/utils/text.cc                                                               <br />
+@@ -5,7 +5,7 @@                                                                       <br />
+ #include <unistd.h>                                                                  <br />
+ #include <stdlib.h>                                                                  <br />
+ #include <errno.h>                                                                   <br />
+-#include <iostream.h>                                                                <br />
++#include <iostream>                                                                  <br />
+ #include <string.h>                                                                  <br />
+ #include <ctype.h><br />
+<br />
+diff --git a/src/utils/webserver.cc b/src/utils/webserver.cc<br />
+index c9ab615..f298599 100644<br />
+--- a/src/utils/webserver.cc<br />
++++ b/src/utils/webserver.cc<br />
+@@ -12,7 +12,7 @@<br />
+<br />
+ #include <string.h><br />
+ #include <unistd.h><br />
+-#include <iostream.h><br />
++#include <iostream><br />
+ #include <netdb.h><br />
+ #include <sys/socket.h><br />
+ #include <sys/types.h><br />
+@@ -56,8 +56,8 @@ void *startWebserver (void *none) {<br />
+          || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))<br />
+          || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0<br />
+          || listen(fds, 4) != 0) {<br />
+-       cerr << "Unable to get the socket for the webserver (" << global::httpPort<br />
+-         << ") : " << strerror(errno) << endl;<br />
++      std::cerr << "Unable to get the socket for the webserver (" << global::httpPort<br />
++         << ") : " << strerror(errno) << std::endl;<br />
+        exit(1);<br />
+   }<br />
+   // answer requests<br />
+@@ -67,7 +67,7 @@ void *startWebserver (void *none) {<br />
+        uint len = sizeof(addr);<br />
+        fdc = accept(fds, (struct sockaddr *) &addrc, &len);<br />
+        if (fdc == -1) {<br />
+-         cerr << "Trouble with web server...\n";<br />
++         std::cerr << "Trouble with web server...\n";<br />
+        } else {<br />
+       manageAns(fdc, readRequest(fdc));<br />
+       close(fdc);<br />
+<br />
+                                               <br />
 [/code]
 </body>
 </html>

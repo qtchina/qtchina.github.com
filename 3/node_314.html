@@ -6,30 +6,30 @@
 <title>用expect实现ssh自动登录对服务器进行批量管理</title>
 </head>
 <body>
-[code type="bash"]
-
-########### auto_login.sh   #####################
-#!/usr/bin/expect
- set PASSWD [lindex $argv 1]
- set IP     [lindex $argv 0]
- set CMD [lindex $argv 2]
- spawn ssh $IP $CMD
- expect "(yes/no)?" {
- send "yes\r"
- expect "password:"
- send "$PASSWD\r"
- } "password:" {send "$PASSWD\r"} "*host " {exit 1}
- expect eof
-
-[/code]
-
-第一行制定使用/usr/bin目录下的expect命令对后面的程序进行解释。
-第二行，三行，四行，分别从命令行参数中获取要登录的主机IP地址，登陆密码，以及要执行的命令。
-第五行，大概就是要触发这样一个事件，执行ssh $IP $CMD命令。
-第6行道第11行就是expect的整个交互过程了。
-如果读取到(yes/no)?提示符，就输入yes并回车，如果读取到password：提示输入密码的字符串，就输入用户登录密码(root用户)。
-当然如果不是第一次登陆，以前已经登录过的话，当输入ssh $IP $CMD回车后，会直接提示输入密码也就是说会读到字符串”* password:”,这个时候会输入密码回车(send "$PASSWD\r").
-另外，如果主机不可达的话，(yes/no)?和”password:”的可能都不会出现，系统会提示:
+[code type="bash"]<br />
+<br />
+########### auto_login.sh   #####################<br />
+#!/usr/bin/expect<br />
+ set PASSWD [lindex $argv 1]<br />
+ set IP     [lindex $argv 0]<br />
+ set CMD [lindex $argv 2]<br />
+ spawn ssh $IP $CMD<br />
+ expect "(yes/no)?" {<br />
+ send "yes\r"<br />
+ expect "password:"<br />
+ send "$PASSWD\r"<br />
+ } "password:" {send "$PASSWD\r"} "*host " {exit 1}<br />
+ expect eof<br />
+<br />
+[/code]<br />
+<br />
+第一行制定使用/usr/bin目录下的expect命令对后面的程序进行解释。<br />
+第二行，三行，四行，分别从命令行参数中获取要登录的主机IP地址，登陆密码，以及要执行的命令。<br />
+第五行，大概就是要触发这样一个事件，执行ssh $IP $CMD命令。<br />
+第6行道第11行就是expect的整个交互过程了。<br />
+如果读取到(yes/no)?提示符，就输入yes并回车，如果读取到password：提示输入密码的字符串，就输入用户登录密码(root用户)。<br />
+当然如果不是第一次登陆，以前已经登录过的话，当输入ssh $IP $CMD回车后，会直接提示输入密码也就是说会读到字符串”* password:”,这个时候会输入密码回车(send "$PASSWD\r").<br />
+另外，如果主机不可达的话，(yes/no)?和”password:”的可能都不会出现，系统会提示:<br />
 “No route to host”这个时候，我们退出程序。
 </body>
 </html>

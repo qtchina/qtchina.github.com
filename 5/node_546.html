@@ -6,48 +6,48 @@
 <title>使用select+blocked socketpair模拟新版本内核才支持的nonblock socketpair</title>
 </head>
 <body>
-话说服务器系统太老真是不爽，现在使用大多数服务器系统都是debian5，而这个系统的内核版本2.6.26，glibc 2.7，一些很方便的函数像pipe2, nonblock socketpair恰好从内核2.6.27开始支持，需要用到这个功能，又不能不兼容这要部署的服务器版本，真郁闷。
-现在要实现一个线程间的非阻塞通信，本来在使用的桌面系统上找到pipe2，从man手册上看完全符合使用要求，没想到在服务器上先测试了一下，直接没有这个函数，查了一下手册，这个原来从glibc 2.9加入的。
-后面又找到了socketpair函数，这个也非常方便，这回还先看了一下服务器，有这个函数，可谁知系统又没有定义一个叫SOCK_NONBLOCK的宏，无法使用它的nonblock模式。
-
-苦苦思索一番，找到一种解决办法，完整的方法是，
-使用#ifdef编译指令，加select block模式的socketpair，这样即能在新系统上使用，也可在比较旧的系统上运行。
-
-大概步骤如下，
-
-首先使用socketpair创建一对已经连接的socket，
-
-#ifdef HAVE_SOCK_NONBLOCK
-socketpair(AF_LOCAL, SOCK_STREAM | SOCK_NONBLOCK, 0, sv);
-#else
-socketpair(AF_LOCAL, SOCK_STREAM, 0, sv);
-#endif
-
-现在读取，
-
-#ifdef HAVE_SOCK_NONBLOCK
-// here will not block of couse
-read(sv[0], rbuf, 1000);
-#else
-fd_set rd_fds;
-FD_ZERO(&rd_fds);
-struct timeval timev;
-timev.tv_sec = 0;
-timev.tv_usec = 1000; // 1ms
-
-FD_SET(sv[0], &rd_fds);
-
-if (select(sv[0]+1, &rd_fds, 0, 0, &timev) == 1) {
-    assert(FD_ISSET(sv[0], &rd_fds);
-    // has data, can read, so here also will not be block
-    read(sv[0], rbuf, 1000);
-}
-
-如果把timev.tv_use设置为0,则会立即返回，就像真正的读取一个nonblock socket一样，这里还可选择地block几个ms时间，也算非常灵活。
-
-
-
-不过现在debian6快发了，以后新安装的服务器应试能用上debian6了，这些新功能就直接可用了。
+话说服务器系统太老真是不爽，现在使用大多数服务器系统都是debian5，而这个系统的内核版本2.6.26，glibc 2.7，一些很方便的函数像pipe2, nonblock socketpair恰好从内核2.6.27开始支持，需要用到这个功能，又不能不兼容这要部署的服务器版本，真郁闷。<br />
+现在要实现一个线程间的非阻塞通信，本来在使用的桌面系统上找到pipe2，从man手册上看完全符合使用要求，没想到在服务器上先测试了一下，直接没有这个函数，查了一下手册，这个原来从glibc 2.9加入的。<br />
+后面又找到了socketpair函数，这个也非常方便，这回还先看了一下服务器，有这个函数，可谁知系统又没有定义一个叫SOCK_NONBLOCK的宏，无法使用它的nonblock模式。<br />
+<br />
+苦苦思索一番，找到一种解决办法，完整的方法是，<br />
+使用#ifdef编译指令，加select block模式的socketpair，这样即能在新系统上使用，也可在比较旧的系统上运行。<br />
+<br />
+大概步骤如下，<br />
+<br />
+首先使用socketpair创建一对已经连接的socket，<br />
+<br />
+#ifdef HAVE_SOCK_NONBLOCK<br />
+socketpair(AF_LOCAL, SOCK_STREAM | SOCK_NONBLOCK, 0, sv);<br />
+#else<br />
+socketpair(AF_LOCAL, SOCK_STREAM, 0, sv);<br />
+#endif<br />
+<br />
+现在读取，<br />
+<br />
+#ifdef HAVE_SOCK_NONBLOCK<br />
+// here will not block of couse<br />
+read(sv[0], rbuf, 1000);<br />
+#else<br />
+fd_set rd_fds;<br />
+FD_ZERO(&rd_fds);<br />
+struct timeval timev;<br />
+timev.tv_sec = 0;<br />
+timev.tv_usec = 1000; // 1ms<br />
+<br />
+FD_SET(sv[0], &rd_fds);<br />
+<br />
+if (select(sv[0]+1, &rd_fds, 0, 0, &timev) == 1) {<br />
+    assert(FD_ISSET(sv[0], &rd_fds);<br />
+    // has data, can read, so here also will not be block<br />
+    read(sv[0], rbuf, 1000);<br />
+}<br />
+<br />
+如果把timev.tv_use设置为0,则会立即返回，就像真正的读取一个nonblock socket一样，这里还可选择地block几个ms时间，也算非常灵活。<br />
+<br />
+<br />
+<br />
+不过现在debian6快发了，以后新安装的服务器应试能用上debian6了，这些新功能就直接可用了。<br />
 
 </body>
 </html>

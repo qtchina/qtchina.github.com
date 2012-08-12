@@ -6,51 +6,51 @@
 <title>CLISP语言中的数组</title>
 </head>
 <body>
-<ol>
-<li>数组中可用的数据类型，array-element-type
-
-<p>(unsigned-byte 2) (unsigned-byte 4) (unsigned-byte 8) (unsigned-byte 16) (unsigned-byte 32)
-bit charactor  nil</p></li>
-
-<li>构造数组
-
-<p>make-array 函数。构造一个新的数组，构造时可指定数组的维数，数据类型，初始化值。
-adjust-array 函数。调整一个已有的数组，修改数组的维数，数据类型，值。</p></li>
-
-<li>数组的限制
-
-<table class="muse-table" border="2" cellpadding="5">
-  <thead>
-
-    <tr>
-      <th>CPU 类型</th>
-      <th>32-位</th>
-      <th>64-位</th>
-    </tr>
-  </thead>
-  <tbody>
-
-    <tr>
-      <td>ARRAY-RANK-LIMIT</td>
-      <td>2^12 = 4096</td>
-      <td>2^12 = 4096</td>
-    </tr>
-    <tr>
-      <td>ARRAY-DIMENSION-LIMIT</td>
-
-      <td>2^24-1 = 16777215</td>
-      <td>2^32-1 = 4294967295</td>
-    </tr>
-    <tr>
-      <td>ARRAY-TOTAL-SIZE-LIMIT</td>
-      <td>2^24-1 = 16777215</td>
-      <td>2^32-1 = 4294967295</li></td>
-
-    </tr>
-  </tbody>
-</table>
-
-</ol>
+<ol><br />
+<li>数组中可用的数据类型，array-element-type<br />
+<br />
+<p>(unsigned-byte 2) (unsigned-byte 4) (unsigned-byte 8) (unsigned-byte 16) (unsigned-byte 32)<br />
+bit charactor  nil</p></li><br />
+<br />
+<li>构造数组<br />
+<br />
+<p>make-array 函数。构造一个新的数组，构造时可指定数组的维数，数据类型，初始化值。<br />
+adjust-array 函数。调整一个已有的数组，修改数组的维数，数据类型，值。</p></li><br />
+<br />
+<li>数组的限制<br />
+<br />
+<table class="muse-table" border="2" cellpadding="5"><br />
+  <thead><br />
+<br />
+    <tr><br />
+      <th>CPU 类型</th><br />
+      <th>32-位</th><br />
+      <th>64-位</th><br />
+    </tr><br />
+  </thead><br />
+  <tbody><br />
+<br />
+    <tr><br />
+      <td>ARRAY-RANK-LIMIT</td><br />
+      <td>2^12 = 4096</td><br />
+      <td>2^12 = 4096</td><br />
+    </tr><br />
+    <tr><br />
+      <td>ARRAY-DIMENSION-LIMIT</td><br />
+<br />
+      <td>2^24-1 = 16777215</td><br />
+      <td>2^32-1 = 4294967295</td><br />
+    </tr><br />
+    <tr><br />
+      <td>ARRAY-TOTAL-SIZE-LIMIT</td><br />
+      <td>2^24-1 = 16777215</td><br />
+      <td>2^32-1 = 4294967295</li></td><br />
+<br />
+    </tr><br />
+  </tbody><br />
+</table><br />
+<br />
+</ol><br />
 
 </body>
 </html>

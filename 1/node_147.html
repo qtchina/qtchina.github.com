@@ -6,31 +6,31 @@
 <title>lighttpd 模块中的函数调用顺序</title>
 </head>
 <body>
-在lighttpd启动的时候运行下面三个函数调用：
-mod staffft plugin inited mod_stat_plug_init
-mod_stat.c 73 call order mod_stat_init
-2007-09-25 09:36:50: (mod_stat.c.120) call order mod_stat_set_defaults
-
-在有新的请求发来时运行下面的函数调用：
-2007-09-25 09:32:36: (mod_stat.c.340) call order mod_stat_connection_reset
-2007-09-25 09:32:36: (mod_stat.c.313) call order mod_stat_subrequest
-2007-09-25 09:37:03: (mod_stat.c.291) call order mod_stat_uri_raw
-2007-09-25 09:32:36: (mod_stat.c.298) call order mod_stat_uri_clean
-2007-09-25 09:32:36: (mod_stat.c.319) call order mod_stat_docroot
-2007-09-25 09:32:36: (mod_stat.c.325) call order mod_stat_physical
-2007-09-25 09:32:36: (mod_stat.c.246) call order mod_stat_request_done
-2007-09-25 09:32:36: (mod_stat.c.340) call order mod_stat_connection_reset
-2007-09-25 09:32:36: (mod_stat.c.348) call order mod_stat_joblist
-2007-09-25 09:32:36: (mod_stat.c.348) call order mod_stat_joblist
-2007-09-25 09:32:42: (mod_stat.c.340) call order mod_stat_connection_reset
-
-在关闭lighttpd的时候运行下面的函数调用：
-2007-09-25 09:36:12: (mod_stat.c.340) call order mod_stat_connection_reset
-2007-09-25 09:36:12: (mod_stat.c.85) call order mod_stat_free
-
-其中有几点不太明白的：
-第一，有几个模块函数没有调用：mod_stat_connection_close , mod_stat_subrequest_start
-第二，为什么有这么多的mod_stat_connedction_reset 调用。
+在lighttpd启动的时候运行下面三个函数调用：<br />
+mod staffft plugin inited mod_stat_plug_init<br />
+mod_stat.c 73 call order mod_stat_init<br />
+2007-09-25 09:36:50: (mod_stat.c.120) call order mod_stat_set_defaults<br />
+<br />
+在有新的请求发来时运行下面的函数调用：<br />
+2007-09-25 09:32:36: (mod_stat.c.340) call order mod_stat_connection_reset<br />
+2007-09-25 09:32:36: (mod_stat.c.313) call order mod_stat_subrequest<br />
+2007-09-25 09:37:03: (mod_stat.c.291) call order mod_stat_uri_raw<br />
+2007-09-25 09:32:36: (mod_stat.c.298) call order mod_stat_uri_clean<br />
+2007-09-25 09:32:36: (mod_stat.c.319) call order mod_stat_docroot<br />
+2007-09-25 09:32:36: (mod_stat.c.325) call order mod_stat_physical<br />
+2007-09-25 09:32:36: (mod_stat.c.246) call order mod_stat_request_done<br />
+2007-09-25 09:32:36: (mod_stat.c.340) call order mod_stat_connection_reset<br />
+2007-09-25 09:32:36: (mod_stat.c.348) call order mod_stat_joblist<br />
+2007-09-25 09:32:36: (mod_stat.c.348) call order mod_stat_joblist<br />
+2007-09-25 09:32:42: (mod_stat.c.340) call order mod_stat_connection_reset<br />
+<br />
+在关闭lighttpd的时候运行下面的函数调用：<br />
+2007-09-25 09:36:12: (mod_stat.c.340) call order mod_stat_connection_reset<br />
+2007-09-25 09:36:12: (mod_stat.c.85) call order mod_stat_free<br />
+<br />
+其中有几点不太明白的：<br />
+第一，有几个模块函数没有调用：mod_stat_connection_close , mod_stat_subrequest_start<br />
+第二，为什么有这么多的mod_stat_connedction_reset 调用。<br />
 
 </body>
 </html>

@@ -6,13 +6,13 @@
 <title>gentoo linux 上的访问IPV6资源的 miredo 启动问题</title>
 </head>
 <body>
-我使用的gentoo发行版本linux,安装miredo 也很方便,直接emerge miredo即可.
-不过最近发一个小问题,在使用wireless连网的时候,miredo总是启动不了,无法再访问IPV6资源.
-经查找发现是由于使用wireless的时候,没有连接网线, net.eth0无法启动,从而导致了依赖它的miredo也无法启动.
-这儿无线网络使用knetworkmanager管理的,与net.wlan0没有关系
-修改了一下/etc/init.d/miredo启动脚本,将第一个depend net行注释, 再启动miredo的时候正常了. 也能正常访问IPV6资源.
-这样有个问题,如果下次开机是先启动了miredo再启动wireless, 还能不能正常访问IPV6资源.
-
+我使用的gentoo发行版本linux,安装miredo 也很方便,直接emerge miredo即可.<br />
+不过最近发一个小问题,在使用wireless连网的时候,miredo总是启动不了,无法再访问IPV6资源.<br />
+经查找发现是由于使用wireless的时候,没有连接网线, net.eth0无法启动,从而导致了依赖它的miredo也无法启动.<br />
+这儿无线网络使用knetworkmanager管理的,与net.wlan0没有关系<br />
+修改了一下/etc/init.d/miredo启动脚本,将第一个depend net行注释, 再启动miredo的时候正常了. 也能正常访问IPV6资源.<br />
+这样有个问题,如果下次开机是先启动了miredo再启动wireless, 还能不能正常访问IPV6资源.<br />
+<br />
 
 </body>
 </html>

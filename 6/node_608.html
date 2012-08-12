@@ -6,33 +6,33 @@
 <title>vpn使用过程中一些附加用法</title>
 </head>
 <body>
-不管是哪个操作系统平台上的vpn，在启动后，vpn客户端会把默认的路由改为由vpn创建的一个虚拟网络卡上。
-
-像在 linux 上会创建一个 pppx 虚拟网络卡，使用/sbin/route命令查看会看到默认路由指向了pppx。
-
-这里有一个可能的问题，一般情况下vpn的连接速度比较慢，有些还有流量限制，如果所有的网络都走vpn的话，可能导致网速慢，vpn的流量变大。
-
-这时可以通过手动修改路由的方式让系统对网络访问做正确的选择。
-
-这是我使用的一个简单脚本，用来控制访问路由的，
-
-[root@myhost ~]# more bin/setinrouter.sh 
-[code type="bash"]
-#!/bin/sh
-
-set -x 
-
-route -v  add  -net 172.24.0.0/16 eth0
-route -v  add  -net 202.168.120.0/24 eth0
-route -v  add  -net 202.168.150.0/24 eth0
-route -v  add  -net 211.160.141.0/24 eth0
-
-[/code]
-
-这样，在访问上述网络时，会直接走未加密的正常网络路由，而其他的，则会走vpn。
-
-对此还可以根据需要，制订更复杂合理的路由控制脚本，以适应不同的网络访问需求。
-
+不管是哪个操作系统平台上的vpn，在启动后，vpn客户端会把默认的路由改为由vpn创建的一个虚拟网络卡上。<br />
+<br />
+像在 linux 上会创建一个 pppx 虚拟网络卡，使用/sbin/route命令查看会看到默认路由指向了pppx。<br />
+<br />
+这里有一个可能的问题，一般情况下vpn的连接速度比较慢，有些还有流量限制，如果所有的网络都走vpn的话，可能导致网速慢，vpn的流量变大。<br />
+<br />
+这时可以通过手动修改路由的方式让系统对网络访问做正确的选择。<br />
+<br />
+这是我使用的一个简单脚本，用来控制访问路由的，<br />
+<br />
+[root@myhost ~]# more bin/setinrouter.sh <br />
+[code type="bash"]<br />
+#!/bin/sh<br />
+<br />
+set -x <br />
+<br />
+route -v  add  -net 172.24.0.0/16 eth0<br />
+route -v  add  -net 202.168.120.0/24 eth0<br />
+route -v  add  -net 202.168.150.0/24 eth0<br />
+route -v  add  -net 211.160.141.0/24 eth0<br />
+<br />
+[/code]<br />
+<br />
+这样，在访问上述网络时，会直接走未加密的正常网络路由，而其他的，则会走vpn。<br />
+<br />
+对此还可以根据需要，制订更复杂合理的路由控制脚本，以适应不同的网络访问需求。<br />
+<br />
 
 </body>
 </html>

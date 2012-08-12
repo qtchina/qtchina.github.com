@@ -6,359 +6,359 @@
 <title>使用C++0x与boost编写的异步信号回调计时器类</title>
 </head>
 <body>
-这个类的接口与QTimer类似，能对现有代码改动极小的情况下取代QTimer
-
-这个类使用linux上的timer_*系统调用实现，只能用于linux平台，但使用boost:signals2实现了类似Qt的信号回调机制。
-
-编写这个类本意是学习一下boost的信号机制，没想到测试效果非常好，达到完成替代QTimer类的功能，在此列出，
-
-[code type="cpp"]
-#ifndef NBTIMER_H
-#define NBTIMER_H
-
-#include <signal.h>
-#include <sys/time.h>
-
-#include "boost/signals2.hpp"
-
-#define NBSLOT(mf,obj) boost::bind(&mf,obj)
-#define NBSLOT1(mf,obj) boost::bind(&mf,obj,_1)
-#define NBSLOT2(mf,obj) boost::bind(&mf,obj,_1,_2)
-#define NBSLOT3(mf,obj) boost::bind(&mf,obj,_1,_2,_3)
-#define NBSLOT4(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4)
-#define NBSLOT5(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5)
-#define NBSLOT6(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6)
-#define NBSLOT7(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7)
-#define NBSLOT8(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7,_8)
-#define NBSLOT9(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7,_8,_9)
-
-class MyTimer
-{
- public:
-    MyTimer();
-    virtual ~MyTimer();
-
-    void start(int msec);
-    void start();
-    void stop();
-    int interval() {return this->m_intval;}
-    void setInterval(int msec);
-    bool isSingleShot() { return this->m_is_single_shot; }
-    bool isActive() {return this->m_started; }
-    
-    boost::signals2::connection connect(boost::signals2::signal<void ()>::slot_type slot);
-
-    static void singleShot(int msec, boost::signals2::signal<void ()>::slot_type slot);
-
- public:
-    static void sig_timeout_handler(int sig, siginfo_t *si, void *uc);
-    static void print_siginfo(siginfo_t *si);
-    
-    static void sig_timeout_revoke_back1(siginfo_t *si);
-    void sig_timeout_revoke_back2();
-
- public: // signals
-    boost::signals2::signal<void ()> sig_timeout;
-
- protected:
-    MyTimer(bool single);
-    void init_timer_signal();
-
- private:
-    timer_t m_timer_id;
-    int m_intval;
-    struct sigevent m_sev;
-    bool m_started;
-    bool m_is_single_shot;
-    static constexpr timer_t  INV_TIMER_ID = NULL;
-};
-
-#endif
-
-[/code]
-
-[code type="cpp"]
-#include "mytimer.h"
-
-MyTimer::MyTimer()
-{
-    this->m_timer_id = MyTimer::INV_TIMER_ID;
-    this->m_intval = 0;
-    this->m_started = false;
-    this->m_is_single_shot = false;
-    // printf("====%d\n", this->m_timer_id == MyTimer::INV_TIMER_ID);
-}
-
-MyTimer::MyTimer(bool single)
-{
-    new(this)MyTimer();
-    this->m_is_single_shot = true;
-}
-
-MyTimer::~MyTimer()
-{
-    if (this->m_timer_id != MyTimer::INV_TIMER_ID) {
-        timer_delete(this->m_timer_id);
-    }
-}
-// timer_t MyTimer::INV_TIMER_ID = NULL;
-
-void MyTimer::start(int msec)
-{
-    this->m_intval = msec;
-
-    if (this->m_timer_id == MyTimer::INV_TIMER_ID) {
-        this->init_timer_signal();
-    }
-
-    if (!this->m_started) {
-        this->start();
-    }
-}
-
-void MyTimer::start()
-{
-    int iret;
-
-    if (this->m_timer_id == MyTimer::INV_TIMER_ID) {
-        this->init_timer_signal();
-    }
-
-    if (!this->m_started) {
-        struct itimerspec itspec, oitspec;
-        memset(&itspec, 0, sizeof(itspec));
-        itspec.it_interval.tv_sec = this->m_intval / 1000;
-        itspec.it_interval.tv_nsec = (this->m_intval % 1000) * 1000000;
-        // itspec.it_interval.tv_sec = 2;
-        // itspec.it_interval.tv_nsec = 0;
-
-        itspec.it_value.tv_sec = itspec.it_interval.tv_sec;
-        itspec.it_value.tv_nsec = itspec.it_interval.tv_nsec;
-
-        printf("sec: %ld, nsec: %ld\n", itspec.it_interval.tv_sec, itspec.it_interval.tv_nsec);
-
-        memset(&oitspec, 0, sizeof(oitspec));
-    
-        iret = timer_settime(this->m_timer_id, 0, &itspec, NULL);
-        if (iret == -1) {
-            perror("set error");
-            // assert(iret != -1);
-        }
-
-        this->m_started = true;
-    }
-}
-
-void MyTimer::stop()
-{
-    int iret = 0;
-    if (this->m_timer_id != MyTimer::INV_TIMER_ID) {
-        struct itimerspec itspec, oitspec;
-        memset(&itspec, 0, sizeof(struct itimerspec));
-        memset(&oitspec, 0, sizeof(struct itimerspec));
-        
-        iret = timer_settime(this->m_timer_id, 0, &itspec, &oitspec);
-        if (iret == -1) {
-            perror("set timer stop error");
-        }
-    }
-}
-
-void MyTimer::setInterval(int msec)
-{
-    this->m_intval = msec;
-}
-
-void MyTimer::init_timer_signal()
-{
-    int iret = 0;
-    sigset_t mask;
-    struct sigaction sa;
-
-    sa.sa_flags = SA_SIGINFO;
-    // sa.sa_sigaction = sig_timer_handler;
-    // sa.sa_sigaction = MyTimer::sig_timeout_handler;
-    sa.sa_sigaction = MyTimer::sig_timeout_handler;
-    sigemptyset(&sa.sa_mask);
-    iret = sigaction(SIGRTMIN, &sa, NULL);
-    assert(iret != -1);
-
-    sigemptyset(&mask);
-    sigaddset(&mask, SIGRTMIN);
-    // iret = sigprocmask(SIG_SETMASK, &mask, NULL);
-
-    this->m_sev.sigev_notify = SIGEV_SIGNAL;
-    this->m_sev.sigev_signo = SIGRTMIN;
-    // this->m_sev.sigev_value.sival_ptr = &this->m_timer_id;
-    this->m_sev.sigev_value.sival_ptr = this;
-    iret = timer_create(CLOCK_REALTIME, &this->m_sev, &this->m_timer_id);
-    printf("timer:%p\n", this->m_timer_id);
-    assert(iret != -1);
-
-}
-
-// #include "boost/lambda/lambda.hpp"
-// #include "boost/lambda/bind.hpp"
-// #include "boost/lambda/if.hpp"
-
-struct abcde {
-    void operator()(int a) {
-        printf("ahaha: %d\n", a);
-    }
-};
-
-boost::signals2::connection MyTimer::connect(boost::signals2::signal<void ()>::slot_type slot)
-{
-    boost::signals2::connection conn;
-
-    conn = this->sig_timeout.connect(slot);
-
-    return conn;
-
-    boost::function<void(void)> onClick;
-
-    // ok
-    onClick = slot;
-
-    // ok
-    onClick = {
-    };
-    onClick();
-
-    // ok
-    onClick = slot;
-
-    boost::function<void(int)> onChange;
-
-    // ok
-    onChange = abcde();
-
-    // onChange = (std::cout<< boost::lambda::_1 <<" "<<boost::lambda::_1);
-    // (std::cout<< boost::lambda::_1 << boost::lambda::_3 << boost::lambda::_2)("adf","fd","dfd");
-
-    [](int x) -> int {
-        return x + 6;
-    };
-
-    int x = 5;
-    char *y = NULL;
-    std::string z;
-
-    [=](int x) -> int {
-        if (y == NULL) {
-        }
-        return x + 6;
-    };
-
-    [&](int x) -> int {
-        if (y == NULL) {
-        }
-        return x + 6;
-    };
-
-    [&y,&z](int x) -> int {
-        if (y == NULL) {
-        }
-        return x + 6;
-    };
-
-    auto my_lambda_func = [&](int x) { /*...*/ };
-    auto my_onheap_lambda_func = new auto([=](int x) { /*...*/ });
-    my_lambda_func(5);
-    (*my_onheap_lambda_func)(6);
-
-    using namespace std;
-    vector<int> v = {50, -10, 20, -30};
-
-    // gcc version problem, go to gcc 4.6.0 now
-    std::sort(v.begin(), v.end(), [](int a, int b) { return abs(a)<abs(b); });
-
-    struct BasicStruct {
-        int x;
-        double y;
-    };
- 
-    struct AltStruct {
-        AltStruct(int x, double y) : x_{x}, y_{y} {}
- 
-    private:
-        int x_;
-        double y_;
-    };
- 
-    BasicStruct var1{5, 3.2};
-    AltStruct var2{2, 4.3};
-
-}
-
-// static 
-void MyTimer::singleShot(int msec, boost::signals2::signal<void ()>::slot_type slot)
-{
-    MyTimer *t = new MyTimer(true);
-    t->setInterval(msec);
-    t->connect(slot);
-    t->start();
-}
-
-// static 
-void MyTimer::sig_timeout_handler(int sig, siginfo_t *si, void *uc)
-{
-    /* Note: calling printf() from a signal handler is not
-       strictly correct, since printf() is not async-signal-safe;
-       see signal(7) */
-
-    printf("Caught signal %d\n", sig);
-    [] (siginfo_t*si) {
-        // MyTimer::print_siginfo(si);
-        MyTimer::print_siginfo(si);
-    } (si);
-
-
-    MyTimer::sig_timeout_revoke_back1(si);
-    // signal(sig, SIG_IGN);
-}
-
-// static 
-void MyTimer::print_siginfo(siginfo_t *si)
-{
-    timer_t *tidp;
-    int oret;
-
-    // tidp = (timer_t*)si->si_value.sival_ptr;
-
-    // printf("    sival_ptr = %p; ", si->si_value.sival_ptr);
-    // printf("    *sival_ptr = 0x%lx\n", (long) *tidp);
-
-    // oret = timer_getoverrun(*tidp);
-    // if (oret == -1) {
-    //     perror("timer_getoverrun");
-    // }
-    // else
-    //     printf("    overrun count = %d\n", oret);
-
-    
-}
-
-// static 
-void MyTimer::sig_timeout_revoke_back1(siginfo_t *si)
-{
-    MyTimer *t = NULL;
-
-    t = (MyTimer*)si->si_value.sival_ptr;
-    t->sig_timeout_revoke_back2();
-}
-
-void MyTimer::sig_timeout_revoke_back2()
-{
-    printf("sig timeout arrived:\n");
-    this->sig_timeout();
-    if (this->m_is_single_shot) {
-        this->stop();
-        delete this;
-    }
-}
-
-[/code]
+这个类的接口与QTimer类似，能对现有代码改动极小的情况下取代QTimer<br />
+<br />
+这个类使用linux上的timer_*系统调用实现，只能用于linux平台，但使用boost:signals2实现了类似Qt的信号回调机制。<br />
+<br />
+编写这个类本意是学习一下boost的信号机制，没想到测试效果非常好，达到完成替代QTimer类的功能，在此列出，<br />
+<br />
+[code type="cpp"]<br />
+#ifndef NBTIMER_H<br />
+#define NBTIMER_H<br />
+<br />
+#include <signal.h><br />
+#include <sys/time.h><br />
+<br />
+#include "boost/signals2.hpp"<br />
+<br />
+#define NBSLOT(mf,obj) boost::bind(&mf,obj)<br />
+#define NBSLOT1(mf,obj) boost::bind(&mf,obj,_1)<br />
+#define NBSLOT2(mf,obj) boost::bind(&mf,obj,_1,_2)<br />
+#define NBSLOT3(mf,obj) boost::bind(&mf,obj,_1,_2,_3)<br />
+#define NBSLOT4(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4)<br />
+#define NBSLOT5(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5)<br />
+#define NBSLOT6(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6)<br />
+#define NBSLOT7(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7)<br />
+#define NBSLOT8(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7,_8)<br />
+#define NBSLOT9(mf,obj) boost::bind(&mf,obj,_1,_2,_3,_4,_5,_6,_7,_8,_9)<br />
+<br />
+class MyTimer<br />
+{<br />
+ public:<br />
+    MyTimer();<br />
+    virtual ~MyTimer();<br />
+<br />
+    void start(int msec);<br />
+    void start();<br />
+    void stop();<br />
+    int interval() {return this->m_intval;}<br />
+    void setInterval(int msec);<br />
+    bool isSingleShot() { return this->m_is_single_shot; }<br />
+    bool isActive() {return this->m_started; }<br />
+    <br />
+    boost::signals2::connection connect(boost::signals2::signal<void ()>::slot_type slot);<br />
+<br />
+    static void singleShot(int msec, boost::signals2::signal<void ()>::slot_type slot);<br />
+<br />
+ public:<br />
+    static void sig_timeout_handler(int sig, siginfo_t *si, void *uc);<br />
+    static void print_siginfo(siginfo_t *si);<br />
+    <br />
+    static void sig_timeout_revoke_back1(siginfo_t *si);<br />
+    void sig_timeout_revoke_back2();<br />
+<br />
+ public: // signals<br />
+    boost::signals2::signal<void ()> sig_timeout;<br />
+<br />
+ protected:<br />
+    MyTimer(bool single);<br />
+    void init_timer_signal();<br />
+<br />
+ private:<br />
+    timer_t m_timer_id;<br />
+    int m_intval;<br />
+    struct sigevent m_sev;<br />
+    bool m_started;<br />
+    bool m_is_single_shot;<br />
+    static constexpr timer_t  INV_TIMER_ID = NULL;<br />
+};<br />
+<br />
+#endif<br />
+<br />
+[/code]<br />
+<br />
+[code type="cpp"]<br />
+#include "mytimer.h"<br />
+<br />
+MyTimer::MyTimer()<br />
+{<br />
+    this->m_timer_id = MyTimer::INV_TIMER_ID;<br />
+    this->m_intval = 0;<br />
+    this->m_started = false;<br />
+    this->m_is_single_shot = false;<br />
+    // printf("====%d\n", this->m_timer_id == MyTimer::INV_TIMER_ID);<br />
+}<br />
+<br />
+MyTimer::MyTimer(bool single)<br />
+{<br />
+    new(this)MyTimer();<br />
+    this->m_is_single_shot = true;<br />
+}<br />
+<br />
+MyTimer::~MyTimer()<br />
+{<br />
+    if (this->m_timer_id != MyTimer::INV_TIMER_ID) {<br />
+        timer_delete(this->m_timer_id);<br />
+    }<br />
+}<br />
+// timer_t MyTimer::INV_TIMER_ID = NULL;<br />
+<br />
+void MyTimer::start(int msec)<br />
+{<br />
+    this->m_intval = msec;<br />
+<br />
+    if (this->m_timer_id == MyTimer::INV_TIMER_ID) {<br />
+        this->init_timer_signal();<br />
+    }<br />
+<br />
+    if (!this->m_started) {<br />
+        this->start();<br />
+    }<br />
+}<br />
+<br />
+void MyTimer::start()<br />
+{<br />
+    int iret;<br />
+<br />
+    if (this->m_timer_id == MyTimer::INV_TIMER_ID) {<br />
+        this->init_timer_signal();<br />
+    }<br />
+<br />
+    if (!this->m_started) {<br />
+        struct itimerspec itspec, oitspec;<br />
+        memset(&itspec, 0, sizeof(itspec));<br />
+        itspec.it_interval.tv_sec = this->m_intval / 1000;<br />
+        itspec.it_interval.tv_nsec = (this->m_intval % 1000) * 1000000;<br />
+        // itspec.it_interval.tv_sec = 2;<br />
+        // itspec.it_interval.tv_nsec = 0;<br />
+<br />
+        itspec.it_value.tv_sec = itspec.it_interval.tv_sec;<br />
+        itspec.it_value.tv_nsec = itspec.it_interval.tv_nsec;<br />
+<br />
+        printf("sec: %ld, nsec: %ld\n", itspec.it_interval.tv_sec, itspec.it_interval.tv_nsec);<br />
+<br />
+        memset(&oitspec, 0, sizeof(oitspec));<br />
+    <br />
+        iret = timer_settime(this->m_timer_id, 0, &itspec, NULL);<br />
+        if (iret == -1) {<br />
+            perror("set error");<br />
+            // assert(iret != -1);<br />
+        }<br />
+<br />
+        this->m_started = true;<br />
+    }<br />
+}<br />
+<br />
+void MyTimer::stop()<br />
+{<br />
+    int iret = 0;<br />
+    if (this->m_timer_id != MyTimer::INV_TIMER_ID) {<br />
+        struct itimerspec itspec, oitspec;<br />
+        memset(&itspec, 0, sizeof(struct itimerspec));<br />
+        memset(&oitspec, 0, sizeof(struct itimerspec));<br />
+        <br />
+        iret = timer_settime(this->m_timer_id, 0, &itspec, &oitspec);<br />
+        if (iret == -1) {<br />
+            perror("set timer stop error");<br />
+        }<br />
+    }<br />
+}<br />
+<br />
+void MyTimer::setInterval(int msec)<br />
+{<br />
+    this->m_intval = msec;<br />
+}<br />
+<br />
+void MyTimer::init_timer_signal()<br />
+{<br />
+    int iret = 0;<br />
+    sigset_t mask;<br />
+    struct sigaction sa;<br />
+<br />
+    sa.sa_flags = SA_SIGINFO;<br />
+    // sa.sa_sigaction = sig_timer_handler;<br />
+    // sa.sa_sigaction = MyTimer::sig_timeout_handler;<br />
+    sa.sa_sigaction = MyTimer::sig_timeout_handler;<br />
+    sigemptyset(&sa.sa_mask);<br />
+    iret = sigaction(SIGRTMIN, &sa, NULL);<br />
+    assert(iret != -1);<br />
+<br />
+    sigemptyset(&mask);<br />
+    sigaddset(&mask, SIGRTMIN);<br />
+    // iret = sigprocmask(SIG_SETMASK, &mask, NULL);<br />
+<br />
+    this->m_sev.sigev_notify = SIGEV_SIGNAL;<br />
+    this->m_sev.sigev_signo = SIGRTMIN;<br />
+    // this->m_sev.sigev_value.sival_ptr = &this->m_timer_id;<br />
+    this->m_sev.sigev_value.sival_ptr = this;<br />
+    iret = timer_create(CLOCK_REALTIME, &this->m_sev, &this->m_timer_id);<br />
+    printf("timer:%p\n", this->m_timer_id);<br />
+    assert(iret != -1);<br />
+<br />
+}<br />
+<br />
+// #include "boost/lambda/lambda.hpp"<br />
+// #include "boost/lambda/bind.hpp"<br />
+// #include "boost/lambda/if.hpp"<br />
+<br />
+struct abcde {<br />
+    void operator()(int a) {<br />
+        printf("ahaha: %d\n", a);<br />
+    }<br />
+};<br />
+<br />
+boost::signals2::connection MyTimer::connect(boost::signals2::signal<void ()>::slot_type slot)<br />
+{<br />
+    boost::signals2::connection conn;<br />
+<br />
+    conn = this->sig_timeout.connect(slot);<br />
+<br />
+    return conn;<br />
+<br />
+    boost::function<void(void)> onClick;<br />
+<br />
+    // ok<br />
+    onClick = slot;<br />
+<br />
+    // ok<br />
+    onClick = {<br />
+    };<br />
+    onClick();<br />
+<br />
+    // ok<br />
+    onClick = slot;<br />
+<br />
+    boost::function<void(int)> onChange;<br />
+<br />
+    // ok<br />
+    onChange = abcde();<br />
+<br />
+    // onChange = (std::cout<< boost::lambda::_1 <<" "<<boost::lambda::_1);<br />
+    // (std::cout<< boost::lambda::_1 << boost::lambda::_3 << boost::lambda::_2)("adf","fd","dfd");<br />
+<br />
+    [](int x) -> int {<br />
+        return x + 6;<br />
+    };<br />
+<br />
+    int x = 5;<br />
+    char *y = NULL;<br />
+    std::string z;<br />
+<br />
+    [=](int x) -> int {<br />
+        if (y == NULL) {<br />
+        }<br />
+        return x + 6;<br />
+    };<br />
+<br />
+    [&](int x) -> int {<br />
+        if (y == NULL) {<br />
+        }<br />
+        return x + 6;<br />
+    };<br />
+<br />
+    [&y,&z](int x) -> int {<br />
+        if (y == NULL) {<br />
+        }<br />
+        return x + 6;<br />
+    };<br />
+<br />
+    auto my_lambda_func = [&](int x) { /*...*/ };<br />
+    auto my_onheap_lambda_func = new auto([=](int x) { /*...*/ });<br />
+    my_lambda_func(5);<br />
+    (*my_onheap_lambda_func)(6);<br />
+<br />
+    using namespace std;<br />
+    vector<int> v = {50, -10, 20, -30};<br />
+<br />
+    // gcc version problem, go to gcc 4.6.0 now<br />
+    std::sort(v.begin(), v.end(), [](int a, int b) { return abs(a)<abs(b); });<br />
+<br />
+    struct BasicStruct {<br />
+        int x;<br />
+        double y;<br />
+    };<br />
+ <br />
+    struct AltStruct {<br />
+        AltStruct(int x, double y) : x_{x}, y_{y} {}<br />
+ <br />
+    private:<br />
+        int x_;<br />
+        double y_;<br />
+    };<br />
+ <br />
+    BasicStruct var1{5, 3.2};<br />
+    AltStruct var2{2, 4.3};<br />
+<br />
+}<br />
+<br />
+// static <br />
+void MyTimer::singleShot(int msec, boost::signals2::signal<void ()>::slot_type slot)<br />
+{<br />
+    MyTimer *t = new MyTimer(true);<br />
+    t->setInterval(msec);<br />
+    t->connect(slot);<br />
+    t->start();<br />
+}<br />
+<br />
+// static <br />
+void MyTimer::sig_timeout_handler(int sig, siginfo_t *si, void *uc)<br />
+{<br />
+    /* Note: calling printf() from a signal handler is not<br />
+       strictly correct, since printf() is not async-signal-safe;<br />
+       see signal(7) */<br />
+<br />
+    printf("Caught signal %d\n", sig);<br />
+    [] (siginfo_t*si) {<br />
+        // MyTimer::print_siginfo(si);<br />
+        MyTimer::print_siginfo(si);<br />
+    } (si);<br />
+<br />
+<br />
+    MyTimer::sig_timeout_revoke_back1(si);<br />
+    // signal(sig, SIG_IGN);<br />
+}<br />
+<br />
+// static <br />
+void MyTimer::print_siginfo(siginfo_t *si)<br />
+{<br />
+    timer_t *tidp;<br />
+    int oret;<br />
+<br />
+    // tidp = (timer_t*)si->si_value.sival_ptr;<br />
+<br />
+    // printf("    sival_ptr = %p; ", si->si_value.sival_ptr);<br />
+    // printf("    *sival_ptr = 0x%lx\n", (long) *tidp);<br />
+<br />
+    // oret = timer_getoverrun(*tidp);<br />
+    // if (oret == -1) {<br />
+    //     perror("timer_getoverrun");<br />
+    // }<br />
+    // else<br />
+    //     printf("    overrun count = %d\n", oret);<br />
+<br />
+    <br />
+}<br />
+<br />
+// static <br />
+void MyTimer::sig_timeout_revoke_back1(siginfo_t *si)<br />
+{<br />
+    MyTimer *t = NULL;<br />
+<br />
+    t = (MyTimer*)si->si_value.sival_ptr;<br />
+    t->sig_timeout_revoke_back2();<br />
+}<br />
+<br />
+void MyTimer::sig_timeout_revoke_back2()<br />
+{<br />
+    printf("sig timeout arrived:\n");<br />
+    this->sig_timeout();<br />
+    if (this->m_is_single_shot) {<br />
+        this->stop();<br />
+        delete this;<br />
+    }<br />
+}<br />
+<br />
+[/code]<br />
 
 </body>
 </html>

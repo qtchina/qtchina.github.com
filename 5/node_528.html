@@ -6,14 +6,14 @@
 <title>在windows上使用msvc2010编译64位的libcurl</title>
 </head>
 <body>
-下载最新包，在lib/下有Makefile.vc10, 使用指令
-
-cd lib
-
-nmake /f Makefile.vc10 CFG=release
-
-可编译出相应格式的库
-
+下载最新包，在lib/下有Makefile.vc10, 使用指令<br />
+<br />
+cd lib<br />
+<br />
+nmake /f Makefile.vc10 CFG=release<br />
+<br />
+可编译出相应格式的库<br />
+<br />
 其中编译64位要对该Makefile.vc10进行修改，指定MACHINE为x64, 修改相关的zlib及ssl库的路径。
 </body>
 </html>

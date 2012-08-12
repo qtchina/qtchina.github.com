@@ -6,555 +6,555 @@
 <title>双缓冲技术</title>
 </head>
 <body>
-	双缓冲技术是一种GUI编程技术，它指的是在一个不在屏幕上的位图上渲染一个物件并把此位图拷贝到屏幕上。在Qt的早期版本中，这种技术常用于消除闪烁和提供一个快速用户界面。
-	在Qt4中，QWidget自动处理双缓冲，因此我们几乎不需要担心物件的闪烁。然而，显式双缓冲技术依然对复杂的物件渲染和重复渲染非带有益。我们可以永久保存物件的位图，总是为下次绘图做准备，并在我们接收到一个绘图事件的时候把位图拷贝到物件上。它尤其在我们希望做一些小改动时特别有效，如画一个橡皮圈，而不用一遍遍地重新计算和渲染整个物件。
-	我们将以讨论Plotter自定义物件来圆满结束本章内容。该物件使用了双缓冲技术和演示Qt编程的其他一些方面的内容，包括键盘事件处理，布局控制和坐标系统。
-	Plotter物件显示一条或者多条由坐标容器指定的曲线。用户可以在此图象上画橡胶圈，Plotter还能缩放橡胶圈内的区域。用户通过点击图形上的一个点，按下鼠标左键拖拽到另一个点再释放鼠标键来画一个橡胶圈。
-图5.7　Plotter物件的缩放
-<img src="upfile/image/plotter2.jpg">
-
-用户可以多次画一个橡胶圈重复地缩放图象，放大使用Zoom Out按键，缩小回去使用Zoom In按钮。Zoom In 和 Zoom Out会在他们可用时首次出现，因此如果用户没有缩放该图象的话他们不会让界面显示混乱。
-Plotter物件能拥有任何数量的曲线。它还管理大量PlotSettings对象，它们中的每个对应于一个特定的缩放级别。
-让我们先从plotter.h开始预览该类：
-[code type="cpp-qt"]
-#ifndef PLOTTER_H
-#define PLOTTER_H
-#include <QMap>
-#include <QPixmap>
-#include <QVector>
-#include <QWidget>
-class QToolButton;
-class PlotSettings;
-class Plotter : public QWidget
-{
-    Q_OBJECT
-public:
-    Plotter(QWidget *parent = 0);
-    void setPlotSettings(const PlotSettings &settings);
-    void setCurveData(int id, const QVector<QPointF> &data);
-    void clearCurve(int id);
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
-public slots:
-    void zoomIn();
-    void zoomOut();
-[/code]
-	在开始的地方包含了用于plotter头文件的Qt头文件，以及在此头文件中使用的指针和引用的类的前置定义。
-	在Plotter类，我们为设置绘图仪提供了3个公有函数，为缩放提供了2个公有槽。我们还重新实现了来自QWidget中的minimumSizeHint() 和 sizeHint()。我们使用QVector<QPointF>存储曲线上的点，而QpointF则是Qpoint的一种浮点数版本。
-[code type="cpp-qt"]
-protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent *event);
-[/code]
-	在类的保护区，我们声明了所有希望重新实现的QWidget事件处理函数。
-[code type="cpp-qt"]
-private:
-    void updateRubberBandRegion();
-    void refreshPixmap();
-    void drawGrid(QPainter *painter);
-    void drawCurves(QPainter *painter);
-    enum { Margin = 50 };
-    QToolButton *zoomInButton;
-    QToolButton *zoomOutButton;
-    QMap<int, QVector<QPointF> > curveMap;
-    QVector<PlotSettings> zoomStack;
-    int curZoom;
-    bool rubberBandIsShown;
-    QRect rubberBandRect;
-    QPixmap pixmap;
-};
-[/code]
-	在类的私有区，我们声明了几个用于绘制物件的函数，一个常量和几个成员变量。Margin用于表示图形周围的空间。
-	成员变量中有一个Qpixmap类型的pixmap。这一变量持有整个物件渲染图的拷贝，与显示在屏幕上的一模一样。绘图仪总是先画到这个不在屏幕上的位图上，然后再把该位图拷贝到物件上。
-[code type="cpp-qt"]
-class PlotSettings
-{
-public:
-    PlotSettings();
-
-    void scroll(int dx, int dy);
-    void adjust();
-    double spanX() const { return maxX - minX; }
-    double spanY() const { return maxY - minY; }
-
-    double minX;
-    double maxX;
-    int numXTicks;
-    double minY;
-    double maxY;
-    int numYTicks;
-
-private:
-    static void adjustAxis(double &min, double &max, int &numTicks);
-};
-#endif
-[/code]
-	PlotSettings类指定x和y轴的区间和这些轴上标记的个数。图5.8显示了一个PlotSettings和一个Plotter物件间的对应关系。
-
-图　5.8　PlotSettings　的成员变量
-<img src="upfile/image/plotsetting.jpg">
-
-	为了方便，numXTicks 和 numYTicks相距为1。如果numXTicks为5，Plotter会自动在x轴上画6个小标记。这会简化后面的计算。
-	现在让我们预览一下实现文件：
-[code type="cpp-qt"]
-#include <QtGui>
-#include <cmath>
-
-#include "plotter.h"
-[/code]
-	我们包含了相关的头文件把所有std命名空间中的符号导入到全局命名空间。这允许我们访问<cmath>中声明的函数而不用在它们前面使用std::前缀（例如，floor()而不是std::floor()）。
-[code type="cpp-qt"]
-Plotter::Plotter(QWidget *parent)
-    : QWidget(parent)
-{
-    setBackgroundRole(QPalette::Dark);
-    setAutoFillBackground(true);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setFocusPolicy(Qt::StrongFocus);
-    rubberBandIsShown = false;
-
-    zoomInButton = new QToolButton(this);
-    zoomInButton->setIcon(QIcon(":/images/zoomin.png"));
-    zoomInButton->adjustSize();
-    connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));
-
-    zoomOutButton = new QToolButton(this);
-    zoomOutButton->setIcon(QIcon(":/images/zoomout.png"));
-    zoomOutButton->adjustSize();
-    connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));
-
-    setPlotSettings(PlotSettings());
-}
-[/code]
-	setBackgroundRole()调用告诉QWidget使用调色板中的“dark”组件擦除物件，而不使用”window”组件。这给Qt用于填充在物件调整为更大尺寸且paintEvent()还没来得及绘制新象素的时候刚露面的象素的默认颜色。我们还要调用setAutoFillBackground(true)开启这种机制。（默认地，子物件从它们的父物件继承背景）
-	setSizePolicy()调用设置物件两个方向上的尺寸策略为QSizePolicy::Expanding。这告诉任何负责该物件的布局管理器它可以被拉伸和收缩。这一设置通过用于可以占据大量屏幕空间的物件。两个方向上的默认设置为QSizePolicy::Preferred，意味着物件更希望使用它的尺寸暗示的大小，但它还能被缩小到它的最小尺寸或者如果需要的话能扩展到无穷大。
-	setFocusPolicy(Qt::StrongFocus)调用使物件能在点击或者按下Tab键时获取焦点。当Plotter拥有焦点时，它会接受键盘事件。该Plotter物件能处理几个键：+号表示缩小，-号表示放大。方向键分别表示上下左右滚动。
-图5.9　滚动Plotter物件。
-<img src="upfile/image/plotter4.jpg" border=0>
-
-	在构造函数中，我们还创建两个QtoolButtons，每个都有一个图标。这些按钮允许用户执行缩放操作。按钮的图标保存在一个资源文件中，因此任何使用Qlotter物件的程序需要它的.pro文件中的入口。
-
-RESOURCES     = plotter.qrc
-
-	下面的文件与我们曾经在Spreadsheet程序中用到的相似：
-[code type="xml"]
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/zoomin.png</file>
-    <file>images/zoomout.png</file>
-</qresource>
-</RCC>
-[/code]
-	按钮的adjustSize()调用设置它们的尺寸为它们的尺寸暗示值。这些按钮并没有放在布局管理器中，相反，我们会在Plotter的调整大小事件时自动放置它们。因为我们没有使用布局，我们必须通过传递this给QpushButton的构造函数显式指定这些按钮的父物件。
-	最后调用setPlotSettings()完成初始化工作。
-[code type="cpp-qt"]
-void Plotter::setPlotSettings(const PlotSettings &settings)
-{
-    zoomStack.clear();
-    zoomStack.append(settings);
-    curZoom = 0;
-    zoomInButton->hide();
-    zoomOutButton->hide();
-    refreshPixmap();
-}
-[/code]
-
-	setPlotSettings()函数用于指定显示绘图仪所需的PlotSettings。它被Plotter的构造函数调用，它也可以被用户的其他类调用。绘图仪开始时为默认缩放级别。每次用户缩小它时，一个新的PlotSettings实例被创建并放到缩放栈上。缩放栈由两个成员变量表示：
-zoomStack 持有不同缩放设置的一个QVector<PlotSettings>。
-curZoom 持有当前PlotSettings在zoomStack上的索引。
-在调用setPlotSettings()之后，缩放栈仅包含一个入口，并且Zoom In 和 Zoom Out按钮也隐藏了。这些按钮直到我们在zoomIn() 和 zoomOut()槽中调用它们的zoomIn() and zoomOut()时才再次显示。（正常情况下，在顶级物件上调用show()来显示所有子物件是非常有效的。但是当我们显工调用一个子物件的hide()时，直到我们调用它的show()时才显示出来）。
-		要更新显示refreshPixmap()调用是必要的。通常情况下，我们应该调用update()，但这里我们的做法稍微有些不同，因为我们希望任何时刻Qpixmap都保持最新状态。在重新生成pixmap之后，refreshPixmap()调用update()把该位图拷贝到物件上。
-[code type="cpp-qt"]
-void Plotter::zoomOut()
-{
-    if (curZoom > 0) {
-        --curZoom;
-        zoomOutButton->setEnabled(curZoom > 0);
-        zoomInButton->setEnabled(true);
-        zoomInButton->show();
-        refreshPixmap();
-    }
-}
-[/code]
-	如果图象是缩小的，zoomOut()槽会放大它。它递减当前的缩放级别并根据图象是否能继续放大激活Zoom Out。Zoom In按钮被激活并显示，屏幕则通过refreshPixmap()调用被更新。
-[code type="cpp-qt"]
-void Plotter::zoomIn()
-{
-    if (curZoom < zoomStack.count() - 1) {
-        ++curZoom;
-        zoomInButton->setEnabled(curZoom < zoomStack.count() - 1);
-        zoomOutButton->setEnabled(true);
-        zoomOutButton->show();
-        refreshPixmap();
-    }
-}
-[/code]
-	如果用户之前执行缩放然后再放大操作，PlotSettings的下一个缩放级别将会在缩放栈中，并能执行缩小。（否则，它可以使用橡胶圈进行缩小）。
-	该槽递增curZoom来把一个缩放级别移动到缩放栈更深位置，激活或者禁用Zoom In按钮依赖于是否它能继续缩小，并激活和显示Zoom Out按钮。我们再次调用refreshPixmap()让绘图仪使用最新的缩放设置。
-[code type="cpp-qt"]
-void Plotter::setCurveData(int id, const QVector<QPointF> &data)
-{
-    curveMap[id] = data;
-    refreshPixmap();
-}
-[/code]
-	setCurveData()设置给定曲线ID的曲线数据。如果相同ID的曲线已经存在于curveMap，它将被新的曲线数据替代，否则新的曲线简单的插入进去。curveMap成员变量是QMap<int, QVector<QPointF> >类型的。
-[code type="cpp-qt"]
-void Plotter::clearCurve(int id)
-{
-    curveMap.remove(id);
-    refreshPixmap();
-}
-[/code]
-	clearCurve()函数从曲线队列中删除指定的曲线。
-[code type="cpp-qt"]
-QSize Plotter::minimumSizeHint() const
-{
-    return QSize(6 * Margin, 4 * Margin);
-}
-[/code]
-
-	minimumSizeHint()函数与sizeHint()类似，只是sizeHint()指定物件的理想尺寸，而minimumSizeHint()指定物件的最小理想尺寸。布局管理器从不会把物件尺寸调整到低于最小尺寸暗示的值。
-	我们返回值为300x200（而Margin 等于50），这允许四边都能有边距并且还能有绘图仪自已的空间。如果比这还小，绘图仪几乎小的不能再用了。
-[code type="cpp-qt"]
-QSize Plotter::sizeHint() const
-{
-    return QSize(12 * Margin, 8 * Margin);
-}
-[/code]
-	在sizeHint()中，我们一个与Margin常量成比例的理想尺寸，而在minimumSizeHint()中我们使用同样的3:2外观。
-	现在我们预览完了Plotter的公有函数和槽。现在来预览一个相关保护级的事件处理函数。
-[code type="cpp-qt"]
-void Plotter::paintEvent(QPaintEvent * /* event */)
-{
-    QStylePainter painter(this);
-    painter.drawPixmap(0, 0, pixmap);
-    if (rubberBandIsShown) {
-        painter.setPen(palette().light().color());
-        painter.drawRect(rubberBandRect.normalized()
-                                       .adjusted(0, 0, -1, -1));
-    }
-    if (hasFocus()) {
-        QStyleOptionFocusRect option;
-        option.initFrom(this);
-        option.backgroundColor = palette().dark().color();
-        painter.drawPrimitive(QStyle::PE_FrameFocusRect, option);
-    }
-}
-[/code]
-	一般情况下，paintEvent()是我们执行所有绘图操作的地方。但这里所有的绘图仪绘图工作预先在refreshPixmap()中完成，因此我们就能简单的通过把位图拷贝到物件的(0,0)位置渲染整个绘图仪。
-	如果橡胶圈可见，我们在绘图仪的顶部绘出它。我们使用来自物件当前颜色组的“light”组件作为画笔颜色来保证与”dark”背景有一个较好的反差。注意我们直接在物件上绘图，而没有触及非屏幕位图。使用QRect::normalized()保证橡胶圈的矩形有一可靠的调度和宽度（如果必要可变换坐标），adjusted()把该矩形尺寸减小一个象素以显示它自己1象素宽的轮廓。
-	如果Plotter援用焦点，一个焦点矩形将通过物件风格的drawPrimitive()函数绘制出来，并以QStyle::PE_FrameFocusRect作为该函数的第一个参数，以QstyleOptionFocusRect对象作为它的第二个参数。焦点矩形绘制参数是从Plotter物件继承来的（通过initFrom()调用）。背景颜色必须被显示指定。
-	当我们希望使用当前风格绘图时，我们或者直接调用Qstyle函数，如：
-style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, &painter,
-                       this);
-或者使用QstylePainter代替正常的QPainter，正如我们在Plotter中所做的一样，使用它绘图更方便。
-	QWidget::style()函数返回应该用于物件绘图的风格。在Qt中，物件风格是QStyle的子类。内建的风格包括QWindowsStyle, QWindowsXPStyle, QMotifStyle, QCDEStyle, QMacStyle, 和 QplastiqueStyle。他们中的每一个风格都重新实现了Qstyle中的虚函数以正确模仿绘制当前平台的风格。QstylePainter的 drawPrimitive()函数调用Qstyle中的同名函数，它可用于绘制“基本元素”如面板、按钮和焦点矩形。一个程序中所有物件风格一般是相同的QApplication::style())，但它能被基于每个物件QWidget::setStyle()覆盖。
-	通过创建Qstyle的子类，定义一个自定义风格是可能的。这能通过给一个或者一组程序与众不同的外观来实现。虽然一般提倡使用目标平台的本地外观，但如果你喜欢冒险Qt也提供了许多灵活性。
-	Qt的内建物件几乎都使用专有的Qstyle绘制它们自己。这就是为什么在所有Qt支持的平台它们看上去像本地物件。自定义物件或者通过使用Qstyle绘制它们自己或者通过使用内建Qt物件作为子物件意识到它的风格。对于Plotter，我们组合使用了这两种方法：焦点矩形使用QStyle（通过一个QstylePainter）绘制，而Zoom In 和 Zoom Out按钮使用Qt物件。
-[code type="cpp-qt"]
-void Plotter::resizeEvent(QResizeEvent * /* event */)
-{
-    int x = width() - (zoomInButton->width()
-                       + zoomOutButton->width() + 10);
-    zoomInButton->move(x, 5);
-    zoomOutButton->move(x + zoomInButton->width() + 5, 5);
-    refreshPixmap();
-}
-[/code]
-	当Plotter物件被调整尺寸时，Qt生成一个”resize”事件。这里，我们重新实现resizeEvent()来把Zoom In 和 Zoom Out 按钮放置到Plotter物件的右上角。
-	我们把Zoom In 按钮和 Zoom Out按钮移动到边缘，使用5象素把它们隔开，并让它离父物件的右边缘和上边缘各5个象素。
-	如果我们希望这些按钮放于左上角，也就是坐(0,0)，我们应该在Plotter的构造函数中把它们移动到那里。但我们希望踀右上角，它的位置依赖于物件的尺寸。为此，重新实现resizeEvent()并设置它作为按钮的位置是必要的。
-	我们没有在Plotter的构造函数为这些按钮设置任何的位置。这不是总是，因为Qt总是在物件第一次显示的时候生成一个”resize”事件。
-	能替代重新resizeEvent()并自动布局这些子物件的途径是使用布局管理器（例如，QGridLayout）。使用布局可能有点复杂并耗费更多的资源，另一方面，它却能更优美地处理从右到左的布局，特别处理像Arabic 和 Hebrew的语言更有必要。
-	最后，我们调用refreshPixmap()以新的尺寸重绘该位图。
-[code type="cpp-qt"]
-void Plotter::mousePressEvent(QMouseEvent *event)
-{
-    QRect rect(Margin, Margin,
-               width() - 2 * Margin, height() - 2 * Margin);
-    if (event->button() == Qt::LeftButton) {
-        if (rect.contains(event->pos())) {
-            rubberBandIsShown = true;
-            rubberBandRect.setTopLeft(event->pos());
-            rubberBandRect.setBottomRight(event->pos());
-            updateRubberBandRegion();
-            setCursor(Qt::CrossCursor);
-        }
-    }
-}
-[/code]
-	当用户按下鼠标左键的时候，我们开始显示一个橡胶圈。这导致把rubberBandIsShown设置为true，并使用鼠标当前位置初始化rubberBandRect成员变量，调度一个绘图事件来绘制该橡胶圈，再把鼠标光标改为十字形状。
-	（？？）rubberBandRect变量是Qrect类型的。Qrect可被定义为(x, y, width, height)四部分，而(x,y)是左上角的位置，width x height是矩形的尺寸。这里我们使用坐标对表示法。我们设置用户点击的点作为左上角和右下角。然后我们调用updateRubberBandRegion()强制重绘橡胶圈内的小区域。
-	Qt提供了两种机制来控制鼠标的光标形状：
-QWidget::setCursor() 用于当鼠标悬浮的一个特定物件的时候设置光标的形状。如果没有为物件设置光标，将使用父物件的光标。默认的顶层鼠标为简头光标。
-QApplication::setOverrideCursor() 设置整个程序的光标形状，覆盖为每个物件单独设置的光标，直到restoreOverrideCursor()被调用为止。
-在第4章，我们以Qt::WaitCursor为参数调用QApplication::setOverrideCursor()改变程序的光标为标准等待光标。
-[code type="cpp-qt"]
-void Plotter::mouseMoveEvent(QMouseEvent *event)
-{
-    if (rubberBandIsShown) {
-        updateRubberBandRegion();
-        rubberBandRect.setBottomRight(event->pos());
-        updateRubberBandRegion();
-    }
-}
-[/code]
-	当用户按着左键移动鼠标光标的时候，我们首先调用updateRubberBandRegion()调度一个绘图事件重绘橡胶圈内的区域，然后我们重新计算rubberBandRect来解释鼠标的移动，最后第二次调用updateRubberBandRegion()重绘橡胶圈移到的位置。这能有效地擦除橡胶圈并在新的坐标重绘它。
-	如果用户向上或者向左移动鼠标，可能rubberBandRect的正常右下角将会结束于它的左上角的上面或者左侧。这如果发生了，Qrect将有向的宽度和调度。我们在paintEvent()使用QRect::normalized()来保证左上角和右下角的坐标会被调整以获得非负的宽度和高度。
-[code type="cpp-qt"]
-void Plotter::mouseReleaseEvent(QMouseEvent *event)
-{
-    if ((event->button() == Qt::LeftButton) && rubberBandIsShown) {
-        rubberBandIsShown = false;
-        updateRubberBandRegion();
-        unsetCursor();
-        QRect rect = rubberBandRect.normalized();
-        if (rect.width() < 4 || rect.height() < 4)
-            return;
-        rect.translate(-Margin, -Margin);
-        PlotSettings prevSettings = zoomStack[curZoom];
-        PlotSettings settings;
-        double dx = prevSettings.spanX() / (width() - 2 * Margin);
-        double dy = prevSettings.spanY() / (height() - 2 * Margin);
-        settings.minX = prevSettings.minX + dx * rect.left();
-        settings.maxX = prevSettings.minX + dx * rect.right();
-        settings.minY = prevSettings.maxY - dy * rect.bottom();
-        settings.maxY = prevSettings.maxY - dy * rect.top();
-        settings.adjust();
-        zoomStack.resize(curZoom + 1);
-        zoomStack.append(settings);
-        zoomIn();
-    }
-}
-[/code]
-	当用户释放鼠标左键的时候，我们擦除橡胶圈并恢复标准箭头光标。如果橡胶圈至少为4x4大小，我们就执行缩放。如果更小，很可能用户只是不小心点击或者为了获取焦点，那么我们什么都不做。
-	用于缩放的代码有点复杂。因为我们要同时处理物件的坐标和绘图仪的坐标。这里的大多数工作是把rubberBandRect从物件坐标转换到绘图仪坐标。一旦完成了转换，我们就调用PlotSettings::adjust()来圆整该数字并为每个坐标轴找到一个合适数字标记。图5.10和5.11描述了这一情况。
-图　5.10　把橡胶圈从物件坐标转换为绘图仪坐标
-<img src="upfile/images/converting_the_rubber.jpg">
-图　5.11　调整绘图仪坐标并缩小橡胶圈内的区域
-<img src="upfile/images/adjusting_plooter.jpg">
-
-	然后我们执行缩放。缩放通过把我们刚计算出来的新的PlotSettings压进缩放栈的顶端并调用zoomIn()来实现。
-[code type="cpp-qt"]
-void Plotter::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key()) {
-    case Qt::Key_Plus:
-        zoomIn();
-        break;
-    case Qt::Key_Minus:
-        zoomOut();
-        break;
-    case Qt::Key_Left:
-        zoomStack[curZoom].scroll(-1, 0);
-        refreshPixmap();
-        break;
-    case Qt::Key_Right:
-        zoomStack[curZoom].scroll(+1, 0);
-        refreshPixmap();
-        break;
-    case Qt::Key_Down:
-        zoomStack[curZoom].scroll(0, -1);
-        refreshPixmap();
-        break;
-    case Qt::Key_Up:
-        zoomStack[curZoom].scroll(0, +1);
-        refreshPixmap();
-        break;
-    default:
-        QWidget::keyPressEvent(event);
-    }
-}
-[/code]
-	当用户按下一个键并且Plotter物件拥有焦点时，keyPressEvent()将被调用。我们重新实现它以响应6个键的输入：+,-,Up,Down,Left,和Right。如果用户按下一个我们没有处理的键，我们调用项类中的实现。为了简便，我们忽略Shift,Ctrl,和Alt修饰键，它们可通过QKeyEvent::modifiers()获得。
-[code type="cpp-qt"]
-void Plotter::wheelEvent(QWheelEvent *event)
-{
-    int numDegrees = event->delta() / 8;
-    int numTicks = numDegrees / 15;
-    if (event->orientation() == Qt::Horizontal) {
-        zoomStack[curZoom].scroll(numTicks, 0);
-    } else {
-        zoomStack[curZoom].scroll(0, numTicks);
-    }
-    refreshPixmap();
-}
-[/code]
-	当鼠标滚轮滚动时滚轮事件会发生。大多数鼠标仅提供一个垂直滚轮，但是另一些还有一个水平滚轮。Qt对两种滚轮类型都支持。滚轮事件会发送到拥有焦点的物件。delta()函数滚轮旋转过的以1/8度为单位距离。鼠标一般每步为5度。这里，我们通过修改缩放栈最上面的项来修改所需数目的标记并使用refreshPixmap()更新显示。
-	滚轮的最常用的地方是滚动一个滚动条。当我们使用QscrollArea（见第16章）以提供滚动条的时候，QscrollArea会自动处理滚轮鼠标事件，因此我们不需要自己来重新实现wheelEvent()。
-	到现在为止我们实现报事件处理函数了。现在我们来预览一下私有函数。
-[code type="cpp-qt"]
-void Plotter::updateRubberBandRegion()
-{
-    QRect rect = rubberBandRect.normalized();
-    update(rect.left(), rect.top(), rect.width(), 1);
-    update(rect.left(), rect.top(), 1, rect.height());
-    update(rect.left(), rect.bottom(), rect.width(), 1);
-    update(rect.right(), rect.top(), 1, rect.height());
-}
-[/code]
-	updateRubberBand()函数在mousePressEvent(), mouseMove-Event(), 和 mouseReleaseEvent()中被调用以擦除或者重绘橡胶圈。它包含四个update()调用为橡胶圈覆盖的四个小矩形产生绘图事件（两条垂直线和两条水平线）。Qt提供了QrubberBand类来绘制橡胶圈，但在这里硬编码提供了一种更好的控制。
-[code type="cpp-qt"]
-void Plotter::refreshPixmap()
-{
-    pixmap = QPixmap(size());
-    pixmap.fill(this, 0, 0);
-    QPainter painter(&pixmap);
-    painter.initFrom(this);
-    drawGrid(&painter);
-    drawCurves(&painter);
-    update();
-}
-[/code]
-	refreshPixmap()函数在非屏幕上的位图上重绘该绘图仪并更新显示。我们调整位图的的尺寸为物件的尺寸并使用物件擦除颜色填充它。该颜色是调色板中的”dark”组件，因为在Plotter构造函数中我们已经调用了setBackgroundRole()。如果背景是non-solid画刷，Qpixmap::fill()需要知道在物件中为正确的调整画刷模式位图结束的位移。这里，该位图与整个物件一致，因此我们指定位置(0,0)。
-	然后我们创建一个QPainter在该位图上绘图。initFrom()调用设置绘图器的画笔，背景和Plotter物件中一致的字体。下一步我们调用drawGrid() 和 drawCurves()执行绘图。最后，我们调用update()对整个物件产生一个绘图事件。该位图在paintEvent()函数中被拷贝到物件上。
-[code type="cpp-qt"]
-void Plotter::drawGrid(QPainter *painter)
-{
-    QRect rect(Margin, Margin,
-               width() - 2 * Margin, height() - 2 * Margin);
-    if (!rect.isValid())
-        return;
-    PlotSettings settings = zoomStack[curZoom];
-    QPen quiteDark = palette().dark().color().light();
-    QPen light = palette().light().color();
-    for (int i = 0; i <= settings.numXTicks; ++i) {
-        int x = rect.left() + (i * (rect.width() - 1)
-                                 / settings.numXTicks);
-        double label = settings.minX + (i * settings.spanX()
-                                          / settings.numXTicks);
-        painter->setPen(quiteDark);
-        painter->drawLine(x, rect.top(), x, rect.bottom());
-        painter->setPen(light);
-        painter->drawLine(x, rect.bottom(), x, rect.bottom() + 5);
-        painter->drawText(x - 50, rect.bottom() + 5, 100, 15,
-                          Qt::AlignHCenter | Qt::AlignTop,
-                          QString::number(label));
-    }
-    for (int j = 0; j <= settings.numYTicks; ++j) {
-        int y = rect.bottom() - (j * (rect.height() - 1)
-                                   / settings.numYTicks);
-        double label = settings.minY + (j * settings.spanY()
-                                          / settings.numYTicks);
-        painter->setPen(quiteDark);
-        painter->drawLine(rect.left(), y, rect.right(), y);
-        painter->setPen(light);
-        painter->drawLine(rect.left() - 5, y, rect.left(), y);
-        painter->drawText(rect.left() - Margin, y - 10, Margin - 5, 20,
-                          Qt::AlignRight | Qt::AlignVCenter,
-                          QString::number(label));
-    }
-    painter->drawRect(rect.adjusted(0, 0, -1, -1));
-}
-[/code]
-	drawGrid()绘制曲线后面的网格和坐标轴。我们画网格的区域指定为rect。如果物件不足够大以适应此画布，我们立即返回。
-	第一个for循环绘制网格的垂直线和x轴的坐标点。第二个for循环绘制网格的水平线和y轴的坐标点。最后，我们沿着边距绘制一个矩形。drawText()函数被用于绘制两个坐标轴上相应坐标点上的数字。
-	drawText()的调用语法如下：
-painter->drawText(x, y, width, height, alignment, text);
-(x, y, width, height)定义了一个矩形，alignment是文本在此矩形内的位置，text是要绘制的文本。
-[code type="cpp-qt"]
-void Plotter::drawCurves(QPainter *painter)
-{
-    static const QColor colorForIds[6] = {
-        Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow
-    };
-    PlotSettings settings = zoomStack[curZoom];
-    QRect rect(Margin, Margin,
-               width() - 2 * Margin, height() - 2 * Margin);
-    if (!rect.isValid())
-        return;
-    painter->setClipRect(rect.adjusted(+1, +1, -1, -1));
-    QMapIterator<int, QVector<QPointF> > i(curveMap);
-    while (i.hasNext()) {
-        i.next();
-        int id = i.key();
-        const QVector<QPointF> &data = i.value();
-        QPolygonF polyline(data.count());
-        for (int j = 0; j < data.count(); ++j) {
-            double dx = data[j].x() - settings.minX;
-            double dy = data[j].y() - settings.minY;
-            double x = rect.left() + (dx * (rect.width() - 1)
-                                         / settings.spanX());
-            double y = rect.bottom() - (dy * (rect.height() - 1)
-                                           / settings.spanY());
-            polyline[j] = QPointF(x, y);
-        }
-        painter->setPen(colorForIds[uint(id) % 6]);
-        painter->drawPolyline(polyline);
-    }
-}
-[/code]
-	drawCurves()函数绘制网格之上的曲线。我们开始时调用setClipRect()设置Qpainter的包含该曲线的矩形的剪裁区域（不包括边距及画布周围的边框）。QPainter将忽略该区域之外的象素绘制操作。
-	下一步，我们使用类java迭代器遍历所有曲线，并且对每条曲线，我们遍历它的组成点QPointF。Key()函数给出曲线的ID，value()函数给出一个QVector<QPointF>.类型的相应曲线数据。内部for循环把每个QpointF从绘图仪坐标转换到物件坐标并把它们存储在polyline变量。
-
-	一旦把所有曲线上所有点转换为物件坐标，我们设置曲线的画笔颜色（使用预定义颜色其中一个）并调用drawPolyline()绘制一条连接曲线所有点的线。
-	这就是完整的Plotter类。剩下的只有几个PlotSettings函数了。
-[code type="cpp-qt"]
-PlotSettings::PlotSettings()
-{
-    minX = 0.0;
-    maxX = 10.0;
-    numXTicks = 5;
-    minY = 0.0;
-    maxY = 10.0;
-    numYTicks = 5;
-}
-[/code]
-	PlotSettings的构造函数初始化两个坐标轴的区间为0到10，它包括5个坐标点。
-[code type="cpp-qt"]
-void PlotSettings::scroll(int dx, int dy)
-{
-    double stepX = spanX() / numXTicks;
-    minX += dx * stepX;
-    maxX += dx * stepX;
-    double stepY = spanY() / numYTicks;
-    minY += dy * stepY;
-    maxY += dy * stepY;
-}
-[/code]
-
-	Scroll()函数通过2倍于给定数字的间隔递减（或者递增）minX, maxX, minY, 和 maxY。该函数在Plotter::keyPressEvent()被使用来实现滚动。
-[code type="cpp-qt"]
-void PlotSettings::adjust()
-{
-    adjustAxis(minX, maxX, numXTicks);
-    adjustAxis(minY, maxY, numYTicks);
-}
-[/code]
-	Adjust()函数在mouseReleaseEvent()被调用来圆整minX, maxX, minY, 和 maxY为适当的值并决定每个坐标轴上合适的坐标点个数。私有函数adjustAxis()每次工作于一个坐标轴。
-[code type="cpp-qt"]
-void PlotSettings::adjustAxis(double &min, double &max,
-                              int &numTicks)
-{
-    const int MinTicks = 4;
-    double grossStep = (max - min) / MinTicks;
-    double step = pow(10.0, floor(log10(grossStep)));
-    if (5 * step < grossStep) {
-        step *= 5;
-    } else if (2 * step < grossStep) {
-        step *= 2;
-    }
-    numTicks = int(ceil(max / step) - floor(min / step));
-    if (numTicks < MinTicks)
-        numTicks = MinTicks;
-    min = floor(min / step) * step;
-    max = ceil(max / step) * step;
-}
-[/code]
-	adjustAxis()函数把它的　min和max 参数转换为合适的数字并把它的numTicks参数设置为在给定[min, max]区间上计算出来的合适的坐标点个数。因为adjustAxis()在修改实际变量(minX, maxX, numXTicks等等.)并且不仅仅是做拷贝，所以它的参数是非常量引用。
-	adjustAxis()中的大部分代码用于试图决定两个坐标点间隔的合适的值。为了获得坐标轴的合适值，我们必须小心选择间距。例如，一个值为3.8的间距会导致一个3.8倍数的坐标轴，这让人们很难处理的。对于坐标轴上的10进制标签，较好的间隔值是10n, 2·10n, or 5·10n中的数字。
-	我们开始计算“大概间距”，间距值的最大值的一种。然后我们从10n格式为的数字中找到小于或者等于大概间距的数字。我们通过取大概间距以10为底的对数来做这工作。例如，如果大概间距是236，我们计算出log 236 = 2.37291…;然后我们把它圆整为2并且获得102 = 100作为格式为10n的相应间距值。
-	我们一旦有了第一个候选间距值，我们就可以用它来计算其他两个候选值：2·10n 和 5·10n。对上面的例子，另两个候选值是200和500。候选值500比大概间距要大，因此我们不能使用它。但200比236小，因此我们使用200作为本例子中的间距大小。
-	从上面的间距值可以非常容易的得到numTicks, min, 和 max。新的min通过把原来的min圆整到离间距的倍数中最近值，新的max通过把原来的max圆整到离间距最近的倍数中最近的值。新的numTicks是被圆整的min和max之间的间距值。例如，如果min是240，max是1184并传递到该函数中，新的区间变成[200, 1200]，而5则为坐标点个数。
-	这一算法在一些情况下能给出最优结果。一个更复杂的算法在出版于Graphics Gems (ISBN 0-12-286166-3)的Paul S. Heckbert的文章"Nice Numbers for Graph Labels"中有描述。
-	本章结束了本书的第一部分。它阐述了如何自定义一个已存在的Qt物件以及如何使用QWidget作为基类创建一个物件。在第2章中我们已经看到了如何用现有的物件组装出一个物件，并且在第6阐我们将进一步研究主题。
-	到现在为止，我们已经知道的足够总并应该能使用Qt编写完整的GUI程序。在第 II 和第III部分，我们将更深入地研究Qt以便我们能充分利用Qt的强大功能。
+	双缓冲技术是一种GUI编程技术，它指的是在一个不在屏幕上的位图上渲染一个物件并把此位图拷贝到屏幕上。在Qt的早期版本中，这种技术常用于消除闪烁和提供一个快速用户界面。<br />
+	在Qt4中，QWidget自动处理双缓冲，因此我们几乎不需要担心物件的闪烁。然而，显式双缓冲技术依然对复杂的物件渲染和重复渲染非带有益。我们可以永久保存物件的位图，总是为下次绘图做准备，并在我们接收到一个绘图事件的时候把位图拷贝到物件上。它尤其在我们希望做一些小改动时特别有效，如画一个橡皮圈，而不用一遍遍地重新计算和渲染整个物件。<br />
+	我们将以讨论Plotter自定义物件来圆满结束本章内容。该物件使用了双缓冲技术和演示Qt编程的其他一些方面的内容，包括键盘事件处理，布局控制和坐标系统。<br />
+	Plotter物件显示一条或者多条由坐标容器指定的曲线。用户可以在此图象上画橡胶圈，Plotter还能缩放橡胶圈内的区域。用户通过点击图形上的一个点，按下鼠标左键拖拽到另一个点再释放鼠标键来画一个橡胶圈。<br />
+图5.7　Plotter物件的缩放<br />
+<img src="upfile/image/plotter2.jpg"><br />
+<br />
+用户可以多次画一个橡胶圈重复地缩放图象，放大使用Zoom Out按键，缩小回去使用Zoom In按钮。Zoom In 和 Zoom Out会在他们可用时首次出现，因此如果用户没有缩放该图象的话他们不会让界面显示混乱。<br />
+Plotter物件能拥有任何数量的曲线。它还管理大量PlotSettings对象，它们中的每个对应于一个特定的缩放级别。<br />
+让我们先从plotter.h开始预览该类：<br />
+[code type="cpp-qt"]<br />
+#ifndef PLOTTER_H<br />
+#define PLOTTER_H<br />
+#include <QMap><br />
+#include <QPixmap><br />
+#include <QVector><br />
+#include <QWidget><br />
+class QToolButton;<br />
+class PlotSettings;<br />
+class Plotter : public QWidget<br />
+{<br />
+    Q_OBJECT<br />
+public:<br />
+    Plotter(QWidget *parent = 0);<br />
+    void setPlotSettings(const PlotSettings &settings);<br />
+    void setCurveData(int id, const QVector<QPointF> &data);<br />
+    void clearCurve(int id);<br />
+    QSize minimumSizeHint() const;<br />
+    QSize sizeHint() const;<br />
+public slots:<br />
+    void zoomIn();<br />
+    void zoomOut();<br />
+[/code]<br />
+	在开始的地方包含了用于plotter头文件的Qt头文件，以及在此头文件中使用的指针和引用的类的前置定义。<br />
+	在Plotter类，我们为设置绘图仪提供了3个公有函数，为缩放提供了2个公有槽。我们还重新实现了来自QWidget中的minimumSizeHint() 和 sizeHint()。我们使用QVector<QPointF>存储曲线上的点，而QpointF则是Qpoint的一种浮点数版本。<br />
+[code type="cpp-qt"]<br />
+protected:<br />
+    void paintEvent(QPaintEvent *event);<br />
+    void resizeEvent(QResizeEvent *event);<br />
+    void mousePressEvent(QMouseEvent *event);<br />
+    void mouseMoveEvent(QMouseEvent *event);<br />
+    void mouseReleaseEvent(QMouseEvent *event);<br />
+    void keyPressEvent(QKeyEvent *event);<br />
+    void wheelEvent(QWheelEvent *event);<br />
+[/code]<br />
+	在类的保护区，我们声明了所有希望重新实现的QWidget事件处理函数。<br />
+[code type="cpp-qt"]<br />
+private:<br />
+    void updateRubberBandRegion();<br />
+    void refreshPixmap();<br />
+    void drawGrid(QPainter *painter);<br />
+    void drawCurves(QPainter *painter);<br />
+    enum { Margin = 50 };<br />
+    QToolButton *zoomInButton;<br />
+    QToolButton *zoomOutButton;<br />
+    QMap<int, QVector<QPointF> > curveMap;<br />
+    QVector<PlotSettings> zoomStack;<br />
+    int curZoom;<br />
+    bool rubberBandIsShown;<br />
+    QRect rubberBandRect;<br />
+    QPixmap pixmap;<br />
+};<br />
+[/code]<br />
+	在类的私有区，我们声明了几个用于绘制物件的函数，一个常量和几个成员变量。Margin用于表示图形周围的空间。<br />
+	成员变量中有一个Qpixmap类型的pixmap。这一变量持有整个物件渲染图的拷贝，与显示在屏幕上的一模一样。绘图仪总是先画到这个不在屏幕上的位图上，然后再把该位图拷贝到物件上。<br />
+[code type="cpp-qt"]<br />
+class PlotSettings<br />
+{<br />
+public:<br />
+    PlotSettings();<br />
+<br />
+    void scroll(int dx, int dy);<br />
+    void adjust();<br />
+    double spanX() const { return maxX - minX; }<br />
+    double spanY() const { return maxY - minY; }<br />
+<br />
+    double minX;<br />
+    double maxX;<br />
+    int numXTicks;<br />
+    double minY;<br />
+    double maxY;<br />
+    int numYTicks;<br />
+<br />
+private:<br />
+    static void adjustAxis(double &min, double &max, int &numTicks);<br />
+};<br />
+#endif<br />
+[/code]<br />
+	PlotSettings类指定x和y轴的区间和这些轴上标记的个数。图5.8显示了一个PlotSettings和一个Plotter物件间的对应关系。<br />
+<br />
+图　5.8　PlotSettings　的成员变量<br />
+<img src="upfile/image/plotsetting.jpg"><br />
+<br />
+	为了方便，numXTicks 和 numYTicks相距为1。如果numXTicks为5，Plotter会自动在x轴上画6个小标记。这会简化后面的计算。<br />
+	现在让我们预览一下实现文件：<br />
+[code type="cpp-qt"]<br />
+#include <QtGui><br />
+#include <cmath><br />
+<br />
+#include "plotter.h"<br />
+[/code]<br />
+	我们包含了相关的头文件把所有std命名空间中的符号导入到全局命名空间。这允许我们访问<cmath>中声明的函数而不用在它们前面使用std::前缀（例如，floor()而不是std::floor()）。<br />
+[code type="cpp-qt"]<br />
+Plotter::Plotter(QWidget *parent)<br />
+    : QWidget(parent)<br />
+{<br />
+    setBackgroundRole(QPalette::Dark);<br />
+    setAutoFillBackground(true);<br />
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);<br />
+    setFocusPolicy(Qt::StrongFocus);<br />
+    rubberBandIsShown = false;<br />
+<br />
+    zoomInButton = new QToolButton(this);<br />
+    zoomInButton->setIcon(QIcon(":/images/zoomin.png"));<br />
+    zoomInButton->adjustSize();<br />
+    connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));<br />
+<br />
+    zoomOutButton = new QToolButton(this);<br />
+    zoomOutButton->setIcon(QIcon(":/images/zoomout.png"));<br />
+    zoomOutButton->adjustSize();<br />
+    connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));<br />
+<br />
+    setPlotSettings(PlotSettings());<br />
+}<br />
+[/code]<br />
+	setBackgroundRole()调用告诉QWidget使用调色板中的“dark”组件擦除物件，而不使用”window”组件。这给Qt用于填充在物件调整为更大尺寸且paintEvent()还没来得及绘制新象素的时候刚露面的象素的默认颜色。我们还要调用setAutoFillBackground(true)开启这种机制。（默认地，子物件从它们的父物件继承背景）<br />
+	setSizePolicy()调用设置物件两个方向上的尺寸策略为QSizePolicy::Expanding。这告诉任何负责该物件的布局管理器它可以被拉伸和收缩。这一设置通过用于可以占据大量屏幕空间的物件。两个方向上的默认设置为QSizePolicy::Preferred，意味着物件更希望使用它的尺寸暗示的大小，但它还能被缩小到它的最小尺寸或者如果需要的话能扩展到无穷大。<br />
+	setFocusPolicy(Qt::StrongFocus)调用使物件能在点击或者按下Tab键时获取焦点。当Plotter拥有焦点时，它会接受键盘事件。该Plotter物件能处理几个键：+号表示缩小，-号表示放大。方向键分别表示上下左右滚动。<br />
+图5.9　滚动Plotter物件。<br />
+<img src="upfile/image/plotter4.jpg" border=0><br />
+<br />
+	在构造函数中，我们还创建两个QtoolButtons，每个都有一个图标。这些按钮允许用户执行缩放操作。按钮的图标保存在一个资源文件中，因此任何使用Qlotter物件的程序需要它的.pro文件中的入口。<br />
+<br />
+RESOURCES     = plotter.qrc<br />
+<br />
+	下面的文件与我们曾经在Spreadsheet程序中用到的相似：<br />
+[code type="xml"]<br />
+<!DOCTYPE RCC><RCC version="1.0"><br />
+<qresource><br />
+    <file>images/zoomin.png</file><br />
+    <file>images/zoomout.png</file><br />
+</qresource><br />
+</RCC><br />
+[/code]<br />
+	按钮的adjustSize()调用设置它们的尺寸为它们的尺寸暗示值。这些按钮并没有放在布局管理器中，相反，我们会在Plotter的调整大小事件时自动放置它们。因为我们没有使用布局，我们必须通过传递this给QpushButton的构造函数显式指定这些按钮的父物件。<br />
+	最后调用setPlotSettings()完成初始化工作。<br />
+[code type="cpp-qt"]<br />
+void Plotter::setPlotSettings(const PlotSettings &settings)<br />
+{<br />
+    zoomStack.clear();<br />
+    zoomStack.append(settings);<br />
+    curZoom = 0;<br />
+    zoomInButton->hide();<br />
+    zoomOutButton->hide();<br />
+    refreshPixmap();<br />
+}<br />
+[/code]<br />
+<br />
+	setPlotSettings()函数用于指定显示绘图仪所需的PlotSettings。它被Plotter的构造函数调用，它也可以被用户的其他类调用。绘图仪开始时为默认缩放级别。每次用户缩小它时，一个新的PlotSettings实例被创建并放到缩放栈上。缩放栈由两个成员变量表示：<br />
+zoomStack 持有不同缩放设置的一个QVector<PlotSettings>。<br />
+curZoom 持有当前PlotSettings在zoomStack上的索引。<br />
+在调用setPlotSettings()之后，缩放栈仅包含一个入口，并且Zoom In 和 Zoom Out按钮也隐藏了。这些按钮直到我们在zoomIn() 和 zoomOut()槽中调用它们的zoomIn() and zoomOut()时才再次显示。（正常情况下，在顶级物件上调用show()来显示所有子物件是非常有效的。但是当我们显工调用一个子物件的hide()时，直到我们调用它的show()时才显示出来）。<br />
+		要更新显示refreshPixmap()调用是必要的。通常情况下，我们应该调用update()，但这里我们的做法稍微有些不同，因为我们希望任何时刻Qpixmap都保持最新状态。在重新生成pixmap之后，refreshPixmap()调用update()把该位图拷贝到物件上。<br />
+[code type="cpp-qt"]<br />
+void Plotter::zoomOut()<br />
+{<br />
+    if (curZoom > 0) {<br />
+        --curZoom;<br />
+        zoomOutButton->setEnabled(curZoom > 0);<br />
+        zoomInButton->setEnabled(true);<br />
+        zoomInButton->show();<br />
+        refreshPixmap();<br />
+    }<br />
+}<br />
+[/code]<br />
+	如果图象是缩小的，zoomOut()槽会放大它。它递减当前的缩放级别并根据图象是否能继续放大激活Zoom Out。Zoom In按钮被激活并显示，屏幕则通过refreshPixmap()调用被更新。<br />
+[code type="cpp-qt"]<br />
+void Plotter::zoomIn()<br />
+{<br />
+    if (curZoom < zoomStack.count() - 1) {<br />
+        ++curZoom;<br />
+        zoomInButton->setEnabled(curZoom < zoomStack.count() - 1);<br />
+        zoomOutButton->setEnabled(true);<br />
+        zoomOutButton->show();<br />
+        refreshPixmap();<br />
+    }<br />
+}<br />
+[/code]<br />
+	如果用户之前执行缩放然后再放大操作，PlotSettings的下一个缩放级别将会在缩放栈中，并能执行缩小。（否则，它可以使用橡胶圈进行缩小）。<br />
+	该槽递增curZoom来把一个缩放级别移动到缩放栈更深位置，激活或者禁用Zoom In按钮依赖于是否它能继续缩小，并激活和显示Zoom Out按钮。我们再次调用refreshPixmap()让绘图仪使用最新的缩放设置。<br />
+[code type="cpp-qt"]<br />
+void Plotter::setCurveData(int id, const QVector<QPointF> &data)<br />
+{<br />
+    curveMap[id] = data;<br />
+    refreshPixmap();<br />
+}<br />
+[/code]<br />
+	setCurveData()设置给定曲线ID的曲线数据。如果相同ID的曲线已经存在于curveMap，它将被新的曲线数据替代，否则新的曲线简单的插入进去。curveMap成员变量是QMap<int, QVector<QPointF> >类型的。<br />
+[code type="cpp-qt"]<br />
+void Plotter::clearCurve(int id)<br />
+{<br />
+    curveMap.remove(id);<br />
+    refreshPixmap();<br />
+}<br />
+[/code]<br />
+	clearCurve()函数从曲线队列中删除指定的曲线。<br />
+[code type="cpp-qt"]<br />
+QSize Plotter::minimumSizeHint() const<br />
+{<br />
+    return QSize(6 * Margin, 4 * Margin);<br />
+}<br />
+[/code]<br />
+<br />
+	minimumSizeHint()函数与sizeHint()类似，只是sizeHint()指定物件的理想尺寸，而minimumSizeHint()指定物件的最小理想尺寸。布局管理器从不会把物件尺寸调整到低于最小尺寸暗示的值。<br />
+	我们返回值为300x200（而Margin 等于50），这允许四边都能有边距并且还能有绘图仪自已的空间。如果比这还小，绘图仪几乎小的不能再用了。<br />
+[code type="cpp-qt"]<br />
+QSize Plotter::sizeHint() const<br />
+{<br />
+    return QSize(12 * Margin, 8 * Margin);<br />
+}<br />
+[/code]<br />
+	在sizeHint()中，我们一个与Margin常量成比例的理想尺寸，而在minimumSizeHint()中我们使用同样的3:2外观。<br />
+	现在我们预览完了Plotter的公有函数和槽。现在来预览一个相关保护级的事件处理函数。<br />
+[code type="cpp-qt"]<br />
+void Plotter::paintEvent(QPaintEvent * /* event */)<br />
+{<br />
+    QStylePainter painter(this);<br />
+    painter.drawPixmap(0, 0, pixmap);<br />
+    if (rubberBandIsShown) {<br />
+        painter.setPen(palette().light().color());<br />
+        painter.drawRect(rubberBandRect.normalized()<br />
+                                       .adjusted(0, 0, -1, -1));<br />
+    }<br />
+    if (hasFocus()) {<br />
+        QStyleOptionFocusRect option;<br />
+        option.initFrom(this);<br />
+        option.backgroundColor = palette().dark().color();<br />
+        painter.drawPrimitive(QStyle::PE_FrameFocusRect, option);<br />
+    }<br />
+}<br />
+[/code]<br />
+	一般情况下，paintEvent()是我们执行所有绘图操作的地方。但这里所有的绘图仪绘图工作预先在refreshPixmap()中完成，因此我们就能简单的通过把位图拷贝到物件的(0,0)位置渲染整个绘图仪。<br />
+	如果橡胶圈可见，我们在绘图仪的顶部绘出它。我们使用来自物件当前颜色组的“light”组件作为画笔颜色来保证与”dark”背景有一个较好的反差。注意我们直接在物件上绘图，而没有触及非屏幕位图。使用QRect::normalized()保证橡胶圈的矩形有一可靠的调度和宽度（如果必要可变换坐标），adjusted()把该矩形尺寸减小一个象素以显示它自己1象素宽的轮廓。<br />
+	如果Plotter援用焦点，一个焦点矩形将通过物件风格的drawPrimitive()函数绘制出来，并以QStyle::PE_FrameFocusRect作为该函数的第一个参数，以QstyleOptionFocusRect对象作为它的第二个参数。焦点矩形绘制参数是从Plotter物件继承来的（通过initFrom()调用）。背景颜色必须被显示指定。<br />
+	当我们希望使用当前风格绘图时，我们或者直接调用Qstyle函数，如：<br />
+style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, &painter,<br />
+                       this);<br />
+或者使用QstylePainter代替正常的QPainter，正如我们在Plotter中所做的一样，使用它绘图更方便。<br />
+	QWidget::style()函数返回应该用于物件绘图的风格。在Qt中，物件风格是QStyle的子类。内建的风格包括QWindowsStyle, QWindowsXPStyle, QMotifStyle, QCDEStyle, QMacStyle, 和 QplastiqueStyle。他们中的每一个风格都重新实现了Qstyle中的虚函数以正确模仿绘制当前平台的风格。QstylePainter的 drawPrimitive()函数调用Qstyle中的同名函数，它可用于绘制“基本元素”如面板、按钮和焦点矩形。一个程序中所有物件风格一般是相同的QApplication::style())，但它能被基于每个物件QWidget::setStyle()覆盖。<br />
+	通过创建Qstyle的子类，定义一个自定义风格是可能的。这能通过给一个或者一组程序与众不同的外观来实现。虽然一般提倡使用目标平台的本地外观，但如果你喜欢冒险Qt也提供了许多灵活性。<br />
+	Qt的内建物件几乎都使用专有的Qstyle绘制它们自己。这就是为什么在所有Qt支持的平台它们看上去像本地物件。自定义物件或者通过使用Qstyle绘制它们自己或者通过使用内建Qt物件作为子物件意识到它的风格。对于Plotter，我们组合使用了这两种方法：焦点矩形使用QStyle（通过一个QstylePainter）绘制，而Zoom In 和 Zoom Out按钮使用Qt物件。<br />
+[code type="cpp-qt"]<br />
+void Plotter::resizeEvent(QResizeEvent * /* event */)<br />
+{<br />
+    int x = width() - (zoomInButton->width()<br />
+                       + zoomOutButton->width() + 10);<br />
+    zoomInButton->move(x, 5);<br />
+    zoomOutButton->move(x + zoomInButton->width() + 5, 5);<br />
+    refreshPixmap();<br />
+}<br />
+[/code]<br />
+	当Plotter物件被调整尺寸时，Qt生成一个”resize”事件。这里，我们重新实现resizeEvent()来把Zoom In 和 Zoom Out 按钮放置到Plotter物件的右上角。<br />
+	我们把Zoom In 按钮和 Zoom Out按钮移动到边缘，使用5象素把它们隔开，并让它离父物件的右边缘和上边缘各5个象素。<br />
+	如果我们希望这些按钮放于左上角，也就是坐(0,0)，我们应该在Plotter的构造函数中把它们移动到那里。但我们希望踀右上角，它的位置依赖于物件的尺寸。为此，重新实现resizeEvent()并设置它作为按钮的位置是必要的。<br />
+	我们没有在Plotter的构造函数为这些按钮设置任何的位置。这不是总是，因为Qt总是在物件第一次显示的时候生成一个”resize”事件。<br />
+	能替代重新resizeEvent()并自动布局这些子物件的途径是使用布局管理器（例如，QGridLayout）。使用布局可能有点复杂并耗费更多的资源，另一方面，它却能更优美地处理从右到左的布局，特别处理像Arabic 和 Hebrew的语言更有必要。<br />
+	最后，我们调用refreshPixmap()以新的尺寸重绘该位图。<br />
+[code type="cpp-qt"]<br />
+void Plotter::mousePressEvent(QMouseEvent *event)<br />
+{<br />
+    QRect rect(Margin, Margin,<br />
+               width() - 2 * Margin, height() - 2 * Margin);<br />
+    if (event->button() == Qt::LeftButton) {<br />
+        if (rect.contains(event->pos())) {<br />
+            rubberBandIsShown = true;<br />
+            rubberBandRect.setTopLeft(event->pos());<br />
+            rubberBandRect.setBottomRight(event->pos());<br />
+            updateRubberBandRegion();<br />
+            setCursor(Qt::CrossCursor);<br />
+        }<br />
+    }<br />
+}<br />
+[/code]<br />
+	当用户按下鼠标左键的时候，我们开始显示一个橡胶圈。这导致把rubberBandIsShown设置为true，并使用鼠标当前位置初始化rubberBandRect成员变量，调度一个绘图事件来绘制该橡胶圈，再把鼠标光标改为十字形状。<br />
+	（？？）rubberBandRect变量是Qrect类型的。Qrect可被定义为(x, y, width, height)四部分，而(x,y)是左上角的位置，width x height是矩形的尺寸。这里我们使用坐标对表示法。我们设置用户点击的点作为左上角和右下角。然后我们调用updateRubberBandRegion()强制重绘橡胶圈内的小区域。<br />
+	Qt提供了两种机制来控制鼠标的光标形状：<br />
+QWidget::setCursor() 用于当鼠标悬浮的一个特定物件的时候设置光标的形状。如果没有为物件设置光标，将使用父物件的光标。默认的顶层鼠标为简头光标。<br />
+QApplication::setOverrideCursor() 设置整个程序的光标形状，覆盖为每个物件单独设置的光标，直到restoreOverrideCursor()被调用为止。<br />
+在第4章，我们以Qt::WaitCursor为参数调用QApplication::setOverrideCursor()改变程序的光标为标准等待光标。<br />
+[code type="cpp-qt"]<br />
+void Plotter::mouseMoveEvent(QMouseEvent *event)<br />
+{<br />
+    if (rubberBandIsShown) {<br />
+        updateRubberBandRegion();<br />
+        rubberBandRect.setBottomRight(event->pos());<br />
+        updateRubberBandRegion();<br />
+    }<br />
+}<br />
+[/code]<br />
+	当用户按着左键移动鼠标光标的时候，我们首先调用updateRubberBandRegion()调度一个绘图事件重绘橡胶圈内的区域，然后我们重新计算rubberBandRect来解释鼠标的移动，最后第二次调用updateRubberBandRegion()重绘橡胶圈移到的位置。这能有效地擦除橡胶圈并在新的坐标重绘它。<br />
+	如果用户向上或者向左移动鼠标，可能rubberBandRect的正常右下角将会结束于它的左上角的上面或者左侧。这如果发生了，Qrect将有向的宽度和调度。我们在paintEvent()使用QRect::normalized()来保证左上角和右下角的坐标会被调整以获得非负的宽度和高度。<br />
+[code type="cpp-qt"]<br />
+void Plotter::mouseReleaseEvent(QMouseEvent *event)<br />
+{<br />
+    if ((event->button() == Qt::LeftButton) && rubberBandIsShown) {<br />
+        rubberBandIsShown = false;<br />
+        updateRubberBandRegion();<br />
+        unsetCursor();<br />
+        QRect rect = rubberBandRect.normalized();<br />
+        if (rect.width() < 4 || rect.height() < 4)<br />
+            return;<br />
+        rect.translate(-Margin, -Margin);<br />
+        PlotSettings prevSettings = zoomStack[curZoom];<br />
+        PlotSettings settings;<br />
+        double dx = prevSettings.spanX() / (width() - 2 * Margin);<br />
+        double dy = prevSettings.spanY() / (height() - 2 * Margin);<br />
+        settings.minX = prevSettings.minX + dx * rect.left();<br />
+        settings.maxX = prevSettings.minX + dx * rect.right();<br />
+        settings.minY = prevSettings.maxY - dy * rect.bottom();<br />
+        settings.maxY = prevSettings.maxY - dy * rect.top();<br />
+        settings.adjust();<br />
+        zoomStack.resize(curZoom + 1);<br />
+        zoomStack.append(settings);<br />
+        zoomIn();<br />
+    }<br />
+}<br />
+[/code]<br />
+	当用户释放鼠标左键的时候，我们擦除橡胶圈并恢复标准箭头光标。如果橡胶圈至少为4x4大小，我们就执行缩放。如果更小，很可能用户只是不小心点击或者为了获取焦点，那么我们什么都不做。<br />
+	用于缩放的代码有点复杂。因为我们要同时处理物件的坐标和绘图仪的坐标。这里的大多数工作是把rubberBandRect从物件坐标转换到绘图仪坐标。一旦完成了转换，我们就调用PlotSettings::adjust()来圆整该数字并为每个坐标轴找到一个合适数字标记。图5.10和5.11描述了这一情况。<br />
+图　5.10　把橡胶圈从物件坐标转换为绘图仪坐标<br />
+<img src="upfile/images/converting_the_rubber.jpg"><br />
+图　5.11　调整绘图仪坐标并缩小橡胶圈内的区域<br />
+<img src="upfile/images/adjusting_plooter.jpg"><br />
+<br />
+	然后我们执行缩放。缩放通过把我们刚计算出来的新的PlotSettings压进缩放栈的顶端并调用zoomIn()来实现。<br />
+[code type="cpp-qt"]<br />
+void Plotter::keyPressEvent(QKeyEvent *event)<br />
+{<br />
+    switch (event->key()) {<br />
+    case Qt::Key_Plus:<br />
+        zoomIn();<br />
+        break;<br />
+    case Qt::Key_Minus:<br />
+        zoomOut();<br />
+        break;<br />
+    case Qt::Key_Left:<br />
+        zoomStack[curZoom].scroll(-1, 0);<br />
+        refreshPixmap();<br />
+        break;<br />
+    case Qt::Key_Right:<br />
+        zoomStack[curZoom].scroll(+1, 0);<br />
+        refreshPixmap();<br />
+        break;<br />
+    case Qt::Key_Down:<br />
+        zoomStack[curZoom].scroll(0, -1);<br />
+        refreshPixmap();<br />
+        break;<br />
+    case Qt::Key_Up:<br />
+        zoomStack[curZoom].scroll(0, +1);<br />
+        refreshPixmap();<br />
+        break;<br />
+    default:<br />
+        QWidget::keyPressEvent(event);<br />
+    }<br />
+}<br />
+[/code]<br />
+	当用户按下一个键并且Plotter物件拥有焦点时，keyPressEvent()将被调用。我们重新实现它以响应6个键的输入：+,-,Up,Down,Left,和Right。如果用户按下一个我们没有处理的键，我们调用项类中的实现。为了简便，我们忽略Shift,Ctrl,和Alt修饰键，它们可通过QKeyEvent::modifiers()获得。<br />
+[code type="cpp-qt"]<br />
+void Plotter::wheelEvent(QWheelEvent *event)<br />
+{<br />
+    int numDegrees = event->delta() / 8;<br />
+    int numTicks = numDegrees / 15;<br />
+    if (event->orientation() == Qt::Horizontal) {<br />
+        zoomStack[curZoom].scroll(numTicks, 0);<br />
+    } else {<br />
+        zoomStack[curZoom].scroll(0, numTicks);<br />
+    }<br />
+    refreshPixmap();<br />
+}<br />
+[/code]<br />
+	当鼠标滚轮滚动时滚轮事件会发生。大多数鼠标仅提供一个垂直滚轮，但是另一些还有一个水平滚轮。Qt对两种滚轮类型都支持。滚轮事件会发送到拥有焦点的物件。delta()函数滚轮旋转过的以1/8度为单位距离。鼠标一般每步为5度。这里，我们通过修改缩放栈最上面的项来修改所需数目的标记并使用refreshPixmap()更新显示。<br />
+	滚轮的最常用的地方是滚动一个滚动条。当我们使用QscrollArea（见第16章）以提供滚动条的时候，QscrollArea会自动处理滚轮鼠标事件，因此我们不需要自己来重新实现wheelEvent()。<br />
+	到现在为止我们实现报事件处理函数了。现在我们来预览一下私有函数。<br />
+[code type="cpp-qt"]<br />
+void Plotter::updateRubberBandRegion()<br />
+{<br />
+    QRect rect = rubberBandRect.normalized();<br />
+    update(rect.left(), rect.top(), rect.width(), 1);<br />
+    update(rect.left(), rect.top(), 1, rect.height());<br />
+    update(rect.left(), rect.bottom(), rect.width(), 1);<br />
+    update(rect.right(), rect.top(), 1, rect.height());<br />
+}<br />
+[/code]<br />
+	updateRubberBand()函数在mousePressEvent(), mouseMove-Event(), 和 mouseReleaseEvent()中被调用以擦除或者重绘橡胶圈。它包含四个update()调用为橡胶圈覆盖的四个小矩形产生绘图事件（两条垂直线和两条水平线）。Qt提供了QrubberBand类来绘制橡胶圈，但在这里硬编码提供了一种更好的控制。<br />
+[code type="cpp-qt"]<br />
+void Plotter::refreshPixmap()<br />
+{<br />
+    pixmap = QPixmap(size());<br />
+    pixmap.fill(this, 0, 0);<br />
+    QPainter painter(&pixmap);<br />
+    painter.initFrom(this);<br />
+    drawGrid(&painter);<br />
+    drawCurves(&painter);<br />
+    update();<br />
+}<br />
+[/code]<br />
+	refreshPixmap()函数在非屏幕上的位图上重绘该绘图仪并更新显示。我们调整位图的的尺寸为物件的尺寸并使用物件擦除颜色填充它。该颜色是调色板中的”dark”组件，因为在Plotter构造函数中我们已经调用了setBackgroundRole()。如果背景是non-solid画刷，Qpixmap::fill()需要知道在物件中为正确的调整画刷模式位图结束的位移。这里，该位图与整个物件一致，因此我们指定位置(0,0)。<br />
+	然后我们创建一个QPainter在该位图上绘图。initFrom()调用设置绘图器的画笔，背景和Plotter物件中一致的字体。下一步我们调用drawGrid() 和 drawCurves()执行绘图。最后，我们调用update()对整个物件产生一个绘图事件。该位图在paintEvent()函数中被拷贝到物件上。<br />
+[code type="cpp-qt"]<br />
+void Plotter::drawGrid(QPainter *painter)<br />
+{<br />
+    QRect rect(Margin, Margin,<br />
+               width() - 2 * Margin, height() - 2 * Margin);<br />
+    if (!rect.isValid())<br />
+        return;<br />
+    PlotSettings settings = zoomStack[curZoom];<br />
+    QPen quiteDark = palette().dark().color().light();<br />
+    QPen light = palette().light().color();<br />
+    for (int i = 0; i <= settings.numXTicks; ++i) {<br />
+        int x = rect.left() + (i * (rect.width() - 1)<br />
+                                 / settings.numXTicks);<br />
+        double label = settings.minX + (i * settings.spanX()<br />
+                                          / settings.numXTicks);<br />
+        painter->setPen(quiteDark);<br />
+        painter->drawLine(x, rect.top(), x, rect.bottom());<br />
+        painter->setPen(light);<br />
+        painter->drawLine(x, rect.bottom(), x, rect.bottom() + 5);<br />
+        painter->drawText(x - 50, rect.bottom() + 5, 100, 15,<br />
+                          Qt::AlignHCenter | Qt::AlignTop,<br />
+                          QString::number(label));<br />
+    }<br />
+    for (int j = 0; j <= settings.numYTicks; ++j) {<br />
+        int y = rect.bottom() - (j * (rect.height() - 1)<br />
+                                   / settings.numYTicks);<br />
+        double label = settings.minY + (j * settings.spanY()<br />
+                                          / settings.numYTicks);<br />
+        painter->setPen(quiteDark);<br />
+        painter->drawLine(rect.left(), y, rect.right(), y);<br />
+        painter->setPen(light);<br />
+        painter->drawLine(rect.left() - 5, y, rect.left(), y);<br />
+        painter->drawText(rect.left() - Margin, y - 10, Margin - 5, 20,<br />
+                          Qt::AlignRight | Qt::AlignVCenter,<br />
+                          QString::number(label));<br />
+    }<br />
+    painter->drawRect(rect.adjusted(0, 0, -1, -1));<br />
+}<br />
+[/code]<br />
+	drawGrid()绘制曲线后面的网格和坐标轴。我们画网格的区域指定为rect。如果物件不足够大以适应此画布，我们立即返回。<br />
+	第一个for循环绘制网格的垂直线和x轴的坐标点。第二个for循环绘制网格的水平线和y轴的坐标点。最后，我们沿着边距绘制一个矩形。drawText()函数被用于绘制两个坐标轴上相应坐标点上的数字。<br />
+	drawText()的调用语法如下：<br />
+painter->drawText(x, y, width, height, alignment, text);<br />
+(x, y, width, height)定义了一个矩形，alignment是文本在此矩形内的位置，text是要绘制的文本。<br />
+[code type="cpp-qt"]<br />
+void Plotter::drawCurves(QPainter *painter)<br />
+{<br />
+    static const QColor colorForIds[6] = {<br />
+        Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow<br />
+    };<br />
+    PlotSettings settings = zoomStack[curZoom];<br />
+    QRect rect(Margin, Margin,<br />
+               width() - 2 * Margin, height() - 2 * Margin);<br />
+    if (!rect.isValid())<br />
+        return;<br />
+    painter->setClipRect(rect.adjusted(+1, +1, -1, -1));<br />
+    QMapIterator<int, QVector<QPointF> > i(curveMap);<br />
+    while (i.hasNext()) {<br />
+        i.next();<br />
+        int id = i.key();<br />
+        const QVector<QPointF> &data = i.value();<br />
+        QPolygonF polyline(data.count());<br />
+        for (int j = 0; j < data.count(); ++j) {<br />
+            double dx = data[j].x() - settings.minX;<br />
+            double dy = data[j].y() - settings.minY;<br />
+            double x = rect.left() + (dx * (rect.width() - 1)<br />
+                                         / settings.spanX());<br />
+            double y = rect.bottom() - (dy * (rect.height() - 1)<br />
+                                           / settings.spanY());<br />
+            polyline[j] = QPointF(x, y);<br />
+        }<br />
+        painter->setPen(colorForIds[uint(id) % 6]);<br />
+        painter->drawPolyline(polyline);<br />
+    }<br />
+}<br />
+[/code]<br />
+	drawCurves()函数绘制网格之上的曲线。我们开始时调用setClipRect()设置Qpainter的包含该曲线的矩形的剪裁区域（不包括边距及画布周围的边框）。QPainter将忽略该区域之外的象素绘制操作。<br />
+	下一步，我们使用类java迭代器遍历所有曲线，并且对每条曲线，我们遍历它的组成点QPointF。Key()函数给出曲线的ID，value()函数给出一个QVector<QPointF>.类型的相应曲线数据。内部for循环把每个QpointF从绘图仪坐标转换到物件坐标并把它们存储在polyline变量。<br />
+<br />
+	一旦把所有曲线上所有点转换为物件坐标，我们设置曲线的画笔颜色（使用预定义颜色其中一个）并调用drawPolyline()绘制一条连接曲线所有点的线。<br />
+	这就是完整的Plotter类。剩下的只有几个PlotSettings函数了。<br />
+[code type="cpp-qt"]<br />
+PlotSettings::PlotSettings()<br />
+{<br />
+    minX = 0.0;<br />
+    maxX = 10.0;<br />
+    numXTicks = 5;<br />
+    minY = 0.0;<br />
+    maxY = 10.0;<br />
+    numYTicks = 5;<br />
+}<br />
+[/code]<br />
+	PlotSettings的构造函数初始化两个坐标轴的区间为0到10，它包括5个坐标点。<br />
+[code type="cpp-qt"]<br />
+void PlotSettings::scroll(int dx, int dy)<br />
+{<br />
+    double stepX = spanX() / numXTicks;<br />
+    minX += dx * stepX;<br />
+    maxX += dx * stepX;<br />
+    double stepY = spanY() / numYTicks;<br />
+    minY += dy * stepY;<br />
+    maxY += dy * stepY;<br />
+}<br />
+[/code]<br />
+<br />
+	Scroll()函数通过2倍于给定数字的间隔递减（或者递增）minX, maxX, minY, 和 maxY。该函数在Plotter::keyPressEvent()被使用来实现滚动。<br />
+[code type="cpp-qt"]<br />
+void PlotSettings::adjust()<br />
+{<br />
+    adjustAxis(minX, maxX, numXTicks);<br />
+    adjustAxis(minY, maxY, numYTicks);<br />
+}<br />
+[/code]<br />
+	Adjust()函数在mouseReleaseEvent()被调用来圆整minX, maxX, minY, 和 maxY为适当的值并决定每个坐标轴上合适的坐标点个数。私有函数adjustAxis()每次工作于一个坐标轴。<br />
+[code type="cpp-qt"]<br />
+void PlotSettings::adjustAxis(double &min, double &max,<br />
+                              int &numTicks)<br />
+{<br />
+    const int MinTicks = 4;<br />
+    double grossStep = (max - min) / MinTicks;<br />
+    double step = pow(10.0, floor(log10(grossStep)));<br />
+    if (5 * step < grossStep) {<br />
+        step *= 5;<br />
+    } else if (2 * step < grossStep) {<br />
+        step *= 2;<br />
+    }<br />
+    numTicks = int(ceil(max / step) - floor(min / step));<br />
+    if (numTicks < MinTicks)<br />
+        numTicks = MinTicks;<br />
+    min = floor(min / step) * step;<br />
+    max = ceil(max / step) * step;<br />
+}<br />
+[/code]<br />
+	adjustAxis()函数把它的　min和max 参数转换为合适的数字并把它的numTicks参数设置为在给定[min, max]区间上计算出来的合适的坐标点个数。因为adjustAxis()在修改实际变量(minX, maxX, numXTicks等等.)并且不仅仅是做拷贝，所以它的参数是非常量引用。<br />
+	adjustAxis()中的大部分代码用于试图决定两个坐标点间隔的合适的值。为了获得坐标轴的合适值，我们必须小心选择间距。例如，一个值为3.8的间距会导致一个3.8倍数的坐标轴，这让人们很难处理的。对于坐标轴上的10进制标签，较好的间隔值是10n, 2·10n, or 5·10n中的数字。<br />
+	我们开始计算“大概间距”，间距值的最大值的一种。然后我们从10n格式为的数字中找到小于或者等于大概间距的数字。我们通过取大概间距以10为底的对数来做这工作。例如，如果大概间距是236，我们计算出log 236 = 2.37291…;然后我们把它圆整为2并且获得102 = 100作为格式为10n的相应间距值。<br />
+	我们一旦有了第一个候选间距值，我们就可以用它来计算其他两个候选值：2·10n 和 5·10n。对上面的例子，另两个候选值是200和500。候选值500比大概间距要大，因此我们不能使用它。但200比236小，因此我们使用200作为本例子中的间距大小。<br />
+	从上面的间距值可以非常容易的得到numTicks, min, 和 max。新的min通过把原来的min圆整到离间距的倍数中最近值，新的max通过把原来的max圆整到离间距最近的倍数中最近的值。新的numTicks是被圆整的min和max之间的间距值。例如，如果min是240，max是1184并传递到该函数中，新的区间变成[200, 1200]，而5则为坐标点个数。<br />
+	这一算法在一些情况下能给出最优结果。一个更复杂的算法在出版于Graphics Gems (ISBN 0-12-286166-3)的Paul S. Heckbert的文章"Nice Numbers for Graph Labels"中有描述。<br />
+	本章结束了本书的第一部分。它阐述了如何自定义一个已存在的Qt物件以及如何使用QWidget作为基类创建一个物件。在第2章中我们已经看到了如何用现有的物件组装出一个物件，并且在第6阐我们将进一步研究主题。<br />
+	到现在为止，我们已经知道的足够总并应该能使用Qt编写完整的GUI程序。在第 II 和第III部分，我们将更深入地研究Qt以便我们能充分利用Qt的强大功能。<br />
 
 </body>
 </html>

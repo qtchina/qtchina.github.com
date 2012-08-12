@@ -6,49 +6,49 @@
 <title>在W500上安装MacOS X Lion 10.7 过程</title>
 </head>
 <body>
-自发布Lion 10.7，尝试了多次直接升级，都没有成功。
-
-10.1 假期，又试了一把，总算安装上了，虽然不是太完美。
-
-以前过程主要记录安装过程遇到的问题
-
-在pcbeta下载的懒人版iso镜像，OS_X_Lion.iso，3.9G，本来从snow leopard 10.6.8升级上来，谁知道，键盘无法驱动，稀里糊涂地把整个分区抹掉了，后来安装完成后，才发现这其实已经升级成功，改个驱动就行的。
-
-把这个iso刻盘，使用光驱安装，非常简单，在选择包的时候，要选择一个我机器的8169驱动，PS/2驱动，其他的没有选。
-
-安装完成，重启动，发现键盘无法驱动，在到欢迎界面时，提示没有外接USB键盘，进行不下去，这样安装了几遍，都是这样。
-
-后来在论坛上搜索，发现一个解决办法，删除系统中这个欢迎界面包，
-备份并删除下面文件/System/Library/CoreServices/SetupAssistant.app/Contents/Resources/DeviceSection.bundle（进入Mac后可复制回去。）
-只要过了这一步，下一步却可以照常使用ps/2键盘，因为在安装的时候选择了PS/2键盘驱动。
-
-看到有些人在这一步之后，遇到无法设置用户名，我这却没有遇到，一切都ok了。
-
-
-另外一个就是引导程序，这次使用的是chrameleon，安装在win7中，启动也正常。
-
-这次把我的驱动放在lion系统根目录/Extra/Extensions/下，在这chrameleon可以在启动的时候直接加载。
-
-由于我的机器是多系统，mbr使用的grub2引导，经过多次测试，找到一种使用grub2引导chrameleon的wowpc.iso的办法，
-menuentry "Mac Lion from wowpc.iso" {
-        insmod hfsplus
-        loopback loop /wowpc.iso
-        #set root=(loop)
-        # chainloader +1
-        #chainloader (loop)
-        #chainloader (loop)/boot
-        #multiboot (loop)/boot root=device:hd0s1
-        multiboot (loop)/boot -z device=80
-}
-
-这样，不需要多步才能引导到mac lion了，直接在grub2顶级菜单就可直接进入苹果系统了。不过这种方法启动的chrameleon没有显示theme，还不知道应该怎么指定。
-参数device=80表示使用第一个硬盘，第二个硬盘使用device=81，这个看上去挺原始，有空再试试有没有其他的方法。
-是不是所有的启动光盘wowpc.iso的可用参数都可用在这呢？
-
-上次使用snow leopard 10.6.x时，接上外放才有声音，这次怎么着都没有声音，比较上个版，就差这一步了。
-
-有线网正常。
-
+自发布Lion 10.7，尝试了多次直接升级，都没有成功。<br />
+<br />
+10.1 假期，又试了一把，总算安装上了，虽然不是太完美。<br />
+<br />
+以前过程主要记录安装过程遇到的问题<br />
+<br />
+在pcbeta下载的懒人版iso镜像，OS_X_Lion.iso，3.9G，本来从snow leopard 10.6.8升级上来，谁知道，键盘无法驱动，稀里糊涂地把整个分区抹掉了，后来安装完成后，才发现这其实已经升级成功，改个驱动就行的。<br />
+<br />
+把这个iso刻盘，使用光驱安装，非常简单，在选择包的时候，要选择一个我机器的8169驱动，PS/2驱动，其他的没有选。<br />
+<br />
+安装完成，重启动，发现键盘无法驱动，在到欢迎界面时，提示没有外接USB键盘，进行不下去，这样安装了几遍，都是这样。<br />
+<br />
+后来在论坛上搜索，发现一个解决办法，删除系统中这个欢迎界面包，<br />
+备份并删除下面文件/System/Library/CoreServices/SetupAssistant.app/Contents/Resources/DeviceSection.bundle（进入Mac后可复制回去。）<br />
+只要过了这一步，下一步却可以照常使用ps/2键盘，因为在安装的时候选择了PS/2键盘驱动。<br />
+<br />
+看到有些人在这一步之后，遇到无法设置用户名，我这却没有遇到，一切都ok了。<br />
+<br />
+<br />
+另外一个就是引导程序，这次使用的是chrameleon，安装在win7中，启动也正常。<br />
+<br />
+这次把我的驱动放在lion系统根目录/Extra/Extensions/下，在这chrameleon可以在启动的时候直接加载。<br />
+<br />
+由于我的机器是多系统，mbr使用的grub2引导，经过多次测试，找到一种使用grub2引导chrameleon的wowpc.iso的办法，<br />
+menuentry "Mac Lion from wowpc.iso" {<br />
+        insmod hfsplus<br />
+        loopback loop /wowpc.iso<br />
+        #set root=(loop)<br />
+        # chainloader +1<br />
+        #chainloader (loop)<br />
+        #chainloader (loop)/boot<br />
+        #multiboot (loop)/boot root=device:hd0s1<br />
+        multiboot (loop)/boot -z device=80<br />
+}<br />
+<br />
+这样，不需要多步才能引导到mac lion了，直接在grub2顶级菜单就可直接进入苹果系统了。不过这种方法启动的chrameleon没有显示theme，还不知道应该怎么指定。<br />
+参数device=80表示使用第一个硬盘，第二个硬盘使用device=81，这个看上去挺原始，有空再试试有没有其他的方法。<br />
+是不是所有的启动光盘wowpc.iso的可用参数都可用在这呢？<br />
+<br />
+上次使用snow leopard 10.6.x时，接上外放才有声音，这次怎么着都没有声音，比较上个版，就差这一步了。<br />
+<br />
+有线网正常。<br />
+<br />
 
 </body>
 </html>

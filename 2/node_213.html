@@ -6,60 +6,60 @@
 <title>使用sshfs将远程ssh服务器文件系统mount到本地目录</title>
 </head>
 <body>
-sshfs 适用于linux平台
-
-sshfs: 基于 SSH 协议的虚拟文件系统，能将一台SSH服务器的特定目录 mount 到本地目录，然后在本地目录中像操作本地文件一样使用这些文件。
-
-sshfs 依赖内核模块 fuse (用户空间文件系统），在最新linux内核2.6.26中已经包含该模块，在编译内核的时候开启这个模块即可。
-
-sshfs 依赖软件fuse，首页 http://fuse.sf.net  
-
-版本说明：
-已经测试过可用的版本组合：
-kernel     fuse      sshfs
-2.6.23     2.7.3     1.9
-2.6.26     2.8-r1    1.9
-
-安装:
- 编写新内核linux-2.6.26，开启fuse模块。重新启动，以root用户执行 modprobe fuse 如果没有错误，则表示fuse模块已经可用。否则要重新配置内核并编译。
-
-
-  下载fuse用户程序，<a href="http://fuse.sourceforge.net/sshfs.html" target="_blank">fuse-2.8.xxx.tar.bz2</a> , 
-  ./configure --prefix=/usr/
-  make && make install
-
-  下载sshfs 1.9 , 
-  ./configure --prefix=/usr/
-  make && make install
-
-在控制台执行命令 （可以是非root用户）
-# sshfs -h
-usage: sshfs [user@]host:[dir] mountpoint [options]  
-
-general options:
-    -o opt,[opt...]        mount options
-    -h   --help            print help   
-    -V   --version         print version
-
-SSHFS options:
-    -p PORT                equivalent to '-o port=PORT'
-...
-
-
-现在就可以使用sshfs了。
-
-假设有一台IP为 192.168.0.100 的SSH服务器，账号是 myname/pw123
-
-使用下面的命名将该用户在该服务器上的目录 /home/myname/ mount 到本机的 /home/192.168.0.100/ 目录下：
-
-sshfs -o workaround=all  myname@192.168.0.100:/home/myname  /home/192.168.0.100
-passwd: xxxxxx
-
-现在看看目录/home/192.168.0.100/下面是不是有文件了呢。
-
-
-
-
+sshfs 适用于linux平台<br />
+<br />
+sshfs: 基于 SSH 协议的虚拟文件系统，能将一台SSH服务器的特定目录 mount 到本地目录，然后在本地目录中像操作本地文件一样使用这些文件。<br />
+<br />
+sshfs 依赖内核模块 fuse (用户空间文件系统），在最新linux内核2.6.26中已经包含该模块，在编译内核的时候开启这个模块即可。<br />
+<br />
+sshfs 依赖软件fuse，首页 http://fuse.sf.net  <br />
+<br />
+版本说明：<br />
+已经测试过可用的版本组合：<br />
+kernel     fuse      sshfs<br />
+2.6.23     2.7.3     1.9<br />
+2.6.26     2.8-r1    1.9<br />
+<br />
+安装:<br />
+ 编写新内核linux-2.6.26，开启fuse模块。重新启动，以root用户执行 modprobe fuse 如果没有错误，则表示fuse模块已经可用。否则要重新配置内核并编译。<br />
+<br />
+<br />
+  下载fuse用户程序，<a href="http://fuse.sourceforge.net/sshfs.html" target="_blank">fuse-2.8.xxx.tar.bz2</a> , <br />
+  ./configure --prefix=/usr/<br />
+  make && make install<br />
+<br />
+  下载sshfs 1.9 , <br />
+  ./configure --prefix=/usr/<br />
+  make && make install<br />
+<br />
+在控制台执行命令 （可以是非root用户）<br />
+# sshfs -h<br />
+usage: sshfs [user@]host:[dir] mountpoint [options]  <br />
+<br />
+general options:<br />
+    -o opt,[opt...]        mount options<br />
+    -h   --help            print help   <br />
+    -V   --version         print version<br />
+<br />
+SSHFS options:<br />
+    -p PORT                equivalent to '-o port=PORT'<br />
+...<br />
+<br />
+<br />
+现在就可以使用sshfs了。<br />
+<br />
+假设有一台IP为 192.168.0.100 的SSH服务器，账号是 myname/pw123<br />
+<br />
+使用下面的命名将该用户在该服务器上的目录 /home/myname/ mount 到本机的 /home/192.168.0.100/ 目录下：<br />
+<br />
+sshfs -o workaround=all  myname@192.168.0.100:/home/myname  /home/192.168.0.100<br />
+passwd: xxxxxx<br />
+<br />
+现在看看目录/home/192.168.0.100/下面是不是有文件了呢。<br />
+<br />
+<br />
+<br />
+<br />
 
 </body>
 </html>

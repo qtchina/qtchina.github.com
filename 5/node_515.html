@@ -6,55 +6,55 @@
 <title>qjsip and Qt problem1</title>
 </head>
 <body>
-> I managed to use pjsip in a Qt application. The problem was, that if a 
-> callback is executed and you try to access a Qt GUI element from this 
-> callback the application will crash because Qt does not want non-Qt 
-> threads (the callback thread is a thread created by pjsip) to access GUI 
-> elements.
-
-Yeah this is a common problem with GUI toolkits (it happens with MFC 
-as well). We also have the same problem with Python.
-
-> The workaround is to use Qt's "signals and slots" mechanism with 
-> Qt::QueuedConnection between the callback function and your application 
-> logic which access Qt objects.
-
-I'm not sure how Qt's signals and slots is implemented, but if it's 
-implemented with some kind of queuing where one thread posts an 
-event to other thread's event queue, we'll have a problem.
-
-The problem is some object state is only valid for the duration of 
-the callback. For example, if on_call_state() callback is called 
-with state==DISCONNECTED, pjsua-lib only retains the call until this 
-callback is called, so that the application can retrieve the call 
-state inside the callback. Once the callback returns, the call will 
-be destroyed. So if you queue this callback to be processed by 
-another thread, the handler may not be able to access the call since 
-it may have been destroyed.
-
-I think there are two solutions for this:
-
-One is to make the original callback waits synchronously until the 
-queue is processed by the other thread.
-
-The second solution is a lot simpler. You just need to disable the 
-worker thread in pjsua-lib by setting pjsua_config.thread_cnt to 
-zero, and create your own Qt thread to poll pjsip, something like:
-
-   void qt_poller_thread()
-   {
-     while (!qt_quit) {
-       pjsua_handle_events(10);
-     }
-   }
-
-With this approach, all callbacks will be called in the context of 
-your Qt thread. There is still another problem, that is for 
-callbacks that are called from the media thread context (for 
-example, on_dtmf_digit(), or the WAV EOF callbacks if you have one). 
-Since these callbacks are not called by pjsip's worker thread, 
-you'll probably need to use the queue approach to process them.
-
+> I managed to use pjsip in a Qt application. The problem was, that if a <br />
+> callback is executed and you try to access a Qt GUI element from this <br />
+> callback the application will crash because Qt does not want non-Qt <br />
+> threads (the callback thread is a thread created by pjsip) to access GUI <br />
+> elements.<br />
+<br />
+Yeah this is a common problem with GUI toolkits (it happens with MFC <br />
+as well). We also have the same problem with Python.<br />
+<br />
+> The workaround is to use Qt's "signals and slots" mechanism with <br />
+> Qt::QueuedConnection between the callback function and your application <br />
+> logic which access Qt objects.<br />
+<br />
+I'm not sure how Qt's signals and slots is implemented, but if it's <br />
+implemented with some kind of queuing where one thread posts an <br />
+event to other thread's event queue, we'll have a problem.<br />
+<br />
+The problem is some object state is only valid for the duration of <br />
+the callback. For example, if on_call_state() callback is called <br />
+with state==DISCONNECTED, pjsua-lib only retains the call until this <br />
+callback is called, so that the application can retrieve the call <br />
+state inside the callback. Once the callback returns, the call will <br />
+be destroyed. So if you queue this callback to be processed by <br />
+another thread, the handler may not be able to access the call since <br />
+it may have been destroyed.<br />
+<br />
+I think there are two solutions for this:<br />
+<br />
+One is to make the original callback waits synchronously until the <br />
+queue is processed by the other thread.<br />
+<br />
+The second solution is a lot simpler. You just need to disable the <br />
+worker thread in pjsua-lib by setting pjsua_config.thread_cnt to <br />
+zero, and create your own Qt thread to poll pjsip, something like:<br />
+<br />
+   void qt_poller_thread()<br />
+   {<br />
+     while (!qt_quit) {<br />
+       pjsua_handle_events(10);<br />
+     }<br />
+   }<br />
+<br />
+With this approach, all callbacks will be called in the context of <br />
+your Qt thread. There is still another problem, that is for <br />
+callbacks that are called from the media thread context (for <br />
+example, on_dtmf_digit(), or the WAV EOF callbacks if you have one). <br />
+Since these callbacks are not called by pjsip's worker thread, <br />
+you'll probably need to use the queue approach to process them.<br />
+<br />
 try this.
 </body>
 </html>

@@ -6,322 +6,322 @@
 <title>Linux 内核使用的 GNU C 扩展</title>
 </head>
 <body>
-<p>GNC CC 是一个功能非常强大的跨平台 C 编译器，它对 C 语言提供了很多扩展，<br />
-这些扩展对优化、目标代码布局、更安全的检查等方面提供了很强的支持。本文把<br />
-支持 GNU 扩展的 C 语言称为 GNU C。<br />
-<br />
-Linux 内核代码使用了大量的 GNU C 扩展，以至于能够编译 Linux 内核的唯一编<br />
-译器是 GNU CC，以前甚至出现过编译 Linux 内核要使用特殊的 GNU CC 版本的情<br />
-况。本文是对 Linux 内核使用的 GNU C 扩展的一个汇总，希望当你读内核源码遇<br />
-到不理解的语法和语义时，能从本文找到一个初步的解答，更详细的信息可以查看<br />
-gcc.info。文中的例子取自 Linux 2.4.18。<br />
-<br />
-<br />
-语句表达式<br />
-==========<br />
-<br />
-GNU C 把包含在括号中的复合语句看做是一个表达式，称为语句表达式，它可以出<br />
-现在任何允许表达式的地方，你可以在语句表达式中使用循环、局部变量等，原本<br />
-只能在复合语句中使用。例如：<br />
-<br />
-++++ include/linux/kernel.h<br />
-159: #define min_t(type,x,y) <br />
-160: ({ type __x = (x); type __y = (y); __x &lt; __y ? __x: __y; })<br />
-++++ net/ipv4/tcp_output.c<br />
-654: int full_space = min_t(int, tp-&gt;window_clamp, tcp_full_space(sk));<br />
-<br />
-复合语句的最后一个语句应该是一个表达式，它的值将成为这个语句表达式的值。<br />
-这里定义了一个安全的求最小值的宏，在标准 C 中，通常定义为:<br />
-<br />
-#define min(x,y) ((x) &lt; (y) ? (x) : (y))<br />
-<br />
-这个定义计算 x 和 y 分别两次，当参数有副作用时，将产生不正确的结果，使用<br />
-语句表达式只计算参数一次，避免了可能的错误。语句表达式通常用于宏定义。<br />
-<br />
-<br />
-Typeof<br />
-======<br />
-<br />
-使用前一节定义的宏需要知道参数的类型，利用 typeof 可以定义更通用的宏，不<br />
-必事先知道参数的类型，例如：<br />
-<br />
-++++ include/linux/kernel.h<br />
-141: #define min(x,y) ({ <br />
-142: const typeof(x) _x = (x); <br />
-143: const typeof(y) _y = (y); <br />
-144: (void) (&amp;_x == &amp;_y); <br />
-145: _x &lt; _y ? _x : _y; })<br />
-<br />
-这里 typeof(x) 表示 x 的值类型，第 142 行定义了一个与 x 类型相同的局部变<br />
-量 _x 并初使化为 x，注意第 144 行的作用是检查参数 x 和 y 的类型是否相同。<br />
-typeof 可以用在任何类型可以使用的地方，通常用于宏定义。<br />
-<br />
-<br />
-零长度数组<br />
-==========<br />
-<br />
-GNU C 允许使用零长度数组，在定义变长对象的头结构时，这个特性非常有用。例<br />
-如：<br />
-<br />
-++++ include/linux/minix_fs.h<br />
-85: struct minix_dir_entry {<br />
-86: __u16 inode;<br />
-87: char name[0];<br />
-88: };<br />
-<br />
-结构的最后一个元素定义为零长度数组，它不占结构的空间。在标准 C 中则需要<br />
-定义数组长度为 1，分配时计算对象大小比较复杂。<br />
-<br />
-<br />
-可变参数宏<br />
-==========<br />
-<br />
-在 GNU C 中，宏可以接受可变数目的参数，就象函数一样，例如：<br />
-<br />
-++++ include/linux/kernel.h<br />
-110: #define pr_debug(fmt,arg...) <br />
-111: printk(KERN_DEBUG fmt,##arg)<br />
-<br />
-这里 arg 表示其余的参数，可以是零个或多个，这些参数以及参数之间的逗号构<br />
-成 arg 的值，在宏扩展时替换 arg，例如：<br />
-<br />
-pr_debug(&quot;%s:%d&quot;,filename,line)<br />
-<br />
-扩展为<br />
-<br />
-printk(&quot;&lt;7&gt;&quot; &quot;%s:%d&quot;, filename, line)<br />
-<br />
-使用 ## 的原因是处理 arg 不匹配任何参数的情况，这时 arg 的值为空，GNU<br />
-C 预处理器在这种特殊情况下，丢弃 ## 之前的逗号，这样<br />
-<br />
-pr_debug(&quot;success!n&quot;)<br />
-<br />
-扩展为<br />
-<br />
-printk(&quot;&lt;7&gt;&quot; &quot;success!n&quot;)<br />
-<br />
-注意最后没有逗号。<br />
-<br />
-<br />
-标号元素<br />
-========<br />
-<br />
-标准 C 要求数组或结构变量的初使化值必须以固定的顺序出现，在 GNU C 中，通<br />
-过指定索引或结构域名，允许初始化值以任意顺序出现。指定数组索引的方法是在<br />
-初始化值前写 '[INDEX] ='，要指定一个范围使用 '[FIRST ... LAST] =' 的形式，<br />
-例如：<br />
-<br />
-+++++ arch/i386/kernel/irq.c<br />
-1079: static unsigned long irq_affinity [NR_IRQS] = { [0 ... NR_IRQS-1] = ~0UL };<br />
-<br />
-将数组的所有元素初使化为 ~0UL，这可以看做是一种简写形式。<br />
-<br />
-要指定结构元素，在元素值前写 'FIELDNAME:'，例如：<br />
-<br />
-++++ fs/ext2/file.c<br />
-41: struct file_operations ext2_file_operations = {<br />
-42: llseek: generic_file_llseek,<br />
-43: read: generic_file_read,<br />
-44: write: generic_file_write,<br />
-45: ioctl: ext2_ioctl,<br />
-46: mmap: generic_file_mmap,<br />
-47: open: generic_file_open,<br />
-48: release: ext2_release_file,<br />
-49: fsync: ext2_sync_file,<br />
-50 };<br />
-<br />
-将结构 ext2_file_operations 的元素 llseek 初始化为 generic_file_llseek，<br />
-元素 read 初始化为 genenric_file_read，依次类推。我觉得这是 GNU C 扩展中<br />
-最好的特性之一，当结构的定义变化以至元素的偏移改变时，这种初始化方法仍然<br />
-保证已知元素的正确性。对于未出现在初始化中的元素，其初值为 0。<br />
-<br />
-<br />
-Case 范围<br />
-=========<br />
-<br />
-GNU C 允许在一个 case 标号中指定一个连续范围的值，例如：<br />
-<br />
-++++ arch/i386/kernel/irq.c<br />
-1062: case '0' ... '9': c -= '0'; break;<br />
-1063: case 'a' ... 'f': c -= 'a'-10; break;<br />
-1064: case 'A' ... 'F': c -= 'A'-10; break;<br />
-<br />
-case '0' ... '9':<br />
-<br />
-相当于<br />
-<br />
-case '0': case '1': case '2': case '3': case '4':<br />
-case '5': case '6': case '7': case '8': case '9':<br />
-<br />
-<br />
-声明的特殊属性<br />
-==============<br />
-<br />
-GNU C 允许声明函数、变量和类型的特殊属性，以便手工的代码优化和更仔细的代<br />
-码检查。要指定一个声明的属性，在声明后写<br />
-<br />
-__attribute__ (( ATTRIBUTE ))<br />
-<br />
-其中 ATTRIBUTE 是属性说明，多个属性以逗号分隔。GNU C 支持十几个属性，这<br />
-里介绍最常用的：<br />
-<br />
-* noreturn<br />
-<br />
-属性 noreturn 用于函数，表示该函数从不返回。这可以让编译器生成稍微优化的<br />
-代码，最重要的是可以消除不必要的警告信息比如未初使化的变量。例如：<br />
-<br />
-++++ include/linux/kernel.h<br />
-47: # define ATTRIB_NORET __attribute__((noreturn)) ....<br />
-61: asmlinkage NORET_TYPE void do_exit(long error_code)<br />
-ATTRIB_NORET;<br />
-<br />
-* format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)<br />
-<br />
-属性 format 用于函数，表示该函数使用 printf, scanf 或 strftime 风格的参<br />
-数，使用这类函数最容易犯的错误是格式串与参数不匹配，指定 format 属性可以<br />
-让编译器根据格式串检查参数类型。例如：<br />
-<br />
-++++ include/linux/kernel.h?<br />
-89: asmlinkage int printk(const char * fmt, ...)<br />
-90: __attribute__ ((format (printf, 1, 2)));<br />
-<br />
-表示第一个参数是格式串，从第二个参数起根据格式串检查参数。<br />
-<br />
-* unused<br />
-<br />
-属性 unused 用于函数和变量，表示该函数或变量可能不使用，这个属性可以避免<br />
-编译器产生警告信息。<br />
-<br />
-* section (&quot;section-name&quot;)<br />
-<br />
-属性 section 用于函数和变量，通常编译器将函数放在 .text 节，变量放在<br />
-.data 或 .bss 节，使用 section 属性，可以让编译器将函数或变量放在指定的<br />
-节中。例如：<br />
-<br />
-++++ include/linux/init.h<br />
-78: #define __init __attribute__ ((__section__ (&quot;.text.init&quot;)))<br />
-79: #define __exit __attribute__ ((unused, __section__(&quot;.text.exit&quot;)))<br />
-80: #define __initdata __attribute__ ((__section__ (&quot;.data.init&quot;)))<br />
-81: #define __exitdata __attribute__ ((unused, __section__ (&quot;.data.exit&quot;)))<br />
-82: #define __initsetup __attribute__ ((unused,__section__ (&quot;.setup.init&quot;)))<br />
-83: #define __init_call __attribute__ ((unused,__section__ (&quot;.initcall.init&quot;)))<br />
-84: #define __exit_call __attribute__ ((unused,__section__ (&quot;.exitcall.exit&quot;)))<br />
-<br />
-连接器可以把相同节的代码或数据安排在一起，Linux 内核很喜欢使用这种技术，<br />
-例如系统的初始化代码被安排在单独的一个节，在初始化结束后就可以释放这部分<br />
-内存。<br />
-<br />
-* aligned (ALIGNMENT)<br />
-<br />
-属性 aligned 用于变量、结构或联合类型，指定变量、结构域、结构或联合的对<br />
-齐量，以字节为单位，例如：<br />
-<br />
-++++ include/asm-i386/processor.h<br />
-294: struct i387_fxsave_struct {<br />
-295: unsigned short cwd;<br />
-296: unsigned short swd;<br />
-297: unsigned short twd;<br />
-298: unsigned short fop;<br />
-299: long fip;<br />
-300: long fcs;<br />
-301: long foo;<br />
-......<br />
-308: } __attribute__ ((aligned (16)));<br />
-<br />
-表示该结构类型的变量以 16 字节对齐。通常编译器会选择合适的对齐量，显示指<br />
-定对齐通常是由于体系限制、优化等原因。<br />
-<br />
-* packed<br />
-<br />
-属性 packed 用于变量和类型，用于变量或结构域时表示使用最小可能的对齐，用<br />
-于枚举、结构或联合类型时表示该类型使用最小的内存。例如：<br />
-<br />
-++++ include/asm-i386/desc.h<br />
-51: struct Xgt_desc_struct {<br />
-52: unsigned short size;<br />
-53: unsigned long address __attribute__((packed));<br />
-54: };<br />
-<br />
-域 address 将紧接着 size 分配。属性 packed 的用途大多是定义硬件相关的结<br />
-构，使元素之间没有因对齐而造成的空洞。<br />
-<br />
-<br />
-当前函数名<br />
-==========<br />
-<br />
-GNU CC 预定义了两个标志符保存当前函数的名字，__FUNCTION__ 保存函数在源码<br />
-中的名字，__PRETTY_FUNCTION__ 保存带语言特色的名字。在 C 函数中，这两个<br />
-名字是相同的，在 C++ 函数中，__PRETTY_FUNCTION__ 包括函数返回类型等额外<br />
-信息，Linux 内核只使用了 __FUNCTION__。<br />
-<br />
-++++ fs/ext2/super.c<br />
-98: void ext2_update_dynamic_rev(struct super_block *sb)<br />
-99: {<br />
-100: struct ext2_super_block *es = EXT2_SB(sb)-&gt;s_es;<br />
-101: <br />
-102: if (le32_to_cpu(es-&gt;s_rev_level) &gt; EXT2_GOOD_OLD_REV)<br />
-103: return;<br />
-104: <br />
-105: ext2_warning(sb, __FUNCTION__,<br />
-106: &quot;updating to rev %d because of new feature flag, &quot;<br />
-107: &quot;running e2fsck is recommended&quot;,<br />
-108: EXT2_DYNAMIC_REV);<br />
-<br />
-这里 __FUNCTION__ 将被替换为字符串 &quot;ext2_update_dynamic_rev&quot;。虽然<br />
-__FUNCTION__ 看起来类似于标准 C 中的 __FILE__，但实际上 __FUNCTION__<br />
-是被编译器替换的，不象 __FILE__ 被预处理器替换。<br />
-<br />
-<br />
-内建函数<br />
-========<br />
-<br />
-GNU C 提供了大量的内建函数，其中很多是标准 C 库函数的内建版本，例如<br />
-memcpy，它们与对应的 C 库函数功能相同，本文不讨论这类函数，其他内建函数<br />
-的名字通常以 __builtin 开始。<br />
-<br />
-* __builtin_return_address (LEVEL)<br />
-<br />
-内建函数 __builtin_return_address 返回当前函数或其调用者的返回地址，参数<br />
-LEVEL 指定在栈上搜索框架的个数，0 表示当前函数的返回地址，1 表示当前函数<br />
-的调用者的返回地址，依此类推。例如：<br />
-<br />
-++++ kernel/sched.c<br />
-437: printk(KERN_ERR &quot;schedule_timeout: wrong timeout &quot;<br />
-438: &quot;value %lx from %pn&quot;, timeout,<br />
-439: __builtin_return_address(0));<br />
-<br />
-* __builtin_constant_p(EXP)<br />
-<br />
-内建函数 __builtin_constant_p 用于判断一个值是否为编译时常数，如果参数<br />
-EXP 的值是常数，函数返回 1，否则返回 0。例如：<br />
-<br />
-++++ include/asm-i386/bitops.h<br />
-249: #define test_bit(nr,addr) <br />
-250: (__builtin_constant_p(nr) ? <br />
-251: constant_test_bit((nr),(addr)) : <br />
-252: variable_test_bit((nr),(addr)))<br />
-<br />
-很多计算或操作在参数为常数时有更优化的实现，在 GNU C 中用上面的方法可以<br />
-根据参数是否为常数，只编译常数版本或非常数版本，这样既不失通用性，又能在<br />
-参数是常数时编译出最优化的代码。<br />
-<br />
-* __builtin_expect(EXP, C)<br />
-<br />
-内建函数 __builtin_expect 用于为编译器提供分支预测信息，其返回值是整数表<br />
-达式 EXP 的值，C 的值必须是编译时常数。例如：<br />
-<br />
-++++ include/linux/compiler.h<br />
-13: #define likely(x) __builtin_expect((x),1)<br />
-14: #define unlikely(x) __builtin_expect((x),0)<br />
-++++ kernel/sched.c<br />
-564: if (unlikely(in_interrupt())) {<br />
-565: printk(&quot;Scheduling in interruptn&quot;);<br />
-566: BUG();<br />
-567: }<br />
-<br />
-这个内建函数的语义是 EXP 的预期值是 C，编译器可以根据这个信息适当地重排<br />
-语句块的顺序，使程序在预期的情况下有更高的执行效率。上面的例子表示处于中<br />
-断上下文是很少发生的，第 565-566 行的目标码可能会放在较远的位置，以保证<br />
+<p>GNC CC 是一个功能非常强大的跨平台 C 编译器，它对 C 语言提供了很多扩展，<br /><br />
+这些扩展对优化、目标代码布局、更安全的检查等方面提供了很强的支持。本文把<br /><br />
+支持 GNU 扩展的 C 语言称为 GNU C。<br /><br />
+<br /><br />
+Linux 内核代码使用了大量的 GNU C 扩展，以至于能够编译 Linux 内核的唯一编<br /><br />
+译器是 GNU CC，以前甚至出现过编译 Linux 内核要使用特殊的 GNU CC 版本的情<br /><br />
+况。本文是对 Linux 内核使用的 GNU C 扩展的一个汇总，希望当你读内核源码遇<br /><br />
+到不理解的语法和语义时，能从本文找到一个初步的解答，更详细的信息可以查看<br /><br />
+gcc.info。文中的例子取自 Linux 2.4.18。<br /><br />
+<br /><br />
+<br /><br />
+语句表达式<br /><br />
+==========<br /><br />
+<br /><br />
+GNU C 把包含在括号中的复合语句看做是一个表达式，称为语句表达式，它可以出<br /><br />
+现在任何允许表达式的地方，你可以在语句表达式中使用循环、局部变量等，原本<br /><br />
+只能在复合语句中使用。例如：<br /><br />
+<br /><br />
+++++ include/linux/kernel.h<br /><br />
+159: #define min_t(type,x,y) <br /><br />
+160: ({ type __x = (x); type __y = (y); __x &lt; __y ? __x: __y; })<br /><br />
+++++ net/ipv4/tcp_output.c<br /><br />
+654: int full_space = min_t(int, tp-&gt;window_clamp, tcp_full_space(sk));<br /><br />
+<br /><br />
+复合语句的最后一个语句应该是一个表达式，它的值将成为这个语句表达式的值。<br /><br />
+这里定义了一个安全的求最小值的宏，在标准 C 中，通常定义为:<br /><br />
+<br /><br />
+#define min(x,y) ((x) &lt; (y) ? (x) : (y))<br /><br />
+<br /><br />
+这个定义计算 x 和 y 分别两次，当参数有副作用时，将产生不正确的结果，使用<br /><br />
+语句表达式只计算参数一次，避免了可能的错误。语句表达式通常用于宏定义。<br /><br />
+<br /><br />
+<br /><br />
+Typeof<br /><br />
+======<br /><br />
+<br /><br />
+使用前一节定义的宏需要知道参数的类型，利用 typeof 可以定义更通用的宏，不<br /><br />
+必事先知道参数的类型，例如：<br /><br />
+<br /><br />
+++++ include/linux/kernel.h<br /><br />
+141: #define min(x,y) ({ <br /><br />
+142: const typeof(x) _x = (x); <br /><br />
+143: const typeof(y) _y = (y); <br /><br />
+144: (void) (&amp;_x == &amp;_y); <br /><br />
+145: _x &lt; _y ? _x : _y; })<br /><br />
+<br /><br />
+这里 typeof(x) 表示 x 的值类型，第 142 行定义了一个与 x 类型相同的局部变<br /><br />
+量 _x 并初使化为 x，注意第 144 行的作用是检查参数 x 和 y 的类型是否相同。<br /><br />
+typeof 可以用在任何类型可以使用的地方，通常用于宏定义。<br /><br />
+<br /><br />
+<br /><br />
+零长度数组<br /><br />
+==========<br /><br />
+<br /><br />
+GNU C 允许使用零长度数组，在定义变长对象的头结构时，这个特性非常有用。例<br /><br />
+如：<br /><br />
+<br /><br />
+++++ include/linux/minix_fs.h<br /><br />
+85: struct minix_dir_entry {<br /><br />
+86: __u16 inode;<br /><br />
+87: char name[0];<br /><br />
+88: };<br /><br />
+<br /><br />
+结构的最后一个元素定义为零长度数组，它不占结构的空间。在标准 C 中则需要<br /><br />
+定义数组长度为 1，分配时计算对象大小比较复杂。<br /><br />
+<br /><br />
+<br /><br />
+可变参数宏<br /><br />
+==========<br /><br />
+<br /><br />
+在 GNU C 中，宏可以接受可变数目的参数，就象函数一样，例如：<br /><br />
+<br /><br />
+++++ include/linux/kernel.h<br /><br />
+110: #define pr_debug(fmt,arg...) <br /><br />
+111: printk(KERN_DEBUG fmt,##arg)<br /><br />
+<br /><br />
+这里 arg 表示其余的参数，可以是零个或多个，这些参数以及参数之间的逗号构<br /><br />
+成 arg 的值，在宏扩展时替换 arg，例如：<br /><br />
+<br /><br />
+pr_debug(&quot;%s:%d&quot;,filename,line)<br /><br />
+<br /><br />
+扩展为<br /><br />
+<br /><br />
+printk(&quot;&lt;7&gt;&quot; &quot;%s:%d&quot;, filename, line)<br /><br />
+<br /><br />
+使用 ## 的原因是处理 arg 不匹配任何参数的情况，这时 arg 的值为空，GNU<br /><br />
+C 预处理器在这种特殊情况下，丢弃 ## 之前的逗号，这样<br /><br />
+<br /><br />
+pr_debug(&quot;success!n&quot;)<br /><br />
+<br /><br />
+扩展为<br /><br />
+<br /><br />
+printk(&quot;&lt;7&gt;&quot; &quot;success!n&quot;)<br /><br />
+<br /><br />
+注意最后没有逗号。<br /><br />
+<br /><br />
+<br /><br />
+标号元素<br /><br />
+========<br /><br />
+<br /><br />
+标准 C 要求数组或结构变量的初使化值必须以固定的顺序出现，在 GNU C 中，通<br /><br />
+过指定索引或结构域名，允许初始化值以任意顺序出现。指定数组索引的方法是在<br /><br />
+初始化值前写 '[INDEX] ='，要指定一个范围使用 '[FIRST ... LAST] =' 的形式，<br /><br />
+例如：<br /><br />
+<br /><br />
++++++ arch/i386/kernel/irq.c<br /><br />
+1079: static unsigned long irq_affinity [NR_IRQS] = { [0 ... NR_IRQS-1] = ~0UL };<br /><br />
+<br /><br />
+将数组的所有元素初使化为 ~0UL，这可以看做是一种简写形式。<br /><br />
+<br /><br />
+要指定结构元素，在元素值前写 'FIELDNAME:'，例如：<br /><br />
+<br /><br />
+++++ fs/ext2/file.c<br /><br />
+41: struct file_operations ext2_file_operations = {<br /><br />
+42: llseek: generic_file_llseek,<br /><br />
+43: read: generic_file_read,<br /><br />
+44: write: generic_file_write,<br /><br />
+45: ioctl: ext2_ioctl,<br /><br />
+46: mmap: generic_file_mmap,<br /><br />
+47: open: generic_file_open,<br /><br />
+48: release: ext2_release_file,<br /><br />
+49: fsync: ext2_sync_file,<br /><br />
+50 };<br /><br />
+<br /><br />
+将结构 ext2_file_operations 的元素 llseek 初始化为 generic_file_llseek，<br /><br />
+元素 read 初始化为 genenric_file_read，依次类推。我觉得这是 GNU C 扩展中<br /><br />
+最好的特性之一，当结构的定义变化以至元素的偏移改变时，这种初始化方法仍然<br /><br />
+保证已知元素的正确性。对于未出现在初始化中的元素，其初值为 0。<br /><br />
+<br /><br />
+<br /><br />
+Case 范围<br /><br />
+=========<br /><br />
+<br /><br />
+GNU C 允许在一个 case 标号中指定一个连续范围的值，例如：<br /><br />
+<br /><br />
+++++ arch/i386/kernel/irq.c<br /><br />
+1062: case '0' ... '9': c -= '0'; break;<br /><br />
+1063: case 'a' ... 'f': c -= 'a'-10; break;<br /><br />
+1064: case 'A' ... 'F': c -= 'A'-10; break;<br /><br />
+<br /><br />
+case '0' ... '9':<br /><br />
+<br /><br />
+相当于<br /><br />
+<br /><br />
+case '0': case '1': case '2': case '3': case '4':<br /><br />
+case '5': case '6': case '7': case '8': case '9':<br /><br />
+<br /><br />
+<br /><br />
+声明的特殊属性<br /><br />
+==============<br /><br />
+<br /><br />
+GNU C 允许声明函数、变量和类型的特殊属性，以便手工的代码优化和更仔细的代<br /><br />
+码检查。要指定一个声明的属性，在声明后写<br /><br />
+<br /><br />
+__attribute__ (( ATTRIBUTE ))<br /><br />
+<br /><br />
+其中 ATTRIBUTE 是属性说明，多个属性以逗号分隔。GNU C 支持十几个属性，这<br /><br />
+里介绍最常用的：<br /><br />
+<br /><br />
+* noreturn<br /><br />
+<br /><br />
+属性 noreturn 用于函数，表示该函数从不返回。这可以让编译器生成稍微优化的<br /><br />
+代码，最重要的是可以消除不必要的警告信息比如未初使化的变量。例如：<br /><br />
+<br /><br />
+++++ include/linux/kernel.h<br /><br />
+47: # define ATTRIB_NORET __attribute__((noreturn)) ....<br /><br />
+61: asmlinkage NORET_TYPE void do_exit(long error_code)<br /><br />
+ATTRIB_NORET;<br /><br />
+<br /><br />
+* format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)<br /><br />
+<br /><br />
+属性 format 用于函数，表示该函数使用 printf, scanf 或 strftime 风格的参<br /><br />
+数，使用这类函数最容易犯的错误是格式串与参数不匹配，指定 format 属性可以<br /><br />
+让编译器根据格式串检查参数类型。例如：<br /><br />
+<br /><br />
+++++ include/linux/kernel.h?<br /><br />
+89: asmlinkage int printk(const char * fmt, ...)<br /><br />
+90: __attribute__ ((format (printf, 1, 2)));<br /><br />
+<br /><br />
+表示第一个参数是格式串，从第二个参数起根据格式串检查参数。<br /><br />
+<br /><br />
+* unused<br /><br />
+<br /><br />
+属性 unused 用于函数和变量，表示该函数或变量可能不使用，这个属性可以避免<br /><br />
+编译器产生警告信息。<br /><br />
+<br /><br />
+* section (&quot;section-name&quot;)<br /><br />
+<br /><br />
+属性 section 用于函数和变量，通常编译器将函数放在 .text 节，变量放在<br /><br />
+.data 或 .bss 节，使用 section 属性，可以让编译器将函数或变量放在指定的<br /><br />
+节中。例如：<br /><br />
+<br /><br />
+++++ include/linux/init.h<br /><br />
+78: #define __init __attribute__ ((__section__ (&quot;.text.init&quot;)))<br /><br />
+79: #define __exit __attribute__ ((unused, __section__(&quot;.text.exit&quot;)))<br /><br />
+80: #define __initdata __attribute__ ((__section__ (&quot;.data.init&quot;)))<br /><br />
+81: #define __exitdata __attribute__ ((unused, __section__ (&quot;.data.exit&quot;)))<br /><br />
+82: #define __initsetup __attribute__ ((unused,__section__ (&quot;.setup.init&quot;)))<br /><br />
+83: #define __init_call __attribute__ ((unused,__section__ (&quot;.initcall.init&quot;)))<br /><br />
+84: #define __exit_call __attribute__ ((unused,__section__ (&quot;.exitcall.exit&quot;)))<br /><br />
+<br /><br />
+连接器可以把相同节的代码或数据安排在一起，Linux 内核很喜欢使用这种技术，<br /><br />
+例如系统的初始化代码被安排在单独的一个节，在初始化结束后就可以释放这部分<br /><br />
+内存。<br /><br />
+<br /><br />
+* aligned (ALIGNMENT)<br /><br />
+<br /><br />
+属性 aligned 用于变量、结构或联合类型，指定变量、结构域、结构或联合的对<br /><br />
+齐量，以字节为单位，例如：<br /><br />
+<br /><br />
+++++ include/asm-i386/processor.h<br /><br />
+294: struct i387_fxsave_struct {<br /><br />
+295: unsigned short cwd;<br /><br />
+296: unsigned short swd;<br /><br />
+297: unsigned short twd;<br /><br />
+298: unsigned short fop;<br /><br />
+299: long fip;<br /><br />
+300: long fcs;<br /><br />
+301: long foo;<br /><br />
+......<br /><br />
+308: } __attribute__ ((aligned (16)));<br /><br />
+<br /><br />
+表示该结构类型的变量以 16 字节对齐。通常编译器会选择合适的对齐量，显示指<br /><br />
+定对齐通常是由于体系限制、优化等原因。<br /><br />
+<br /><br />
+* packed<br /><br />
+<br /><br />
+属性 packed 用于变量和类型，用于变量或结构域时表示使用最小可能的对齐，用<br /><br />
+于枚举、结构或联合类型时表示该类型使用最小的内存。例如：<br /><br />
+<br /><br />
+++++ include/asm-i386/desc.h<br /><br />
+51: struct Xgt_desc_struct {<br /><br />
+52: unsigned short size;<br /><br />
+53: unsigned long address __attribute__((packed));<br /><br />
+54: };<br /><br />
+<br /><br />
+域 address 将紧接着 size 分配。属性 packed 的用途大多是定义硬件相关的结<br /><br />
+构，使元素之间没有因对齐而造成的空洞。<br /><br />
+<br /><br />
+<br /><br />
+当前函数名<br /><br />
+==========<br /><br />
+<br /><br />
+GNU CC 预定义了两个标志符保存当前函数的名字，__FUNCTION__ 保存函数在源码<br /><br />
+中的名字，__PRETTY_FUNCTION__ 保存带语言特色的名字。在 C 函数中，这两个<br /><br />
+名字是相同的，在 C++ 函数中，__PRETTY_FUNCTION__ 包括函数返回类型等额外<br /><br />
+信息，Linux 内核只使用了 __FUNCTION__。<br /><br />
+<br /><br />
+++++ fs/ext2/super.c<br /><br />
+98: void ext2_update_dynamic_rev(struct super_block *sb)<br /><br />
+99: {<br /><br />
+100: struct ext2_super_block *es = EXT2_SB(sb)-&gt;s_es;<br /><br />
+101: <br /><br />
+102: if (le32_to_cpu(es-&gt;s_rev_level) &gt; EXT2_GOOD_OLD_REV)<br /><br />
+103: return;<br /><br />
+104: <br /><br />
+105: ext2_warning(sb, __FUNCTION__,<br /><br />
+106: &quot;updating to rev %d because of new feature flag, &quot;<br /><br />
+107: &quot;running e2fsck is recommended&quot;,<br /><br />
+108: EXT2_DYNAMIC_REV);<br /><br />
+<br /><br />
+这里 __FUNCTION__ 将被替换为字符串 &quot;ext2_update_dynamic_rev&quot;。虽然<br /><br />
+__FUNCTION__ 看起来类似于标准 C 中的 __FILE__，但实际上 __FUNCTION__<br /><br />
+是被编译器替换的，不象 __FILE__ 被预处理器替换。<br /><br />
+<br /><br />
+<br /><br />
+内建函数<br /><br />
+========<br /><br />
+<br /><br />
+GNU C 提供了大量的内建函数，其中很多是标准 C 库函数的内建版本，例如<br /><br />
+memcpy，它们与对应的 C 库函数功能相同，本文不讨论这类函数，其他内建函数<br /><br />
+的名字通常以 __builtin 开始。<br /><br />
+<br /><br />
+* __builtin_return_address (LEVEL)<br /><br />
+<br /><br />
+内建函数 __builtin_return_address 返回当前函数或其调用者的返回地址，参数<br /><br />
+LEVEL 指定在栈上搜索框架的个数，0 表示当前函数的返回地址，1 表示当前函数<br /><br />
+的调用者的返回地址，依此类推。例如：<br /><br />
+<br /><br />
+++++ kernel/sched.c<br /><br />
+437: printk(KERN_ERR &quot;schedule_timeout: wrong timeout &quot;<br /><br />
+438: &quot;value %lx from %pn&quot;, timeout,<br /><br />
+439: __builtin_return_address(0));<br /><br />
+<br /><br />
+* __builtin_constant_p(EXP)<br /><br />
+<br /><br />
+内建函数 __builtin_constant_p 用于判断一个值是否为编译时常数，如果参数<br /><br />
+EXP 的值是常数，函数返回 1，否则返回 0。例如：<br /><br />
+<br /><br />
+++++ include/asm-i386/bitops.h<br /><br />
+249: #define test_bit(nr,addr) <br /><br />
+250: (__builtin_constant_p(nr) ? <br /><br />
+251: constant_test_bit((nr),(addr)) : <br /><br />
+252: variable_test_bit((nr),(addr)))<br /><br />
+<br /><br />
+很多计算或操作在参数为常数时有更优化的实现，在 GNU C 中用上面的方法可以<br /><br />
+根据参数是否为常数，只编译常数版本或非常数版本，这样既不失通用性，又能在<br /><br />
+参数是常数时编译出最优化的代码。<br /><br />
+<br /><br />
+* __builtin_expect(EXP, C)<br /><br />
+<br /><br />
+内建函数 __builtin_expect 用于为编译器提供分支预测信息，其返回值是整数表<br /><br />
+达式 EXP 的值，C 的值必须是编译时常数。例如：<br /><br />
+<br /><br />
+++++ include/linux/compiler.h<br /><br />
+13: #define likely(x) __builtin_expect((x),1)<br /><br />
+14: #define unlikely(x) __builtin_expect((x),0)<br /><br />
+++++ kernel/sched.c<br /><br />
+564: if (unlikely(in_interrupt())) {<br /><br />
+565: printk(&quot;Scheduling in interruptn&quot;);<br /><br />
+566: BUG();<br /><br />
+567: }<br /><br />
+<br /><br />
+这个内建函数的语义是 EXP 的预期值是 C，编译器可以根据这个信息适当地重排<br /><br />
+语句块的顺序，使程序在预期的情况下有更高的执行效率。上面的例子表示处于中<br /><br />
+断上下文是很少发生的，第 565-566 行的目标码可能会放在较远的位置，以保证<br /><br />
 经常执行的目标码更紧凑。</p>
 </body>
 </html>

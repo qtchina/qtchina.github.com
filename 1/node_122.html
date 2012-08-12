@@ -6,304 +6,304 @@
 <title>第3章 创建主窗口 (使用对话框)</title>
 </head>
 <body>
-<h3>&nbsp;<b><u>使用对话框</u></b><br />
-在本节中，我们将解释如何在Qt中使用对话框，如果创建并初始化他们以及运行它们，并响应用户的行为。我们将使用第2章中创建的&rdquo;Find&rdquo;,&rdquo;Go-to-Cell&rdquo;和排序对话框。我们还将创建一个简单的&ldquo;About&rdquo;对话框。<br />
-图3.12　电子表格程序的&ldquo;Find&rdquo;对话框<br />
-<input type="image" src="/upfile/image/find.jpg" width="311" height="131" align="middle" /><br />
-我们以&ldquo;Find&rdquo;对话框为开始。因为我们想让用户随意的在主窗口和&rdquo;Find&rdquo;对话框间切换，所以&rdquo;Find&rdquo;对话框必须是非模态的。非模态的窗口是程序中与其他窗口无关的窗口。<br />
-在模态窗口创建之后，他们都有自己的信号和槽连接以响应用户的交互。<br />
-void MainWindow::find()<br />
-{<br />
-&nbsp;   if (!findDialog) {<br />
-&nbsp;       findDialog = new FindDialog(this);<br />
-&nbsp;       connect(findDialog, SIGNAL (findNext(const QString &amp;,<br />
-&nbsp;                                           Qt::CaseSensitivity)),<br />
-&nbsp;               spreadsheet, SLOT (findNext(const QString &amp;,<br />
-&nbsp;                                           Qt::CaseSensitivity)));<br />
-&nbsp;       connect(findDialog, SIGNAL(findPrevious(const QString &amp;,<br />
-&nbsp;                                               Qt::CaseSensitivity)),<br />
-&nbsp;                spreadsheet, SLOT(findPrevious(const QString &amp;,<br />
-&nbsp;                                               Qt::CaseSensitivity)));<br />
-&nbsp;   }<br />
-&nbsp;   findDialog->show();<br />
-&nbsp;   findDialog->activateWindow();<br />
-}<br />
-&ldquo;Find&rdquo;对话框是一个能让用户在电子表格中搜索文本的窗口。当用户点击&rdquo;Edit|Find&rdquo;以弹出&rdquo;Find&rdquo;对话框时find()槽被调用。这时，可能出现下面几种情况：<br />
-这是用户首次调用&ldquo;查找&rdquo;对话框。<br />
-&ldquo;查找&rdquo;对话框以前调用过，但用户已经将它关闭了。<br />
-&ldquo;查找&rdquo;对话框以前调用过，并且现存还在。<br />
-<br />
-如果&ldquo;查找&rdquo;对话框不存在，我们创建它并把它的findNext()和findPrevious()信号连接到相应的Spreadsheet槽上。我们本该在MainWindow的构造函数中创建该对话框，但延迟创建会使启动更快。也就是，如果从没有使用过该对话框，它就不会被创建，即可以节省时间，还能节省内存。<br />
-接下来我们调用show()和activeWindow()以保证该窗口是可见的、活动的。一个单独的show()调用对于让隐藏的窗口可见并成为活动窗口是有效的，但&ldquo;查找&rdquo;对话框在它被调用的时候就已经存在了，这种情况下show()不做任何事情，使用activeWindow()击活窗口是有必要的。我们的另一选择或许可写为：<br />
-if (findDialog->isHidden()) {<br />
-&nbsp;   findDialog->show();<br />
-} else {<br />
-&nbsp;   findDialog->activateWindow();<br />
-}<br />
-这是兼顾两种情况的编程方式。<br />
-我们现存来看一下&ldquo;转到单元格&ldquo;对话框。我们想让用户弹出它，使用它，关闭它，但不能与程序中的其他窗口切换。这就是产&rdquo;转到单元格&ldquo;对话框必须是模态的。模态窗口是一种在调用的时候能够弹出并阻塞应用程序，在窗口关闭前阻止任何与原窗口的交互和处理的窗口。前面用到的文件对话框和消息框都是模态的。<br />
-图3.13　电子表格的&ldquo;转到单元格&ldquo;对话框<br />
-<input type="image" src="/upfile/image/gotocell.jpg" width="274" height="107" align="middle" /><br />
-通过show()调用的对话框是非模态的（除非预先调用setModel()使它变成模态的）。通过exec()调用的则是模态的。<br />
-void MainWindow::goToCell()<br />
-{<br />
-&nbsp;   GoToCellDialog dialog(this);<br />
-&nbsp;   if (dialog.exec()) {<br />
-&nbsp;       QString str = dialog.lineEdit->text().toUpper();<br />
-&nbsp;       spreadsheet->setCurrentCell(str.mid(1).toInt() - 1,<br />
-&nbsp;                                   str[0].unicode() - 'A');<br />
-&nbsp;   }<br />
-}<br />
-如果对话框被接受QDialog::exec()函数返回真值（QDialog::Accepted），否则会返回假值（QDialog::Rejected）。回忆一下第2章中用Qt设计师创建的&ldquo;转到单元格&ldquo;对话框，我们曾把OK按钮连接了到accept()，把Cancel连接到了reject()。如果用户点击了OK，我们把当前单元格设置为行编辑框中指定的值。<br />
-QTableWidget::setCurrentCell()函数需要两个参数：一个行号和一个列号。在电子表格程序中，单元格A1是单元格(0,0)，单元格B27是单元格(26,1)。要从QLineEdit::text()返回的字符串中获取行号，可以使用QString::mid()（它返回从开始位置到字符串未尾的子字符串）解析出行号，使用QString::toInt()把它转换为int类型后再减去1。对于列号，我们使用字符串第一个字符的大写形式的整数值减去&rsquo;A&rsquo;的整数值即可。由于我们为对话框创建的QregExpValidator能检验用户的输入，仅当输入为一个字母后跟最多3个数字的时候OK按钮才被使能，所以我们能确信获得的字符串格式是正确的。<br />
-goToCell()函数与我们到现存为止所看到的代码不同，它在内部创建了一个位于栈空间上的物件（一个GoToCellDialog实例）。由于仅有一行的额外代价，我们只需要简单的使用new和delete了：<br />
-void MainWindow::goToCell()<br />
-{<br />
-&nbsp;   GoToCellDialog *dialog = new GoToCellDialog(this);<br />
-&nbsp;   if (dialog->exec()) {<br />
-&nbsp;       QString str = dialog->lineEdit->text().toUpper();<br />
-&nbsp;       spreadsheet->setCurrentCell(str.mid(1).toInt() - 1,<br />
-&nbsp;                                   str[0].unicode() - 'A');<br />
-&nbsp;   }<br />
-&nbsp;   delete dialog;<br />
-}<br />
-在栈空间上创建模态对话框（以及QWidget::contextMenuEvent()实现中的上下文菜单）是一种常用的编程模式，这是因为这些对话框对使用完后就不再需要了，正好在当前域的最后手工销毁它。<br />
-现在我们转向排序对话框。排序对话框是一个能让用户按照指定的列对选中的区域排序的模态对话框。图3.14展示一个排序的例子，其中列B是一级排序关键字，列B是二级排序关键字（两列都是按照升序）。<br />
-图3.14　排序电子表格的选中区域<br />
-<input type="image" src="/upfile/image/spreadsheet_sort1.jpg" width="500" height="192" align="middle" /><br />
-void MainWindow::sort()<br />
-{<br />
-&nbsp;   SortDialog dialog(this);<br />
-&nbsp;   QTableWidgetSelectionRange range = spreadsheet->selectedRange();<br />
-&nbsp;   dialog.setColumnRange('A' + range.leftColumn(),<br />
-&nbsp;                         'A' + range.rightColumn());<br />
-&nbsp;   if (dialog.exec()) {<br />
-&nbsp;       SpreadsheetCompare compare;<br />
-&nbsp;       compare.keys[0] =<br />
-&nbsp;             dialog.primaryColumnCombo->currentIndex();<br />
-&nbsp;       compare.keys[1] =<br />
-&nbsp;             dialog.secondaryColumnCombo->currentIndex() - 1;<br />
-&nbsp;       compare.keys[2] =<br />
-&nbsp;             dialog.tertiaryColumnCombo->currentIndex() - 1;<br />
-&nbsp;       compare.ascending[0] =<br />
-&nbsp;             (dialog.primaryOrderCombo->currentIndex() == 0);<br />
-&nbsp;       compare.ascending[1] =<br />
-&nbsp;             (dialog.secondaryOrderCombo->currentIndex() == 0);<br />
-&nbsp;       compare.ascending[2] =<br />
-&nbsp;             (dialog.tertiaryOrderCombo->currentIndex() == 0);<br />
-&nbsp;       spreadsheet->sort(compare);<br />
-&nbsp;   }<br />
-}<br />
-sort()中的代码遵循类似goToCell()的模式。<br />
-在栈上创建对话框并初始化它。<br />
-使用exec()弹出该对话框。<br />
-如果用户点击OK，我们从用户在对话框物件中输入中抽出值并使用它。<br />
-setColumnRange() 调用设置对选定列进行排序的可用列。例如，使用图3.14中的选择区域，range.leftColumn()值为0，表示为&rsquo;A&rsquo;+0=&rsquo;A&rsquo;，range.rightColumn()值为2，表示为&rsquo;A&rsquo;+2=&rsquo;C&rsquo;。<br />
-compare对象存储了一级，二级和三级排序关键字以及排序顺序。（我们将在下一章查看spreadsheetCompare类的定义）。该对象被Spreadsheet::sort() 使用来对两行进行比较。Keys数组存储了所有键的列号。例如，如果选定区域是从C2到E5，则C的位置为0。acending数组存储了与每个键的排序顺序相应的bool值。QComboBox::current-Index()返回当前选定的项的索引位置，从0开始。对于二级和三级键，我们从当前项减掉1以解释&ldquo;None&rdquo;项。<br />
-sort()函数可以做这些工作，但这有点脆弱。它假设排序对话框以一种带有复选框和&ldquo;None&rdquo;项的特有的方式实现。这意味着如果我们重新设计排序对话框，我们还需要重写这些代码。虽然这种方法对于只在一个地方使用的对话框还能胜任，但是如果该对话框用在几个地方的话势必造成维护的恶梦。<br />
-一个更健壮的方法是通过让SortDialog自己创建一个SpreadsheetCompare对象使它更巧妙。简化的MainWindow::sort()如下：<br />
-void MainWindow::sort()<br />
-{<br />
-&nbsp;   SortDialog dialog(this);<br />
-&nbsp;   QTableWidgetSelectionRange range = spreadsheet->selectedRange();<br />
-&nbsp;   dialog.setColumnRange('A' + range.leftColumn(),<br />
-&nbsp;                         'A' + range.rightColumn());<br />
-&nbsp;   if (dialog.exec())<br />
-&nbsp;       spreadsheet->performSort(dialog.comparisonObject());<br />
-}<br />
-<br />
-这种方法导致组件间的松藕合，并且对于在多个地方调用的对话框这几乎总是正确的选择。<br />
-一个更激进的方法在初始化SortDialog对象的时候传递指向Spreadsheet对象的指针过来，并允许该对话框直接操作Spreadsheet。这让SortDialog更难通用了，因为它仅能工作在特定类型的物件上，但这通过除去了SortDialog::setColumnRange()函数进下简化了代码。MainWindow::sort()函数现存变成了：<br />
-<br />
-void MainWindow::sort()<br />
-{<br />
-&nbsp;   SortDialog dialog(this);<br />
-&nbsp;   dialog.setSpreadsheet(spreadsheet);<br />
-&nbsp;   dialog.exec();<br />
-}<br />
-<br />
-这种方法首先反映出：与调用者需要该对话框的内部知识相反，该对话框调用者提供的数据结构的内部知识。这种方法在对话框需要实事应用修改时非常有用。但是在像第一种方法的调用者代码很脆弱，第三种方法会在数组结构改变后崩溃。<br />
-一些开发人员仅选择一种使用对话框的方法并一直使用。这有精通和简单的好处因为他们的对话框用法总是同一模式，但同时也失去了他们没有使用的方法的好处。实际上，具体使用的方法应该取决于每个对话框的低层需求。<br />
-我们将以关于对话框结束本节。我们要像做&ldquo;查找&rdquo;和&ldquo;转到&rdquo;对话框一样创建一个自定义对话框，用其描述程序的信息。但由于大多数关于对话框是高度程序化的，所有Qt提供了一种简单的解决方案。<br />
-<br />
-void MainWindow::about()<br />
-{<br />
-&nbsp;   QMessageBox::about(this, tr(&quot;About Spreadsheet&quot;),<br />
-&nbsp;           tr(&quot;&lt;h2>Spreadsheet 1.1&lt;/h2>&quot;<br />
-&nbsp;              &quot;&lt;p>Copyright &amp;copy; 2006 Software Inc.&quot;<br />
-&nbsp;              &quot;&lt;p>Spreadsheet is a small application that &quot;<br />
-&nbsp;              &quot;demonstrates QAction, QMainWindow, QMenuBar, &quot;<br />
-&nbsp;              &quot;QStatusBar, QTableWidget, QToolBar, and many other &quot;<br />
-&nbsp;              &quot;Qt classes.&quot;));<br />
-}<br />
-<br />
-该关于对话框通过调用静态函数QMessageBox::about()获得。这个函数非常像QMessageBox::warning()，除了它使用父窗口的图标而不是标准的&ldquo;warning&rdquo;。<br />
-图3.15　关于电子表格<br />
-<input type="image" src="/upfile/image/about.jpg" width="437" height="240" /><br />
-<br />
-到现在为止我们已经使用了QMessageBox 和 QfileDialog中的几个便利的静态函数。这些函数创建一个对话框，初始化它，并调用它的exec()。还可以像任何其他物件一样创建QMessageBox 或QfileDialog物件并显式地调用它的exec()或者show()函数，尽管这不够便利。<br />
-<br />
-<br />
-<br />
-<br />
-保存设置<br />
-在MainWindow的构造函数中，我们调用readSettings()加载程序存储的设置。类似地，在closeEvent()中，我们调用writeSettings()来保存当前设置。这两个函数最后两个需要实现的成员函数。<br />
-<br />
-void MainWindow::writeSettings()<br />
-{<br />
-&nbsp;   QSettings settings(&quot;Software Inc.&quot;, &quot;Spreadsheet&quot;);<br />
-&nbsp;   settings.setValue(&quot;geometry&quot;, geometry());<br />
-&nbsp;   settings.setValue(&quot;recentFiles&quot;, recentFiles);<br />
-&nbsp;   settings.setValue(&quot;showGrid&quot;, showGridAction->isChecked());<br />
-&nbsp;   settings.setValue(&quot;autoRecalc&quot;, autoRecalcAction->isChecked());<br />
-}<br />
-<br />
-writeSettings()函数保存主窗口的几何参数（位置和大小），最近打开的文件列表，显示网格和自动重算选项。<br />
-默认情况下，Qsettings在平台相关的特定保存程序设置。在Windows上，它使用系统注册表。在Unix上，它在文本文件中存储数据。在Mac OS X上，它使用Core Foundation Preference　API。<br />
-它的构造函数的参数指定组织名字和程序名字。这些信息用于以平台相关的方式查找设置数据的位置。<br />
-Qsettings以健值对的形式存储设置。键与文件系统中的路径相似。子键可以用类路径语法指定（如findDialog/matchCase），或者使用beginGroup() 和 endGroup()：<br />
-<br />
-settings.beginGroup(&quot;findDialog&quot;);<br />
-settings.setValue(&quot;matchCase&quot;, caseCheckBox->isChecked());<br />
-settings.setValue(&quot;searchBackward&quot;, backwardCheckBox->isChecked());<br />
-settings.endGroup();<br />
-<br />
-值可以是int,bool ,double,QString, QStringList,或者任何其他QVariant支持的类型，当然也包括已经注册过的自定义类型。<br />
-<br />
-void MainWindow::readSettings()<br />
-{<br />
-&nbsp;   QSettings settings(&quot;Software Inc.&quot;, &quot;Spreadsheet&quot;);<br />
-&nbsp;   QRect rect = settings.value(&quot;geometry&quot;,<br />
-&nbsp;                               QRect(200, 200, 400, 400)).toRect();<br />
-&nbsp;   move(rect.topLeft());<br />
-&nbsp;   resize(rect.size());<br />
-&nbsp;   recentFiles = settings.value(&quot;recentFiles&quot;).toStringList();<br />
-&nbsp;   updateRecentFileActions();<br />
-&nbsp;   bool showGrid = settings.value(&quot;showGrid&quot;, true).toBool();<br />
-&nbsp;   showGridAction->setChecked(showGrid);<br />
-<br />
-&nbsp;   bool autoRecalc = settings.value(&quot;autoRecalc&quot;, true).toBool();<br />
-&nbsp;   autoRecalcAction->setChecked(autoRecalc);<br />
-}<br />
-<br />
-readSettings()函数加入由writeSettings()存储的设置。当没有有效设置时，value()函数的第二个参数用于给定一个默认值。该默认值仅在程序首次运行时用到。由于没有给最近的文件列表一个默认值作为第二个参数，在程序首次运行时它将被设为一个空表。<br />
-Qt 提供了一个与QWidget::geometry()对应的QWidget::setGeometry()函数，但在X11平台上它不总如我们预料的行为工作，这是由于许多窗口管理器的限制。由于这个原因，我们使用move()和resize()取而代之。（详见http://doc.trolltech.com/4.1/geometry.html）<br />
-我们在MainWindow中的所有安排，将QSettings相差的代码放在readSettings()和writeSettings()中，这仅是诸多可选方法的一种。QSettings　对象可在代码的任何地方，程序运行过程中任何时刻创建、查询或者修改设置。<br />
-我们现存已经完成了Spreadsheet的MainWindow的实现。在随后的小节中，我们将讨论如何修改该电子表格程序使之能处理多个文档，以及如何实现一个启动欢迎窗口。我们将在下一章中完成包括处理公式和排序在内的所有功能。<br />
-多文档程序<br />
-<br />
-我们现存准备编写电子表格程序的main()函数：<br />
-<br />
-include &lt;QApplication><br />
-include &quot;mainwindow.h&quot;<br />
-int main(int argc, char *argv[])<br />
-{<br />
-&nbsp;   QApplication app(argc, argv);<br />
-&nbsp;   MainWindow mainWin;<br />
-&nbsp;   mainWin.show();<br />
-&nbsp;   return app.exec();<br />
-}<br />
-<br />
-这个main()函数与我们以前所写的有所不同。我们不再使用new而是在栈上创建MainWindow的变量实例。MainWindow实现将在函数结束时自动销毁。<br />
-使用上面的main()函数，电子表格程序提供了一个主窗口并且同一时刻只能处理一个文档。如果我们想山同时修改多个文档，我们必须启动电子表格程序的多个实例。但是对用户来说这不如一个提供了多个主窗口的单一实例程序方便，就像一个浏览器的实现能同时提供多个浏览窗口一样。<br />
-我们要修改电子表格程序以便它能处理多文档。首先，我们需要一个稍微不同的&ldquo;文件&rdquo;菜单：<br />
-&ldquo;文件|新建&rdquo;创建一个新的空文档主窗口而不是重用已有的主窗口。<br />
-&ldquo;文件|关闭&ldquo;仅关闭当前的主窗口。<br />
-&ldquo;文件|退出&ldquo;关闭所有的窗口。<br />
-在老版的&ldquo;文件&ldquo;菜单中是没有&rdquo;关闭&rdquo;选项的，因为这和退出一样。<br />
-图3.16　新的&ldquo;文件&rdquo;菜单<br />
-<input type="image" src="/upfile/image/new_file_menu.jpg" width="156" height="183" align="middle" /><br />
-下面是新的main()函数：<br />
-int main(int argc, char *argv[])<br />
-{<br />
-&nbsp;   QApplication app(argc, argv);<br />
-&nbsp;   MainWindow *mainWin = new MainWindow;<br />
-&nbsp;   mainWin->show();<br />
-&nbsp;   return app.exec();<br />
-}<br />
-<br />
-使用了多窗口，我们现在要用new创建MainWindow，因为而后可能在编辑完成后用delete删除主窗口以节省内存。<br />
-下面是新MainWindow::newFile()槽：<br />
-<br />
-void MainWindow::newFile()<br />
-{<br />
-&nbsp;   MainWindow *mainWin = new MainWindow;<br />
-&nbsp;   mainWin->show();<br />
-}<br />
-<br />
-我们简单的创建一个新的MainWindow实例。看起来有点奇怪的是我们没有保存该新窗口的任何指针，但这不是问题，因为Qt为我们跟踪所有的窗口。<br />
-下面是关闭和退出的操作：<br />
-void MainWindow::createActions()<br />
-{<br />
-&nbsp;   ...<br />
-&nbsp;   closeAction = new QAction(tr(&quot;&amp;Close&quot;), this);<br />
-&nbsp;   closeAction->setShortcut(tr(&quot;Ctrl+W&quot;));<br />
-&nbsp;   closeAction->setStatusTip(tr(&quot;Close this window&quot;));<br />
-&nbsp;   connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));<br />
-&nbsp;   exitAction = new QAction(tr(&quot;E&amp;xit&quot;), this);<br />
-&nbsp;   exitAction->setShortcut(tr(&quot;Ctrl+Q&quot;));<br />
-&nbsp;   exitAction->setStatusTip(tr(&quot;Exit the application&quot;));<br />
-&nbsp;   connect(exitAction, SIGNAL(triggered()),<br />
-&nbsp;           qApp, SLOT(closeAllWindows()));<br />
-&nbsp;   ...<br />
-}<br />
-<br />
-QApplication::closeAllWindows()槽将关闭程序的所有窗口，除非它们中的一个丢弃了了关闭事件。这的确是我们这里需要的行为。我们不必担心未保存的改变，因为无论任何时候关闭一个窗口，这都会在MainWindow::closeEvent()中进行处理。<br />
-看起来我们已经完成了该程序处理多窗口的功能。很遗憾的，这里有一个潜在的问题：如果用户一直创建和关闭主窗口，可能最终将耗尽机器内存。这是因为我们在newFile()中不断的创建MainWindow物件但从没有删除它们。当用户关闭一个主窗口的时候，它的默认行为是隐藏它，因为它还一直在内存中。主窗口多了之后将产生问题。<br />
-解决方法是在构造函数中设置Qt::WA_DeleteOnClose属性。<br />
-MainWindow::MainWindow()<br />
-{<br />
-&nbsp;   ...<br />
-&nbsp;   setAttribute(Qt::WA_DeleteOnClose);<br />
-&nbsp;   ...<br />
-}<br />
-<br />
-这会告诉Qt在关闭它之后同时把它删除。Qt::WA_DeleteOnClose属性仅是可设的能影响QWidget的行为的诸多标记之一。<br />
-内存泄漏不是我要处理的仅有的问题。我们老版程序的设计包括一个隐含假设：我们仅有一个主窗口。在多窗口情况下，每个主窗口都有它自己的打开的文件列表。明示的，最近打开的文件列表应该是整个程序共有的。我们可以把recentFiles声明为静态变量，因而整个程序嚘它的一份实例，这就简单的解决该问题。但是我们必须确保在任何地方调用updateRecentFileActions()更新文件菜单的时候，我们必须调用所有窗口的这一方法。下面是实现代码：<br />
-<br />
-foreach (QWidget *win, QApplication::topLevelWidgets()) {<br />
-&nbsp;   if (MainWindow *mainWin = qobject_cast&lt;MainWindow *>(win))<br />
-&nbsp;       mainWin->updateRecentFileActions();<br />
-}<br />
-<br />
-以上代码使用Qt的foreach（在第11章说明）构造函数迭代程序的所有窗口并调用所有MainWindow类型的物件的updateRecentFileActions()。类似的代码也可用于&ldquo;显示网格&rdquo;和&ldquo;自动重计算&rdquo;项，或者用于确保同一文件不被加载两次。<br />
-每个主窗口提供一个文档的程序叫做SDI（单文档界面）应用程序。在Windows平台上一个常用的替代选择是MDI（多文档界面），这种程序有单一的主窗口，然而它的中央区域能管理多个文档窗口。Qt能用于在所有它支持的平台创建上创建SDI和MDI应用程序。图3.17展示使用两种方法的电子表格　程序。MID将在第6章中说明（布局管理）。<br />
-<br />
-图3.17　SID对MDI<br />
-<input type="image" src="/upfile/image/sdiversusmdi.jpg" width="500" height="201" align="middle" /><br />
-欢迎窗口<br />
-许多程序在启动的时候都有一个欢迎窗口。一些开发才使用欢迎窗口来掩盖缓慢的启动过程，而另一些人则用它来满足市场需要。使用QSplashScreen类给Qt程序添加一个欢迎窗口非常容易。<br />
-QSplashScreen类在主窗口显示之前显示一幅图像。它还能在图像上显示信息以告诉用户程序的初始化过程。一般情况下，欢迎窗口的代码在main()中调用QApplication::exec()之前。<br />
-接下来是一个使用QSplashScreen的程序的main()函数的例子，该程序在启动的时候会加载模块并建立网络连接。<br />
-<br />
-int main(int argc, char *argv[])<br />
-{<br />
-&nbsp;   QApplication app(argc, argv);<br />
-&nbsp;   QSplashScreen *splash = new QSplashScreen;<br />
-&nbsp;   splash->setPixmap(QPixmap(&quot;:/images/splash.png&quot;));<br />
-&nbsp;   splash->show();<br />
-&nbsp;   Qt::Alignment topRight = Qt::AlignRight | Qt::AlignTop;<br />
-&nbsp;   splash->showMessage(QObject::tr(&quot;Setting up the main window...&quot;),<br />
-&nbsp;                       topRight, Qt::white);<br />
-&nbsp;   MainWindow mainWin;<br />
-&nbsp;   splash->showMessage(QObject::tr(&quot;Loading modules...&quot;),<br />
-&nbsp;                       topRight, Qt::white);<br />
-&nbsp;   loadModules();<br />
-&nbsp;   splash->showMessage(QObject::tr(&quot;Establishing connections...&quot;),<br />
-&nbsp;                       topRight, Qt::white);<br />
-&nbsp;   establishConnections();<br />
-&nbsp;   mainWin.show();<br />
-&nbsp;   splash->finish(&amp;mainWin);<br />
-&nbsp;   delete splash;<br />
-&nbsp;   return app.exec();<br />
-}<br />
-<br />
-我们现存已经完成了电子表格程序的用户界面。在下一章中，我们将实现电子表格程序的核心功能。<br />
-<br />
-图3.18　欢迎窗口<br />
-<br />
-<input type="image" src="/upfile/image/splash.jpg" width="400" height="300" align="middle" /><br />
-&nbsp;</h3>
+<h3>&nbsp;<b><u>使用对话框</u></b><br /><br />
+在本节中，我们将解释如何在Qt中使用对话框，如果创建并初始化他们以及运行它们，并响应用户的行为。我们将使用第2章中创建的&rdquo;Find&rdquo;,&rdquo;Go-to-Cell&rdquo;和排序对话框。我们还将创建一个简单的&ldquo;About&rdquo;对话框。<br /><br />
+图3.12　电子表格程序的&ldquo;Find&rdquo;对话框<br /><br />
+<input type="image" src="/upfile/image/find.jpg" width="311" height="131" align="middle" /><br /><br />
+我们以&ldquo;Find&rdquo;对话框为开始。因为我们想让用户随意的在主窗口和&rdquo;Find&rdquo;对话框间切换，所以&rdquo;Find&rdquo;对话框必须是非模态的。非模态的窗口是程序中与其他窗口无关的窗口。<br /><br />
+在模态窗口创建之后，他们都有自己的信号和槽连接以响应用户的交互。<br /><br />
+void MainWindow::find()<br /><br />
+{<br /><br />
+&nbsp;   if (!findDialog) {<br /><br />
+&nbsp;       findDialog = new FindDialog(this);<br /><br />
+&nbsp;       connect(findDialog, SIGNAL (findNext(const QString &amp;,<br /><br />
+&nbsp;                                           Qt::CaseSensitivity)),<br /><br />
+&nbsp;               spreadsheet, SLOT (findNext(const QString &amp;,<br /><br />
+&nbsp;                                           Qt::CaseSensitivity)));<br /><br />
+&nbsp;       connect(findDialog, SIGNAL(findPrevious(const QString &amp;,<br /><br />
+&nbsp;                                               Qt::CaseSensitivity)),<br /><br />
+&nbsp;                spreadsheet, SLOT(findPrevious(const QString &amp;,<br /><br />
+&nbsp;                                               Qt::CaseSensitivity)));<br /><br />
+&nbsp;   }<br /><br />
+&nbsp;   findDialog->show();<br /><br />
+&nbsp;   findDialog->activateWindow();<br /><br />
+}<br /><br />
+&ldquo;Find&rdquo;对话框是一个能让用户在电子表格中搜索文本的窗口。当用户点击&rdquo;Edit|Find&rdquo;以弹出&rdquo;Find&rdquo;对话框时find()槽被调用。这时，可能出现下面几种情况：<br /><br />
+这是用户首次调用&ldquo;查找&rdquo;对话框。<br /><br />
+&ldquo;查找&rdquo;对话框以前调用过，但用户已经将它关闭了。<br /><br />
+&ldquo;查找&rdquo;对话框以前调用过，并且现存还在。<br /><br />
+<br /><br />
+如果&ldquo;查找&rdquo;对话框不存在，我们创建它并把它的findNext()和findPrevious()信号连接到相应的Spreadsheet槽上。我们本该在MainWindow的构造函数中创建该对话框，但延迟创建会使启动更快。也就是，如果从没有使用过该对话框，它就不会被创建，即可以节省时间，还能节省内存。<br /><br />
+接下来我们调用show()和activeWindow()以保证该窗口是可见的、活动的。一个单独的show()调用对于让隐藏的窗口可见并成为活动窗口是有效的，但&ldquo;查找&rdquo;对话框在它被调用的时候就已经存在了，这种情况下show()不做任何事情，使用activeWindow()击活窗口是有必要的。我们的另一选择或许可写为：<br /><br />
+if (findDialog->isHidden()) {<br /><br />
+&nbsp;   findDialog->show();<br /><br />
+} else {<br /><br />
+&nbsp;   findDialog->activateWindow();<br /><br />
+}<br /><br />
+这是兼顾两种情况的编程方式。<br /><br />
+我们现存来看一下&ldquo;转到单元格&ldquo;对话框。我们想让用户弹出它，使用它，关闭它，但不能与程序中的其他窗口切换。这就是产&rdquo;转到单元格&ldquo;对话框必须是模态的。模态窗口是一种在调用的时候能够弹出并阻塞应用程序，在窗口关闭前阻止任何与原窗口的交互和处理的窗口。前面用到的文件对话框和消息框都是模态的。<br /><br />
+图3.13　电子表格的&ldquo;转到单元格&ldquo;对话框<br /><br />
+<input type="image" src="/upfile/image/gotocell.jpg" width="274" height="107" align="middle" /><br /><br />
+通过show()调用的对话框是非模态的（除非预先调用setModel()使它变成模态的）。通过exec()调用的则是模态的。<br /><br />
+void MainWindow::goToCell()<br /><br />
+{<br /><br />
+&nbsp;   GoToCellDialog dialog(this);<br /><br />
+&nbsp;   if (dialog.exec()) {<br /><br />
+&nbsp;       QString str = dialog.lineEdit->text().toUpper();<br /><br />
+&nbsp;       spreadsheet->setCurrentCell(str.mid(1).toInt() - 1,<br /><br />
+&nbsp;                                   str[0].unicode() - 'A');<br /><br />
+&nbsp;   }<br /><br />
+}<br /><br />
+如果对话框被接受QDialog::exec()函数返回真值（QDialog::Accepted），否则会返回假值（QDialog::Rejected）。回忆一下第2章中用Qt设计师创建的&ldquo;转到单元格&ldquo;对话框，我们曾把OK按钮连接了到accept()，把Cancel连接到了reject()。如果用户点击了OK，我们把当前单元格设置为行编辑框中指定的值。<br /><br />
+QTableWidget::setCurrentCell()函数需要两个参数：一个行号和一个列号。在电子表格程序中，单元格A1是单元格(0,0)，单元格B27是单元格(26,1)。要从QLineEdit::text()返回的字符串中获取行号，可以使用QString::mid()（它返回从开始位置到字符串未尾的子字符串）解析出行号，使用QString::toInt()把它转换为int类型后再减去1。对于列号，我们使用字符串第一个字符的大写形式的整数值减去&rsquo;A&rsquo;的整数值即可。由于我们为对话框创建的QregExpValidator能检验用户的输入，仅当输入为一个字母后跟最多3个数字的时候OK按钮才被使能，所以我们能确信获得的字符串格式是正确的。<br /><br />
+goToCell()函数与我们到现存为止所看到的代码不同，它在内部创建了一个位于栈空间上的物件（一个GoToCellDialog实例）。由于仅有一行的额外代价，我们只需要简单的使用new和delete了：<br /><br />
+void MainWindow::goToCell()<br /><br />
+{<br /><br />
+&nbsp;   GoToCellDialog *dialog = new GoToCellDialog(this);<br /><br />
+&nbsp;   if (dialog->exec()) {<br /><br />
+&nbsp;       QString str = dialog->lineEdit->text().toUpper();<br /><br />
+&nbsp;       spreadsheet->setCurrentCell(str.mid(1).toInt() - 1,<br /><br />
+&nbsp;                                   str[0].unicode() - 'A');<br /><br />
+&nbsp;   }<br /><br />
+&nbsp;   delete dialog;<br /><br />
+}<br /><br />
+在栈空间上创建模态对话框（以及QWidget::contextMenuEvent()实现中的上下文菜单）是一种常用的编程模式，这是因为这些对话框对使用完后就不再需要了，正好在当前域的最后手工销毁它。<br /><br />
+现在我们转向排序对话框。排序对话框是一个能让用户按照指定的列对选中的区域排序的模态对话框。图3.14展示一个排序的例子，其中列B是一级排序关键字，列B是二级排序关键字（两列都是按照升序）。<br /><br />
+图3.14　排序电子表格的选中区域<br /><br />
+<input type="image" src="/upfile/image/spreadsheet_sort1.jpg" width="500" height="192" align="middle" /><br /><br />
+void MainWindow::sort()<br /><br />
+{<br /><br />
+&nbsp;   SortDialog dialog(this);<br /><br />
+&nbsp;   QTableWidgetSelectionRange range = spreadsheet->selectedRange();<br /><br />
+&nbsp;   dialog.setColumnRange('A' + range.leftColumn(),<br /><br />
+&nbsp;                         'A' + range.rightColumn());<br /><br />
+&nbsp;   if (dialog.exec()) {<br /><br />
+&nbsp;       SpreadsheetCompare compare;<br /><br />
+&nbsp;       compare.keys[0] =<br /><br />
+&nbsp;             dialog.primaryColumnCombo->currentIndex();<br /><br />
+&nbsp;       compare.keys[1] =<br /><br />
+&nbsp;             dialog.secondaryColumnCombo->currentIndex() - 1;<br /><br />
+&nbsp;       compare.keys[2] =<br /><br />
+&nbsp;             dialog.tertiaryColumnCombo->currentIndex() - 1;<br /><br />
+&nbsp;       compare.ascending[0] =<br /><br />
+&nbsp;             (dialog.primaryOrderCombo->currentIndex() == 0);<br /><br />
+&nbsp;       compare.ascending[1] =<br /><br />
+&nbsp;             (dialog.secondaryOrderCombo->currentIndex() == 0);<br /><br />
+&nbsp;       compare.ascending[2] =<br /><br />
+&nbsp;             (dialog.tertiaryOrderCombo->currentIndex() == 0);<br /><br />
+&nbsp;       spreadsheet->sort(compare);<br /><br />
+&nbsp;   }<br /><br />
+}<br /><br />
+sort()中的代码遵循类似goToCell()的模式。<br /><br />
+在栈上创建对话框并初始化它。<br /><br />
+使用exec()弹出该对话框。<br /><br />
+如果用户点击OK，我们从用户在对话框物件中输入中抽出值并使用它。<br /><br />
+setColumnRange() 调用设置对选定列进行排序的可用列。例如，使用图3.14中的选择区域，range.leftColumn()值为0，表示为&rsquo;A&rsquo;+0=&rsquo;A&rsquo;，range.rightColumn()值为2，表示为&rsquo;A&rsquo;+2=&rsquo;C&rsquo;。<br /><br />
+compare对象存储了一级，二级和三级排序关键字以及排序顺序。（我们将在下一章查看spreadsheetCompare类的定义）。该对象被Spreadsheet::sort() 使用来对两行进行比较。Keys数组存储了所有键的列号。例如，如果选定区域是从C2到E5，则C的位置为0。acending数组存储了与每个键的排序顺序相应的bool值。QComboBox::current-Index()返回当前选定的项的索引位置，从0开始。对于二级和三级键，我们从当前项减掉1以解释&ldquo;None&rdquo;项。<br /><br />
+sort()函数可以做这些工作，但这有点脆弱。它假设排序对话框以一种带有复选框和&ldquo;None&rdquo;项的特有的方式实现。这意味着如果我们重新设计排序对话框，我们还需要重写这些代码。虽然这种方法对于只在一个地方使用的对话框还能胜任，但是如果该对话框用在几个地方的话势必造成维护的恶梦。<br /><br />
+一个更健壮的方法是通过让SortDialog自己创建一个SpreadsheetCompare对象使它更巧妙。简化的MainWindow::sort()如下：<br /><br />
+void MainWindow::sort()<br /><br />
+{<br /><br />
+&nbsp;   SortDialog dialog(this);<br /><br />
+&nbsp;   QTableWidgetSelectionRange range = spreadsheet->selectedRange();<br /><br />
+&nbsp;   dialog.setColumnRange('A' + range.leftColumn(),<br /><br />
+&nbsp;                         'A' + range.rightColumn());<br /><br />
+&nbsp;   if (dialog.exec())<br /><br />
+&nbsp;       spreadsheet->performSort(dialog.comparisonObject());<br /><br />
+}<br /><br />
+<br /><br />
+这种方法导致组件间的松藕合，并且对于在多个地方调用的对话框这几乎总是正确的选择。<br /><br />
+一个更激进的方法在初始化SortDialog对象的时候传递指向Spreadsheet对象的指针过来，并允许该对话框直接操作Spreadsheet。这让SortDialog更难通用了，因为它仅能工作在特定类型的物件上，但这通过除去了SortDialog::setColumnRange()函数进下简化了代码。MainWindow::sort()函数现存变成了：<br /><br />
+<br /><br />
+void MainWindow::sort()<br /><br />
+{<br /><br />
+&nbsp;   SortDialog dialog(this);<br /><br />
+&nbsp;   dialog.setSpreadsheet(spreadsheet);<br /><br />
+&nbsp;   dialog.exec();<br /><br />
+}<br /><br />
+<br /><br />
+这种方法首先反映出：与调用者需要该对话框的内部知识相反，该对话框调用者提供的数据结构的内部知识。这种方法在对话框需要实事应用修改时非常有用。但是在像第一种方法的调用者代码很脆弱，第三种方法会在数组结构改变后崩溃。<br /><br />
+一些开发人员仅选择一种使用对话框的方法并一直使用。这有精通和简单的好处因为他们的对话框用法总是同一模式，但同时也失去了他们没有使用的方法的好处。实际上，具体使用的方法应该取决于每个对话框的低层需求。<br /><br />
+我们将以关于对话框结束本节。我们要像做&ldquo;查找&rdquo;和&ldquo;转到&rdquo;对话框一样创建一个自定义对话框，用其描述程序的信息。但由于大多数关于对话框是高度程序化的，所有Qt提供了一种简单的解决方案。<br /><br />
+<br /><br />
+void MainWindow::about()<br /><br />
+{<br /><br />
+&nbsp;   QMessageBox::about(this, tr(&quot;About Spreadsheet&quot;),<br /><br />
+&nbsp;           tr(&quot;&lt;h2>Spreadsheet 1.1&lt;/h2>&quot;<br /><br />
+&nbsp;              &quot;&lt;p>Copyright &amp;copy; 2006 Software Inc.&quot;<br /><br />
+&nbsp;              &quot;&lt;p>Spreadsheet is a small application that &quot;<br /><br />
+&nbsp;              &quot;demonstrates QAction, QMainWindow, QMenuBar, &quot;<br /><br />
+&nbsp;              &quot;QStatusBar, QTableWidget, QToolBar, and many other &quot;<br /><br />
+&nbsp;              &quot;Qt classes.&quot;));<br /><br />
+}<br /><br />
+<br /><br />
+该关于对话框通过调用静态函数QMessageBox::about()获得。这个函数非常像QMessageBox::warning()，除了它使用父窗口的图标而不是标准的&ldquo;warning&rdquo;。<br /><br />
+图3.15　关于电子表格<br /><br />
+<input type="image" src="/upfile/image/about.jpg" width="437" height="240" /><br /><br />
+<br /><br />
+到现在为止我们已经使用了QMessageBox 和 QfileDialog中的几个便利的静态函数。这些函数创建一个对话框，初始化它，并调用它的exec()。还可以像任何其他物件一样创建QMessageBox 或QfileDialog物件并显式地调用它的exec()或者show()函数，尽管这不够便利。<br /><br />
+<br /><br />
+<br /><br />
+<br /><br />
+<br /><br />
+保存设置<br /><br />
+在MainWindow的构造函数中，我们调用readSettings()加载程序存储的设置。类似地，在closeEvent()中，我们调用writeSettings()来保存当前设置。这两个函数最后两个需要实现的成员函数。<br /><br />
+<br /><br />
+void MainWindow::writeSettings()<br /><br />
+{<br /><br />
+&nbsp;   QSettings settings(&quot;Software Inc.&quot;, &quot;Spreadsheet&quot;);<br /><br />
+&nbsp;   settings.setValue(&quot;geometry&quot;, geometry());<br /><br />
+&nbsp;   settings.setValue(&quot;recentFiles&quot;, recentFiles);<br /><br />
+&nbsp;   settings.setValue(&quot;showGrid&quot;, showGridAction->isChecked());<br /><br />
+&nbsp;   settings.setValue(&quot;autoRecalc&quot;, autoRecalcAction->isChecked());<br /><br />
+}<br /><br />
+<br /><br />
+writeSettings()函数保存主窗口的几何参数（位置和大小），最近打开的文件列表，显示网格和自动重算选项。<br /><br />
+默认情况下，Qsettings在平台相关的特定保存程序设置。在Windows上，它使用系统注册表。在Unix上，它在文本文件中存储数据。在Mac OS X上，它使用Core Foundation Preference　API。<br /><br />
+它的构造函数的参数指定组织名字和程序名字。这些信息用于以平台相关的方式查找设置数据的位置。<br /><br />
+Qsettings以健值对的形式存储设置。键与文件系统中的路径相似。子键可以用类路径语法指定（如findDialog/matchCase），或者使用beginGroup() 和 endGroup()：<br /><br />
+<br /><br />
+settings.beginGroup(&quot;findDialog&quot;);<br /><br />
+settings.setValue(&quot;matchCase&quot;, caseCheckBox->isChecked());<br /><br />
+settings.setValue(&quot;searchBackward&quot;, backwardCheckBox->isChecked());<br /><br />
+settings.endGroup();<br /><br />
+<br /><br />
+值可以是int,bool ,double,QString, QStringList,或者任何其他QVariant支持的类型，当然也包括已经注册过的自定义类型。<br /><br />
+<br /><br />
+void MainWindow::readSettings()<br /><br />
+{<br /><br />
+&nbsp;   QSettings settings(&quot;Software Inc.&quot;, &quot;Spreadsheet&quot;);<br /><br />
+&nbsp;   QRect rect = settings.value(&quot;geometry&quot;,<br /><br />
+&nbsp;                               QRect(200, 200, 400, 400)).toRect();<br /><br />
+&nbsp;   move(rect.topLeft());<br /><br />
+&nbsp;   resize(rect.size());<br /><br />
+&nbsp;   recentFiles = settings.value(&quot;recentFiles&quot;).toStringList();<br /><br />
+&nbsp;   updateRecentFileActions();<br /><br />
+&nbsp;   bool showGrid = settings.value(&quot;showGrid&quot;, true).toBool();<br /><br />
+&nbsp;   showGridAction->setChecked(showGrid);<br /><br />
+<br /><br />
+&nbsp;   bool autoRecalc = settings.value(&quot;autoRecalc&quot;, true).toBool();<br /><br />
+&nbsp;   autoRecalcAction->setChecked(autoRecalc);<br /><br />
+}<br /><br />
+<br /><br />
+readSettings()函数加入由writeSettings()存储的设置。当没有有效设置时，value()函数的第二个参数用于给定一个默认值。该默认值仅在程序首次运行时用到。由于没有给最近的文件列表一个默认值作为第二个参数，在程序首次运行时它将被设为一个空表。<br /><br />
+Qt 提供了一个与QWidget::geometry()对应的QWidget::setGeometry()函数，但在X11平台上它不总如我们预料的行为工作，这是由于许多窗口管理器的限制。由于这个原因，我们使用move()和resize()取而代之。（详见http://doc.trolltech.com/4.1/geometry.html）<br /><br />
+我们在MainWindow中的所有安排，将QSettings相差的代码放在readSettings()和writeSettings()中，这仅是诸多可选方法的一种。QSettings　对象可在代码的任何地方，程序运行过程中任何时刻创建、查询或者修改设置。<br /><br />
+我们现存已经完成了Spreadsheet的MainWindow的实现。在随后的小节中，我们将讨论如何修改该电子表格程序使之能处理多个文档，以及如何实现一个启动欢迎窗口。我们将在下一章中完成包括处理公式和排序在内的所有功能。<br /><br />
+多文档程序<br /><br />
+<br /><br />
+我们现存准备编写电子表格程序的main()函数：<br /><br />
+<br /><br />
+include &lt;QApplication><br /><br />
+include &quot;mainwindow.h&quot;<br /><br />
+int main(int argc, char *argv[])<br /><br />
+{<br /><br />
+&nbsp;   QApplication app(argc, argv);<br /><br />
+&nbsp;   MainWindow mainWin;<br /><br />
+&nbsp;   mainWin.show();<br /><br />
+&nbsp;   return app.exec();<br /><br />
+}<br /><br />
+<br /><br />
+这个main()函数与我们以前所写的有所不同。我们不再使用new而是在栈上创建MainWindow的变量实例。MainWindow实现将在函数结束时自动销毁。<br /><br />
+使用上面的main()函数，电子表格程序提供了一个主窗口并且同一时刻只能处理一个文档。如果我们想山同时修改多个文档，我们必须启动电子表格程序的多个实例。但是对用户来说这不如一个提供了多个主窗口的单一实例程序方便，就像一个浏览器的实现能同时提供多个浏览窗口一样。<br /><br />
+我们要修改电子表格程序以便它能处理多文档。首先，我们需要一个稍微不同的&ldquo;文件&rdquo;菜单：<br /><br />
+&ldquo;文件|新建&rdquo;创建一个新的空文档主窗口而不是重用已有的主窗口。<br /><br />
+&ldquo;文件|关闭&ldquo;仅关闭当前的主窗口。<br /><br />
+&ldquo;文件|退出&ldquo;关闭所有的窗口。<br /><br />
+在老版的&ldquo;文件&ldquo;菜单中是没有&rdquo;关闭&rdquo;选项的，因为这和退出一样。<br /><br />
+图3.16　新的&ldquo;文件&rdquo;菜单<br /><br />
+<input type="image" src="/upfile/image/new_file_menu.jpg" width="156" height="183" align="middle" /><br /><br />
+下面是新的main()函数：<br /><br />
+int main(int argc, char *argv[])<br /><br />
+{<br /><br />
+&nbsp;   QApplication app(argc, argv);<br /><br />
+&nbsp;   MainWindow *mainWin = new MainWindow;<br /><br />
+&nbsp;   mainWin->show();<br /><br />
+&nbsp;   return app.exec();<br /><br />
+}<br /><br />
+<br /><br />
+使用了多窗口，我们现在要用new创建MainWindow，因为而后可能在编辑完成后用delete删除主窗口以节省内存。<br /><br />
+下面是新MainWindow::newFile()槽：<br /><br />
+<br /><br />
+void MainWindow::newFile()<br /><br />
+{<br /><br />
+&nbsp;   MainWindow *mainWin = new MainWindow;<br /><br />
+&nbsp;   mainWin->show();<br /><br />
+}<br /><br />
+<br /><br />
+我们简单的创建一个新的MainWindow实例。看起来有点奇怪的是我们没有保存该新窗口的任何指针，但这不是问题，因为Qt为我们跟踪所有的窗口。<br /><br />
+下面是关闭和退出的操作：<br /><br />
+void MainWindow::createActions()<br /><br />
+{<br /><br />
+&nbsp;   ...<br /><br />
+&nbsp;   closeAction = new QAction(tr(&quot;&amp;Close&quot;), this);<br /><br />
+&nbsp;   closeAction->setShortcut(tr(&quot;Ctrl+W&quot;));<br /><br />
+&nbsp;   closeAction->setStatusTip(tr(&quot;Close this window&quot;));<br /><br />
+&nbsp;   connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));<br /><br />
+&nbsp;   exitAction = new QAction(tr(&quot;E&amp;xit&quot;), this);<br /><br />
+&nbsp;   exitAction->setShortcut(tr(&quot;Ctrl+Q&quot;));<br /><br />
+&nbsp;   exitAction->setStatusTip(tr(&quot;Exit the application&quot;));<br /><br />
+&nbsp;   connect(exitAction, SIGNAL(triggered()),<br /><br />
+&nbsp;           qApp, SLOT(closeAllWindows()));<br /><br />
+&nbsp;   ...<br /><br />
+}<br /><br />
+<br /><br />
+QApplication::closeAllWindows()槽将关闭程序的所有窗口，除非它们中的一个丢弃了了关闭事件。这的确是我们这里需要的行为。我们不必担心未保存的改变，因为无论任何时候关闭一个窗口，这都会在MainWindow::closeEvent()中进行处理。<br /><br />
+看起来我们已经完成了该程序处理多窗口的功能。很遗憾的，这里有一个潜在的问题：如果用户一直创建和关闭主窗口，可能最终将耗尽机器内存。这是因为我们在newFile()中不断的创建MainWindow物件但从没有删除它们。当用户关闭一个主窗口的时候，它的默认行为是隐藏它，因为它还一直在内存中。主窗口多了之后将产生问题。<br /><br />
+解决方法是在构造函数中设置Qt::WA_DeleteOnClose属性。<br /><br />
+MainWindow::MainWindow()<br /><br />
+{<br /><br />
+&nbsp;   ...<br /><br />
+&nbsp;   setAttribute(Qt::WA_DeleteOnClose);<br /><br />
+&nbsp;   ...<br /><br />
+}<br /><br />
+<br /><br />
+这会告诉Qt在关闭它之后同时把它删除。Qt::WA_DeleteOnClose属性仅是可设的能影响QWidget的行为的诸多标记之一。<br /><br />
+内存泄漏不是我要处理的仅有的问题。我们老版程序的设计包括一个隐含假设：我们仅有一个主窗口。在多窗口情况下，每个主窗口都有它自己的打开的文件列表。明示的，最近打开的文件列表应该是整个程序共有的。我们可以把recentFiles声明为静态变量，因而整个程序嚘它的一份实例，这就简单的解决该问题。但是我们必须确保在任何地方调用updateRecentFileActions()更新文件菜单的时候，我们必须调用所有窗口的这一方法。下面是实现代码：<br /><br />
+<br /><br />
+foreach (QWidget *win, QApplication::topLevelWidgets()) {<br /><br />
+&nbsp;   if (MainWindow *mainWin = qobject_cast&lt;MainWindow *>(win))<br /><br />
+&nbsp;       mainWin->updateRecentFileActions();<br /><br />
+}<br /><br />
+<br /><br />
+以上代码使用Qt的foreach（在第11章说明）构造函数迭代程序的所有窗口并调用所有MainWindow类型的物件的updateRecentFileActions()。类似的代码也可用于&ldquo;显示网格&rdquo;和&ldquo;自动重计算&rdquo;项，或者用于确保同一文件不被加载两次。<br /><br />
+每个主窗口提供一个文档的程序叫做SDI（单文档界面）应用程序。在Windows平台上一个常用的替代选择是MDI（多文档界面），这种程序有单一的主窗口，然而它的中央区域能管理多个文档窗口。Qt能用于在所有它支持的平台创建上创建SDI和MDI应用程序。图3.17展示使用两种方法的电子表格　程序。MID将在第6章中说明（布局管理）。<br /><br />
+<br /><br />
+图3.17　SID对MDI<br /><br />
+<input type="image" src="/upfile/image/sdiversusmdi.jpg" width="500" height="201" align="middle" /><br /><br />
+欢迎窗口<br /><br />
+许多程序在启动的时候都有一个欢迎窗口。一些开发才使用欢迎窗口来掩盖缓慢的启动过程，而另一些人则用它来满足市场需要。使用QSplashScreen类给Qt程序添加一个欢迎窗口非常容易。<br /><br />
+QSplashScreen类在主窗口显示之前显示一幅图像。它还能在图像上显示信息以告诉用户程序的初始化过程。一般情况下，欢迎窗口的代码在main()中调用QApplication::exec()之前。<br /><br />
+接下来是一个使用QSplashScreen的程序的main()函数的例子，该程序在启动的时候会加载模块并建立网络连接。<br /><br />
+<br /><br />
+int main(int argc, char *argv[])<br /><br />
+{<br /><br />
+&nbsp;   QApplication app(argc, argv);<br /><br />
+&nbsp;   QSplashScreen *splash = new QSplashScreen;<br /><br />
+&nbsp;   splash->setPixmap(QPixmap(&quot;:/images/splash.png&quot;));<br /><br />
+&nbsp;   splash->show();<br /><br />
+&nbsp;   Qt::Alignment topRight = Qt::AlignRight | Qt::AlignTop;<br /><br />
+&nbsp;   splash->showMessage(QObject::tr(&quot;Setting up the main window...&quot;),<br /><br />
+&nbsp;                       topRight, Qt::white);<br /><br />
+&nbsp;   MainWindow mainWin;<br /><br />
+&nbsp;   splash->showMessage(QObject::tr(&quot;Loading modules...&quot;),<br /><br />
+&nbsp;                       topRight, Qt::white);<br /><br />
+&nbsp;   loadModules();<br /><br />
+&nbsp;   splash->showMessage(QObject::tr(&quot;Establishing connections...&quot;),<br /><br />
+&nbsp;                       topRight, Qt::white);<br /><br />
+&nbsp;   establishConnections();<br /><br />
+&nbsp;   mainWin.show();<br /><br />
+&nbsp;   splash->finish(&amp;mainWin);<br /><br />
+&nbsp;   delete splash;<br /><br />
+&nbsp;   return app.exec();<br /><br />
+}<br /><br />
+<br /><br />
+我们现存已经完成了电子表格程序的用户界面。在下一章中，我们将实现电子表格程序的核心功能。<br /><br />
+<br /><br />
+图3.18　欢迎窗口<br /><br />
+<br /><br />
+<input type="image" src="/upfile/image/splash.jpg" width="400" height="300" align="middle" /><br /><br />
+&nbsp;</h3><br />
 <p>&nbsp;</p>
 </body>
 </html>

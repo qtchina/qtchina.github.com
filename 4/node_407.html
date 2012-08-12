@@ -6,29 +6,29 @@
 <title>VC2005编译Qt实现静态链接C运行库的方法</title>
 </head>
 <body>
-<p>本站的nullfxp项目需要发布Windows版本，因而需要使用VC编译Qt,并用此Qt编译nullfxp。</p>
-
-<p>默认情况下，Qt源代码编译的时候使用动态链接C运行库的方法，在发布使用VC2005编译的程序时，需要想办法发布C运行库，否则可能用户机器上运行出错。</p>
-
-<p>因此，在使用过程摸索出一种方法，能让Qt程序静态链接C运行库，并且不使用VC2005的manifest方法。这样编译出来的程序可以在任意版本的Windows平台运行了。当然缺点就是编译出来的程序稍微大一些。</p>
-
-<p>下面说明一下我使用的静态化方法，这需要修改Qt源代码树中的配置文件：.</p>
-
-<p>下面的说明基于VC2005和Qt-4.6.2，其他版本也可以用此思路相应调整实际修改的代码。</p>
-
-<ul>
-<li>修改Qt-src-path/mkspec/win32-msvc2005/qmake.conf，把其中的CONFIG变量中的embed_manifest_dll和embed_manifest_exe去掉。这样告诉VC2005在编译Qt及Qt程序的时候不产生manifest文件。</li>
-
-<li>修改Qt-src-path/mkspec/win32-msvc2005/qmake.conf，把其中的
-QMAKE_CFLAGS_RELEASE    = -O2 -MD
-QMAKE_CFLAGS_DEBUG      = -Zi -MDd
-修改为
-QMAKE_CFLAGS_RELEASE    = -O2 -MT
-QMAKE_CFLAGS_DEBUG      = -Zi -MTd
-。这告诉VC2005在编译Qt及Qt程序的时候，静态链接C语言运行库。</li>
-</ul>
-
-<p>通过这两处修改，使用这个版本的Qt编译出来的程序不需要附带C语言运行库安装包，程序也能良好运行于所有Windows平台。</p>
+<p>本站的nullfxp项目需要发布Windows版本，因而需要使用VC编译Qt,并用此Qt编译nullfxp。</p><br />
+<br />
+<p>默认情况下，Qt源代码编译的时候使用动态链接C运行库的方法，在发布使用VC2005编译的程序时，需要想办法发布C运行库，否则可能用户机器上运行出错。</p><br />
+<br />
+<p>因此，在使用过程摸索出一种方法，能让Qt程序静态链接C运行库，并且不使用VC2005的manifest方法。这样编译出来的程序可以在任意版本的Windows平台运行了。当然缺点就是编译出来的程序稍微大一些。</p><br />
+<br />
+<p>下面说明一下我使用的静态化方法，这需要修改Qt源代码树中的配置文件：.</p><br />
+<br />
+<p>下面的说明基于VC2005和Qt-4.6.2，其他版本也可以用此思路相应调整实际修改的代码。</p><br />
+<br />
+<ul><br />
+<li>修改Qt-src-path/mkspec/win32-msvc2005/qmake.conf，把其中的CONFIG变量中的embed_manifest_dll和embed_manifest_exe去掉。这样告诉VC2005在编译Qt及Qt程序的时候不产生manifest文件。</li><br />
+<br />
+<li>修改Qt-src-path/mkspec/win32-msvc2005/qmake.conf，把其中的<br />
+QMAKE_CFLAGS_RELEASE    = -O2 -MD<br />
+QMAKE_CFLAGS_DEBUG      = -Zi -MDd<br />
+修改为<br />
+QMAKE_CFLAGS_RELEASE    = -O2 -MT<br />
+QMAKE_CFLAGS_DEBUG      = -Zi -MTd<br />
+。这告诉VC2005在编译Qt及Qt程序的时候，静态链接C语言运行库。</li><br />
+</ul><br />
+<br />
+<p>通过这两处修改，使用这个版本的Qt编译出来的程序不需要附带C语言运行库安装包，程序也能良好运行于所有Windows平台。</p><br />
 
 </body>
 </html>

@@ -6,35 +6,35 @@
 <title>nullfxp中两个远程服务器间文件拷贝的另一方法</title>
 </head>
 <body>
-目前实现的方法是在客户端同时连接到两个服务器，数据需要通过本地客户端中转
-
-这种方法的数据传递效率不高。
-
-图示：对于丙个服务器A、B，当前要从A上传递文件到B服务器上,客户端为C
-
-A---->C----->B
-
-另一种方法说明：对于同一种情况。
-
-C
-|
-| 控制命令
-|
-V
-A----->B
-
-客户端C控制数据源A，让其连接到B，并将文件传到B服务器上。
-
-这种方法的优点数据不需要中转，传输速度会变快。
-
-缺点是，C对A的控制复杂，对于可能出现的情况不好控制,并且有些服务器只开SFTP而没有SSH命令执行功能。
-
-NEW：使用direct-tcpip的一种方法：
-You can use direct-tcpip to tunnel a second SSH connection between B
-and C back to A. Use SFTP within the tunneled connection. This way
-you have API control in your application of everything that goes on,
-but pumping the data requires more work by you. See the direct-tcpip
-example and feel free to ask any questions.
+目前实现的方法是在客户端同时连接到两个服务器，数据需要通过本地客户端中转<br />
+<br />
+这种方法的数据传递效率不高。<br />
+<br />
+图示：对于丙个服务器A、B，当前要从A上传递文件到B服务器上,客户端为C<br />
+<br />
+A---->C----->B<br />
+<br />
+另一种方法说明：对于同一种情况。<br />
+<br />
+C<br />
+|<br />
+| 控制命令<br />
+|<br />
+V<br />
+A----->B<br />
+<br />
+客户端C控制数据源A，让其连接到B，并将文件传到B服务器上。<br />
+<br />
+这种方法的优点数据不需要中转，传输速度会变快。<br />
+<br />
+缺点是，C对A的控制复杂，对于可能出现的情况不好控制,并且有些服务器只开SFTP而没有SSH命令执行功能。<br />
+<br />
+NEW：使用direct-tcpip的一种方法：<br />
+You can use direct-tcpip to tunnel a second SSH connection between B<br />
+and C back to A. Use SFTP within the tunneled connection. This way<br />
+you have API control in your application of everything that goes on,<br />
+but pumping the data requires more work by you. See the direct-tcpip<br />
+example and feel free to ask any questions.<br />
 
 </body>
 </html>

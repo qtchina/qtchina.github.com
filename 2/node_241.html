@@ -6,241 +6,241 @@
 <title>打印</title>
 </head>
 <body>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Qt中打印与在QWidget, QPixmap, 或者 QImage上绘图相似。它包含下面几步：
-1.创建一个QPainter当作一个绘图设置。
-2.弹出一个QprintDialog,让用户选择一个打印机并设置几个参数。
-3.创建一个在Qprinter上执行操作的QPainter。
-4.使用该QPainter绘制一页。
-5.调用QPrinter::newPage()前进到下一页。
-6.重复第4和5步直到所有页都绘制完毕。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Windows和Mac OS X 上，Qprinter使用所在系统的打印机驱动程序。在Unix上，它生成PostScript并把它发送到lp或者lpr（或者到QPrinter::setPrintProgram()所设置的程序）。Qprinter也可通过调用setOutputFormat(QPrinter::PdfFormat)用于生成PDF文件。
-
-图8.12　打印一个QImage
-<img src="upfile/image/printing.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	让我们以一个仅在打印单页的简单例子开始。第一个例子打印一个QImage:
-
-[code type="cpp-qt"]
-void PrintWindow::printImage(const QImage &image)
-{
-    QPrintDialog printDialog(&printer, this);
-    if (printDialog.exec()) {
-        QPainter painter(&printer);
-        QRect rect = painter.viewport();
-        QSize size = image.size();
-        size.scale(rect.size(), Qt::KeepAspectRatio);
-        painter.setViewport(rect.x(), rect.y(),
-                            size.width(), size.height());
-        painter.setWindow(image.rect());
-        painter.drawImage(0, 0, image);
-    }
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们假设PrintWindow类有一个Qprinter类型的叫printer的成员变量。我们应该在printImage()函数中从栈上创建该Qprinter，但它可能在执行到另一个打印时无法记住用户的对上一次打印设置。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们创建了一个QprintDialog并调用了exec()来显示它。如果用户点击了它的OK按钮它返回true，否则返回false。在调用exec()之后，该Qprinter对象就准备好使用了。（也可以不用QprintDialog就能打印，通过直接调用Qprinter的成员函数设置参数）。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下一步，我们创建一个在Qprinter上绘图的QPainter。我们把窗口设为该图象的矩形并以相同的比率把视口设置为一个矩形，我们在(0,0)位置绘制该图象。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	默认情况下，QPainter窗口是初始化过的，因此打印机看上去与屏幕的处理方法相似（一般为72和100点每英寸），这使得打印工作可以容易的重用物件绘图代码。这里并没有什么关系，因为我们设置了我们自己的容器。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	打印只有一页非常容易，但是许多程序都需要打印多页。为此，我们需要一次绘制一页，并调用newPage()进行到下一页。这产生了我们要决定每页打印多少信息的问题。在Qt中有两种主要方法能处理多页文档：
-我们可以把数据转换为HTML并使用Qtextdocument渲染它，这是Qt的丰富文件引擎。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们可以手工绘图和分页。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们将依次预览这两种方法。作为一个例子，我们将打印一本花草手册：一系列花的名字，每个都有一个文本描述。手册中的每个入口都以"name:description"格式存储为一个字符串，例如：
-Miltonopsis santanae: A most dangerous orchid species.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	由于每种花的数据被表示为一个单独的字符串，我们可以使用一个QStringList表示手册中的所有花。下面是使用Qt的丰富文本引擎打印花草手册的函数：
-
-[code type="cpp-qt"]
-void PrintWindow::printFlowerGuide(const QStringList &entries)
-{
-    QString html;
-    foreach (QString entry, entries) {
-        QStringList fields = entry.split(": ");
-        QString title = Qt::escape(fields[0]);
-        QString body = Qt::escape(fields[1]);
-        html += "<table width=\"100%\" border=1 cellspacing=0>\n"
-                "<tr><td bgcolor=\"lightgray\"><font size=\"+1\">"
-                "<b><i>" + title + "</i></b></font>\n<tr><td>" + body
-                + "\n</table>\n<br>\n";
-    }
-    printHtml(html);
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	第一步是把该QStringList转换为HTML。每种花变成一个有两个单元格的表格。我们使用Qt::escape()把特殊字符'&', '<', '>'替换为相应的HTML实体("&amp;", "&lt;", "&gt;")。然后再调用printHtml()打印这些文本：
-
-[code type="cpp-qt"]
-void PrintWindow::printHtml(const QString &html)
-{
-    QPrintDialog printDialog(&printer, this);
-    if (printDialog.exec()) {
-        QPainter painter(&printer);
-        QTextDocument textDocument;
-        textDocument.setHtml(html);
-        textDocument.print(&printer);
-    }
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printHtml()函数弹出一个QprintDialog并小心地打印一个HTML文档。它可被重用于任何Qt程序以打印任意HTML页。
-图8.13　使用QTextdocument打印花草手册
-<img src="upfile/image/printing_a_flower_guide.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	把文档转换为HTML并用Qtextdocument来打印它是到现在为止打印报表和其他复杂文档的常用替代选择。在我们需要更多控制的时候，我们可以做出该页的布局并手工绘图。现在让我们看一下如何使用这种方法打印一本花草手册。下面是新的printFlowerGuide()函数：
-
-[code type="cpp-qt"]
-void PrintWindow::printFlowerGuide(const QStringList &entries)
-{
-    QPrintDialog printDialog(&printer, this);
-    if (printDialog.exec()) {
-
-        QPainter painter(&printer);
-        QList<QStringList> pages;
-        paginate(&painter, &pages, entries);
-        printPages(&painter, pages);
-    }
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在设置完打印机并构造了绘图器后，我们就调用paginate()帮助函数来决定哪一条应该出现在哪一页中。这产生的结果是一系列的QStringList，每个QStringList持有每页的条目。我们把此结果传递给printPages()。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	例如，假设花草手册包含6条，我们把它叫做A, B, C, D, E, and F。现在假设在第一页有放置A和B的空间，C、D和E放在第二页，F在第三页。Pages列表现在有索引位置为0的列表[A, B]，索引位置为1的列表[C, D, E]，索引位置为2的列表[F ]。
-
-[code type="cpp-qt"]
-void PrintWindow::paginate(QPainter *painter, QList<QStringList> *pages,
-                           const QStringList &entries)
-{
-    QStringList currentPage;
-    int pageHeight = painter->window().height() - 2 * LargeGap;
-    int y = 0;
-    foreach (QString entry, entries) {
-        int height = entryHeight(painter, entry);
-        if (y + height > pageHeight && !currentPage.empty()) {
-            pages->append(currentPage);
-            currentPage.clear();
-            y = 0;
-        }
-        currentPage.append(entry);
-        y += height + MediumGap;
-    }
-    if (!currentPage.empty())
-        pages->append(currentPage);
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们遍历这些条目并把它们追加到当前页，直到我们遇到一个放不下的条目，然后我们把当前页追加到pages列表并开始一个新页。
-
-[code type="cpp-qt"]
-int PrintWindow::entryHeight(QPainter *painter, const QString &entry)
-{
-    QStringList fields = entry.split(": ");
-    QString title = fields[0];
-    QString body = fields[1];
-
-    int textWidth = painter->window().width() - 2 * SmallGap;
-    int maxHeight = painter->window().height();
-    painter->setFont(titleFont);
-    QRect titleRect = painter->boundingRect(0, 0, textWidth, maxHeight,
-                                            Qt::TextWordWrap, title);
-    painter->setFont(bodyFont);
-    QRect bodyRect = painter->boundingRect(0, 0, textWidth, maxHeight,
-                                           Qt::TextWordWrap, body);
-    return titleRect.height() + bodyRect.height() + 4 * SmallGap;
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	enTRyHeight()函数使用QPainter::boundingRect()来计算每个条目所需的垂直空间。图8.14展示一个条目的布局以及SmallGap 和 MediumGap常量的意义。
-图8.14　一条花目的布局
-<img src="upfile/image/flower_entry_s_layout.jpg" border="0">
-
-[code type="cpp-qt"]
-void PrintWindow::printPages(QPainter *painter,
-                             const QList<QStringList> &pages)
-{
-    int firstPage = printer.fromPage() - 1;
-    if (firstPage >= pages.size())
-        return;
-    if (firstPage == -1)
-        firstPage = 0;
-    int lastPage = printer.toPage() - 1;
-    if (lastPage == -1 || lastPage >= pages.size())
-        lastPage = pages.size() - 1;
-    int numPages = lastPage - firstPage + 1;
-    for (int i = 0; i < printer.numCopies(); ++i) {
-        for (int j = 0; j < numPages; ++j) {
-            if (i != 0 || j != 0)
-                printer.newPage();
-            int index;
-            if (printer.pageOrder() == QPrinter::FirstPageFirst) {
-                index = firstPage + j;
-            } else {
-
-                index = lastPage - j;
-            }
-            printPage(painter, pages[index], index + 1);
-        }
-    }
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printPages()函数的角色是以正确的顺序和正确的次数调用printPage()打印每一页。使用QPrintDialog，用户可能需要几个拷贝，指定一个打印区间，或者以反方向请求页面。使用QPrintDialog::setEnabledOptions()设置这些参数并禁用它们是我们的责任。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们以决定打印区间为开始。QPrinter's fromPage() 和 toPage()函数返回用户选择的页序号，或者如果没有选择任何区域则为0。我们要减去1，因为pages列表是从0开始索引的，如果用户没有设置任何区间则把firstPage 和 lastPage设为整个区间。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	然后我们就打印每一页。外部的for循环迭代任意多次以生成用户请求的拷贝数量。大多数打印机驱动程序支持多份拷贝，因此对些来说QPrinter::numCopies()总是返回1。如果打印机不能处理多份文档，QPrinter::numCopies()返回用户请求的拷贝数，并且程序是负责打印该数目的拷贝。（在本节前面的QImage例子中，为了保持简单性的原因我们忽略了QPrinter::numCopies()）。
-图8.15　使用QPainter打印花草手册
-<img src="upfile/image/flower_guide_using.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	内部的for循环遍历所有的页面。如果该页面不是第一页，我们调用newPage()以刷新前一页并开始在一个新的页面上绘图。我们调用printPage()绘制每一页。
-
-[code type="cpp-qt"]
-void PrintWindow::printPage(QPainter *painter,
-                            const QStringList &entries, int pageNumber)
-{
-    painter->save();
-    painter->translate(0, LargeGap);
-    foreach (QString entry, entries) {
-        QStringList fields = entry.split(": ");
-        QString title = fields[0];
-        QString body = fields[1];
-        printBox(painter, title, titleFont, Qt::lightGray);
-        printBox(painter, body, bodyFont, Qt::white);
-        painter->translate(0, MediumGap);
-    }
-    painter->restore();
-    painter->setFont(footerFont);
-    painter->drawText(painter->window(),
-                      Qt::AlignHCenter | Qt::AlignBottom,
-                      QString::number(pageNumber));
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printPage()函数遍历所有手册中的条目并使用两个printBox()打印它们：一个用于标题（花的名字），另一个用于页面正文（它的描述）。它还绘制在页面底部中央的页码。
-图8.16　手册页面布局
-<img src="upfile/image/page_layout.jpg" border="0">
-
-[code type="cpp-qt"]
-void PrintWindow::printBox(QPainter *painter, const QString &str,
-                           const QFont &font, const QBrush &brush)
-{
-    painter->setFont(font);
-    int boxWidth = painter->window().width();
-    int textWidth = boxWidth - 2 * SmallGap;
-    int maxHeight = painter->window().height();
-    QRect textRect = painter->boundingRect(SmallGap, SmallGap,
-                                           textWidth, maxHeight,
-                                           Qt::TextWordWrap, str);
-    int boxHeight = textRect.height() + 2 * SmallGap;
-    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine));
-    painter->setBrush(brush);
-    painter->drawRect(0, 0, boxWidth, boxHeight);
-    painter->drawText(textRect, Qt::TextWordWrap, str);
-    painter->translate(0, boxHeight);
-}
-[/code]
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	该printBox()函数绘制了该盒子的边框，然后在盒子中绘制文本。
-
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Qt中打印与在QWidget, QPixmap, 或者 QImage上绘图相似。它包含下面几步：<br />
+1.创建一个QPainter当作一个绘图设置。<br />
+2.弹出一个QprintDialog,让用户选择一个打印机并设置几个参数。<br />
+3.创建一个在Qprinter上执行操作的QPainter。<br />
+4.使用该QPainter绘制一页。<br />
+5.调用QPrinter::newPage()前进到下一页。<br />
+6.重复第4和5步直到所有页都绘制完毕。<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Windows和Mac OS X 上，Qprinter使用所在系统的打印机驱动程序。在Unix上，它生成PostScript并把它发送到lp或者lpr（或者到QPrinter::setPrintProgram()所设置的程序）。Qprinter也可通过调用setOutputFormat(QPrinter::PdfFormat)用于生成PDF文件。<br />
+<br />
+图8.12　打印一个QImage<br />
+<img src="upfile/image/printing.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	让我们以一个仅在打印单页的简单例子开始。第一个例子打印一个QImage:<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printImage(const QImage &image)<br />
+{<br />
+    QPrintDialog printDialog(&printer, this);<br />
+    if (printDialog.exec()) {<br />
+        QPainter painter(&printer);<br />
+        QRect rect = painter.viewport();<br />
+        QSize size = image.size();<br />
+        size.scale(rect.size(), Qt::KeepAspectRatio);<br />
+        painter.setViewport(rect.x(), rect.y(),<br />
+                            size.width(), size.height());<br />
+        painter.setWindow(image.rect());<br />
+        painter.drawImage(0, 0, image);<br />
+    }<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们假设PrintWindow类有一个Qprinter类型的叫printer的成员变量。我们应该在printImage()函数中从栈上创建该Qprinter，但它可能在执行到另一个打印时无法记住用户的对上一次打印设置。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们创建了一个QprintDialog并调用了exec()来显示它。如果用户点击了它的OK按钮它返回true，否则返回false。在调用exec()之后，该Qprinter对象就准备好使用了。（也可以不用QprintDialog就能打印，通过直接调用Qprinter的成员函数设置参数）。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下一步，我们创建一个在Qprinter上绘图的QPainter。我们把窗口设为该图象的矩形并以相同的比率把视口设置为一个矩形，我们在(0,0)位置绘制该图象。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	默认情况下，QPainter窗口是初始化过的，因此打印机看上去与屏幕的处理方法相似（一般为72和100点每英寸），这使得打印工作可以容易的重用物件绘图代码。这里并没有什么关系，因为我们设置了我们自己的容器。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	打印只有一页非常容易，但是许多程序都需要打印多页。为此，我们需要一次绘制一页，并调用newPage()进行到下一页。这产生了我们要决定每页打印多少信息的问题。在Qt中有两种主要方法能处理多页文档：<br />
+我们可以把数据转换为HTML并使用Qtextdocument渲染它，这是Qt的丰富文件引擎。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们可以手工绘图和分页。<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们将依次预览这两种方法。作为一个例子，我们将打印一本花草手册：一系列花的名字，每个都有一个文本描述。手册中的每个入口都以"name:description"格式存储为一个字符串，例如：<br />
+Miltonopsis santanae: A most dangerous orchid species.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	由于每种花的数据被表示为一个单独的字符串，我们可以使用一个QStringList表示手册中的所有花。下面是使用Qt的丰富文本引擎打印花草手册的函数：<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printFlowerGuide(const QStringList &entries)<br />
+{<br />
+    QString html;<br />
+    foreach (QString entry, entries) {<br />
+        QStringList fields = entry.split(": ");<br />
+        QString title = Qt::escape(fields[0]);<br />
+        QString body = Qt::escape(fields[1]);<br />
+        html += "<table width=\"100%\" border=1 cellspacing=0>\n"<br />
+                "<tr><td bgcolor=\"lightgray\"><font size=\"+1\">"<br />
+                "<b><i>" + title + "</i></b></font>\n<tr><td>" + body<br />
+                + "\n</table>\n<br>\n";<br />
+    }<br />
+    printHtml(html);<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	第一步是把该QStringList转换为HTML。每种花变成一个有两个单元格的表格。我们使用Qt::escape()把特殊字符'&', '<', '>'替换为相应的HTML实体("&amp;", "&lt;", "&gt;")。然后再调用printHtml()打印这些文本：<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printHtml(const QString &html)<br />
+{<br />
+    QPrintDialog printDialog(&printer, this);<br />
+    if (printDialog.exec()) {<br />
+        QPainter painter(&printer);<br />
+        QTextDocument textDocument;<br />
+        textDocument.setHtml(html);<br />
+        textDocument.print(&printer);<br />
+    }<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printHtml()函数弹出一个QprintDialog并小心地打印一个HTML文档。它可被重用于任何Qt程序以打印任意HTML页。<br />
+图8.13　使用QTextdocument打印花草手册<br />
+<img src="upfile/image/printing_a_flower_guide.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	把文档转换为HTML并用Qtextdocument来打印它是到现在为止打印报表和其他复杂文档的常用替代选择。在我们需要更多控制的时候，我们可以做出该页的布局并手工绘图。现在让我们看一下如何使用这种方法打印一本花草手册。下面是新的printFlowerGuide()函数：<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printFlowerGuide(const QStringList &entries)<br />
+{<br />
+    QPrintDialog printDialog(&printer, this);<br />
+    if (printDialog.exec()) {<br />
+<br />
+        QPainter painter(&printer);<br />
+        QList<QStringList> pages;<br />
+        paginate(&painter, &pages, entries);<br />
+        printPages(&painter, pages);<br />
+    }<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在设置完打印机并构造了绘图器后，我们就调用paginate()帮助函数来决定哪一条应该出现在哪一页中。这产生的结果是一系列的QStringList，每个QStringList持有每页的条目。我们把此结果传递给printPages()。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	例如，假设花草手册包含6条，我们把它叫做A, B, C, D, E, and F。现在假设在第一页有放置A和B的空间，C、D和E放在第二页，F在第三页。Pages列表现在有索引位置为0的列表[A, B]，索引位置为1的列表[C, D, E]，索引位置为2的列表[F ]。<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::paginate(QPainter *painter, QList<QStringList> *pages,<br />
+                           const QStringList &entries)<br />
+{<br />
+    QStringList currentPage;<br />
+    int pageHeight = painter->window().height() - 2 * LargeGap;<br />
+    int y = 0;<br />
+    foreach (QString entry, entries) {<br />
+        int height = entryHeight(painter, entry);<br />
+        if (y + height > pageHeight && !currentPage.empty()) {<br />
+            pages->append(currentPage);<br />
+            currentPage.clear();<br />
+            y = 0;<br />
+        }<br />
+        currentPage.append(entry);<br />
+        y += height + MediumGap;<br />
+    }<br />
+    if (!currentPage.empty())<br />
+        pages->append(currentPage);<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们遍历这些条目并把它们追加到当前页，直到我们遇到一个放不下的条目，然后我们把当前页追加到pages列表并开始一个新页。<br />
+<br />
+[code type="cpp-qt"]<br />
+int PrintWindow::entryHeight(QPainter *painter, const QString &entry)<br />
+{<br />
+    QStringList fields = entry.split(": ");<br />
+    QString title = fields[0];<br />
+    QString body = fields[1];<br />
+<br />
+    int textWidth = painter->window().width() - 2 * SmallGap;<br />
+    int maxHeight = painter->window().height();<br />
+    painter->setFont(titleFont);<br />
+    QRect titleRect = painter->boundingRect(0, 0, textWidth, maxHeight,<br />
+                                            Qt::TextWordWrap, title);<br />
+    painter->setFont(bodyFont);<br />
+    QRect bodyRect = painter->boundingRect(0, 0, textWidth, maxHeight,<br />
+                                           Qt::TextWordWrap, body);<br />
+    return titleRect.height() + bodyRect.height() + 4 * SmallGap;<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	enTRyHeight()函数使用QPainter::boundingRect()来计算每个条目所需的垂直空间。图8.14展示一个条目的布局以及SmallGap 和 MediumGap常量的意义。<br />
+图8.14　一条花目的布局<br />
+<img src="upfile/image/flower_entry_s_layout.jpg" border="0"><br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printPages(QPainter *painter,<br />
+                             const QList<QStringList> &pages)<br />
+{<br />
+    int firstPage = printer.fromPage() - 1;<br />
+    if (firstPage >= pages.size())<br />
+        return;<br />
+    if (firstPage == -1)<br />
+        firstPage = 0;<br />
+    int lastPage = printer.toPage() - 1;<br />
+    if (lastPage == -1 || lastPage >= pages.size())<br />
+        lastPage = pages.size() - 1;<br />
+    int numPages = lastPage - firstPage + 1;<br />
+    for (int i = 0; i < printer.numCopies(); ++i) {<br />
+        for (int j = 0; j < numPages; ++j) {<br />
+            if (i != 0 || j != 0)<br />
+                printer.newPage();<br />
+            int index;<br />
+            if (printer.pageOrder() == QPrinter::FirstPageFirst) {<br />
+                index = firstPage + j;<br />
+            } else {<br />
+<br />
+                index = lastPage - j;<br />
+            }<br />
+            printPage(painter, pages[index], index + 1);<br />
+        }<br />
+    }<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printPages()函数的角色是以正确的顺序和正确的次数调用printPage()打印每一页。使用QPrintDialog，用户可能需要几个拷贝，指定一个打印区间，或者以反方向请求页面。使用QPrintDialog::setEnabledOptions()设置这些参数并禁用它们是我们的责任。<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们以决定打印区间为开始。QPrinter's fromPage() 和 toPage()函数返回用户选择的页序号，或者如果没有选择任何区域则为0。我们要减去1，因为pages列表是从0开始索引的，如果用户没有设置任何区间则把firstPage 和 lastPage设为整个区间。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	然后我们就打印每一页。外部的for循环迭代任意多次以生成用户请求的拷贝数量。大多数打印机驱动程序支持多份拷贝，因此对些来说QPrinter::numCopies()总是返回1。如果打印机不能处理多份文档，QPrinter::numCopies()返回用户请求的拷贝数，并且程序是负责打印该数目的拷贝。（在本节前面的QImage例子中，为了保持简单性的原因我们忽略了QPrinter::numCopies()）。<br />
+图8.15　使用QPainter打印花草手册<br />
+<img src="upfile/image/flower_guide_using.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	内部的for循环遍历所有的页面。如果该页面不是第一页，我们调用newPage()以刷新前一页并开始在一个新的页面上绘图。我们调用printPage()绘制每一页。<br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printPage(QPainter *painter,<br />
+                            const QStringList &entries, int pageNumber)<br />
+{<br />
+    painter->save();<br />
+    painter->translate(0, LargeGap);<br />
+    foreach (QString entry, entries) {<br />
+        QStringList fields = entry.split(": ");<br />
+        QString title = fields[0];<br />
+        QString body = fields[1];<br />
+        printBox(painter, title, titleFont, Qt::lightGray);<br />
+        printBox(painter, body, bodyFont, Qt::white);<br />
+        painter->translate(0, MediumGap);<br />
+    }<br />
+    painter->restore();<br />
+    painter->setFont(footerFont);<br />
+    painter->drawText(painter->window(),<br />
+                      Qt::AlignHCenter | Qt::AlignBottom,<br />
+                      QString::number(pageNumber));<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	printPage()函数遍历所有手册中的条目并使用两个printBox()打印它们：一个用于标题（花的名字），另一个用于页面正文（它的描述）。它还绘制在页面底部中央的页码。<br />
+图8.16　手册页面布局<br />
+<img src="upfile/image/page_layout.jpg" border="0"><br />
+<br />
+[code type="cpp-qt"]<br />
+void PrintWindow::printBox(QPainter *painter, const QString &str,<br />
+                           const QFont &font, const QBrush &brush)<br />
+{<br />
+    painter->setFont(font);<br />
+    int boxWidth = painter->window().width();<br />
+    int textWidth = boxWidth - 2 * SmallGap;<br />
+    int maxHeight = painter->window().height();<br />
+    QRect textRect = painter->boundingRect(SmallGap, SmallGap,<br />
+                                           textWidth, maxHeight,<br />
+                                           Qt::TextWordWrap, str);<br />
+    int boxHeight = textRect.height() + 2 * SmallGap;<br />
+    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine));<br />
+    painter->setBrush(brush);<br />
+    painter->drawRect(0, 0, boxWidth, boxHeight);<br />
+    painter->drawText(textRect, Qt::TextWordWrap, str);<br />
+    painter->translate(0, boxHeight);<br />
+}<br />
+[/code]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	该printBox()函数绘制了该盒子的边框，然后在盒子中绘制文本。<br />
+<br />
+<br />
 
 </body>
 </html>

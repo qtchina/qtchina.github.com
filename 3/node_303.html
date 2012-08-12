@@ -6,17 +6,17 @@
 <title>调整phpmyadmin中的session过期时间</title>
 </head>
 <body>
-在config.inc.php的行
-[code type="php]
-$cfg['blowfish_secret'] = 'xxxxx'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
-[/code]
-
-后面加入下面两行，根据需要调整一下数值。
-
-[code type="php"]
-$cfg['LoginCookieValidity']=360000; // [number of seconds]
-// Define how long is login cookie valid.
-$cfg['LoginCookieStore'] = 3600000; // integer [number of seconds]
+在config.inc.php的行<br />
+[code type="php]<br />
+$cfg['blowfish_secret'] = 'xxxxx'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */<br />
+[/code]<br />
+<br />
+后面加入下面两行，根据需要调整一下数值。<br />
+<br />
+[code type="php"]<br />
+$cfg['LoginCookieValidity']=360000; // [number of seconds]<br />
+// Define how long is login cookie valid.<br />
+$cfg['LoginCookieStore'] = 3600000; // integer [number of seconds]<br />
 [/code]
 </body>
 </html>

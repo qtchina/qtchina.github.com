@@ -6,45 +6,45 @@
 <title>vc 不支持elifdef指令</title>
 </head>
 <body>
-今天遇到在程序中需要三种情况的宏判断，使用下面的指令：
-
-#ifdef A
- .....
-#elifdef B
- ....
-#else
-  ...
-#endif
-
-但到了vc下编译怎么也会跳到#else块，而B的确是定义了的宏，是vc中不支持这个预编译指令吧。
-
-现在只好先把这个写成嵌套式的ifdef
-
-#ifdef A
- ...
-#else
-  #ifdef B
-    ....
-  #else 
-     ....
-  #endif
-#endif
-
-这样应该在gcc,vc下都能编译了。
-
-+++++++++++++++++
-最近读了些代码，知道还有另外一种通用的写法。 不使用#elifdef这个指令，而使用#elif  和 defined() 的组合，也能达到同样的效果，而且格式看起来还不错。
-
-#if defined(something)
-.....do 1
-#elif defined(sth2)
-.....do 2
-#elif defined(sth3)
-.....do 3
-#else
-.....do 4
-#endif
-
+今天遇到在程序中需要三种情况的宏判断，使用下面的指令：<br />
+<br />
+#ifdef A<br />
+ .....<br />
+#elifdef B<br />
+ ....<br />
+#else<br />
+  ...<br />
+#endif<br />
+<br />
+但到了vc下编译怎么也会跳到#else块，而B的确是定义了的宏，是vc中不支持这个预编译指令吧。<br />
+<br />
+现在只好先把这个写成嵌套式的ifdef<br />
+<br />
+#ifdef A<br />
+ ...<br />
+#else<br />
+  #ifdef B<br />
+    ....<br />
+  #else <br />
+     ....<br />
+  #endif<br />
+#endif<br />
+<br />
+这样应该在gcc,vc下都能编译了。<br />
+<br />
++++++++++++++++++<br />
+最近读了些代码，知道还有另外一种通用的写法。 不使用#elifdef这个指令，而使用#elif  和 defined() 的组合，也能达到同样的效果，而且格式看起来还不错。<br />
+<br />
+#if defined(something)<br />
+.....do 1<br />
+#elif defined(sth2)<br />
+.....do 2<br />
+#elif defined(sth3)<br />
+.....do 3<br />
+#else<br />
+.....do 4<br />
+#endif<br />
+<br />
 
 </body>
 </html>

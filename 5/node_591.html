@@ -6,50 +6,50 @@
 <title>PostgreSQL模块mylink</title>
 </head>
 <body>
-mylink模块已经提交到PostgreSQL专用开源项目站点， http://pgfoundry.org/projects/mylink/
-
-Postgresql是一扩展性非常好的数据库，支持使用多种语言编写扩展模块，像C/C++, perl, python等。
-
-mylink是在postgresql数据库中连接mysql，并执行mysql数据库查询的异构数据库扩展模块。
-
-mylink实现了多个mysql连接，不同语句可指定不同连接功能。
-
-实现执行过程切换mysql数据库功能。
-
-实现有返回记录的查询
-
-实现无返回记录的查询。
-
-实现当前连接列表查询。
-
-安装方法，下载<a href="https://sourceforge.net/projects/nullfxp/files/mylink/mylink-1.0.tar.bz2/download">mylink-1.0.tar.bz2</a>
-
-解压到postgresql-x.x.x/contrib/，并命名为mylink
-
-cd mylink
-
-make MYSQL_PREFIX=/path/to/mysql/installation
-
-make install
-
-然后，登陆postgresql, 执行CREATE EXTENTION mylink;
-
-测试，select mylink_get_connections();
-
-本模块在postgresql-9.x上测试，在低版本postgresql上的情况没有测试，请使用时注意。
-
-mylink接口。 
-
-text mylink_connect(hostname IN text, port IN integer, username IN text, passwd IN text, dbname IN text, conn_name IN text);
-
-text mylink_disconnect(conn_name IN text);
-
-text mylink_exec(sql IN text, conn_name IN text), 可执行无返回值任意SQL语句。
-
-text mylink_query(sql IN text, conn_name IN text),可执行有返回行记录的任意SQL语句
-
-mylink_get_connections() returns text[],返回当前所有打开的mysql连接名字。
-
+mylink模块已经提交到PostgreSQL专用开源项目站点， http://pgfoundry.org/projects/mylink/<br />
+<br />
+Postgresql是一扩展性非常好的数据库，支持使用多种语言编写扩展模块，像C/C++, perl, python等。<br />
+<br />
+mylink是在postgresql数据库中连接mysql，并执行mysql数据库查询的异构数据库扩展模块。<br />
+<br />
+mylink实现了多个mysql连接，不同语句可指定不同连接功能。<br />
+<br />
+实现执行过程切换mysql数据库功能。<br />
+<br />
+实现有返回记录的查询<br />
+<br />
+实现无返回记录的查询。<br />
+<br />
+实现当前连接列表查询。<br />
+<br />
+安装方法，下载<a href="https://sourceforge.net/projects/nullfxp/files/mylink/mylink-1.0.tar.bz2/download">mylink-1.0.tar.bz2</a><br />
+<br />
+解压到postgresql-x.x.x/contrib/，并命名为mylink<br />
+<br />
+cd mylink<br />
+<br />
+make MYSQL_PREFIX=/path/to/mysql/installation<br />
+<br />
+make install<br />
+<br />
+然后，登陆postgresql, 执行CREATE EXTENTION mylink;<br />
+<br />
+测试，select mylink_get_connections();<br />
+<br />
+本模块在postgresql-9.x上测试，在低版本postgresql上的情况没有测试，请使用时注意。<br />
+<br />
+mylink接口。 <br />
+<br />
+text mylink_connect(hostname IN text, port IN integer, username IN text, passwd IN text, dbname IN text, conn_name IN text);<br />
+<br />
+text mylink_disconnect(conn_name IN text);<br />
+<br />
+text mylink_exec(sql IN text, conn_name IN text), 可执行无返回值任意SQL语句。<br />
+<br />
+text mylink_query(sql IN text, conn_name IN text),可执行有返回行记录的任意SQL语句<br />
+<br />
+mylink_get_connections() returns text[],返回当前所有打开的mysql连接名字。<br />
+<br />
 mylink_error_message(text connname) returns text
 </body>
 </html>

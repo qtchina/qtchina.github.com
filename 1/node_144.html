@@ -6,124 +6,124 @@
 <title>plugin.h 代码阅读笔记</title>
 </head>
 <body>
-该文件中定义了lighttpd的模块插件结构体。此结构体大量使用了函数指针，对进一步深入了解函数指针很有现在。现在的工作是，解释结构体中每个字段的含义，用处，使用方法。搞清楚插件中几个函数的调用序列，插件中几个函数的返回值对lighttpd有什么影响。
-
-[code type="c"]
-#ifndef _PLUGIN_H_
-
-#define _PLUGIN_H_
-
-#include “base.h”
-
-#include “buffer.h”
-
-//此宏定义服务器函数的通用格式，参数为 server 类型指针，一个 指向模块定义的数据结构的void 类型指针
-
-#define SERVER_FUNC(x) \
-
-static handler_t x(server *srv, void *p_d)
-
-#define CONNECTION_FUNC(x) \
-
-static handler_t x(server *srv, connection *con, void *p_d)
-
-#define INIT_FUNC(x) \
-
-static void *x()
-
-//下面四个是服务器级别的函数
-
-#define FREE_FUNC SERVER_FUNC
-
-#define TRIGGER_FUNC SERVER_FUNC
-
-#define SETDEFAULTS_FUNC SERVER_FUNC
-
-#define SIGHUP_FUNC SERVER_FUNC
-
-//下面五个是连接级别的函数
-
-#define SUBREQUEST_FUNC CONNECTION_FUNC
-
-#define JOBLIST_FUNC CONNECTION_FUNC
-
-#define PHYSICALPATH_FUNC CONNECTION_FUNC
-
-#define REQUESTDONE_FUNC CONNECTION_FUNC
-
-#define URIHANDLER_FUNC CONNECTION_FUNC
-
-#define PLUGIN_DATA size_t id //这个定义的是所有模块插件的内部数据都必须有一个公共字段，这个字段的值由lighttpd统一管理，类似于一个序列值，给每个模块都定义一个ID号。
-
-//模块插件结构体,包含的信息相当的丰富。
-
-typedef struct {
-
-size_t version; //一般写为 ： LIGHTTPD_VERSION_ID 什么时候不一样呢。
-
-buffer *name; /* name of the plugin */ //一般写为模块的名字 , 如 mod_skeleton
-
-//下面这些函数指针指向的函数是要编写模块的开发人员实现的，当然，有些是可选的，有些是必须实现的。
-
-void *(* init) (); //在加载当前模块的时候调用，但不是第一个要调用的函数。在此之前会调用 *_plugin_init 函数初始化当前模块。它是第一个实际调用的插件函数。此函数用于初始化模块内部数据结构，此内部数据结构被赋给*plugin_init中设定的data字段了。
-handler_t (* set_defaults) (server *srv, void *p_d); //实际调用的第二个插件函数。此函数是配置文件解析入口。它应该传递一个选项参数列表给config_insert_values函数，并且还要检查参数是否有效，如果是无效参数，则需要给该选项参数设置默认值，或者返回错误。
-handler_t (* cleanup) (server *srv, void *p_d); //最后一个调用的模块插件函数。用于清理当前模块使用的内存。它在当前模块被卸载的前一该被lighttpd调用。
-/* is called … */
-handler_t (* handle_trigger) (server *srv, void *p_d); /* once a second */ //每一秒都会调用的插件函数，模块如果不需要此定时器，可以忽略它。
-handler_t (* handle_sighup) (server *srv, void *p_d); /* at a signup */ //如果lighttpd收到SIGHUP信号，则它会调用插件中的这个函数，通知插件做相应处理。lighttpd收到这个信号时并不会退出，因而对模块来说可以忽略这个信号。这个函数的调用顺序不定，在模块被加载之后，被卸载之前的任何时刻都可能调用此函数，这依赖于用户行为，用户可能手工向lighttpd发送SIGHUP信号。
-
-handler_t (* handle_uri_raw) (server *srv, connection *con, void *p_d); /* after uri_raw is set */ //在lighttpd 设置了 uri_raw之后被调用。uri_raw是在什么时候设置的呢？
-handler_t (* handle_uri_clean) (server *srv, connection *con, void *p_d); /* after uri is set */ //在lighttpd设置了uri.path 之后被调用。uri.path是在什么时候设置的呢？
-handler_t (* handle_docroot) (server *srv, connection *con, void *p_d); /* getting the document-root */ //当 lighttpd 需要docroot的时候此函数被调用。 不太明白这个docroot的意思，lighttpd为什么会不定时的需要 docroot 呢？
-handler_t (* handle_physical) (server *srv, connection *con, void *p_d); /* mapping url to physical path */ // 在lighttpd设置了physical.path之后被调用。
-handler_t (* handle_request_done) (server *srv, connection *con, void *p_d); /* at the end of a request */ //在请求结束的时候被调用，这个时候是否已经处理了请求并将数据发送到了客户端了呢？
-handler_t (* handle_connection_close)(server *srv, connection *con, void *p_d); /* at the end of a connection */ //在连接终止的时候被调用。这时候请求的响应数据肯定已经发送到了客户。
-handler_t (* handle_joblist) (server *srv, connection *con, void *p_d); /* after all events are handled */ // 当此次请求的连接状态发生变化时此函数被调用。连接状态类型定义: connection_state_t
-
-handler_t (* handle_subrequest_start)(server *srv, connection *con, void *p_d); //在设置了physical.path之后被调用。这和 handle_physical函数有什么区别呢。
-
-/* when a handler for the request
-* has to be found
-*/
-handler_t (* handle_subrequest) (server *srv, connection *con, void *p_d); /* */ //?????
-handler_t (* connection_reset) (server *srv, connection *con, void *p_d); /* */ //在每次请求的最后调用。这和 handle_request_close ，handle_request_done 有什么关系，好象是在这两 个调用中间某个时刻调用的？？？
-void *data; //这个是指向模块内部数据结构的指针。
-
-/* dlopen handle */
-void *lib; //dlopen 当前模块时返回的指向此模块动态库的指针变量。用于 dlclose, dlsym , dlerror 函数调用。
-} plugin;
-
-int plugins_load(server *srv);
-void plugins_free(server *srv);
-
-//与结构体中的函数指针对应的函数调用，一一对应。其实模块插件中的函数指针是在下面这些函数中被调用的。
-handler_t plugins_call_handle_uri_raw(server *srv, connection *con);
-handler_t plugins_call_handle_uri_clean(server *srv, connection *con);
-handler_t plugins_call_handle_subrequest_start(server *srv, connection *con);
-handler_t plugins_call_handle_subrequest(server *srv, connection *con);
-handler_t plugins_call_handle_request_done(server *srv, connection *con);
-handler_t plugins_call_handle_docroot(server *srv, connection *con);
-handler_t plugins_call_handle_physical(server *srv, connection *con);
-handler_t plugins_call_handle_connection_close(server *srv, connection *con);
-handler_t plugins_call_handle_joblist(server *srv, connection *con);
-handler_t plugins_call_connection_reset(server *srv, connection *con);
-
-handler_t plugins_call_handle_trigger(server *srv);
-handler_t plugins_call_handle_sighup(server *srv);
-
-handler_t plugins_call_init(server *srv);
-handler_t plugins_call_set_defaults(server *srv);
-handler_t plugins_call_cleanup(server *srv);
-
-int config_insert_values_global(server *srv, array *ca, const config_values_t *cv);
-int config_insert_values_internal(server *srv, array *ca, const config_values_t *cv);
-int config_setup_connection(server *srv, connection *con);
-int config_patch_connection(server *srv, connection *con, comp_key_t comp);
-int config_check_cond(server *srv, connection *con, data_config *dc);
-int config_append_cond_match_buffer(connection *con, data_config *dc, buffer *buf, int n);
-
-#endif
-
+该文件中定义了lighttpd的模块插件结构体。此结构体大量使用了函数指针，对进一步深入了解函数指针很有现在。现在的工作是，解释结构体中每个字段的含义，用处，使用方法。搞清楚插件中几个函数的调用序列，插件中几个函数的返回值对lighttpd有什么影响。<br />
+<br />
+[code type="c"]<br />
+#ifndef _PLUGIN_H_<br />
+<br />
+#define _PLUGIN_H_<br />
+<br />
+#include “base.h”<br />
+<br />
+#include “buffer.h”<br />
+<br />
+//此宏定义服务器函数的通用格式，参数为 server 类型指针，一个 指向模块定义的数据结构的void 类型指针<br />
+<br />
+#define SERVER_FUNC(x) \<br />
+<br />
+static handler_t x(server *srv, void *p_d)<br />
+<br />
+#define CONNECTION_FUNC(x) \<br />
+<br />
+static handler_t x(server *srv, connection *con, void *p_d)<br />
+<br />
+#define INIT_FUNC(x) \<br />
+<br />
+static void *x()<br />
+<br />
+//下面四个是服务器级别的函数<br />
+<br />
+#define FREE_FUNC SERVER_FUNC<br />
+<br />
+#define TRIGGER_FUNC SERVER_FUNC<br />
+<br />
+#define SETDEFAULTS_FUNC SERVER_FUNC<br />
+<br />
+#define SIGHUP_FUNC SERVER_FUNC<br />
+<br />
+//下面五个是连接级别的函数<br />
+<br />
+#define SUBREQUEST_FUNC CONNECTION_FUNC<br />
+<br />
+#define JOBLIST_FUNC CONNECTION_FUNC<br />
+<br />
+#define PHYSICALPATH_FUNC CONNECTION_FUNC<br />
+<br />
+#define REQUESTDONE_FUNC CONNECTION_FUNC<br />
+<br />
+#define URIHANDLER_FUNC CONNECTION_FUNC<br />
+<br />
+#define PLUGIN_DATA size_t id //这个定义的是所有模块插件的内部数据都必须有一个公共字段，这个字段的值由lighttpd统一管理，类似于一个序列值，给每个模块都定义一个ID号。<br />
+<br />
+//模块插件结构体,包含的信息相当的丰富。<br />
+<br />
+typedef struct {<br />
+<br />
+size_t version; //一般写为 ： LIGHTTPD_VERSION_ID 什么时候不一样呢。<br />
+<br />
+buffer *name; /* name of the plugin */ //一般写为模块的名字 , 如 mod_skeleton<br />
+<br />
+//下面这些函数指针指向的函数是要编写模块的开发人员实现的，当然，有些是可选的，有些是必须实现的。<br />
+<br />
+void *(* init) (); //在加载当前模块的时候调用，但不是第一个要调用的函数。在此之前会调用 *_plugin_init 函数初始化当前模块。它是第一个实际调用的插件函数。此函数用于初始化模块内部数据结构，此内部数据结构被赋给*plugin_init中设定的data字段了。<br />
+handler_t (* set_defaults) (server *srv, void *p_d); //实际调用的第二个插件函数。此函数是配置文件解析入口。它应该传递一个选项参数列表给config_insert_values函数，并且还要检查参数是否有效，如果是无效参数，则需要给该选项参数设置默认值，或者返回错误。<br />
+handler_t (* cleanup) (server *srv, void *p_d); //最后一个调用的模块插件函数。用于清理当前模块使用的内存。它在当前模块被卸载的前一该被lighttpd调用。<br />
+/* is called … */<br />
+handler_t (* handle_trigger) (server *srv, void *p_d); /* once a second */ //每一秒都会调用的插件函数，模块如果不需要此定时器，可以忽略它。<br />
+handler_t (* handle_sighup) (server *srv, void *p_d); /* at a signup */ //如果lighttpd收到SIGHUP信号，则它会调用插件中的这个函数，通知插件做相应处理。lighttpd收到这个信号时并不会退出，因而对模块来说可以忽略这个信号。这个函数的调用顺序不定，在模块被加载之后，被卸载之前的任何时刻都可能调用此函数，这依赖于用户行为，用户可能手工向lighttpd发送SIGHUP信号。<br />
+<br />
+handler_t (* handle_uri_raw) (server *srv, connection *con, void *p_d); /* after uri_raw is set */ //在lighttpd 设置了 uri_raw之后被调用。uri_raw是在什么时候设置的呢？<br />
+handler_t (* handle_uri_clean) (server *srv, connection *con, void *p_d); /* after uri is set */ //在lighttpd设置了uri.path 之后被调用。uri.path是在什么时候设置的呢？<br />
+handler_t (* handle_docroot) (server *srv, connection *con, void *p_d); /* getting the document-root */ //当 lighttpd 需要docroot的时候此函数被调用。 不太明白这个docroot的意思，lighttpd为什么会不定时的需要 docroot 呢？<br />
+handler_t (* handle_physical) (server *srv, connection *con, void *p_d); /* mapping url to physical path */ // 在lighttpd设置了physical.path之后被调用。<br />
+handler_t (* handle_request_done) (server *srv, connection *con, void *p_d); /* at the end of a request */ //在请求结束的时候被调用，这个时候是否已经处理了请求并将数据发送到了客户端了呢？<br />
+handler_t (* handle_connection_close)(server *srv, connection *con, void *p_d); /* at the end of a connection */ //在连接终止的时候被调用。这时候请求的响应数据肯定已经发送到了客户。<br />
+handler_t (* handle_joblist) (server *srv, connection *con, void *p_d); /* after all events are handled */ // 当此次请求的连接状态发生变化时此函数被调用。连接状态类型定义: connection_state_t<br />
+<br />
+handler_t (* handle_subrequest_start)(server *srv, connection *con, void *p_d); //在设置了physical.path之后被调用。这和 handle_physical函数有什么区别呢。<br />
+<br />
+/* when a handler for the request<br />
+* has to be found<br />
+*/<br />
+handler_t (* handle_subrequest) (server *srv, connection *con, void *p_d); /* */ //?????<br />
+handler_t (* connection_reset) (server *srv, connection *con, void *p_d); /* */ //在每次请求的最后调用。这和 handle_request_close ，handle_request_done 有什么关系，好象是在这两 个调用中间某个时刻调用的？？？<br />
+void *data; //这个是指向模块内部数据结构的指针。<br />
+<br />
+/* dlopen handle */<br />
+void *lib; //dlopen 当前模块时返回的指向此模块动态库的指针变量。用于 dlclose, dlsym , dlerror 函数调用。<br />
+} plugin;<br />
+<br />
+int plugins_load(server *srv);<br />
+void plugins_free(server *srv);<br />
+<br />
+//与结构体中的函数指针对应的函数调用，一一对应。其实模块插件中的函数指针是在下面这些函数中被调用的。<br />
+handler_t plugins_call_handle_uri_raw(server *srv, connection *con);<br />
+handler_t plugins_call_handle_uri_clean(server *srv, connection *con);<br />
+handler_t plugins_call_handle_subrequest_start(server *srv, connection *con);<br />
+handler_t plugins_call_handle_subrequest(server *srv, connection *con);<br />
+handler_t plugins_call_handle_request_done(server *srv, connection *con);<br />
+handler_t plugins_call_handle_docroot(server *srv, connection *con);<br />
+handler_t plugins_call_handle_physical(server *srv, connection *con);<br />
+handler_t plugins_call_handle_connection_close(server *srv, connection *con);<br />
+handler_t plugins_call_handle_joblist(server *srv, connection *con);<br />
+handler_t plugins_call_connection_reset(server *srv, connection *con);<br />
+<br />
+handler_t plugins_call_handle_trigger(server *srv);<br />
+handler_t plugins_call_handle_sighup(server *srv);<br />
+<br />
+handler_t plugins_call_init(server *srv);<br />
+handler_t plugins_call_set_defaults(server *srv);<br />
+handler_t plugins_call_cleanup(server *srv);<br />
+<br />
+int config_insert_values_global(server *srv, array *ca, const config_values_t *cv);<br />
+int config_insert_values_internal(server *srv, array *ca, const config_values_t *cv);<br />
+int config_setup_connection(server *srv, connection *con);<br />
+int config_patch_connection(server *srv, connection *con, comp_key_t comp);<br />
+int config_check_cond(server *srv, connection *con, data_config *dc);<br />
+int config_append_cond_match_buffer(connection *con, data_config *dc, buffer *buf, int n);<br />
+<br />
+#endif<br />
+<br />
 [/code]
 </body>
 </html>

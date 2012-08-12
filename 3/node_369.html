@@ -6,76 +6,76 @@
 <title>在gentoo Linux上安装Trac 0.11.5</title>
 </head>
 <body>
-在gentoo Linux上安装Trac 0.11.5
-1. 需要依赖的包: 
-
-dev-python/setuptools
-dev-python/genshi
-
-emerge -va setuptools genshi
-
-安装数据库驱动包: 可以使用的有 PySQLite(for sqlite),  psycopg2(for postgresql), MySQLdb(for mysql)
-psycopg2在gentoo上的包名为dev-python/pycopg2-2.x
-MySQLdb在gentoo上的包名为dev-python/mysql-python-1.2.x
-我希望可以用postgresql和mysql两种库,所以安装后面两个包
-
-emerge -va psycopg mysql-python
-These are the packages that would be merged, in order:
-
-Calculating dependencies ... done!
-[ebuild  N    ] app-admin/eselect-postgresql-0.3  3 kB
-[ebuild  N    ] dev-db/postgresql-base-8.4.1  USE="kerberos nls pam readline ssl threads zlib -doc -ldap -pg-intdatetime" LINGUAS="zh_CN zh_TW -af -cs -de -es -fa -fr -hr -hu -it -ko -nb -pl -pt_BR -ro -ru -sk -sl -sv -tr" 13,262 kB                                                                                         
-[ebuild  N    ] dev-python/mysql-python-1.2.3_rc1  88 kB                                                   
-[ebuild  N    ] virtual/postgresql-base-8.4  0 kB                                                          
-[ebuild  N    ] dev-python/psycopg-2.0.12  USE="-debug -doc -examples -mxdatetime" 251 kB                  
-
-Total: 5 packages (5 new), Size of downloads: 13,602 kB
-
-Would you like to merge these packages? [Yes/No] Yes
-
-基础依赖包装完了,如果你使用的Linux不是gentoo, 那么请参考Trac目录下的INSTALL文件安装这些包.
-
-2. 接下来安装trac包
-
-解压Trac-0.11.5.tar.gz
-cd Trac-0.11.5
-由于 我想把trac装在一个自定义路径下,所以要把PYTHONPATH的路径设置一下.
-export PYTHONPATH=/serv/stow/trac-0.11.5/lib64/python2.6/site-packages/
-python ./setup.py build
-python ./setup.py -v install
-
-3. 配置trac运行参数
-/serv/stow/trac-0.11.5/bin/trac-admin /serv/stow/mytrac/ initenv
-在这一步中,需要确定要使用的数据库,如果安装完成后需要换数据库,则要重新配置一遍,而不是修改下配置文件就可以的.所以在数据库选择步骤要提前准备好要使用的数据库,或者是postgresql,或者是mysql.默认的sqlite是sqlite:db/trac.db
-对于postgresql,对应上述建立的数据库，应该是;
-postgres://trac:12345@localhost/trac
-MySQL与之类似.
-
-配置/serv/stow/trac-0.11.5/mytrac/trac.ini,设置数据库信息及认证信息
-
-以standalone模式启动trac
-tracd --port 8000 /serv/stow/mytrac
-
-4. 访问:  http://localhost:8000/可以看到trac系统已经运行了.如果还有什么问题,可以再修改trac.ini
-
-5. 用户认证登陆.
-trac支持的认证方式比较多,下面测试一种比较简单的htpasswd方式,其他的参照http://localhost:8000/mytrac/wiki/TracGuide
-
-使用htpasswd创建用户认证文件
-htpasswd -c /serv/stow/trac-0.11.5/mytrac/.htpasswd admin
-这样会加入一个admin用户,设置上你的密码.
-
-添加第二个用户名的时候仍旧使用上面的命令,不过少了一个-c参数.
-htpasswd /serv/stow/trac-0.11.5/mytrac/.htpasswd test1
-
-启动与上一步中的命令一到,参数复杂了些:
-./bin/tracd --port 8000 --basic-auth=mytrac,/serv/stow/trac-0.11.5/mytrac/.htpasswd,/serv/stow/trac-0.11.5/mytrac/ /serv/stow/trac-0.11.5/mytrac/
-
-OK,从浏览器登陆测试一下如何.
-
-6. 添加一个管理员账号
- /serv/stow/trac-0.11.5/bin/trac-admin /serv/stow/trac-0.11.5/mytrac/ permission add admin TRAC_ADMIN
-当这个管理员登陆后,会比用户多一个admin菜单,用于管理这个trac
+在gentoo Linux上安装Trac 0.11.5<br />
+1. 需要依赖的包: <br />
+<br />
+dev-python/setuptools<br />
+dev-python/genshi<br />
+<br />
+emerge -va setuptools genshi<br />
+<br />
+安装数据库驱动包: 可以使用的有 PySQLite(for sqlite),  psycopg2(for postgresql), MySQLdb(for mysql)<br />
+psycopg2在gentoo上的包名为dev-python/pycopg2-2.x<br />
+MySQLdb在gentoo上的包名为dev-python/mysql-python-1.2.x<br />
+我希望可以用postgresql和mysql两种库,所以安装后面两个包<br />
+<br />
+emerge -va psycopg mysql-python<br />
+These are the packages that would be merged, in order:<br />
+<br />
+Calculating dependencies ... done!<br />
+[ebuild  N    ] app-admin/eselect-postgresql-0.3  3 kB<br />
+[ebuild  N    ] dev-db/postgresql-base-8.4.1  USE="kerberos nls pam readline ssl threads zlib -doc -ldap -pg-intdatetime" LINGUAS="zh_CN zh_TW -af -cs -de -es -fa -fr -hr -hu -it -ko -nb -pl -pt_BR -ro -ru -sk -sl -sv -tr" 13,262 kB                                                                                         <br />
+[ebuild  N    ] dev-python/mysql-python-1.2.3_rc1  88 kB                                                   <br />
+[ebuild  N    ] virtual/postgresql-base-8.4  0 kB                                                          <br />
+[ebuild  N    ] dev-python/psycopg-2.0.12  USE="-debug -doc -examples -mxdatetime" 251 kB                  <br />
+<br />
+Total: 5 packages (5 new), Size of downloads: 13,602 kB<br />
+<br />
+Would you like to merge these packages? [Yes/No] Yes<br />
+<br />
+基础依赖包装完了,如果你使用的Linux不是gentoo, 那么请参考Trac目录下的INSTALL文件安装这些包.<br />
+<br />
+2. 接下来安装trac包<br />
+<br />
+解压Trac-0.11.5.tar.gz<br />
+cd Trac-0.11.5<br />
+由于 我想把trac装在一个自定义路径下,所以要把PYTHONPATH的路径设置一下.<br />
+export PYTHONPATH=/serv/stow/trac-0.11.5/lib64/python2.6/site-packages/<br />
+python ./setup.py build<br />
+python ./setup.py -v install<br />
+<br />
+3. 配置trac运行参数<br />
+/serv/stow/trac-0.11.5/bin/trac-admin /serv/stow/mytrac/ initenv<br />
+在这一步中,需要确定要使用的数据库,如果安装完成后需要换数据库,则要重新配置一遍,而不是修改下配置文件就可以的.所以在数据库选择步骤要提前准备好要使用的数据库,或者是postgresql,或者是mysql.默认的sqlite是sqlite:db/trac.db<br />
+对于postgresql,对应上述建立的数据库，应该是;<br />
+postgres://trac:12345@localhost/trac<br />
+MySQL与之类似.<br />
+<br />
+配置/serv/stow/trac-0.11.5/mytrac/trac.ini,设置数据库信息及认证信息<br />
+<br />
+以standalone模式启动trac<br />
+tracd --port 8000 /serv/stow/mytrac<br />
+<br />
+4. 访问:  http://localhost:8000/可以看到trac系统已经运行了.如果还有什么问题,可以再修改trac.ini<br />
+<br />
+5. 用户认证登陆.<br />
+trac支持的认证方式比较多,下面测试一种比较简单的htpasswd方式,其他的参照http://localhost:8000/mytrac/wiki/TracGuide<br />
+<br />
+使用htpasswd创建用户认证文件<br />
+htpasswd -c /serv/stow/trac-0.11.5/mytrac/.htpasswd admin<br />
+这样会加入一个admin用户,设置上你的密码.<br />
+<br />
+添加第二个用户名的时候仍旧使用上面的命令,不过少了一个-c参数.<br />
+htpasswd /serv/stow/trac-0.11.5/mytrac/.htpasswd test1<br />
+<br />
+启动与上一步中的命令一到,参数复杂了些:<br />
+./bin/tracd --port 8000 --basic-auth=mytrac,/serv/stow/trac-0.11.5/mytrac/.htpasswd,/serv/stow/trac-0.11.5/mytrac/ /serv/stow/trac-0.11.5/mytrac/<br />
+<br />
+OK,从浏览器登陆测试一下如何.<br />
+<br />
+6. 添加一个管理员账号<br />
+ /serv/stow/trac-0.11.5/bin/trac-admin /serv/stow/trac-0.11.5/mytrac/ permission add admin TRAC_ADMIN<br />
+当这个管理员登陆后,会比用户多一个admin菜单,用于管理这个trac<br />
 
 </body>
 </html>

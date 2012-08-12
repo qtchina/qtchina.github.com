@@ -6,93 +6,93 @@
 <title>RADIUS协议原理</title>
 </head>
 <body>
-<p><span style="color: rgb(0, 0, 255);"><strong>一．RADIUS协议原理</strong></span></p>
-<p>RADIUS（Remote Authentication Dial In User Service） 用户远程拨入认证服务，它主要针对的远程登录类型有：SLIP、PPP、telnet和rlogin等。RADIUS协议应用范围很广，包括普通电话、上网业务计费，对VPN的支持可以使不同的拨入<a href='/a/list_52_1.html' target='_blank'><u>服务器</u></a>的用户具有不同权限。</p>
-<p>RADIUS典型应用环境如下：</p>
-<p style="text-align: center;"><img src="/Files/allimg/110308/1626233411-0.jpg" alt="radius典型应用" /></p>
-<p>RADIUS数据包分为5个部分：</p>
-<p>（1）Code:1个字节，用于区分RADIUS包的类型：常用类型有：</p>
-<p>接入请求（Access-Request），Code=1；接入允许（Access-Accept），Code=2；接入拒绝（Access-Reject），Code=3；计费请求（Accounting-Request），Code=4等。</p>
-<p>（2）Identifier:一个字节，用于请求和应答包的匹配。</p>
-<p>（3）Length:两个字节，表示RADIUS数据区（包括Code, Identifier, Length, Authenticator, Attributes）的长度，单位是字节，最小为20，最大为4096。</p>
-<p>（4）Authenticator:16个字节，用于验证服务器端的应答，另外还用于用户口令的加密。RADIUS服务器和NAS的共享密钥(Shared Secret)与请求认证码(Request Authenticator)和应答认证码(Response Authenticator)，共同支持发、收报文的完整性和认证。另外，用户密码不能在NAS和RADIUS 服务器之间用明文传输，而一般使用共享密钥(Shared Secret)和认证码(Authenticator)通过MD5加密算法进行加密隐藏。</p>
-<p>（5）Attributes:不定长度，最小可为0个字节，描述RADIUS协议的属性，如用户名、口令、IP地址等信息都是存放在本数据段。</p>
-<p>各个属性的详细编码信息，以及数据格式，限于篇幅，这里不作具体介绍，感兴趣的，可以参看RFC文档，或与我交流。</p>
-<p><span style="color: rgb(0, 0, 255);"><strong>二．RADIUS协议实现</strong></span></p>
-<p>目前，开源软件包freeRadius , tinyRadius，可以下载到其实现的源码。freeRadius是目前功能最强大的开源 RADIUS 服务器软件，采用<a href='/a/list_100_1.html' target='_blank'><u>C语言</u></a>实现，采用了多进程，进程池的处理方法，拥有很好的吞吐处理能力，同时，提供了连接各种数据库的应用接口，方便用户根据自己的需要进行适当的扩展。值得一提的是，它采用模块化处理，用户可以定做适合自己的认证计费处理模块。</p>
-<p>freeRadius的功能强大，也造成了它模块的庞大，不易维护，对安装环境有一些要求。tinyRadius采用Java开发，短小精悍，能接收各种标准协议中的数据包，可以快速的完成对RADIUS数据包的封装与解包，我们可以自己的需要进行某些处理，具有很大的自由度，唯一的缺陷是单线程，没有数据库接口。</p>
-<p><span style="color: rgb(0, 0, 255);"><strong>三．RADIUS协议对安全的考虑</strong></span></p>
-<p>RADIUS采用UDP协议基于以下几点原因：</p>
-<p>1．NAS和RADIUS服务器大多在同一个局域网中，使用UDP更加快捷方便。</p>
-<p>2．简化了服务端的实现。</p>
-<p>事实证明，采用UDP协议可行，RADIUS有自己的机制，来解决UDP丢包特点。</p>
-<p>如果NAS向某个RADIUS服务器提交请求没有收到返回信息，那么可以要求备份RADIUS服务器重传。由于有多个备份RADIUS服务器，因此NAS进行重传的时候，可以采用轮询的方法。如果备份RADIUS服务器的密钥和以前RADIUS服务器的密钥不同，则需要重新进行认证。</p>
-<p>下面重点从RADIUS协议来谈下它在身份认证中如何确保安全认证的。</p>
-<p>1．&nbsp; Authenticator：鉴别码，分为请求鉴别码，回应鉴别码。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<p>在&ldquo;Access-Request&rdquo;数据包中，Authenticator是一个16字节的随机数，称为&ldquo;Request Authenticator&rdquo;。 在机密的整个生存周期中（如RADIUAS服务器和客户端共享的机密），这个值应该是不可预测的，并且是唯一的，因为具有相同密码的重复请求值，使黑客有机会用已截取的响应回复用户。因为同一机密可以被用在不同地理区域中的服务器的验证中，所以请求认证域应该具有全球和临时唯一性。</p>
-<p>为防止数据包中数据被截获被篡改，回应鉴别码采用如下方式生成：</p>
-<p>ResponseAuth = MD5(Code+ID+Length+RequestAuth+ Attributes+Secret)；</p>
-<p>回应鉴别码是对整个数据包进行MD5演算产生的16字节索引，防止伪造服务器的回应。</p>
-<p>2．加密方式。PAP，CAHP，EAP以及Unix登录认证三种加密认证方式。最常用的是前两种，下面介绍下：</p>
-<p><strong>PAP加密</strong>，采用此加密方法时，密码存放在User-Password属性中。</p>
-<p>User-Password加密方法：</p>
-<p>1.在密码的末尾用nulls代替填补形成多个十六个字节的二进制数;</p>
-<p>2.把密码按16个字节为一组划分为p1、p2等等;</p>
-<p>b1=MD5(Secret + Authenticator)&nbsp; c(1) = p1 异或 b1</p>
-<p>b2 = MD5(S + c(1))&nbsp;&nbsp;&nbsp;&nbsp; c(2) = p2 异或b2</p>
-<p>bi = MD5(S + c(i-1))&nbsp;&nbsp; c (i) = pi 异或 bi</p>
-<p>c(1)+c(2)+...+c (i)</p>
-<p>在接收时，这个过程被反过来，由于采用异或方式贯穿在每16个字节之间，同样的算法再异或一次，然后配合MD5演算，从而生成原始的密码，尽管这种加密方式是可逆的，黑客截获到密文后，能通过一定的手段来破解出密码，但如果共享密钥未知的情况下，很难破解，也就只能采用蛮力破解方法。使用共享密钥应采用合适的长度，来防止破解，不应过短。</p>
-<p>PAP加密方法使密码以密文的方式在网络中进行传输，使黑客仍有有机可乘的机会，但CHAP加密方法阻止了密码的传输。</p>
-<p><strong>CHAP加密</strong>，采用此加密方法时，密码存放在Chap-Password属性中。</p>
-<p>这种加密方法的原则是不是密码在网络中进行传输，而只是传输一个索引值，从而增加了安全性，但这样做的代价是，RADIUS服务端必须要知道用户的密码，从而再现密码索引值来和发来的认证请求中的密码索引值比对。</p>
-<p>Chap-Password加密方法：</p>
-<p>Md5(chapId+password+chapChallenge);</p>
-<p>chapId :可以是随机产生的一字节码；</p>
-<p>chapChallenge&nbsp; :NAS生成一个随机挑战字（16个字节比较合适）该字段有时缺失，读取Authenticator域作为挑战字。</p>
-<p>3．共享密钥（Secret）：共享密钥在密码加密以及数据包的鉴别码部分都参与了运算，即使RADIUS数据包被截获，但不知道共享密钥，很难破解用户的密码伪造数据。共享密钥应采用合适的长度，不应过短，宽大密码范围能有效提供对穷举搜寻攻击的防卫，随着密钥长度的增加，其破解花费的时间将大大增加。</p>
-<p>4．为防止非法用户的重放攻击，造成服务器瘫痪。如果在一个很短的时间片段里，一个请求有相同的客户源IP地址、源UDP端口号和标识符，RADIUS服务器会认为这是上一个重复的请求，将直接丢弃，不做任何处理。</p>
-<p><span style="color: rgb(0, 0, 255);"><strong>四．总结</strong></span></p>
-<p>Radius协议本身比较易掌握，在应用中，可以结合其自身的密码方式，实现满足企业需要的更高强度的强认证，比如结合各种令牌卡，手机短信等等。对协议进行开发，离不开各种抓包工具，像sniffer,tcpdump,ethereal等抓包工具的使用。</p>
-<p>外部用户要访问某局域网络中计算机设备，其访问方式有多种，比如采用VPN拨号，Telnet等等。如用户Telnet登陆时，产生用户名和密码信息，而NAS服务器AAA配置中指定了采用RADIUS作为认证服务器，则将其封装成RADIUS请求数据包发送到RADIUS服务器进行身份认证，RADIUS服务器通过NAS和用户进行交流，以提示用户认证通过与否，以及是否需要Challenge身份认证。</p>
-<p>其工作原理为：用户接入NAS （Net Access Server），NAS一般为路由器等设备，NAS向RADIUS服务器使用Access-Request数据包提交用户信息，包括用户名、密码等相关信息，其中用户密码是经过MD5加密的，双方使用共享密钥，这个密钥不经过网络传播；RADIUS服务器对用户名和密码的合法性进行检验，必要时可以提出一个Challenge，要求进一步对用户认证，也可以对NAS进行类似的认证；如果合法，给NAS返回Access-Accept数据包，允许用户进行下一步工作，否则返回Access-Reject数据包，拒绝用户访问；如果允许访问，NAS向RADIUS服务器提出计费请求Account-Require，RADIUS服务器响应Account-Accept，对用户的计费开始，同时用户可以进行自己的相关操作。</p>
-<p>RADIUS还支持代理和漫游功能。简单地说，代理就是一台服务器，可以作为其他RADIUS服务器的代理，负责转发RADIUS认证和计费数据包。所谓漫游功能，就是代理的一个具体实现，这样可以让用户通过本来和其无关的RADIUS服务器进行认证。</p>
-<p>RADIUS能够实现其功能依赖于它自身的数据包结构。RADIUS采用的是UDP传输协议，认证和计费监听端口一般分别为：1812，1813。</p>
-<p>以太网上的RADIUS封装后的包结构如下：</p>
-<table cellspacing="1" cellpadding="1" border="1">
-    <tbody>
-        <tr>
-            <td>
-            <p>以太帧头</p>
-            </td>
-            <td>
-            <p>IP包头</p>
-            </td>
-            <td>
-            <p>UDP包头</p>
-            </td>
-            <td>
-            <p><span style="color: rgb(255, 0, 0);">RADIUS数据</span>包</p>
-            </td>
-            <td>
-            <p>以太网FCS</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<p>在这里我们关心的是红色RADIUS数据包部分。</p>
-<p>RADIUS数据包的格式如下：</p>
-<p style="text-align: center;"><img src="/Files/allimg/110308/1626233958-1.gif" alt="radius数据包格式" /></p>
-
+<p><span style="color: rgb(0, 0, 255);"><strong>一．RADIUS协议原理</strong></span></p><br />
+<p>RADIUS（Remote Authentication Dial In User Service） 用户远程拨入认证服务，它主要针对的远程登录类型有：SLIP、PPP、telnet和rlogin等。RADIUS协议应用范围很广，包括普通电话、上网业务计费，对VPN的支持可以使不同的拨入<a href='/a/list_52_1.html' target='_blank'><u>服务器</u></a>的用户具有不同权限。</p><br />
+<p>RADIUS典型应用环境如下：</p><br />
+<p style="text-align: center;"><img src="/Files/allimg/110308/1626233411-0.jpg" alt="radius典型应用" /></p><br />
+<p>RADIUS数据包分为5个部分：</p><br />
+<p>（1）Code:1个字节，用于区分RADIUS包的类型：常用类型有：</p><br />
+<p>接入请求（Access-Request），Code=1；接入允许（Access-Accept），Code=2；接入拒绝（Access-Reject），Code=3；计费请求（Accounting-Request），Code=4等。</p><br />
+<p>（2）Identifier:一个字节，用于请求和应答包的匹配。</p><br />
+<p>（3）Length:两个字节，表示RADIUS数据区（包括Code, Identifier, Length, Authenticator, Attributes）的长度，单位是字节，最小为20，最大为4096。</p><br />
+<p>（4）Authenticator:16个字节，用于验证服务器端的应答，另外还用于用户口令的加密。RADIUS服务器和NAS的共享密钥(Shared Secret)与请求认证码(Request Authenticator)和应答认证码(Response Authenticator)，共同支持发、收报文的完整性和认证。另外，用户密码不能在NAS和RADIUS 服务器之间用明文传输，而一般使用共享密钥(Shared Secret)和认证码(Authenticator)通过MD5加密算法进行加密隐藏。</p><br />
+<p>（5）Attributes:不定长度，最小可为0个字节，描述RADIUS协议的属性，如用户名、口令、IP地址等信息都是存放在本数据段。</p><br />
+<p>各个属性的详细编码信息，以及数据格式，限于篇幅，这里不作具体介绍，感兴趣的，可以参看RFC文档，或与我交流。</p><br />
+<p><span style="color: rgb(0, 0, 255);"><strong>二．RADIUS协议实现</strong></span></p><br />
+<p>目前，开源软件包freeRadius , tinyRadius，可以下载到其实现的源码。freeRadius是目前功能最强大的开源 RADIUS 服务器软件，采用<a href='/a/list_100_1.html' target='_blank'><u>C语言</u></a>实现，采用了多进程，进程池的处理方法，拥有很好的吞吐处理能力，同时，提供了连接各种数据库的应用接口，方便用户根据自己的需要进行适当的扩展。值得一提的是，它采用模块化处理，用户可以定做适合自己的认证计费处理模块。</p><br />
+<p>freeRadius的功能强大，也造成了它模块的庞大，不易维护，对安装环境有一些要求。tinyRadius采用Java开发，短小精悍，能接收各种标准协议中的数据包，可以快速的完成对RADIUS数据包的封装与解包，我们可以自己的需要进行某些处理，具有很大的自由度，唯一的缺陷是单线程，没有数据库接口。</p><br />
+<p><span style="color: rgb(0, 0, 255);"><strong>三．RADIUS协议对安全的考虑</strong></span></p><br />
+<p>RADIUS采用UDP协议基于以下几点原因：</p><br />
+<p>1．NAS和RADIUS服务器大多在同一个局域网中，使用UDP更加快捷方便。</p><br />
+<p>2．简化了服务端的实现。</p><br />
+<p>事实证明，采用UDP协议可行，RADIUS有自己的机制，来解决UDP丢包特点。</p><br />
+<p>如果NAS向某个RADIUS服务器提交请求没有收到返回信息，那么可以要求备份RADIUS服务器重传。由于有多个备份RADIUS服务器，因此NAS进行重传的时候，可以采用轮询的方法。如果备份RADIUS服务器的密钥和以前RADIUS服务器的密钥不同，则需要重新进行认证。</p><br />
+<p>下面重点从RADIUS协议来谈下它在身份认证中如何确保安全认证的。</p><br />
+<p>1．&nbsp; Authenticator：鉴别码，分为请求鉴别码，回应鉴别码。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br />
+<p>在&ldquo;Access-Request&rdquo;数据包中，Authenticator是一个16字节的随机数，称为&ldquo;Request Authenticator&rdquo;。 在机密的整个生存周期中（如RADIUAS服务器和客户端共享的机密），这个值应该是不可预测的，并且是唯一的，因为具有相同密码的重复请求值，使黑客有机会用已截取的响应回复用户。因为同一机密可以被用在不同地理区域中的服务器的验证中，所以请求认证域应该具有全球和临时唯一性。</p><br />
+<p>为防止数据包中数据被截获被篡改，回应鉴别码采用如下方式生成：</p><br />
+<p>ResponseAuth = MD5(Code+ID+Length+RequestAuth+ Attributes+Secret)；</p><br />
+<p>回应鉴别码是对整个数据包进行MD5演算产生的16字节索引，防止伪造服务器的回应。</p><br />
+<p>2．加密方式。PAP，CAHP，EAP以及Unix登录认证三种加密认证方式。最常用的是前两种，下面介绍下：</p><br />
+<p><strong>PAP加密</strong>，采用此加密方法时，密码存放在User-Password属性中。</p><br />
+<p>User-Password加密方法：</p><br />
+<p>1.在密码的末尾用nulls代替填补形成多个十六个字节的二进制数;</p><br />
+<p>2.把密码按16个字节为一组划分为p1、p2等等;</p><br />
+<p>b1=MD5(Secret + Authenticator)&nbsp; c(1) = p1 异或 b1</p><br />
+<p>b2 = MD5(S + c(1))&nbsp;&nbsp;&nbsp;&nbsp; c(2) = p2 异或b2</p><br />
+<p>bi = MD5(S + c(i-1))&nbsp;&nbsp; c (i) = pi 异或 bi</p><br />
+<p>c(1)+c(2)+...+c (i)</p><br />
+<p>在接收时，这个过程被反过来，由于采用异或方式贯穿在每16个字节之间，同样的算法再异或一次，然后配合MD5演算，从而生成原始的密码，尽管这种加密方式是可逆的，黑客截获到密文后，能通过一定的手段来破解出密码，但如果共享密钥未知的情况下，很难破解，也就只能采用蛮力破解方法。使用共享密钥应采用合适的长度，来防止破解，不应过短。</p><br />
+<p>PAP加密方法使密码以密文的方式在网络中进行传输，使黑客仍有有机可乘的机会，但CHAP加密方法阻止了密码的传输。</p><br />
+<p><strong>CHAP加密</strong>，采用此加密方法时，密码存放在Chap-Password属性中。</p><br />
+<p>这种加密方法的原则是不是密码在网络中进行传输，而只是传输一个索引值，从而增加了安全性，但这样做的代价是，RADIUS服务端必须要知道用户的密码，从而再现密码索引值来和发来的认证请求中的密码索引值比对。</p><br />
+<p>Chap-Password加密方法：</p><br />
+<p>Md5(chapId+password+chapChallenge);</p><br />
+<p>chapId :可以是随机产生的一字节码；</p><br />
+<p>chapChallenge&nbsp; :NAS生成一个随机挑战字（16个字节比较合适）该字段有时缺失，读取Authenticator域作为挑战字。</p><br />
+<p>3．共享密钥（Secret）：共享密钥在密码加密以及数据包的鉴别码部分都参与了运算，即使RADIUS数据包被截获，但不知道共享密钥，很难破解用户的密码伪造数据。共享密钥应采用合适的长度，不应过短，宽大密码范围能有效提供对穷举搜寻攻击的防卫，随着密钥长度的增加，其破解花费的时间将大大增加。</p><br />
+<p>4．为防止非法用户的重放攻击，造成服务器瘫痪。如果在一个很短的时间片段里，一个请求有相同的客户源IP地址、源UDP端口号和标识符，RADIUS服务器会认为这是上一个重复的请求，将直接丢弃，不做任何处理。</p><br />
+<p><span style="color: rgb(0, 0, 255);"><strong>四．总结</strong></span></p><br />
+<p>Radius协议本身比较易掌握，在应用中，可以结合其自身的密码方式，实现满足企业需要的更高强度的强认证，比如结合各种令牌卡，手机短信等等。对协议进行开发，离不开各种抓包工具，像sniffer,tcpdump,ethereal等抓包工具的使用。</p><br />
+<p>外部用户要访问某局域网络中计算机设备，其访问方式有多种，比如采用VPN拨号，Telnet等等。如用户Telnet登陆时，产生用户名和密码信息，而NAS服务器AAA配置中指定了采用RADIUS作为认证服务器，则将其封装成RADIUS请求数据包发送到RADIUS服务器进行身份认证，RADIUS服务器通过NAS和用户进行交流，以提示用户认证通过与否，以及是否需要Challenge身份认证。</p><br />
+<p>其工作原理为：用户接入NAS （Net Access Server），NAS一般为路由器等设备，NAS向RADIUS服务器使用Access-Request数据包提交用户信息，包括用户名、密码等相关信息，其中用户密码是经过MD5加密的，双方使用共享密钥，这个密钥不经过网络传播；RADIUS服务器对用户名和密码的合法性进行检验，必要时可以提出一个Challenge，要求进一步对用户认证，也可以对NAS进行类似的认证；如果合法，给NAS返回Access-Accept数据包，允许用户进行下一步工作，否则返回Access-Reject数据包，拒绝用户访问；如果允许访问，NAS向RADIUS服务器提出计费请求Account-Require，RADIUS服务器响应Account-Accept，对用户的计费开始，同时用户可以进行自己的相关操作。</p><br />
+<p>RADIUS还支持代理和漫游功能。简单地说，代理就是一台服务器，可以作为其他RADIUS服务器的代理，负责转发RADIUS认证和计费数据包。所谓漫游功能，就是代理的一个具体实现，这样可以让用户通过本来和其无关的RADIUS服务器进行认证。</p><br />
+<p>RADIUS能够实现其功能依赖于它自身的数据包结构。RADIUS采用的是UDP传输协议，认证和计费监听端口一般分别为：1812，1813。</p><br />
+<p>以太网上的RADIUS封装后的包结构如下：</p><br />
+<table cellspacing="1" cellpadding="1" border="1"><br />
+    <tbody><br />
+        <tr><br />
+            <td><br />
+            <p>以太帧头</p><br />
+            </td><br />
+            <td><br />
+            <p>IP包头</p><br />
+            </td><br />
+            <td><br />
+            <p>UDP包头</p><br />
+            </td><br />
+            <td><br />
+            <p><span style="color: rgb(255, 0, 0);">RADIUS数据</span>包</p><br />
+            </td><br />
+            <td><br />
+            <p>以太网FCS</p><br />
+            </td><br />
+        </tr><br />
+    </tbody><br />
+</table><br />
+<p>在这里我们关心的是红色RADIUS数据包部分。</p><br />
+<p>RADIUS数据包的格式如下：</p><br />
+<p style="text-align: center;"><img src="/Files/allimg/110308/1626233958-1.gif" alt="radius数据包格式" /></p><br />
 <br />
-
-<div class='copyright' style="font-size:10pt;color:#930000;PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 5px; MARGIN: 20px 10px; BORDER-LEFT: #cfc 10px solid;PADDING-TOP: 5px">
-本站遵循Creative Commons Attribution 3.0 License，所有文章欢迎任何形式的转载，但请注明作者及出处，尊重他人劳动成果！<br/>
-文章转载自：<strong>罗索工作室</strong> [<a href="http://www.rosoo.net/">http://www.rosoo.net</a>]<br />
-本文标题：浅谈Radius协议<br/>
-本文作者：cjx1986    本文来源:CSDN博客<br/>
-本文地址：<a href="http://www.rosoo.net/a/201103/11039.html">http://www.rosoo.net/a/201103/11039.html</a><br/>
-</div>
+<br /><br />
+<br />
+<div class='copyright' style="font-size:10pt;color:#930000;PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 5px; MARGIN: 20px 10px; BORDER-LEFT: #cfc 10px solid;PADDING-TOP: 5px"><br />
+本站遵循Creative Commons Attribution 3.0 License，所有文章欢迎任何形式的转载，但请注明作者及出处，尊重他人劳动成果！<br/><br />
+文章转载自：<strong>罗索工作室</strong> [<a href="http://www.rosoo.net/">http://www.rosoo.net</a>]<br /><br />
+本文标题：浅谈Radius协议<br/><br />
+本文作者：cjx1986    本文来源:CSDN博客<br/><br />
+本文地址：<a href="http://www.rosoo.net/a/201103/11039.html">http://www.rosoo.net/a/201103/11039.html</a><br/><br />
+</div><br />
 
 </body>
 </html>

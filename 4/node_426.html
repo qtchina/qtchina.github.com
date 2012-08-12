@@ -6,45 +6,45 @@
 <title>来仔细看看GCC 4.5.0</title>
 </head>
 <body>
-				<p>距离GCC 4.4的发布一年之久，GNU终于发布GCC 4.5了。新版本带来了很多新特性，包括使用MPC库在编译时完成复杂的算术计算，C++0x支持增强，使用部分Graphite完成自动并行化，支持新的ARM处理器，Intel Atom优化和调优支持，以及AMD Orochi优化支持等。今年稍晚发布的Fedora 14,Ubuntu 10.10,OpenSUSE 11.3，都将有GCC4.5，估计Gentoo马上就会有支持了，磨拳擦掌准备试用喽：）详细支持如下：</p> 
-<h4>总体说明：</h4> 
-<ul> 
-<li>编译GCC需要MPC库</li> 
-<li>故纸堆里的旧系统和很久没有更新和测试的系统在GCC4.5中被标记为待放弃，包括IRIX, Solaris 7, Tru64 UNIX V5.1.</li> 
-<li>GCC4.4中标记为待放弃的支持被放弃</li> 
-<li>移除Itanium 1变种支持，但Itanium2编译的程序能在Itanium1上正确执行</li> 
-<li>GCC生成的调试信息包括了更多DWARF 3的特性，甚至包含了DWARF4的一些特性.GDB7.0之前的版本将无法使用这些特性.所以调试GCC4.5编译的程序需要使用GDB7.0及以上版本.也可以使用选项 -gdwarf-s  -gstrict-dwarf来禁止生成DWARF4信息，或者-gdwarf-2 -gstrict-dwarf让GCC严格执行DWARF2标准.</li> 
-<li>X86上，浮点运算在GCC4.5上使用严格C99语法编译时，可能会运行变慢。这是为了和标准一致，可以通过选项-fexcess-precision=fast来避免严格的标准限制。</li> 
-<li>noinline属性不再能阻止整个函数拷贝。但可以通过新的属性noclone做到。</li> 
-</ul> 
-<p><span id="more-10746"></span></p> 
-<h4>改进：</h4> 
-<ul> 
-<li>-save-temps可以增加参数，该功能让用户可以在并行编译的时候得到编译器的中间文件，但不会在不同的文件夹中使用相同的文件名从而干扰比起。</li> 
-<li>调试信息目标文件也都被放在了同个文件夹下，而不是当前工作目录，这样用户可以在并行编译的时候得到调试信息。</li> 
-<li>集成了MPC库，这样可以让GCC在编译时更精确的评估复杂的算术运算。GCC也可以通过它，对于常数作参数的数学运算类内建函数调用，直接在编译时使用相等的返回值来代替之。包括下列内建函数：cacos, cacosh, casin, casinh, catan, catanh, ccos, ccosh, cexp, clog, cpow, csin, csinh, csqrt, ctan和ctanh。</li> 
-<li>新的链接时优化器(-flto),打开此选项后，GCC会针对每个输入文件，产生bytecode的表示形式，并将其写入每个目标文件的特定ELF区內。链接时，从这些ELF区內读取函数体，并将其实体化为转换单元。这样就可以使得过程间优化能在不同的文件间进行(甚至不同语言间),进而可能提升性能。使用此功能需要在编译时和链接时都增加-flto选项。如果不需要程序输出任何符号，可以联合-fwhopr和-fwhole-program来让过程间优化器执行更加激进的优化。</li> 
-<li>增强自动并行化，现在支持外层循环的并行化。</li> 
-<li>自动并行化能作为Graphite的一部分来打开。在选项-ftree-parallelize-loops=的基础上增加-floop-parallelize-all能打开基于Graphite的优化。(注:Graphite是GCC中使用多面体模型做循环优化的部分)</li> 
-<li>重写基于严格指针的优化架构，会提高生成代码的效率。基于严格指针的优化在打开-fno-strict-aliasing后可用。</li> 
-<li>增加关于函数传参的新优化。试图改变函数原型，避免无用传递，仅传递结构体中特定部分，并将引用传参改为值传参。-O2，-Os及以上级别默认开启此优化。</li> 
-<li>优化异常控制代码。</li> 
-</ul> 
-<h4>新语言支持和特定语言改进</h4> 
-<ul> 
-<li>所有语言：-fshow-colum选项默认打开，错误信息现在有列信息。</li> 
-<li>C类语言：若#include的文件未找到，编译器会立即退出；增加一个新内建函数__builtin_unreachable()；增加-Wlogical-op选项，对可能存在的逻辑错误，报警告；嵌入式汇编增加goto特性，允许汇编中的语句直接跳到C中的标号处；C++0x原始strings(raw string)支持；deprecatd树形现在可以增加可选字符串参数,如__attribute__((deprecated(&#8220;text string&#8221;))),这样，deprecation警告会和字符串一同打印。</li> 
-<li>其他针对各个语言的详细细节请参考官方release。</li> 
-</ul> 
-<h4>其他改进：</h4> 
-<ul> 
-<li>插件支持：可以不通过改变编译器代码来扩展编译器功能。-fplugin=file.so能指定GCC载入动态链接文件file.so，并将其作为编译器的一部分执行。更多的细节请参考相关文档。</li> 
-<li>安装文件夹稍有变动。</li> 
-</ul> 
-<p>参考：</p> 
-<p>http://gcc.gnu.org/gcc-4.5/changes.html</p> 
-
-		<p>PS:GCC 4.5.0最大的更新是性能提升，对于高性能的benchmark，普遍性能提升在5%-10%. GCC4.5.0中真正实现了过程间优化。过程间优化能明显的提升性能并明显降低生成的代码大小。另外，GCC4.5.0也使用多面体模型改进了循环优化架构.使得GCC日后可以加入更多高级循环优化，并且能深入调优。</p> 
+				<p>距离GCC 4.4的发布一年之久，GNU终于发布GCC 4.5了。新版本带来了很多新特性，包括使用MPC库在编译时完成复杂的算术计算，C++0x支持增强，使用部分Graphite完成自动并行化，支持新的ARM处理器，Intel Atom优化和调优支持，以及AMD Orochi优化支持等。今年稍晚发布的Fedora 14,Ubuntu 10.10,OpenSUSE 11.3，都将有GCC4.5，估计Gentoo马上就会有支持了，磨拳擦掌准备试用喽：）详细支持如下：</p> <br />
+<h4>总体说明：</h4> <br />
+<ul> <br />
+<li>编译GCC需要MPC库</li> <br />
+<li>故纸堆里的旧系统和很久没有更新和测试的系统在GCC4.5中被标记为待放弃，包括IRIX, Solaris 7, Tru64 UNIX V5.1.</li> <br />
+<li>GCC4.4中标记为待放弃的支持被放弃</li> <br />
+<li>移除Itanium 1变种支持，但Itanium2编译的程序能在Itanium1上正确执行</li> <br />
+<li>GCC生成的调试信息包括了更多DWARF 3的特性，甚至包含了DWARF4的一些特性.GDB7.0之前的版本将无法使用这些特性.所以调试GCC4.5编译的程序需要使用GDB7.0及以上版本.也可以使用选项 -gdwarf-s  -gstrict-dwarf来禁止生成DWARF4信息，或者-gdwarf-2 -gstrict-dwarf让GCC严格执行DWARF2标准.</li> <br />
+<li>X86上，浮点运算在GCC4.5上使用严格C99语法编译时，可能会运行变慢。这是为了和标准一致，可以通过选项-fexcess-precision=fast来避免严格的标准限制。</li> <br />
+<li>noinline属性不再能阻止整个函数拷贝。但可以通过新的属性noclone做到。</li> <br />
+</ul> <br />
+<p><span id="more-10746"></span></p> <br />
+<h4>改进：</h4> <br />
+<ul> <br />
+<li>-save-temps可以增加参数，该功能让用户可以在并行编译的时候得到编译器的中间文件，但不会在不同的文件夹中使用相同的文件名从而干扰比起。</li> <br />
+<li>调试信息目标文件也都被放在了同个文件夹下，而不是当前工作目录，这样用户可以在并行编译的时候得到调试信息。</li> <br />
+<li>集成了MPC库，这样可以让GCC在编译时更精确的评估复杂的算术运算。GCC也可以通过它，对于常数作参数的数学运算类内建函数调用，直接在编译时使用相等的返回值来代替之。包括下列内建函数：cacos, cacosh, casin, casinh, catan, catanh, ccos, ccosh, cexp, clog, cpow, csin, csinh, csqrt, ctan和ctanh。</li> <br />
+<li>新的链接时优化器(-flto),打开此选项后，GCC会针对每个输入文件，产生bytecode的表示形式，并将其写入每个目标文件的特定ELF区內。链接时，从这些ELF区內读取函数体，并将其实体化为转换单元。这样就可以使得过程间优化能在不同的文件间进行(甚至不同语言间),进而可能提升性能。使用此功能需要在编译时和链接时都增加-flto选项。如果不需要程序输出任何符号，可以联合-fwhopr和-fwhole-program来让过程间优化器执行更加激进的优化。</li> <br />
+<li>增强自动并行化，现在支持外层循环的并行化。</li> <br />
+<li>自动并行化能作为Graphite的一部分来打开。在选项-ftree-parallelize-loops=的基础上增加-floop-parallelize-all能打开基于Graphite的优化。(注:Graphite是GCC中使用多面体模型做循环优化的部分)</li> <br />
+<li>重写基于严格指针的优化架构，会提高生成代码的效率。基于严格指针的优化在打开-fno-strict-aliasing后可用。</li> <br />
+<li>增加关于函数传参的新优化。试图改变函数原型，避免无用传递，仅传递结构体中特定部分，并将引用传参改为值传参。-O2，-Os及以上级别默认开启此优化。</li> <br />
+<li>优化异常控制代码。</li> <br />
+</ul> <br />
+<h4>新语言支持和特定语言改进</h4> <br />
+<ul> <br />
+<li>所有语言：-fshow-colum选项默认打开，错误信息现在有列信息。</li> <br />
+<li>C类语言：若#include的文件未找到，编译器会立即退出；增加一个新内建函数__builtin_unreachable()；增加-Wlogical-op选项，对可能存在的逻辑错误，报警告；嵌入式汇编增加goto特性，允许汇编中的语句直接跳到C中的标号处；C++0x原始strings(raw string)支持；deprecatd树形现在可以增加可选字符串参数,如__attribute__((deprecated(&#8220;text string&#8221;))),这样，deprecation警告会和字符串一同打印。</li> <br />
+<li>其他针对各个语言的详细细节请参考官方release。</li> <br />
+</ul> <br />
+<h4>其他改进：</h4> <br />
+<ul> <br />
+<li>插件支持：可以不通过改变编译器代码来扩展编译器功能。-fplugin=file.so能指定GCC载入动态链接文件file.so，并将其作为编译器的一部分执行。更多的细节请参考相关文档。</li> <br />
+<li>安装文件夹稍有变动。</li> <br />
+</ul> <br />
+<p>参考：</p> <br />
+<p>http://gcc.gnu.org/gcc-4.5/changes.html</p> <br />
+<br />
+		<p>PS:GCC 4.5.0最大的更新是性能提升，对于高性能的benchmark，普遍性能提升在5%-10%. GCC4.5.0中真正实现了过程间优化。过程间优化能明显的提升性能并明显降低生成的代码大小。另外，GCC4.5.0也使用多面体模型改进了循环优化架构.使得GCC日后可以加入更多高级循环优化，并且能深入调优。</p> <br />
 
 </body>
 </html>

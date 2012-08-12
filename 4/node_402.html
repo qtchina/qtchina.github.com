@@ -6,43 +6,43 @@
 <title>在gentoo上使用又显示器，扩展，镜像</title>
 </head>
 <body>
-首先需要在xorg.conf的下面这节中设置Virtual 值，这个值等于两个显示器的长度和、宽度和。
-
-Section "Screen"
-        Identifier "aticonfig-Screen[0]-0"
-        Device     "aticonfig-Device[0]-0"
-        Monitor    "aticonfig-Monitor[0]-0"
-        DefaultDepth     24
-        SubSection "Display"
-                Viewport   0 0
-                Depth     24
-               <b> Virtual 2944 1200</b>
-        EndSubSection
-EndSection
-
-注意其中加重的一行。这一行一般在两个显示分辨率不同的时候会用到，否则在使用xrandr设置启动另外的显示器的时候，会出现下面的错误：
-
-
-然后在命令行，输入下面的命令，启动扩展显示器：
-xrandr  --output VGA-0 --right-of LVDS --auto
-
-有几个参数，根据相应的情况修改，VGA-0可能是其他的名字，--right-of 表示在右边扩展，可以使用--left-off在左边扩展。
---auto 也可以改为--mode aaaaxbbbb
-
-附：
-  xrandr 命令行可以很方便地切换双屏，常用方式如下，其他的可以自己探索：
-xrandr --output VGA --same-as LVDS --auto
-         打开外接显示器(最高分辨率)，与笔记本液晶屏幕显示同样内容（克隆）
-xrandr --output VGA --same-as LVDS --mode 1024x768
-         打开外接显示器(分辨率为1024x768)，与笔记本液晶屏幕显示同样内容（克隆）
-xrandr --output VGA --right-of LVDS --auto
-         打开外接显示器(最高分辨率)，设置为右侧扩展屏幕
-xrandr --output VGA --off
-          关闭外接显示器
-xrandr --output VGA --auto --output LVDS --off
-        打开外接显示器，同时关闭笔记本液晶屏幕（只用外接显示器工作）
-xrandr --output VGA --off --output LVDS --auto
-        关闭外接显示器，同时打开笔记本液晶屏幕 (只用笔记本液晶屏)
+首先需要在xorg.conf的下面这节中设置Virtual 值，这个值等于两个显示器的长度和、宽度和。<br />
+<br />
+Section "Screen"<br />
+        Identifier "aticonfig-Screen[0]-0"<br />
+        Device     "aticonfig-Device[0]-0"<br />
+        Monitor    "aticonfig-Monitor[0]-0"<br />
+        DefaultDepth     24<br />
+        SubSection "Display"<br />
+                Viewport   0 0<br />
+                Depth     24<br />
+               <b> Virtual 2944 1200</b><br />
+        EndSubSection<br />
+EndSection<br />
+<br />
+注意其中加重的一行。这一行一般在两个显示分辨率不同的时候会用到，否则在使用xrandr设置启动另外的显示器的时候，会出现下面的错误：<br />
+<br />
+<br />
+然后在命令行，输入下面的命令，启动扩展显示器：<br />
+xrandr  --output VGA-0 --right-of LVDS --auto<br />
+<br />
+有几个参数，根据相应的情况修改，VGA-0可能是其他的名字，--right-of 表示在右边扩展，可以使用--left-off在左边扩展。<br />
+--auto 也可以改为--mode aaaaxbbbb<br />
+<br />
+附：<br />
+  xrandr 命令行可以很方便地切换双屏，常用方式如下，其他的可以自己探索：<br />
+xrandr --output VGA --same-as LVDS --auto<br />
+         打开外接显示器(最高分辨率)，与笔记本液晶屏幕显示同样内容（克隆）<br />
+xrandr --output VGA --same-as LVDS --mode 1024x768<br />
+         打开外接显示器(分辨率为1024x768)，与笔记本液晶屏幕显示同样内容（克隆）<br />
+xrandr --output VGA --right-of LVDS --auto<br />
+         打开外接显示器(最高分辨率)，设置为右侧扩展屏幕<br />
+xrandr --output VGA --off<br />
+          关闭外接显示器<br />
+xrandr --output VGA --auto --output LVDS --off<br />
+        打开外接显示器，同时关闭笔记本液晶屏幕（只用外接显示器工作）<br />
+xrandr --output VGA --off --output LVDS --auto<br />
+        关闭外接显示器，同时打开笔记本液晶屏幕 (只用笔记本液晶屏)<br />
 （最后两种情况请小心操作，不要误把两个屏幕都关掉了。。。。）
 </body>
 </html>

@@ -6,52 +6,52 @@
 <title>短网址技术常用的Base62编解码</title>
 </head>
 <body>
-使用Base62能编码出与URL字符不冲突，并且长度与Base64几乎相等的字符串，很有优化与使用便利的优势。
-
-下面示例代码所使用bcmath库，在php4.0.4时已经引入到核心，更新的版本中不需要额外安装bcmath库。
-
- [code type="php']
-
-<?php
-
- /**
-   * Converts a base 10 number to any other base.
-   * 
-   * @param int $val   Decimal number
-   * @param int $base  Base to convert to. If null, will use strlen($chars) as base.
-   * @param string $chars Characters used in base, arranged lowest to highest. Must be at least $base characters long.
-   * 
-   * @return string    Number converted to specified base
-   */
- function base_encode($val, $base=62, $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
-      if(!isset($base)) $base = strlen($chars);
-      $str = '';
-      do {
-          $m = bcmod($val, $base);
-          $str = $chars[$m] . $str;
-          $val = bcdiv(bcsub($val, $m), $base);
-      } while(bccomp($val,0)>0);
-      return $str;
- }
-
- /**
-   * Convert a number from any base to base 10
-   * 
-   * @param string $str   Number
-   * @param int $base  Base of number. If null, will use strlen($chars) as base.
-   * @param string $chars Characters use in base, arranged lowest to highest. Must be at least $base characters long.
-   * 
-   * @return int    Number converted to base 10
-   */
- function base_decode($str, $base=62, $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
-      if(!isset($base)) $base = strlen($chars);
-      $len = strlen($str);
-      $val = 0;
-      $arr = array_flip(str_split($chars));
-      for($i = 0; $i < $len; ++$i) {
-          $val = bcadd($val, bcmul($arr[$str[$i]], bcpow($base, $len-$i-1)));
-      }
-      return $v
+使用Base62能编码出与URL字符不冲突，并且长度与Base64几乎相等的字符串，很有优化与使用便利的优势。<br />
+<br />
+下面示例代码所使用bcmath库，在php4.0.4时已经引入到核心，更新的版本中不需要额外安装bcmath库。<br />
+<br />
+ [code type="php']<br />
+<br />
+<?php<br />
+<br />
+ /**<br />
+   * Converts a base 10 number to any other base.<br />
+   * <br />
+   * @param int $val   Decimal number<br />
+   * @param int $base  Base to convert to. If null, will use strlen($chars) as base.<br />
+   * @param string $chars Characters used in base, arranged lowest to highest. Must be at least $base characters long.<br />
+   * <br />
+   * @return string    Number converted to specified base<br />
+   */<br />
+ function base_encode($val, $base=62, $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {<br />
+      if(!isset($base)) $base = strlen($chars);<br />
+      $str = '';<br />
+      do {<br />
+          $m = bcmod($val, $base);<br />
+          $str = $chars[$m] . $str;<br />
+          $val = bcdiv(bcsub($val, $m), $base);<br />
+      } while(bccomp($val,0)>0);<br />
+      return $str;<br />
+ }<br />
+<br />
+ /**<br />
+   * Convert a number from any base to base 10<br />
+   * <br />
+   * @param string $str   Number<br />
+   * @param int $base  Base of number. If null, will use strlen($chars) as base.<br />
+   * @param string $chars Characters use in base, arranged lowest to highest. Must be at least $base characters long.<br />
+   * <br />
+   * @return int    Number converted to base 10<br />
+   */<br />
+ function base_decode($str, $base=62, $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {<br />
+      if(!isset($base)) $base = strlen($chars);<br />
+      $len = strlen($str);<br />
+      $val = 0;<br />
+      $arr = array_flip(str_split($chars));<br />
+      for($i = 0; $i < $len; ++$i) {<br />
+          $val = bcadd($val, bcmul($arr[$str[$i]], bcpow($base, $len-$i-1)));<br />
+      }<br />
+      return $v<br />
 [/code]
 </body>
 </html>

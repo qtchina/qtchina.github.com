@@ -6,36 +6,36 @@
 <title>PHP实现的二分查找法</title>
 </head>
 <body>
-今天做题的时候这个二分算法都没写出来，真惨。
-再记下来看一遍。
-
-[code type="php"]
-
-<?php 
-$a=range(0,9546); 
-$high=count($a) - 1; 
-$mid=0; 
-$low=0; 
-$found=0; 
-$m=456; 
-while( ($low<=$high) && ($found==0)) 
-{ 
-    $mid=floor( ($low+$high) / 2 ); 
-    if($m<$a[$mid])    $high=$mid-1; 
-    elseif($m>$a[$mid])    $low=$mid+1; 
-    else     
-    { 
-        $found=1; 
-        $key=$mid; 
-    } 
-    $i++; 
-} 
-echo "共进行了{$i}次查找\n<br />\n"; 
-echo "找到的下标是{$mid}\n<br />\n"; 
-echo "找到标志位{$found}\n<br />\n"; 
-?>
-
-[/code]
+今天做题的时候这个二分算法都没写出来，真惨。<br />
+再记下来看一遍。<br />
+<br />
+[code type="php"]<br />
+<br />
+<?php <br />
+$a=range(0,9546); <br />
+$high=count($a) - 1; <br />
+$mid=0; <br />
+$low=0; <br />
+$found=0; <br />
+$m=456; <br />
+while( ($low<=$high) && ($found==0)) <br />
+{ <br />
+    $mid=floor( ($low+$high) / 2 ); <br />
+    if($m<$a[$mid])    $high=$mid-1; <br />
+    elseif($m>$a[$mid])    $low=$mid+1; <br />
+    else     <br />
+    { <br />
+        $found=1; <br />
+        $key=$mid; <br />
+    } <br />
+    $i++; <br />
+} <br />
+echo "共进行了{$i}次查找\n<br />\n"; <br />
+echo "找到的下标是{$mid}\n<br />\n"; <br />
+echo "找到标志位{$found}\n<br />\n"; <br />
+?><br />
+<br />
+[/code]<br />
  
 </body>
 </html>

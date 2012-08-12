@@ -6,274 +6,274 @@
 <title>官方 Qt 编码标准</title>
 </head>
 <body>
-这是Qt内部开发人员使用的编码标准，也是未来向Qt提交代码的人员要使用的标准。
-同时也能当作一般的C/C++标准使用。
-
-http://qt.gitorious.org/qt/pages/QtCodingStyle
-
-<br>
-<div class="page wiki-page"><div class="toc">
- <ul>
- <li><a href="#Qt+Coding+Style">Qt Coding Style</a>
-  <ul>
-  <li><a href="#Indentation">Indentation</a>  </li>
-  <li><a href="#Declaring+variables">Declaring variables</a>  </li>
-  <li><a href="#Whitespace">Whitespace</a>  </li>
-  <li><a href="#Braces">Braces</a>  </li>
-  <li><a href="#Parentheses">Parentheses</a>  </li>
-  <li><a href="#Switch+statements">Switch statements</a>  </li>
-  <li><a href="#Line+breaks">Line breaks</a>  </li>
-  <li><a href="#General+exception">General exception</a>  </li>
-  </ul>
- </li>
- </ul>
-</div><div class="page-content"><h1 id="Qt+Coding+Style">Qt Coding Style</h1>
-
-<p>This is a overview of the coding convention we use when writing Qt code.
-The data has been gathered by mining the Qt sources, discussion forums,
-email threads and through collaboration of the developers.</p>
-
-<h2 id="Indentation">Indentation</h2>
-
-<ul>
-<li> 4 spaces are used for indentation</li>
-<li> Spaces, not tabs!</li>
-</ul>
-
-
-<h2 id="Declaring+variables">Declaring variables</h2>
-
-<ul>
-<li> Declare each variable on a separate line</li>
-<li> Avoid short (e.g., a,rbarr,nughdeget) names whenever possible</li>
-<li> Single character variable names are only okay for counters and temporaries, where the purpose of the variable is obvious</li>
-<li><p> Wait with declaring a variable until it is needed</p>
-
-<pre><code>// Wrong
-int a, b;
-char *c, *d;
-
-// Correct
-int height;
-int width;
-char *nameOfThis;
-char *nameOfThat;
-</code></pre></li>
-<li><p> Variables and functions start with a small letter. Each consecive word in a variable&rsquo;s
- name starts with a capital letter</p></li>
-<li><p> Avoid abbreviations</p>
-
-<pre><code>// Wrong
-short Cntr;
-char ITEM_DELIM = '\t';
-
-// Correct
-short counter;
-char itemDelimiter = '\t';
-</code></pre></li>
-<li><p> Classes always start with a big letter. Public classes start with a &lsquo;Q&rsquo; (QRgb). Public functions most often start with a &lsquo;q&rsquo; (qRgb).</p></li>
-</ul>
-
-
-<h2 id="Whitespace">Whitespace</h2>
-
-<ul>
-<li> Use blank lines to group statements together where suited</li>
-<li> Always use only one blank line</li>
-<li><p> Always use a single space after a keyword, and before a curly brace.</p>
-
-<pre><code>// Wrong
-if(foo){
-}
-
-// Correct
-if (foo) {
-}
-</code></pre></li>
-<li><p> For pointers or references, always use a single space before &lsquo;*&rsquo; or &lsquo;&amp;&rsquo;, but never after.</p></li>
-<li> No space after a cast.</li>
-<li><p> Avoid C-style casts when possible.</p>
-
-<pre><code>// Wrong
-char* blockOfMemory = (char* ) malloc(data.size());
-
-// Correct
-char *blockOfMemory = (char *)malloc(data.size());
-char *blockOfMemory = reinterpret_cast(malloc(data.size()));
-</code></pre></li>
-</ul>
-
-
-<h2 id="Braces">Braces</h2>
-
-<ul>
-<li><p> As a base rule, the left curly brace goes on the same line as the start of the statement:</p>
-
-<pre><code>// Wrong
-if (codec)
-{
-}
-
-// Correct
-if (codec) {
-}
-</code></pre></li>
-<li><p> Exception: Function implementations and class declarations always have the left brace on the start of a line:</p>
-
-<pre><code>static void foo(int g)
-{
-    qDebug("foo: %i", g);
-}
-
-class Moo
-{
-};
-</code></pre></li>
-<li><p> Use curly braces when the body of a conditional statement contains more than one line,
- and also if a single line statement is somewhat complex.</p>
-
-<pre><code>// Wrong
-if (address.isEmpty()) {
-    return false;
-}
-
-for (int i = 0; i &amp;lt; 10; ++i) {
-    qDebug("%i", i);
-}
-
-// Correct
-if (address.isEmpty())
-    return false;
-
-for (int i = 0; i &amp;lt; 10; ++i)
-    qDebug("%i", i);
-</code></pre></li>
-<li><p> Exception 1: Use braces also if the parent statement covers several lines / wraps</p>
-
-<pre><code>// Correct
-if (address.isEmpty() || !isValid()
-    || !codec) {
-    return false;
-}
-</code></pre></li>
-<li><p> Exception 2: Use braces also in if-then-else blocks where either the if-code or the else-code covers several lines</p>
-
-<pre><code>// Wrong
-if (address.isEmpty())
-    return false;
-else {
-    qDebug("%s", qPrintable(address));
-    ++it;
-}
-
-// Correct
-if (address.isEmpty()) {
-    return false;
-} else {
-    qDebug("%s", qPrintable(address));
-    ++it;
-}
-
-// Wrong
-if (a)
-    if (b)
-        ...
-    else
-        ...
-
-// Correct
-if (a) {
-    if (b)
-        ...
-    else
-        ...
-}
-</code></pre></li>
-<li><p> Use curly braces when the body of a conditional statement is empty</p>
-
-<pre><code>// Wrong
-while (a);
-
-// Correct
-while (a) {}
-</code></pre></li>
-</ul>
-
-
-<h2 id="Parentheses">Parentheses</h2>
-
-<ul>
-<li><p> Use parentheses to group expressions:</p>
-
-<pre><code>// Wrong
-if (a &amp;&amp; b || c)
-
-// Correct
-if ((a &amp;&amp; b) || c)
-
-// Wrong
-a + b &amp; c
-
-// Correct
-(a + b) &amp; c
-</code></pre></li>
-</ul>
-
-
-<h2 id="Switch+statements">Switch statements</h2>
-
-<ul>
-<li> The case labels are on the same column as the switch</li>
-<li><p> Every case must have a break (or return) statement at the end or a comment to indicate that there&rsquo;s intentionally no break</p>
-
-<pre><code>switch (myEnum) {
-case Value1:
-    doSomething();
-    break;
-case Value2:
-    doSomethingElse();
-    // fall through
-default:
-    defaultHandling();
-    break;
-}
-</code></pre></li>
-</ul>
-
-
-<h2 id="Line+breaks">Line breaks</h2>
-
-<ul>
-<li><p> Keep lines shorter than 100 characters; insert
- line breaks if necessary.</p></li>
-<li><p> Commas go at the end of a broken line; operators start at the beginning of the new line. The operator is at the end of the line to avoid having to scroll if your editor is too narrow.</p>
-
-<p>// Correct
-if (longExpression</p>
-
-<pre><code>+ otherLongExpression
-+ otherOtherLongExpression) {
-</code></pre>
-
-<p>}</p>
-
-<p>// Wrong
-if (longExpression +</p>
-
-<pre><code>otherLongExpression +
-otherOtherLongExpression) {
-</code></pre>
-
-}</li>
-</ul>
-
-
-<h2 id="General+exception">General exception</h2>
-
-<ul>
-<li> Feel free to break a rule if it makes your code look bad.</li>
-</ul>
-
+这是Qt内部开发人员使用的编码标准，也是未来向Qt提交代码的人员要使用的标准。<br />
+同时也能当作一般的C/C++标准使用。<br />
+<br />
+http://qt.gitorious.org/qt/pages/QtCodingStyle<br />
+<br />
+<br><br />
+<div class="page wiki-page"><div class="toc"><br />
+ <ul><br />
+ <li><a href="#Qt+Coding+Style">Qt Coding Style</a><br />
+  <ul><br />
+  <li><a href="#Indentation">Indentation</a>  </li><br />
+  <li><a href="#Declaring+variables">Declaring variables</a>  </li><br />
+  <li><a href="#Whitespace">Whitespace</a>  </li><br />
+  <li><a href="#Braces">Braces</a>  </li><br />
+  <li><a href="#Parentheses">Parentheses</a>  </li><br />
+  <li><a href="#Switch+statements">Switch statements</a>  </li><br />
+  <li><a href="#Line+breaks">Line breaks</a>  </li><br />
+  <li><a href="#General+exception">General exception</a>  </li><br />
+  </ul><br />
+ </li><br />
+ </ul><br />
+</div><div class="page-content"><h1 id="Qt+Coding+Style">Qt Coding Style</h1><br />
+<br />
+<p>This is a overview of the coding convention we use when writing Qt code.<br />
+The data has been gathered by mining the Qt sources, discussion forums,<br />
+email threads and through collaboration of the developers.</p><br />
+<br />
+<h2 id="Indentation">Indentation</h2><br />
+<br />
+<ul><br />
+<li> 4 spaces are used for indentation</li><br />
+<li> Spaces, not tabs!</li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Declaring+variables">Declaring variables</h2><br />
+<br />
+<ul><br />
+<li> Declare each variable on a separate line</li><br />
+<li> Avoid short (e.g., a,rbarr,nughdeget) names whenever possible</li><br />
+<li> Single character variable names are only okay for counters and temporaries, where the purpose of the variable is obvious</li><br />
+<li><p> Wait with declaring a variable until it is needed</p><br />
+<br />
+<pre><code>// Wrong<br />
+int a, b;<br />
+char *c, *d;<br />
+<br />
+// Correct<br />
+int height;<br />
+int width;<br />
+char *nameOfThis;<br />
+char *nameOfThat;<br />
+</code></pre></li><br />
+<li><p> Variables and functions start with a small letter. Each consecive word in a variable&rsquo;s<br />
+ name starts with a capital letter</p></li><br />
+<li><p> Avoid abbreviations</p><br />
+<br />
+<pre><code>// Wrong<br />
+short Cntr;<br />
+char ITEM_DELIM = '\t';<br />
+<br />
+// Correct<br />
+short counter;<br />
+char itemDelimiter = '\t';<br />
+</code></pre></li><br />
+<li><p> Classes always start with a big letter. Public classes start with a &lsquo;Q&rsquo; (QRgb). Public functions most often start with a &lsquo;q&rsquo; (qRgb).</p></li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Whitespace">Whitespace</h2><br />
+<br />
+<ul><br />
+<li> Use blank lines to group statements together where suited</li><br />
+<li> Always use only one blank line</li><br />
+<li><p> Always use a single space after a keyword, and before a curly brace.</p><br />
+<br />
+<pre><code>// Wrong<br />
+if(foo){<br />
+}<br />
+<br />
+// Correct<br />
+if (foo) {<br />
+}<br />
+</code></pre></li><br />
+<li><p> For pointers or references, always use a single space before &lsquo;*&rsquo; or &lsquo;&amp;&rsquo;, but never after.</p></li><br />
+<li> No space after a cast.</li><br />
+<li><p> Avoid C-style casts when possible.</p><br />
+<br />
+<pre><code>// Wrong<br />
+char* blockOfMemory = (char* ) malloc(data.size());<br />
+<br />
+// Correct<br />
+char *blockOfMemory = (char *)malloc(data.size());<br />
+char *blockOfMemory = reinterpret_cast(malloc(data.size()));<br />
+</code></pre></li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Braces">Braces</h2><br />
+<br />
+<ul><br />
+<li><p> As a base rule, the left curly brace goes on the same line as the start of the statement:</p><br />
+<br />
+<pre><code>// Wrong<br />
+if (codec)<br />
+{<br />
+}<br />
+<br />
+// Correct<br />
+if (codec) {<br />
+}<br />
+</code></pre></li><br />
+<li><p> Exception: Function implementations and class declarations always have the left brace on the start of a line:</p><br />
+<br />
+<pre><code>static void foo(int g)<br />
+{<br />
+    qDebug("foo: %i", g);<br />
+}<br />
+<br />
+class Moo<br />
+{<br />
+};<br />
+</code></pre></li><br />
+<li><p> Use curly braces when the body of a conditional statement contains more than one line,<br />
+ and also if a single line statement is somewhat complex.</p><br />
+<br />
+<pre><code>// Wrong<br />
+if (address.isEmpty()) {<br />
+    return false;<br />
+}<br />
+<br />
+for (int i = 0; i &amp;lt; 10; ++i) {<br />
+    qDebug("%i", i);<br />
+}<br />
+<br />
+// Correct<br />
+if (address.isEmpty())<br />
+    return false;<br />
+<br />
+for (int i = 0; i &amp;lt; 10; ++i)<br />
+    qDebug("%i", i);<br />
+</code></pre></li><br />
+<li><p> Exception 1: Use braces also if the parent statement covers several lines / wraps</p><br />
+<br />
+<pre><code>// Correct<br />
+if (address.isEmpty() || !isValid()<br />
+    || !codec) {<br />
+    return false;<br />
+}<br />
+</code></pre></li><br />
+<li><p> Exception 2: Use braces also in if-then-else blocks where either the if-code or the else-code covers several lines</p><br />
+<br />
+<pre><code>// Wrong<br />
+if (address.isEmpty())<br />
+    return false;<br />
+else {<br />
+    qDebug("%s", qPrintable(address));<br />
+    ++it;<br />
+}<br />
+<br />
+// Correct<br />
+if (address.isEmpty()) {<br />
+    return false;<br />
+} else {<br />
+    qDebug("%s", qPrintable(address));<br />
+    ++it;<br />
+}<br />
+<br />
+// Wrong<br />
+if (a)<br />
+    if (b)<br />
+        ...<br />
+    else<br />
+        ...<br />
+<br />
+// Correct<br />
+if (a) {<br />
+    if (b)<br />
+        ...<br />
+    else<br />
+        ...<br />
+}<br />
+</code></pre></li><br />
+<li><p> Use curly braces when the body of a conditional statement is empty</p><br />
+<br />
+<pre><code>// Wrong<br />
+while (a);<br />
+<br />
+// Correct<br />
+while (a) {}<br />
+</code></pre></li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Parentheses">Parentheses</h2><br />
+<br />
+<ul><br />
+<li><p> Use parentheses to group expressions:</p><br />
+<br />
+<pre><code>// Wrong<br />
+if (a &amp;&amp; b || c)<br />
+<br />
+// Correct<br />
+if ((a &amp;&amp; b) || c)<br />
+<br />
+// Wrong<br />
+a + b &amp; c<br />
+<br />
+// Correct<br />
+(a + b) &amp; c<br />
+</code></pre></li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Switch+statements">Switch statements</h2><br />
+<br />
+<ul><br />
+<li> The case labels are on the same column as the switch</li><br />
+<li><p> Every case must have a break (or return) statement at the end or a comment to indicate that there&rsquo;s intentionally no break</p><br />
+<br />
+<pre><code>switch (myEnum) {<br />
+case Value1:<br />
+    doSomething();<br />
+    break;<br />
+case Value2:<br />
+    doSomethingElse();<br />
+    // fall through<br />
+default:<br />
+    defaultHandling();<br />
+    break;<br />
+}<br />
+</code></pre></li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="Line+breaks">Line breaks</h2><br />
+<br />
+<ul><br />
+<li><p> Keep lines shorter than 100 characters; insert<br />
+ line breaks if necessary.</p></li><br />
+<li><p> Commas go at the end of a broken line; operators start at the beginning of the new line. The operator is at the end of the line to avoid having to scroll if your editor is too narrow.</p><br />
+<br />
+<p>// Correct<br />
+if (longExpression</p><br />
+<br />
+<pre><code>+ otherLongExpression<br />
++ otherOtherLongExpression) {<br />
+</code></pre><br />
+<br />
+<p>}</p><br />
+<br />
+<p>// Wrong<br />
+if (longExpression +</p><br />
+<br />
+<pre><code>otherLongExpression +<br />
+otherOtherLongExpression) {<br />
+</code></pre><br />
+<br />
+}</li><br />
+</ul><br />
+<br />
+<br />
+<h2 id="General+exception">General exception</h2><br />
+<br />
+<ul><br />
+<li> Feel free to break a rule if it makes your code look bad.</li><br />
+</ul><br />
+<br />
 </div></div>
 </body>
 </html>

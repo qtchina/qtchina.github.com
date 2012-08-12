@@ -6,90 +6,90 @@
 <title>去除 C/C++/Java 源代码中的注释： flex 词法分析源程序</title>
 </head>
 <body>
-<p>刚开始用 lex &amp; yacc 写东西，今天偶然想到一个去掉C/C++/Java代码中注释的方法，顺便写了出来。</p>
-<p>看了lex没几天，写的代码还比较生硬。</p>
-<p>说明：</p>
-<p>这个编译出来的程序有两个输出，一个是错误信息输出到了标准错误输出（stderr)，一个是不处理过的不包含注释的源代码码到标准输出（stdout)。</p>
-<p>可以使用下面的命令分别保存 stderr 和 stdout的输出:</p>
-<p>./ucl &lt; some_file.c&nbsp;&nbsp; 2&gt;some_file_comment.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;some_file_clean.c</p>
-<p>将下面的代码保存为 ucl.fl, 然后使用下面的命令编译：&nbsp; </p>
-[code type="bash"]
-    flex -dv ucl.fl
-    gcc -o ucl  lex.yy.c  -lfl
-    ./ucl < some_file.c
-[/code]
-
-<p>&nbsp;</p>
-
-[code type="c"]
-%{
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-
-    char cmc_buffer[8096];
-%}
-
-%s CMCS STRING
-
-%%
-
-<INITIAL>[/][/].*$ { fprintf(stderr,"%s", yytext); }
-
-<INITIAL>[/][*].*[*][/] { fprintf(stderr,"%s", yytext); }
-
-<INITIAL>[/][*] {
-    BEGIN (CMCS);
-    memset(cmc_buffer, 0, sizeof(cmc_buffer));
-    strcpy(cmc_buffer, yytext);
-}
-
-<CMCS>. {
-    cmc_buffer[strlen(cmc_buffer)] = yytext[0];
-}
-
-<CMCS>n {
-    cmc_buffer[strlen(cmc_buffer)] = yytext[0];
-}
-
-<CMCS>[*][/] {
-    strcat(cmc_buffer, yytext);
-    fprintf(stderr, "nCMC at line %d : n[[-------n%sn-----------]]n", yylineno, cmc_buffer);
-    BEGIN (INITIAL);
-}
-
-<INITIAL>n { yylineno ++; ECHO ;}
-
-<INITIAL>["] { 
-    BEGIN (STRING);
-    ECHO;
-}
-<STRING>["] {
-    BEGIN (INITIAL);
-    ECHO;
-}
-<STRING>. { ECHO ;}
-
-. {
-    BEGIN (INITIAL);
-    ECHO ;
-}
-
-%%
-
-  /*
-    用法： flex -dv ucl.fl
-    gcc -o ucl  lex.yy.c  -lfl
-    ./ucl < some_file.c
-   */
-
-int main(int argc, char **arg)
-{
-    yylex();
-    return  0;
-}
- 
+<p>刚开始用 lex &amp; yacc 写东西，今天偶然想到一个去掉C/C++/Java代码中注释的方法，顺便写了出来。</p><br />
+<p>看了lex没几天，写的代码还比较生硬。</p><br />
+<p>说明：</p><br />
+<p>这个编译出来的程序有两个输出，一个是错误信息输出到了标准错误输出（stderr)，一个是不处理过的不包含注释的源代码码到标准输出（stdout)。</p><br />
+<p>可以使用下面的命令分别保存 stderr 和 stdout的输出:</p><br />
+<p>./ucl &lt; some_file.c&nbsp;&nbsp; 2&gt;some_file_comment.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;some_file_clean.c</p><br />
+<p>将下面的代码保存为 ucl.fl, 然后使用下面的命令编译：&nbsp; </p><br />
+[code type="bash"]<br />
+    flex -dv ucl.fl<br />
+    gcc -o ucl  lex.yy.c  -lfl<br />
+    ./ucl < some_file.c<br />
+[/code]<br />
+<br />
+<p>&nbsp;</p><br />
+<br />
+[code type="c"]<br />
+%{<br />
+<br />
+#include <stdlib.h><br />
+#include <stdio.h><br />
+#include <assert.h><br />
+<br />
+    char cmc_buffer[8096];<br />
+%}<br />
+<br />
+%s CMCS STRING<br />
+<br />
+%%<br />
+<br />
+<INITIAL>[/][/].*$ { fprintf(stderr,"%s", yytext); }<br />
+<br />
+<INITIAL>[/][*].*[*][/] { fprintf(stderr,"%s", yytext); }<br />
+<br />
+<INITIAL>[/][*] {<br />
+    BEGIN (CMCS);<br />
+    memset(cmc_buffer, 0, sizeof(cmc_buffer));<br />
+    strcpy(cmc_buffer, yytext);<br />
+}<br />
+<br />
+<CMCS>. {<br />
+    cmc_buffer[strlen(cmc_buffer)] = yytext[0];<br />
+}<br />
+<br />
+<CMCS>n {<br />
+    cmc_buffer[strlen(cmc_buffer)] = yytext[0];<br />
+}<br />
+<br />
+<CMCS>[*][/] {<br />
+    strcat(cmc_buffer, yytext);<br />
+    fprintf(stderr, "nCMC at line %d : n[[-------n%sn-----------]]n", yylineno, cmc_buffer);<br />
+    BEGIN (INITIAL);<br />
+}<br />
+<br />
+<INITIAL>n { yylineno ++; ECHO ;}<br />
+<br />
+<INITIAL>["] { <br />
+    BEGIN (STRING);<br />
+    ECHO;<br />
+}<br />
+<STRING>["] {<br />
+    BEGIN (INITIAL);<br />
+    ECHO;<br />
+}<br />
+<STRING>. { ECHO ;}<br />
+<br />
+. {<br />
+    BEGIN (INITIAL);<br />
+    ECHO ;<br />
+}<br />
+<br />
+%%<br />
+<br />
+  /*<br />
+    用法： flex -dv ucl.fl<br />
+    gcc -o ucl  lex.yy.c  -lfl<br />
+    ./ucl < some_file.c<br />
+   */<br />
+<br />
+int main(int argc, char **arg)<br />
+{<br />
+    yylex();<br />
+    return  0;<br />
+}<br />
+ <br />
 [/code]
 </body>
 </html>

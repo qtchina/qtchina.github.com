@@ -6,53 +6,53 @@
 <title>今天试了一把更强大的ssh X11forwarding功能</title>
 </head>
 <body>
-这次使用主要解决了两个问题，
-一个是在centos 服务器上的配置。
-另一个是在启动的程序中使用中文输入法的功能。
-对forwading模式下的X渲染风格机制了解了一点。
-
-1. 远程服务器为centos 6.2 x86_64
-在/etc/sshd_config中开启下面三个sshd服务端配置参数：
-X11Forwarding yes
-X11DisplayOffset 10
-X11UseLocalhost yes
-
-重启动sshd， /etc/init.d/sshd restart
-
-2.确认安装了必须的包，
-xterm，测试包，能了之后，执行这个程序可在本地显示。
-xorg-x11-xauth，这个必须安装，否则无法实现基于ssh的x11forwarding功能。
-需要安装两个字体包，不然可能有些X程序无法运行，像wqy-zenhei-fonts dejavu-lgc-sans-mono-fonts。
-
-3。重新登陆ssh，测试xterm是否正常运行
-
-ssh -C -XY younam@youhost
-
-xterm
-
-如果正常，则配置完成，否则根据提示检查是否有其他的问题。
-
-4。x11forwarding中文输入法的问题
-不需要在服务器端安装输入法，客户端有即可。
-创建以下脚本，设置远端的用户环境变量，
-renv.sh:
-export XIM_PROGRAM=fcitx
-export XIM=fcitx
-export XMODIFIERS=@im=fcitx
-export DEPENDS=fcitx
-
-source ./renv.sh
-
-firefox
-
-这时应该可以使用fcitx输入法了。
-
-其他的输入法需要设置相应的环境变量。
-
-5。这种方式运行的X程序界面很难看啊。
-     还需要优化的能让界面与本地一致起来吧。
-     注：
-         由于界面设置是在客户端方设定，所以为远程启动用户设置的字体和界面外观，都能绘制出来。
+这次使用主要解决了两个问题，<br />
+一个是在centos 服务器上的配置。<br />
+另一个是在启动的程序中使用中文输入法的功能。<br />
+对forwading模式下的X渲染风格机制了解了一点。<br />
+<br />
+1. 远程服务器为centos 6.2 x86_64<br />
+在/etc/sshd_config中开启下面三个sshd服务端配置参数：<br />
+X11Forwarding yes<br />
+X11DisplayOffset 10<br />
+X11UseLocalhost yes<br />
+<br />
+重启动sshd， /etc/init.d/sshd restart<br />
+<br />
+2.确认安装了必须的包，<br />
+xterm，测试包，能了之后，执行这个程序可在本地显示。<br />
+xorg-x11-xauth，这个必须安装，否则无法实现基于ssh的x11forwarding功能。<br />
+需要安装两个字体包，不然可能有些X程序无法运行，像wqy-zenhei-fonts dejavu-lgc-sans-mono-fonts。<br />
+<br />
+3。重新登陆ssh，测试xterm是否正常运行<br />
+<br />
+ssh -C -XY younam@youhost<br />
+<br />
+xterm<br />
+<br />
+如果正常，则配置完成，否则根据提示检查是否有其他的问题。<br />
+<br />
+4。x11forwarding中文输入法的问题<br />
+不需要在服务器端安装输入法，客户端有即可。<br />
+创建以下脚本，设置远端的用户环境变量，<br />
+renv.sh:<br />
+export XIM_PROGRAM=fcitx<br />
+export XIM=fcitx<br />
+export XMODIFIERS=@im=fcitx<br />
+export DEPENDS=fcitx<br />
+<br />
+source ./renv.sh<br />
+<br />
+firefox<br />
+<br />
+这时应该可以使用fcitx输入法了。<br />
+<br />
+其他的输入法需要设置相应的环境变量。<br />
+<br />
+5。这种方式运行的X程序界面很难看啊。<br />
+     还需要优化的能让界面与本地一致起来吧。<br />
+     注：<br />
+         由于界面设置是在客户端方设定，所以为远程启动用户设置的字体和界面外观，都能绘制出来。<br />
 
 </body>
 </html>

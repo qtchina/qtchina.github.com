@@ -6,117 +6,117 @@
 <title>在Linux等UNIX家族操作系统玩转Symbian！</title>
 </head>
 <body>
-一、前言
-我在这里运用简单的文字向同学们介绍如何在Linux操作系统下完成对Symbian系统的一些操作，这里讲的内容适用于同是采用塞班系 统的UIQ系以及S60系（含S60v5！）平台。另外，我在这里要郑重说明的是，塞班公开了这些工具的源代码，这里讲的内容也同样适用于 FreeBSD、Mac OSX等等Unix家族操作系统。同时，借助Wine相同程序的最新版本在Wine可支持的操作系统上同样可以工作的很好。在这篇文章中，我将向大家介绍 怎样获取相关工具，如何运行这些工具生成证书（根证书）、签名软件、打包、脱壳等基本操作。
-
-二、工具介绍
-塞班在一个名为“塞班开源交流中心”的网站上公布了一些塞班工具的源代码。这里我们可以找到常用到的一些工具，分别是：makekeys、signsis、makesis、petran。makekeys 证书生成工具，这个工具可以生成塞班操作系统支持的.cer证书及.key钥匙文件。我们在制作自己的根证书，或者开发人员向塞班申请正式证书时会用到这个工具。signsis 签名工具，我们安装需要签名的软件时，可以通过这个工具完成签名操作。makesis 打包工具，我们需要向同学们发布sis安装包时，可以通过这个工具完成打包操作。petran是PE文件预处理器，我们汉化或者破解塞班程序时，通常需要借助这个工具完成脱壳操作。
-
-三、获取工具
-上述四个工具分别包括在两个软件包中，使用控制台下载工具wget下载他们，命令如下。
-
-#建立一个名为s60的文件夹，我们把工具都放在这里，免得搞乱系统。
-mkdir s60
-cd s60 
-#下载makesis软件包，包含makesis signsis makekeys 三个工具
-wget http://www.symbianos.org/download/makesis_2.0.0-1.tar.gz
-＃下载petran软件包
-wget http://www.symbianos.org/download/petran_1.0.0-2.tar.gz
-
-因为我们下载的是源代码，所以在使用前我们需要先进行编译。要注意的是，编译一个软件需要安装编译器和对应的开发库，如果您还没有请查阅操作系统的安装指南了解相关信息。这些软件包的编译方法如下。
-
-#编译makekeys makesis signsis
-tar xvf makesis_2.0.0-1.tar.gz
-cd makesis-2.0.0
-make
-#返回上一层目录
-cd ..
-#编译petran
-tar xvf petran_1.0.0-2.tar.gz
-cd petran-1.0.0
-make
-#返回上一层目录
-cd ..
-
-编译完成之后，我们把我们需要的程序复制到一块儿，最好是复制到/usr/bin目录下（需要root权限），这样调用起来方便，命令如下。
-
-#安装 makekeys makesis signsis
-cd cd makesis-2.0.0/src
-#复制文件到/usr/bin，需要root权限！
-sudo cp makkeys makesis signsis /usr/bin
-cd ../../
-cd petran-1.0.0/petran
-#复制文件到/usr/bin，需要root权限！
-sudo cp petran /usr/bin
-cd ../../
-
-
-在这里fedora系的用户要注意，执行带sudo的命令时会提示当前用户不具备sudo权限，这种情况只需要先执行su命令成为root，再执行那些命令不输入sudo就可以了。
-
-四、makekeys签名工具的使用
-makekeys 默认产生密钥长度1024位（最大长度4096位）、一年期限的证书。这个程序除了证书之外还可以查看已有证书。我先向同学们介绍一下证书生成的方法。
-
-makekeys -cert [-password] [-len keylength] [-expdays days] privatekey certificate
-# -cert 要求生成证书
-# -password 要求设置密码
-# -len 密钥长度
-# -expdays 过期时间，以天为单位
-#privtekey 命名产生的密钥
-#certificate 命名产生的证书
-
-生成证书演示：
-
-makekeys -cert  -expdays 730 test.key test.cer
-
-执 行这个命令后，将产生一对1024位，从当前算起有效期2年的test.key密钥以及对应的test.cer证书文件。在执行命令makekeys生成 证书时，会有一个交互过程，要求您回答一些问题，我把英文的问题做了一下翻译，根据自己的情况、喜好，进行回答即可。一个完整的申请过程如下：
-
-$makekeys -cert -expdays 730 test.key test.cer
-Generating DSA parameters, 1024 bit long prime
-This could take some time
-.+......+................+..++++++++++++++++++++++++++++++++++++++++++++++
-..+.+.......+...........+...........+..............+.....+.....+.+........
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [GB]:      
-#国家代码，中国填CN。
-State or Province Name (full name) :
-#所在省份，填写省份拼音全写。
-Locality Name (eg, city) [Newbury]:
-#所在城市，填写城市拼音全写。
-Organization Name (eg, company) [My Company Ltd]:
-#公司名称，填我们自己的大名的拼音好了！
-Organizational Unit Name (eg, section) []:
-#部门名称，同上。
-Common Name (eg, your name or your server's hostname) []:
-#申请人，填写我们的姓名或者网址什么都可以。
-Email Address []:
-#电子邮件地址
-Done
-#看到Done说明我们的证书已经制作好了！
-
-
-
-查看证书，相当简单，只要执行下面的命令即可。
-
-$makekeys -view 证书.cer文件名
-
-为sis文件签名:
-
-$signsis helloworldbasic.sis helloworldbasic.sisx mycert.cer mykey.key
-
-
-PS: makesis和petran在64位系统编译时有问题,需要使用-m32模式编译成32位程序.
-
-more: 原来这几个工具有新版本,在http://www.martin.st/symbian/ 下载makesis-4包, 可支持64位系统,成功编译出makekeys, makesis, signsis三个程序.
-         petran也有1.1.0的包了.同时更新.系统兼容性更好.
-
-由于手机软件权限级别的问题,这种签名方式只能应用于低级别权限要求的程序包.
-
+一、前言<br />
+我在这里运用简单的文字向同学们介绍如何在Linux操作系统下完成对Symbian系统的一些操作，这里讲的内容适用于同是采用塞班系 统的UIQ系以及S60系（含S60v5！）平台。另外，我在这里要郑重说明的是，塞班公开了这些工具的源代码，这里讲的内容也同样适用于 FreeBSD、Mac OSX等等Unix家族操作系统。同时，借助Wine相同程序的最新版本在Wine可支持的操作系统上同样可以工作的很好。在这篇文章中，我将向大家介绍 怎样获取相关工具，如何运行这些工具生成证书（根证书）、签名软件、打包、脱壳等基本操作。<br />
+<br />
+二、工具介绍<br />
+塞班在一个名为“塞班开源交流中心”的网站上公布了一些塞班工具的源代码。这里我们可以找到常用到的一些工具，分别是：makekeys、signsis、makesis、petran。makekeys 证书生成工具，这个工具可以生成塞班操作系统支持的.cer证书及.key钥匙文件。我们在制作自己的根证书，或者开发人员向塞班申请正式证书时会用到这个工具。signsis 签名工具，我们安装需要签名的软件时，可以通过这个工具完成签名操作。makesis 打包工具，我们需要向同学们发布sis安装包时，可以通过这个工具完成打包操作。petran是PE文件预处理器，我们汉化或者破解塞班程序时，通常需要借助这个工具完成脱壳操作。<br />
+<br />
+三、获取工具<br />
+上述四个工具分别包括在两个软件包中，使用控制台下载工具wget下载他们，命令如下。<br />
+<br />
+#建立一个名为s60的文件夹，我们把工具都放在这里，免得搞乱系统。<br />
+mkdir s60<br />
+cd s60 <br />
+#下载makesis软件包，包含makesis signsis makekeys 三个工具<br />
+wget http://www.symbianos.org/download/makesis_2.0.0-1.tar.gz<br />
+＃下载petran软件包<br />
+wget http://www.symbianos.org/download/petran_1.0.0-2.tar.gz<br />
+<br />
+因为我们下载的是源代码，所以在使用前我们需要先进行编译。要注意的是，编译一个软件需要安装编译器和对应的开发库，如果您还没有请查阅操作系统的安装指南了解相关信息。这些软件包的编译方法如下。<br />
+<br />
+#编译makekeys makesis signsis<br />
+tar xvf makesis_2.0.0-1.tar.gz<br />
+cd makesis-2.0.0<br />
+make<br />
+#返回上一层目录<br />
+cd ..<br />
+#编译petran<br />
+tar xvf petran_1.0.0-2.tar.gz<br />
+cd petran-1.0.0<br />
+make<br />
+#返回上一层目录<br />
+cd ..<br />
+<br />
+编译完成之后，我们把我们需要的程序复制到一块儿，最好是复制到/usr/bin目录下（需要root权限），这样调用起来方便，命令如下。<br />
+<br />
+#安装 makekeys makesis signsis<br />
+cd cd makesis-2.0.0/src<br />
+#复制文件到/usr/bin，需要root权限！<br />
+sudo cp makkeys makesis signsis /usr/bin<br />
+cd ../../<br />
+cd petran-1.0.0/petran<br />
+#复制文件到/usr/bin，需要root权限！<br />
+sudo cp petran /usr/bin<br />
+cd ../../<br />
+<br />
+<br />
+在这里fedora系的用户要注意，执行带sudo的命令时会提示当前用户不具备sudo权限，这种情况只需要先执行su命令成为root，再执行那些命令不输入sudo就可以了。<br />
+<br />
+四、makekeys签名工具的使用<br />
+makekeys 默认产生密钥长度1024位（最大长度4096位）、一年期限的证书。这个程序除了证书之外还可以查看已有证书。我先向同学们介绍一下证书生成的方法。<br />
+<br />
+makekeys -cert [-password] [-len keylength] [-expdays days] privatekey certificate<br />
+# -cert 要求生成证书<br />
+# -password 要求设置密码<br />
+# -len 密钥长度<br />
+# -expdays 过期时间，以天为单位<br />
+#privtekey 命名产生的密钥<br />
+#certificate 命名产生的证书<br />
+<br />
+生成证书演示：<br />
+<br />
+makekeys -cert  -expdays 730 test.key test.cer<br />
+<br />
+执 行这个命令后，将产生一对1024位，从当前算起有效期2年的test.key密钥以及对应的test.cer证书文件。在执行命令makekeys生成 证书时，会有一个交互过程，要求您回答一些问题，我把英文的问题做了一下翻译，根据自己的情况、喜好，进行回答即可。一个完整的申请过程如下：<br />
+<br />
+$makekeys -cert -expdays 730 test.key test.cer<br />
+Generating DSA parameters, 1024 bit long prime<br />
+This could take some time<br />
+.+......+................+..++++++++++++++++++++++++++++++++++++++++++++++<br />
+..+.+.......+...........+...........+..............+.....+.....+.+........<br />
+You are about to be asked to enter information that will be incorporated<br />
+into your certificate request.<br />
+What you are about to enter is what is called a Distinguished Name or a DN.<br />
+There are quite a few fields but you can leave some blank<br />
+For some fields there will be a default value,<br />
+If you enter '.', the field will be left blank.<br />
+-----<br />
+Country Name (2 letter code) [GB]:      <br />
+#国家代码，中国填CN。<br />
+State or Province Name (full name) :<br />
+#所在省份，填写省份拼音全写。<br />
+Locality Name (eg, city) [Newbury]:<br />
+#所在城市，填写城市拼音全写。<br />
+Organization Name (eg, company) [My Company Ltd]:<br />
+#公司名称，填我们自己的大名的拼音好了！<br />
+Organizational Unit Name (eg, section) []:<br />
+#部门名称，同上。<br />
+Common Name (eg, your name or your server's hostname) []:<br />
+#申请人，填写我们的姓名或者网址什么都可以。<br />
+Email Address []:<br />
+#电子邮件地址<br />
+Done<br />
+#看到Done说明我们的证书已经制作好了！<br />
+<br />
+<br />
+<br />
+查看证书，相当简单，只要执行下面的命令即可。<br />
+<br />
+$makekeys -view 证书.cer文件名<br />
+<br />
+为sis文件签名:<br />
+<br />
+$signsis helloworldbasic.sis helloworldbasic.sisx mycert.cer mykey.key<br />
+<br />
+<br />
+PS: makesis和petran在64位系统编译时有问题,需要使用-m32模式编译成32位程序.<br />
+<br />
+more: 原来这几个工具有新版本,在http://www.martin.st/symbian/ 下载makesis-4包, 可支持64位系统,成功编译出makekeys, makesis, signsis三个程序.<br />
+         petran也有1.1.0的包了.同时更新.系统兼容性更好.<br />
+<br />
+由于手机软件权限级别的问题,这种签名方式只能应用于低级别权限要求的程序包.<br />
+<br />
 
 </body>
 </html>

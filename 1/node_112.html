@@ -6,209 +6,209 @@
 <title>第二章 创建对话框 (可变形对话框)</title>
 </head>
 <body>
-<p>
-<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-<title></title>
-<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)"> 	 	 	<style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		H2 { margin-top: 0.46cm; margin-bottom: 0.46cm; line-height: 173%; page-break-inside: avoid }
-		H2.western { font-family: "Arial", sans-serif; font-size: 16pt }
-		H2.cjk { font-family: "黑体", "SimHei"; font-size: 16pt; font-style: normal }
-		H2.ctl { font-family: "Tahoma"; font-size: 16pt }
-		H5 { margin-top: 0.49cm; margin-bottom: 0.51cm; line-height: 156%; page-break-inside: avoid }
-		H5.western { font-family: "Times New Roman", serif; font-size: 14pt }
-		H5.cjk { font-family: "Tahoma"; font-size: 14pt; font-style: normal }
-		H5.ctl { font-family: "Tahoma"; font-size: 14pt }
-		P { margin-bottom: 0.21cm }
-		A:link { color: #0000ff }
-	-->
-	</style>    </meta>
-</meta>
-</p>
-<h2 class="cjk">可变形对话框</h2>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">我们已经知道了如何创建总是显示相同的物件的对话框。某些情况下，需要创建可以变形的对话框。两种常用的可变形对话框是扩展对话框和多页对话框。这个两种对话框都可以在</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">中实现，不管是手写代码还是使用</font><font face="宋体, SimSun"><font size="3">Qt Designer</font></font><font size="3">。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">可扩展对话框通常提供一个简单的外观，但是包含一个开关按钮允许用户在对话框简单外观和可扩展外观之间转换。可扩展对话框</font><font face="宋体, SimSun"><font size="3">一般用在同时适用于普通用户和高级用户的应用中，默认隐藏高级选项功能，当用户明确指定的时候再显示出来。在本节中，我们要用 Qt 设计师来创建图</font></font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig10%23ch02fig10"> 2.10</a></u></font></font></font><font face="宋体, SimSun"><font size="3"> 中的可扩展对话框。</font></font></p>
-<h5 class="cjk"><a name="ch02fig10"></a><font face="Times New Roman, serif">Figure 2.10. The Sort dialog with simple and extended appearances</font></h5>
-<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort1_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;<input width="500" type="image" height="279" src="/upfile/image/sort1.jpg" /></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle2596"></a><a name="iddle3046"></a><a name="iddle3050"></a><a name="iddle4353"></a><a name="iddle5136"></a> <font size="2" style="font-size: 10pt;">这个对话框是一个</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">spreadsheet</font></font><font size="2" style="font-size: 10pt;">应用程序中的排序对话框，在这个对话框中用户可以选择一列或多列进行排序。对话框的简单外观允许用户输入一个排序关键字，扩展外观提供了额外的两个排序关键字。一个附加的按钮允许用户在简单外观和扩展外观之间转换。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="2" style="font-size: 10pt;">我们将用</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">Qt Designer</font></font><font size="2" style="font-size: 10pt;">创建物件和它的扩展外观，并在运行时按需要隐藏第二和第三个关键字。物件看起来很复杂，但是在</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">Qt Designer</font></font><font size="2" style="font-size: 10pt;">实现起来却是相当容易的。窍门就是先做主关键字部分，然后复制它两次来获取第二和第三关键字：</font></p>
-<ol>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="2" style="font-size: 10pt;">点击 </font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">File|New 	Form </font></font><font size="2" style="font-size: 10pt;">并选择 	</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">&quot;Dialog 	with Buttons Right&quot; </font></font><font size="2" style="font-size: 10pt;">模板。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3"><font size="2" style="font-size: 10pt;">创建 </font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">More 	button </font></font></font><font size="3"><font size="2" style="font-size: 10pt;">并把它拖拽它到垂直布局，放在垂直空白占位符下面。设置 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">More 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">按钮的 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">text 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">属性为 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;&amp;More&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">，</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;"><span lang="zxx">checkable</span></font><font size="2" style="font-size: 10pt;"> 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">属性为 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;true&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">，设置 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">OK 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">按钮的默认属性 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;true&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">。</font></font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="2" style="font-size: 10pt;">创建一个分组框，两个标签，两个下拉列表框和一个水平占位符，并把它们放在窗体的任意位置。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3"><font size="2" style="font-size: 10pt;">拖拽分组框的右下角使它变大。然后将其他物件移动到分组框中，位置像</font><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig11%23ch02fig11">图 	</a></u></font></font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig11%23ch02fig11">2.11(a)</a></u></font> 	</font></font><font size="3"><font size="2" style="font-size: 10pt;">显示的那样。</font></font></p>
-    </li>
-</ol>
-<h5 class="cjk" style="margin-left: 1.27cm;"><a name="ch02fig11"></a><font face="Times New Roman, serif">Figure 2.11. Laying out the group box's children in a grid</font></h5>
-<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort3_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
-<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><input width="500" type="image" height="140" src="/upfile/image/sort3.jpg" />&nbsp;</p>
-<ol start="5">
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">拖拽第二个下拉列表框的右边线使它大概为第一个下拉列表框宽度的两倍。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">设置分组框的 </font><font face="宋体, SimSun"><font size="3">t<span lang="zxx">itle</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Primary 	Key&quot;</font></font><font size="3">，第一个标签的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;Column:&quot;</font></font><font size="3">，第二个标签的 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;Order:&quot;</font></font><font size="3">。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">右键单击第一个分组框并下从上下文菜单中选择 	</font><font face="宋体, SimSun"><font size="3">Edit Items </font></font><font size="3">弹出 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt 	Designer</span></font></font><font size="3">的下拉列表编辑器。创建一个 	</font><font face="宋体, SimSun"><font size="3">text</font></font><font size="3">为 	</font><font face="宋体, SimSun"><font size="3">&quot;None&quot;</font></font><font size="3">项。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">右键单击第二个分组框并下从上下文菜单中选择 	</font><font face="宋体, SimSun"><font size="3">Edit Items </font></font><font size="3">弹出 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt 	Designer</span></font></font><font size="3">的下拉列表编辑器。创建一个 	</font><font face="宋体, SimSun"><font size="3">&quot;Ascending&quot; 	</font></font><font size="3">项和一个 </font><font face="宋体, SimSun"><font size="3">&quot;Descending&quot; 	</font></font><font size="3">项。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击分组框，然后点击 </font><font face="宋体, SimSun"><font size="3">Form|Lay 	Out in a Grid</font></font><font size="3">。再次点击分组框点击 	</font><font face="宋体, SimSun"><font size="3">Form|Adjust 	Size</font></font><font size="3">。这将生成一个如 <a href="file:///mk:@MSITStore:E">图 	</a></font><font face="宋体, SimSun"><font size="3"><a href="file:///mk:@MSITStore:E">2.11</a> 	(b)</font></font><font size="3">显示的布局。</font></p>
-    </li>
-</ol>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">如果一个布局不是很合适或者如果你犯了一个错误，你可以点击 </font><font face="宋体, SimSun"><font size="3">Edit|Undo </font></font><font size="3">或者 </font><font face="宋体, SimSun"><font size="3">Form|Break Layout</font></font><font size="3">，然后重新布局物件再次尝试。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在我们将添加第二和第三主键的分组框：</font></p>
-<ol>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">确保对话框窗口拥有足够高的高度来存放额外的部分。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">按住 </font><font face="宋体, SimSun"><font size="3">Ctrl 	</font></font><font size="3">键 </font><font face="宋体, SimSun"><font size="3">(Alt 	on the Mac) </font></font><font size="3">的同时点击 </font><font face="宋体, SimSun"><font size="3">Primary 	Key </font></font><font size="3">分组框创建分组框的一份拷贝（包括它的内容）。同时按住 Ctrl( 或者 Alt)键，拖动此拷贝到下面的分组框中。</font><font face="宋体, SimSun"><font size="3">使用同样的方法创建出第三个分组框，并把它放在第二个下面。</font></font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">重置它们的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">title</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Secondary 	Key&quot; </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Tertiary 	Key&quot;.</font></font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><a name="iddle1596"></a><a name="iddle2597"></a><a name="iddle3047"></a><a name="iddle3051"></a><a name="iddle4354"></a><a name="iddle5137"></a><a name="iddle6295"></a><a name="iddle6301"></a><a name="iddle6322"></a><a name="iddle6361"></a><a name="iddle6366"></a><a name="iddle6411"></a> 	<font size="3">创建一个垂直占位符并把它放置在第一关键字和第二关键字分组框之间。</font></p>
-    </li>
-</ol>
-<ol start="5">
-    <li>
-    <p align="justify" style="margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在</font><font face="宋体, SimSun"><font size="3">Arrange 	the widgets in the grid-like pattern shown in <font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig12%23ch02fig12">Figure 	2.12</a></u></font> (a).</font></font></p>
-    </li>
-</ol>
-<h5 class="cjk" style="margin-left: 1.27cm;"><a name="ch02fig12"></a><font face="Times New Roman, serif">Figure 2.12. Laying out the form's children in a grid</font></h5>
-<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort5_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
-<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><input type="image" src="/upfile/image/sort5.jpg" />&nbsp;</p>
-<ol start="5">
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击窗体取消对所有选择物件的选择，然后点击 	</font><font face="宋体, SimSun"><font size="3">Form|Lay Out in a 	Grid</font></font><font size="3">。窗体现在应该和 <a href="file:///mk:@MSITStore:E">图 	</a></font><font face="宋体, SimSun"><font size="3"><a href="file:///mk:@MSITStore:E">2.12</a> 	(b)</font></font><font size="3">一样。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">设置两个垂直空白占位符元素的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sizeHint</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">[20, 	0]</font></font><font size="3">。</font></p>
-    </li>
-</ol>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">结果的网格布局有两列和四行，</font>
-<meta content="OpenOffice.org 2.3  (Linux)" name="GENERATOR" /> 	<style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		P { margin-bottom: 0.21cm }
-	--></style><font size="3">共</font><font face="宋体, SimSun"><font size="3">8 </font></font><font size="3">个单元。</font> <font face="宋体, SimSun"><font size="3"> </font></font><font size="3">主键的分组框，最靠左的垂直空白占位符项，第二主键分组框，第三主键分组框每一个占据一个单元格。垂直布局包含</font><font face="宋体, SimSun"><font size="3">OK</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3">Cancel</font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮占据两个单元格。在对话框的右下方留下两个空白单元格。如果你没有得到这个，取消布局，重新放置物件，然后重试。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">重命名窗体 </font><font face="宋体, SimSun"><font size="3">&quot;SortDialog&quot; </font></font><font size="3">设置窗口的标题为 </font><font face="宋体, SimSun"><font size="3">&quot;Sort&quot;</font></font><font size="3">。设置子物件的名字为 </font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig13%23ch02fig13">Figure 2.13</a></u></font> </font></font><font size="3">显示的那样：</font></p>
-<h5 class="cjk"><a name="ch02fig13"></a><font face="Times New Roman, serif">Figure 2.13. Naming the form's widgets</font></h5>
-<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort7_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;<input type="image" src="/upfile/image/sort7.jpg" /></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig14"></a> <font size="3">点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Tab Order</font></font><font size="3">。从上到下依次点击每个下拉列表框，然后点击右边的</font><font face="宋体, SimSun"><font size="3">OK</font></font><font size="3">、</font><font face="宋体, SimSun"><font size="3">Cancel</font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮。单击</font><font face="宋体, SimSun"><font size="3">Edit|Eeit Widgets </font></font><font size="3">离开</font><font face="宋体, SimSun"><font size="3">tab</font></font><font size="3">顺序模式。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在我们已经创建了窗体，我们准备设置一些信号／槽连接使它可用。</font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">允许我们在同一窗体的物件之间建立连接。我们需要创建两个连接。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">单击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Signals/Slots </font></font><font size="3">进入 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer</span></font></font><font size="3">的连接模式。窗体物件之间的蓝色箭头代表了物件之间的连接。因为我们选择了 </font><font face="宋体, SimSun"><font size="3">&quot;Dialog with Buttons Right&quot; </font></font><font size="3">模板， </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">按钮已经连接到 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QDialog</span>'s <span lang="zxx">accept()</span> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">reject()</span> </font></font><font size="3">槽上。连接也在 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer</span>'</font></font><font size="3">的</font><font face="宋体, SimSun"><font size="3">signal/slot </font></font><font size="3">编辑器窗口列出来了。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">要在两个物件之间建立一个连接，点击 </font><font face="宋体, SimSun"><font size="3">sender </font></font><font size="3">物件并拖拽红色箭头线</font><font face="宋体, SimSun"><font size="3">widget and drag the red arrow line to the receiver widget, </font></font><font size="3">然后释放。这会弹出一个对话框允许你选择要建立连接信号和槽。</font></p>
-<h5 class="cjk"><font face="Times New Roman, serif">Figure 2.14. Connecting the form's widgets</font></h5>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><input type="image" src="/upfile/image/sort8.jpg" />&nbsp;</p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig15"></a> <font size="3">第一个连接建立在</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮和第二个分组框之间。拖拽红色箭头线在这两个物件之间，然后选择 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">toggled(bool)</span> </font></font><font size="3">作为信号 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">作为槽。默认，</font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">不在槽的列表中列出 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">，但是如果你打开</font><font face="宋体, SimSun"><font size="3">Show all signals and slots </font></font><font size="3">选项它就会显示。 </font></p>
-<h5 class="cjk"><font face="Times New Roman, serif">Figure 2.15. Qt Designer's connection editor</font></h5>
-<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/connections_alt.jpg" target="_self">[View full size image]</a></u></font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;<input width="500" type="image" height="272" src="/upfile/image/connections.jpg" /></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle4193"></a><a name="iddle4448"></a><a name="iddle6031"></a><a name="iddle6179"></a><a name="iddle6390"></a><a name="iddle6391"></a><a name="iddle6395"></a><a name="iddle6396"></a><a name="iddle6398"></a><a name="iddle6626"></a><a name="iddle6653"></a><a name="iddle6990"></a> <font size="3">第二个连接在</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮的</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">toggled(bool)</span> </font></font><font size="3">信号和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">tertiaryGroupBox</span></font></font><font size="3">的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">槽之间建立。一旦连接建立点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Widgets </font></font><font size="3">离开连接模式。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在一个目录名为</font><font face="宋体, SimSun"><font size="3">sort</font></font><font size="3">中以 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.ui</span> </font></font><font size="3">保存对话框。向窗体添加代码，我们将使用在上一部分中</font><font face="宋体, SimSun"><font size="3">Go-to-Cell</font></font><font size="3">对话框中用到的相同的多重继承的方式。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">首先，创建一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.h</span> </font></font><font size="3">文件，内容如下：</font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#ifndef SORTDIALOG_H</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#define SORTDIALOG_H</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QDialog&gt;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;ui_sortdialog.h&quot;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class SortDialog : public QDialog, public Ui::SortDialog</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; Q_OBJECT</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; SortDialog(QWidget *parent = 0);</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; void setColumnRange(QChar first, QChar last);</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#endif</font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">然后创建 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.cpp</span>:</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">1 #include &lt;QtGui&gt;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">2 #include &quot;sortdialog.h&quot;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">3 SortDialog::SortDialog(QWidget *parent)</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">4     : QDialog(parent)</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">5 {</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">6     setupUi(this);</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">7     secondaryGroupBox-&gt;hide();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">8     tertiaryGroupBox-&gt;hide();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">9     layout()-&gt;setSizeConstraint(QLayout::SetFixedSize);</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">10     setColumnRange('A', 'Z');</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">11 }</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">12 void SortDialog::setColumnRange(QChar first, QChar last)</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">13 {</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">14     primaryColumnCombo-&gt;clear();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">15     secondaryColumnCombo-&gt;clear();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">16     tertiaryColumnCombo-&gt;clear();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">17     secondaryColumnCombo-&gt;addItem(tr(&quot;None&quot;));</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">18     tertiaryColumnCombo-&gt;addItem(tr(&quot;None&quot;));</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">19     primaryColumnCombo-&gt;setMinimumSize(</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">20             secondaryColumnCombo-&gt;sizeHint());</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">21     QChar ch = first;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">22     while (ch &lt;= last) {</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">23         primaryColumnCombo-&gt;addItem(QString(ch));</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">24         secondaryColumnCombo-&gt;addItem(QString(ch));</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">25         tertiaryColumnCombo-&gt;addItem(QString(ch));</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">26         ch = ch.unicode() + 1;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">27     }</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">28 }</font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle1086"></a><a name="iddle3062"></a><a name="iddle3345"></a><a name="iddle4129"></a><a name="iddle4446"></a><a name="iddle4779"></a><a name="iddle5566"></a><a name="iddle5593"></a><a name="iddle6089"></a><a name="iddle6131"></a><a name="iddle6195"></a><a name="iddle6196"></a><a name="iddle6328"></a><a name="iddle6337"></a><a name="iddle7245"></a> <font size="3">构造函数隐藏对话框的第二和第三部分。它还设置窗体布局的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sizeConstraint</span> </font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QLayout::SetFixedSize</span></font></font><font size="3">，使得对话框对用户不可改变大小。当子物件显示或隐藏时，布局将接管更改大小的回应，然后自动更改对话框的大小，确保对话框总是以合适的大小显示。</font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><span lang="zxx">setColumnRange()</span> </font></font><font size="3">槽根据</font><font face="宋体, SimSun"><font size="3">spreadsheet</font></font><font size="3">选择的列来初始化下拉列表的内容。我们在下拉列表中插入一个 </font><font face="宋体, SimSun"><font size="3">&quot;None&quot; </font></font><font size="3">项 </font><font face="宋体, SimSun"><font size="3">in the comboboxes for the (optional) secondary and tertiary keys.</font></font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;">
-<meta content="text/html; charset=utf-8" http-equiv="CONTENT-TYPE" />
-<title></title>
-<meta content="OpenOffice.org 2.3  (Linux)" name="GENERATOR" /> 	<style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		P { margin-bottom: 0.21cm }
-	-->
-	</style>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">行 </font><font face="宋体, SimSun"><font size="3">19 </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">20 </font></font><font size="3"><font face="宋体, SimSun"><font size="3">暗示了一种微妙的布局思想。</font></font> </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QWidget::sizeHint()</span> </font></font><font size="3">函数返回一个物件的理想大小，这是布局系统所期望的。这就解释了为什么不同的物件或者包含不同内容的相似的物件可能被布局系统赋予不同的尺寸了。 对于下拉列表框，这意味着包含内容&rdquo;</font><font face="宋体, SimSun"><font size="3">None&rdquo;</font></font><font size="3">的第二和第三下拉框会大于只包含一个字母的第一个下拉框。为了避免这种矛盾，我们把第一个下拉框的最小尺寸设置为第二个下拉框的理想尺寸了。</font></p>
-</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">这里有一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">main()</span> </font></font><font size="3">测试函数设置包含了列</font><font face="宋体, SimSun"><font size="3">'C' </font></font><font size="3">到 </font><font face="宋体, SimSun"><font size="3">'F' </font></font><font size="3">范围然后显示对话框：</font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QApplication&gt;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;sortdialog.h&quot;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int main(int argc, char *argv[])</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QApplication app(argc, argv);</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">SortDialog *dialog = new SortDialog;</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">dialog-&gt;setColumnRange('C', 'F');</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">dialog-&gt;show();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">return app.exec();</font></font></p>
-<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p>
-<p style="margin-bottom: 0cm;">&nbsp;</p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle1569"></a><a name="iddle1776"></a><a name="iddle2085"></a><a name="iddle2417"></a><a name="iddle3115"></a><a name="iddle3130"></a><a name="iddle3325"></a><a name="iddle3433"></a><a name="iddle3852"></a><a name="iddle4296"></a><a name="iddle4466"></a><a name="iddle4470"></a><a name="iddle4613"></a><a name="iddle4964"></a><a name="iddle5145"></a><a name="iddle5171"></a><a name="iddle5384"></a><a name="iddle5418"></a><a name="iddle6049"></a><a name="iddle6499"></a><a name="iddle6676"></a><a name="iddle6943"></a><a name="iddle6994"></a><a name="iddle6999"></a><a name="iddle7066"></a><a name="iddle7160"></a><a name="iddle7206"></a> <font size="3">到这里我们就全部完成了可扩展对话框。就像例子中展示的那样，设计一个可扩展对话框并不比设计一个普通对话框困难多少：我们所需要做的就是一个开关按钮，一些额外的信号槽连接，和一个不可变的布局。在生产级应用程序，用按钮控制高级扩展内容的显示是很普通的一件事情 </font><font face="宋体, SimSun"><font size="3">&gt;&gt;&gt; 仅当基础对话框可见并且是高级模式时 &lt;&lt;&lt; 仅当扩展显示时。这在Qt中可很容易的当点击QPushButton时调用setText()实现。</font></font></p>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">其他常用的可变形对话框，多页对话框用</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">创建甚至更简单，不管是手写代码还是使用</font><font face="宋体, SimSun"><font size="3">Qt Designer</font></font><font size="3">。这些对话框可以使用很多不同的方法创建。</font></p>
-<ul>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QTabWidget</span> 	</font></font><font size="3">可以自我控制，它在顶部提供了一个</font><font face="宋体, SimSun"><font size="3">tab</font></font><font size="3">栏控制一个內建的 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget 	</span></font></font><font size="3">物件。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QListWidget</span> 	</font></font><font size="3">和一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget</span> 	</font></font><font size="3">可以一起使用，通过连接 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QListWidget::currentRowChanged()</span> 	</font></font><font size="3">信号到 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget::setCurrentIndex()</span> 	</font></font><font size="3">槽上，用 </font><font face="宋体, SimSun"><font size="3">QList-Widget 	</font></font><font size="3">的当前项决定</font><font face="宋体, SimSun"><font size="3">QStackedWidget 	</font></font><font size="3">显示哪一页。</font></p>
-    </li>
-    <li>
-    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QtreeWidget</span> 	</font></font><font size="3">可以被可以像 </font><font face="宋体, SimSun"><font size="3">QListWidget 	</font></font><font size="3">一样和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget</span> 	</font></font><font size="3">一起使用</font></p>
-    </li>
-</ul>
-<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;<font face="宋体, SimSun"><font size="3">QStackedWidget</font></font> 类描述在 <font color="#0000ff"><u>第</u><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch06.html#ch06"> 6 章</a></u></font> 中(布局管理).</font></font></p>
+<p><br />
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8"><br />
+<title></title><br />
+<meta name="GENERATOR" content="OpenOffice.org 2.3  (Linux)"> 	 	 	<style type="text/css"><br />
+	<!--<br />
+		@page { size: 21cm 29.7cm; margin: 2cm }<br />
+		H2 { margin-top: 0.46cm; margin-bottom: 0.46cm; line-height: 173%; page-break-inside: avoid }<br />
+		H2.western { font-family: "Arial", sans-serif; font-size: 16pt }<br />
+		H2.cjk { font-family: "黑体", "SimHei"; font-size: 16pt; font-style: normal }<br />
+		H2.ctl { font-family: "Tahoma"; font-size: 16pt }<br />
+		H5 { margin-top: 0.49cm; margin-bottom: 0.51cm; line-height: 156%; page-break-inside: avoid }<br />
+		H5.western { font-family: "Times New Roman", serif; font-size: 14pt }<br />
+		H5.cjk { font-family: "Tahoma"; font-size: 14pt; font-style: normal }<br />
+		H5.ctl { font-family: "Tahoma"; font-size: 14pt }<br />
+		P { margin-bottom: 0.21cm }<br />
+		A:link { color: #0000ff }<br />
+	--><br />
+	</style>    </meta><br />
+</meta><br />
+</p><br />
+<h2 class="cjk">可变形对话框</h2><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">我们已经知道了如何创建总是显示相同的物件的对话框。某些情况下，需要创建可以变形的对话框。两种常用的可变形对话框是扩展对话框和多页对话框。这个两种对话框都可以在</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">中实现，不管是手写代码还是使用</font><font face="宋体, SimSun"><font size="3">Qt Designer</font></font><font size="3">。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">可扩展对话框通常提供一个简单的外观，但是包含一个开关按钮允许用户在对话框简单外观和可扩展外观之间转换。可扩展对话框</font><font face="宋体, SimSun"><font size="3">一般用在同时适用于普通用户和高级用户的应用中，默认隐藏高级选项功能，当用户明确指定的时候再显示出来。在本节中，我们要用 Qt 设计师来创建图</font></font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig10%23ch02fig10"> 2.10</a></u></font></font></font><font face="宋体, SimSun"><font size="3"> 中的可扩展对话框。</font></font></p><br />
+<h5 class="cjk"><a name="ch02fig10"></a><font face="Times New Roman, serif">Figure 2.10. The Sort dialog with simple and extended appearances</font></h5><br />
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort1_alt.jpg" target="_self">[View full size image]</a></u></font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;<input width="500" type="image" height="279" src="/upfile/image/sort1.jpg" /></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle2596"></a><a name="iddle3046"></a><a name="iddle3050"></a><a name="iddle4353"></a><a name="iddle5136"></a> <font size="2" style="font-size: 10pt;">这个对话框是一个</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">spreadsheet</font></font><font size="2" style="font-size: 10pt;">应用程序中的排序对话框，在这个对话框中用户可以选择一列或多列进行排序。对话框的简单外观允许用户输入一个排序关键字，扩展外观提供了额外的两个排序关键字。一个附加的按钮允许用户在简单外观和扩展外观之间转换。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="2" style="font-size: 10pt;">我们将用</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">Qt Designer</font></font><font size="2" style="font-size: 10pt;">创建物件和它的扩展外观，并在运行时按需要隐藏第二和第三个关键字。物件看起来很复杂，但是在</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">Qt Designer</font></font><font size="2" style="font-size: 10pt;">实现起来却是相当容易的。窍门就是先做主关键字部分，然后复制它两次来获取第二和第三关键字：</font></p><br />
+<ol><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="2" style="font-size: 10pt;">点击 </font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">File|New 	Form </font></font><font size="2" style="font-size: 10pt;">并选择 	</font><font face="宋体, SimSun"><font size="2" style="font-size: 10pt;">&quot;Dialog 	with Buttons Right&quot; </font></font><font size="2" style="font-size: 10pt;">模板。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3"><font size="2" style="font-size: 10pt;">创建 </font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">More 	button </font></font></font><font size="3"><font size="2" style="font-size: 10pt;">并把它拖拽它到垂直布局，放在垂直空白占位符下面。设置 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">More 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">按钮的 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">text 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">属性为 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;&amp;More&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">，</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;"><span lang="zxx">checkable</span></font><font size="2" style="font-size: 10pt;"> 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">属性为 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;true&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">，设置 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">OK 	</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">按钮的默认属性 	</font></font><font face="宋体, SimSun"><font size="3"><font size="2" style="font-size: 10pt;">&quot;true&quot;</font></font></font><font size="3"><font size="2" style="font-size: 10pt;">。</font></font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="2" style="font-size: 10pt;">创建一个分组框，两个标签，两个下拉列表框和一个水平占位符，并把它们放在窗体的任意位置。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3"><font size="2" style="font-size: 10pt;">拖拽分组框的右下角使它变大。然后将其他物件移动到分组框中，位置像</font><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig11%23ch02fig11">图 	</a></u></font></font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig11%23ch02fig11">2.11(a)</a></u></font> 	</font></font><font size="3"><font size="2" style="font-size: 10pt;">显示的那样。</font></font></p><br />
+    </li><br />
+</ol><br />
+<h5 class="cjk" style="margin-left: 1.27cm;"><a name="ch02fig11"></a><font face="Times New Roman, serif">Figure 2.11. Laying out the group box's children in a grid</font></h5><br />
+<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort3_alt.jpg" target="_self">[View full size image]</a></u></font></font></p><br />
+<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><input width="500" type="image" height="140" src="/upfile/image/sort3.jpg" />&nbsp;</p><br />
+<ol start="5"><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">拖拽第二个下拉列表框的右边线使它大概为第一个下拉列表框宽度的两倍。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">设置分组框的 </font><font face="宋体, SimSun"><font size="3">t<span lang="zxx">itle</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Primary 	Key&quot;</font></font><font size="3">，第一个标签的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;Column:&quot;</font></font><font size="3">，第二个标签的 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">text</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;Order:&quot;</font></font><font size="3">。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">右键单击第一个分组框并下从上下文菜单中选择 	</font><font face="宋体, SimSun"><font size="3">Edit Items </font></font><font size="3">弹出 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt 	Designer</span></font></font><font size="3">的下拉列表编辑器。创建一个 	</font><font face="宋体, SimSun"><font size="3">text</font></font><font size="3">为 	</font><font face="宋体, SimSun"><font size="3">&quot;None&quot;</font></font><font size="3">项。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">右键单击第二个分组框并下从上下文菜单中选择 	</font><font face="宋体, SimSun"><font size="3">Edit Items </font></font><font size="3">弹出 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt 	Designer</span></font></font><font size="3">的下拉列表编辑器。创建一个 	</font><font face="宋体, SimSun"><font size="3">&quot;Ascending&quot; 	</font></font><font size="3">项和一个 </font><font face="宋体, SimSun"><font size="3">&quot;Descending&quot; 	</font></font><font size="3">项。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击分组框，然后点击 </font><font face="宋体, SimSun"><font size="3">Form|Lay 	Out in a Grid</font></font><font size="3">。再次点击分组框点击 	</font><font face="宋体, SimSun"><font size="3">Form|Adjust 	Size</font></font><font size="3">。这将生成一个如 <a href="file:///mk:@MSITStore:E">图 	</a></font><font face="宋体, SimSun"><font size="3"><a href="file:///mk:@MSITStore:E">2.11</a> 	(b)</font></font><font size="3">显示的布局。</font></p><br />
+    </li><br />
+</ol><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">如果一个布局不是很合适或者如果你犯了一个错误，你可以点击 </font><font face="宋体, SimSun"><font size="3">Edit|Undo </font></font><font size="3">或者 </font><font face="宋体, SimSun"><font size="3">Form|Break Layout</font></font><font size="3">，然后重新布局物件再次尝试。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在我们将添加第二和第三主键的分组框：</font></p><br />
+<ol><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">确保对话框窗口拥有足够高的高度来存放额外的部分。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">按住 </font><font face="宋体, SimSun"><font size="3">Ctrl 	</font></font><font size="3">键 </font><font face="宋体, SimSun"><font size="3">(Alt 	on the Mac) </font></font><font size="3">的同时点击 </font><font face="宋体, SimSun"><font size="3">Primary 	Key </font></font><font size="3">分组框创建分组框的一份拷贝（包括它的内容）。同时按住 Ctrl( 或者 Alt)键，拖动此拷贝到下面的分组框中。</font><font face="宋体, SimSun"><font size="3">使用同样的方法创建出第三个分组框，并把它放在第二个下面。</font></font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">重置它们的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">title</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Secondary 	Key&quot; </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">&quot;&amp;Tertiary 	Key&quot;.</font></font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><a name="iddle1596"></a><a name="iddle2597"></a><a name="iddle3047"></a><a name="iddle3051"></a><a name="iddle4354"></a><a name="iddle5137"></a><a name="iddle6295"></a><a name="iddle6301"></a><a name="iddle6322"></a><a name="iddle6361"></a><a name="iddle6366"></a><a name="iddle6411"></a> 	<font size="3">创建一个垂直占位符并把它放置在第一关键字和第二关键字分组框之间。</font></p><br />
+    </li><br />
+</ol><br />
+<ol start="5"><br />
+    <li><br />
+    <p align="justify" style="margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在</font><font face="宋体, SimSun"><font size="3">Arrange 	the widgets in the grid-like pattern shown in <font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig12%23ch02fig12">Figure 	2.12</a></u></font> (a).</font></font></p><br />
+    </li><br />
+</ol><br />
+<h5 class="cjk" style="margin-left: 1.27cm;"><a name="ch02fig12"></a><font face="Times New Roman, serif">Figure 2.12. Laying out the form's children in a grid</font></h5><br />
+<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort5_alt.jpg" target="_self">[View full size image]</a></u></font></font></p><br />
+<p style="margin-left: 1.27cm; margin-top: 0.49cm; margin-bottom: 0.49cm;"><input type="image" src="/upfile/image/sort5.jpg" />&nbsp;</p><br />
+<ol start="5"><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">点击窗体取消对所有选择物件的选择，然后点击 	</font><font face="宋体, SimSun"><font size="3">Form|Lay Out in a 	Grid</font></font><font size="3">。窗体现在应该和 <a href="file:///mk:@MSITStore:E">图 	</a></font><font face="宋体, SimSun"><font size="3"><a href="file:///mk:@MSITStore:E">2.12</a> 	(b)</font></font><font size="3">一样。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">设置两个垂直空白占位符元素的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sizeHint</span> 	</font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3">[20, 	0]</font></font><font size="3">。</font></p><br />
+    </li><br />
+</ol><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">结果的网格布局有两列和四行，</font><br />
+<meta content="OpenOffice.org 2.3  (Linux)" name="GENERATOR" /> 	<style type="text/css"><br />
+	<!--<br />
+		@page { size: 21cm 29.7cm; margin: 2cm }<br />
+		P { margin-bottom: 0.21cm }<br />
+	--></style><font size="3">共</font><font face="宋体, SimSun"><font size="3">8 </font></font><font size="3">个单元。</font> <font face="宋体, SimSun"><font size="3"> </font></font><font size="3">主键的分组框，最靠左的垂直空白占位符项，第二主键分组框，第三主键分组框每一个占据一个单元格。垂直布局包含</font><font face="宋体, SimSun"><font size="3">OK</font></font><font size="3">，</font><font face="宋体, SimSun"><font size="3">Cancel</font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮占据两个单元格。在对话框的右下方留下两个空白单元格。如果你没有得到这个，取消布局，重新放置物件，然后重试。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">重命名窗体 </font><font face="宋体, SimSun"><font size="3">&quot;SortDialog&quot; </font></font><font size="3">设置窗口的标题为 </font><font face="宋体, SimSun"><font size="3">&quot;Sort&quot;</font></font><font size="3">。设置子物件的名字为 </font><font face="宋体, SimSun"><font size="3"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch02lev1sec4.html#ch02fig13%23ch02fig13">Figure 2.13</a></u></font> </font></font><font size="3">显示的那样：</font></p><br />
+<h5 class="cjk"><a name="ch02fig13"></a><font face="Times New Roman, serif">Figure 2.13. Naming the form's widgets</font></h5><br />
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/sort7_alt.jpg" target="_self">[View full size image]</a></u></font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;<input type="image" src="/upfile/image/sort7.jpg" /></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig14"></a> <font size="3">点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Tab Order</font></font><font size="3">。从上到下依次点击每个下拉列表框，然后点击右边的</font><font face="宋体, SimSun"><font size="3">OK</font></font><font size="3">、</font><font face="宋体, SimSun"><font size="3">Cancel</font></font><font size="3">和</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮。单击</font><font face="宋体, SimSun"><font size="3">Edit|Eeit Widgets </font></font><font size="3">离开</font><font face="宋体, SimSun"><font size="3">tab</font></font><font size="3">顺序模式。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">现在我们已经创建了窗体，我们准备设置一些信号／槽连接使它可用。</font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">允许我们在同一窗体的物件之间建立连接。我们需要创建两个连接。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">单击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Signals/Slots </font></font><font size="3">进入 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer</span></font></font><font size="3">的连接模式。窗体物件之间的蓝色箭头代表了物件之间的连接。因为我们选择了 </font><font face="宋体, SimSun"><font size="3">&quot;Dialog with Buttons Right&quot; </font></font><font size="3">模板， </font><font face="宋体, SimSun"><font size="3">OK </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">Cancel </font></font><font size="3">按钮已经连接到 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QDialog</span>'s <span lang="zxx">accept()</span> </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">reject()</span> </font></font><font size="3">槽上。连接也在 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">Qt Designer</span>'</font></font><font size="3">的</font><font face="宋体, SimSun"><font size="3">signal/slot </font></font><font size="3">编辑器窗口列出来了。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">要在两个物件之间建立一个连接，点击 </font><font face="宋体, SimSun"><font size="3">sender </font></font><font size="3">物件并拖拽红色箭头线</font><font face="宋体, SimSun"><font size="3">widget and drag the red arrow line to the receiver widget, </font></font><font size="3">然后释放。这会弹出一个对话框允许你选择要建立连接信号和槽。</font></p><br />
+<h5 class="cjk"><font face="Times New Roman, serif">Figure 2.14. Connecting the form's widgets</font></h5><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><input type="image" src="/upfile/image/sort8.jpg" />&nbsp;</p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="ch02fig15"></a> <font size="3">第一个连接建立在</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮和第二个分组框之间。拖拽红色箭头线在这两个物件之间，然后选择 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">toggled(bool)</span> </font></font><font size="3">作为信号 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">作为槽。默认，</font><font face="宋体, SimSun"><font size="3">Qt Designer </font></font><font size="3">不在槽的列表中列出 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">，但是如果你打开</font><font face="宋体, SimSun"><font size="3">Show all signals and slots </font></font><font size="3">选项它就会显示。 </font></p><br />
+<h5 class="cjk"><font face="Times New Roman, serif">Figure 2.15. Qt Designer's connection editor</font></h5><br />
+<p style="margin-bottom: 0cm;"><font face="Times New Roman, serif"><font color="#0000ff"><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/images/connections_alt.jpg" target="_self">[View full size image]</a></u></font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;<input width="500" type="image" height="272" src="/upfile/image/connections.jpg" /></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle4193"></a><a name="iddle4448"></a><a name="iddle6031"></a><a name="iddle6179"></a><a name="iddle6390"></a><a name="iddle6391"></a><a name="iddle6395"></a><a name="iddle6396"></a><a name="iddle6398"></a><a name="iddle6626"></a><a name="iddle6653"></a><a name="iddle6990"></a> <font size="3">第二个连接在</font><font face="宋体, SimSun"><font size="3">More</font></font><font size="3">按钮的</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">toggled(bool)</span> </font></font><font size="3">信号和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">tertiaryGroupBox</span></font></font><font size="3">的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">setVisible(bool)</span> </font></font><font size="3">槽之间建立。一旦连接建立点击 </font><font face="宋体, SimSun"><font size="3">Edit|Edit Widgets </font></font><font size="3">离开连接模式。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">在一个目录名为</font><font face="宋体, SimSun"><font size="3">sort</font></font><font size="3">中以 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.ui</span> </font></font><font size="3">保存对话框。向窗体添加代码，我们将使用在上一部分中</font><font face="宋体, SimSun"><font size="3">Go-to-Cell</font></font><font size="3">对话框中用到的相同的多重继承的方式。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">首先，创建一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.h</span> </font></font><font size="3">文件，内容如下：</font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#ifndef SORTDIALOG_H</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#define SORTDIALOG_H</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QDialog&gt;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;ui_sortdialog.h&quot;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">class SortDialog : public QDialog, public Ui::SortDialog</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; Q_OBJECT</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">public:</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; SortDialog(QWidget *parent = 0);</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;&nbsp; void setColumnRange(QChar first, QChar last);</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">};</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#endif</font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">然后创建 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sortdialog.cpp</span>:</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">1 #include &lt;QtGui&gt;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">2 #include &quot;sortdialog.h&quot;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">3 SortDialog::SortDialog(QWidget *parent)</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">4     : QDialog(parent)</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">5 {</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">6     setupUi(this);</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">7     secondaryGroupBox-&gt;hide();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">8     tertiaryGroupBox-&gt;hide();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">9     layout()-&gt;setSizeConstraint(QLayout::SetFixedSize);</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">10     setColumnRange('A', 'Z');</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">11 }</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">12 void SortDialog::setColumnRange(QChar first, QChar last)</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">13 {</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">14     primaryColumnCombo-&gt;clear();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">15     secondaryColumnCombo-&gt;clear();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">16     tertiaryColumnCombo-&gt;clear();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">17     secondaryColumnCombo-&gt;addItem(tr(&quot;None&quot;));</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">18     tertiaryColumnCombo-&gt;addItem(tr(&quot;None&quot;));</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">19     primaryColumnCombo-&gt;setMinimumSize(</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">20             secondaryColumnCombo-&gt;sizeHint());</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">21     QChar ch = first;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">22     while (ch &lt;= last) {</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">23         primaryColumnCombo-&gt;addItem(QString(ch));</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">24         secondaryColumnCombo-&gt;addItem(QString(ch));</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">25         tertiaryColumnCombo-&gt;addItem(QString(ch));</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">26         ch = ch.unicode() + 1;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">27     }</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">28 }</font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle1086"></a><a name="iddle3062"></a><a name="iddle3345"></a><a name="iddle4129"></a><a name="iddle4446"></a><a name="iddle4779"></a><a name="iddle5566"></a><a name="iddle5593"></a><a name="iddle6089"></a><a name="iddle6131"></a><a name="iddle6195"></a><a name="iddle6196"></a><a name="iddle6328"></a><a name="iddle6337"></a><a name="iddle7245"></a> <font size="3">构造函数隐藏对话框的第二和第三部分。它还设置窗体布局的 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">sizeConstraint</span> </font></font><font size="3">属性为 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QLayout::SetFixedSize</span></font></font><font size="3">，使得对话框对用户不可改变大小。当子物件显示或隐藏时，布局将接管更改大小的回应，然后自动更改对话框的大小，确保对话框总是以合适的大小显示。</font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3"><span lang="zxx">setColumnRange()</span> </font></font><font size="3">槽根据</font><font face="宋体, SimSun"><font size="3">spreadsheet</font></font><font size="3">选择的列来初始化下拉列表的内容。我们在下拉列表中插入一个 </font><font face="宋体, SimSun"><font size="3">&quot;None&quot; </font></font><font size="3">项 </font><font face="宋体, SimSun"><font size="3">in the comboboxes for the (optional) secondary and tertiary keys.</font></font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><br />
+<meta content="text/html; charset=utf-8" http-equiv="CONTENT-TYPE" /><br />
+<title></title><br />
+<meta content="OpenOffice.org 2.3  (Linux)" name="GENERATOR" /> 	<style type="text/css"><br />
+	<!--<br />
+		@page { size: 21cm 29.7cm; margin: 2cm }<br />
+		P { margin-bottom: 0.21cm }<br />
+	--><br />
+	</style><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">行 </font><font face="宋体, SimSun"><font size="3">19 </font></font><font size="3">和 </font><font face="宋体, SimSun"><font size="3">20 </font></font><font size="3"><font face="宋体, SimSun"><font size="3">暗示了一种微妙的布局思想。</font></font> </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QWidget::sizeHint()</span> </font></font><font size="3">函数返回一个物件的理想大小，这是布局系统所期望的。这就解释了为什么不同的物件或者包含不同内容的相似的物件可能被布局系统赋予不同的尺寸了。 对于下拉列表框，这意味着包含内容&rdquo;</font><font face="宋体, SimSun"><font size="3">None&rdquo;</font></font><font size="3">的第二和第三下拉框会大于只包含一个字母的第一个下拉框。为了避免这种矛盾，我们把第一个下拉框的最小尺寸设置为第二个下拉框的理想尺寸了。</font></p><br />
+</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">这里有一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">main()</span> </font></font><font size="3">测试函数设置包含了列</font><font face="宋体, SimSun"><font size="3">'C' </font></font><font size="3">到 </font><font face="宋体, SimSun"><font size="3">'F' </font></font><font size="3">范围然后显示对话框：</font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &lt;QApplication&gt;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">#include &quot;sortdialog.h&quot;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">int main(int argc, char *argv[])</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">{</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">QApplication app(argc, argv);</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">SortDialog *dialog = new SortDialog;</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">dialog-&gt;setColumnRange('C', 'F');</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">dialog-&gt;show();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">return app.exec();</font></font></p><br />
+<p align="justify" style="margin-bottom: 0cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">}</font></font></p><br />
+<p style="margin-bottom: 0cm;">&nbsp;</p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><a name="iddle1569"></a><a name="iddle1776"></a><a name="iddle2085"></a><a name="iddle2417"></a><a name="iddle3115"></a><a name="iddle3130"></a><a name="iddle3325"></a><a name="iddle3433"></a><a name="iddle3852"></a><a name="iddle4296"></a><a name="iddle4466"></a><a name="iddle4470"></a><a name="iddle4613"></a><a name="iddle4964"></a><a name="iddle5145"></a><a name="iddle5171"></a><a name="iddle5384"></a><a name="iddle5418"></a><a name="iddle6049"></a><a name="iddle6499"></a><a name="iddle6676"></a><a name="iddle6943"></a><a name="iddle6994"></a><a name="iddle6999"></a><a name="iddle7066"></a><a name="iddle7160"></a><a name="iddle7206"></a> <font size="3">到这里我们就全部完成了可扩展对话框。就像例子中展示的那样，设计一个可扩展对话框并不比设计一个普通对话框困难多少：我们所需要做的就是一个开关按钮，一些额外的信号槽连接，和一个不可变的布局。在生产级应用程序，用按钮控制高级扩展内容的显示是很普通的一件事情 </font><font face="宋体, SimSun"><font size="3">&gt;&gt;&gt; 仅当基础对话框可见并且是高级模式时 &lt;&lt;&lt; 仅当扩展显示时。这在Qt中可很容易的当点击QPushButton时调用setText()实现。</font></font></p><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font size="3">其他常用的可变形对话框，多页对话框用</font><font face="宋体, SimSun"><font size="3">Qt</font></font><font size="3">创建甚至更简单，不管是手写代码还是使用</font><font face="宋体, SimSun"><font size="3">Qt Designer</font></font><font size="3">。这些对话框可以使用很多不同的方法创建。</font></p><br />
+<ul><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QTabWidget</span> 	</font></font><font size="3">可以自我控制，它在顶部提供了一个</font><font face="宋体, SimSun"><font size="3">tab</font></font><font size="3">栏控制一个內建的 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget 	</span></font></font><font size="3">物件。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QListWidget</span> 	</font></font><font size="3">和一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget</span> 	</font></font><font size="3">可以一起使用，通过连接 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QListWidget::currentRowChanged()</span> 	</font></font><font size="3">信号到 	</font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget::setCurrentIndex()</span> 	</font></font><font size="3">槽上，用 </font><font face="宋体, SimSun"><font size="3">QList-Widget 	</font></font><font size="3">的当前项决定</font><font face="宋体, SimSun"><font size="3">QStackedWidget 	</font></font><font size="3">显示哪一页。</font></p><br />
+    </li><br />
+    <li><br />
+    <p align="justify" style="margin-top: 0.17cm; margin-bottom: 0.17cm; widows: 0; orphans: 0;"><font size="3">一个 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QtreeWidget</span> 	</font></font><font size="3">可以被可以像 </font><font face="宋体, SimSun"><font size="3">QListWidget 	</font></font><font size="3">一样和 </font><font face="宋体, SimSun"><font size="3"><span lang="zxx">QStackedWidget</span> 	</font></font><font size="3">一起使用</font></p><br />
+    </li><br />
+</ul><br />
+<p align="justify" style="margin-top: 0.49cm; margin-bottom: 0.49cm; widows: 2; orphans: 2;"><font face="宋体, SimSun"><font size="3">&nbsp;<font face="宋体, SimSun"><font size="3">QStackedWidget</font></font> 类描述在 <font color="#0000ff"><u>第</u><u><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/ch06.html#ch06"> 6 章</a></u></font> 中(布局管理).</font></font></p><br />
 <p>&nbsp;</p>
 </body>
 </html>

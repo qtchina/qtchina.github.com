@@ -6,94 +6,94 @@
 <title>subversion服务器升级记录</title>
 </head>
 <body>
-背景;
-
-本是升级次从subversion-1.6到subversion-1.7升级
-
-服务器端svn与apache2.2整合，使用authz用户认证机制。
-
-
-由于这个svn服务器有一个团队几十个人在使用，需要非常小心
-
-在动手升级之前，查阅subversion-1.7文档，发现svn版本库不完成兼容，
-
-不需要升级，这还好办一点了。
-
-
-但是客户端的svn库是需要升级的，是什么问题呢，
-
-就是自动分发系统从svn中检出代码，暂时放在服务器上，这与安装的svn客户端版本有关系。
-
-svn客户端命令从1.6到1.7,版本数据库格式有不兼容的变化，必须显式使用svn upgrade命令更新，否则无法做其他的svn操作的。
-
-由于整个svn检出库比较大，大概 1.5G，执行svn upgrade耗时比较长，使用的另一种解决方法，先在临时目录检出整个库，完成后替换，这样可异步的升级。
-
-
-最后一个问题，subversion服务器端与apache整合，也不完全兼容。
-
-在安装完成subversion-1.7与apache整合后，在commit提交代码时一直出现一个svn服务器端错误，如下，
-
-客户端显示：
-
-[gzleo@myhost trunk]$ svn commit -m ""
-
-svn: E175002: 提交失败(细节如下):
-
-svn: E175002: 服务器发送了意外的返回值(200 OK)，在响应 “POST” 的请求 “/svndb/!svn/me” 中
-
-
-服务器端log显示：
-
-==> /usr/local/apache-2.2.14/logs/access_log <==
-
-10.207.16.254 - - [04/Jun/2012:10:57:32 +0800] "OPTIONS /svndb/abcxxx/trunk/app/admin HTTP/1.1" 401 401
-
-10.207.16.254 - guangzhao [04/Jun/2012:10:57:32 +0800] "OPTIONS /svndb/abcxxx/trunk/app/admin HTTP/1.1" 200 184
-
-10.207.16.254 - guangzhao [04/Jun/2012:10:57:32 +0800] "POST /svndb/!svn/me HTTP/1.1" 200 1799
-
-
-
-经查找官方的资料与buglist，确定在于这个请求被进默认的虚拟主机接收并处理了，并且返回了OK 200，
-
-那么subversion则认为这不是一上svn请求，忽略了相关的处理，最终导致提交失败。
-
-
-现有找到的这个问题的解决办法，虽然有效果，可用，但好象有点别扭，也没有找到其他的办法，就先用着了。
-
-为apache创建一个默认虚拟主机（也就是配置第一个虚拟主机），让其不可对任何请求响应OK 200,而是响应 400 not found，这样subversion才会继续处理这一提交请求，成功完成commit请求。
-
-该虚拟主机配置需要放在虚拟主机配置最前面，内容如下，
-
-<VirtualHost *:80>
-   DocumentRoot /WEB/HTML/
-   ServerName nonamenoname.com
-   DirectoryIndex index.php
-</VirtualHost>
-
-访问这个默认虚拟主机返回值应该为;
-
-[gzleo@myhost Documents]$ wget http://10.207.16.254:8000/
-
---2012-06-04 15:04:26-- http://10.207.16.254:8000/
-
-正在连接 10.207.16.254:8000... 已连接。
-
-已发出 HTTP 请求，正在等待回应... 403 Forbidden
-
-2012-06-04 15:04:26 错误 403：Forbidden。
- 
-
-整个升级过程虽然现在看来步骤简单明确，但在没有动手之前了只知道大概的，像第二上问题就是之前没有想到的，在反复试了两次之后才发现问题，并找到了这个解决方法。
-
-目前经过几个的使用，倒是没有别的问题，一切还算正常。
-
-
-svn 1.7客户端新建立的.svn只在根目录下出现，而不是在每个子目录下出来，应该存储效率比1.6老版本高了，从整体上看，占用的磁盘空间比原来上了很多。
-
-这也算是升级的一个好处吧。
-
-
+背景;<br />
+<br />
+本是升级次从subversion-1.6到subversion-1.7升级<br />
+<br />
+服务器端svn与apache2.2整合，使用authz用户认证机制。<br />
+<br />
+<br />
+由于这个svn服务器有一个团队几十个人在使用，需要非常小心<br />
+<br />
+在动手升级之前，查阅subversion-1.7文档，发现svn版本库不完成兼容，<br />
+<br />
+不需要升级，这还好办一点了。<br />
+<br />
+<br />
+但是客户端的svn库是需要升级的，是什么问题呢，<br />
+<br />
+就是自动分发系统从svn中检出代码，暂时放在服务器上，这与安装的svn客户端版本有关系。<br />
+<br />
+svn客户端命令从1.6到1.7,版本数据库格式有不兼容的变化，必须显式使用svn upgrade命令更新，否则无法做其他的svn操作的。<br />
+<br />
+由于整个svn检出库比较大，大概 1.5G，执行svn upgrade耗时比较长，使用的另一种解决方法，先在临时目录检出整个库，完成后替换，这样可异步的升级。<br />
+<br />
+<br />
+最后一个问题，subversion服务器端与apache整合，也不完全兼容。<br />
+<br />
+在安装完成subversion-1.7与apache整合后，在commit提交代码时一直出现一个svn服务器端错误，如下，<br />
+<br />
+客户端显示：<br />
+<br />
+[gzleo@myhost trunk]$ svn commit -m ""<br />
+<br />
+svn: E175002: 提交失败(细节如下):<br />
+<br />
+svn: E175002: 服务器发送了意外的返回值(200 OK)，在响应 “POST” 的请求 “/svndb/!svn/me” 中<br />
+<br />
+<br />
+服务器端log显示：<br />
+<br />
+==> /usr/local/apache-2.2.14/logs/access_log <==<br />
+<br />
+10.207.16.254 - - [04/Jun/2012:10:57:32 +0800] "OPTIONS /svndb/abcxxx/trunk/app/admin HTTP/1.1" 401 401<br />
+<br />
+10.207.16.254 - guangzhao [04/Jun/2012:10:57:32 +0800] "OPTIONS /svndb/abcxxx/trunk/app/admin HTTP/1.1" 200 184<br />
+<br />
+10.207.16.254 - guangzhao [04/Jun/2012:10:57:32 +0800] "POST /svndb/!svn/me HTTP/1.1" 200 1799<br />
+<br />
+<br />
+<br />
+经查找官方的资料与buglist，确定在于这个请求被进默认的虚拟主机接收并处理了，并且返回了OK 200，<br />
+<br />
+那么subversion则认为这不是一上svn请求，忽略了相关的处理，最终导致提交失败。<br />
+<br />
+<br />
+现有找到的这个问题的解决办法，虽然有效果，可用，但好象有点别扭，也没有找到其他的办法，就先用着了。<br />
+<br />
+为apache创建一个默认虚拟主机（也就是配置第一个虚拟主机），让其不可对任何请求响应OK 200,而是响应 400 not found，这样subversion才会继续处理这一提交请求，成功完成commit请求。<br />
+<br />
+该虚拟主机配置需要放在虚拟主机配置最前面，内容如下，<br />
+<br />
+<VirtualHost *:80><br />
+   DocumentRoot /WEB/HTML/<br />
+   ServerName nonamenoname.com<br />
+   DirectoryIndex index.php<br />
+</VirtualHost><br />
+<br />
+访问这个默认虚拟主机返回值应该为;<br />
+<br />
+[gzleo@myhost Documents]$ wget http://10.207.16.254:8000/<br />
+<br />
+--2012-06-04 15:04:26-- http://10.207.16.254:8000/<br />
+<br />
+正在连接 10.207.16.254:8000... 已连接。<br />
+<br />
+已发出 HTTP 请求，正在等待回应... 403 Forbidden<br />
+<br />
+2012-06-04 15:04:26 错误 403：Forbidden。<br />
+ <br />
+<br />
+整个升级过程虽然现在看来步骤简单明确，但在没有动手之前了只知道大概的，像第二上问题就是之前没有想到的，在反复试了两次之后才发现问题，并找到了这个解决方法。<br />
+<br />
+目前经过几个的使用，倒是没有别的问题，一切还算正常。<br />
+<br />
+<br />
+svn 1.7客户端新建立的.svn只在根目录下出现，而不是在每个子目录下出来，应该存储效率比1.6老版本高了，从整体上看，占用的磁盘空间比原来上了很多。<br />
+<br />
+这也算是升级的一个好处吧。<br />
+<br />
+<br />
 
 </body>
 </html>

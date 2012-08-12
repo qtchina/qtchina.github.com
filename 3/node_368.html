@@ -6,41 +6,41 @@
 <title>切换kvm与virtualbox内核驱动模块的自动脚本</title>
 </head>
 <body>
-由于我目前在同时使用virtualbox和kvm,而这两个模块有冲突,所以把内核中的kvm编译成了模块,在需要的时候可以切换这两个模块,选择使用其中任何一种虚拟机驱动.
-下面是我用的切换脚本,可以自动检测当前使用的虚拟机模块,把它rmmod掉之后,再加载另一种模块,用起来比较方面,在此帖出,仅做参考.
-
-more swith_vbox_kvm.sh
-
-[code type="bash"]
-
-#vboxnetflt             91444  0
-#vboxnetadp             85412  0
-#vboxdrv              1699090  1 vboxnetflt
-
-NOW_VM=`lsmod | grep vbox`
-if [ x"$NOW_VM" = x"" ] ; then
-        echo "Now is kvm, swithing to vbox..."
-        rmmod kvm-intel
-        rmmod kvm
-
-        modprobe vboxdrv
-        modprobe vboxnetadp
-        modprobe vboxnetflt
-else
-        echo "Now is vbox, swithing to kvm..."
-        rmmod vboxnetflt
-        rmmod vboxnetadp
-        rmmod vboxdrv
-
-        modprobe kvm
-        modprobe kvm-intel
-fi
-
-echo "Switching from    to xxx done."
-lsmod | grep kvm
-lsmod | grep vbox
-echo "enjoy it now!"
-
+由于我目前在同时使用virtualbox和kvm,而这两个模块有冲突,所以把内核中的kvm编译成了模块,在需要的时候可以切换这两个模块,选择使用其中任何一种虚拟机驱动.<br />
+下面是我用的切换脚本,可以自动检测当前使用的虚拟机模块,把它rmmod掉之后,再加载另一种模块,用起来比较方面,在此帖出,仅做参考.<br />
+<br />
+more swith_vbox_kvm.sh<br />
+<br />
+[code type="bash"]<br />
+<br />
+#vboxnetflt             91444  0<br />
+#vboxnetadp             85412  0<br />
+#vboxdrv              1699090  1 vboxnetflt<br />
+<br />
+NOW_VM=`lsmod | grep vbox`<br />
+if [ x"$NOW_VM" = x"" ] ; then<br />
+        echo "Now is kvm, swithing to vbox..."<br />
+        rmmod kvm-intel<br />
+        rmmod kvm<br />
+<br />
+        modprobe vboxdrv<br />
+        modprobe vboxnetadp<br />
+        modprobe vboxnetflt<br />
+else<br />
+        echo "Now is vbox, swithing to kvm..."<br />
+        rmmod vboxnetflt<br />
+        rmmod vboxnetadp<br />
+        rmmod vboxdrv<br />
+<br />
+        modprobe kvm<br />
+        modprobe kvm-intel<br />
+fi<br />
+<br />
+echo "Switching from    to xxx done."<br />
+lsmod | grep kvm<br />
+lsmod | grep vbox<br />
+echo "enjoy it now!"<br />
+<br />
 [/code]
 </body>
 </html>

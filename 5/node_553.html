@@ -6,136 +6,136 @@
 <title>e17 r56388 去hal补丁</title>
 </head>
 <body>
-前段时间把系统的hal USE,今天升级e17的时候发现它还需要依赖hal，通过参数也无法控制，稍微修改了一下代码，编译安装完成后，e17桌面能正常使用，现在还不知道删掉的代码对桌面有什么影响。不过本来e17也就作为一个轻量级备用桌面的，有一点功能问题也没有什么关系。
-
-cat e17-no-hal.patch
-[code type="diff"]
-Index: src/modules/illume/e_kbd.c
-===================================================================
---- src/modules/illume/e_kbd.c  (版本 56394)
-+++ src/modules/illume/e_kbd.c  (工作副本)
-@@ -2,7 +2,7 @@
- #include "e_kbd.h"
- #include "e_mod_layout.h"
- #include "e_cfg.h"
--#include <E_Hal.h>
-+// #include <E_Hal.h>
- 
- static void _e_kbd_layout_send(E_Kbd *kbd);
- 
-@@ -724,11 +724,11 @@
- static void
- _e_kbd_dbus_cb_dev_input_keyboard(void *user_data __UNUSED__, void *reply_data, DBusError *error)
- {
--   E_Hal_Manager_Find_Device_By_Capability_Return *ret = reply_data;
-+    // E_Hal_Manager_Find_Device_By_Capability_Return *ret = reply_data;
-    Eina_List *l;
-    char *device;
-                                      
--   if ((!ret) || (!ret->strings)) return;
-+   // if ((!ret) || (!ret->strings)) return;
-    
-    if (dbus_error_is_set(error))
-      {
-@@ -736,18 +736,18 @@
-        return;
-      }
-    
--   EINA_LIST_FOREACH(ret->strings, l, device)
--     {
--       _e_kbd_dbus_keyboard_add(device);
--       _e_kbd_dbus_keyboard_eval();
--     }
-+   /* EINA_LIST_FOREACH(ret->strings, l, device) */
-+   /*   { */
-+   /*  _e_kbd_dbus_keyboard_add(device); */
-+   /*  _e_kbd_dbus_keyboard_eval(); */
-+   /*   } */
- }
- 
- static void
- _e_kbd_dbus_cb_input_keyboard_is(void *user_data, void *reply_data, DBusError *error)
- {
-    char *udi = user_data;
--   E_Hal_Device_Query_Capability_Return *ret = reply_data;
-+   // E_Hal_Device_Query_Capability_Return *ret = reply_data;
-    
-    if (dbus_error_is_set(error))
-      {
-@@ -755,11 +755,11 @@
-        goto error;
-      }
-    
--   if (ret && ret->boolean)
--     {
--       _e_kbd_dbus_keyboard_add(udi);
--       _e_kbd_dbus_keyboard_eval();
--     }
-+   /* if (ret && ret->boolean) */
-+   /*   { */
-+   /*  _e_kbd_dbus_keyboard_add(udi); */
-+   /*  _e_kbd_dbus_keyboard_eval(); */
-+   /*   } */
-    
-    error:
-    eina_stringshare_del(udi);
-@@ -773,10 +773,10 @@
-         
-    dbus_error_init(&err);
-    dbus_message_get_args(msg, &err, DBUS_TYPE_STRING, &udi, DBUS_TYPE_INVALID);
--   e_hal_device_query_capability(_e_kbd_dbus_conn, eina_stringshare_add(udi), 
--                                 "input.keyboard",
--                                 _e_kbd_dbus_cb_input_keyboard_is, 
--                                 (void*)eina_stringshare_add(udi));
-+   /* e_hal_device_query_capability(_e_kbd_dbus_conn, eina_stringshare_add(udi),  */
-+   /*                               "input.keyboard", */
-+   /*                               _e_kbd_dbus_cb_input_keyboard_is,  */
-+   /*                               (void*)eina_stringshare_add(udi)); */
- }
-      
- static void
-@@ -857,24 +857,24 @@
-    if (_e_kbd_dbus_conn)
-      {
-         
--       e_hal_manager_find_device_by_capability(_e_kbd_dbus_conn, "input.keyboard",
--                                               _e_kbd_dbus_cb_dev_input_keyboard, NULL);
-+       /* e_hal_manager_find_device_by_capability(_e_kbd_dbus_conn, "input.keyboard", */
-+       /*                                      _e_kbd_dbus_cb_dev_input_keyboard, NULL); */
- 
--       _e_kbd_dbus_handler_dev_add =
--         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,
--                                   E_HAL_MANAGER_PATH,
--                                   E_HAL_MANAGER_INTERFACE,
--                                   "DeviceAdded", _e_kbd_dbus_cb_dev_add, NULL);
--       _e_kbd_dbus_handler_dev_del =
--         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,
--                                   E_HAL_MANAGER_PATH,
--                                   E_HAL_MANAGER_INTERFACE,
--                                   "DeviceRemoved", _e_kbd_dbus_cb_dev_del, NULL);
--       _e_kbd_dbus_handler_dev_chg =
--         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,
--                                   E_HAL_MANAGER_PATH,
--                                   E_HAL_MANAGER_INTERFACE,
--                                   "NewCapability", _e_kbd_dbus_cb_cap_add, NULL);
-+       /* _e_kbd_dbus_handler_dev_add = */
-+       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */
-+       /*                          E_HAL_MANAGER_PATH, */
-+       /*                          E_HAL_MANAGER_INTERFACE, */
-+       /*                          "DeviceAdded", _e_kbd_dbus_cb_dev_add, NULL); */
-+       /* _e_kbd_dbus_handler_dev_del = */
-+       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */
-+       /*                          E_HAL_MANAGER_PATH, */
-+       /*                          E_HAL_MANAGER_INTERFACE, */
-+       /*                          "DeviceRemoved", _e_kbd_dbus_cb_dev_del, NULL); */
-+       /* _e_kbd_dbus_handler_dev_chg = */
-+       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */
-+       /*                          E_HAL_MANAGER_PATH, */
-+       /*                          E_HAL_MANAGER_INTERFACE, */
-+       /*                          "NewCapability", _e_kbd_dbus_cb_cap_add, NULL); */
-      }
- }
-
+前段时间把系统的hal USE,今天升级e17的时候发现它还需要依赖hal，通过参数也无法控制，稍微修改了一下代码，编译安装完成后，e17桌面能正常使用，现在还不知道删掉的代码对桌面有什么影响。不过本来e17也就作为一个轻量级备用桌面的，有一点功能问题也没有什么关系。<br />
+<br />
+cat e17-no-hal.patch<br />
+[code type="diff"]<br />
+Index: src/modules/illume/e_kbd.c<br />
+===================================================================<br />
+--- src/modules/illume/e_kbd.c  (版本 56394)<br />
++++ src/modules/illume/e_kbd.c  (工作副本)<br />
+@@ -2,7 +2,7 @@<br />
+ #include "e_kbd.h"<br />
+ #include "e_mod_layout.h"<br />
+ #include "e_cfg.h"<br />
+-#include <E_Hal.h><br />
++// #include <E_Hal.h><br />
+ <br />
+ static void _e_kbd_layout_send(E_Kbd *kbd);<br />
+ <br />
+@@ -724,11 +724,11 @@<br />
+ static void<br />
+ _e_kbd_dbus_cb_dev_input_keyboard(void *user_data __UNUSED__, void *reply_data, DBusError *error)<br />
+ {<br />
+-   E_Hal_Manager_Find_Device_By_Capability_Return *ret = reply_data;<br />
++    // E_Hal_Manager_Find_Device_By_Capability_Return *ret = reply_data;<br />
+    Eina_List *l;<br />
+    char *device;<br />
+                                      <br />
+-   if ((!ret) || (!ret->strings)) return;<br />
++   // if ((!ret) || (!ret->strings)) return;<br />
+    <br />
+    if (dbus_error_is_set(error))<br />
+      {<br />
+@@ -736,18 +736,18 @@<br />
+        return;<br />
+      }<br />
+    <br />
+-   EINA_LIST_FOREACH(ret->strings, l, device)<br />
+-     {<br />
+-       _e_kbd_dbus_keyboard_add(device);<br />
+-       _e_kbd_dbus_keyboard_eval();<br />
+-     }<br />
++   /* EINA_LIST_FOREACH(ret->strings, l, device) */<br />
++   /*   { */<br />
++   /*  _e_kbd_dbus_keyboard_add(device); */<br />
++   /*  _e_kbd_dbus_keyboard_eval(); */<br />
++   /*   } */<br />
+ }<br />
+ <br />
+ static void<br />
+ _e_kbd_dbus_cb_input_keyboard_is(void *user_data, void *reply_data, DBusError *error)<br />
+ {<br />
+    char *udi = user_data;<br />
+-   E_Hal_Device_Query_Capability_Return *ret = reply_data;<br />
++   // E_Hal_Device_Query_Capability_Return *ret = reply_data;<br />
+    <br />
+    if (dbus_error_is_set(error))<br />
+      {<br />
+@@ -755,11 +755,11 @@<br />
+        goto error;<br />
+      }<br />
+    <br />
+-   if (ret && ret->boolean)<br />
+-     {<br />
+-       _e_kbd_dbus_keyboard_add(udi);<br />
+-       _e_kbd_dbus_keyboard_eval();<br />
+-     }<br />
++   /* if (ret && ret->boolean) */<br />
++   /*   { */<br />
++   /*  _e_kbd_dbus_keyboard_add(udi); */<br />
++   /*  _e_kbd_dbus_keyboard_eval(); */<br />
++   /*   } */<br />
+    <br />
+    error:<br />
+    eina_stringshare_del(udi);<br />
+@@ -773,10 +773,10 @@<br />
+         <br />
+    dbus_error_init(&err);<br />
+    dbus_message_get_args(msg, &err, DBUS_TYPE_STRING, &udi, DBUS_TYPE_INVALID);<br />
+-   e_hal_device_query_capability(_e_kbd_dbus_conn, eina_stringshare_add(udi), <br />
+-                                 "input.keyboard",<br />
+-                                 _e_kbd_dbus_cb_input_keyboard_is, <br />
+-                                 (void*)eina_stringshare_add(udi));<br />
++   /* e_hal_device_query_capability(_e_kbd_dbus_conn, eina_stringshare_add(udi),  */<br />
++   /*                               "input.keyboard", */<br />
++   /*                               _e_kbd_dbus_cb_input_keyboard_is,  */<br />
++   /*                               (void*)eina_stringshare_add(udi)); */<br />
+ }<br />
+      <br />
+ static void<br />
+@@ -857,24 +857,24 @@<br />
+    if (_e_kbd_dbus_conn)<br />
+      {<br />
+         <br />
+-       e_hal_manager_find_device_by_capability(_e_kbd_dbus_conn, "input.keyboard",<br />
+-                                               _e_kbd_dbus_cb_dev_input_keyboard, NULL);<br />
++       /* e_hal_manager_find_device_by_capability(_e_kbd_dbus_conn, "input.keyboard", */<br />
++       /*                                      _e_kbd_dbus_cb_dev_input_keyboard, NULL); */<br />
+ <br />
+-       _e_kbd_dbus_handler_dev_add =<br />
+-         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,<br />
+-                                   E_HAL_MANAGER_PATH,<br />
+-                                   E_HAL_MANAGER_INTERFACE,<br />
+-                                   "DeviceAdded", _e_kbd_dbus_cb_dev_add, NULL);<br />
+-       _e_kbd_dbus_handler_dev_del =<br />
+-         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,<br />
+-                                   E_HAL_MANAGER_PATH,<br />
+-                                   E_HAL_MANAGER_INTERFACE,<br />
+-                                   "DeviceRemoved", _e_kbd_dbus_cb_dev_del, NULL);<br />
+-       _e_kbd_dbus_handler_dev_chg =<br />
+-         e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER,<br />
+-                                   E_HAL_MANAGER_PATH,<br />
+-                                   E_HAL_MANAGER_INTERFACE,<br />
+-                                   "NewCapability", _e_kbd_dbus_cb_cap_add, NULL);<br />
++       /* _e_kbd_dbus_handler_dev_add = */<br />
++       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */<br />
++       /*                          E_HAL_MANAGER_PATH, */<br />
++       /*                          E_HAL_MANAGER_INTERFACE, */<br />
++       /*                          "DeviceAdded", _e_kbd_dbus_cb_dev_add, NULL); */<br />
++       /* _e_kbd_dbus_handler_dev_del = */<br />
++       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */<br />
++       /*                          E_HAL_MANAGER_PATH, */<br />
++       /*                          E_HAL_MANAGER_INTERFACE, */<br />
++       /*                          "DeviceRemoved", _e_kbd_dbus_cb_dev_del, NULL); */<br />
++       /* _e_kbd_dbus_handler_dev_chg = */<br />
++       /*   e_dbus_signal_handler_add(_e_kbd_dbus_conn, E_HAL_SENDER, */<br />
++       /*                          E_HAL_MANAGER_PATH, */<br />
++       /*                          E_HAL_MANAGER_INTERFACE, */<br />
++       /*                          "NewCapability", _e_kbd_dbus_cb_cap_add, NULL); */<br />
+      }<br />
+ }<br />
+<br />
 [/code]
 </body>
 </html>

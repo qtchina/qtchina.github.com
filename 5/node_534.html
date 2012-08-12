@@ -6,94 +6,94 @@
 <title>我比较喜欢的一种javascript类的写法</title>
 </head>
 <body>
-自进入web 2.0以来，浏览器更新进步飞速，javascript的使用越来越广泛，面向对象，成系统的，大规模的javascript代码的出现，必须使用良好的方法组织这些代码，javascript面向对象的组织方式开始流行，我以前也看过一点，却总没有机会实现大规模javascript代码，对其面向对象也只有一些了解。
-
-最近需要编写一个交互性强的页面，重新把javascript捡起来，也使用面向对象的方法对相关功能进行封装，目前已经有500多行代码了。
-
-在实践过程中找到了一种比较喜欢的类组织方式，在此记录备忘。
-
-[code type="javascript"]
-function ClassA() {
-    var p1 = 1;   // 成员变量
-    var p2 = 2;
-
-    // 类方法1
-    this.func1 = function() {
-        this.p1 = p1 * 4;
-        ......
-    }
-
-    // 类方法2
-    this.func2 = function(arg1, arg2) {
-        this.p2 = p1*5 + p2;
-    }
-
-    // 类方法3
-    this.func3 = function() {
-        var ws = new WebSocket("ws://localhost:5678/");
-        ws.onopen=this.onwsopen;
-    }
-
-    this.onwsopen = function () {
-        // 注意，这是ws的回调函数，在这里的this对象不是指的ClassA, 而是WebSocket。
-        // 如果要使用ClassA的this, 必须使用一种方法如下，
-        rthis.p2 = 10;
-    }
-
-    var rthis = this;  // 把成员rthis指向自己。以便在回调函数中使用。
-};
-[/code]
-
-其他地方比较清楚，但在"类方法3“中，使用一种小技巧解决了要调用上层object的this实例的方法，也许还应该有其他的更好的方法才对，这种写法很别扭，不过问题算解决了。
-
-其余几种类写法，
-
-[code type="javascript"]
-//第1种写法 
-function Circle(r) { 
-    this.r = r; 
-} 
-Circle.PI = 3.14159; 
-Circle.prototype.area = function() { 
-    return Circle.PI * this.r * this.r; 
-} 
-var c = new Circle(1.0); 
-alert(c.area()); 
-
-//第2种写法 
-var Circle = function() { 
-    var obj = new Object(); 
-    obj.PI = 3.14159; 
-    obj.area = function( r ) { 
-        return this.PI * r * r; 
-    } 
-    return obj; 
-} 
-var c = new Circle(); 
-alert( c.area( 1.0 ) ); 
-
-
-//第3种写法 
-var Circle = new Object(); 
-Circle.PI = 3.14159; 
-Circle.Area = function( r ) { 
-    return this.PI * r * r; 
-} 
-alert( Circle.Area( 1.0 ) ); 
-
-//第4种写法 
-var Circle={ 
-    "PI":3.14159, 
-    "area":function(r){ 
-        return this.PI * r * r; 
-    } 
-}; 
-alert( Circle.area(1.0) );                                                                                         
-                                                                                                                   
-//第5种写法                                                                                                        
-var Circle = new Function("this.PI = 3.14159;this.area = function( r ) {return r*r*this.PI;}");                    
-alert( (new Circle()).area(1.0) );
-
+自进入web 2.0以来，浏览器更新进步飞速，javascript的使用越来越广泛，面向对象，成系统的，大规模的javascript代码的出现，必须使用良好的方法组织这些代码，javascript面向对象的组织方式开始流行，我以前也看过一点，却总没有机会实现大规模javascript代码，对其面向对象也只有一些了解。<br />
+<br />
+最近需要编写一个交互性强的页面，重新把javascript捡起来，也使用面向对象的方法对相关功能进行封装，目前已经有500多行代码了。<br />
+<br />
+在实践过程中找到了一种比较喜欢的类组织方式，在此记录备忘。<br />
+<br />
+[code type="javascript"]<br />
+function ClassA() {<br />
+    var p1 = 1;   // 成员变量<br />
+    var p2 = 2;<br />
+<br />
+    // 类方法1<br />
+    this.func1 = function() {<br />
+        this.p1 = p1 * 4;<br />
+        ......<br />
+    }<br />
+<br />
+    // 类方法2<br />
+    this.func2 = function(arg1, arg2) {<br />
+        this.p2 = p1*5 + p2;<br />
+    }<br />
+<br />
+    // 类方法3<br />
+    this.func3 = function() {<br />
+        var ws = new WebSocket("ws://localhost:5678/");<br />
+        ws.onopen=this.onwsopen;<br />
+    }<br />
+<br />
+    this.onwsopen = function () {<br />
+        // 注意，这是ws的回调函数，在这里的this对象不是指的ClassA, 而是WebSocket。<br />
+        // 如果要使用ClassA的this, 必须使用一种方法如下，<br />
+        rthis.p2 = 10;<br />
+    }<br />
+<br />
+    var rthis = this;  // 把成员rthis指向自己。以便在回调函数中使用。<br />
+};<br />
+[/code]<br />
+<br />
+其他地方比较清楚，但在"类方法3“中，使用一种小技巧解决了要调用上层object的this实例的方法，也许还应该有其他的更好的方法才对，这种写法很别扭，不过问题算解决了。<br />
+<br />
+其余几种类写法，<br />
+<br />
+[code type="javascript"]<br />
+//第1种写法 <br />
+function Circle(r) { <br />
+    this.r = r; <br />
+} <br />
+Circle.PI = 3.14159; <br />
+Circle.prototype.area = function() { <br />
+    return Circle.PI * this.r * this.r; <br />
+} <br />
+var c = new Circle(1.0); <br />
+alert(c.area()); <br />
+<br />
+//第2种写法 <br />
+var Circle = function() { <br />
+    var obj = new Object(); <br />
+    obj.PI = 3.14159; <br />
+    obj.area = function( r ) { <br />
+        return this.PI * r * r; <br />
+    } <br />
+    return obj; <br />
+} <br />
+var c = new Circle(); <br />
+alert( c.area( 1.0 ) ); <br />
+<br />
+<br />
+//第3种写法 <br />
+var Circle = new Object(); <br />
+Circle.PI = 3.14159; <br />
+Circle.Area = function( r ) { <br />
+    return this.PI * r * r; <br />
+} <br />
+alert( Circle.Area( 1.0 ) ); <br />
+<br />
+//第4种写法 <br />
+var Circle={ <br />
+    "PI":3.14159, <br />
+    "area":function(r){ <br />
+        return this.PI * r * r; <br />
+    } <br />
+}; <br />
+alert( Circle.area(1.0) );                                                                                         <br />
+                                                                                                                   <br />
+//第5种写法                                                                                                        <br />
+var Circle = new Function("this.PI = 3.14159;this.area = function( r ) {return r*r*this.PI;}");                    <br />
+alert( (new Circle()).area(1.0) );<br />
+<br />
 [/code]
 </body>
 </html>

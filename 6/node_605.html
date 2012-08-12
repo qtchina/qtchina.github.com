@@ -6,10 +6,10 @@
 <title>linux系统去掉带BOM的UTF8编码文件的BOM头</title>
 </head>
 <body>
-# awk '{if(NR==1)sub(/^\xef\xbb\xbf/,"");print}' text.txt
-
-或者
-
+# awk '{if(NR==1)sub(/^\xef\xbb\xbf/,"");print}' text.txt<br />
+<br />
+或者<br />
+<br />
 # tail --bytes=+4 text.txt
 </body>
 </html>

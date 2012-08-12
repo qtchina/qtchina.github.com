@@ -6,32 +6,32 @@
 <title>在Qt4中使用QPersistentModelIndex传递QModelIndex</title>
 </head>
 <body>
-在Qt4的model/view架构中，用的非常多的是QModelIndex，但这个类是动态的，可以说不可以传递的，因为随着view的变化，相同结点的QModelIndex也可能不同，非常容易失效，甚至造成读写数据错误的问题。
-Qt4中还提供一个QPersistentModelIndex类，说明中这个类可以存储作为结点记录，并且不会因为model的变化而变化，应该也可以当作参数传递。
-测试其中nullfxp中试用是否可以。
-
-假如在一个View中的点击事件，点击之后异步更新当前点击的结点，
-那么就需要在更新返回的时候正确查找到这个结点。
-如果把这个结点的普通QModelIndex传递给异步更新处理器，则返回的时候程序行为 无法预料，
-因为model中其他数据可能发生变化，而这个QModelIndex已经失效了，找不到原来的结点，或者找到的结点根本就不是原来结点。
-
-这时候借助QPersistentModelIndex实现该功能，把当前的QModelIndex转换为QPersistentModelIndex:
-QPersistentModelINdex *persisIndex = new QPersistentModelIndex(index);
-
-然后这个persisIndex可以当作普通指针传递到更新处理器，更新完成返回后使用这个实例查找原来的结点。
-
-或者可以不使用指针，直接使用引用，
-QPersistentModelIndex persisIndex = QPersistentModelIndex(index);
-这样在传递存储的时候有大量的实例拷贝，有一些内存上的动态变化开销。
-前者则需要自己管理对象生命期，直到用完delete。
-
-QPersistentModelIndex提供的方法， 
-persisIndex->parent(); 取得结点的父结点的QModelIndex, 这是在本语句执行时最新的view的Index,使用这个值操作不会导致view/model混乱异常。
-persisIndex->row();  结点所在行，也是最新的位置。
-persisIndex->column(); 结点所在列，也是最新的位置。
-
-如有需要，代码实现在nullfxp项目中，通过svn访问nullfxp项目源代码可找到可运行的实例。
-
+在Qt4的model/view架构中，用的非常多的是QModelIndex，但这个类是动态的，可以说不可以传递的，因为随着view的变化，相同结点的QModelIndex也可能不同，非常容易失效，甚至造成读写数据错误的问题。<br />
+Qt4中还提供一个QPersistentModelIndex类，说明中这个类可以存储作为结点记录，并且不会因为model的变化而变化，应该也可以当作参数传递。<br />
+测试其中nullfxp中试用是否可以。<br />
+<br />
+假如在一个View中的点击事件，点击之后异步更新当前点击的结点，<br />
+那么就需要在更新返回的时候正确查找到这个结点。<br />
+如果把这个结点的普通QModelIndex传递给异步更新处理器，则返回的时候程序行为 无法预料，<br />
+因为model中其他数据可能发生变化，而这个QModelIndex已经失效了，找不到原来的结点，或者找到的结点根本就不是原来结点。<br />
+<br />
+这时候借助QPersistentModelIndex实现该功能，把当前的QModelIndex转换为QPersistentModelIndex:<br />
+QPersistentModelINdex *persisIndex = new QPersistentModelIndex(index);<br />
+<br />
+然后这个persisIndex可以当作普通指针传递到更新处理器，更新完成返回后使用这个实例查找原来的结点。<br />
+<br />
+或者可以不使用指针，直接使用引用，<br />
+QPersistentModelIndex persisIndex = QPersistentModelIndex(index);<br />
+这样在传递存储的时候有大量的实例拷贝，有一些内存上的动态变化开销。<br />
+前者则需要自己管理对象生命期，直到用完delete。<br />
+<br />
+QPersistentModelIndex提供的方法， <br />
+persisIndex->parent(); 取得结点的父结点的QModelIndex, 这是在本语句执行时最新的view的Index,使用这个值操作不会导致view/model混乱异常。<br />
+persisIndex->row();  结点所在行，也是最新的位置。<br />
+persisIndex->column(); 结点所在列，也是最新的位置。<br />
+<br />
+如有需要，代码实现在nullfxp项目中，通过svn访问nullfxp项目源代码可找到可运行的实例。<br />
+<br />
 使用本方法解决前面 http://www.qtchina.net/?q=node/442 中提到的一个bug。
 </body>
 </html>

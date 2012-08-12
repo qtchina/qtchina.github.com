@@ -6,13 +6,13 @@
 <title>emacs中关闭所有打开的文件的函数</title>
 </head>
 <body>
-[code type="lisp"]
-;; 关闭所有打开的文件, C-c x
-(defun close-all-buffers()
-  (interactive)
-  (mapc 'kill-buffer (buffer-list)))
-(global-set-key "\C-cx" 'close-all-buffers)
-[/code]
+[code type="lisp"]<br />
+;; 关闭所有打开的文件, C-c x<br />
+(defun close-all-buffers()<br />
+  (interactive)<br />
+  (mapc 'kill-buffer (buffer-list)))<br />
+(global-set-key "\C-cx" 'close-all-buffers)<br />
+[/code]<br />
 
 </body>
 </html>

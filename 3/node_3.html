@@ -6,89 +6,89 @@
 <title>NullGet 1.2.0-alpha</title>
 </head>
 <body>
-<table ><tr><td><div  style="line-height:160%">
-<p>　　svn 源代码仓库： svn co https://nullget.svn.sourceforge.net/svnroot/nullget nullget <br />
-镜像站点： svn co   http://gforge.osdn.net.cn/svn/nullget/ nullget </p>
-<p>　　如果你还没有安装subversion , 请到subversion站点<a href="http://subversion.tigris.org/" target="_blank">http://subversion.tigris.org/</a>下载最新版本并安装。</p>
-
-	</div>
-</td></tr></table>
-
-
-<?php
-
-$a_url = "http://sourceforge.net/project/showfiles.php?group_id=204368&package_id=243873";
-$a_url = "http://sourceforge.net/projects/nullget/files/";
-$a_url = "http://sourceforge.net/projects/nullget/files/nullfxp/";
-$pkg_name = "nullget";
-$versions = array('2.1.0', '2.0.2', '2.0.1', '2.0.0');
-//echo '<a href="http://sourceforge.net/projects/nullget/files/" target="_blank">SourceForge.net Nullfxp Download page</a>';
-
-$a_c = file($a_url);
-
-// print_r($a_c);
-
-foreach ($versions as $idx => $ver) {
-
-}
-
-$blno = -1;
-$elno = 0;
-if(!$a_c || count($a_c) == 0 ) {
-        //echo "Page error. Refresh please.";
-        echo "<a href=$a_url taget=_blank>SourceForge.net Nullfxp Download page</a>";
-}else{
-        foreach($a_c as $lno => $lv) {
-                //if(trim($lv) == '<a name="downloads"></a>') {
-                //      $blno = $lno;
-                //}
-                if(strstr(trim($lv), "files_list") != null) {
-                        $blno = $lno;
-                }
-
-                //if(trim($lv) == '<div id="fadbtmp">&nbsp;</div>') {
-                //      $elno = $lno;
-                //}
-        $section_end = false;
-                if($blno > 0) {
-                        if(trim($lv) == "</table>") {
-                                $elno = $lno+1;
-                $section_end = true;
-                        }
-                }
-
-                if($blno > 0 ) {
-                        if($lno == $blno+1 ) {
-                                $lv = str_replace("border=\"0\"", "border=\"1\"",  $lv);
-                        }
-
-                        if($elno == 0 || $lno < $elno) {
-                                if(strstr($lv, "href=\"/") != null) {
-                                        $lv = str_replace("href=\"/",  "href=\"http://sf.net/", $lv);
-                                }
-
-                                if(strstr($lv, "href=\"show") != null) {
-                                        $lv = str_replace("href=\"show", "href=\"http://sf.net/project/show",  $lv);
-                                }
-
-                                if(strstr($lv, "href=\"mirror") != null) {
-                                        $lv = str_replace("href=\"mirror", "target=\"_blank\" href=\"http://sf.net/project/mirror",$lv);
-                                }
-                                if(strstr($lv, "onClick=\"window.location") != null) {
-                                        $lv = str_replace("window.location='", "window.location='http://sf.net",$lv);
-                                }
-                                echo $lv;
-                        }
-                }
-        if ($section_end) {
-            break;
-        }
-        }
-    echo "\n";
-}
-
-?>
-
+<table ><tr><td><div  style="line-height:160%"><br />
+<p>　　svn 源代码仓库： svn co https://nullget.svn.sourceforge.net/svnroot/nullget nullget <br /><br />
+镜像站点： svn co   http://gforge.osdn.net.cn/svn/nullget/ nullget </p><br />
+<p>　　如果你还没有安装subversion , 请到subversion站点<a href="http://subversion.tigris.org/" target="_blank">http://subversion.tigris.org/</a>下载最新版本并安装。</p><br />
+<br />
+	</div><br />
+</td></tr></table><br />
+<br />
+<br />
+<?php<br />
+<br />
+$a_url = "http://sourceforge.net/project/showfiles.php?group_id=204368&package_id=243873";<br />
+$a_url = "http://sourceforge.net/projects/nullget/files/";<br />
+$a_url = "http://sourceforge.net/projects/nullget/files/nullfxp/";<br />
+$pkg_name = "nullget";<br />
+$versions = array('2.1.0', '2.0.2', '2.0.1', '2.0.0');<br />
+//echo '<a href="http://sourceforge.net/projects/nullget/files/" target="_blank">SourceForge.net Nullfxp Download page</a>';<br />
+<br />
+$a_c = file($a_url);<br />
+<br />
+// print_r($a_c);<br />
+<br />
+foreach ($versions as $idx => $ver) {<br />
+<br />
+}<br />
+<br />
+$blno = -1;<br />
+$elno = 0;<br />
+if(!$a_c || count($a_c) == 0 ) {<br />
+        //echo "Page error. Refresh please.";<br />
+        echo "<a href=$a_url taget=_blank>SourceForge.net Nullfxp Download page</a>";<br />
+}else{<br />
+        foreach($a_c as $lno => $lv) {<br />
+                //if(trim($lv) == '<a name="downloads"></a>') {<br />
+                //      $blno = $lno;<br />
+                //}<br />
+                if(strstr(trim($lv), "files_list") != null) {<br />
+                        $blno = $lno;<br />
+                }<br />
+<br />
+                //if(trim($lv) == '<div id="fadbtmp">&nbsp;</div>') {<br />
+                //      $elno = $lno;<br />
+                //}<br />
+        $section_end = false;<br />
+                if($blno > 0) {<br />
+                        if(trim($lv) == "</table>") {<br />
+                                $elno = $lno+1;<br />
+                $section_end = true;<br />
+                        }<br />
+                }<br />
+<br />
+                if($blno > 0 ) {<br />
+                        if($lno == $blno+1 ) {<br />
+                                $lv = str_replace("border=\"0\"", "border=\"1\"",  $lv);<br />
+                        }<br />
+<br />
+                        if($elno == 0 || $lno < $elno) {<br />
+                                if(strstr($lv, "href=\"/") != null) {<br />
+                                        $lv = str_replace("href=\"/",  "href=\"http://sf.net/", $lv);<br />
+                                }<br />
+<br />
+                                if(strstr($lv, "href=\"show") != null) {<br />
+                                        $lv = str_replace("href=\"show", "href=\"http://sf.net/project/show",  $lv);<br />
+                                }<br />
+<br />
+                                if(strstr($lv, "href=\"mirror") != null) {<br />
+                                        $lv = str_replace("href=\"mirror", "target=\"_blank\" href=\"http://sf.net/project/mirror",$lv);<br />
+                                }<br />
+                                if(strstr($lv, "onClick=\"window.location") != null) {<br />
+                                        $lv = str_replace("window.location='", "window.location='http://sf.net",$lv);<br />
+                                }<br />
+                                echo $lv;<br />
+                        }<br />
+                }<br />
+        if ($section_end) {<br />
+            break;<br />
+        }<br />
+        }<br />
+    echo "\n";<br />
+}<br />
+<br />
+?><br />
+<br />
 
 </body>
 </html>

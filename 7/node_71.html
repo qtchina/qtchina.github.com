@@ -6,22 +6,22 @@
 <title>我的一些FAQ，涉及各方面的东西</title>
 </head>
 <body>
-<p>netbeans5.5、xmind 等JAVA程序 在LINUX平台下中文乱码问题：</p>
-<p>在...jre/lib/fonts下创建了fallback目录，把windows下的simsun.ttc字体copy到fallback目录中，netbeans和其它java程序终于可以正常显示汉字了。</p>
-<p>用同样的方法，Zend Studio 5.5也可以在LINUX平台下正常显示中文了。</p>
-<p>不过好象有一个问题，在上面创建的文件输入的中文，到WINDOWS上就会全是问号或者乱码，还没有弄清楚，在放在服务器上用应该是正常的。</p>
-<p>================================================================</p>
-<p>&nbsp;</p>
-
-注：这个simsum.ttc，也可用其他字体文件代替，日前已经使用开源的wqy-zenhei.ttc了。
-
-对于openjdk，一般系统上对中文字体的识别路径有问题，这个路径存储在/usr/lib/jvm/java-6-openjdk/jre/lib/fontconfig.properties.src中。
-可以根据这个路径，复制或者链接一个字体文件到指定的路径即可。
-如，
-此文件中wqy的路径为filename.WenQuanYi_Zen_Hei=/usr/share/fonts/TTF/wqy-zenhei.ttf
-而实际的安装路径为，
-/usr/share/fonts/wenquanyi/wqy-zenhei/wqy-zenhei.ttc
-只要把wqy-zenhei.ttc链接到上面的路径就可以了。
+<p>netbeans5.5、xmind 等JAVA程序 在LINUX平台下中文乱码问题：</p><br />
+<p>在...jre/lib/fonts下创建了fallback目录，把windows下的simsun.ttc字体copy到fallback目录中，netbeans和其它java程序终于可以正常显示汉字了。</p><br />
+<p>用同样的方法，Zend Studio 5.5也可以在LINUX平台下正常显示中文了。</p><br />
+<p>不过好象有一个问题，在上面创建的文件输入的中文，到WINDOWS上就会全是问号或者乱码，还没有弄清楚，在放在服务器上用应该是正常的。</p><br />
+<p>================================================================</p><br />
+<p>&nbsp;</p><br />
+<br />
+注：这个simsum.ttc，也可用其他字体文件代替，日前已经使用开源的wqy-zenhei.ttc了。<br />
+<br />
+对于openjdk，一般系统上对中文字体的识别路径有问题，这个路径存储在/usr/lib/jvm/java-6-openjdk/jre/lib/fontconfig.properties.src中。<br />
+可以根据这个路径，复制或者链接一个字体文件到指定的路径即可。<br />
+如，<br />
+此文件中wqy的路径为filename.WenQuanYi_Zen_Hei=/usr/share/fonts/TTF/wqy-zenhei.ttf<br />
+而实际的安装路径为，<br />
+/usr/share/fonts/wenquanyi/wqy-zenhei/wqy-zenhei.ttc<br />
+只要把wqy-zenhei.ttc链接到上面的路径就可以了。<br />
 
 </body>
 </html>

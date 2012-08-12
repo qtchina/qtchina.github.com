@@ -6,93 +6,93 @@
 <title>使用QPainter进行绘图</title>
 </head>
 <body>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	要开始向一个绘图设备上绘图（一般是一个物件），我们仅需要简单地创建一个QPainter并传递一个指向该设备的指针。例如：
-[code type="cpp-qt"]
-void MyWidget::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(this);
-    ...
-}
-[/code]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们可以使用QPainter的draw…()函数绘制许多的形状。图8.1列出了最重要的几个。绘图的执行方式受QPainter的设置影响。其中一些设置采用了设备的，而其他则初始化为默认值。3个主要的绘图器是画笔，画刷和字体：
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 画笔被用于绘制线和图形的外形线。它包含颜色，宽度，线风格，端点风格和连接风格。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 画刷是用于填充几何图形的图案。它一般包含颜色和风格，但也可有纹理（一个重复无限次的pixmap）和梯度。
-字体被用于绘制文本。一种字体有许多属性，包含字体族和点尺寸　。
-图　8.1　QPainter 的最常用draw...() 函数
-<img src="upfile/image/frequently_used_draw.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这些设置可通过对一个Qpen，Qbrush或者Qfont对象调用setPen() , setBrush(), 和 setFont()来修改。
-图 8.2　端点和连接风格
-<img src="upfile/image/cap_and_join_styles.jpg" border="0">
-
-图　8.3　画笔风格
-<img src="upfile/image/pen_styles.jpg" border="0">
-
-图 8.4　预定义画刷风格
-<img src="upfile/image/brush_styles.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	让我们来看一些实际的例子。下面的代码用于绘制图8.5（a）中的椭圆：
-
-[code type="cpp-qt"]
-QPainter painter(this);
-painter.setRenderHint(QPainter::Antialiasing, true);
-painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));
-painter.setBrush(QBrush(Qt::green, Qt::SolidPattern));
-painter.drawEllipse(80, 80, 400, 240);
-[/code]
-图　8.5　几何图形的例子
-<img src="upfile/image/geometric_shape.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	setRenderHint()调用激活抗钜齿功能，告诉QPainter在边缘位置使用不同的颜色亮度以降低当图形边缘被转换为象素时的视觉失真。结果是在支持这一功能的平台和设备上实现更平滑的边缘。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下面是绘制图8.5（b）中的饼图的代码：
-[code type="cpp-qt"]
-QPainter painter(this);
-painter.setRenderHint(QPainter::Antialiasing, true);
-painter.setPen(QPen(Qt::black, 15, Qt::SolidLine, Qt::RoundCap,
-                    Qt::MiterJoin));
-painter.setBrush(QBrush(Qt::blue, Qt::DiagCrossPattern));
-painter.drawPie(80, 80, 400, 240, 60 * 16, 270 * 16);
-[/code]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	drawPie()的最后两个参数以1/16度为单位表示。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下面的代码用于绘制图8.5(c)中的贝赛尔曲线：
-[code type="cpp-qt"]
-QPainter painter(this);
-painter.setRenderHint(QPainter::Antialiasing, true);
-QPainterPath path;
-path.moveTo(80, 320);
-path.cubicTo(200, 80, 320, 80, 480, 320);
-painter.setPen(QPen(Qt::black, 8));
-painter.drawPath(path);
-[/code]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	QpainterPath能表示把基本图形元素连接在一起的任意的矢量图形：直线，椭圆，多边形，弧，quadratic和贝赛尔曲线，以及其他绘图路径。绘图路径是在任何图形或者图形组合都能表示为路径基础上的基本绘图原理。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个路径指定了一个轮廓，由该轮廓描述的区域可用一个画刷填充。在图8.5(c)的例子中，我们没有设置一个画刷，因此只有轮廓被画出来了。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	上面的3个例子使用了内建画刷（Qt::SolidPattern, Qt:: DiagCrossPattern, 和 Qt::NoBrush）。在更现代的程序中，梯度填充模式是单色填充模式的流行的替代。梯度依赖于颜色内插值来获得两种或者多种颜色间的平台过渡。它们常用于产生3D效果，例如，Plastique风格就使用了梯度法来渲染QPushButton的。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Qt支持三种类型的梯度：直线形的，圆锥形的和放射型的。下一节中的Oven Timer例子在单一物件中组合了这3种类型的梯度以产生一种仿真效果。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 直线梯度法被定义为两个控制点和连接这两个点间的直线上的一系列“颜色断点“。例如，图8.6中的直线梯度法是使用了下面的代码创建的：
-[code type="cpp-qt"]
-QLinearGradient gradient(50, 100, 300, 350);
-gradient.setColorAt(0.0, Qt::white);
-gradient.setColorAt(0.2, Qt::green);
-gradient.setColorAt(1.0, Qt::black);
-[/code]
-图 8.6. QPainter的梯度画刷
-[View full size image]
-<img src="upfile/image/gradient_brushes.jpg" border="0">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们在两个控制点之间在3个不同的点指定3种不同的颜色。位置被指定为0到1之间的浮点值，其中0对应于控制点中的第一个点，1对应于控制点中的第二个点。在指定断点间的颜色是内插值替换的。
-放射状梯度法被定义为一个中心点(xc,yc)，一个半径，一个焦点(xf,yf)，另外还有颜色断点。中心点和半径指定了一个圆。颜色从焦点向外传播，焦点可以是中心点或者任何该圆内的点。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 圆锥梯度法被定义为一个中心点(xc,yc)，一个角度。颜色将绕着中心点传播，就像一只手表的秒针扫过一样。
-到现在为止我们已经陈述了QPainter的画笔，画刷，和字体设置。另外，QPainter还有其他会影响图象和文本的绘制方式的设置：
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 背景画刷被用于当背景模式为Qt::OpaQueMode(默认为Qt::transparentMode)时填充几何图形的图案的背景（在画刷模式下面），文本或者bitmap。
-画刷起点是画刷模式的开始点，一般是物件的左上角。
-裁剪区域是可绘图调用区域。在该裁减区域外绘图是无效的。
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 视口，窗口，和世界矩阵决定QPainter的逻辑坐标如果映射到物理绘图设备的坐标。默认情况下，这些被设置为逻辑坐标与物理坐标一致。坐标系统将在下一节中讲述。
-组成模式指定新绘的象素如何与绘图设备上已有的象素相互任用。默认为“source over”，这就是说被画的象素要画在现有象素的上面。这仅在特定的设备上支持并将在本章的后面进行阐述。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 不管在什么时候，我们都可以调用save()把一个绘图器的当前状态保存在一个内部栈上，然后通过调用restore()恢复它。如果我们希望临时改变绘图器的设置，然后再把它们重围为原来的值的的时候这是很有用的，正如我们在下一节将看到的一样。
-
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	要开始向一个绘图设备上绘图（一般是一个物件），我们仅需要简单地创建一个QPainter并传递一个指向该设备的指针。例如：<br />
+[code type="cpp-qt"]<br />
+void MyWidget::paintEvent(QPaintEvent *event)<br />
+{<br />
+    QPainter painter(this);<br />
+    ...<br />
+}<br />
+[/code]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	我们可以使用QPainter的draw…()函数绘制许多的形状。图8.1列出了最重要的几个。绘图的执行方式受QPainter的设置影响。其中一些设置采用了设备的，而其他则初始化为默认值。3个主要的绘图器是画笔，画刷和字体：<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 画笔被用于绘制线和图形的外形线。它包含颜色，宽度，线风格，端点风格和连接风格。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 画刷是用于填充几何图形的图案。它一般包含颜色和风格，但也可有纹理（一个重复无限次的pixmap）和梯度。<br />
+字体被用于绘制文本。一种字体有许多属性，包含字体族和点尺寸　。<br />
+图　8.1　QPainter 的最常用draw...() 函数<br />
+<img src="upfile/image/frequently_used_draw.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这些设置可通过对一个Qpen，Qbrush或者Qfont对象调用setPen() , setBrush(), 和 setFont()来修改。<br />
+图 8.2　端点和连接风格<br />
+<img src="upfile/image/cap_and_join_styles.jpg" border="0"><br />
+<br />
+图　8.3　画笔风格<br />
+<img src="upfile/image/pen_styles.jpg" border="0"><br />
+<br />
+图 8.4　预定义画刷风格<br />
+<img src="upfile/image/brush_styles.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	让我们来看一些实际的例子。下面的代码用于绘制图8.5（a）中的椭圆：<br />
+<br />
+[code type="cpp-qt"]<br />
+QPainter painter(this);<br />
+painter.setRenderHint(QPainter::Antialiasing, true);<br />
+painter.setPen(QPen(Qt::black, 12, Qt::DashDotLine, Qt::RoundCap));<br />
+painter.setBrush(QBrush(Qt::green, Qt::SolidPattern));<br />
+painter.drawEllipse(80, 80, 400, 240);<br />
+[/code]<br />
+图　8.5　几何图形的例子<br />
+<img src="upfile/image/geometric_shape.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	setRenderHint()调用激活抗钜齿功能，告诉QPainter在边缘位置使用不同的颜色亮度以降低当图形边缘被转换为象素时的视觉失真。结果是在支持这一功能的平台和设备上实现更平滑的边缘。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下面是绘制图8.5（b）中的饼图的代码：<br />
+[code type="cpp-qt"]<br />
+QPainter painter(this);<br />
+painter.setRenderHint(QPainter::Antialiasing, true);<br />
+painter.setPen(QPen(Qt::black, 15, Qt::SolidLine, Qt::RoundCap,<br />
+                    Qt::MiterJoin));<br />
+painter.setBrush(QBrush(Qt::blue, Qt::DiagCrossPattern));<br />
+painter.drawPie(80, 80, 400, 240, 60 * 16, 270 * 16);<br />
+[/code]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	drawPie()的最后两个参数以1/16度为单位表示。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	下面的代码用于绘制图8.5(c)中的贝赛尔曲线：<br />
+[code type="cpp-qt"]<br />
+QPainter painter(this);<br />
+painter.setRenderHint(QPainter::Antialiasing, true);<br />
+QPainterPath path;<br />
+path.moveTo(80, 320);<br />
+path.cubicTo(200, 80, 320, 80, 480, 320);<br />
+painter.setPen(QPen(Qt::black, 8));<br />
+painter.drawPath(path);<br />
+[/code]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	QpainterPath能表示把基本图形元素连接在一起的任意的矢量图形：直线，椭圆，多边形，弧，quadratic和贝赛尔曲线，以及其他绘图路径。绘图路径是在任何图形或者图形组合都能表示为路径基础上的基本绘图原理。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个路径指定了一个轮廓，由该轮廓描述的区域可用一个画刷填充。在图8.5(c)的例子中，我们没有设置一个画刷，因此只有轮廓被画出来了。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	上面的3个例子使用了内建画刷（Qt::SolidPattern, Qt:: DiagCrossPattern, 和 Qt::NoBrush）。在更现代的程序中，梯度填充模式是单色填充模式的流行的替代。梯度依赖于颜色内插值来获得两种或者多种颜色间的平台过渡。它们常用于产生3D效果，例如，Plastique风格就使用了梯度法来渲染QPushButton的。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Qt支持三种类型的梯度：直线形的，圆锥形的和放射型的。下一节中的Oven Timer例子在单一物件中组合了这3种类型的梯度以产生一种仿真效果。<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 直线梯度法被定义为两个控制点和连接这两个点间的直线上的一系列“颜色断点“。例如，图8.6中的直线梯度法是使用了下面的代码创建的：<br />
+[code type="cpp-qt"]<br />
+QLinearGradient gradient(50, 100, 300, 350);<br />
+gradient.setColorAt(0.0, Qt::white);<br />
+gradient.setColorAt(0.2, Qt::green);<br />
+gradient.setColorAt(1.0, Qt::black);<br />
+[/code]<br />
+图 8.6. QPainter的梯度画刷<br />
+[View full size image]<br />
+<img src="upfile/image/gradient_brushes.jpg" border="0"><br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们在两个控制点之间在3个不同的点指定3种不同的颜色。位置被指定为0到1之间的浮点值，其中0对应于控制点中的第一个点，1对应于控制点中的第二个点。在指定断点间的颜色是内插值替换的。<br />
+放射状梯度法被定义为一个中心点(xc,yc)，一个半径，一个焦点(xf,yf)，另外还有颜色断点。中心点和半径指定了一个圆。颜色从焦点向外传播，焦点可以是中心点或者任何该圆内的点。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 圆锥梯度法被定义为一个中心点(xc,yc)，一个角度。颜色将绕着中心点传播，就像一只手表的秒针扫过一样。<br />
+到现在为止我们已经陈述了QPainter的画笔，画刷，和字体设置。另外，QPainter还有其他会影响图象和文本的绘制方式的设置：<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 背景画刷被用于当背景模式为Qt::OpaQueMode(默认为Qt::transparentMode)时填充几何图形的图案的背景（在画刷模式下面），文本或者bitmap。<br />
+画刷起点是画刷模式的开始点，一般是物件的左上角。<br />
+裁剪区域是可绘图调用区域。在该裁减区域外绘图是无效的。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 视口，窗口，和世界矩阵决定QPainter的逻辑坐标如果映射到物理绘图设备的坐标。默认情况下，这些被设置为逻辑坐标与物理坐标一致。坐标系统将在下一节中讲述。<br />
+组成模式指定新绘的象素如何与绘图设备上已有的象素相互任用。默认为“source over”，这就是说被画的象素要画在现有象素的上面。这仅在特定的设备上支持并将在本章的后面进行阐述。<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 不管在什么时候，我们都可以调用save()把一个绘图器的当前状态保存在一个内部栈上，然后通过调用restore()恢复它。如果我们希望临时改变绘图器的设置，然后再把它们重围为原来的值的的时候这是很有用的，正如我们在下一节将看到的一样。<br />
+<br />
+<br />
 
 </body>
 </html>

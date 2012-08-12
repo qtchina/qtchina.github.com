@@ -6,37 +6,37 @@
 <title>在gentoo Linux上安装Trac 0.12.0</title>
 </head>
 <body>
-上接， <a href="http://www.qtchina.net/?q=node/369">在gentoo Linux上安装Trac 0.11.5</a>
-
-前一篇安装基本系统，不包括中文和插件，subversion/git等，本文就以这些为主进行说明，其他基础部分参考前文。
-
-自trac-0.12开始，加入了完整的国际化基础架构，安装国际化功能不用再像之前版本那样复杂了。
-
-一、中文化包安装：
-1. 安装依赖包cldr: (由于包依赖问题，babel能使用cldr-1.7.x版本）
-svn co http://www.unicode.org/repos/cldr/tags/release-1-7-2/common/ cldr-1.7
-
-2. 安装依赖基础包babel-0.9.5:
-svn co http://svn.edgewall.org/repos/babel/tags/0.9.5 babel-0.9.5
-cd babel-0.9.5
-./setup.py egg_info
-python ./scripts/import_cldr.py ../cldr-1.7/
-python setup.py install --prefix=/serv/stow/trac/
-这时重新启动tracd时，访问http://localhost:8000会出现错误：
-    OSError: [Errno 2] 没有那个文件或目录: '/serv/stow/trac/lib64/python2.6/site-packages/Trac-0.12-py2.6.egg/trac/locale'
-也就是说trac现在会搜索i10n的Local翻译文件了。
-
-3. 其实还依赖两个包，genshi 和setuptools，不过这两个包系统中已经安装了。
-    如果需要让trac支持PostgreSQL，则还需要安装包 http://pypi.python.org/pypi/psycopg2
-
-4. 如果前面安装过trac-0.12, 则重新安装trac-0.12
-cd trac-0.12
-python setup.py install --prefix=/serv/stow/trac/
-这一步现在能看到处理locale相关数据。
-
-如果中间没有出现错误，安装完成, 可以启动测试。
-使用中文浏览器 http://localhost:8000/mytrac显示中文了。
-
+上接， <a href="http://www.qtchina.net/?q=node/369">在gentoo Linux上安装Trac 0.11.5</a><br />
+<br />
+前一篇安装基本系统，不包括中文和插件，subversion/git等，本文就以这些为主进行说明，其他基础部分参考前文。<br />
+<br />
+自trac-0.12开始，加入了完整的国际化基础架构，安装国际化功能不用再像之前版本那样复杂了。<br />
+<br />
+一、中文化包安装：<br />
+1. 安装依赖包cldr: (由于包依赖问题，babel能使用cldr-1.7.x版本）<br />
+svn co http://www.unicode.org/repos/cldr/tags/release-1-7-2/common/ cldr-1.7<br />
+<br />
+2. 安装依赖基础包babel-0.9.5:<br />
+svn co http://svn.edgewall.org/repos/babel/tags/0.9.5 babel-0.9.5<br />
+cd babel-0.9.5<br />
+./setup.py egg_info<br />
+python ./scripts/import_cldr.py ../cldr-1.7/<br />
+python setup.py install --prefix=/serv/stow/trac/<br />
+这时重新启动tracd时，访问http://localhost:8000会出现错误：<br />
+    OSError: [Errno 2] 没有那个文件或目录: '/serv/stow/trac/lib64/python2.6/site-packages/Trac-0.12-py2.6.egg/trac/locale'<br />
+也就是说trac现在会搜索i10n的Local翻译文件了。<br />
+<br />
+3. 其实还依赖两个包，genshi 和setuptools，不过这两个包系统中已经安装了。<br />
+    如果需要让trac支持PostgreSQL，则还需要安装包 http://pypi.python.org/pypi/psycopg2<br />
+<br />
+4. 如果前面安装过trac-0.12, 则重新安装trac-0.12<br />
+cd trac-0.12<br />
+python setup.py install --prefix=/serv/stow/trac/<br />
+这一步现在能看到处理locale相关数据。<br />
+<br />
+如果中间没有出现错误，安装完成, 可以启动测试。<br />
+使用中文浏览器 http://localhost:8000/mytrac显示中文了。<br />
+<br />
 
 </body>
 </html>

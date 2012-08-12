@@ -6,73 +6,73 @@
 <title>第二章 创建对话框 ( 动态对话框、内建物件和对话框类)</title>
 </head>
 <body>
-<p>&nbsp;动态对话框<br />
-动态对话框是从 Qt Designer 的.ui文件在运行时创建的对话框。我们在运行时用 QUiLoader 类加载.ui文件，而不是用 uic 将.ui文件转换为标准的 C++ 代码。<br />
-QUiLoader uiLoader;<br />
-QFile file(&quot;sortdialog.ui&quot;);<br />
-QWidget *sortDialog = uiLoader.load(&amp;file);<br />
-if (sortDialog) {<br />
-&nbsp;   ...<br />
-}<br />
-<br />
-We can access the form's child widgets using QObject::findChild&lt;T>():<br />
-QComboBox *primaryColumnCombo =<br />
-&nbsp;       sortDialog->findChild&lt;QComboBox *>(&quot;primaryColumnCombo&quot;);<br />
-if (primaryColumnCombo) {<br />
-&nbsp;   ...<br />
-}<br />
-<br />
-findChild&lt;T>() 函数是一个返回匹配指定名字和类型子对象的模板成员函数。因为编译器的限制，这对于 MSVC6编译器 是不可行的。如果你需要 MSVC 6 编译器调用功能完全相同的 qFindChild&lt;T>() 全局函数代替。<br />
-QUiLoader 类放在一个独立的库中。要在一个Qt 应用程序中使用QUiLoader你必须将下面这行添加到程序的 .pro 文件：<br />
-CONFIG         += uitools<br />
-<br />
-动态对话框使得不重新编译应用程序就可改变窗体的布局成为可能。它们还可以被用来创建瘦客户端应用程序，在这种程序中可执行文件仅有一个內建的文本窗体并且所有的其他窗体都按需创建。<br />
-内建物件和对话框类<br />
-Qt 提供了一整套的內建物件和常用的对话框能够满足大多数情况的需求。在这一部分，我们呈现了它们中差不多所有的屏幕截图。一些特别的物件 are deferred until later: 主窗口物件，比如 QMenuBar, QToolBar 和 QStatusBar 在 第 3 章讲解而布局相关物件比如 QSplitter 和 QScrollArea 在 第 6 章介绍。大多数的內建物件和对话框被用在本书提供的例子中。在下面这些屏幕截图中，the widgets are shown using the Plastique style.<br />
-Figure 2.16. Qt's button widgets<br />
-<input type="image" src="/upfile/image/qpushbutton.jpg" width="500" height="104" /><br />
-<br />
-Qt 提供了四种&ldquo;按钮&rdquo;： QPushButton, QToolButton, QCheckBox, 和 QRadioButton。QPushButton 和 QToolButton 通常被用来在被点击后触发一些行为，但是它们还可以被用作开关按钮 (click to press down, click to restore). QCheckBox 可以被用来can be used for independent on/off options, whereas QRadioButtons are normally mutually exclusive.<br />
-Figure 2.17. Qt's single-page container widgets<br />
-[View full size image]<br />
-<input type="image" src="/upfile/image/qgroupbox.jpg" width="500" height="162" /><br />
-<br />
-Qt 的容器物件是一些包含其他物件的物件。 QFrame 还可以被自己利用来简单地画一些线并被许多其他物件类继承，包括  QToolBox 和 QLabel。<br />
-Figure 2.18. Qt's multi-page container widgets<br />
-[View full size image]<br />
-<input type="image" src="/upfile/image/qtabwidget.jpg" width="500" height="158" /><br />
-<br />
-QTabWidget 和 QToolBox 是多页物件。每一页都是一个子物件，并且页是从0开始计数的。<br />
-Figure 2.19. Qt's item view widgets<br />
-<input type="image" src="/upfile/image/qlistview_list.jpg" width="500" height="317" /><br />
-<br />
-项目预览 are optimized for handling large amounts of data and often use scroll bars. 滚动条栏机制在 QAbstractScrollArea 中实现，一个用作项目预览和其他可滚动物件的基类。<br />
-Qt 提供了少量仅用来显示信息的物件。 QLabel 是这些当中最重要的一个，并且它可以被用来显示 rich text (使用简单的 HTML-like 语法) 和图像。<br />
-QTextBrowser 是一个只读的 QTextEdit 子类，具有基本的 HTML 支持，包括列表、表格、图像和超级链接。 Qt Assistant 用 QTextBrowser 来向用户显示文档。<br />
-Figure 2.20. Qt's display widgets<br />
-<input type="image" src="/upfile/image/qlabel_text.jpg" width="500" height="332" /><br />
-<br />
-Qt 提供了几个数据输入物件。 QLineEdit 可以用一个输入遮照或者一个验证器来严格它的输入。QTextEdit 是一个 QAbstractScrollArea 能够用来编辑大量文本的子类。<br />
-Figure 2.21. Qt's input widgets<br />
-<input type="image" src="/upfile/image/qspinbox.jpg" width="500" height="455" /><br />
-<br />
-Qt 提供常用对话框的标准套件使得用户选择颜色、字体、文件或者打印一个文档变得很简单。&nbsp;<br />
-Figure 2.22. Qt's color dialog and font dialog<br />
-<input type="image" src="/upfile/image/qcolordialog.jpg" width="500" height="197" /><br />
-<br />
-在 Windows 和 Mac OS X，如果可能的话 Qt 用本地化的对话框而不是本身的对话框。<br />
-Figure 2.23. Qt's file and print dialogs<br />
-<input type="image" src="/upfile/image/qpagesetupdialog.jpg" width="500" height="293" /><br />
-<br />
-Qt 提供了一个provides a versatile 信息框和一个错误对话框记忆了它已经显示的信息。 这是一个很耗时的操作 can be indicated using QProgressDialog or using the QProgressBar shown earlier. 当需要用户输入单行文本或者一个单独的数字时，QInputDialog 是很方便的。<br />
-內建的物件和常用对话框提供了很多 ready-to-use 函数。更多的特殊要求通常通过设置物件属性来满足，或者通过连接信号到槽上然后在槽中实现配置行为。<br />
-Figure 2.24. Qt's feedback dialogs<br />
-<input type="image" src="/upfile/image/qinputdialog.jpg" width="500" height="270" /><br />
-<br />
-在某些情况下，它可能被要求来从头创建一个配置物件。Qt 使这变得很简单，配置物件可以将所有简单的平台独立的简单画图函数用作內建物件。配置物件甚至可以被 Qt Designer 集成，所以它们可以像 Qt 的內建物件一样使用。第 5章解释了如何创建配置物件。<br />
-<br />
-<br />
-<br />
+<p>&nbsp;动态对话框<br /><br />
+动态对话框是从 Qt Designer 的.ui文件在运行时创建的对话框。我们在运行时用 QUiLoader 类加载.ui文件，而不是用 uic 将.ui文件转换为标准的 C++ 代码。<br /><br />
+QUiLoader uiLoader;<br /><br />
+QFile file(&quot;sortdialog.ui&quot;);<br /><br />
+QWidget *sortDialog = uiLoader.load(&amp;file);<br /><br />
+if (sortDialog) {<br /><br />
+&nbsp;   ...<br /><br />
+}<br /><br />
+<br /><br />
+We can access the form's child widgets using QObject::findChild&lt;T>():<br /><br />
+QComboBox *primaryColumnCombo =<br /><br />
+&nbsp;       sortDialog->findChild&lt;QComboBox *>(&quot;primaryColumnCombo&quot;);<br /><br />
+if (primaryColumnCombo) {<br /><br />
+&nbsp;   ...<br /><br />
+}<br /><br />
+<br /><br />
+findChild&lt;T>() 函数是一个返回匹配指定名字和类型子对象的模板成员函数。因为编译器的限制，这对于 MSVC6编译器 是不可行的。如果你需要 MSVC 6 编译器调用功能完全相同的 qFindChild&lt;T>() 全局函数代替。<br /><br />
+QUiLoader 类放在一个独立的库中。要在一个Qt 应用程序中使用QUiLoader你必须将下面这行添加到程序的 .pro 文件：<br /><br />
+CONFIG         += uitools<br /><br />
+<br /><br />
+动态对话框使得不重新编译应用程序就可改变窗体的布局成为可能。它们还可以被用来创建瘦客户端应用程序，在这种程序中可执行文件仅有一个內建的文本窗体并且所有的其他窗体都按需创建。<br /><br />
+内建物件和对话框类<br /><br />
+Qt 提供了一整套的內建物件和常用的对话框能够满足大多数情况的需求。在这一部分，我们呈现了它们中差不多所有的屏幕截图。一些特别的物件 are deferred until later: 主窗口物件，比如 QMenuBar, QToolBar 和 QStatusBar 在 第 3 章讲解而布局相关物件比如 QSplitter 和 QScrollArea 在 第 6 章介绍。大多数的內建物件和对话框被用在本书提供的例子中。在下面这些屏幕截图中，the widgets are shown using the Plastique style.<br /><br />
+Figure 2.16. Qt's button widgets<br /><br />
+<input type="image" src="/upfile/image/qpushbutton.jpg" width="500" height="104" /><br /><br />
+<br /><br />
+Qt 提供了四种&ldquo;按钮&rdquo;： QPushButton, QToolButton, QCheckBox, 和 QRadioButton。QPushButton 和 QToolButton 通常被用来在被点击后触发一些行为，但是它们还可以被用作开关按钮 (click to press down, click to restore). QCheckBox 可以被用来can be used for independent on/off options, whereas QRadioButtons are normally mutually exclusive.<br /><br />
+Figure 2.17. Qt's single-page container widgets<br /><br />
+[View full size image]<br /><br />
+<input type="image" src="/upfile/image/qgroupbox.jpg" width="500" height="162" /><br /><br />
+<br /><br />
+Qt 的容器物件是一些包含其他物件的物件。 QFrame 还可以被自己利用来简单地画一些线并被许多其他物件类继承，包括  QToolBox 和 QLabel。<br /><br />
+Figure 2.18. Qt's multi-page container widgets<br /><br />
+[View full size image]<br /><br />
+<input type="image" src="/upfile/image/qtabwidget.jpg" width="500" height="158" /><br /><br />
+<br /><br />
+QTabWidget 和 QToolBox 是多页物件。每一页都是一个子物件，并且页是从0开始计数的。<br /><br />
+Figure 2.19. Qt's item view widgets<br /><br />
+<input type="image" src="/upfile/image/qlistview_list.jpg" width="500" height="317" /><br /><br />
+<br /><br />
+项目预览 are optimized for handling large amounts of data and often use scroll bars. 滚动条栏机制在 QAbstractScrollArea 中实现，一个用作项目预览和其他可滚动物件的基类。<br /><br />
+Qt 提供了少量仅用来显示信息的物件。 QLabel 是这些当中最重要的一个，并且它可以被用来显示 rich text (使用简单的 HTML-like 语法) 和图像。<br /><br />
+QTextBrowser 是一个只读的 QTextEdit 子类，具有基本的 HTML 支持，包括列表、表格、图像和超级链接。 Qt Assistant 用 QTextBrowser 来向用户显示文档。<br /><br />
+Figure 2.20. Qt's display widgets<br /><br />
+<input type="image" src="/upfile/image/qlabel_text.jpg" width="500" height="332" /><br /><br />
+<br /><br />
+Qt 提供了几个数据输入物件。 QLineEdit 可以用一个输入遮照或者一个验证器来严格它的输入。QTextEdit 是一个 QAbstractScrollArea 能够用来编辑大量文本的子类。<br /><br />
+Figure 2.21. Qt's input widgets<br /><br />
+<input type="image" src="/upfile/image/qspinbox.jpg" width="500" height="455" /><br /><br />
+<br /><br />
+Qt 提供常用对话框的标准套件使得用户选择颜色、字体、文件或者打印一个文档变得很简单。&nbsp;<br /><br />
+Figure 2.22. Qt's color dialog and font dialog<br /><br />
+<input type="image" src="/upfile/image/qcolordialog.jpg" width="500" height="197" /><br /><br />
+<br /><br />
+在 Windows 和 Mac OS X，如果可能的话 Qt 用本地化的对话框而不是本身的对话框。<br /><br />
+Figure 2.23. Qt's file and print dialogs<br /><br />
+<input type="image" src="/upfile/image/qpagesetupdialog.jpg" width="500" height="293" /><br /><br />
+<br /><br />
+Qt 提供了一个provides a versatile 信息框和一个错误对话框记忆了它已经显示的信息。 这是一个很耗时的操作 can be indicated using QProgressDialog or using the QProgressBar shown earlier. 当需要用户输入单行文本或者一个单独的数字时，QInputDialog 是很方便的。<br /><br />
+內建的物件和常用对话框提供了很多 ready-to-use 函数。更多的特殊要求通常通过设置物件属性来满足，或者通过连接信号到槽上然后在槽中实现配置行为。<br /><br />
+Figure 2.24. Qt's feedback dialogs<br /><br />
+<input type="image" src="/upfile/image/qinputdialog.jpg" width="500" height="270" /><br /><br />
+<br /><br />
+在某些情况下，它可能被要求来从头创建一个配置物件。Qt 使这变得很简单，配置物件可以将所有简单的平台独立的简单画图函数用作內建物件。配置物件甚至可以被 Qt Designer 集成，所以它们可以像 Qt 的內建物件一样使用。第 5章解释了如何创建配置物件。<br /><br />
+<br /><br />
+<br /><br />
+<br /><br />
 &nbsp;</p>
 </body>
 </html>

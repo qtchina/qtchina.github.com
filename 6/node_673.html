@@ -6,122 +6,122 @@
 <title>linux笔记本过热调频控制算法+脚本</title>
 </head>
 <body>
-由于笔记本几年没有除尘了，风扇降温效果非常差了，开几个软件可能出来过热死机。
-使用几个调频软件一直没有设置成我需要的方式，只好自己先写一个简单的工具。
-
-已测试系统; gentoo linux，arch linux。
-
-调频软件包使用的新的调频包cpupower。
-
-算法说明：
-开始的时候使用laptop-mode的默认ondemand档
-每隔１－２秒检测一下ＣＰＵ的温度，
-     如果没有超过９０度，忽略本次检测
-     如果超过９０度，转为userspace档，设定ＣＰＵ频率为最低
-            记录当前时间
-      如果低于６０度，如果是我们设置了固定的频率（使用记录时间值和当前的频率设定档是否是userspace检测）
-             则，返回到ondemand档
-              否则，忽略本次检测。
-完成
-
-附后;
-查看ＣＰＵ温度:
-cat /sys/devices/virtual/hwmon/hwmon0/temp1_input
-
-关注最新版本脚本实现：<a href='http://nullfxp.googlecode.com/svn/vendor/myscripts/laphot_ctrl.sh'>http://nullfxp.googlecode.com/svn/vendor/myscripts/laphot_ctrl.sh</a>
-
-[code type="bash"]
-#!/bin/sh
-
-# usage: (start|stop|status|reset)
-
-RTDIR_PREFIX=
-PID_FILE=$RTDIR_PREFIX/var/run/laphot.pid
-LOG_FILE=$RTDIR_PREFIX/var/log/laphot.log
-LAST_SETFREQ_TIME_FILE=$RTDIR_PREFIX/var/tmp/laphot_last_setfreq_time.txt
-STOP_FLAG_FILE=$RTDIR_PREFIX/var/tmp/laphot_stop.conf
-
-COOL_HOLL=61000
-HOT_HOLL=92000
-
-RT_PID=$$
-
-echo $RT_PID > $PID_FILE || exit 1;
-echo "" > $LAST_SETFREQ_TIME_FILE || exit 2;
-echo "" > $STOP_FLAG_FILE || exit 3;
-echo "I'm ${USER}." | tee  $LOG_FILE || exit 4;
-
-while true
-do
-    CUR_TIME=$(date)
-    echo $CUR_TIME | tee -a $LOG_FILE
-
-    CUR_TEMP=$(cat /sys/devices/virtual/hwmon/hwmon0/temp1_input)
-    echo $CUR_TEMP | tee -a $LOG_FILE
-
-    if [ $CUR_TEMP -lt $COOL_HOLL ] ; then
-        # up
-        last_setfreq_time=$(cat $LAST_SETFREQ_TIME_FILE)
-        if [ x"$last_setfreq_time" = x"" ] ; then
-            echo "Cool state ${CUR_TEMP}, Not need any op" | tee -a $LOG_FILE
-            true
-        else
-            #
-            echo "" > $LAST_SETFREQ_TIME_FILE
-            # set freq to ondemand
-            echo "Set to ondemand mode, go to nice performance mode." | tee -a $LOG_FILE
-            cpupower frequency-set --min 800MHz --max 2820MHz | tee -a $LOG_FILE
-            cpupower frequency-set --governor ondemand | tee -a $LOG_FILE
-
-            echo "SET ondemangovernor, set max_freq." | tee -a $LOG_FILE
-            FREQ_INFO=$(cpupower frequency-info)
-            echo $FREQ_INFO | tee -a $LOG_FILE 
-            echo "" | tee -a $LOG_FILE
-            echo "" | tee -a $LOG_FILE
-        fi
-    elif [ $CUR_TEMP -gt $HOT_HOLL ] ; then
-        last_setfreq_time=$(cat $LAST_SETFREQ_TIME_FILE)
-        if [ x"$last_setfreq_time" = x"" ] ; then
-            # down
-            echo $CUR_TIME > $LAST_SETFREQ_TIME_FILE
-            # set freq to usespace
-            # set freq to min_freq
-
-            echo "Set to userspace mode, go to cooler mode." | tee -a $LOG_FILE
-
-            #cpupower frequency-set --governor userspace | tee -a $LOG_FILE
-            #cpupower frequency-set --min 800MHz --max 800MHz | tee -a $LOG_FILE
-            #cpupower frequency-set --freq 800MHz | tee -a $LOG_FILE
-
-            cpupower frequency-set --min 800MHz --max 1600MHz | tee -a $LOG_FILE
-            cpupower frequency-set --governor ondemand | tee -a $LOG_FILE
-
-            echo "SET userspace governor, set min_freq." | tee -a $LOG_FILE
-            FREQ_INFO=$(cpupower frequency-info)
-            echo $FREQ_INFO | tee -a $LOG_FILE
-            echo "" | tee -a $LOG_FILE
-            echo "" | tee -a $LOG_FILE
-        else
-            echo "Already set min freq. continue." | tee -a $LOG_FILE
-        fi
-    else
-        echo "Good nice porformane state: ${CUR_TEMP}, Not need any op." | tee -a $LOG_FILE
-        true
-    fi
-
-    sleep 2;
-done
-
-# cat /etc/rc.local
-# if [ x"$USER" = x"root" ] ; then
-#     /root/bin/laphot_ctrl.sh > /dev/null &
-# elif [ x"$USER" = x"" ] ; then
-#     /root/bin/laphot_ctrl.sh > /dev/null &
-# else
-#     true
-# fi
-
-[/code]
+由于笔记本几年没有除尘了，风扇降温效果非常差了，开几个软件可能出来过热死机。<br />
+使用几个调频软件一直没有设置成我需要的方式，只好自己先写一个简单的工具。<br />
+<br />
+已测试系统; gentoo linux，arch linux。<br />
+<br />
+调频软件包使用的新的调频包cpupower。<br />
+<br />
+算法说明：<br />
+开始的时候使用laptop-mode的默认ondemand档<br />
+每隔１－２秒检测一下ＣＰＵ的温度，<br />
+     如果没有超过９０度，忽略本次检测<br />
+     如果超过９０度，转为userspace档，设定ＣＰＵ频率为最低<br />
+            记录当前时间<br />
+      如果低于６０度，如果是我们设置了固定的频率（使用记录时间值和当前的频率设定档是否是userspace检测）<br />
+             则，返回到ondemand档<br />
+              否则，忽略本次检测。<br />
+完成<br />
+<br />
+附后;<br />
+查看ＣＰＵ温度:<br />
+cat /sys/devices/virtual/hwmon/hwmon0/temp1_input<br />
+<br />
+关注最新版本脚本实现：<a href='http://nullfxp.googlecode.com/svn/vendor/myscripts/laphot_ctrl.sh'>http://nullfxp.googlecode.com/svn/vendor/myscripts/laphot_ctrl.sh</a><br />
+<br />
+[code type="bash"]<br />
+#!/bin/sh<br />
+<br />
+# usage: (start|stop|status|reset)<br />
+<br />
+RTDIR_PREFIX=<br />
+PID_FILE=$RTDIR_PREFIX/var/run/laphot.pid<br />
+LOG_FILE=$RTDIR_PREFIX/var/log/laphot.log<br />
+LAST_SETFREQ_TIME_FILE=$RTDIR_PREFIX/var/tmp/laphot_last_setfreq_time.txt<br />
+STOP_FLAG_FILE=$RTDIR_PREFIX/var/tmp/laphot_stop.conf<br />
+<br />
+COOL_HOLL=61000<br />
+HOT_HOLL=92000<br />
+<br />
+RT_PID=$$<br />
+<br />
+echo $RT_PID > $PID_FILE || exit 1;<br />
+echo "" > $LAST_SETFREQ_TIME_FILE || exit 2;<br />
+echo "" > $STOP_FLAG_FILE || exit 3;<br />
+echo "I'm ${USER}." | tee  $LOG_FILE || exit 4;<br />
+<br />
+while true<br />
+do<br />
+    CUR_TIME=$(date)<br />
+    echo $CUR_TIME | tee -a $LOG_FILE<br />
+<br />
+    CUR_TEMP=$(cat /sys/devices/virtual/hwmon/hwmon0/temp1_input)<br />
+    echo $CUR_TEMP | tee -a $LOG_FILE<br />
+<br />
+    if [ $CUR_TEMP -lt $COOL_HOLL ] ; then<br />
+        # up<br />
+        last_setfreq_time=$(cat $LAST_SETFREQ_TIME_FILE)<br />
+        if [ x"$last_setfreq_time" = x"" ] ; then<br />
+            echo "Cool state ${CUR_TEMP}, Not need any op" | tee -a $LOG_FILE<br />
+            true<br />
+        else<br />
+            #<br />
+            echo "" > $LAST_SETFREQ_TIME_FILE<br />
+            # set freq to ondemand<br />
+            echo "Set to ondemand mode, go to nice performance mode." | tee -a $LOG_FILE<br />
+            cpupower frequency-set --min 800MHz --max 2820MHz | tee -a $LOG_FILE<br />
+            cpupower frequency-set --governor ondemand | tee -a $LOG_FILE<br />
+<br />
+            echo "SET ondemangovernor, set max_freq." | tee -a $LOG_FILE<br />
+            FREQ_INFO=$(cpupower frequency-info)<br />
+            echo $FREQ_INFO | tee -a $LOG_FILE <br />
+            echo "" | tee -a $LOG_FILE<br />
+            echo "" | tee -a $LOG_FILE<br />
+        fi<br />
+    elif [ $CUR_TEMP -gt $HOT_HOLL ] ; then<br />
+        last_setfreq_time=$(cat $LAST_SETFREQ_TIME_FILE)<br />
+        if [ x"$last_setfreq_time" = x"" ] ; then<br />
+            # down<br />
+            echo $CUR_TIME > $LAST_SETFREQ_TIME_FILE<br />
+            # set freq to usespace<br />
+            # set freq to min_freq<br />
+<br />
+            echo "Set to userspace mode, go to cooler mode." | tee -a $LOG_FILE<br />
+<br />
+            #cpupower frequency-set --governor userspace | tee -a $LOG_FILE<br />
+            #cpupower frequency-set --min 800MHz --max 800MHz | tee -a $LOG_FILE<br />
+            #cpupower frequency-set --freq 800MHz | tee -a $LOG_FILE<br />
+<br />
+            cpupower frequency-set --min 800MHz --max 1600MHz | tee -a $LOG_FILE<br />
+            cpupower frequency-set --governor ondemand | tee -a $LOG_FILE<br />
+<br />
+            echo "SET userspace governor, set min_freq." | tee -a $LOG_FILE<br />
+            FREQ_INFO=$(cpupower frequency-info)<br />
+            echo $FREQ_INFO | tee -a $LOG_FILE<br />
+            echo "" | tee -a $LOG_FILE<br />
+            echo "" | tee -a $LOG_FILE<br />
+        else<br />
+            echo "Already set min freq. continue." | tee -a $LOG_FILE<br />
+        fi<br />
+    else<br />
+        echo "Good nice porformane state: ${CUR_TEMP}, Not need any op." | tee -a $LOG_FILE<br />
+        true<br />
+    fi<br />
+<br />
+    sleep 2;<br />
+done<br />
+<br />
+# cat /etc/rc.local<br />
+# if [ x"$USER" = x"root" ] ; then<br />
+#     /root/bin/laphot_ctrl.sh > /dev/null &<br />
+# elif [ x"$USER" = x"" ] ; then<br />
+#     /root/bin/laphot_ctrl.sh > /dev/null &<br />
+# else<br />
+#     true<br />
+# fi<br />
+<br />
+[/code]<br />
 
 </body>
 </html>
