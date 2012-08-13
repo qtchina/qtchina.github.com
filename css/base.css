@@ -1,0 +1,21 @@
+body{
+/*text-align:center;*/
+margin:0;
+padding:0;
+font:normal 13px/150% Helvetica, Tahoma, Arial, sans-serif;
+color:#000;
+background:#FFF;
+}
+
+a{color:#888;text-decoration:none;}
+a:hover{color:#F60;text-decoration:underline;}
+
+.clear{clear:both;}
+img{border:0;}
+
+h1,h2,h3,h4,h5,h6,dl,dt,dd,ol,ul,li,form{margin:0;padding:0;}
+ol,ul{list-style-type:none;}
+input,textarea,select{font-size:12px;}
+code,samp,cite,dfn{font-style:normal;}
+
+a{color:#333;text-decoration:none;}
