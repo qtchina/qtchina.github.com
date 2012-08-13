@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>关于gentoo 下 chromium-bin对x11-themes/gnome-icon-theme包的依赖问题</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>关于gentoo 下 chromium-bin对x11-themes/gnome-icon-theme包的依赖问题</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-11-10 10:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 今天更新portage,发现又有新的包依赖了，<br />
 localhost ~ # emerge -va chromium-bin<br />
 <br />
@@ -31,6 +59,26 @@ Would you like to merge these packages? [Yes/No]<br />
 由于不希望安装些乱七八糟的包，就修改了一下ebuild，把x11-themes/gnome-icon-theme的依赖去掉了。使用下试试有没有问题，应该没有吧，不就是一个theme吗,不用图标总成吧,哈哈<br />
 不过要是官方不修改这个选项成一个use的话，以后每次都要自己手动修改了。<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/377'>http://nullget.sourceforge.net/?q=node/377</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

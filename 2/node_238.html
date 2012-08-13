@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>使用QPainter进行绘图</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用QPainter进行绘图</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:25
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	要开始向一个绘图设备上绘图（一般是一个物件），我们仅需要简单地创建一个QPainter并传递一个指向该设备的指针。例如：<br />
 [code type="cpp-qt"]<br />
 void MyWidget::paintEvent(QPaintEvent *event)<br />
@@ -93,6 +121,26 @@ gradient.setColorAt(1.0, Qt::black);<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 不管在什么时候，我们都可以调用save()把一个绘图器的当前状态保存在一个内部栈上，然后通过调用restore()恢复它。如果我们希望临时改变绘图器的设置，然后再把它们重围为原来的值的的时候这是很有用的，正如我们在下一节将看到的一样。<br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/238'>http://nullget.sourceforge.net/?q=node/238</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

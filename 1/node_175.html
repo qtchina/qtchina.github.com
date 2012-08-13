@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>把自定义物件整合到Qt设计师中</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>把自定义物件整合到Qt设计师中</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-06-03 19:47
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 	在我们能在Qt设计师中使用自定义物件之前，我们必须让Qt设计师注意到它们。有两种技术完成这个：“升级“方法和插件方法。<br />
 	升级方法是一种快速简单的方法。它包括：选择一个与我们的自定义物件有相似API的内建Qt　物件，完成Qt设计师中的关于我们的自定义物件信息的一个对话框。这个物件就能用于使用Qt设计师开发的窗体，虽然在编辑或者预览窗体的时候它被表示相关联的内建Qt物件。<br />
 	下面是如何使用这种方法把HexSpinBox物件插入到一个窗体的步骤：<br />
@@ -123,6 +151,26 @@ DESTDIR         = $(QTDIR)/plugins/designer<br />
 <br />
 	该.pro文件假设QtdIR环境变量被设置为Qt的安装位置。当你键入make或者nmake构建该插件的时候，它会自动安装自己到Qt设计师的plugins目的。一旦该插件被编译出来，在Qt设计师中就能像使用其他任何Qt内建物件一样使用IconEditor物件了。<br />
 	如果你想把多个自定义物件整合到Qt设计师中，你或者为他们每一个创建一个插件，或者把他们组合进从QdesignerCustomWidgetCollectionInterface派生出来的单个插件内。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/175'>http://nullget.sourceforge.net/?q=node/175</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

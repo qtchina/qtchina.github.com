@@ -1,14 +1,62 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>Qt 中QModelIndex的一个不正确用法解说</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Qt 中QModelIndex的一个不正确用法解说</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-06-27 17:46
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 最近项目中用到了QDirModel实现一个树形结构，这个功能需要首先记住某个QModelIndex处的文件路径，再某时间段后使用这个记录的QModelIndex的文件路径。<br />
 接下来操作过程不断出现程序崩溃的情况，怎么查也找不到问题。大概折腾了两三个小时的时间，便决定采用另一种方法，记录这个结果的绝对路径，然后使用的时候通过这个路径得到一个QModelIndex,这样竟然不再出现问题。<br />
 回头想了一下，原来在记录了这个QModelIndex后，又执行了多个相关的树结构的操作，那么原先的那个QModelIndex可能已经无效了，这个随便的错误用法导致程序随机出现一些崩溃现象，才明白过来这种用法的错误之处。<br />
 总结一点，这个QModelIndex不能做类似的用途，由于它是动态生成的位置变量，具有相当的“不稳定性”特点。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/305'>http://nullget.sourceforge.net/?q=node/305</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

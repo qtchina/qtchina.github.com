@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>在ubuntu 8.04 x86_64系统上编译32位程序</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在ubuntu 8.04 x86_64系统上编译32位程序</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-10-28 15:03
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 今天移植一个用c写的程序，没想到在新系统编译运行后一直出现莫名其妙的内存问题。<br />
 最后才发现是因为新服务器是64位系统的问题，原来使用的服务器是32位的。<br />
 在网上看了几篇关于从32位移植到64位的文章，知道是一些数据类型长度变化的问题，<br />
@@ -18,6 +46,26 @@ gcc有一个参数 -m32 ，可以编译出来32位的程序。<br />
 在编译的时候需要注意，gcc要支持 multilib。另外还要有32位的库文件。<br />
 像这个系统，有lib/   lib32/ lib64/ 几个目录，分别存储不同cpu架构<br />
 的运行库。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/256'>http://nullget.sourceforge.net/?q=node/256</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

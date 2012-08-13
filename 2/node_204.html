@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>布局窗体上的物件</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>布局窗体上的物件</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-07-13 20:46
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 	有三种管理窗体上的子物件的布局的方法：绝对位置，手工布局和布局管理器。我们将依次看看每种方法，使用图6.1中的“Find File “对话框作为例子。<br />
 图6.1　文件查找对话框<br />
 <br />
@@ -129,6 +157,26 @@ Expanding 意味着物件能缩小或者伸长并且它将优先伸长。<br />
 	除了尺寸策略的水平和垂直组件，QsizePolicy类还存储了水平和垂直伸缩因子。这些伸缩因子可被用于表示在窗体扩展的时候不同的子物件应该以不同的速率伸长。例如，如果我们在QTextEdit上面有一个QtreeWidget并且我们希望QTextEdit应该是QtreeWidget的两倍高，那么我们可以把QTextEdit的垂直伸长因子设为2并把QtreeWidget's的垂直伸缩因子设为1。<br />
 	然而其他影响布局的方法有设置子物件的最小尺寸，最大尺寸或者固定尺寸。布局管理器将会在布置这些物件的时候充分考虑这些常量。并且如果这还不够的话，我们还可从子物件类继承并重新实现sizeHint()来获得我们需要的尺寸暗示。<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/204'>http://nullget.sourceforge.net/?q=node/204</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

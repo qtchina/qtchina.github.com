@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>3.14 fcntl函数</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>3.14 fcntl函数</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-29 22:29
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <p class="MsoNormal">fcntl函数可以改变已打开的文件的性质。</p><br />
 <p class="MsoNormal">&nbsp;<img width="554" height="63" src="http://book.csdn.net/BookFiles/418/img/image103.jpg" id="图片 346" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" /></p><br />
 <p class="MsoNormal">在本节的各实例中，第三个参数总是一个整数，与上面所示函数原型中的注释部分相对应。但是在14.3节说明记录锁时，第三个参数则是指向一个结构的指针。</p><br />
@@ -51,5 +79,25 @@
 <p class="MsoNormal">表3-5显示了在Mac OS X 10.3上运行同样的测试所得到的计时结果。注意该计时结果与我们的期望相符：同步写较延迟写所消耗的时间增加了很多，而且在同步写后再调用函数 fsync 并不会产生测量上的显著差别。还要引起注意的是，在延迟写后增加一个fsync函数调用也不产生可测量的差别。其原因很可能是，当写新数据到某个文件中 时，操作系统将以前写的数据冲洗到了磁盘上，所以在调用函数fsync时几乎就没有什么工作要做了。</p><br />
 <p class="MsoNormal"><img width="553" height="158" src="http://book.csdn.net/BookFiles/418/img/image111.jpg" id="图片 370" title="点击图片可在新窗口打开" style="cursor: pointer;" alt="" />比较fsync和fdatasync与O_SYNC标志，fsync和fdatasync在我们需要时更新文件内容，O_SYNC标志则在我们每次写至文件时更新文件内容。</p><br />
 <p class="MsoNormal">在本例中，我们看到了fcntl的必要性。我们的程序在一个描述符（标准输出）上进行操作，但是根本不知道由 shell打开的相应文件的文件名。因为这是shell打开的，于是不能在打开时，按我们的要求设置O_SYNC标志。fcntl则允许仅知道打开文件描 述符时可以修改其性质。在说明非阻塞管道时（15.2节），我们还将了解到，由于我们对管道所具有的知识只是其描述符，所以也需要使用fcntl的功能。</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/102'>http://nullget.sourceforge.net/?q=node/102</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>双缓冲技术</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>双缓冲技术</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-06-03 20:24
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 	双缓冲技术是一种GUI编程技术，它指的是在一个不在屏幕上的位图上渲染一个物件并把此位图拷贝到屏幕上。在Qt的早期版本中，这种技术常用于消除闪烁和提供一个快速用户界面。<br />
 	在Qt4中，QWidget自动处理双缓冲，因此我们几乎不需要担心物件的闪烁。然而，显式双缓冲技术依然对复杂的物件渲染和重复渲染非带有益。我们可以永久保存物件的位图，总是为下次绘图做准备，并在我们接收到一个绘图事件的时候把位图拷贝到物件上。它尤其在我们希望做一些小改动时特别有效，如画一个橡皮圈，而不用一遍遍地重新计算和渲染整个物件。<br />
 	我们将以讨论Plotter自定义物件来圆满结束本章内容。该物件使用了双缓冲技术和演示Qt编程的其他一些方面的内容，包括键盘事件处理，布局控制和坐标系统。<br />
@@ -555,6 +583,26 @@ void PlotSettings::adjustAxis(double &min, double &max,<br />
 	这一算法在一些情况下能给出最优结果。一个更复杂的算法在出版于Graphics Gems (ISBN 0-12-286166-3)的Paul S. Heckbert的文章"Nice Numbers for Graph Labels"中有描述。<br />
 	本章结束了本书的第一部分。它阐述了如何自定义一个已存在的Qt物件以及如何使用QWidget作为基类创建一个物件。在第2章中我们已经看到了如何用现有的物件组装出一个物件，并且在第6阐我们将进一步研究主题。<br />
 	到现在为止，我们已经知道的足够总并应该能使用Qt编写完整的GUI程序。在第 II 和第III部分，我们将更深入地研究Qt以便我们能充分利用Qt的强大功能。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/176'>http://nullget.sourceforge.net/?q=node/176</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

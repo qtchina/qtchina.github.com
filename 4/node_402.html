@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>在gentoo上使用又显示器，扩展，镜像</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在gentoo上使用又显示器，扩展，镜像</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2010-02-07 14:14
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 首先需要在xorg.conf的下面这节中设置Virtual 值，这个值等于两个显示器的长度和、宽度和。<br />
 <br />
 Section "Screen"<br />
@@ -44,5 +72,25 @@ xrandr --output VGA --auto --output LVDS --off<br />
 xrandr --output VGA --off --output LVDS --auto<br />
         关闭外接显示器，同时打开笔记本液晶屏幕 (只用笔记本液晶屏)<br />
 （最后两种情况请小心操作，不要误把两个屏幕都关掉了。。。。）
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/402'>http://nullget.sourceforge.net/?q=node/402</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

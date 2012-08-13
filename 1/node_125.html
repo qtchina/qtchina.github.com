@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>第4章　实现程序的功能(实现编辑菜单)</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>第4章　实现程序的功能(实现编辑菜单)</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-06-02 23:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <h4>实现编辑菜单</h4><br />
 	我们现在准备实现与程序的编辑菜单相应的槽。<br />
 [code type="cpp-qt"]<br />
@@ -529,5 +557,25 @@ QVariant Cell::evalFactor(const QString &str, int &pos) const<br />
 	如果因子不是一个嵌套的表达式，我们抽取下一个序列，它应该是个单元格坐标或者是个数字。如果这个序列匹配相应QRegExp，我们把它当作一个单元格引用并以给定的坐标调用它的value()函数。这个单元格可以是电子表格中的任何一个，并且它还可以依赖于其他的单元格。依赖不是问题。他们将会简单的触发更多的value()调用和（对“脏“单元格）更多的分析直到所有的附属单元都被求值。如果该序列不是一个单元格坐标，我们把它当作一个数字。<br />
 	如果单元格A1包含公式"=A1"会发生什么呢？或者如果单元格A1包含"=A2"并且单元格A2又包含"=A1"又会发生什么呢。尽管我们没有编写任何特别的代码来检测循环依赖，分析器通过返回一个无效的QVariant值优美地处理了这些情况。这能够工作的很好，因为在我们调用evalExpression()之前已经把cacheIsDirty设置为false，并把cachedValue在value()中设置为无效的了。如果evalExpression()递归地对同一个单元格调用value()，它会立即返回无效值，并且整个表达式的值的计算结果也是无效的。<br />
 	我们现在已经完成了公式分析器。它应该能通过扩展因子的定义讲法来简单地扩展为处理预定义的电子表格程序函数，像sum()" 和"avg()"。另一个简单的扩展方式是实现字符串的'+'操作符（作为连接用）。而这并不需要修改因子定义语法。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/125'>http://nullget.sourceforge.net/?q=node/125</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

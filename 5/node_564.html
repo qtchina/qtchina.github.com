@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>asterisk中自定义fd_set扩展select能处理的文件描述符个数的研究</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>asterisk中自定义fd_set扩展select能处理的文件描述符个数的研究</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-03-30 22:44
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 asterisk中自定义fd_set与FD_ZERO,FD_SET几个量扩展select能处理的文件描述符个数的研究<br />
 <br />
 在asterisk中，仍旧使用select处理socket文件描述符的读写事件驱动，虽然有点老套，但这种方式的移植性更好，现在几乎所有的平台都支持这个函数。如果使用一些特定平台的功能，像linux的epoll或者BSD的kqueue，还有solaris的什么  方式，都需要做一个核心兼容这几种不同操作系统上的方式。<br />
@@ -89,5 +117,25 @@ typedef struct {<br />
 当然，在自己的项目中，也可以使用这种方式改进系统负载容量。<br />
 <br />
 不过，如果可能，还是使用先进一些的epoll,kqueue这些，因为select在处理这么大的文件描述符时，效率上相比前者还是小一点。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/564'>http://nullget.sourceforge.net/?q=node/564</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

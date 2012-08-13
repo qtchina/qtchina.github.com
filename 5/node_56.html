@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>如何在PHP 中使用共享内存</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>如何在PHP 中使用共享内存</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-06-06 18:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 *nix共享内存很早就有，可以使用共享内存实现进程或者线程间的通信，也可用作存储特定的数据(简化的内存数据库)。<br />在PHP4.0。4中加入了共享内存的支持，这样可以在多个PHP程序间共享某些数据。<br />对于某些少量数据记录的库可以使用这种共享内存来加速执行效率，如PHP的模板文件(需要修改smarty)，校验码的存储等。<br /><br />用起来非常简单，编译PHP时 加上参数 --enable-shmop 即可。主要有下面几个PHP函数：<br /><br />目录<br />shmop_close -- Close shared memory block<br />shmop_delete -- Delete shared memory block<br />shmop_open -- Create or open shared memory block<br />shmop_read -- Read data from shared memory block<br />shmop_size -- Get size of shared memory block<br />shmop_write -- Write data into shared memory block<br /><br />ftok <br /><br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/56'>http://nullget.sourceforge.net/?q=node/56</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>关于QModelIndexList的应用，在64位win上有问题</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>关于QModelIndexList的应用，在64位win上有问题</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2010-12-04 12:05
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 一般使用方法，<br />
 QItemSelectionModel *ism = someview->selectionModel();<br />
 QModelIndexList mil = ism->selectedIndexes();<br />
@@ -24,5 +52,25 @@ cidx = ism->currentIndex();<br />
 idx = ism->model()->index(cidx.row(), 0, cidx.parent());<br />
 <br />
 那么这里的idx就是我们要找到的行首的QModelIndex();
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/527'>http://nullget.sourceforge.net/?q=node/527</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

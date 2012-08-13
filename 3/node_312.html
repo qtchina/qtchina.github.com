@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>编写larbin抓取到的页面处理模块</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>编写larbin抓取到的页面处理模块</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-07-19 13:59
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 用户自定义的页面处理模块的入口位于文件 ./src/interf/useroutput.cc<br />
 <br />
 通过不同的宏控制使用哪个模块，larbin自带的几个简单模块：SIMPLE_SAVE, MIRROR_SAVE, STATS_OUTPUT, DEFAULT_OUTPUT<br />
@@ -45,6 +73,26 @@ void outputStats(int fds);<br />
 larbin 模块的一个奇怪的地方是模块直接使用#include指令包含进 useroutput.cc的，如果这个模块有许多个.cc文件组成的话，就不好办了。<br />
 这样包含还有一个坏处，改动自己的模块后，重新make不会编译这个模块，还要把useroutput.o删除掉才能让改动生效，因为这个模块编译进useroutput.o中去了，而这个文件没有动，所以make不会重新编译它。<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/312'>http://nullget.sourceforge.net/?q=node/312</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

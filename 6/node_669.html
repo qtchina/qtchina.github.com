@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>部署postgresql数据库集群</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>部署postgresql数据库集群</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-07-07 10:38
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 可把任意一台作为主服务器，提供读写功能，其他的服务器提供读取服务器，作为热备服务器使用。<br />
 <br />
 如果主服务器有问题，可把其他任意一台从服务器转为主服务器<br />
@@ -55,5 +83,25 @@ archive_cleanup_command = 'true'<br />
 如果在启动从服务器时，从服务器的数据与主服务器不一致，这可能会出现什么问题。<br />
 <br />
 再加一台从C服务器，测试一下。没有问题。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/669'>http://nullget.sourceforge.net/?q=node/669</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

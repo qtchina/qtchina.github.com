@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>TOM-Skype附加功能模块skmsg.dll解析</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>TOM-Skype附加功能模块skmsg.dll解析</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-12-14 17:58
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <div>这个skmsg.dll模块用于。。。。。。</div><div><br></div>1. VC .DEF文件内容：<div><br><div><div>IBRARY &nbsp; &nbsp; &nbsp;"skmsg.dll"</div><div><br></div><div>EXPORTS</div><div>&nbsp; &nbsp; SkmsgStartup</div><div>&nbsp; &nbsp; SkmsgShutdown</div><div>&nbsp; &nbsp; SkmsgRegisterEvent</div><div>&nbsp; &nbsp; SkmsgUnregisterEvent</div><div>&nbsp; &nbsp; SkmsgPostMessage</div><div><br></div></div></div><div>2. 导出函数的原型：</div><div><div>BOOL __stdcall SkmsgStartup(const char * pszSkypeId, const char * pszSkypeVersion, const char * pszMsgSvr = NULL);</div><div>void __stdcall SkmsgShutdown();</div></div><div><div>BOOL __stdcall SkmsgRegisterEvent(SKMSGNOTIFY pNotify, unsigned short msgType);</div><div>BOOL __stdcall SkmsgUnregisterEvent(SKMSGNOTIFY pNotify);</div><div><br></div><div>BOOL __stdcall SkmsgPostMessage(const char * pszToId, unsigned short msgType, unsigned short msgLen, const unsigned char *pMsg);</div><div>void __stdcall RequestMissionMsg();</div></div><div><br></div><div>通过这个，我们可以</div><div><br></div><div>3. 导出函数说明：</div><div>&nbsp; &nbsp; SkmsgStartup: 在skype登陆成功后调用，初始化该dll模块中的全局变量的值。如skype账号名，skype版本号。</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;第三个参数pszMsgSvr一个服务器地址，格式必须为host:port。</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;返回FALSE，也就是该dll模块初始化失败的情况有，已经初始化过，服务器地址格式错误，连接服务器错误，发送登陆通知出错。</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;该函数还创建弹窗线程。</div><div><br></div><div>&nbsp; &nbsp;SkmsgShutdown: 在skype退出登陆时调用，停止对该模块的调用。</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;所做处理，退出线程，发送skype登出通知，停止计时器，清理内存。</div><div><br></div><div>&nbsp; &nbsp;SkmsgPostMessage: 向服务器发送一条消息，消息内容有CRC4验证。</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 第一个pszToId其实没有用，一直给传递的值都是当前登陆的skype id。</div><div>&nbsp;</div><div>4. 客户端与服务器间通信协议</div><div>&nbsp; &nbsp; 使用简单的二进制流协议，该二进制流是对原数据使用CRC4加密取得。</div><div>&nbsp; &nbsp; 使用协议头，协议尾来标识一条消息。</div><div>&nbsp; &nbsp;&nbsp;</div><div>&nbsp; &nbsp; 格式： &nbsp;|MSG_HEAD|PROTO_VERSION|0|rand_digit|REQ_NO|skype_id_len|skype_id|skype_version_len|skype_version|msgid|MSG_TAIL|</div><div>&nbsp; &nbsp; 字节： &nbsp;|1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |1|2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |skype_id_len|1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|skype_version_len|4 &nbsp; &nbsp; &nbsp; &nbsp; | 1|</div><div><br></div><div>&nbsp; &nbsp; &nbsp;CRC4加密，只加密从rand_digit到msgid中间的数据，协议头、尾、版本号不在加密之列。</div><div>&nbsp; &nbsp; &nbsp;该加密使用简单可逆的按位异或实现，并没有使用加密key，加密结果操持原来的长度。</div><div><br></div><div>&nbsp; &nbsp;&nbsp;</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/624'>http://nullget.sourceforge.net/?q=node/624</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

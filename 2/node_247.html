@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>内存泄漏检测工具valgrind输出结果详解</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>内存泄漏检测工具valgrind输出结果详解</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-18 11:32
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 一。 valgrind内存检测中五种内存丢失的解释<br />
 <br />
 结果示例：<br />
@@ -26,6 +54,26 @@ LEAK SUMMARY:<br />
 4)  possibly lost: 发现了一个指向某块内存中部的指针，而不是指向内存块头部。这种指针一般是原先指向内存块头部，后来移动到了内存块的中部，还有可能该指针和该内存根本就没有关系，检测工具只是怀疑有内存泄漏。<br />
 <br />
 5)  suppressed:  <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/247'>http://nullget.sourceforge.net/?q=node/247</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

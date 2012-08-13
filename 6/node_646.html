@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>PHP内核代码中smart_str更高效的用法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>PHP内核代码中smart_str更高效的用法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-04-06 10:55
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 在PHP内核中，smart_str默认初始化大小为78，<br />
 <br />
 每次分配多加128字节。<br />
@@ -73,5 +101,25 @@ buf->len += strlen(s);       // 追加一个字符串<br />
 这样比使用smart_str_appendc宏更有效率。<br />
 <br />
 不过这样的安全问题要注意，前提是已经为后续操作分配了内存的内存，不能内存溢出了。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/646'>http://nullget.sourceforge.net/?q=node/646</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

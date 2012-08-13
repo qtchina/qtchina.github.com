@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>修改服务器版linux系统上的dummy虚拟声卡最大声道数</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>修改服务器版linux系统上的dummy虚拟声卡最大声道数</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2010-12-31 21:55
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 最近在一个项目中需要使用到服务器上的声卡，当然也不是需要真的物理声卡（真有物理声卡，服务器在机房中播放音乐，放电影？）。我们需要的是虚拟语音声卡，能处理客户端到服务器的语音流，不需要真正的播放。<br />
 <br />
 我们需要的这个虚拟声卡，在linux中作为一个内核模块存在、运行，snd-dummy。<br />
@@ -236,6 +264,26 @@ card 0: Dummy [Dummy], device 0: Dummy PCM [Dummy PCM]<br />
 <br />
 这时看到系统识别了一个dummy声卡，走道数为128,完全实现了声道数修改。<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/540'>http://nullget.sourceforge.net/?q=node/540</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

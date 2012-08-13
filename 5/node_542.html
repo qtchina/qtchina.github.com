@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>重拾kvm, 内核级虚拟机</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>重拾kvm, 内核级虚拟机</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-01-02 22:59
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 kvm虚拟机（Kernel-based Virtual Machine）是运行与linux上的内核级虚拟机实现，相比其他的内核级虚拟级，kvm有很大优势，内核级运行，相对简单轻量，是一种关虚拟机，理论上效率更高，完全GPL。当然也有不少缺点，宿主机当然只能是linux了，客户机无所谓，没有完善易用的管理工具，需要与其他内核模块一起使用，对宿主机CPU有要求，必须支持VT技术才行。<br />
 <br />
 其他的虚拟机，包括老牌的vmware,企业级，个人桌面版本都比较完善，但越来越庞大，越来赶不上linux内核的发展，使用它被限制在某些特定的内核版本。virtualbox，桌面级应用非常简便，也还可以，不地以IT大颚Oracle收购，应该对企业级应用的支持变好，但桌面级应用就不知道了。这两个平台都是全虚拟化平台。还有别一个半虚拟化平台xen，这个本来很有希望的虚拟化实现，却由于对内核来说过于复杂，不有其他一些原因没能进入内核，听说也 是很强大的。<br />
@@ -323,6 +351,26 @@ http://blog.bodhizazen.net/linux/improve-kvm-performance/<br />
 使用qemu-img 创建的虚拟机硬盘，有一个好处，虽然显示硬盘文件大小为分配时指定大小，但在没有真正写入数据前，实际上不占用真正的物理硬盘空间。<br />
 <br />
 qemu-kvm有一个-cpu参数，在不指定的情况下，为什么安装32位系统和64位系统都可以？默认的是64位系统了？所以才能安装32位的操作系统。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/542'>http://nullget.sourceforge.net/?q=node/542</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>Qt的状态栏类的一点改进想法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Qt的状态栏类的一点改进想法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-08-31 21:20
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 Qt的状态栏类是QStatusBar，继承自QWidget，维护了一个比较容易用的状态栏组件。<br />
 但在实际使用中，却发现它提供的功能并不够用。例如，我希望能在状态栏的左侧永久显示一个组件，却发现不行，问题在于QStatusBar中放在左侧的组件属于其“临时状态组件”概念，如果有新消息，那么消息将会覆盖组件，不再显示。<br />
 <br />
@@ -35,6 +63,26 @@ Qt的状态栏类是QStatusBar，继承自QWidget，维护了一个比较容易�
 KDE也实现了一个KStatusBar，功能更强些，但是好象只能支持多区域的文本消息显示。<br />
 <br />
 等整理好后发个代码出来。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/594'>http://nullget.sourceforge.net/?q=node/594</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

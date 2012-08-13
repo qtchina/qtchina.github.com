@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>数据库恢复--ARIES 算法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>数据库恢复--ARIES 算法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-08-12 13:19
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 大多数数据恢复均采用 ARIES 算法。该算法的三个基本原理：<br />
     1 WAL(Write-ahead logging) 写优先日志法<br />
         对于数据库的修改永远先写LOG然后再修改数据库。因此，修改数据的流程如下(假设内存中没有需要修改的数据)<br />
@@ -21,5 +49,25 @@
 <br />
     3恢复修改记录<br />
          反做（撤消）没有提交的事务，这点能保证数据库的正确性。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/321'>http://nullget.sourceforge.net/?q=node/321</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

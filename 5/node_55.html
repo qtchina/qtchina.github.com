@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>oracle分页查询语句</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>oracle分页查询语句</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-06-06 18:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 select rownum from users where  rowid not in (select rowid from users where rownum&lt;=10) and rownum&lt;=20 ;<br /><br />语文解释：查询users表中第11行到第30行的20行数据。那么将其中的10与20和表名users做成变量即可实现任意表的分页查询。<br /><br />用于oracle<br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/55'>http://nullget.sourceforge.net/?q=node/55</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

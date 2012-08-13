@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>VC2005编译Qt实现静态链接C运行库的方法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>VC2005编译Qt实现静态链接C运行库的方法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2010-03-20 21:16
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <p>本站的nullfxp项目需要发布Windows版本，因而需要使用VC编译Qt,并用此Qt编译nullfxp。</p><br />
 <br />
 <p>默认情况下，Qt源代码编译的时候使用动态链接C运行库的方法，在发布使用VC2005编译的程序时，需要想办法发布C运行库，否则可能用户机器上运行出错。</p><br />
@@ -29,6 +57,26 @@ QMAKE_CFLAGS_DEBUG      = -Zi -MTd<br />
 </ul><br />
 <br />
 <p>通过这两处修改，使用这个版本的Qt编译出来的程序不需要附带C语言运行库安装包，程序也能良好运行于所有Windows平台。</p><br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/407'>http://nullget.sourceforge.net/?q=node/407</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

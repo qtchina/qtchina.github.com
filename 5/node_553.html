@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>e17 r56388 去hal补丁</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>e17 r56388 去hal补丁</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-01-31 14:40
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 前段时间把系统的hal USE,今天升级e17的时候发现它还需要依赖hal，通过参数也无法控制，稍微修改了一下代码，编译安装完成后，e17桌面能正常使用，现在还不知道删掉的代码对桌面有什么影响。不过本来e17也就作为一个轻量级备用桌面的，有一点功能问题也没有什么关系。<br />
 <br />
 cat e17-no-hal.patch<br />
@@ -137,5 +165,25 @@ Index: src/modules/illume/e_kbd.c<br />
  }<br />
 <br />
 [/code]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/553'>http://nullget.sourceforge.net/?q=node/553</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

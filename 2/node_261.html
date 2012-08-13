@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>sshfs文件系统使用git和svn遇到的问题及解决办法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>sshfs文件系统使用git和svn遇到的问题及解决办法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-12-17 14:51
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 在通过sshfs方式mount到本地的文件系统中，使用svn或者git经常出现一些奇怪的，关于版本控制相关文件操作的错误：<br />
 这是git 遇到的一个问题<br />
 git init<br />
@@ -13,5 +41,25 @@ error: could not commit config file /path/to/.git/config<br />
 <br />
 svn也一样会出现类似的文件问题。<br />
 在网上搜索到解决办法是，在调用sshfs命令的时候使用-o workaround=rename参数。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/261'>http://nullget.sourceforge.net/?q=node/261</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

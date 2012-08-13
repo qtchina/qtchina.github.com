@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>linux coredump 文件生成</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>linux coredump 文件生成</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-09-02 09:46
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 以前用linux系统，生成的 core文件都是带进程号的，最近使用的arch与debian6，生成的core文件都不带这个值了。<br />
 <br />
 查找了一个，有一个内核参数可以控制生成的core文件名。<br />
@@ -15,6 +43,26 @@
 我现在使用的规则为，progname.time.core.pid<br />
 echo "%e.%t.core.%p" > /proc/sys/kernel/core_pattern<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/595'>http://nullget.sourceforge.net/?q=node/595</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

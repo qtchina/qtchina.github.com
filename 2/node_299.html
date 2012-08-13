@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>想起来以前写过的一段C代码</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>想起来以前写过的一段C代码</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-05-19 15:34
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 这段代码的功能是调试C语言中的内存漏洞。<br />
 原理：<br />
 使用自定义的宏malloc, calloc, realloc, free 来覆盖libc中的相应函数声明，这些宏中实现记录函数的调用位置（如在哪个文件，哪一行），记录的数据存放在一个链表中，然后再调用libc中的相应内存处理函数。等到程序结束时，通过遍历这个链接，能找到那些没有正常释放的内存分配位置，从而达到获得内存漏洞的相关信息，以便及时修补这些内存问题。<br />
@@ -17,6 +45,26 @@
 dmalloc的原理也是在调用相关的内存函数时做记录的吗？还有什么函数能hook这些libc函数的调用呢？<br />
 <br />
 我的这部分代码丢了，只记得一点实现原理了,有空的话看看dmalloc的实现，对我这部分的理解更有帮助些。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/299'>http://nullget.sourceforge.net/?q=node/299</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

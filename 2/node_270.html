@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>linux下的虚拟文件系统</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>linux下的虚拟文件系统</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-01-10 13:44
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 （以下内容来自网上收集）    <br />
 系统默认加载的/dev/shm ，它就是一个虚拟文件系统tmpfs，他跟ramdisk（虚拟磁盘）不一样。tmpfs 可以使用RAM，也可以使用您的swap分区来存储数据。而且传统的虚拟磁盘是个块设备，并需要mkfs将其格式化才能真正地使用它，tmpfs 是一个文件系统，而不是块设备；只要安装它，就可以使用了。<br />
 <br />
@@ -34,5 +62,25 @@ none /dev/shm tmpfs defaults,size=1024M 0 0<br />
 size参数也可以用G作单位：size＝1G<br />
 重新mount /dev/shm使之生效：<br />
 # mount -o remount /dev/shm
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/270'>http://nullget.sourceforge.net/?q=node/270</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

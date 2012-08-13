@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>kvm 虚拟机直接从virtualbox虚拟磁盘VDI启动的方法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>kvm 虚拟机直接从virtualbox虚拟磁盘VDI启动的方法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-02-01 11:21
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 如果同时使用两种虚拟机，像我现在用的kvm和virtualbox，是不是要分别为两种虚拟机创建两个虚拟磁盘，一般用起来都这么做。但这样多用了一个虚拟磁盘的空间，并且还不能保证两个虚拟机的系统同步，或者即使同步了，也非常麻烦。<br />
 <br />
 今天偶然在网上看到一种解决方法，能让kvkm直接从virtualbox的VDI格式虚拟磁盘启动，两种虚拟机操作的同虚拟磁盘上的同一系统，非常方便。<br />
@@ -130,6 +158,26 @@ total 12580864<br />
 PS:<br />
 这种方法对windows有问题，启动不了。<br />
 linux,freebsd皆可。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/555'>http://nullget.sourceforge.net/?q=node/555</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

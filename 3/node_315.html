@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>基于 pgpool-II 的 postgresql replication 安装配置</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>基于 pgpool-II 的 postgresql replication 安装配置</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-08-12 13:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 1. pgpool replication模式：<br />
 基于语句的复制，即将insert,update,delete,create等更新语句分发到所有节点上执行，如果有一个执行失败，其他节点还可以回退到之前的状态。而select语句则选择其中一个节点上执行，并返回结果。<br />
 这样做的结果应时更新的额外开销很大。<br />
@@ -86,6 +114,26 @@ create table node (id serial, title text, body text);<br />
 <br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/315'>http://nullget.sourceforge.net/?q=node/315</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>nullfxp 中一个顽固的bug</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>nullfxp 中一个顽固的bug</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2010-05-30 15:52
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 自从本机上的Qt升级到 4.7.9999，这个bug显示出来，具体表现为，连接到ssh主机后列目录时挂掉，gdb的backtrace显示与QSortFilterProxyModel有关，出现mapToSource时异常。<br />
 <br />
 调试了几天也没有找到问题关键，应该是原来的基础代码写的太乱了，如果再找不到考虑重新写下基础的RemoteDirModel这个类。<br />
@@ -19,6 +47,26 @@ AA:<br />
 几经调试，终于发现，还是原来的代码基础问题，没有严格按照Qt 4 的view/model架构修改model数据，导致数据更新后，打破有序执行序列，导致程序崩溃。<br />
 现在重写了代码，严格按照要求修改model中的数据，没有问题了。<br />
 改动比较大，nullfxp程序功能还没有完全恢复原有功能。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/442'>http://nullget.sourceforge.net/?q=node/442</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

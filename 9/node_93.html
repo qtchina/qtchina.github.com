@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>第一章 开始（物件样式）</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>第一章 开始（物件样式）</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-29 22:20
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <h2 style="margin: 13pt 0cm; text-indent: 0cm; line-height: 150%; tab-stops: 0cm"><a class="FCK__AnchorC" name="ch01sb01"><span style="font-family: 黑体; mso-ascii-font-family: Arial">物件样式</span></a></h2><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">上面我们看到的所有的屏幕抓图是在</span><span lang="EN-US"> Linux </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">下抓取的，但是</span><span lang="EN-US"> Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">应用程序在</span><span lang="EN-US"> Qt</span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">支持的不同平台上都有它们本地化的显示样式。</span><span lang="EN-US">Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">通过模拟不同平台的观感，而不是通过包装一个特定平台的物件集来做到这一点。</span></font></font></p><br />
 <h5 style="margin: 12pt 0cm 3pt; text-indent: 0cm; line-height: 150%; text-align: center; tab-stops: 0cm" align="center"><a class="FCK__AnchorC" name="ch01fig09"><em><font size="4"><font face="Times"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: Times; mso-hansi-font-family: Times">图</span><span lang="EN-US"> 1.9. Styles available everywhere</span></font></font></em></a></h5><br />
@@ -19,5 +47,25 @@
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">不像其他的风格，</span><span lang="EN-US">Windows XP </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">和</span><span lang="EN-US">Mac </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">风格只能在它的本地化的平台上获得，因为它依赖于平台的主题引擎。</span></font></font></p><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">这一章介绍了重要的概念信号</span><span lang="EN-US">/</span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">槽、连接和布局。也揭示了</span><span lang="EN-US"> Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">的完全和始终如一的面向对象创建和使用物件的方式。如果你浏览</span><span lang="EN-US"> Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">的参考手册，你将发现一种统一的方式，这种方式使得学习如何使用新的物件变得非常简单，你还会发现</span><span lang="EN-US"> Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">命名函数、参数，枚举等的细心，这使得用</span><span lang="EN-US"> Qt </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">编程惊人的简单和富有乐趣。</span><span lang="EN-US"> </span></font></font></p><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">在</span><span lang="EN-US"><a href="mk:@MSITStore:E:%5CMyDocuments%5CStudy%5CSystem%20&amp;%20App%20programing%5C(Qt)Prentice.Hall.PTR.C.plus.plus.GUI.Programming.with.Qt.4.Jun.2006.chm::/0131872494/part01.html#part01"><span style="mso-field-code: ' HYPERLINK 'mk:@msitstore:e:MyDocumentsStudySystem &amp; App programing(qt)prentice.hall.ptr.c.plus.plus.gui.programming.with.qt.4.jun.2006.chm::/0131872494/part01.html'l 'part01''"><span style="mso-field-code: ' HYPERLINK 'mk:@msitstore:e:MyDocumentsStudySystem &amp; App programing(qt)prentice.hall.ptr.c.plus.plus.gui.programming.with.qt.4.jun.2006.chm::/0131872494/part01.html'l 'part01''"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">第一部分</span></span></span></a></span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">接下来的章节将以这里介绍的概念为基础，向你展示了如何利用菜单、工具栏、文档窗口、状态栏，对话框和一些表面之下的函数来读，处理，和写文件。创建完整的</span><span lang="EN-US"> GUI </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">应用程序。</span></font></font></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/93'>http://nullget.sourceforge.net/?q=node/93</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

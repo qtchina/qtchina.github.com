@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>subversion For Linux 安装</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>subversion For Linux 安装</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-06-06 18:45
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 subversion For Linux 安装<br /><br />安装步骤：<br />默认安装包如下：<br /><br />CODE<br /><br />autoconf-2.59-5<br />libtool-1.5.6-4<br /><br /><br />一、下载安装APACHE2<br />1、下载httpd-2.0.55.tar.gz源码包<br />该源码包中包含APR和APR-UTIL模块，不需重新下载<br /><br />CODE<br /><br />#tar xvzf httd-2.0.55.tar.gz<br />#cd httpd-2.0.55<br />//安装APR和APR-UTIL<br />#cd srclib/apr<br />#./buildconf<br />#./configure --prefix=/usr/local/apr<br />#make && make install<br />#cd ../apr-util<br />#./buildconf<br />#./configure --prefix=/usr/local/apr --with-apr=/usr/local/apr<br />#make && make install<br />#cd ../..<br />#./configure --enable-dav --enable-maintainer-mode --prefix=/usr/local/apache2 --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr --with-mpm=worker --enable-track-vars --enable-cgi --enable-modules=so --enable-rewrite<br />#make && make install<br /><br /><br />修改httpd.conf文件<br />加入<br />CODE<br /><br />LoadModule php4_module modules/libphp4.so<br />LoadModule perl_module modules/mod_perl.so<br /><br />AddType application/x-httpd-php .php .php3 .inc<br />AddType application/x-httpd-php-source .phps<br /><br /><br /><br /><br />二、PHP安装<br /><br />CODE<br /><br />configure --enable-pic --with-bz2 --with-png --with-freetype-dir --with-gd --enable-gd-native-ttf --with-iconv --with-jpeg-dir=/usr/lib --with-xml --with-zlib --enable-ftp --enable-sockets --with-pear=/usr/share/pear --with-mysql=/usr/local/mysql --with-apxs2=/usr/local/apache2/bin/apxs --enable-mbstring=all --prefix=/usr/local/php4 --enable-exif<br /><br /><br />三、安装subversion<br /><br />CODE<br /><br />#./configure --prefix=/usr/local/subversion --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr --with-apxs=/usr/local/apache2/bin/apxs<br />#make && make install<br />#/usr/local/subversion/bin/svnadmin create /data/svn/root<br />#chown -R nobody /data/svn<br /><br /><br />在apache2的httpd.conf中加入以下代码：<br /><br />CODE<br /><br />&lt;Location /svn&gt;<br />      DAV svn<br />      SVNPath /data/svn/root<br />      AuthType Basic<br />      AuthName "CSYL Version Control System"<br />      AuthUserFile /data/svn/svn-auth-file<br />      Require valid-user<br />&lt;/Location&gt;<br /><br /><br />生成密码文件<br /><br />CODE<br /><br />#mkdir /data/svn<br />#chown -R nobody /data/svn<br />#/usr/local/apache2/bin/htpasswd -c /data/svn/svn-auth-file mills<br /><br /><br /><br />QUOTE<br />在安装完后出现以下问题：<br />svn: PROPFIND request failed on '/svn/repository'<br />svn:Could not open the requested SVN filesystem<br />GOOGLE了半天后，终于发现是httpd.conf中的&lt;location&gt;标签中的路径没设好。<br />&lt;Location /svn&gt;<br />    DAV svn<br />    SVNPath /data/svn/root<br />&lt;/Location&gt;<br />访问方式：http://blog.guomin.net/svn<br /><br /><br />==================<br />&lt;Location /svn&gt;<br />DAV svn<br />SVNParentPath D:/repos<br />&lt;/Location&gt; <br /><br /><br /> 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/60'>http://nullget.sourceforge.net/?q=node/60</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

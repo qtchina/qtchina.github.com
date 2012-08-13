@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>RADIUS 协议基础</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>RADIUS 协议基础</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-08-17 21:25
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 RADIUS（Remote Authentication Dial In User Service）协议最初是由 Livingston 公司提出的，原先的目的是为拨号用户进行认证和计费。后来经过多次改进，形成了一项通用的认证计费协议。RADIUS 认证要用到基于挑战/应答（Challenge/Response）的认证方式。 <br />
 <br />
 RADIUS 是一种 C/S 结构的协议，它的客户端最初就是 NAS（Net Access Server）服务器，现在任何运行 RADIUS 客户端软件的计算机都可以成为 RADIUS 的客户端。RADIUS 协议认证机制灵活，可以采用 PAP、CHAP 或者 Unix 登录认证等多种方式。RADIUS 是一种可扩展的协议，它进行的全部工作都是基于 Attribute-Length-Value 的向量进行的。  <br />
@@ -19,5 +47,25 @@ RADIUS 协议还规定了重传机制。如果 NAS 向某个 RADIUS 服务器提
 RADIUS 协议应用范围很广，包括普通电话、上网业务计费，对 VPN 的支持可以使不同的拨入服务器的用户具有不同权限。 <br />
 <br />
 越来越多的软件开始内置RADIUS协议，以方便和各种业务系统对接，如ERP、OA、VPN等，随着这些软件对安全性要求的日益增高，一部分软硬件开始采用双因素方式进行认证，静态密码 + 动态密码（动态令牌/短信密码）形式，那些支持RADIUS协议的ERP、OA、VPN，在无需对客户端做任何修改情况下就能很好整合动态密码，增强系统身份认证安全。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/589'>http://nullget.sourceforge.net/?q=node/589</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

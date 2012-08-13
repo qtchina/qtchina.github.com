@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>一次惊险的grub2-svn安装经历</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>一次惊险的grub2-svn安装经历</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-11-27 00:53
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 起因：<br />
    gentoo linux 根文件系统从reiserfs切换到ext4, grub 0.9x系统不支持从ext4分区启动，只能升级到grub 1.9x才行，而1.9x至今没有一个稳定版本可用，大多数使用这个版本的人都在使用svn中的grub2。<br />
 <br />
@@ -92,6 +120,26 @@ menuentry "Chainload my OS" {<br />
 这里的惊险主要是，在此过程可能会修改MBR，造成这几个系统都不能启动了。所以要注意备份mbr，恢复mbr这一步。到最后其实并没有把grub2的引导信息安装到hda8引导扇区中，不过我们的目的已经达到，其实即使将grub2引导信息写入到引导扇区，也还是要拷贝出来保存到一个512字节的文件中。现在如果你想安装，可以使用dd将grub2内容拷贝到hda8的引导扇区，也是没有问题的。<br />
 <br />
 对linux的dd命令，grub引导，ntldr引导，mbr，引导扇区不熟悉的人切勿随便模仿。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/258'>http://nullget.sourceforge.net/?q=node/258</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

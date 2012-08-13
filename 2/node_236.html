@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>在密集处理过程中保持响应</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在密集处理过程中保持响应</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:07
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	当我们调用QApplication::exec()时，我们就启动了Qt的事件循环。Qt在启动的时候抛出几个显示以及绘制物件的事件。在这之后，事件循环就不停运行，不断地检查中否有什么事件发生并把这些事件分发到程序的QObject。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	当一个事件正在处理过程中，其他事件可能产生并追加到Qt的事件队列中。如果我们花费太多的时间处理特定的事件，用户界面可能会变得无法响应。例如，在程序把文件保存到磁盘上时任何窗口系统生成的事件将不能被处理，直到该文件保存完成。在保存过程中，程序不能响应窗口系统的请求来重绘它自己。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一种解决方法是使用多线程：一个用于程序的用户界面的线程和另一个用于执行保存（或者任何其他耗时的操作）的线程。这样，程序的用户界面在保存文件的过程中依旧能保持响应。我们将在第18章中看如何实现它。<br />
@@ -75,6 +103,26 @@ void Spreadsheet::timerEvent(QTimerEvent *event)<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	如果hasPendingEvents()返回true，我们停止处理并把控制返回给Qt。处理过程将在Qt已经处理所有未决事件后恢复。<br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/236'>http://nullget.sourceforge.net/?q=node/236</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

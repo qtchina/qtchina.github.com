@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>解决openssh与ssh2之间文件传输</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>解决openssh与ssh2之间文件传输</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-01-28 09:19
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 ssh2一个商业的ssh服务协议实现，其实现的scp模块与GPL的openssh的scp不兼容，在客户端的用openssh的scp向服务端为ssh2的服务器传输文件时失败，原因也在于此。<br />
 但如果scp使用sftp传输，则无论服务端是openssh还是ssh2的，都不会有问题，这引出了openssh中的scp使用sftp协议传输的补丁要求。<br />
 <br />
@@ -686,5 +714,25 @@ index cdc2708..73ed168 100644<br />
 <br />
 <br />
 [/code]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/549'>http://nullget.sourceforge.net/?q=node/549</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>使用select+blocked socketpair模拟新版本内核才支持的nonblock socketpair</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用select+blocked socketpair模拟新版本内核才支持的nonblock socketpair</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-01-12 23:41
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 话说服务器系统太老真是不爽，现在使用大多数服务器系统都是debian5，而这个系统的内核版本2.6.26，glibc 2.7，一些很方便的函数像pipe2, nonblock socketpair恰好从内核2.6.27开始支持，需要用到这个功能，又不能不兼容这要部署的服务器版本，真郁闷。<br />
 现在要实现一个线程间的非阻塞通信，本来在使用的桌面系统上找到pipe2，从man手册上看完全符合使用要求，没想到在服务器上先测试了一下，直接没有这个函数，查了一下手册，这个原来从glibc 2.9加入的。<br />
 后面又找到了socketpair函数，这个也非常方便，这回还先看了一下服务器，有这个函数，可谁知系统又没有定义一个叫SOCK_NONBLOCK的宏，无法使用它的nonblock模式。<br />
@@ -48,6 +76,26 @@ if (select(sv[0]+1, &rd_fds, 0, 0, &timev) == 1) {<br />
 <br />
 <br />
 不过现在debian6快发了，以后新安装的服务器应试能用上debian6了，这些新功能就直接可用了。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/546'>http://nullget.sourceforge.net/?q=node/546</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

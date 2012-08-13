@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>在nginx模块中读写用户cookie</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在nginx模块中读写用户cookie</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-03-15 18:02
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 nginx已经提供了存储用户cookie的机制，还提供了比较方便的读写cookie的相关函数，不过文档并不好找。<br />
 这是一点阅读nginx源代码的总结。<br />
 这里不再说明如何编写一个完整的nginx模块，只从模块的处理函数入手。<br />
@@ -68,6 +96,26 @@ static ngx_int_t ngx_http_hello_handler(ngx_http_request_t *r);<br />
    ngx_http_request_t<br />
 </code><br />
 这部分代码在nginx-0.6.xx版本上通过测试.<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/286'>http://nullget.sourceforge.net/?q=node/286</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

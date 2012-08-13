@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>使用QImage的高质量渲染</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用QImage的高质量渲染</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:37
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在绘图的时候，我们可能要面对速度和精确的平衡。例如，在X11和Max OS X上，在QWidget或者Qpixmap上绘图依赖于平台的本地绘图引擎。在X11上，要保证与X服务器的通信最少，仅有绘图命令被传递而不是实现的图象数据。这种方法的主要缺点是Qt受平台的本地支持所限制：<br />
 在X11平台上，你抗钜齿功能和小型坐标支持仅当X服务器上有Xrender 扩展才可用。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在 Mac OS X平台上，本地别名图形引擎使用与X11和Windows平台不同的绘制多边形的算法，因而也就有稍微不同的结果。<br />
@@ -57,6 +85,26 @@ painter.drawImage(0, 0, butterflyImage);<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	一个要注意的问题是QImage::CompositionMode_Xor操作使用了alpha通过。这意味着如果我们对该白色（0xFFFFFFFF）自身执行XOR操作，我们将得到一个透明色（0x00000000），而不是黑色（0xFF000000）。<br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/240'>http://nullget.sourceforge.net/?q=node/240</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

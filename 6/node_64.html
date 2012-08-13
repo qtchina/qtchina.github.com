@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>我安装Oracle时遇到的问题及处理办法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>我安装Oracle时遇到的问题及处理办法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-07-13 12:37
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <p>我安装Oracle时遇到的问题及处理办法,现在比较乱，有空整理一下子。</p><br />
 <p>error: You do not have sufficient privileges to write 没有办法<br /><br />
 &nbsp;&nbsp; 解决方法： 原因是没有权限，主要是安装程序以oracle用户身份试图新建一个目录/oradata失败，解决办法，以root用户建立该目录，然后把它属主改变oracle用户:<br /><br />
@@ -77,5 +105,25 @@ Copyright (c) 2001,2002,2003 Oracle Corporation. All Rights Reserved.</p><br />
 <p>ERROR: OPatch failed because of Inventory problem.</p><br />
 <p>Cannot set up OUI inventory session</p><br />
 <p>使用下面的带参数的命令即可：　　opatch apply -no_inventory</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/64'>http://nullget.sourceforge.net/?q=node/64</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>Boost与Qt的信号/槽及执行线程</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Boost与Qt的信号/槽及执行线程</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-09-04 21:38
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 Boost与Qt均提供了线程功能，信号/槽功能，<br />
 但Qt有自己的事件循环功能，Boost没有自带的事件循环，如需要使用的话，需要自己实现。<br />
 <br />
@@ -34,6 +62,26 @@ Boost发出的信号对应的槽也会在发出信号的线程执行。<br />
 <br />
 对第二种方法，使用IPC，两者的通信更独立，分别在两端的线程处理相应的事件循环即可。如socket，两个线程分别实现服务器端和客户端，在客户端线程连接到服务器socket端口，收发数据如正好的分进程的C/S程序。<br />
 在本应用中也就是使用的比较通用的socket，比较简单，两端只要定义一个简单的通信协议，也就实现了两个线程无相互之间的直接调用功能。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/596'>http://nullget.sourceforge.net/?q=node/596</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

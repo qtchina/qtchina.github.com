@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>绘图器变换</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>绘图器变换</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:33
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	对QPainter的默认坐标系统，点(0,0)位于绘图设备左上角，x坐标向右增长，y坐标向下增长。每个象素占据默认坐标系统中大小为1x1的区域。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	要明白的一个重要事件是一个象素的中心位于“半象素”的地方。例如，左上角象素覆盖的区域在点(0,0)和(1,1)之间，它的中心位于(0.5,0.5)。如果我们要QPainter在(100,100)处画一个象素，它将通过在两个方向平移+0.5个象素把结果进行近似取值，这将导致该点中心被画在(100.5,100.5)。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	这个区别看上去首选是理论上的，但它在实际中也非常重要。首先，平移＋0.5仅发生在抗钜齿功能被禁用时（默认是这样的），如果抗钜齿功能是激活的并且我们试图在位置为(100,100)的地方画一个黑色象素，QPainter将把(99.5, 99.5), (99.5, 100.5), (100.5, 99.5), 和 (100.5, 100.5)四个象素将被设置浅灰色，以制造一种象素正好位于四个点汇合处理的假象。如果这种影响是不期望的，我们可以通过指定半象素坐标来避免，如，(100.5, 100.5)。<br />
@@ -265,6 +293,26 @@ for (int i = 0; i <= MaxMinutes; ++i) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	另一种实现烤箱计时器的方法是我们自己计算(x,y)的的位置，使用sin()和cos()计算沿圆圈周围的位置。但然后我们仍旧需要使用一个翻译和一个旋转来在某角度绘制文本。<br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/239'>http://nullget.sourceforge.net/?q=node/239</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

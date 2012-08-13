@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>plugin.h 代码阅读笔记</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>plugin.h 代码阅读笔记</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-29 23:02
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 该文件中定义了lighttpd的模块插件结构体。此结构体大量使用了函数指针，对进一步深入了解函数指针很有现在。现在的工作是，解释结构体中每个字段的含义，用处，使用方法。搞清楚插件中几个函数的调用序列，插件中几个函数的返回值对lighttpd有什么影响。<br />
 <br />
 [code type="c"]<br />
@@ -125,5 +153,25 @@ int config_append_cond_match_buffer(connection *con, data_config *dc, buffer *bu
 #endif<br />
 <br />
 [/code]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/144'>http://nullget.sourceforge.net/?q=node/144</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

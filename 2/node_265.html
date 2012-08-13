@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>gentoo portage安装软件下载提速</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>gentoo portage安装软件下载提速</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-01-05 11:59
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 默认的使用wget的方式是根本无法满足下载速度的需求的<br />
 <br />
 之前改成用axel会出状况（明明是能下载的，但是emerge的时候却提示不行，郁闷了一个晚上）<br />
@@ -15,5 +43,25 @@
 /etc/make.conf里面:<br />
 FETCHCOMMAND="/usr/bin/aria2c -c -s 5 -d \${DISTDIR} -o \${FILE} \${URI}"<br />
 RESUMECOMMAND="${FETCHCOMMAND}"
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/265'>http://nullget.sourceforge.net/?q=node/265</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

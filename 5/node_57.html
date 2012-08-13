@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>Oracle数据字典</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Oracle数据字典</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-06-06 18:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
  <br /><br />Oracle数据字典 <br /><br />    以下表格中收集了Oracle数据字典中几乎所有的视图或别名，至于每个视图或别名的字段请用‘Describe’语句来查询。 <br />命名说明： <br />    Oracle数据字典中，对象名称多数以"USER."，"ALL."，"DBA."为前缀"USER."视图中记录通常记录执行查询的帐户所拥有的对象的信息，"ALL."视图中记录包括"USER"记录和授权至PUBLIC或用户的对象的信息，"DBA."视图包含所有数据库对象，而不管其所有者。 <br />使用举例： <br />select * from dba_data_files <br />    查询表空间的信息(当前用户必须拥有DBA角色) <br />select owner , object_name ,object_type from all_objects <br />    查询某一用户下的所有表、过程、函数等信息 <br /><br /><br />视图名                                描述 <br />  ALL_CATALOG              当前用户能访问的所有表，视图，同义词，序列 <br /> ALL_COL_COMMENTS          Comments on columns of accessible tables and views <br /> ALL_COL_GRANTS_MADE      Grants on columns for which the user is owner or grantor <br /> ALL_COL_GRANTS_RECD      Grants on columns for which the user or PUBLIC is the grantee <br /> ALL_COL_PRIVS            Grants on columns for which the user is the grantor, grantee, owner, or an <br />                        enabled role or PUBLIC is the grantee <br /> ALL_COL_PRIVS_MADE      Grants on columns for which the user is owner or grantor <br /> ALL_COL_PRIVS_RECD      Grants on columns for which the user, PUBLIC or enabled role is the grantee <br /> ALL_CONSTRAINTS          Constraint definitions on accessible tables <br /> ALL_CONS_COLUMNS        Information about accessible columns in constraint definitions <br /> ALL_DB_LINKS              Database links accessible to the user <br /> ALL_DEF_AUDIT_OPTS        Auditing options for newly created objects <br /> ALL_DEPENDENCIES          Dependencies to and from objects accessible to the user <br /> ALL_ERRORS                  Current errors on stored objects that user is allowed to create <br /> ALL_INDEXES            当前用户可访问的表的索引的描述 <br /> ALL_IND_COLUMNS        COLUMNs comprising INDEXes on accessible TABLES <br /> ALL_OBJECTS          Objects accessible to the user <br /> ALL_REFRESH            All the refresh groups that the user can touch <br /> ALL_REFRESH_CHILDREN  All the objects in refresh groups, where the user can touch the group <br /> ALL_SEQUENCES                  Description of SEQUENCEs accessible to the user <br /> ALL_SNAPSHOTS          Snapshots the user can look at <br /> ALL_SOURCE              Current source on stored objects that user is allowed to create <br /> ALL_SYNONYMS          All synonyms accessible to the user <br /> ALL_TABLES        Description of tables accessible to the user <br /> ALL_TAB_COLUMNS        Columns of all tables, views and clusters <br /> ALL_TAB_COMMENTS        Comments on tables and views accessible to the user <br /> ALL_TAB_GRANTS_MADE        User's grants and grants on user's objects <br /> ALL_TAB_GRANTS_RECD        Grants on objects for which the user or PUBLIC is the grantee <br /> ALL_TAB_PRIVS        Grants on objects for which the user is the grantor, grantee, owner, or an <br />                     enabled role or PUBLIC is the grantee <br /> ALL_TAB_PRIVS_MADE  User's grants and grants on user's objects <br /> ALL_TAB_PRIVS_RECD    Grants on objects for which the user, PUBLIC or enabled role is the grantee <br /> ALL_TRIGGERS        Triggers accessible to the current user <br /> ALL_TRIGGER_COLS          Column usage in user's triggers or in triggers on user's tables <br /> ALL_USERS            Information about all users of the database <br /> ALL_VIEWS            Text of views accessible to the user <br /> USER_AUDIT_CONNECT  Audit trail entries for user logons/logoffs <br /> USER_AUDIT_OBJECT    Audit trail records for statements concerning objects, specifically: table, <br />                      cluster, view, index, sequence, [public] database link, [public] synonym, <br />                     procedure, trigger, rollback segment, tablespace, role, user <br /> USER_AUDIT_SESSION 　 <br /> USER_AUDIT_STATEMENT  Audit trail records concerning grant, revoke, audit, noaudit and alter <br />                       system <br /> USER_AUDIT_TRAIL          Audit trail entries relevant to the user <br /> USER_CATALOG              Tables, Views, Synonyms and Sequences owned by the user <br /> USER_CLUSTERS              Descriptions of user's own clusters <br /> USER_CLU_COLUMNS              Mapping of table columns to cluster columns <br /> USER_COL_COMMENTS          Comments on columns of user's tables and views <br /> USER_COL_GRANTS            Grants on columns for which the user is the owner, grantor or grantee <br /> USER_COL_GRANTS_MADE    All grants on columns of objects owned by the user <br /> USER_COL_GRANTS_RECD    Grants on columns for which the user is the grantee <br /> USER_COL_PRIVS      Grants on columns for which the user is the owner, grantor or grantee <br /> USER_COL_PRIVS_MADE    All grants on columns of objects owned by the user <br /> USER_COL_PRIVS_RECD    Grants on columns for which the user is the grantee <br /> USER_CONSTRAINTS    Constraint definitions on user's own tables <br /> USER_CONS_COLUMNS    Information about accessible columns in constraint definitions <br /> USER_CROSS_REFS    Cross references for user's views and synonyms <br /> USER_DB_LINKS      Database links owned by the user <br /> USER_DEPENDENCIES    Dependencies to and from a users objects <br /> USER_ERRORS        Current errors on stored objects owned by the user <br /> USER_EXTENTS      Extents comprising segments owned by the user <br /> USER_FREE_SPACE    Free extents in tablespaces accessible to the user <br /> USER_INDEXES        Description of the user's own indexes <br /> USER_IND_COLUMNS    COLUMNs    comprising user's INDEXes or on user's TABLES <br /> USER_JOBS          All jobs owned by this user <br /> USER_OBJECTS          Objects owned by the user <br /> USER_OBJECT_SIZE              Sizes, in bytes, of various pl/sql objects <br /> USER_OBJ_AUDIT_OPTS            Auditing options for user's own tables and views <br /> USER_REFRESH                  All the refresh groups <br /> USER_REFRESH_CHILDREN            All the objects in refresh groups, where the user owns the <br />                         refresh group <br /> USER_RESOURCE_LIMITS          Display resource limit of the user <br /> USER_ROLE_PRIVS          Roles granted to current user <br /> USER_SEGMENTS          Storage allocated for all database segments <br /> USER_SEQUENCES          Description of the user's own SEQUENCEs <br /> USER_SNAPSHOTS          Snapshots the user can look at <br /> USER_SNAPSHOT_LOGS          All snapshot logs owned by the user <br /> USER_SOURCE          Source of stored objects accessible to the user <br /> USER_SYNONYMS          The user's private synonyms <br /> USER_SYS_PRIVS          System privileges granted to current user <br /> USER_TABLES          Description of the user's own tables <br /> USER_TABLESPACES          Description of accessible tablespaces <br /> USER_TAB_AUDIT_OPTS          Auditing options for user's own tables and views <br /> USER_TAB_COLUMNS          Columns of user's tables, views and clusters <br /> USER_TAB_COMMENTS          Comments on the tables and views owned by the user <br /> USER_TAB_GRANTS          Grants on objects for which the user is the owner, grantor or grantee <br /> USER_TAB_GRANTS_MADE          All grants on objects owned by the user <br /> USER_TAB_GRANTS_RECD          Grants on objects for which the user is the grantee <br /> USER_TAB_PRIVS          Grants on objects for which the user is the owner, grantor or grantee <br /> USER_TAB_PRIVS_MADE          All grants on objects owned by the user <br /> USER_TAB_PRIVS_RECD          Grants on objects for which the user is the grantee <br /> USER_TRIGGERS          Triggers owned by the user <br /> USER_TRIGGER_COLS          Column usage in user's triggers <br /> USER_TS_QUOTAS          Tablespace quotas for the user <br /> USER_USERS          Information about the current user <br /> USER_VIEWS          Text of views owned by the user <br /> AUDIT_ACTIONS          Description table for audit trail action type codes. Maps action type <br />                     numbers to action type names <br /> COLUMN_PRIVILEGES          Grants on columns for which the user is the grantor, grantee, owner, or <br />                     an enabled role or PUBLIC is the grantee <br /> DICTIONARY          Description of data dictionary tables and views <br /> DICT_COLUMNS          Description of columns in data dictionary tables and views <br /> DUAL 　 <br /> GLOBAL_NAME              global database name <br /> INDEX_HISTOGRAM          statistics on keys with repeat count <br /> INDEX_STATS            statistics on the b-tree <br /> RESOURCE_COST          Cost for each resource <br /> ROLE_ROLE_PRIVS          Roles which are granted to roles <br /> ROLE_SYS_PRIVS          System privileges granted to roles <br /> ROLE_TAB_PRIVS          Table privileges granted to roles <br /> SESSION_PRIVS          Privileges which the user currently has set <br /> SESSION_ROLES          Roles which the user currently has enabled. <br /> TABLE_PRIVILEGES          Grants on objects for which the user is the grantor, grantee, owner, or <br />                       an enabled role or PUBLIC is the grantee <br /> ACCESSIBLE_COLUMNS <br />          <br /><br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/57'>http://nullget.sourceforge.net/?q=node/57</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

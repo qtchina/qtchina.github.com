@@ -1,11 +1,59 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>Oracle Pro*C/C++编程入门</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Oracle Pro*C/C++编程入门</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-06-05 13:16
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <br />Oracle Pro*C/C++编程入门<br /><br />Oracle作为当今关系数据库的老大哥，自然用在许多重要项目上面。Oracle也提供了许多的开发接口，如oci,occi等，并在最近的版本中加入许多java的接口，但总观这些接口，我们可以发现几个重要的特点，OCI的使用特别麻烦，但相对来说效率非常好。OCCI是一个C++版本的OCI，使用起来稍微方便一点，对于用C++程序编写的项目本人认为是一个非常好的选择。而对Java接口来说，它的效率实在令人堪忧，没用过也就不说了。另外Oracle还提供了一种访问接口，Pro * 系列，如Pro*C/C++,Pro*COBOL,Pro*FORTRAN,Pro*Ada。它可以允许开发人员在高级语言中内嵌SQL语句和PL/SQL块，大大简化了Oracle数据库应用程序的开发。我就在使用Pro*C/C++开发一个项目的过程中得到的一点心得写下这篇文章希望对刚开始学习使用的朋友起到些许的指导作用。我使用的开发环境是Oracle 9i , Linux , g++。这篇文章假设读者已经熟悉SQL语句，PL/SQL，C/C++等基础知识。<br />Pro*C/C++是Oracle公司提供的预编译工具，它能将内嵌Pro*C/C++语法的源文件预处理成标准的C/C++源程序，然后就可以用GCC/G++工具进行编译了。开发步骤如下：<br />1． 编写预编译源程序 pro*C/C++源程序 一般以.pc作后缀名<br />2．预编译后的源程序 标准C/C++源程序<br />3．生成目标代码<br />4．生成可执行程序。<br />Pro*C/C++虽然语法与C、C++非常接近，但也有不同，以便让预编译程序能准确的进行处理。这主要包括数据类型转换，数据结构(数组，结构体，指针等)的使用，内嵌OCI函数的方法，内嵌SQL语句的方法，调用存储过程，处理数据库对象的方法，错误处理等几个部分。下面就以Linux开发平台为例依次介绍各部分内容。<br /><br />注意，我们这篇文章的主线为一个程序，随着内容的向前推进，我们的这个程序将越来越长，但它是一个完整的程序，而不是对每个知识点都写一个小不点代码段，因为这样不利于对完整程序，对全局的把握。这个程序我叫它stuproc，第一版的程序非常简单，它只有一个文件stuproc.cpp.它就是Hello Pro*C/C++!程序。<br /><br />#include &lt;iostream&gt;<br />Using namespace std;<br />Int main ( int argc, char *argv[])<br />{<br />Cout&lt;&lt;” Hello Pro*C/C++!”&lt;&lt;endl;<br />}<br /><br />同时，我们也维护一个Makefile文件，它的功能我不说相信大家也都知道吧。<br /><br />一． C/C++数据类型与Oracle数据类型的转换<br /><br />因为它们之间不是简单的一一对应的关系，因而需要熟悉它们之间的转换规则，否则在编写程序的时候可能会因为数据类型的转换而出现一些莫名其妙的问题。<br />C/C++ Oracle<br />Char char* char[n] varchar2<br />Int,int*,long,long*,short,short* integer<br />float,float*,double,double* float<br />在这里，像C/C++称为宿主语言。(SQL语句借宿在C/C++语句中。 ^_^)<br />有了这些对应规则，在使用SQL语句的时候就可将C、C++中的变量传递给Oracle了。<br />二． 内嵌SQL的使用<br />它提供一个在C/C++中直接使用sql语句的功能，用法非常简单，呆需要在常规的SQL语句前加一个EXEC SQL 即可，如EXEC SQL SELECT * FROM CAT; 。<br />首先，我们介绍一下登陆ORACLE所需要的步骤，以便能够进行我们执行SQL语句。详细的登陆将在后面给出代码及说明。<br />扩展源码文件，加入procimpl.pc,和procimpl.h文件。<br /><br /><br /><br /><br /><br /><br />未完待续...............<br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/46'>http://nullget.sourceforge.net/?q=node/46</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

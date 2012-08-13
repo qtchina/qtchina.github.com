@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>制做FreeBSD DVD的方法，适合喜欢用package安装软件的朋友</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>制做FreeBSD DVD的方法，适合喜欢用package安装软件的朋友</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2007-07-16 16:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <p>出于安装方便，自己小小研究了一下FreeBSD两张CD的结构，通常需要CD2的情况是在安装CD1上的package时需要安装CD2上的某些package才会被用到，并且安装期间很容易出现频繁的置换两张CD，现代光驱那个出舱认盘速度，还是稍微懒得恭维。所以得出自己一个简单的、为了实现方便安装package的、制作单张FreeBSD DVD的方法，现分享给大家：</p><br />
 <p>制作平台是win32 + ultraISO =&gt; freebsd6.2。其实可以用任何编辑ISO的软件，如果配合一个虚拟光驱来测试镜像，制作起来会更方便些。</p><br />
 <p>步骤：<br /><br />
@@ -18,5 +46,25 @@
 <p>Freebsd 6.2做出来的DVD文件大小，在wxp下看是1.62GB。</p><br />
 <p>附注：<br /><br />
 最好不要把CD1和CD2都复制到硬盘中搞整合，因为某些朋友会忘记光盘的启动区的设置。并且，要知道FreeBSD是区分文件大小写的，以前在做FreeBSD6.1DVD的时候，CD2中包含一个docs的文件夹，在Win32下做镜像碰到了同目录下同名但大小写不同的文件被覆盖的问题。FreeBSD的CD2中只剩下了packages的文件夹，我在制作的时候没有再碰到这个问题，但不确保CD1中会否有类似的情况，所以建议直接用ultraiso或类似软件往镜像里追加文件。</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/69'>http://nullget.sourceforge.net/?q=node/69</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

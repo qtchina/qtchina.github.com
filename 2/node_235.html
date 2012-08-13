@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>安装事件过滤器</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>安装事件过滤器</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:05
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Qt的事件模型的一个强大的功能是一个QObject实例能够在另一个QObject实例看到它的事件前监控它的事件。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们假设我们有一个给几个QLineEidt组成的CustomerInfoDialog物件，我们希望使用安全可靠键把焦点从一个移动到下一个QLineEdit上。这一非标准的行为可能对使用都经过良好训练的内部程序非常合适。一个直接的解决方法是创建QLineEdit的子类并重新实现keyPressEvent()来调用　docusNextChild()，代码如下所示：<br />
 [code type="cpp-qt"]<br />
@@ -76,6 +104,26 @@ bool CustomerInfoDialog::eventFilter(QObject *target, QEvent *event)<br />
 <img src="upfile/image/propagation.jpg" border="0"><br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/235'>http://nullget.sourceforge.net/?q=node/235</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

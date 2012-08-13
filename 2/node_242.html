@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>OpenGL图象</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>OpenGL图象</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 23:49
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OpenGL是一种渲染2D和3D图象的标准API。Qt程序可以使用QtOpenGL模块绘制3D图象，这依赖于系统的OpenGL库。这一节假设你已经熟悉了OpenGL。如果OpenGL对你来说是新的，一个开始学习的好地方是http://www.opengl.org/。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	在Qt程序中使用OpenGL绘图是非常直接的：我们必须继承QGLWidget，重新实现几个虚函数，并把程序与QtOpenGL和OpenGL库链接。因为QGLWidget继承自QWidget，我们已经知道的大多数依然可用。主要的不同是我们使用标准的OpenGL函数执行绘图而不是用QPainter。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	为了展示这是如何工作的，我们预览一下图8.17中展示的四面体程序的代码。该程序展示了一个3D的四面体，或者叫四边骰子，它的每一面都使用不同的颜色绘制。用户可以通过按下鼠标并拖动来旋转该四面体。用户也可以通过双击它并从弹出的QcolorDialog选择一种颜色设置其中一面的颜色。<br />
@@ -222,6 +250,26 @@ QT             += opengl<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	该四面体程序就完成了。为了更多关于QtOpenGL模块的信息，请看手册中QGLWidget, QGLFormat, QGLContext, QGLColormap, 和 QGLPixelBuffer的文档。<br />
 <br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/242'>http://nullget.sourceforge.net/?q=node/242</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

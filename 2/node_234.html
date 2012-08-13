@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>重新实现事件处理器</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>重新实现事件处理器</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-08-12 22:53
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在Qt中，一个事件是继承自QEvent的对象。Qt处理了100多种事件，每一种通过一个枚举值标识。例如，对于鼠标按键事件QEvent::type()返回QEvent::MouseButtonPress。<br />
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;许多事件类型需要比存储在普通QEvent对象中更多的信息。例如，鼠标事件需要存储是哪个按键触发的事件，以及在事件发现时鼠标的位置在哪。这些附加的信息被存储在专门的QEvent的子类中，如 QMouseEvent。<br />
@@ -176,6 +204,26 @@ void Ticker::hideEvent(QHideEvent * /* event */)<br />
 [/code]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	hideEvent()函数调用QObject::killTimer()停止一个计时器。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	计时器时间属于底层的，因此如果我们需要多个计时器时　，保存并跟踪所有的计时器ID是非常麻烦的。在这种情况下，通过是简单地为每个计时器创建一个QTimer对象。QTimer在每时间　间隔内都会发射timeout()信号。而且它还提供了一个方便的单次为计时接口（计时器仅超时一次）。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/234'>http://nullget.sourceforge.net/?q=node/234</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

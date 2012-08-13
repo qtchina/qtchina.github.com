@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>lighttpd 模块中的函数调用顺序</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>lighttpd 模块中的函数调用顺序</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-28 20:21
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 在lighttpd启动的时候运行下面三个函数调用：<br />
 mod staffft plugin inited mod_stat_plug_init<br />
 mod_stat.c 73 call order mod_stat_init<br />
@@ -31,6 +59,26 @@ mod_stat.c 73 call order mod_stat_init<br />
 其中有几点不太明白的：<br />
 第一，有几个模块函数没有调用：mod_stat_connection_close , mod_stat_subrequest_start<br />
 第二，为什么有这么多的mod_stat_connedction_reset 调用。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/147'>http://nullget.sourceforge.net/?q=node/147</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

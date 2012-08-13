@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>生产者/消费者模型的特化与无锁ring buffer的讨论</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>生产者/消费者模型的特化与无锁ring buffer的讨论</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-03-24 05:28
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 生产者/消费者是计算机程序中常用多线程算法，其功能是借助多线程同步并行计算快速实现数据处理，但一般情况下，需要使用锁机制控制多线程之间的同步，锁机制有时候也是效率问题的原因。<br />
 那么，能否使用无锁多线程并行计算呢？答案其实也不绝对，只是在某些场景可以。<br />
 对产生者/消费者模型再进行细分，<br />
@@ -14,6 +42,26 @@
 × 多生产者/单消费者<br />
 × 多生产者/多消费者<br />
 <br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/560'>http://nullget.sourceforge.net/?q=node/560</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>第一章 开始（创建连接）</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>第一章 开始（创建连接）</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-29 22:22
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <h3 style="margin: 12pt 0cm 3pt; text-indent: 0cm; line-height: 150%; tab-stops: 0cm"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">创建连接</span></h3><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">第二个例子将向你展示怎样来回应用户的动作。这个应用程序包含了一个用户可以通过点击它来结束该应用程序的按钮。程序的源代码和上一个</span><span lang="EN-US"> Hello </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">实例的源代码类似，除了我们用一个</span> <tt><span lang="EN-US">QPushButton</span></tt><span lang="EN-US"> </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">代替</span> <tt><span lang="EN-US">QLabel</span></tt><span lang="EN-US"> </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">作为我们的主窗口物件，并且我们将连接一个用户动作（点击按钮）和一段程序代码。</span></font></font></p><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><a name="iddle1462"></a><a name="iddle1580"></a><a name="iddle2312"></a><a name="iddle4039"></a><a name="iddle4598"></a><a name="iddle4775"></a><a name="iddle5421"></a><a name="iddle5423"></a><a name="iddle6291"></a><a name="iddle6310"></a><a name="iddle6357"></a><a name="iddle6375"><span style="mso-bookmark: iddle6357"><span style="mso-bookmark: iddle6310"><span style="mso-bookmark: iddle6291"><span style="mso-bookmark: iddle5423"><span style="mso-bookmark: iddle5421"><span style="mso-bookmark: iddle4775"><span style="mso-bookmark: iddle4598"><span style="mso-bookmark: iddle4039"><span style="mso-bookmark: iddle2312"><span style="mso-bookmark: iddle1580"><span style="mso-bookmark: iddle1462"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">这个程序的源代码可以在随书赠送的</span><span lang="EN-US"> CD </span></font></font></span></span></span></span></span></span></span></span></span></span></span></a><font size="3"><font face="宋体"><span style="mso-bookmark: iddle6375"><span style="mso-bookmark: iddle6357"><span style="mso-bookmark: iddle6310"><span style="mso-bookmark: iddle6291"><span style="mso-bookmark: iddle5423"><span style="mso-bookmark: iddle5421"><span style="mso-bookmark: iddle4775"><span style="mso-bookmark: iddle4598"><span style="mso-bookmark: iddle4039"><span style="mso-bookmark: iddle2312"><span style="mso-bookmark: iddle1580"><span style="mso-bookmark: iddle1462"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">的这个文件中获得</span> </span></span></span></span></span></span></span></span></span></span></span></span><tt><span lang="EN-US">/examples/chap01/quit/quit.cpp</span></tt><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">。下面是这个文件的内容：</span></font></font></p><br />
@@ -30,5 +58,25 @@
 <pre style="line-height: 150%"><span lang="EN-US"><font face="宋体" size="3">qmake -project</font></span></pre><br />
 <pre style="line-height: 150%"><span lang="EN-US"><font face="宋体" size="3">qmake quit.pro</font></span></pre><br />
 <p class="doctext" style="margin: 14pt 0cm; text-indent: 24pt; line-height: 150%; mso-char-indent-count: 2.0"><font size="3"><font face="宋体"><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">现在编译这个应用程序，运行它。如果你点击</span><span lang="EN-US"> Quit </span><span style="font-family: 文鼎PL细上海宋Uni; mso-ascii-font-family: 宋体; mso-hansi-font-family: 宋体">按钮，程序将终止。</span></font></font></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/88'>http://nullget.sourceforge.net/?q=node/88</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

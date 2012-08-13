@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>memcached 新的CAS指令说明</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>memcached 新的CAS指令说明</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2009-08-12 21:41
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 memcache 1.4 中加了个CAS指令<br />
 cas <key> <flags> <exptime> <bytes> <cas unqiue> [noreply]\r\n<br />
 <br />
@@ -17,5 +45,25 @@ cas <key> <flags> <exptime> <bytes> <cas unqiue> [noreply]\r\n<br />
 这是一个检测并设置操作，也就是：仅在最后一次获取后没有更新的时候才能存储这个值。<br />
 <br />
 用于抢先式修改情况，如果某值已经被别人修改，则不能修改它。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/323'>http://nullget.sourceforge.net/?q=node/323</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

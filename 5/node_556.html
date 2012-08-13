@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>简洁强大的pgbouncer</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>简洁强大的pgbouncer</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-03-24 05:12
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 最近在项目上用到了postgresql数据库，并且需要的数据库连接数量相当大，需要达到1000个连接的数量级，甚至更多。如果直接在postgresql服务器上开这么多连接，会影响到它的性能吧。所以需要在应用与postgresql数据库之间添加一个代理。目前有两个比较好的代理，pgpool-2和pgbouncer，经过测试比较，发现只能pgbouncer 符合这个要求：能够模拟扩大数据库的最大连接数，如，pgsql开最大连接数为100,而pgbouncer开最大连接数为1000，那么在应用程序端看来，数据库提供了一个1000连接的功能。实际上，pgbouncer的1000个连接中，有些是共享pgsql连接的。<br />
 <br />
 安装pgbouncer非常简单，<br />
@@ -27,5 +55,25 @@ make && make install<br />
 通过使用pgbouncer，还获得了一项功能，可屏蔽主库上的某些数据库，通过pgbouncer的连接只能访问某些库，对数据库的安全有所帮助。pgbouncer使用的用户认证机制相对于postgresql独立，也是这个组件的一大特点，具有非常大的灵活性，其功能是连接pgbouncer本身也需要认证，如果用户有什么不良使用行为，在这一步就能有效控制，不至于马上把攻击传递给后端数据库。<br />
 <br />
  参考：http://pgbouncer.projects.postgresql.org/doc/config.html
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/556'>http://nullget.sourceforge.net/?q=node/556</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>

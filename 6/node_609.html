@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>LRU的改进算法LIRS</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>LRU的改进算法LIRS</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2011-11-18 10:51
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 LRU（Least Recent Used）是我们在cache替换算法中最普遍使用的算法，在缓存块已满，而需要缓存新的数据块的时候，这时需要从缓存中找到一个“没有价值”的块用新的数据块去替换它。<br />
 <br />
 LRU的特点是简洁高效，但是缺点是LRU的缺点是不能对weak locality的数据进行缓存。<br />
@@ -37,6 +65,26 @@ LIRS算法实现：<br />
 当用户访问未命中，分配新节点时，先检查N-1号缓冲区是否能分配新节点，若不能则依次向前检查。若分配了新节点，则直接加入相应缓冲区的尾部，否则就从0级缓冲区头部摘下一个节点来，更新节点信息后加入0级缓冲区尾部。<br />
 当用户访问命中时，则将x级的节点提升到x+1级，并加到缓冲区尾部，x+1级的头部节点，则被移到x级缓冲区的尾部<br />
 同样的，增加了Dictionary<ID,数据节点>字典，提高查找节点的效率。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/609'>http://nullget.sourceforge.net/?q=node/609</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
 
 </body>
 </html>

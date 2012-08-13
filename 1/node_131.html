@@ -1,11 +1,39 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset='utf8'>
 <title>彻底关闭FreeBSD中的sendmail服务</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
 </head>
 <body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>彻底关闭FreeBSD中的sendmail服务</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2008-05-02 13:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
 <p>FreeBSD系统中的sendmail一直默认启动，而且不容易关闭。</p><br />
 <p>必须修改配置文件rc.conf，并一关闭几个相关进程才行。</p><br />
 <p>&nbsp;</p><br />
@@ -16,5 +44,25 @@ sendmail_outbound_enable=NO<br /><br />
 sendmail_msp_queue_enable=NO<br /><br />
 &nbsp;</p><br />
 <p>重新启动系统。sendmail进程不再启动了。</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/131'>http://nullget.sourceforge.net/?q=node/131</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
 </body>
 </html>
