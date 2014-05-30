@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>关于Qt的应用与定制</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>关于Qt的应用与定制</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-10-06 20:42
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+很长时间没有写Qt的代码了，这几天又写了一些Qt的代码，<br />
+对Qt的的应用，特别是界面部分类的应用，有了一点新的认识。<br />
+Qt开发库已经非常成熟强大，不过，对于像软件的写界面部分，<br />
+自带的都是比较中规中矩的外观形状。<br />
+即使Qt的定制性非常强，如果希望能调整成需要的效果，<br />
+还是需要做些扩展功能。<br />
+现在开始使用Qt5开发应用，也就使用了Qt5的一些特性，<br />
+但本次讲解不以这个Qt5的特性为主，还是以基础的通过窗口类为主。<br />
+在本次编写代码过程中，总结出了几个比较实用的窗口定制成果，<br />
+1、配置对话框的列表栏<br />
+     这个涉及到QListWidget类，其实是想把列表栏的图标选项调整高些，<br />
+     而不是默认的QListWidget行距和默认选中模式。<br />
+     其实这个很简单， 只需要几行代码，<br />
+    // 设置listWidget中的项目选中区域<br />
+    this->uiwin.listWidget->setIconSize(QSize(32,32));<br />
+    <br />
+    QListWidgetItem *item = NULL;<br />
+    for (int i = this->uiwin.listWidget->count() - 1; i >= 0; --i) {<br />
+        item = this->uiwin.listWidget->item(i);<br />
+        item->setSizeHint(QSize(120, 50));<br />
+    }<br />
+      本人编写桌面程序比较少，对这些界面的调整不太熟悉，这也是经过多次测试调整才得出来的。<br />
+2、Qt的stylesheet<br />
+     这几天遇到的问题，希望扩展QStatusBar类，支持在状态栏上放一些信息与控制组件。<br />
+     扩展出来一个新的XStatusBar，使用QStatus类的方法添加像按钮类组件，<br />
+     但添加后这些新组件外观都显示了边框，按照当前设计习惯，尽量好扁平化。<br />
+     查找Qt手册，希望能有相应的方法去掉新加组件的边框，即没有找到。<br />
+     最后使用了Qt的stylesheet，一行代码解决。<br />
+     在扩展的XStatusBar类添加一行初始化代码，<br />
+      this->setStyleSheet(QStringLiteral("QStatusBar::item {border: none;}"));<br />
+     <br />
+     如果希望能简单的调整出希望的界面外观，还需要学习下Qt的stylesheet啊。<br />
+     当然，深度定制，可能还需要编写大量的代码。<br />
+Qt已经进入到V5了，有时间多了解了解。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/769'>http://nullget.sourceforge.net/?q=node/769</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

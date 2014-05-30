@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>drupal的中文搜索模块向7.x迁移</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>drupal的中文搜索模块向7.x迁移</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-09-06 17:36
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+本站CMS升级到drupal-7.x，不过中文搜索模块(Chinese Splitter)没有赶上来，不能直接使用。<br />
+<br />
+<br />
+今天抽了点时间试着升级中文搜索模块，由于搜索模块用到的drupal依赖功能比较少，<br />
+<br />
+很容易从原来的6.x版本升级到了7.x版本。<br />
+<br />
+<br />
+升级修改步骤：<br />
+<br />
+<br />
+×） 修改版本信息<br />
+<br />
+     修改csplitter/csplitter.module中的版本号为7.x<br />
+<br />
+×）模块放在module/csplitter目录<br />
+<br />
+×）在drupal后台安装模块，即可使用。<br />
+<br />
+<br />
+遇到的程序BUG与修正:<br />
+<br />
+×） 是因为单词拼写错误<br />
+<br />
+Notice: Use of undefined constant fasle - assumed 'fasle' in _csplitter_splite_2() (line 349 of /home/gzleo/workspace/cms-drupal/modules/csplitter/csplitter.module).<br />
+<br />
+×） $outstr 变量没有初始化，在478行if ($len > 1)语句之前，变量使用前初始化一下，    $outstr = ' ';<br />
+<br />
+      注意，初始化值为空格，而不是空值。<br />
+<br />
+Notice: Uninitialized string offset: 0 in _csplitter_splite_2() (line 493 of /home/gzleo/workspace/cms-drupal/modules/csplitter/csplitter.module).<br />
+<br />
+×）英文词好像不能搜索了。<br />
+<br />
+    修改后台中的最小configure->Search and metadata->Search settings->"Minimum word length to index"从默认的2改为1,可以搜索英文单词和单个汉字了。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/678'>http://nullget.sourceforge.net/?q=node/678</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>做了个php-hyperdex扩展</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>做了个php-hyperdex扩展</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-26 22:00
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+前几天使用 hyperdex的golang客户端api编写导数据程序，<br />
+<br />
+发现golang API还有一个内存泄漏的BUG，导致长时间导入数据时内存占用非常大。<br />
+<br />
+一般导入100w条后，4G内存的机器已经受不了，但准备导入的数据大概2000w或者更多。<br />
+<br />
+这几天花了点时间，找了个hyperdex把 php 语言API扩展，<br />
+<br />
+发现其已经是很早之前的，已经与现在的hyperdex版本不兼容了。<br />
+<br />
+在此基础出，迁移到了与最新版本的hyperdex兼容，并且添加了HyperdexAdmin相关的功能。<br />
+<br />
+有兴趣的可以看看， 代码在github上， https://github.com/kitech/php-hyperdex<br />
+<br />
+现的状态是基本功能完成可用。<br />
+<br />
+后续的改进包括，<br />
+<br />
+1、支持超时参数。。<br />
+<br />
+2、支持hyperdex官方的C API中的异步执行功能。<br />
+<br />
+3、把代码改到使用hyperdex的C++ API，转为C API是hyperdex在C++ API基础上封装的。<br />
+<br />
+4、admin管理API异常/错误处理完善。<br />
+<br />
+5、做一个web版本的hyperdex管理系统。<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/782'>http://nullget.sourceforge.net/?q=node/782</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

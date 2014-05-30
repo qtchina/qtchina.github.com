@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>初步尝试opencv图像识别训练</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>初步尝试opencv图像识别训练</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-18 16:38
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在了解了一些关于opencv的功能与基本用法之后，开学尝试使用opencv做一些实际应用。<br />
+本次选定一个功能应用，识别验证码功能。<br />
+验证码用于网站的防伪，一般为大小写字母与数字，4-6个字符不等。<br />
+<br />
+使用opencv识别，分解为以下步骤，<br />
+验证码图片的切割，把图片中的几个字符拆开成单独的字符图片。<br />
+使用拆开的字符图片执行opencv训练，<br />
+使用训练好的分类器文件，识别目标中的字符。<br />
+<br />
+对于图片验证码的切割，又分为下面几个步骤，<br />
+图像去噪，去除图像的背景，混淆随机点/线<br />
+图像的加强或者平滑处理，让其中的字符更清楚<br />
+根据字符轮廓，切割出字符图片。<br />
+<br />
+这一步中，对于稍微复杂的验证码，也非常难以做到，<br />
+例如在去噪的时候，会把字符线条也去掉了部分，对于比较细的字体，可能就被过滤掉了。<br />
+对于有比较粗的混淆线时，这种线一般与字符交叉重叠，<br />
+在计算字符的轮廓时，会出现两个字符粘连一在起的情况。<br />
+图片加强时，也会加强没有去掉的混淆点/线，影响识别字符轮廓<br />
+还有些字符距离可能由于倾斜或者字体大小不同而靠的非常近，<br />
+<br />
+这种情况也会出现字符识别与切割时的粘连问题。<br />
+图像的识别训练，分为两步，<br />
+第一步，创建样例与样例文件<br />
+第二步，使用前一步创建的样例文件执行训练，生成训练分类文件<br />
+<br />
+使用opencv_createsamples命令生成样例文件，<br />
+首先，创建两个目录，pos与neg，分别存放正样本图片与负样本图片，<br />
+推荐数量在1000:500的数量级。<br />
+<br />
+然后，分别在pos与neg文件，生成样本列表文件，<br />
+如在pos目录生成pos.txt，格式为，<br />
+       文件名 1  0  0  样本图宽度  样本图高度<br />
+生成命令，ls | awk '{print $1 " 1 0 0 30 30"}' > pos.txt<br />
+同样，在neg目录生成neg.txt，文件格式只有一列文件名：<br />
+       文件名<br />
+然后，在pos上级目录，执行创建样例信息文件：<br />
+opencv_createsamples -info pos/pos.txt -vec verify.vec -num $pos_num -bg neg/neg.txt<br />
+<br />
+如果无误，会生成verify.vec文件，样例数量在1000左右，这个文件大概在100K。<br />
+生成了verify.vec样本信息文件后，使用下面的命令开始训练，<br />
+ opencv_traincascade -data trdata -vec verify.vec -bg neg/neg.txt -numStages 16 -numPos $rpos_num -numNeg $rneg_num -minHitRate 0.999<br />
+其中，训练结果存放在trdata目录，<br />
+-numStages 16 为重复训练的步骤数，可调节0-20之间。<br />
+一般来说，需要根据训练的结果调整这个值，一般训练到输出结果为0.0002-0.0004这个范围就够了，<br />
+再继续训练的话也是过度训练了，如训练到结果为1.2-E10这种类似的结果说明已经过度，<br />
+需要调整这个numStages参数的值再执行训练。<br />
+minHitRate参数表示训练的精确度，默认为0.95，这里比默认的还要高些。<br />
+<br />
+训练结果：<br />
+[gzleo@myubuntu imgtrain]$ ls trdata/ -lh<br />
+总用量 88K<br />
+-rw-r--r-- 1 gzleo wheel  18K 8月  11 20:28 cascade.xml<br />
+-rw-r--r-- 1 gzleo wheel  594 8月  11 20:25 params.xml<br />
+-rw-r--r-- 1 gzleo wheel  566 8月  11 20:25 stage0.xml<br />
+-rw-r--r-- 1 gzleo wheel  749 8月  11 20:27 stage10.xml<br />
+-rw-r--r-- 1 gzleo wheel  565 8月  11 20:27 stage11.xml<br />
+-rw-r--r-- 1 gzleo wheel  544 8月  11 20:28 stage12.xml<br />
+-rw-r--r-- 1 gzleo wheel  690 8月  11 20:28 stage13.xml<br />
+-rw-r--r-- 1 gzleo wheel 1.1K 8月  11 20:28 stage14.xml<br />
+-rw-r--r-- 1 gzleo wheel  926 8月  11 20:28 stage15.xml<br />
+-rw-r--r-- 1 gzleo wheel  562 8月  11 20:26 stage1.xml<br />
+-rw-r--r-- 1 gzleo wheel  563 8月  11 20:26 stage2.xml<br />
+-rw-r--r-- 1 gzleo wheel  541 8月  11 20:26 stage3.xml<br />
+-rw-r--r-- 1 gzleo wheel  746 8月  11 20:26 stage4.xml<br />
+-rw-r--r-- 1 gzleo wheel  566 8月  11 20:26 stage5.xml<br />
+-rw-r--r-- 1 gzleo wheel  923 8月  11 20:27 stage6.xml<br />
+-rw-r--r-- 1 gzleo wheel  740 8月  11 20:27 stage7.xml<br />
+-rw-r--r-- 1 gzleo wheel  564 8月  11 20:27 stage8.xml<br />
+-rw-r--r-- 1 gzleo wheel  924 8月  11 20:27 stage9.xml、<br />
+最终结果为trdata/cascade.xml文件，这个文件可用于下一步的图片识别中。<br />
+这次训练，得到的cascade.xml文件大小为18K，算是非常小的，所以准确度上不够。<br />
+训练正常的情况下，使用比较好的正样本与负样本，可得到大概在500K-1M-2M的分类文件，<br />
+识别效果才比较好。<br />
+<br />
+不过，一个正常的训练过程可能会比较耗时，有可能用10几个小时才会训练完成。<br />
+所以，训练慢时要有耐心。<br />
+<br />
+另外，如果训练时给的负样本数太少，有可能死循环在stage1的训练上，这时需要适当调整负样本个数。<br />
+<br />
+本次训练即使使用的非常小的图片和比较小的图片数量，一次也需要耗时10-20分钟。<br />
+训练结果出来之后，使用CvHaarClassifierCascade类做了识别测试。<br />
+<br />
+本次尝试结果并不太理想，识别率不足50%，只是了解了下opencv图像识别的处理流程。<br />
+<br />
+不过从中可以看出来，好的正负样本图像对训练过程与识别结果的准确度影响至关重要。<br />
+<br />
+从这个经验来看，选择这个试验主题开始opencv训练分类也许不太好。<br />
+下次准备测试下图像的分类训练，如能识别出自然景观照片，人物照片，城市外景照片，<br />
+可能会比直接处理验证码识别这块效果要好些。<br />
+<br />
+参考资料：<br />
+www.opencv.org<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/758'>http://nullget.sourceforge.net/?q=node/758</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

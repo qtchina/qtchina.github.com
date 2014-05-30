@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>gcc与clang内置原子操作函数研究</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>gcc与clang内置原子操作函数研究</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-02-24 19:26
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+原子操作在实现多线程并发操作时非常重要的功能。<br />
+<br />
+在现有的线程库中，一般通过提供锁的功能实现线程的互斥与同步。<br />
+<br />
+但是锁的粒度比较大，在性能要求非常高的软件中可能会受限制。<br />
+<br />
+原子操作函数则能在最小粒度上实现并发的互斥与同步，很多的无锁数据结构(lock-free data structure)库皆使用这些函数实现的。<br />
+<br />
+<br />
+<br />
+不同的编译器提供的原子操作函数不相同，但总结下来，也就几种模式，包括：<br />
+<br />
+*）原子加、减并返回操作结果，或者返回当前值后再加、减<br />
+<br />
+*）原子与、或、异或并返回操作结果，或者返回当前值后再与、或、异或<br />
+<br />
+*) test and set类功能，测试标识并设置相应的值<br />
+<br />
+*) exchange/swap类功能，比较并交换值<br />
+<br />
+*)<br />
+<br />
+目前最新版本的gcc、clang的原子操作实现均符合c++11定义的原子操作6种内存模型：<br />
+<br />
+__ATOMIC_RELAXED No barriers or synchronization. <br />
+__ATOMIC_CONSUME Data dependency only for both barrier and synchronization with another thread. <br />
+__ATOMIC_ACQUIRE Barrier to hoisting of code and synchronizes with release (or stronger) semantic stores from another thread. <br />
+__ATOMIC_RELEASE Barrier to sinking of code and synchronizes with acquire (or stronger) semantic loads from another thread. <br />
+__ATOMIC_ACQ_REL Full barrier in both directions and synchronizes with acquire loads and release stores in another thread. <br />
+__ATOMIC_SEQ_CST Full barrier in both directions and synchronizes with acquire loads and release stores in all threads. <br />
+详见 http://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync<br />
+<br />
+<br />
+<br />
+gcc的内置原子函数：<br />
+<br />
+定义见 http://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html<br />
+<br />
+定义列表:<br />
+<br />
+— Built-in Function: type __atomic_load_n (type *ptr, int memmodel)<br />
+— Built-in Function: void __atomic_load (type *ptr, type *ret, int memmodel)<br />
+— Built-in Function: void __atomic_store_n (type *ptr, type val, int memmodel)<br />
+— Built-in Function: void __atomic_store (type *ptr, type *val, int memmodel)<br />
+— Built-in Function: type __atomic_exchange_n (type *ptr, type val, int memmodel)<br />
+— Built-in Function: void __atomic_exchange (type *ptr, type *val, type *ret, int memmodel)<br />
+— Built-in Function: bool __atomic_compare_exchange_n (type *ptr, type *expected, type desired, bool weak, int success_memmodel, int failure_memmodel)<br />
+— Built-in Function: bool __atomic_compare_exchange (type *ptr, type *expected, type *desired, bool <br />
+<br />
+— Built-in Function: type __atomic_add_fetch (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_sub_fetch (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_and_fetch (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_xor_fetch (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_or_fetch (type *ptr, type val, int memmodel)<br />
+ — Built-in Function: type __atomic_nand_fetch (type *ptr, type val, int memmodel)<br />
+<br />
+— Built-in Function: type __atomic_fetch_add (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_fetch_sub (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_fetch_and (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_fetch_xor (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_fetch_or (type *ptr, type val, int memmodel)<br />
+— Built-in Function: type __atomic_fetch_nand (type *ptr, type val, int memmodel)<br />
+— Built-in Function: bool __atomic_test_and_set (void *ptr, int memmodel)<br />
+— Built-in Function: void __atomic_clear (bool *ptr, int memmodel)<br />
+— Built-in Function: void __atomic_thread_fence (int memmodel)<br />
+— Built-in Function: void __atomic_signal_fence (int memmodel)<br />
+— Built-in Function: bool __atomic_always_lock_free (size_t size, void *ptr)<br />
+— Built-in Function: bool __atomic_is_lock_free (size_t size, void *ptr)<br />
+<br />
+<br />
+<br />
+clang的内置原子函数：<br />
+<br />
+定义见 /usr/include/clang/Basic/Builtins.def<br />
+<br />
+ 另外，c11标准与c++11标准也定义了原子操作的相关规范，<br />
+<br />
+clang与gcc均实现了std::atomic模板类，实现更高级的原子操作实现,在实例用上相同的。<br />
+<br />
+但两者实现的_Atomic和_Atomic_word不相同，使用的时候需要注意。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/716'>http://nullget.sourceforge.net/?q=node/716</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

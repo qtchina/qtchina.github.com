@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>多台linux的X之间共享键盘和鼠标</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>多台linux的X之间共享键盘和鼠标</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-15 18:56
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+多台linux的X之间共享键盘和鼠标，对提高工作效率比较重要。<br />
+在linux这个开放的系统上，这个功能也比较容易实现。<br />
+今天就介绍一种synergy的工具，很容易的实现这种功能。<br />
+<br />
+synergy是客户端-服务器模式的应用，服务器端的键盘和鼠标为控制，<br />
+鼠标可以移动到客户端机器，键盘输入会在客户端输入。<br />
+客户端的键盘和鼠标仍旧只能在客户端使用，而不能过渡到其他的机器上。<br />
+<br />
+先看服务器端，启动命令，<br />
+/usr/bin/synergys -f --no-tray --debug NOTE --name myarchbox -c /path/to/synergy_server.conf --address :24800<br />
+<br />
+-f 参数表示不进入后台执行，方便查看程序输出。<br />
+-name 表示服务器端的名字<br />
+-c表示服务器端的配置信息，<br />
+--address 表示服务器网络监听端口<br />
+<br />
+synergy_server.conf:<br />
+section: screens<br />
+        myubuntu:<br />
+                halfDuplexCapsLock = false<br />
+                halfDuplexNumLock = false<br />
+                halfDuplexScrollLock = false<br />
+                xtestIsXineramaUnaware = false<br />
+                switchCorners = none <br />
+                switchCornerSize = 0<br />
+        myarchbox:<br />
+                halfDuplexCapsLock = false<br />
+                halfDuplexNumLock = false<br />
+                halfDuplexScrollLock = false<br />
+                xtestIsXineramaUnaware = false<br />
+                switchCorners = none <br />
+                switchCornerSize = 0<br />
+end<br />
+<br />
+<br />
+section: aliases<br />
+        myubuntu:<br />
+                ubuntu<br />
+end<br />
+<br />
+<br />
+section: links<br />
+        myubuntu:<br />
+                right = myarchbox<br />
+        myarchbox:<br />
+                left = myubuntu<br />
+end<br />
+<br />
+<br />
+section: options<br />
+        relativeMouseMoves = false<br />
+        screenSaverSync = true<br />
+        win32KeepForeground = false<br />
+        switchCorners = none <br />
+        switchCornerSize = 0<br />
+end<br />
+<br />
+这个配置文件由qsynergy程序自动生成，在对配置不太熟悉的时候，<br />
+可以使用这个程序生成，参数自动生成的配置文件基础上修改，并在命令行使用。<br />
+服务器端配置参数，主要来控制有效的客户端名字，客户端在控制中的位置关系。<br />
+<br />
+<br />
+客户端启动：<br />
+synergyc --display :0.0 -f -n myubuntu 10.207.27.143:24800<br />
+<br />
+只需要指定服务器的监听服务ip:port即可。<br />
+现在可以应用了。<br />
+<br />
+注意，<br />
+在之前试用的时候，经常遇到服务器端不接受客户端的连接，提示名字无法识别，<br />
+这是由于在服务器端没有配置这个名字，所以不接受连接。<br />
+<br />
+两台linux的X之间有可能共享clipboard啊，synergy, xclip, xsel相关。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/735'>http://nullget.sourceforge.net/?q=node/735</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>对stun/turn协议的认识与理解过程笔记</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>对stun/turn协议的认识与理解过程笔记</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-18 12:46
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div id="yass_top_edge_dummy" style="width:1px;height:1px;padding:0px;margin:-6px 0px 0px;border-width:0px;display:block;"></div><div id="yass_top_edge" style="background-position:center bottom;padding:0px;margin:0px;border-width:0px;height:0px;display:block;width:925px;"></div><div id="yass_top_edge_padding" style="padding:0px 0px 5px;margin:0px;border-width:0px;height:0px;display:block;"></div><div><div>stun协议的全称是 <span class="st"><em>Session Traversal Utilities for NAT</em>，NAT会话传输应用程序</span>。<br> <div>turn协议的全称是 <span style="font-family:宋体;"></span><span style="font-family:'Arial','sans-serif';" lang="FR">Traversal Using Relays around NAT</span><span style="font-family:宋体;"></span>，<span style="font-family:宋体;">使用中继穿透</span><span style="font-family:'Arial','sans-serif';" lang="FR">NAT</span>.<br> <div><br> <div>这里提到了NAT，有必要先介绍下NAT相关的信息。<br> <div>其实这两个协议是转为有了NAT才出现的协议，也就是为了解决NAT带来的问题的方案。<br> <div><div><br> <div>NAT又是什么呢？</div></div></div></div></div></div></div></div></div><div><div><div><div><div><div><div><div><div><br> <div>NAT的全称是Network Address Translate，即网络地址翻译。<br> </div></div></div><div>那么我们互联网络为什么需要NAT呢？<br> <div>是由于在现在的IPV4设计初期，并没有想到能使用的这么广泛，<br> <div>设计者以为IP从0.0.0.0-255.255.255.255这么多就足够用了。<br> <div>实际上，随着互联网的超快速的发展，这些IP地址还真就不够用了，<br> <div>于是，有人想到一个解决方案，采用分局域网的办法，有一台机器使用一个公网IP，<br> <div>在局域网内的机器使用一段不同局域网可以重复的IP段，这样，能连接到互联网上的机器数量就能远大于IP地址数量，<br> <div>而不需要每个机器都有一个公网IP地址。<br> <div><br> <div>这个IP地址不够用问题是解决了，局域网内的机器也能够访问互联网了，<br> <div>而这个解决方案的核心就在于NAT设备，把局域网内的机器的内网IP，转换为NAT设备的公网IP地址，<br> <div>再发送到互联网上，请求的响应回来之后，NAT设备再通过这个映射关系，知道把数据包返回给局域网内的哪台机器上。<br> <div><br> <div><div>现在，另一个问题来了，如果一局域网的机器想访问另一局域网的机器，<br> <div>这就难了，如何定位这台机器呢？<br> 这时就需要本文本开头提到的stun/turn两个协议了。<br> </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div><br> <div>也许本文对STUN的名称定义并不全面。<br> <div>STUN协议最初在RFC3489中定义，名称为Simple Traversal of UDP throughs NATs，即<span style="font-family:宋体;">简单的用</span><span style="font-family:'Arial','sans-serif';" lang="EN-US">UDP</span><span style="font-family:宋体;">穿透</span><span style="font-family:'Arial','sans-serif';" lang="EN-US">NAT</span>。<br> <div>而在后续的RFC5389中，名称变成了本文开头提到的名字，Session Traversal Utilities for NATs。<br> <div><div>这里有点意思的是，这两个名字的缩写相同，目的基本也相同。<br> <div>两者的区别是，RFC3489<span style="font-family:宋体;">是作为完整的</span><span style="font-family:'Arial','sans-serif';" lang="EN-US">NAT</span><span style="font-family:宋体;">穿透解决方案</span>而定义的，<br> <div>FC5389重新把STUN协议定位成为NAT穿透提供工具，并且在后者中提到了关于TCP协议的NAT穿透定义。<br> <div>从现实情况来看，RFC3489/STUN定位目标很高，却没能像预期中那样解决所有问题。<br> <div><br> <div>TURN协议定义的RFC5766中，这个协议也有点意思，它的定位是作为RFC5389的扩展，<br> <div>一种采用中继方式实现NAT穿透的方法。</div></div></div></div></div></div></div><div><br> <div><div>再往后发展，又定义了一个RFC6156，这个协议又是一个对RFC5766/TURN的扩展协议，<br> <div>全名叫，Traversal Using Relays around NAT (TURN) Extension for<br />
+	  IPv6，即TURN协议的IPV6扩展。<br> <div><br> <div><br> </div></div></div></div><div>接下来，通过一个实际例子对stun作更深入的体验。<br><div>我希望能做一个连接两个内网的节点的程序，被连接的这端作为服务存在，<br><div>但与其他公共服务不同的是这个服务运行在内网中，所以无法直接连接。<br><div><br><div>这其实是一个点对点的模式，所以首先想到的是用stun作打洞，让两个节点能够直接连接。<br><div>但在实际实现的过程中，通过检测发现两端都是对称型NAT，由stun提供的方式无法实现。<br><div>查找了一些开源的P2P项目，也都没有实现两端都是对称型NAT的打洞，而且在维基百科上则直接说明这种情况无法采用打洞方式实现P2P连接，必须通过中继实现。<br><div><br><div><div>看来第一步必须是考虑STUN中继的模式了。还好有个STUN服务器可用，并且支持的功能比较全面。<br><div>既然使用STUN中继，则相关的标准是定义的RFC5766中了，开始阅读标准定义并实现相应的功能代码。<br><div><br><div>这里着重说明的地方，有allocate操作，它要求不能重复allocate申请，没有释放请求协议，而在在一段时间内自动失效。<br><div>而如果希望一直使用，则需要定时使用refresh请求保持allocate的资源。<br><div><div><br><div>在成功的allocate之后，发送数据之前，需要有一个createPermission的请求，</div></div><div>这个请求目的是对通信的两端进行授权，否则中继不会转发收到的包到对端，而是丢弃。<br><div>这个授权与allocate类似，也没有释放请求协议，并且会在一段时间内自动失效。<br><div>如果希望一直使用，则需要定时再次使用相同的请求参数发送createPermission请求。<br><div>这一点很重要，在这过程没有注意到文档中的这一说明，导致程序多次测试都会在一段时间的正常连接后，<br><div>数据发送不了的情况，通过几次反复测试与阅读RFC文档才发现是这个标准没有满足的问题。<br><div><br><div>在RFC5766标准中定义的中继数据的发送有两种机制，一种是使用send和data 请求，另一种使用channelbind请求。<br><div>send/data机制中，send请求是把数据发送到STUN服务端口，并通过中继端口发送到对端。<br><div>data请求把数据直接发送到中继端口，并通过STUN服务端口发送到对端。<br></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div><div>需要注意的是，在对称型NAT的情况下，通过中继端口向对端发送数据的话，<br><div>实际需要对端先打一个到中继端口的NAT洞，并且必须保持这个NAT打洞会话不能失效。<br><div>否则无法收到STUN中继端口发送过来的数据，因为数据包已经被对称型NAT服务器给丢弃了。<br><div><div><div>data请求到中继端口的NAT会话通道，发送端也有保持这个NAT会话通道不失效的职责。<br><div><br><div>通过对这第一种机制的说明，从中了解到，由于UDP协议的无状态不可靠特点，为了保持某些会话的可用，<br><div>在实现实现功能代码的时候，需要用到大量的定时操作，像两端都需要保持NAT会话打洞的有效，<br><div><div>一端需要保持allocate资源有效，保持permission有效。<br><div>这些都是需要特别注意的实现细节，如果少了其中一个，可能会发现即使开始的时候通信开始了，<br><div>但过不多久这个通信信道就失效了，而且不容易查到问题所在。<br><div><br><div><br></div></div></div></div></div><div>资料：<br><div><div>http://tools.ietf.org/html/rfc5766<br><div><br></div></div></div></div></div></div></div></div></div><div><br></div></div></div></div></div></div><div><br></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div id="yass_bottom_edge" style="position:absolute;margin:0px;padding:0px;border-width:0px;height:0px;left:0px;top:971px;width:100%;display:block;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/808'>http://nullget.sourceforge.net/?q=node/808</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

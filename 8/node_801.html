@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>程序运行时动态修改进程名</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>程序运行时动态修改进程名</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-04-20 16:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在做平台的过程中，碰到一个可能的需要，平台服务的的进程名一般都不变的，<br />
+如果需要动态在外部监控进程的执行状态，比如程序正在执行什么功能，<br />
+也许可以通过动态修改进程的名字实现，可以把正在执行的功能做个摘要放在进程名字中。<br />
+<br />
+在linux上，有一个系统调用prctl，这是一个综合性的函数，可以实现一些进程的控制功能。<br />
+动态修改进程名的功能也就是在prctl函数。<br />
+<br />
+来看看prctl的函数原型，<br />
+<br />
+NAME<br />
+       prctl - operations on a process<br />
+<br />
+SYNOPSIS<br />
+[code type="C"]<br />
+       #include <sys/prctl.h><br />
+<br />
+       int prctl(int option, unsigned long arg2, unsigned long arg3,<br />
+                 unsigned long arg4, unsigned long arg5);<br />
+[/code]<br />
+<br />
+虽然参数比较多，也是由于这个函数包含了太多功能，这一特点与IO操作的ioctl函数非常类型。<br />
+修改进程名的话，则只使用到前两个参数：<br />
+prctl(PR_SET_NAME, (unsigned long)"newprocessname");<br />
+<br />
+注意使用prctl修改的进程名，可能会影响查看进程列表的方式。<br />
+使用ps a可以显示新的名字，而使用ps ax时却还是原来的名字。<br />
+另外，使用pstree也会显示新的名字。<br />
+<br />
+<br />
+该函数还有设置进程优级的功能，对该函数的其他功能请详细参与函数手册。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/801'>http://nullget.sourceforge.net/?q=node/801</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>konsole-4.9.2的简单功能补丁</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>konsole-4.9.2的简单功能补丁</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-10-29 13:14
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+通过使用kbookmark类的description字段存储密码（当然是明文存储的），<br />
+<br />
+在执行kbookmark中的ssh会话连接时，取出这个字码的值，<br />
+<br />
+通过系统的sshpass执行自动登陆。<br />
+<br />
+<br />
+补丁.patch<br />
+<br />
+[code type="diff"]<br />
+diff --git a/src/BookmarkHandler.cpp b/src/BookmarkHandler.cpp<br />
+index 99bf0ce..b4e6c8b 100644<br />
+--- a/src/BookmarkHandler.cpp<br />
++++ b/src/BookmarkHandler.cpp<br />
+@@ -68,9 +68,20 @@ BookmarkHandler::~BookmarkHandler()<br />
+     delete _bookmarkMenu;<br />
+ }<br />
+ <br />
++#include <QtCore><br />
+ void BookmarkHandler::openBookmark(const KBookmark& bm, Qt::MouseButtons, Qt::KeyboardModifiers)<br />
+ {<br />
+-    emit openUrl(bm.url());<br />
++    // qDebug()<<bm.description()<<bm.fullText()<<bm.text()<<bm.address() << bm.url();<br />
++<br />
++    if (bm.description().trimmed().length() > 0) {<br />
++        KUrl aurl = bm.url();<br />
++        aurl.setPassword("aaaabcd");<br />
++        aurl.setPassword(bm.description().trimmed());<br />
++        qDebug()<<aurl << aurl.password();<br />
++        emit openUrl(aurl);<br />
++    } else {<br />
++        emit openUrl(bm.url());<br />
++    }<br />
+ }<br />
+ void BookmarkHandler::openFolderinTabs(const KBookmarkGroup& group)<br />
+ {<br />
+diff --git a/src/SessionController.cpp b/src/SessionController.cpp<br />
+index ccae55f..8094f7d 100644<br />
+--- a/src/SessionController.cpp<br />
++++ b/src/SessionController.cpp<br />
+@@ -271,6 +271,8 @@ void SessionController::rename()<br />
+ <br />
+ void SessionController::openUrl(const KUrl& url)<br />
+ {<br />
++    // qDebug()<<url << url.password();<br />
++<br />
+     // handle local paths<br />
+     if (url.isLocalFile()) {<br />
+         QString path = url.toLocalFile();<br />
+@@ -281,6 +283,23 @@ void SessionController::openUrl(const KUrl& url)<br />
+         QString command = url.prettyUrl();<br />
+         if (!command.isEmpty())<br />
+             _session->emulation()->sendText(command + '\r');<br />
++    } else if (url.protocol() == "ssh" && url.password().length() > 0<br />
++               && (QFile("/usr/bin/sshpass").exists() <br />
++                   || QFile("/usr/local/bin/sshpass").exists())) {<br />
++               QString esc_passwd = url.password().replace("!", "\\!").replace("$", "\\$");<br />
++        QString sshCommand = "sshpass -p " + esc_passwd + " ssh -CXY ";<br />
++<br />
++        if (url.port() > -1) {<br />
++            sshCommand += QString("-p %1 ").arg(url.port());<br />
++        }<br />
++        if (url.hasUser()) {<br />
++            sshCommand += (url.user() + '@');<br />
++        }<br />
++        if (url.hasHost()) {<br />
++            sshCommand += url.host();<br />
++        }<br />
++<br />
++        _session->sendText(sshCommand + '\r');<br />
+     } else if (url.protocol() == "ssh") {<br />
+         QString sshCommand = "ssh ";<br />
+<br />
+[/code]<br />
+<br />
+虽然一直在用kde，但这还是第一次做kde的功能补丁，这次其实只了解了KBookmark类的实现位置和功能。<br />
+<br />
+KBookmark实现是在kio组件，比较核心的部分，方便上层组件共享。<br />
+<br />
+了解了konsole中的bookmarkhandler和sessioncontroller两个部分。<br />
+<br />
+未来计划：<br />
+除了这个功能hack之外，还希望能做个ssh会话的标签clone功能。<br />
+<br />
+<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4AEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD4yooooAKKKKACiiigAooooAKK+vl/Zh+H7xRyxa54gmikBKSQ3ttIjAEg4ZYiOoI/Cj/hmDwF/wBBbxN/4Ewf/GaXMiuVnyDRX19/wzB4C/6C3ib/AMCYP/jNH/DMHgL/AKC3ib/wJg/+M0uZBys+QaK+vv8AhmDwF/0FvE3/AIEwf/GaP+GYPAX/AEFvE3/gTB/8Zo5kHKz5Bor6+/4Zg8Bf9BbxN/4Ewf8Axmj/AIZg8Bf9BbxN/wCBMH/xmjmQcrPerGFBo9kFUKAs2AB/03lrhdS8eR6fBPc3NnfvDbrC1w9rYpMsPmxo6hibhTj5wu4qATkCvRNKjL6NZkAn/Xf+j5K+c/G+h+MLzWll0WRltxDaTQBdSih2yC1iUuFLgq3y4zgHikkNux2uifFvQ9Z1YaXp4v2uWimlUT6ckaN5cTSEFluHIyEIB2nnFeo+SPSvl/wH4R8UWHjddW1eCIr5F608pv4ZXZntpRkhXLMSW9+ua+rvJP8AdNNoIu5kyz20V9BZOx+0Tq7xqEY5VMbiSBgAbl646igz2o1FNOMn+lPC0yptPKAhSc9OrD868l8NPpNtpV5qVzp8urXd/ZyiHTf7AnIvy0ocNJKVZbsrwd6D7m5gp7aI8OXEPh9rXwpYXsP/ABKJ1lkOly2nmStcRPKFjYRkbl3hVBXgAAjGQrDPUfJHpR5I9K8u0/RJYYIZb7Srm88NnUN1xp9v4fmtowfIKhxas8kjJv25G0DdhsHlq73wbYz23gmGDVbWbYFmIt5UMjrbl3McbLySRGVUryeMUWA0dL8Q6dplktjqXnQNE77HWB5FkVnZ/wCAEgjcRg+lZqT+B48+TqWuQL2SG51KNV9gqkAD2AxRRRcGhrv4DkYGa+1qYZyVluNRkVvYqxII9jxW7/wmHhv/AJ/Jv/AGf/4iiii4rGXpl78O9LvZL3TNOsbK6lBEk9vo0kcj565ZYgTWp/wmHhv/AJ/Jv/AGf/4iiii47B/wmHhv/n8m/wDAGf8A+Io/4TDw3/z+Tf8AgDP/APEUUUXCx//Z"><br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/693'>http://nullget.sourceforge.net/?q=node/693</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

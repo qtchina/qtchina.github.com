@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>访问git的自动密码/证书登陆功能</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>访问git的自动密码/证书登陆功能</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-23 11:12
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+访问git的认证一般性两种方式，<br />
+1、使用用户名+密码方式<br />
+2、使用ssh证书模式<br />
+<br />
+第1种一般出现在使用http(s)协议访问git库，服务器端一般用http的basic auth认证方式。<br />
+如果不使用密码自动输入的话，需要每次都输入用户名和密码。<br />
+可能出于安全考虑，git客户端没有自动记录密码功能。<br />
+可以使用下面的方法，让git访问不需要再每次输入密码，<br />
+在$HOME目录创建.netrc文件，文件内容格式为：<br />
+machine  git-server-host-name1<br />
+              login  username<br />
+              password yourpassword<br />
+machine  git-server-host-name2<br />
+              login  username<br />
+              password yourpassword<br />
+<br />
+<br />
+第二种用户认证模式，与ssh的自动登陆类似，<br />
+需要在$HOME/.ssh/目录创建config文件，文件格式为：​<br />
+Host github.com<br />
+       Compression yes<br />
+       HostName github.com<br />
+       User yourusername<br />
+       IdentityFile /path/to/id_rsa_github<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/739'>http://nullget.sourceforge.net/?q=node/739</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

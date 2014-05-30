@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>projecttox项目介绍</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>projecttox项目介绍</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-03-16 10:22
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+projecttox旨在实现一个能够替代skype的开源支持视频通话的即时通信IM，<br />
+它的目标是简单易用，消息全程加密，保证通信与通话的安全。<br />
+<br />
+在技术上，与skype类似地可大概分为核心部分与界面UI部分。<br />
+核心部分实现了主要的网络通信，网络穿透功能，加密安全功能，视频编码功能。<br />
+界面部分是基于核心的功能，使用Qt开发，比较容易地实现跨平台功能。<br />
+<br />
+网络部分最开始使用了UDP协议，为了能支持简便的网络穿透功能。<br />
+最近，开发工程师正在添加TCP的支持。<br />
+可能将来projecttox也会像skype一样，两种网络协议混用。<br />
+在不同的功能上使用不同的网络协议，简化代码，提高可靠性与可用性。<br />
+<br />
+目前在网络穿透功能上，核心部分已经实现了非对称防火墙打洞功能，<br />
+对称防火墙的打洞正在做理论研究与测试，相信不久之后也能够加入到核心代码。<br />
+<br />
+在分布式网络方面，使用的是类似bittorrent的分布式DHT网络结构，这一点也与skype类似。<br />
+但相比skype来说更是一种无中心结点的分布式网络环境。<br />
+<br />
+对这个项目，我比较感兴趣的部分是这种无中心结点的分布式DHT网络，<br />
+以及能够在不同内网之间通过网络打洞穿透功能实现的点对点安全通信功能。<br />
+<br />
+经过简单的测试，发现这个项目基本可用，但还没有达到非常完善状态。<br />
+遇到过在同一个网段的两个好友之间可以实现通信功能，<br />
+但有两个在不同局域网的好友之间，可以接收到对方添加好友的请求，但无法实现进一步的好友消息通信。<br />
+这可能是在网络穿透功能上还有待改进吧。<br />
+<br />
+这个项目在2013中开始，到现在为止，开发上还比较活跃，如果能够一直保持下去，还是很有发展的。<br />
+projecttox在2014年计划参加google summary of code开发，进一步完善这个项目。<br />
+<br />
+后续多研究下其中的代码，也许能够为这个项目编写部分代码。<br />
+<br />
+项目主站：https://tox.im/<br />
+源代码：https://github.com/irungentoo/ProjectTox-Core<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/792'>http://nullget.sourceforge.net/?q=node/792</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>实时图片处理系统架构设计与实现</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>实时图片处理系统架构设计与实现</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-28 23:08
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1) 需求<br />
+<br />
+     对于当前的互联网，图片的应用非常广泛。<br />
+<br />
+     无论从基本的论坛到SNS，从B2B到B2C的电商网站，<br />
+<br />
+     或者到纯图片浏览网站，都离不开图片这种传达信息丰富的媒介。<br />
+<br />
+2) 功能特征<br />
+<br />
+     对于这些需求作整理，一般要求对图片做水印、缩略图、裁切、滤镜等功能。<br />
+<br />
+3）原理<br />
+<br />
+     实时处理图片，只记录原图，请求来到之后根据参数处理为所需的效果图片。<br />
+<br />
+     无/微配置系统，把处理参数直接放在url中，由系统解析URL，提取处理参数。<br />
+<br />
+     原图安全，对于原图的访问，根据图片的文件名添加签名信息和token信息。<br />
+<br />
+     多样化存储后端，可以使用磁盘目录hash存储，或者使用分面式文件系统存储。<br />
+<br />
+     不同规模配置，对于小、中、大、超大规模图片处理的支持，使用不同的后端配置，运行于不同的规模模式。<br />
+<br />
+     结果缓存，对于已经处理完成的效果图片，使用静态缓存提高速度，减小实时处理的CPU压力。<br />
+<br />
+     url唯一化，对于带无用的、多余的参数的情况，作重定向到整理过的正规的唯一地址上。<br />
+<br />
+4）架构<br />
+<br />
+      NAMP + haproxy + squid<br />
+<br />
+      网络结构：<br />
+<br />
+      haproxy --> squid1/squid2/squidxxx --> Nginx-PHP1/Nginx-PHP2/Nginx-PHPxxx-->MySQL<br />
+<br />
+                                                                               |<br />
+<br />
+                                                                ------------------------------<br />
+<br />
+                                                               |                              |<br />
+<br />
+                                                           disk1/disk2/diskxxx     fastdfs           <br />
+<br />
+5）相关技术<br />
+<br />
+     opencv<br />
+<br />
+     gmagick<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/733'>http://nullget.sourceforge.net/?q=node/733</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

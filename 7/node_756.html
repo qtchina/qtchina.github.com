@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>android手机sdcard分区优化</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>android手机sdcard分区优化</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-15 21:33
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+该优化针对针对我需要在一个分区上安装个完整的可chroot的linux服务环境。<br />
+<br />
+在手机系统升级与数据清理时都不抹掉分区的安装的单独系统数据。<br />
+<br />
+分区格式：<br />
+/dev/block/mmcblk1p1        4G    vfat<br />
+/dev/block/mmcblk1p2        20M   ext4<br />
+/dev/block/mmcblk1p3        ~2G   ext4<br />
+<br />
+分区原理，对于cm 10 来说，在recover恢复功能中，有重新格对sdcard分区功能，<br />
+<br />
+重新分区可支持/sd-ext和swap两种扩展机身内存的功能，<br />
+使用分区2用于存储应用数据和缓存，可在开机时做个简单的hack，也有相关的app实现这一功能。<br />
+但分区在wipe data时会被清除掉。<br />
+这城不能使用分区2存储这个服务系统环境。<br />
+<br />
+我的实现方式，先把sdcard在recover菜单中分成两个分区。<br />
+在进入系统后，把第二分区邮袋，重新创建两个分区，现在的分二分区设置一个比较小的空间，如20M<br />
+现在的第三个分区才设置为存放服务环境系统的分区。<br />
+这样在手机wipe data的时候，只会清理掉这个20M的小分区，而不会动第三个分区。<br />
+以后的使用就稳定的多了。<br />
+<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/756'>http://nullget.sourceforge.net/?q=node/756</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

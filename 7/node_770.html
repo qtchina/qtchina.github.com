@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>libaria2功能介绍</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>libaria2功能介绍</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-10-06 21:27
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+libaria2是linux aria2命令行下载工具的封闭api，<br />
+这样在使用aria2的时候不需要修改其代码了。<br />
+<br />
+在之前编写karia2(aria2的GUI界面前端）的时候，<br />
+需要在控制代码中包含大量的aria2源代码头文件，<br />
+维护起来非常复杂，虽然这有个好处是能了解aria2源代码的组件结构。<br />
+编写早期的karia2的过程中，基本上实现了libaria2的功能，<br />
+并且比现在的libaria2功能还要多。因为当时直接include进来aria2的源代码，<br />
+可以获取到所有程序运行状态信息。<br />
+<br />
+现在karia2作为aria2的前端，以多种不同方式支持aria2的运行管理。<br />
+包括直接使用aria2源代码的方式，使用libaria2的方式，<br />
+使用aria2 RPC的方式。<br />
+所有这些方式，使用相同的管理架构进行下载的管理，并与用户界面交互信息。<br />
+<br />
+目前感觉libaria2的功能比较少，比如无法拿到内部的连接信息，<br />
+无法获取每个连接的速度等详细信息。<br />
+虽然不影响使用，但还是希望功能再加强些。<br />
+看了一下源代码，这个libaria的封装还比较简单，如果还需要这些功能，<br />
+可以再通过修改libaria2源代码的方式继续扩展其功能。<br />
+<br />
+最新karia2截图：<br />
+<img src="http://farm6.staticflickr.com/5492/10116884834_843c77220e.jpg"/><br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/770'>http://nullget.sourceforge.net/?q=node/770</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

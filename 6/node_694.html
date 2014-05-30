@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>VIM/EMACS编辑器及cscope/ctags/etags</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>VIM/EMACS编辑器及cscope/ctags/etags</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-07 10:47
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+这两个编辑器就像瑞士军刀一样灵活而且强大，不过需要你让它的强大表现出来。<br />
+<br />
+在使用它们阅读代码的过程中，经常需要在代码间跳转，跟踪代码的调用关系，更好地理解代码关系。<br />
+<br />
+最近又仔细看了一遍这两个辅助工具cscope/[ce]tags，分析其相似之处与功能差异，<br />
+<br />
+以便在后面的使用过程对它们的选择更合理高效。<br />
+<br />
+<br />
+cscope与ctags都是独立的linux命令行程序。<br />
+<br />
+cscope针对C/C++语言，ctags/etags则支持多数常用语言。<br />
+<br />
+cscope功能在emacs中叫做xcscope，在包xcscope.el中。<br />
+<br />
+ctags在emacs中叫做etags，在emacs包中自带etags。<br />
+<br />
+VIM与emacs都能使用cscope和tags格式，但是emacs使用的TAGS为etags格式，<br />
+<br />
+使用ctags默认生成的TAGS不能直接用于emacs，<br />
+<br />
+但通过指定ctags参数，可生成兼容etags的TAGS文件。<br />
+<br />
+<br />
+×）cscope用法：<br />
+<br />
+     在emacs中，使用cscope-index-files生成索引<br />
+<br />
+                        使用cscope-set-init-directory设置代码根目录（索引目录）<br />
+<br />
+     在命令行，使用:<br />
+<br />
+     find . -name "*.h" -o -name "*.cpp" -o -name "*.hpp" -o -name "*.cc" -o -name "*.cxx" > cscope.files<br />
+<br />
+    <br />
+<br />
+×）xcscope常用命令列表<br />
+<br />
+http://linux.die.net/man/1/xcscope<br />
+<br />
+* Keybindings:<br />
+All keybindings use the "C-c s" prefix, but are usable only while editing a source file, or in the cscope results buffer:<br />
+<br />
+C-c s s Find symbol.<br />
+C-c s d Find global definition.<br />
+C-c s g Find global definition (alternate binding).<br />
+C-c s G Find global definition without prompting.<br />
+C-c s c Find functions calling a function.<br />
+C-c s C Find called functions (list functions called<br />
+from a function).<br />
+C-c s t Find text string.<br />
+C-c s e Find egrep pattern.<br />
+C-c s f Find a file.<br />
+C-c s i Find files #including a file.<br />
+These pertain to navigation through the search results:<br />
+<br />
+C-c s b Display *cscope* buffer.<br />
+C-c s B Auto display *cscope* buffer toggle.<br />
+C-c s n Next symbol.<br />
+C-c s N Next file.<br />
+C-c s p Previous symbol.<br />
+C-c s P Previous file.<br />
+C-c s u Pop mark.<br />
+These pertain to setting and unsetting the variable, 'cscope-initial-directory', (location searched for the cscope database directory):<br />
+<br />
+C-c s a Set initial directory.<br />
+C-c s A Unset initial directory.<br />
+These pertain to cscope database maintenance:<br />
+<br />
+C-c s L Create list of files to index.<br />
+C-c s I Create list and index.<br />
+C-c s E Edit list of files to index.<br />
+C-c s W Locate this buffer's cscope directory<br />
+( "W" --> "where" ).<br />
+C-c s S Locate this buffer's cscope directory.<br />
+(alternate binding: "S" --> "show" ).<br />
+C-c s T Locate this buffer's cscope directory.<br />
+(alternate binding: "T" --> "tell" ).<br />
+C-c s D Dired this buffer's directory.<br />
+<br />
+<br />
+<br />
+×）etags用法<br />
+<br />
+    在命令行，使用find . -name "*.php" -print | etags -<br />
+<br />
+    在emacs使用visit-tags-table  emacs指令切换TAGS文件。<br />
+<br />
+    使用ctags 生成etags：find . -name \*php | xargs ctags -e -f TAGS --language-force=php<br />
+<br />
+<br />
+×）etags常用命令列表<br />
+<br />
+M-. tag <RET><br />
+Find first definition of tag (find-tag).<br />
+C-u M-.<br />
+Find next alternate definition of last tag specified.<br />
+C-u - M-.<br />
+Go back to previous tag found.<br />
+C-M-. pattern <RET><br />
+Find a tag whose name matches pattern (find-tag-regexp).<br />
+C-u C-M-.<br />
+Find the next tag whose name matches the last pattern used.<br />
+C-x 4 . tag <RET><br />
+Find first definition of tag, but display it in another window (find-tag-other-window).<br />
+C-x 5 . tag <RET><br />
+Find first definition of tag, and create a new frame to select the buffer (find-tag-other-frame).<br />
+M-*<br />
+<br />
+EMACS列编辑： 很简单啊<br />
+M-x cua-mode<br />
+M-x cua-set-rectangle-mark / C+Retrun<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/694'>http://nullget.sourceforge.net/?q=node/694</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

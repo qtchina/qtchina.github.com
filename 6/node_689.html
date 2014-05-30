@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Paxos算法简述</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Paxos算法简述</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-02-13 14:40
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div class="BlogContent"><p>Paxos算法是分布式中一个著名的一致性算法。它的假设前提是，在分布式系统中进程之间的通信会出现丢失、延迟、重复等现象，但不会出现传错的现象。Paxos算法就是为了保证在这样的系统中进程间基于消息传递就某个值达成一致。要理解paxos算法最好还是看作者本人(Leslie Lamport)的论文《<a rel="nofollow" href="http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf">The Part-Time Parliament</a>》。在这里只是简单地介绍paxos最核心的思想，其实它还有很多的内容。</p> <br />
+<p>提议者和决议者是这里最重要的两个角色，paxos最核心的算法就是定义他们之间的通讯规则来保证某个变量在分布式系统中的一致性。</p> <br />
+<p>提议者是提出议案的人。每个议案都有一个议案号，议案号是区别不同议案的唯一标识，而且议案号是有大小次序的。这里的提议者不像我们真实世界里的提议者，这里的提议者提的议案内容不能随心所欲。提议者和决议者要遵循下面的规则：</p> <br />
+<p>1） 提议者先给议案决定一个议案号，注意整个系统中议案号都不能重复的。然后发消息给所有决议者，告诉他们我要提出第几号议案。</p> <br />
+<p>第一阶段，提议者甲向决议者A、B、C、D、E、F、G发出议案号16的消息。</p> <br />
+<p><a rel="nofollow" href="http://static.oschina.net/uploads/img/201209/17151352_uzw1.jpg"><a target="_blank" href="http://static.oschina.net/uploads/img/201209/17151358_x3Kq.jpg"><img width="361" height="294" src="http://static.oschina.net/uploads/img/201209/17151358_x3Kq.jpg" alt="clip_image002" title="clip_image002" style="cursor: pointer;"></a></a></p> <br />
+<p>2） 决议者收到提议者发来的议案号后先看这个议案号是否是自己收到的所有议案号中最大的。如果不是，就不予理会；如果是，就把自己最后一次投票的议案发回去，如果没投过议案就回复没投过议案。</p> <br />
+<p>第二阶段，决议者收到甲发来的议案号16后根据自己的情况作出回复</p> <br />
+<p><a rel="nofollow" href="http://static.oschina.net/uploads/img/201209/17151405_2bXz.jpg"><a target="_blank" href="http://static.oschina.net/uploads/img/201209/17151410_cNc0.jpg"><img width="354" height="237" src="http://static.oschina.net/uploads/img/201209/17151410_cNc0.jpg" alt="clip_image004" title="clip_image004" style="cursor: pointer;"></a></a></p> <br />
+<p>A、D未投过任何议案所以回复(null)</p> <br />
+<p>B最后一次投了2号议案所以回复(2,α)</p> <br />
+<p>C、F最后一次投了5号议案所以回复(5,β)</p> <br />
+<p>E的最大议案号是21所以不用回复</p> <br />
+<p>G由于网络原因没收到消息</p> <br />
+<p>3） 当提议者收到过半回复后才能决定议案的内容。在所有回复中议案号最大的那个议案的内容就定为当前议案的内容。如果都回复没投过议案，那议案内容就由自己定了。如果只收到不过半数的回复，那么这个过程就这样结束了。确定议案内容后就要把议案发给所有决议者。到此提议者的工作就可以结束了。</p> <br />
+<p>第三阶段，甲根据回复确定16号议案的内容，然后正式提出16号议案。</p> <br />
+<p><a rel="nofollow" href="http://static.oschina.net/uploads/img/201209/17151416_hpse.jpg"><a target="_blank" href="http://static.oschina.net/uploads/img/201209/17151421_pHKu.jpg"><img width="357" height="242" src="http://static.oschina.net/uploads/img/201209/17151421_pHKu.jpg" alt="clip_image006" title="clip_image006" style="cursor: pointer;"></a></a></p> <br />
+<p>甲收到过半数人的回复，回复的内容有(null)、(2,α)、(5,β)，其中5是最大的议案号，所以16号议案的内容就定为β,接着甲就把(16,β)发出去。</p> <br />
+<p>4） 决议者收到议案后，就要对它进行投票。如果这个议案号是自己收到的所以议案号中最大的，就要投这个议案的票；否则就不予理会。这里的投票没有反对或赞成的类型之分。也就是可以认为只有赞成票。到此决议者的工作就可以结束了。</p> <br />
+<p>第四阶段，决议者收到16号议案并对它投票。</p> <br />
+<p><a rel="nofollow" href="http://static.oschina.net/uploads/img/201209/17151426_5km9.jpg"><a target="_blank" href="http://static.oschina.net/uploads/img/201209/17151431_gyKy.jpg"><img width="359" height="232" src="http://static.oschina.net/uploads/img/201209/17151431_gyKy.jpg" alt="clip_image008" title="clip_image008" style="cursor: pointer;"></a></a></p> <br />
+<p>A、B、C、G收到(16,β)后，由于16号是他们的最大号，所以会给这个议案投票</p> <br />
+<p>D、E、F收到(16,β)后，由于21号是他们的最大号，所以不投票。</p> <br />
+<p>&nbsp;</p> <br />
+<p>这个算法保证了某个变量在分布式系统中要么没有值，要么就只会有一个值。只要某个议案在某一刻有过半数的人投票，那么这个值就永远定下来了。</p> <br />
+<p><a rel="nofollow" href="http://static.oschina.net/uploads/img/201209/17151436_AG9w.jpg"><a target="_blank" href="http://static.oschina.net/uploads/img/201209/17151441_b7f2.jpg"><img width="343" height="245" src="http://static.oschina.net/uploads/img/201209/17151441_b7f2.jpg" alt="clip_image010" title="clip_image010" style="cursor: pointer;"></a></a></p> <br />
+<p>如上图，15号议案(内容是β)有了过半数的投票，那么它的下一号16号议案内容只能是β了，因为在第三阶段收到的回复如果过半数，那么其中一定有(15,β)，而15肯定是回复中最大的号，所以内容只能是β。而下下一号21号议案内容也只能是β，因为它的前两个议案的内容都是β，如果收到的回复过半数的话肯定包含(15,β)或(16,β)，而他们都是最大的两个，所以内容也只能是β了。可以证明其后的所有议案内容都是β。虽然paxos算法可以保证不会有两个值，但显然不能保证一定会有值。这也是理论上(CAP理论)不能解决的问题。</p> <br />
+<p>这里的算法是有改动的，提议者和决议者都还有后续的处理，而且关于上面的“过半数的决议者”也并不是paxos本身的描述。Paxos本身定义的是一个更一般的“大多数”集合，每个议案都有一个“大多数”的决议者集合S，这些集合是两两相交的，对于每个议案，在第三阶段要收到S中所有决议者的回复才能继续下去。如果某个议案得到相应S的全体投票，那么这个值就这么定下来了。</p><br />
+<p></p><br />
+<p>参考：</p><br />
+<p>http://en.wikipedia.org/wiki/Paxos_algorithm</p><br />
+<p>https://zh.wikipedia.org/wiki/Paxos%E7%AE%97%E6%B3%95</p><br />
+<p>http://csrd.aliapp.com/?p=160</p><br />
+<p></p><br />
+<p></p><br />
+</div><br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/689'>http://nullget.sourceforge.net/?q=node/689</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>对raid基本磁盘阵列的理解</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>对raid基本磁盘阵列的理解</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-09-15 12:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+RAID是英文Redundant Array of Independent Disks（独立磁盘冗余阵列），简称磁盘阵列。<br />
+常用的raid级别有，raid0,raid1,raid5,raid6,raid10。<br />
+下面就这几个常见raid级别说明一下我的理解。<br />
+1、raid0  条带存储<br />
+     这种级别没有数据冗余，所有阵列中的磁盘参数数据存储。<br />
+     分数据存储实现并行存储，理论上，N块磁盘的raid0存储速度为一块磁盘存储速度的N倍。<br />
+     并行存储是把写入的数据按段分隔，每个磁盘存储不同的数据段。<br />
+     这种级别的问题无修复机制，一块磁盘块，整个阵列无法读写。<br />
+     好处在于，能完全利用磁盘空间，提高IO速度，能提供所有raidx级别中最快的IO速度。<br />
+     速度S:  N*<br />
+     容量C:  N*<br />
+2、raid1  镜像存储<br />
+     这个级别包含完整的数据冗余，不同的磁盘两两互备。<br />
+     由于可在原磁盘繁忙时到副本磁盘上读取，可以提高IO速度。<br />
+     由于数据存储完整两份，成本是所有级别中最高的，可靠性也是最高的。<br />
+     速度S: N/2+<br />
+     容量C: N/2<br />
+3、raid5   奇偶检验条带存储<br />
+     奇偶校验数据交叉分布在所有的磁盘。<br />
+     更适合小数据与随机读写环境。<br />
+      由于需要奇偶校验，raid5有额外的写损失，每个写操作附带写校验数据。<br />
+      当有一块磁盘坏，不影响整个阵列。<br />
+      当有两块磁盘坏时，整个阵列失效。<br />
+      速度S: N*-<br />
+      容量C: N*-<br />
+4、raid6  双奇偶校验条带存储<br />
+     两个奇偶校验使用不同的算法，并且分布在不同的磁盘上。<br />
+     因此写损失比raid5更大。<br />
+     速度S: N*--<br />
+     容量C: N*--<br />
+5、raid10  先镜像后条带存储<br />
+    10的意思是1和0级别的结合，结合顺序为先做raid1镜像，再做raid0条带。<br />
+     这个磁盘利用率与raid1相同，为N/2。<br />
+     并且阵列中的磁盘数必须为大于4的偶数。<br />
+     <br />
+6、raid01  先条带后镜像存储<br />
+     01的意思是0和1级别的结合，结合顺序为先做raid0条带，再做raid1镜像。<br />
+     要求与raid10相同，故障率也与raid10相同。<br />
+     读取性能略低于raid10。<br />
+<br />
+7、raid的实现有硬件raid和软件raid<br />
+     两种实现的理论原理一致。<br />
+     raid的硬件实现暂时不在此做叙述。<br />
+     软件raid的实现，目前比较熟悉的有dmraid，btrfs文件系统级实现。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/764'>http://nullget.sourceforge.net/?q=node/764</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

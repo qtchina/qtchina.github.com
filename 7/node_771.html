@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>JSON-RPC协议与网络传输</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>JSON-RPC协议与网络传输</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-10-07 21:28
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<br />
+通常据说的JSON-RPC协议指的是数据格式协议，<br />
+对于数据包的传输，可以使用不同的网络连接协议实现，<br />
+最基本的只使用tcp传输，所有传递的数据包以 json格式为准。<br />
+对于无法识别成json格式的数据包，像其他的类似软件一样认为协议错误。<br />
+<br />
+另外，其他的像http,websocket这些通用协议，都可以作为JSON-RPC的传输层使用。<br />
+RPC的概念是一个远程过程调用，想当于通过网络执行一段远程服务器上的代码。<br />
+那么这段代码可以理解成普通编程语言中的函数，<br />
+它有函数名字和函数参数，这样程序的其他位置可以通过名字与参数调用。<br />
+JSON-RPC协议也是如此，给远程服务器一段功能代码一个名字与输入参数，<br />
+然后通过网络发起这段功能代码的调用，执行并返回结果。<br />
+<br />
+所以，JSON-RPC协议标准，每次调用都需要提供一个方法名，一组方法参数。<br />
+<br />
+例如，以JSON-RPC over HTTP为例，构造一个简单的请求：<br />
+请求包：<br />
+                                 "POST /jsonrpc HTTP/1.0\r\n"<br />
+                                  "Host: 127.0.0.1\r\n"<br />
+                                  "Content-length: 71\r\n"<br />
+                                  "\r\n"<br />
+                                  "{"id": 1,"jsonrpc": "2.0","method": "aria2.getVersion","params": ["a"]}"<br />
+响应包：<br />
+HTTP/1.1 200 OK<br />
+Date: Mon, 07 Oct 2013 19:36:31 GMT<br />
+Content-Length: 170<br />
+Expires: Mon, 07 Oct 2013 19:36:31 GMT<br />
+Cache-Control: no-cache<br />
+Content-Type: application/json-rpc<br />
+Connection: close<br />
+<br />
+{"id":1,"jsonrpc":"2.0","result":{"enabledFeatures":["Async DNS","BitTorrent","Firefox3 Cookie","GZip","HTTPS","Message Digest","Metalink","XML-RPC"],"version":"1.18.0"}}"<br />
+ <br />
+简单的解释也就是，把HTTP POST协议中的K/V格式替换成了JSON格式，<br />
+服务器解析时按照JSON格式解析POST过来的数据，查找method和params两个参数并行相应的代码。<br />
+在返回时，HTTP头中的Content-Type变了application/json-rpc，<br />
+而不是通过HTTP协议输出的text/html文件类型。<br />
+在HTTP协议头之后的所有数据作为JSON格式的返回结果处理。<br />
+<br />
+个人认为之所以出现JSON-RPC这种协议格式，<br />
+原因在于它的标准化，通用化，可视化，最终传输协议的实现比较简单。<br />
+很明显，JSON-RPC依赖JSON数据标准的发展，由于JSON数据标准的流行才流行起来的。<br />
+还有一个原因，浏览器逐渐强大，web应用的快速发展也起到推动JSON标准流行的作用。<br />
+所以，它流行并不是因为效率有多么高，因为JSON的解析速度快不了。<br />
+<br />
+与JSON-RPC对应的更早协议是XML-RPC协议。<br />
+这个出现的比较早，其标准很类似。<br />
+在其他方面都差不多的情况下，JSON解析速度想比XML快，<br />
+JSON比XML越来越流行，这就是JSON-RPC的优势所在。<br />
+<br />
+从XML-RPC到JSON-RPC，也是人们对于看得见的协议的喜好与高效率代码的喜好折衷的结果。<br />
+计算机技术不断发展，没有最好，只有更好。<br />
+<br />
+最近又发现一种同时支持文本格式与二进制格式的msgpack数据标准，<br />
+它的定位是轻量级的高效的网络传输数据标准，解析速度与包大小均小于JSON。<br />
+由于它支持文本格式与二进制格式标准，在复杂度上是否会小还不太确定。<br />
+对于msgpack数据标准是否能发展到如JSON一样流行，我们还需要耐心等待。<br />
+<br />
+--<br />
+这是我对JSON-RPC及XML-RPC协议的认识理解，<br />
+由于刚接触不久，理解不到位地方请读者指出。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/771'>http://nullget.sourceforge.net/?q=node/771</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

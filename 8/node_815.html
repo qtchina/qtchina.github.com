@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>升级drupal-7.28记录</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>升级drupal-7.28记录</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-29 15:26
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div><div><div><div><div><div><strong>本次升级的改进</strong><strong>列表，</strong> </div><div>更换新的HTML5与扁平化风格的外观。<br> </div><div>添加i18n模拟，支持多语言站点，<br> <div>简体中文界面包，多语言菜单，</div></div></div><div>恢复代码高亮功能，<br> <div><div><div>升级第三方模块到最新版本。</div><div><p>恢复中文搜索模块 -核心自带搜索，</p><p>开启markdown模块 - OK markdown模块，</p><p>开启各文章点击统计 - 核心自带统计，</p><p>修正几处hack的功能。</p><br> </div><div><br> </div></div><div><strong>升级过程：</strong><br> </div></div></div></div><div>1、核心程序更新，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 下载drupal-7.28.tar.gz核心包，并解压。<br> </div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp -va drupal-7.28/*&nbsp; cms-drupal/<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; 执行 http://host.domaim/upgrade.php升级数据库结构。</div><div>&nbsp;&nbsp;&nbsp;&nbsp; 注意，升级完成后，把upgrade.php删除掉。<br> </div><div><div><div><div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 本次升级是从drupal-7.12升级过来的，主要是优化改进，所有升级过程并没有什么大的障碍。<br> </div></div><div><div><div><br> <div><br> </div></div><div>2、第三方模块的更新与改变<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 升级：Libraries模块<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 升级：geshifilter模块与geshi库<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 关闭：cspliter模块<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加：i18n模块<br> </div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加：langicons模块<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加：markdown模块<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加：ZeroPoint外观<br> </div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> </div></div></div></div><div><br> <div>3、国际化多语言支持<br> </div></div></div></div><div><div><div><div><div>&nbsp;&nbsp;&nbsp; 国际化功能需要多方的支持，首先是drupal核心的支持，localize模块。<br> <div>&nbsp;&nbsp;&nbsp; 其次是国际化的翻译文件。<br> </div></div><div>&nbsp;&nbsp;&nbsp; 然后是第三方模块，提供更多的功能。<br> <div>&nbsp;&nbsp;&nbsp; 最后是显式的语言切换工具。<br> <div><br> <div>&nbsp;&nbsp;&nbsp; 核心的模块开启即可，不再详述。<br> <div>&nbsp;&nbsp;&nbsp; 安装i18n模块，到drupal.org官方下载包，放到modules目录，后台开启。<br> <div>&nbsp;&nbsp;&nbsp; <br> <div>&nbsp;&nbsp;&nbsp; 安装翻译文件，比如简体中文，drupal官方国际化：https://localize.drupal.org/<br> <div>&nbsp;&nbsp;&nbsp; 下载.po文件后放到下面的目录，<br> </div></div></div></div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mv -v uptmp/drupal-7.28.zh-hans.po profiles/standard/translations/zh-hans.po</div></div><div><div>&nbsp;&nbsp;&nbsp;&nbsp; 其他的语言也类似的方式安装好，然后到后台添加语言后会自动导入相应的翻译文件。<br> <div><br> </div></div><div>&nbsp;&nbsp;&nbsp;&nbsp; 接下来是考虑不同语言的切换显示了，不同的语言提供不同的菜单。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 这里就用上i18n模块的， i18n模块里有个子模块是用来做菜单多语言的。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 可以先建一个英文的菜单，再建一个其他语言的菜单，然后可以在这2个之间建立对应关系。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 这样切换语言的时间能够显示相应语言的菜单了。<br> </div></div></div></div></div></div></div></div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 最后安装一个语言切换工具，有langicons和language_switcher两个模块可用，最后选择了比较简单的langicons模块。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 说到选择这个简单些的模块的原因，就说一我的需求吧。<br> <div><br> <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我需要的国际化站点语言切换，设置默认的，然后由用户可选择。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 没有根据IP选择语言，没有根据浏览器选择语言功能。</p><p><br></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在这一步中，遇到了一点问题，需要注意：</p></div></div></div></div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 中文问题，无法复制指定的文件 <em class="placeholder">temporary</em><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 先确保sites/default/files 有读写权限<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 其次在后台设置那里，admin/config/media/file-system 临时目录地址也给设置一个读写权限</p><div><br> </div><p>4、代码高亮</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这个模块原来在用，在本次恢复之前的一段时间内，这模块却一直不好用，也没发现问题在哪。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这次总算找到了问题，过程是这样的：</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 升级了geshifilter模拟，发现bash语言无法高亮，而其他的像C/C++，PHP语言却可以。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 开始还以为不支持bash语言呢，不过考虑这也说不通。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 后面发现这个模块有缓存，清理了缓存，还是不行。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 现在没什么办法想着重新安装一下这个模块，就在模块配置中关闭了，然后再开启，结果功能全部恢复了。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 现在可以看看这个例子，http://nullget.sourceforge.net/?q=node/814</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 应该是这个模块需要更新库里的相关数据。</p><p><br></p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这个过程也发现了一些小问题，记录如下，这个可能就是没有更新库里相关数据的原因：</p><ul><li><em class="placeholder">Notice</em>: Undefined index: post-load integration files 在 <em class="placeholder">libraries_load_files()</em> (行 <em class="placeholder">697</em> 在 <em class="placeholder">/home/project-web/nullget/htdocs/modules/libraries/libraries.module</em>).</li><li><em class="placeholder">Notice</em>: Undefined index: post-load integration files 在 <em class="placeholder">libraries_load_files()</em> (行 <em class="placeholder">775</em> 在 <em class="placeholder">/home/project-web/nullget/htdocs/modules/libraries/libraries.module</em>).</li></ul><p><br></p><p>5、浏览统计</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果能显示每个博文的浏览数就好，这。。。drupal已经给想到了，核心里就有这功能。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 开启statistic模块时，报accesslog表或者node_counter表已经存在，如果没有数据，表可直接删除。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 删除的时候最好两者一次删除，开启这模块一步会同时创建这两个表。</p><p><br></p><p><br></p><p>6、恢复中文搜索功能</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 原来使用的中文搜索模块cspliiter，但到了drupal7之后， 这个模块的维护者一直没有更新。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 这段时间一直没有恢复起来这块功能。搜索全是用的google站内搜索功能。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; google的站内搜索功能也还不错，支持子域名站内搜索。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 尝试了国内的几个搜索引擎，baidu.com,sogou.com，这两个能够做站内搜索使用，不过却只支持顶级域名的站内搜索，子域名不成。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 几翻考虑还是换回到了drupal自带的全文搜索功能，对中文的支持也还可以。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 接下来就禁用掉了csplitter模块。</p><p><br></p><p><br></p><p>7、启用新的外观</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 安装Zero point外面，这个外观简洁，默认的配色和布局也比较符合我的要求。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 使用当前新的HTML5和CSS2/3实现，扁平移动化的设计非常好。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; Zero point另一意思指的是从零开始，虽然继承了原来的数据。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 之前比较看重数量，现在对于个人的博客站点来说，数据已经不少了，</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 以后多注意博文的质量，虽然以前的博文也以自己写为主，应该90%以上吧。</p><p>&nbsp;&nbsp;&nbsp;&nbsp; 博文的质量从两方面加以提高，第一当然是内容要精新深，第二是排版和图文等更丰富的表达方式。</p><p><br></p><p><br></p><p>8、markdown文本格式支持</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 安装markdown模块。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加Markdown类型的文本格式。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 由于markdown格式已经差不多是开源界标准简洁的文档格式标准，</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在此添加这种文本格式，更多的兼容在其他地方写的文档，实现以后与更多系统互通的目标。</p><p><br></p><p>总结：</p><p>drupal的感觉非常复杂，不熟悉的情况下还是可能被配置绕晕了。</p><p>不过定制化、灵活性还是非常强大的。值得一用，不需要太关注内部的实现也能做出比较好的站点了。</p><p><br></p><p><br></p><p>TODO</p><div>启用新的外观<br> <div>修正几处hack的当前已经失效功能。</div></div><p>google anylise恢复</p><p>rss进地址栏 -先不开</p><p>摘要算法模块</p><p>google ads</p><p>静态镜像更新。</p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p></div></div></div><br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/815'>http://nullget.sourceforge.net/?q=node/815</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

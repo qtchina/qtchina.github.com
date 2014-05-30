@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>hyperdex 不同数据类型hash算法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>hyperdex 不同数据类型hash算法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-16 22:18
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+hyperdex使用hyperspace hashing算法对记录的每个字段做哈希，<br />
+并且所有字段的哈希值作为每个维度的值映射到多维度空间中的一个点上。<br />
+通过化分多维空间的方式，把所有的记录分布到不同的存储节点上，<br />
+实现hyperdex的分布式NoSQL功能。<br />
+<br />
+对于hyperdex的实现，它所支持的土原子数据类型各自有不同的哈希算法，<br />
+原子类型有float,int64,string，每种类型的哈希算法如下：<br />
+<br />
+字符串字段  cityhash<br />
+int64  unpack64le 把值高字节与低字节交换位置，64位为8个字节，即1,8交换，2,7交换，3,6交换，4,5交换<br />
+         其他的同类整数类型，也使用相同的算法计算哈希结果。<br />
+float  即小数类型， 使用unpack64le，8字节前后对调<br />
+        然后， hyperdex判断针对无穷大/小，是否是数字，0和正常小数分别做处理。<br />
+        如果是>0的无穷大/小数，则结果为固定值，           out = 0xfff0000000000000ULL + 2;<br />
+        如果是其他的无穷大/小数，则结果为固定值               out = 0;<br />
+        如果不是数字，则结果为固定值，                   out = 0xfff0000000000000ULL + 3;<br />
+        如果等于0，则结果为固定值，           out = 0x8000000000000000ULL + 1;<br />
+        如果是其他正常的数字，则使用ieee754_double类型的标准处理，<br />
+                      ieee754_double d;<br />
+        d.d = x;<br />
+        uint64_t sign = d.ieee.negative ^ 0x1;<br />
+        uint64_t exp  = d.ieee.exponent;<br />
+        uint64_t frac = d.ieee.mantissa0;<br />
+        frac <<= 32;<br />
+        frac |= d.ieee.mantissa1;<br />
+        uint64_t shift = 2;<br />
+​<br />
+        if (x < 0)<br />
+        {<br />
+            exp  ^= 0x7ffULL;<br />
+            frac ^= 0xfffffffffffffULL;<br />
+            shift = 1;<br />
+        }<br />
+<br />
+        out = (sign << 63) | (exp << 52) | (frac);<br />
+        out += shift;<br />
+<br />
+<br />
+<br />
+复合类型，list,set,map，集合中的数据类型必须一致。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/757'>http://nullget.sourceforge.net/?q=node/757</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

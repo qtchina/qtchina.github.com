@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>nginx高并发与高耗时配置优化总结</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>nginx高并发与高耗时配置优化总结</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-27 16:03
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+默认情况下，nginx的配置是以高并发为主<br />
+但对于某些需要耗时比较长的插件来说，这样的配置是不合适的，只会让并发的请求等待时间更长间<br />
+<br />
+以图片处理服务器为例，属于耗CPU的任务，nginx的并发并不能提高处理图片的速度。<br />
+在这种情况，如果启动了太多的php-fpm进程，如256个，也就是并发处理图片的达到256个，<br />
+这时，服务器由于CPU核心数的限制，需要在256个处理图片的php-fpm进程间切换，<br />
+平均每个图片的处理时间拉长，有可能拉长到nginx超时(30秒)而中断，<br />
+那么前30秒的处理就白白浪费了。<br />
+最好的办法是限制并发处理图片的进程个数，让处理图片的任务能快速完成。<br />
+一般来说，把处理图片的进程数设置为所有cpu核心数或者稍高，能达到充分利用CPU并且能快速响应的要求，<br />
+不会由于进程数过多，CPU负载过高把服务器拖死，拖慢到不可用的状态。<br />
+<br />
+现在的服务器一般都带有intel的hyperthread功能，对于普通的处理文字性的任务可以开启，可以提高10-20%的并发处理效率，<br />
+但是个人觉得对于这种耗CPU的服务来说，这个更多核心的假像没有意义，不需要开启。<br />
+<br />
+multi_accept off; 每个worker同时只处理一个连接<br />
+accept_mutex on;  使用accept请求锁<br />
+<br />
+<br />
+配置分为两种模式，一种是高并发模式，另一种是高耗时模式，针对不同的应用特点，使用不同的优化配置。<br />
+<br />
+<br />
+未完待续。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/744'>http://nullget.sourceforge.net/?q=node/744</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

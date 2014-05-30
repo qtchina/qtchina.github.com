@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>简单动态web js/css压缩与cdn系统</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>简单动态web js/css压缩与cdn系统</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-27 11:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1、目标，<br />
+优化处理过程，不再需要每次有svn提交重复处理所有文件。<br />
+<br />
+自动化程度更高，添加自动处理多文件控件的动态按需合并功能。<br />
+<br />
+采用实时动态js/css压缩，只在有请求时才有压缩，而不是之前的预先把所有文件压缩好。<br />
+<br />
+相对可靠的自动varnish缓存清理，降低从更新代码到生效的时间延迟。<br />
+<br />
+减少svn钩子端代码量和处理时间，SVN服务器减负。<br />
+<br />
+添加处理日志，帮助处理异常查询。<br />
+<br />
+调整svn目录结构，更合理规范。<br />
+<br />
+2、使用技术组件，<br />
+nodejs做js/css压缩。<br />
+<br />
+nginx/varnish做服务与缓存。<br />
+<br />
+graphicsmagick做图片压缩优化。<br />
+<br />
+<br />
+3、服务组件图，<br />
+<br />
+<img src="http://farm6.staticflickr.com/5484/12165879376_26bbe86dd5_z.jpg"/><br />
+<br />
+4、压缩处理程序流程图，<br />
+<br />
+<img src="http://farm8.staticflickr.com/7296/12166079776_859a96d9c1_z.jpg"/><br />
+<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/784'>http://nullget.sourceforge.net/?q=node/784</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

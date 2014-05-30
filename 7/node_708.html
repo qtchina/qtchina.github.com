@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>本套shell+gearman+PHP方案实现技术解析</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>本套shell+gearman+PHP方案实现技术解析</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-30 21:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+本套shell+gearman+PHP方案实现技术解析<br />
+<br />
+*）配置信息文件<br />
+<br />
+   使用shell脚本的加载，source 命令加载配置信息文件，<br />
+<br />
+   这个脚本看上去是个ini文件，但这种语法也是shell脚本的基本变量声明语法，<br />
+<br />
+   这种方式对于复杂的脚本还是非常有用的，可以把脚本的控制逻辑与配置信息分离开。<br />
+<br />
+*）简单进程控制，<br />
+<br />
+   使用shell相关的命令和功能实现，<br />
+<br />
+   获取运行脚本路径信息，$(readlink -f $0)<br />
+<br />
+   获取运行脚本的目录信息，$(dirname $(readlink -f $0))<br />
+<br />
+   加载配置变量信息，后台启动PHP进程，并传递相应的参数，<br />
+<br />
+   使用$!获取启动的PHP进程的pid，存放到pid文件，<br />
+<br />
+   为下次关闭该进程或者查看该进程状态作准备。<br />
+<br />
+   为了防止启动PHP进程失败，使用shell的$?命令获取进程启动返回值，为0时成功。<br />
+<br />
+   使用shell的进程输出重定向功能">>"，实现启动的PHP脚本程序输出日志存储在指定的日志文件中。<br />
+<br />
+*）GearmanWorker的封装<br />
+<br />
+   gearman的PHP扩展实现了基本功能，但对于一个生产级的系统需要更多的控制。<br />
+<br />
+   该gearman封装则实现了许多实际环境中可能遇到的问题的处理封装，包括后续几个功能的PHP实现。   <br />
+<br />
+   该封装主要实现了两种worker工作模式，监控模式与任务模式。<br />
+<br />
+   监控模式用来定时监控worker进程的状态，服务器状态，提供分布式worker进程控制的功能。<br />
+<br />
+   任务模式用于接收并运行各项目发送过来的任务，以及监控模式发送过来的任务和分布式控制指令。<br />
+<br />
+<br />
+*) gearmand服务器状态的下线监控与自动剔除<br />
+<br />
+<br />
+   在gearman的worker中（包括监控worker与任务worker)，当有服务器下线后，GearmanWorker::work()会返回一个特定的值，表示有gearmand服务器下线了。<br />
+<br />
+   这时的问题是gearman自身没有返回是哪个服务器下线了，并且因为一个服务器下线，导致整个worker服务都无法使用，<br />
+<br />
+  这一点是gearman的实现问题，实现细节还差不少啊。<br />
+<br />
+  不过，在应用封装可以通过比较直接的方法检测出来。<br />
+<br />
+  使用简单的TCP socket 连接测试，可以检测出配置的gearmand列表中哪个ip:port服务器下线了。<br />
+<br />
+public static function check_tcp_service($ip, $port = 4730)<br />
+{<br />
+     // socket链接测试,200ms超时 <br />
+     @$fp = fsockopen($ip, $port, $errno, $errstr, 0.2);<br />
+     if ($fp){<br />
+        $fp && fclose($fp);<br />
+        return true;<br />
+     } else {<br />
+        return false;<br />
+     }<br />
+}<br />
+<br />
+在检测到已下线的服务器后，把它从列表中删除，并通过GearmanWorker::removeServers和GearmanWorker::addServers方法，让可用的服务器列表生效。<br />
+<br />
+   这样对gearmand的暂时下线或者永久下线作了处理。<br />
+<br />
+   再者，对于有已下线服务器时，还要通过相同的方式，定时或者不定时的检测gearmand服务器是否已经恢复，<br />
+<br />
+   再等到恢复后，重新加入到可用服务器列表中。否则会出现可用服务器列表越来越少，最终到可用列表为空而无法正常提供服务了。<br />
+<br />
+*) worker进程的运行时监控机制<br />
+<br />
+   本方案的设计是在每一个节点上，启动一个监控进程，启动几十甚至上百个任务worker进程。<br />
+<br />
+   实际情况下，由于任务worker不停地执行各种任务，可能导致进程崩溃或者处理即将崩溃的状态。<br />
+<br />
+   监控进程除了执行监控任务外不再处理其他的处理，能够更长时间的稳定运行。<br />
+<br />
+   一般情况下，这个进程不会退出，不会中断，通过文件锁的方式表示它依然运行，除非在退出时，文件锁才会关闭。<br />
+<br />
+   <br />
+<br />
+*）worker脚本程序的修改检测与自动加载 <br />
+<br />
+  由于任务worker是处于GearmanWorker::work的阻塞状态，无法自行检测是否有代码修改。<br />
+<br />
+  这个工作是由监控进程完成的，监控进程使用inotify扩展得知所有worker代码文件的改动通知，<br />
+<br />
+  一量确认代码有修改，则会调用所有worker进程的reload_worker任务通知有需要重新加载的worker。<br />
+<br />
+  任务worker得到通知，根据传递过来的参数，确定是哪些worker修改重新加载。<br />
+<br />
+  执行一遍任务worker的加载工作，并使用新的worker代码替换原来的worker代码。<br />
+<br />
+  由于PHP的普通函数或者类无法方便地实现替换，这里使用的是比较特殊的方式，<br />
+<br />
+  所有的worker都使用Closure方式编写，把worker的执行代码函数作为一个Closure代码放在一个变量中，<br />
+<br />
+  这样，只需要替换掉指向这个Closure的变量即可实现代码的替换。<br />
+<br />
+  <br />
+<br />
+*）指定区分不同服务器上不同类别worker的实现机制<br />
+<br />
+  由于worker节点可能不包括所有的worker，那么对于一个gearman worker集群，<br />
+<br />
+  可能有限制在某个节点上执行某个worker的需求，也可能有限制在某些节点上执行worker的需求。<br />
+<br />
+   根据gearman worker的特点，在注册给gearman时，可以通过worker别名的方式实现，<br />
+<br />
+  这个别名包含了节点的ip，项目的名称，甚至是一个worker进程的进程ID。<br />
+<br />
+  而这些别名则都指向一个worker的Clouse代码段，无论使用哪个别名，最后执行的都是相同的代码逻辑。<br />
+<br />
+  在需要指定的时候，可根据这些分类实现指定在特定的节点或者worker上执行某个任务worker。<br />
+<br />
+*) 异步任务的结果查询机制<br />
+<br />
+   系统通过引入第三方的kv组件，像redis，memcache来存储任务worker的结果。<br />
+<br />
+   结果的存储是以任务的uuid作为key，任务的返回值为value存储的。<br />
+<br />
+   结果的存储是有有效时间的，在存储时以当前时间为限N天内必须来读取这个结果，否则将再也读取不到了。<br />
+<br />
+   对于还需要关心任务处理结果的项目来说，可以通过定时或者通知的形式来读取这个结果并做进一步处理。<br />
+<br />
+   <br />
+<br />
+*）改进<br />
+<br />
+  使用msgpack代替现有的json编码打包从client到worker的参数与返回值。<br />
+<br />
+  使用稳定的C/C++编写监控与管理进程，长时间运行不退出。<br />
+<br />
+  使用zeromq把多节点的监控进程与管理进程整合起来，实现真正的分布式gearman worker进程管理。<br />
+<br />
+  规范参数与返回值。<br />
+<br />
+  支持其他语言编写的worker运行在这个框架之内。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/708'>http://nullget.sourceforge.net/?q=node/708</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

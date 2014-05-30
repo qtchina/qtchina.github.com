@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>没时间试qt5</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>没时间试qt5</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-14 13:39
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+最近qt5发展的相当不错，我却没时间再跟上qt的步伐了。<br />
+<br />
+想起来整整跟了qt4一代，现在扔下可惜，有时间再继续吧。<br />
+<br />
+现在有些演示工具，测试程序还用的qt开发的界面，<br />
+<br />
+偶尔碰到一点迁移到qt5的问题，随手改过来继续用了。<br />
+<br />
+最近遇到的迁移问题，<br />
+1）QString.toAscii() -> QString.toLatin1()<br />
+2)  FileDialog类需要包含<QtWidget><br />
+3) QByteArray.signature() -> QByteArray.methodSignature();<br />
+4)  QHttpRequestHeader类去掉了<br />
+[code type="c"]<br />
+/*<br />
+  simple Qt4 class emulater<br />
+*/<br />
+<br />
+#if QT_VERSION >= 0x050000<br />
+QHttpRequestHeader::QHttpRequestHeader(QString headerString)<br />
+{<br />
+    this->mHeaderString = headerString;<br />
+<br />
+    QStringList hdrs = headerString.split("\r\n");<br />
+    QStringList hdrkv;<br />
+    for (int i = 0; i < hdrs.size(); i++) {<br />
+        if (hdrs.at(i).trimmed().isEmpty()) break;<br />
+        if (i == 0) {<br />
+            hdrkv = hdrs.at(i).split(" ");<br />
+            this->mMethod = hdrkv.at(0);<br />
+        } else {<br />
+            hdrkv = hdrs.at(i).split(":");<br />
+            this->mHeaders[hdrkv.at(0)] = hdrkv.at(1).trimmed();<br />
+        }<br />
+    }<br />
+}<br />
+<br />
+bool QHttpRequestHeader::isValid()<br />
+{<br />
+    if (this->mHeaderString.isEmpty()) return false;<br />
+    if (this->mMethod != "GET" && this->mMethod != "POST") return false;<br />
+    if (this->mHeaders.size() < 2) return false;<br />
+    return true;<br />
+}<br />
+<br />
+QString QHttpRequestHeader::method()<br />
+{<br />
+    return this->mMethod;<br />
+}<br />
+<br />
+uint QHttpRequestHeader::contentLength() const<br />
+{<br />
+    uint clen = 0;<br />
+<br />
+    clen = this->mHeaders.value("Content-Length").toUInt();<br />
+<br />
+    return clen;<br />
+}<br />
+<br />
+QHttpResponseHeader::QHttpResponseHeader(int code, QString text)<br />
+{<br />
+    this->mCode = code;<br />
+    this->mText = text;<br />
+}<br />
+<br />
+void QHttpResponseHeader::setValue(const QString &key, const QString &value)<br />
+{<br />
+    this->mHeaders[key] = value;<br />
+}<br />
+<br />
+QString QHttpResponseHeader::toString() const<br />
+{<br />
+    QMapIterator<QString, QString> it(this->mHeaders);<br />
+    QString hdrstr;<br />
+<br />
+    hdrstr += QString("HTTP/1.1 %1 %2\r\n").arg(this->mCode).arg(this->mText);<br />
+    while (it.hasNext()) {<br />
+        it.next();<br />
+        hdrstr += it.key() + ": " + it.value() + "\r\n";<br />
+    }<br />
+    hdrstr += "\r\n";<br />
+<br />
+    return hdrstr;<br />
+}<br />
+<br />
+#endif<br />
+<br />
+[/code]<br />
+<br />
+先碰到了这些，以后遇到再整理。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/755'>http://nullget.sourceforge.net/?q=node/755</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

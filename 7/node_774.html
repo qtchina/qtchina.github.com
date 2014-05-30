@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>自己编译archlinux内核</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>自己编译archlinux内核</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-11-23 14:11
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在测试lxc(linux container)的过程中，发现arch 自带linux内核3.12缺少一个模块user_namespace功能。<br />
+在lxc-checkcontainer时显示为miss。<br />
+<br />
+在搜索了下关于archlinux对这个模块的打包问题，原来是由于可能存在一个安全问题而没有带到官方的包里。<br />
+<br />
+可以自己在arch linux打包的基础上添加这个功能就可以，因此，考虑使用官方的PKGBUILD文件。<br />
+<br />
+下载最新的archlinux包文件，<br />
+<br />
+git clone git://projects.archlinux.org/svntogit/packages.git<br />
+<br />
+cd packages/linux/trunk/<br />
+vim config   # 或者config.x86_64<br />
+修改一行配置，把# CONFIG_USER_NS is not set替换为CONFIG_USER_NS=y<br />
+<br />
+然后执行正常的编译，<br />
+makepkg --skipchecksums<br />
+<br />
+编译出来的包为，linux-3.12.1-1-i686.pkg.tar.xz<br />
+pacman -U linux-3.12.1-1-i686.pkg.tar.xz<br />
+<br />
+安装完成后重启机器，再执行lxc-checkconfig时，所有的检测都通过了。<br />
+<br />
+注，这个功能据arch linux官方回应，应该会在linux-3.13版本默认开启，到时不需要再自已编译了。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/774'>http://nullget.sourceforge.net/?q=node/774</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

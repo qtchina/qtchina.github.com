@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>基于couchbase的全局日志系统设计</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>基于couchbase的全局日志系统设计</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-11-13 10:58
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+web系统的日志记录很重要，但单独设置独立的日志系统很费开发与维护。<br />
+<br />
+导致现有的系统日志记录零散混乱无规则。<br />
+<br />
+对现有的日志记录方式的总结：<br />
+<br />
+×）在本机上记录日志文件<br />
+<br />
+×）记录到关系数据库中，如MySQL<br />
+<br />
+×）临时记录，测试完后删除日志代码<br />
+<br />
+<br />
+现有的web系统一般都是基于负载均衡的多web前端架构，<br />
+<br />
+这几种方式都有比较大的缺点，很难综合存储处理分析web系统日志。<br />
+<br />
+<br />
+当前比较好的日志方式：<br />
+<br />
+×）独立的日志系统，为各web系统提供日志记录服务，提供查询<br />
+<br />
+这种方式引入了系统维护与开发复杂度，同时由于处理大量日志，<br />
+<br />
+还需要投入大量硬件资源来满足大量的日志处理。<br />
+<br />
+<br />
+在现有的无法满足大量独立硬件资源的情况下，在现有的系统基本之上，<br />
+<br />
+使用couchbase来实现全局日志系统，其优点有，<br />
+<br />
+×）不需要新加硬件<br />
+<br />
+×）充分利用web前端空闲的硬盘存储资源<br />
+<br />
+×）不需要新加软件系统<br />
+<br />
+×）实现分布式日志系统<br />
+<br />
+×）效率比较关系型数据库高<br />
+<br />
+×）很容易导出到其他非线上机器实现离线数据处理与分析<br />
+<br />
+×）存储任意结构数据<br />
+<br />
+×）开发维护代价比较低<br />
+<br />
+<br />
+实现：<br />
+<br />
+×）定义MemModel<br />
+<br />
+×）使用虚拟表结构，<br />
+<br />
+×）定义两个接口，添加日志，删除日志<br />
+<br />
+×）在couchbase创建applog独立桶，合理分配内存资源（128-256M)<br />
+<br />
+×）嵌入到web应用系统<br />
+<br />
+<br />
+还需要做的工作：<br />
+<br />
+×）查询接口/工具<br />
+<br />
+×）清理/导出机制/工具<br />
+<br />
+×）Map/Reduce处理/分析工具<br />
+<br />
+<br />
+这种日志系统设计，是在现有的软件、硬件资源条件下的一个很好的折中方案。<br />
+<br />
+能帮助开发人员开发稳定高效的系统，提供更多系统的维护信息，<br />
+<br />
+提高故障的处理效率，提早发现系统可能潜在的问题。<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/695'>http://nullget.sourceforge.net/?q=node/695</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

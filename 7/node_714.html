@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>对于couchbase执行效率的一点认识</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>对于couchbase执行效率的一点认识</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-02-06 11:34
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在2012年，对于IT行业来说是NoSQL的一年，所有的NoSQL产品不断出现，刷新着IT行业的技术理念。<br />
+<br />
+在实际应用中，讨论比较多的，依旧是mongodb, redis, （其他可能还有许多)，couchbase算是比较新的一种。<br />
+<br />
+选择couchbase的理由在于，其设计理念上比较先进，水平扩展的功能基本透明，集群内的节点上的数据自动分布，添加减少节点时的rebanlance功能，与其他几个产品相比，比较简洁，也很实用好用。<br />
+<br />
+接下来讨论它的效率了，couchbase 的集群功能与进程通信使用erlang实现的，所以对于单个操作上根本不占优势。因为即使单个操作，在实现上依然需要考虑集群的数据分配，数据的备份与磁盘的定入。<br />
+<br />
+但是这种实现也有好处，在并发早大的情况下，其性能下降并不明显，couchbase官方的测试结果最大能达到每个节点写入2w个k/v。我自己的测试，也不低于这个数据。<br />
+根据这种情况，它更像数据库了。<br />
+<br />
+所有在追求极致的访问速度，但访问并发不大的情况下，使用couchbase也许不太合适，但大多数项目下，还是比较好的选择。<br />
+<br />
+目前遇到的一个比较大的问题是couchbase存储二进制静态数据的时候，couchbase会做base64后再保存，如果是大量的这种数据，存放在其中非常不合适，实现使用过程中，发现其耗时为硬盘的6倍。不过又由于其把磁盘做成一个存储集群的功能比较易用，目前仍然在用着。<br />
+<br />
+所有的系统都有优点，也有不足之处，关键还在于多了解不同系统的运行机制与实际运行情况，根据项目的要求，选择合适的系统。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/714'>http://nullget.sourceforge.net/?q=node/714</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>搭建nginx+git+cgit环境</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>搭建nginx+git+cgit环境</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-27 15:58
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1、环境目标<br />
+     *) 通过http协议操作git库，<br />
+     *) 支持基本的git库用户认证<br />
+     *) 通过http协议访问git库展示，类似gitview功能<br />
+     <br />
+2、基础环境与包安装<br />
+     centos-6, 64位<br />
+     nginx-1.4.1<br />
+​<br />
+3、安装带完整dav支持的nginx<br />
+     由于nginx包自带的dav模块不是完整的dav协议实现，<br />
+     还需要用于一个额外的nginx模块，nginx-dav-ext-module。<br />
+     下载nginx-1.4.1.tar.gz，解压，<br />
+      ./configure --add-module=/path/to/nginx-dav-ext-module<br />
+      make && make install<br />
+ <br />
+      配置编译好的nginx，并启动，<br />
+  <br />
+        listen 8080;<br />
+        server_name code.qtchina.net;<br />
+        dav_methods PUT DELETE MKCOL COPY MOVE;<br />
+        dav_ext_methods PROPFIND OPTIONS;<br />
+<br />
+        # turn on auth_basic                                                                                  <br />
+        auth_basic           "Private area";<br />
+        auth_basic_user_file "/data1/SVN/passwd.conf";<br />
+        create_full_put_path   on;<br />
+        dav_access             group:rw  all:r;<br />
+<br />
+        location /git/ {<br />
+            root   /data1;<br />
+            index  index.html index.htm;<br />
+            autoindex on;<br />
+        }<br />
+<br />
+      现在可以通过http://code.qtchina.net/git/xxx访问git库了。<br />
+      git clone http://code.qtchina.net/git/xxx<br />
+      git add xxx<br />
+      git commit -a -m "xxx"<br />
+      git push origin master<br />
+<br />
+4、安装cgit fastcgi处理进程<br />
+   这一步为了实现页面的gitview功能，像浏览代码树，查看提供记录与提交日志，查看提交代码改动。<br />
+   下载cgit-0.9.2.tar.xz，git-1.8.3.4.tar.gz<br />
+    解压cgit后，到cgit源代码目录解压git源代码，并把目录名改为git。<br />
+    make V=1 <br />
+    编译完成，当前文件生成了可执行文件cgit，可尝试执行./cgit输出HTML代码。<br />
+    把它拷贝到/path/to/nginx/install/path/cgi-bin/目录。<br />
+    开始启动cgit了，这要需要用到spawn-fcgi，yum install spawn-fcgi。<br />
+    配置/etc/sysconfig/spawn-fcgi文件，<br />
+       SOCKET=/var/run/cgit-fcgi.sock<br />
+       OPTIONS="-u nobody -g nobody -s $SOCKET -S -M 0600 -C 32 -F 1 -P /var/run/spawn-fcgi.pid -- /usr/bin/fcgiwrap"<br />
+    启动后的socket文件信息，启动参数信息。<br />
+    /etc/init.d/spawn-fcgi start<br />
+    <br />
+    修改nginx配置，添加这一个location:<br />
+        location /cgit/ {<br />
+            root /usr/local/nginx/fcgi-bin;<br />
+            fastcgi_pass unix:/var/run/cgit-fcgi.sock;<br />
+<br />
+            fastcgi_param  QUERY_STRING       $query_string;<br />
+            fastcgi_param  REQUEST_METHOD     $request_method;<br />
+            fastcgi_param  CONTENT_TYPE       $content_type;<br />
+            fastcgi_param  CONTENT_LENGTH     $content_length;<br />
+<br />
+            fastcgi_param  REQUEST_URI        $request_uri;<br />
+            fastcgi_param  DOCUMENT_URI       $document_uri;<br />
+            fastcgi_param  SERVER_PROTOCOL    $server_protocol;<br />
+<br />
+            fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;<br />
+            fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;<br />
+<br />
+            fastcgi_param  REMOTE_ADDR        $remote_addr;<br />
+            fastcgi_param  REMOTE_PORT        $remote_port;<br />
+            fastcgi_param  SERVER_ADDR        $server_addr;<br />
+            fastcgi_param  SERVER_PORT        $server_port;<br />
+            fastcgi_param  SERVER_NAME        $server_name;<br />
+<br />
+            # Tell nginx to consider everything after /git as PATH_INFO. This way                    <br />
+            # we get nice, clean URL’s                                                                       <br />
+            fastcgi_split_path_info           ^(/cgit)(/?.+)$;<br />
+<br />
+            # Unfortunately the version of fcgiwrap currently available in Debian                                         # squeeze removes the PATH_INFO variable from the CGI environment and                                         # sets a new one based on DOCUMENT_ROOT and SCRIPT_NAME, so the line                                           # below won’t work                                                                                           #fastcgi_param  PATH_INFO         $fastcgi_path_info;                                                         # Tell fcgiwrap about the binary we’d like to execute and cgit about                                         # the path we’d like to access.                                                                                          <br />
+            fastcgi_param  SCRIPT_NAME        /cgit$fastcgi_path_info;<br />
+<br />
+            include        fastcgi_params;<br />
+        }​<br />
+<br />
+    重启nginx后，通过浏览器访问，http://code.qtchina.net/cgit/已经能显示了，<br />
+    但是显示没有项目，列表为空。<br />
+<br />
+5、接下来配置cgit的项目，<br />
+   cgit默认的配置文件放在/etc/cgitrc文件<br />
+# prepend this string to every url<br />
+virtual-root=/cgit<br />
+<br />
+# title, heading, desc, about...<br />
+root-title=201 develop server git repositories<br />
+root-desc=testing purpose, try it just now. git clone http://code.qtchina.com/git/pubtest.git; cd pubtest; echo "123" >> abc.t\<br />
+xt;<br />
+#root-readme=/files/web/example.com/code/about.html<br />
+root-readme=/usr/local/nginx/fcgi-bin/cgit_about.html<br />
+<br />
+# styling<br />
+#css=/htdocs/cgit/cgit.css<br />
+#logo=/htdocs/cgit/cgit.png<br />
+<br />
+#<br />
+# "STATIC" REPOSITORIES<br />
+#<br />
+# Add them one by one, or include a file...<br />
+# section=Hosted repos<br />
+​# First repository<br />
+#repo.url=<project_name><br />
+#repo.owner=<user><br />
+#repo.path=/path/to/git_repo/.git<br />
+#repo.desc=A test project.<br />
+<br />
+# admtools<br />
+repo.url=admtools<br />
+repo.owner=git201<br />
+repo.path=/data1/git/admtools.git<br />
+repo.desc=Develop server admin tools.<br />
+<br />
+repo.url=couchbase-devel<br />
+repo.owner=git201<br />
+repo.path=/data1/git/couchbase-devel.git<br />
+repo.desc=<br />
+​     这时再访问上一步的cgit页面时，已经会出现两个项目了。<br />
+     注意，在配置完成后，会依旧显示不出来项目详细信息，需要到每个git库目录执行：<br />
+cd putest.git/<br />
+git update-server-info<br />
+     这个命令生成refs/info文件，给cgit或者其他的git代码浏览工具使用。<br />
+<br />
+6、现在已经能通过http协议操作git库，并能通过cgit浏览代码改动和提交相关信息了。<br />
+   现在的认证方式只使用了http basic auth模式，比较简单。<br />
+   其他的认证方式有数据库模式，或者证书模式，再以后有需要的时候研究补充。<br />
+<br />
+<br />
+nginx-dav-ext-module<br />
+cd putest.git/<br />
+git update-server-info<br />
+<br />
+/etc/sysconfig/spawn-fcgi:<br />
+SOCKET=/var/run/cgit-fcgi.sock<br />
+OPTIONS="-u nobody -g nobody -s $SOCKET -S -M 0600 -C 32 -F 1 -P /var/run/spawn-fcgi.pid -- /usr/bin/fcgiwrap"<br />
+<br />
+ 参考：<br />
+https://github.com/pmirshad/cgit-on-nginx/wiki/Installing-cgit-with-nginx-on-Ubuntu-11.10<br />
+cgitrc.5.txt<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/737'>http://nullget.sourceforge.net/?q=node/737</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

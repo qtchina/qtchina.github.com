@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用zram优化linux交换分区</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用zram优化linux交换分区</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-03-16 10:52
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+zram从名字就可能看出，它是linux内核中的一种内存压缩技术。<br />
+zram一个非常适用的地方是把它用于基于压缩内存的linux交换分区。<br />
+<br />
+针对内存比较小的机器，比如内存在2G以内的机器，使用效果非常明显。<br />
+其原理是使用CPU的压缩功能变相地让系统有更多地内存可用，。<br />
+当然，这需要一部分CPU时间来处理内存地压缩，对于CPU相对比较好的机器，则非常适用。<br />
+<br />
+像我在用的一台电脑，CPU是i5的，但内存是2G，还有512M内存分给了集成显卡，<br />
+正常使用的情况下，非常难用，这种笔记本电脑配置非常不合理。<br />
+不同自己的电脑，也无法升级内存，则使用这种技术，可以改进一点硬件配置的不合理。<br />
+<br />
+zram一般使用可用物理内存的20-25%，这是比较推荐地值。<br />
+假设现有1.5G内存可用，拿出来25%的内存，也就是375M，还剩下1125M内存。<br />
+而这375M内存，在压缩率为70%的情况下，可以当作1250M的内存使用。<br />
+剩余内存与这些压缩内存相加，大概有1125+1250=2375M了。<br />
+可用内存从原来的1.5G变到了2.3G左右，效高还算是比较明显的。<br />
+<br />
+内核中类似的技术，cleancache。<br />
+<br />
+参考资料：<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/793'>http://nullget.sourceforge.net/?q=node/793</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

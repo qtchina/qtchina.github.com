@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>后台PHP进程的多版本框架可重入方法总结</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>后台PHP进程的多版本框架可重入方法总结</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-30 12:46
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+PHP一般用于web 开发，执行一次结束，而对后台PHP进程相关机制的支持不是太好。<br />
+<br />
+由于系统需要的原因，对它的这种后台运行方式考虑了一段时间，总结出几种方法，<br />
+<br />
+*）使用启动新进程的方法，可以完全启动一个新的PHP运行环境<br />
+*）使用PHP 的 runkit扩展，在当前的进程中生成一个全新的PHP虚拟运行环境<br />
+*）使用pcntl_fork方式生成一个新进程，这个进程与执行fork时的父进程相同，但之后的环境是全新的。<br />
+<br />
+但是这三种都各有优点与不足的地方，<br />
+第一种，效率上可能是问题，再有是难以控制<br />
+第二种，这个扩展的稳定性还有待测试，效率上不太好说，也类似创建一个新的虚拟机支持环境<br />
+第三种，这个对新生的进程有影响，不是完全全新的PHP运行环境。<br />
+<br />
+这个问题的来源在于，对于使用include*,require*引入的文件中包含的类和函数，都是全局有效的。<br />
+在使用多版本的框架后，第一次加载的框架版本会影响后续的执行代码所引用的框架版本，必然会导致后续代码的执行结果。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/706'>http://nullget.sourceforge.net/?q=node/706</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

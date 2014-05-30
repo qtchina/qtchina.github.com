@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>go语言学习笔记-文件读写</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>go语言学习笔记-文件读写</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-10 10:31
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+和文件读写相关的包和类：<br />
+os.<br />
+bytes.<br />
+Reader<br />
+Writer<br />
+<br />
+package main;<br />
+<br />
+import ( "fmt"<br />
+"os"<br />
+"bytes"<br />
+)<br />
+<br />
+func main () {<br />
+     fp,err := os.Open("file.go")<br />
+     fp2,err2 := os.Open("file2.go")<br />
+     data := make([]byte, 100)<br />
+<br />
+     if err != nil {<br />
+           count,err3 := fp.Read(data)<br />
+           if count == 0 && err3 != nil {<br />
+               fmt.Printf("%s", data[0:count])<br />
+               fp2.Write(data[0:count])<br />
+           }<br />
+     }<br />
+}<br />
+<br />
+这是一个简单的文件读写示例，用于复制当前的程序源代码。<br />
+其中需要注意的是，在写入数据或者输出数据的时候，需要用到go语言的slice机制，只使用可用的数据段，否则会出现数据重叠。<br />
+<br />
+os.Open函数默认需要打开一个已经存储的文件，如果文件不存在，需要先创建文件，否则会出文件不存在的错误。<br />
+<br />
+文件的创建，os.Create函数，返回已经打开的文件指针，可执行文件读写操作。文件是否存在的判断，使用os.Stat函数和os.IsNotExist(err)函数判断。<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/753'>http://nullget.sourceforge.net/?q=node/753</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>总结P2P程序中UDP穿透难点</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>总结P2P程序中UDP穿透难点</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-21 14:33
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div id="yass_top_edge_dummy" style="width:1px;height:1px;padding:0px;margin:-6px 0px 0px;border-width:0px;display:block;"></div><div id="yass_top_edge" style="background-position:center bottom;padding:0px;margin:0px;border-width:0px;height:0px;display:block;width:796px;"></div><div id="yass_top_edge_padding" style="padding:0px 0px 5px;margin:0px;border-width:0px;height:0px;display:block;"></div>最难的一种NAT，这是从对称型NAT演变过来折和中NAT，叫做动态类型NAT。<br> <br> 使用traceroute/tcptraceroute确定动态NAT网络到目标主机的出口IP，为对方的NAT打洞提供目标IP信息。<br> <br> 有一种动态类型的NAT，这种NAT的网络出口IP是一个出口IP池中选出来的。<br> <br> 选择的方式可能是随机，也有可能按照目标IP做hash，从而固定选择。<br> <br> 即使是随机的，在一段时间内，很有可能也会使用相同的NAT出口IP，<br> <br> 从实现结果可以看到，这可能是为了保证NAT能够正常工作。<br> <br> 但是，有些NAT却不支持traceroute，一个中间路由都trace不到的情况，<br> <br> 这就非常难办了。<br> <br> 对于普通的对称型NAT，穿透方式已经有前人研究，而且成功率很高，<br> <br> 比较好的方式有multi hole punching方式，通过猜测下一个可能使用的NAT端口实现。<br> <br> 猜测端口，现在的NAT端口选择大概有两种常见方式，一种是累加模式，<br> <br> 每次使用的NAT端口在之前的端口基础上加n（n&gt;=1，并且一般来说n&lt;=9）。<br> <br> 另一种方式是完全随机选择未使用的端口，这种不太好猜测，<br> <br> 当然，如果用的是非动态NAT，只使用一个固定IP的情况下，可以考虑把可用端口全部占用，<br> <br> 那么剩下的端口还好猜测一些。<br> <br> multi hole punching论文：。<br> <br> 猜测端口的另一篇文章：。<br> <br> <br> 相比来说，其他几种NAT方式，则非常容易了，也有许多资料和实现代码供参考。<br> <br> 以上说的都是UDP协议穿透，TCP协议穿透也类似，但在实现上更复杂，如需了解查询资料。<br> <br> 当然，在无法实现P2P穿透的情况下，也就是使用中继这种方式了。<div id="yass_bottom_edge" style="position:absolute;margin:0px;padding:0px;border-width:0px;height:0px;left:0px;top:970px;width:100%;display:block;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/810'>http://nullget.sourceforge.net/?q=node/810</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用clang编译完全支持C++11的Qt5</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用clang编译完全支持C++11的Qt5</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-02-24 11:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+总结，通过这次折腾，<br />
+<br />
+加深了对clang/llvm编译工具链的理解。<br />
+<br />
+了解了些关于gcc与clang的内建原子操作机制与实现。<br />
+<br />
+了解了clang当前3.2版本的一些问题。<br />
+<br />
+了解了clang/llvm后续版本的一些新特性。<br />
+<br />
+Qt5关于C++11的配置编译变量设置机制。<br />
+<br />
+Qt5跨平台配置编译的实现机制。<br />
+<br />
+<br />
+<br />
+软件包版本说明：<br />
+<br />
+clang/llvm-3.2<br />
+<br />
+libcxx-3.2<br />
+<br />
+libcxxabi-svn-20130223<br />
+<br />
+qt5.0.1<br />
+<br />
+archlinux/kernel3.8.0/x86_64<br />
+<br />
+<br />
+<br />
+参考资料：<br />
+<br />
+*) 关于clang/libcxx/libcxxabi的讨论：http://lists.cs.uiuc.edu/pipermail/cfe-dev/2012-July/022837.html<br />
+*) clang的内置原子操作函数应用示例：http://fossies.org/unix/misc/clang-3.2.src.tar.gz:a/clang-3.2.src/test/CodeGen/atomic-ops.c<br />
+<br />
+*) clang的内置函数列表：/usr/include/clang/Basic/Builtins.def <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+编译过程：<br />
+<br />
+1）修正libcxx的头文件<atomic>的问题<br />
+<br />
+   修改/usr/include/c++/v1/atomic文件，把has_feature替换为has_extension<br />
+<br />
+   #if !has_extension(cxx_atomic)<br />
+<br />
+   这个问题应该的libcxx-3.3-trunk中修正了。<br />
+<br />
+2）编译参数<br />
+<br />
+   $ ./configure -v -prefix /opt/qt5 -opensource -release -shared -c++11 -platform linux-clang -make libs -make tools -make demos<br />
+<br />
+3) 设置clang++支持c++11，链接libcxx与libcxxabi<br />
+<br />
+   修改qtbase/mkspec/linux-clang/qmake.conf<br />
+<br />
+   把QMAKE_LFLAGS改为:  QMAKE_LFLAGS += -stdlib=libc++ -llibc++ -llibc++abi<br />
+<br />
+ <br />
+<br />
+   修改qtbase/mkspec/common/clang.conf<br />
+<br />
+   把QMAKE_CXXFLAGS_CXX11变量设置为：QMAKE_CXXFLAGS_CXX11 = -std=c++11 -stdlib=libc++  <br />
+<br />
+   把QMAKE_LFLAGS_CXX11变量设置为：QMAKE_LFLAGS_CXX11 = -lc++ -stdlib=libc++ -lc++abi  <br />
+<br />
+4) 修改Qt5源代码，让qt-script和qt-webkit支持clang-3.2的标准<br />
+<br />
+   *) ./qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h  <br />
+<br />
+   *) ./qtwebkit/Source/WTF/wtf/Atomics.h  <br />
+      把#include <ext/atomicity.h>换成#include <atomic><br />
+<br />
+      把__gnu_cxx::__exchange_and_add(addend,1)+1替换为__atomic_add_fetch调用， <br />
+<br />
+      把__gnu_cxx::__exchange_and_add(addend,-1)-1替换为__atomic_sub_fetch调用，<br />
+<br />
+      inline int atomicIncrement(int volatile* addend) { return __atomic_add_fetch(addend, 1, std::memory_order_seq_cst); } <br />
+<br />
+      inline int atomicDecrement(int volatile* addend) { return __atomic_sub_fetch(addend, 1, std::memory_order_seq_cst); } <br />
+<br />
+<br />
+<br />
+   *) ./qtbase/src/corelib/thread/qbasicatomic.h  <br />
+<br />
+      把198行QBasicAtomicInteger(const QBasicAtomicInteger &) = delete;中的=delete去掉。 <br />
+<br />
+      QBasicAtomicInteger(const QBasicAtomicInteger &);  <br />
+<br />
+   *) qtbase/src/corelib/thread/qmutex_linux.cpp <br />
+<br />
+      把63行的has_trivial_default_constructor替换为is_trivially_default_constructible，<br />
+<br />
+        Q_STATIC_ASSERT(std::is_trivially_default_constructible<QT_PREPEND_NAMESPACE(QElapsedTimer)>::value);<br />
+<br />
+       <br />
+<br />
+后续深入探讨：<br />
+<br />
+*）现在编译出来的库和程序不会链接libstdc++.so了,但是还会链接libgcc_s.so，，研究下是否可完全替换掉gcc的影响。<br />
+<br />
+*) clang链接优化参数-O4的应用问题。ld.gold和LLVMgold.so插件的应用问题。<br />
+<br />
+<br />
+<br />
+补丁：<br />
+<br />
+qt-5.0.1-clang-c++11-libcxx.patch<br />
+<br />
+涉及6个文件的改动：<br />
+<br />
+<br />
+<br />
+patch文件内容：<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+libcxx-3.2-atomic-check.patch<br />
+<br />
+涉及1个文件的改动：<br />
+<br />
+patch文件的内容：
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/715'>http://nullget.sourceforge.net/?q=node/715</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

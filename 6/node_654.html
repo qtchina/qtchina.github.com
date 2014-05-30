@@ -27,7 +27,7 @@
 
   <tr>
     <td>
-      发布： 2012-05-03 09:20
+      发布： 2013-03-18 13:07
     </td>
   </tr>
 
@@ -71,7 +71,8 @@ export DEPENDS=fcitx<br />
 <br />
 source ./renv.sh<br />
 <br />
-firefox<br />
+对于gtk程序来说，需要在远程系统安装gtk2-immodule-xim包，否则无法正常使用远程输入法，<br />
+安装完这个包后， firefox 和 google-chrome 才能正常使用。<br />
 <br />
 这时应该可以使用fcitx输入法了。<br />
 <br />
@@ -81,6 +82,15 @@ firefox<br />
      还需要优化的能让界面与本地一致起来吧。<br />
      注：<br />
          由于界面设置是在客户端方设定，所以为远程启动用户设置的字体和界面外观，都能绘制出来。<br />
+<br />
+    对于宿主机上的X环境为KDE/Gnome等，可在远程机上设置相应的环境变量，<br />
+    让X程序启动时以宿主机的X-SESSION环境一致，外观效果更能与宿主机接近。<br />
+    如，设置以下环境变量，可以让支持KDE环境的特定软件显示能美观：<br />
+   KDE_MULTIHEAD=false<br />
+   KDE_FULL_SESSION=true<br />
+   KDE_SESSION_UID=1000<br />
+   KDE_SESSION_VERSION=4<br />
+   DESKTOP_SESSION=kde-plasma<br />
 
     </td>
   </tr>

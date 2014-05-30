@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>依托现有基础组件的gearman部署方案</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>依托现有基础组件的gearman部署方案</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-27 09:49
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+   gearman属于异步任务框架，目前实现了gearman框架相关封装管理工作，<br />
+   *) 包括启动停止管理php程序编写的worker相关程序，<br />
+   *) 包括启动信息管理gearmand job server的相关脚本程序<br />
+   *) 一些动态检测gearman集群状态及部署状态的核心worker<br />
+ <br />
+   本gearman部署方案及实现有以下功能，<br />
+   *) 支持worker的集中部署方式，所有项目的worker部署在一个大型的gearman集群中，给gearman专用<br />
+   *) 支持worker按项目分散式部署，如部署在各自项目的web服务器上<br />
+   *) 支持混合式部署，各项目的worker可以部署在gearman专用的集群中，也可以部署在各项目的web前端<br />
+   *) 支持任意worker节点上的worker崩溃自动化检测与重启动<br />
+   *) 支持任意worker节点上的worker状态查询<br />
+   *) 支持任意worker节点上的服务器即时状态信息查询<br />
+   *) 支持任意节点的worker程序部署即时生效功能，即实现了worker代码的修改并部署后的自动检测与自动加载<br />
+   *) 支持worker执行结果自动暂存储功能，有一定过期时间<br />
+   *) 支持worker运行在按IP地址指定的某个指定节点上<br />
+   *) 支持worker运行在按项目名称/域名指定的某个节点上<br />
+   *) 支持worker能最大限度使用框架及项目已经实现功能，<br />
+      项目相关的worker（框架action命令行模式）与项目代码一同部署<br />
+      worker管理程序自动生效并能调用项目的worker<br />
+ <br />
+   这个部署方案的需求，<br />
+   *) gearmand (job server)，必须是一个集群，否则无法做到统一管理，只能按多个gearmand/worker集群管理<br />
+   *) worker节点服务器的php版本，php-5.3+<br />
+ <br />
+   实现，<br />
+   *) 启动停止脚本目前使用shell实现<br />
+   *) worker的管理使用php脚本实现，常驻内存daemon进程<br />
+   *) worker在注册时会给worker分配别名，所有的别名指向worker实现时的函数名，功能完全相同<br />
+      实现指定worker运行在某个特定节点上，或者一批特定节点上<br />
+      如，对于dummy worker,加载管理程序会为其注册以下几个别名，<br />
+I: [2012-12-17 17:10:46] W-3. Servering dummy ....<br />
+I: [2012-12-17 17:10:46] W-3. Servering gmworker_node_10.207.0.248_dummy ....<br />
+I: [2012-12-17 17:10:46] W-3. Servering gmworker_node_127.0.0.1_dummy ....<br />
+I: [2012-12-17 17:10:46] W-3. Servering project_test_com_cn_dummy ....<br />
+I: [2012-12-17 17:10:46] W-3. Servering gmworker_node_10.207.0.248_project_test_com_cn_dummy ....<br />
+I: [2012-12-17 17:10:46] W-3. Servering gmworker_node_127.0.0.1_project_test_com_cn_dummy<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/705'>http://nullget.sourceforge.net/?q=node/705</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>nginx worker的调度策略</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>nginx worker的调度策略</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-11-28 09:21
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1）accept_mutex = on，在低连接量的情况下，大都由一个worker处理<br />
+<br />
+2）accept_mutex = off，每个连接都激活所有的worker，哪个worker抢到算哪个的<br />
+<br />
+      这种在worker多的时候容易有惊群问题。<br />
+<br />
+3）使用worker绑定CPU的方式，按照连接进来的顺序，设定每个CPU（worker）可接收的连接<br />
+<br />
+      配置麻烦，不同的机器需要不同的配置。<br />
+<br />
+4)  倒置配置法？？？ worker_process 为128, 但每个work_connection设置为1，是否可行<br />
+<br />
+     保证在前一个连接没有处理完成之前不再接收新的连接。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/698'>http://nullget.sourceforge.net/?q=node/698</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

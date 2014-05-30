@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>php5.5 opcache效率测试</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>php5.5 opcache效率测试</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-11-05 19:47
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+以下是使用ab程序测试的同一个PHP实现的URL的结果。<br />
+<br />
+<table width="100%" cellspacing="0" cellpadding="4" _moz_resizing="true"><colgroup><col width="51*"><br />
+	<col width="77*"><br />
+	<col width="77*"><br />
+	<col width="51*"><br />
+	</colgroup><br />
+	<tbody><tr valign="TOP"><td width="20%" style="border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0.1cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p>并发数</p></td><td width="30%" style="border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0.1cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">php5.4</span></span></span> </p></td><td width="30%" style="border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0.1cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">php5.5+opcache</span></span></span> </p></td><td width="20%" style="border:1px solid #000000;padding:0.1cm;"><p>备注</p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c1</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">25.6ms/25.6ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">8.5ms/8.5ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p>单个<span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">/</span></span></span>并发平均</p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c10</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">56.7ms/5.67ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">17ms/1.7ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c20</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">113.4ms/5.7</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">32.3ms/1.6ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c30</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">174.9ms/5.8</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">52.4ms/1.7ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c50</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">278.8ms/5.6ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">86.1ms/1.7ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c80</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">455.8ms/5.7ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">137.6ms/1.7ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c100</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">576.7ms/5.8ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">170.7ms/1.7ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c130</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">761.8ms/5.9ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">215.0ms/1.6ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c160</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">958.1ms/6.0ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">263.2ms/1.6ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr><tr valign="TOP"><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">c200</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">1193.6ms/6.0ms</span></span></span> </p></td><td width="30%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:none;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0cm;"><p><span style="font-family:'DejaVu Serif, serif';"><span style="font-size:small;"><span lang="en-US">378.7ms/1.9ms</span></span></span> </p></td><td width="20%" style="border-top:none;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;padding-top:0cm;padding-bottom:0.1cm;padding-left:0.1cm;padding-right:0.1cm;"><p><br></p></td></tr></tbody></table><br />
+<br />
+<br />
+结果总结：<br />
+php5.5开启opcache时的代码执行效率大概是php5.4的3倍。<br />
+<br />
+之前由于需要额外安装php的opcache模块，<br />
+<br />
+而且这些php扩展模块还不统一，在实际项目中一直没有使用。<br />
+<br />
+现在php5.5自带了opcache，只需要配置一下就能使用，<br />
+<br />
+并且优化效果比较明显，在以后的项目可以使用上php5.5+的opcache代码优化了。<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/773'>http://nullget.sourceforge.net/?q=node/773</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

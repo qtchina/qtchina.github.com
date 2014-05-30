@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用NGINX+PHP实现comet服务的nginx配置</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用NGINX+PHP实现comet服务的nginx配置</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-03-26 17:08
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+正常情况下，nginx为了最大化优化其负载能力，<br />
+大量使用缓存技术，比如缓存http响应内容直到缓冲区满再输出，可以最大化提高网络吞吐量。<br />
+在nginx连接fastcgi时，也使用相同的缓存技术。<br />
+但是，对于comet来说，缓存只能让comet的传输信息延迟更大，甚至可能收不信息。<br />
+<br />
+在现在的nginx版本中，提供了一些参数，可以优化这种应用场景。<br />
+<br />
+一般comet的实现，需要尽量关闭不需要的所有缓存，在无法关闭的时候减小缓冲区大小。<br />
+还需要尽量能保持连接跟踪，以便能在有信息时及时响应。<br />
+<br />
+这里说明的是使用php fastcgi实现简单的comet服务端的情况。<br />
+具体在nginx中，配置需要注意这些参数，<br />
+fastcgi_keep_conn on; # < solution<br />
+proxy_buffering off;<br />
+gzip off;<br />
+fastcgi_buffer_size 100;<br />
+fastcgi_buffers 2 100;<br />
+fastcgi_busy_buffers_size 100;<br />
+<br />
+其中这里列出的第一个参数最重要，让不可能变成了可能。<br />
+另外几个参数通过强制设置缓冲区大小，优化响应延迟。<br />
+<br />
+在php中，多使用flush，把所有的信息尽可能及时地刷新到comet客户端。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/797'>http://nullget.sourceforge.net/?q=node/797</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

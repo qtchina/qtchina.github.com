@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>php扩展编写中的整数参数接收</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>php扩展编写中的整数参数接收</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-27 13:15
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在php中没有C/C++语言中的unsigned long long，unsigned int这些无符号整数类型，<br />
+<br />
+在C/C++程序中一般表示为uint64_t,uint32_t等。<br />
+<br />
+如果在php扩展中需要接收这些无符号数据类型，则需要特殊的处理方式。<br />
+<br />
+对于在PHP支持的范围内的整数，可以直接使用"l"参数获取，<br />
+<br />
+但对于赶出php支持范围的整数，一般需要使用"s"参数获取，<br />
+<br />
+之后在C/C++语言中转换成无符号整数。<br />
+<br />
+也就是，通用的情况下，参数定义为mixed(integer/string)类型的。<br />
+<br />
+在扩展中使用"z"接收参数，接收到之后，使用宏Z_TYPE_P判断参数的实际类型，<br />
+<br />
+对于Z_TYPE_P == IS_LONG的时候，直接转换成无符号类型，<br />
+<br />
+因为这情况情况说明PHP正确传递了整数类型的参数。<br />
+<br />
+如果超出了PHP处理的范围，参数会被转换为浮点数，宏Z_TYPE_P应该为IS_DOUBLE类型。<br />
+<br />
+这样就可以根据扩展中判断出来的类型做不同的接收处理。<br />
+<br />
+当使用字符串类型传递这种参数时，Z_TYPE_P == IS_STRING，转换一次就可以。<br />
+<br />
+如果在接收参数的时候指定特定的类型，当传递的参数不是这种类型的时候，<br />
+<br />
+有可能导致PHP进程崩溃。<br />
+<br />
+所以一般比较完善的用法应该是，使用zval类型接收参数，然后使用宏Z_TYPE_P判断类型，<br />
+<br />
+并检测参数的有效性，才能保证PHP扩展不出现崩溃问题。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/783'>http://nullget.sourceforge.net/?q=node/783</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

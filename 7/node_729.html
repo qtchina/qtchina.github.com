@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在android的shell直接执行C程序</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在android的shell直接执行C程序</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-07 10:53
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<br />
+<br />
+默认情况下，sdcard是以noexec参数挂载上的，<br />
+所有传输到/sdcard/下的所有C编译出来的二进程程序无法直接执行，<br />
+会出现sh: ./mplayer: can't execute: Permission denied错误。<br />
+但是这个/sdcard/目录下的shell脚本文件是可以执行的。<br />
+<br />
+对于在shell中执行C/C++编译出来的二进制程序，有两种方式，<br />
+一种是把程序放在/data/local/tmp目录下，即可执行<br />
+第二种，如果系统已经root了，可以以新的参数重新挂载sdcard，<br />
+      mount -o remount,rw /mnt/sdcard<br />
+<br />
+这样放在sdcard上的二进制程序也可以无障碍执行了。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/729'>http://nullget.sourceforge.net/?q=node/729</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

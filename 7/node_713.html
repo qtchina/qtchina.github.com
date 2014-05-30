@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>karia2近期一点想法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>karia2近期一点想法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-02-06 11:10
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+karia2是一个开源的基于Qt4的命令行下载工具aria2的GUI 跨平台下载管理器项目。<br />
+aria2c是一个支持许多协议，支持多线程下载的命令行工具。<br />
+<br />
+aria2c这个项目一直非常活跃，最近有点时间，看了一点源代码，发源其工程提供编译出来一个libaria2c.a的库，然后考虑是否能以嵌入方式与karia2界面整合成一个整体。<br />
+经一点测试，发现这种方式确实可以正常调用aria2c的下载功能。<br />
+因此对些做一些完善工作，从原来的xmlrpc模式修改为直接调用aria2c核心类的方式实现下载功能，以及其他的控制功能与状态监控功能。<br />
+目前已经出来一个可用版本，但还不够完善，需要不断完善。<br />
+<br />
+另外，aria2c又提供了json-rpc和websocket-rpc功能，希望有时间的话，能通过比较好的设计模式，实现其提供的所有通信方式，最终打造一个像样的aria2c界面交互下载软件。<br />
+<br />
+现在的代码在github.com提供一份，会定期的同步到sourceforge.net的svn中。<br />
+最新代码地址：<br />
+     https://github.com/kitech/karia2<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/713'>http://nullget.sourceforge.net/?q=node/713</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

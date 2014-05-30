@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>一次图片存储库迁移方案整理</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>一次图片存储库迁移方案整理</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-10-17 10:08
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+图片存储库迁移方案<br />
+<br />
+需求：<br />
+<br />
+1）新的图片直接放在新图片存储库中<br />
+<br />
+2）原有的图片迁移到新图上存储库中<br />
+<br />
+3）对原有图片的地址必须做兼容处理<br />
+<br />
+<br />
+对于新图片的处理功能，是没有问题的。<br />
+<br />
+现在着重考虑后面两个需求。<br />
+<br />
+<br />
+原有图片迁移步骤，<br />
+<br />
+×）在原有系统导出一个迁移图片列表<br />
+<br />
+      列表内容需要包含老图片的url，文件大小，文件类型信息，老图片在磁盘上的存储路径<br />
+<br />
+×）在新图片库中对列表进行二次处理<br />
+<br />
+      生成列表中图片在新图片库中存储位置，合并成一个文件<br />
+<br />
+      并把列表信息导入到图片库数据库中<br />
+<br />
+×）在存储服务器上对列表遍历，把存储的图片路径从老的位置移动到新的位置<br />
+<br />
+      这样效率从通过接口走效率要高些。<br />
+<br />
+×）原业务系统遍历二次处理的列表，更新其业务系统数据库，存储老图地址到新图地址的映射关系。<br />
+<br />
+×）删除存储的老图<br />
+<br />
+<br />
+如果在没有写死的图片地址的情况下，这样迁移就可以了。<br />
+<br />
+但对于目前这种情况，有些新闻等附图文章中，<br />
+<br />
+很多使用了老图的完整url，根本就不可能修改的。<br />
+<br />
+对于这部分老图url的解决方案，必须涉及到域名指向的修改、<br />
+<br />
+squid后端404重定向的修改，以及新图片库中对老图片路径与新图片路径兼容转换的处理。<br />
+<br />
+具体步骤整理如下：<br />
+<br />
+×）修改图片系统apache配置，让新图片虚拟主机支持老图片用到的所有域名<br />
+<br />
+    ServerAlias oldimg.example.com<br />
+    ServerAlias oldimg2.example.com<br />
+<br />
+×）修改图片系统apache配置，将老的图片地址转发到兼容路由入口<br />
+<br />
+<br />
+    RewriteCond %{HTTP_HOST} !^newimg.example.com<br />
+    RewriteCond %{HTTP_HOST} !^newimg2.example.com<br />
+<br />
+    RewriteRule (.*) http://newimg.example.com/migration/coswitcher?host=%{HTTP_HOST}&path=$1 [P]<br />
+×）设计并实现新旧url兼容路由器程序coswitcher<br />
+<br />
+<br />
+×）修改前端squid配置，在404图片时，转发到newimg.example.com服务器上<br />
+<br />
+×）或者通过修改老域名oldimg.example.com，直接指向newimg.example.com服务器上。<br />
+<br />
+<br />
+对老图片url兼容并实现路由映射转换是有一定代价的，<br />
+<br />
+除去图片文件迁移工作不算，在效率上也有一些折扣。<br />
+<br />
+一张使用老地址的老图片，<br />
+<br />
+在访问过程中，相比正常的新图片url访问，<br />
+<br />
+会多一次squid上的404跳转，多一次映射查询，一次url重写。<br />
+<br />
+这部分代价估计总耗时在50-100ms。<br />
+<br />
+好处在于对老图片url的完全兼容，原有使用到老图片url地址的所有地方不需要任何需要。<br />
+<br />
+图片库成了无所不能的怪兽，接下来的工作怎么保持、加强怪兽系统的系统维护工作了。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/692'>http://nullget.sourceforge.net/?q=node/692</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

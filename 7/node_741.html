@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>web系统优化--前端js,css,图片压缩</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>web系统优化--前端js,css,图片压缩</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-09-14 08:42
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+自从进入web2.0时代，web系统对浏览器端的界面效果要求不断提高。<br />
+浏览器端的效果大多数由js+css+图片实现。<br />
+页面的整体效果由平面设计实现，这里不做描述，仅对优化代码执行方面做些分析总结。<br />
+​<br />
+开发人员编写的js,css基本都带格式，方便开发人员阅读。<br />
+但是这些格式对于浏览器来说不是必须的，可以去掉这些格式，<br />
+省略格式字符，如空格，换行，注释等，能节省部分网络开销，<br />
+这一过程称作压缩过程，显然这个压缩不同于常说的文件压缩。<br />
+<br />
+前端JS，CSS开发的一般流程为，开发人员编写代码，提交到代码管理库，<br />
+提交后触发另外的工具，做压缩后，再触发部署程序部署到服务器上。<br />
+<br />
+压缩方法比较多，我接触的有yahoo的yuicompress，用java开发提供的jar包。<br />
+另外一种，与前端js关系比较密切的node.js，可供参考。<br />
+<br />
+除了单个js,css文件压缩外，还有一种合并请求机制，减少浏览器与服务器之间的请求次数。<br />
+这种是把页面需要用到的JS或者CSS文件列表提交给服务器的动态程序，<br />
+程序实时或者带缓冲地把所有文件合并为一个文件后，执行压缩过程，返回给客户端浏览器。<br />
+如果使用到的JS，CSS文件数非常多，则这种机制的效果非常明显。<br />
+<br />
+http服务器端的配置优化，一般针对这些文件开启gzip压缩（这是常说的文件压缩），<br />
+减小数据传输大小。<br />
+或者在之前放置上squid缓存服务器，进一步优化静态文件加载。<br />
+<br />
+对于JS，CSS文件中用到的图片文件，一般使用gmagick,imagick程序做优化，<br />
+设定结果图片的图片质量，能在一定程序上缩小图片尺寸，减小网络传输消耗。<br />
+<br />
+对JS，CSS的优化，还有一种超级优化方式，即代码混淆。<br />
+之前提到的优化只是格式上的优化，最多能去掉格式字符，注释等，<br />
+这种优化是把代码里的函数，变量命名替换为更简短的按照某种规则生成的名字，<br />
+让代码文件整体再进一步减小，预计能减小1/3到1/2。<br />
+混淆工具成熟的不太多，整理后再发出来。<br />
+<br />
+综合这些优化方法，减少一半的传输数据，减少更多的请求次数，能让页面效果得到巨大提升。<br />
+<br />
+压缩工具介绍，<br />
+比较老的yuicompress.jar<br />
+比较新的，使用nodejs的uglify-js, cleancss, r.js<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/741'>http://nullget.sourceforge.net/?q=node/741</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

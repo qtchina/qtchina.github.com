@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>基于parrallssh的并行压力测试方法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>基于parrallssh的并行压力测试方法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-08-21 14:40
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1、压力测试的必要性<br />
+<br />
+     在做架构选型时，需要对可替换组件进行测试，以便确定时否适用。<br />
+<br />
+    <br />
+<br />
+2、压力测试的难点<br />
+<br />
+      一般对并发的测试不好处理。<br />
+<br />
+      需要编写大量脚本，并在多台服务器上重复执行。<br />
+<br />
+      如果服务器超过10台的规模，则测试起来繁琐。<br />
+<br />
+      并且由于启动时间的差异等因素，测试结果会受到影响。<br />
+<br />
+<br />
+3、Unix哲学-工具组合<br />
+<br />
+     一个工具做一件事，简单易用，这就是Unix哲学。<br />
+<br />
+     在实际应用过程中，总结了这么一套工具组合，实现并行压力测试功能。<br />
+<br />
+     parrall-ssh: 这个包为并行自动登陆工具<br />
+<br />
+     mpirun: 这个包为在登陆机器的并行运行进程工具<br />
+<br />
+     在测试时，只需要开发能单机运行的程序或脚本即可。<br />
+<br />
+     自动化工具运行时把单机执行的程序或脚本自动拷贝到目录机器上，并行执行。<br />
+<br />
+     执行的时间的测算，目前还不太精确，是计算的单机上所有进程都执行完成所用时间。<br />
+<br />
+     执行结果可返回并汇总到当前启动测试的机器上。<br />
+<br />
+4、工具包安装<br />
+     *) 在本机上安装sshpass<br />
+<br />
+          centos: yum install sshpass<br />
+<br />
+          archlinux: pacman -S sshpass<br />
+<br />
+           gentoo: emerge sshpass<br />
+<br />
+           debian/ubuntu: apt-get install sshpass<br />
+<br />
+     *) 在本机上安装parrall-ssh<br />
+<br />
+         $> git://github.com/kitech/parallel-ssh.git<br />
+<br />
+         $> cd parallel-ssh<br />
+<br />
+         $> sudo python setup.py install<br />
+<br />
+         测试运行，<br />
+<br />
+         $> pssh<br />
+<br />
+               Usage: pssh [OPTIONS] -h hosts.txt command [...]<br />
+<br />
+               pssh: error: Command not specified.<br />
+<br />
+<br />
+       *)  在远程服务器上安装openmpi<br />
+<br />
+            $> pssh -h yourservs.txt "yum install openmpi"<br />
+<br />
+            $> pssh -h yourservs.txt "ls -lh /usr/bin/mpirun"<br />
+<br />
+            如果能正常显示文件信息，则相关包安装完毕。<br />
+<br />
+5、工具演示<br />
+<br />
+      psat:    parrall stress auto tool  <br />
+<br />
+      使用方法：<br />
+<br />
+              psat [ -h hostfile ] [ exec_file | cmd ]<br />
+<br />
+      
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/675'>http://nullget.sourceforge.net/?q=node/675</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

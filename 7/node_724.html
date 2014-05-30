@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用Tokenizer做简单PHP代码静态分析</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用Tokenizer做简单PHP代码静态分析</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-03-16 15:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+这是PHP的核心功能。<br />
+<br />
+<br />
+<br />
+检测扩展模块是否完整：<br />
+<br />
+读取所有的代码，查找到所有的定义的类<br />
+<br />
+对所有new的类到定义类中查找，<br />
+<br />
+如没找到，则测试是否是扩展类，<br />
+<br />
+如再没找到，则是没有任何定义的类，可能是扩展安装不全。<br />
+<br />
+可以通过字符串的近似匹配算法，查看是否是手误。<br />
+<br />
+<br />
+<br />
+检测扩展函数是否完整：<br />
+<br />
+读取所有的代码，查找到所有的定义的函数<br />
+<br />
+对所有函数调用到定义函数表中查找，<br />
+<br />
+如没找到，则测试是否是自带函数，或者是扩展函数，<br />
+<br />
+如再没找到，则是没有任何定义的函数，可能是扩展安装不全，或者有手误。<br />
+<br />
+<br />
+<br />
+检测类方法调用：<br />
+<br />
+是否定义了方法，定义的public/private是否合适。<br />
+<br />
+<br />
+<br />
+检测没有使用的函数、类、变量。<br />
+<br />
+PHP代码静态分析工具列表：<br />
+<br />
+hiphop<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/724'>http://nullget.sourceforge.net/?q=node/724</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

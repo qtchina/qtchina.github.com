@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>php_gearman-1.0.3与gearmand-1.1.0在centos上的安装补丁</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>php_gearman-1.0.3与gearmand-1.1.0在centos上的安装补丁</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-09-14 09:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1、gearmand开发活跃，现已从0.x时代跨入了1.x时代<br />
+<br />
+     但是，有点问题，gearmand的编译系统对比较老的linux发行版不太友好<br />
+<br />
+     从0.x起，在centos-5.x上安装经常出编译问题，虽然其代码本身没有问题。<br />
+<br />
+2、php-gearman扩展的开发速度落后gearmand的开发，不得不在升级gearmand的时候，<br />
+<br />
+     对php-gearman扩展稍做修改才能正常编译执行。<br />
+<br />
+3、对gearmand-1.1.0包的修改，以linux sed命令方式做自动修改。<br />
+<br />
+        ### centos 5.x patch<br />
+        sed 's/Werror/O2/g' Makefile > ma<br />
+        mv -v ma Makefile<br />
+        sed 's/const//g' libtest/memcached.hpp > ma<br />
+        mv -v ma libtest/memcached.hpp<br />
+        # cp -v ../gearman.h ./libgearman-1.0/<br />
+        grep -v cinttypes libgearman-1.0/gearman.h > ma<br />
+        mv -v ma libgearman-1.0/gearman.h<br />
+<br />
+      <br />
+<br />
+      这些修改分别对应，编译报警级别的修正，const到non-const转换的修下，<br />
+<br />
+      gcc低版本(gcc-4.1)无tr1/cinttypes的修正。<br />
+<br />
+4、对php-gearman扩展包的修改，以linux sed命令方式做自动修改。<br />
+<br />
+       sed 's/gearman_worker_error(obj->job->worker)/gearman_strerror(obj->ret)/g' php_gearman.c > ma<br />
+        mv -v ma php_gearman.c  <br />
+        sed 's/gearman_worker_error(jobj->job->worker)/gearman_strerror(jobj->ret)/g' php_gearman.c > ma<br />
+        mv -v ma php_gearman.c<br />
+<br />
+        sed 's/&gearman_module_entry/&gearman_module_entry\n\n\nenum{GEARMAN_MAGIC_TEXT,GEARMAN_MAGIC_REQUEST,GEARMAN_MAGIC_RESPONSE};/g' ph<br />
+p_gearman.h > ma<br />
+        mv -v ma php_gearman.h<br />
+<br />
+       修改分另针对以下不兼容问题，<br />
+<br />
+       a）由于结构隐藏问题，不能再通过obj->obj->worker取到gearman_worker_st指针。<br />
+<br />
+       b）有几个常量不在对客户端库开放，暂时手工加入修正这个问题。<br />
+<br />
+             实际上完全可以去掉，没有使用。<br />
+<br />
+5、希望gearmand自身越来越完善。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/684'>http://nullget.sourceforge.net/?q=node/684</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

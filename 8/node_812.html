@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>当前环境使用IPv6的完全解决方案</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>当前环境使用IPv6的完全解决方案</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-25 10:21
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div><div><div>目前IPv6已经有小范围的应用。<br> <div>但国内除了几所高校有IPv6网络之外，互联网上的使用范围还非常少。<br> <div>现在的操作系统都已经支持IPv6协议，可以使用标准的6over4协议，<br> <div><div>实现现在就用IPv6的功能。<br> <div>现在的网络软件也大多数支持IPv6协议，不过优先支持使用IPv4地址。<br> </div></div><div><br> <div>除了操作系统之外，还需要DNS的支持，服务器的支持。<br> <div><br> <div>这里讨论一种可尽量使用 IPv6协议的客户端系统配置。<br> <div>这一配置包括以下几项：<br> <div><div><div>1、查看当前的操作系统是否支持IPv6并开启IPv6<br> <div>2、6over4 隧道的实现程序安装</div></div><div>3、支持IPv6的公用DNS服务器<br> <div>4、本地DNS缓存服务器，dnsmasq<br> <div>5、本地DNS劫持服务器，kdns<br> <div><div><div>6、软件的IPv6参数<br> <div>7、测试与测试工具<br> </div></div><div>8、注意事项<br> </div></div><div><br> <div>注：后续说明都是在Linux操作系统环境下的演示说明，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 其他Unix类系统操作使用类似，包括Mac OS X。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Windows下除了kdns之外，也有相应的软件和类似的配置。<br> <div><br> <div><br> </div></div></div></div></div></div></div></div></div></div></div><div><div>1、查看当前的操作系统是否支持IPv6并开启IPv6<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; /sbin/ifconfig<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 查看是否有类似一行输出:<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<strong>inet6</strong> fe80::6ef0:49ff:fe64:349&nbsp; prefixlen 64&nbsp; scopeid 0x20&lt;link&gt;<br> </div></div></div><div><div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> </div></div><div><br> </div></div></div></div></div><div>2、6over4的 miredo</div></div></div></div></div></div></div></div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp; teredo协议就是指的IPv6 over IPv4协议。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 在linux上的实现软件名称为miredo。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; miredo使用linux的tun内核模块创建一个虚拟网络接口teredo，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 所有的IPv6协议的访问将首先经过这个虚拟网络接口。<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; teredo协议的详细说明请参考相关文档。<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 安装miredo非常简单，像在Archlinux上，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pacman -S miredo<br> <div><br> </div></div></div></div></div><div>&nbsp; &nbsp; &nbsp; 启动miredo,<br> <div>&nbsp; &nbsp; &nbsp; systemctl start miredo<br> <div>&nbsp; &nbsp;&nbsp; <br> <div>&nbsp; &nbsp; &nbsp; 查询miredo服务进程的启动情况，<br> <div>&nbsp; &nbsp; &nbsp; systemctl status -l miredo<br> <div><br> <div><div><div>&nbsp; &nbsp; &nbsp;&nbsp; 查询虚拟网络接口miredo状态，/sbin/ifconfig，<br> <div>teredo: flags=4305&lt;UP,POINTOPOINT,RUNNING,NOARP,MULTICAST&gt;&nbsp; mtu 1280</div></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inet6 <strong>2001:0:53aa:64c:1c68:bed:2db1:76d5</strong>&nbsp; prefixlen 32&nbsp; scopeid 0x0&lt;global&gt;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inet6 fe80::ffff:ffff:ffff&nbsp; prefixlen 64&nbsp; scopeid 0x20&lt;link&gt;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00&nbsp; txqueuelen 500&nbsp; (UNSPEC)<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RX packets 16217&nbsp; bytes 12112456 (11.5 MiB)<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RX errors 0&nbsp; dropped 0&nbsp; overruns 0&nbsp; frame 0<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TX packets 32753&nbsp; bytes 2967255 (2.8 MiB)<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TX errors 0&nbsp; dropped 0 overruns 0&nbsp; carrier 0&nbsp; collisions 0</div><div><div><br> <div>&nbsp; &nbsp; &nbsp; &nbsp; 这样表示miredo服务正常启动。</div></div><div><div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果全部使用IP而不是使用域名的话，现在已经能够连接公网上的IPv6服务器了。<br> </div></div><div><br> </div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这里可以简单测试一下，测试命令可以参考“测试与测试工具一节”。<br> </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div><div><br> <div>3、支持IPv6的公用DNS服务器<br> <div>cat&nbsp; /etc/resolv.conf.ipv6<br> nameserver 2002:5968:c28e::53<br> nameserver 2a00:1508:0:4::9<br> nameserver 2620:0:ccc::2<br> nameserver 2620:0:ccd::2<br> nameserver 2001:4860:4860::8888<br> <div><br> <div>注意这里使用的是另一个resolv.conf.ipv6，这是为了后面的本地dns配置，<br> <div>另外，单独把支持IPv6的DNS服务器摘出来，也方便管理。<br> <div>即使后面不再使用也不影响当前的系统。<br> <div><br> <div>这些是收集的公共DNS服务器，因为如果不用支持IPv6的DNS的话，<br> <div>即使一个域名已经提供IPv6地址，DNS也会忽略掉这IPv6地址，只返回IPv4地址。<br> <div><br> <div>而IPv6的DNS则是向前兼容的，如果没有查到域名的IPv6地址，还会查是否有IPv4地址。 <br> </div></div></div></div></div></div></div></div></div><div><div><br> <div>4、本地DNS缓存服务器，dnsmasq<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dnsmasq是一个DNS代理服务器，并且具有缓存DNS结果的功能。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 本地使用这个程序带来DNS解析的速度提升。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 另外，这个程序的配置非常可控，可以防止DNS解析受影响的问题。<br> <div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 安装，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pacman -S dnsmasq<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 配置，cat /etc/dnsmasq.conf<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; port=5353&nbsp;&nbsp;&nbsp; # 注，这里没有使用DNS默认的53端口，53端口给后面的程序使用。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resolv-file=/etc/resolv.conf.ipv6&nbsp;&nbsp; # 默认指向自定义的resolv文件，而不是系统的默认/etc/resolv.conf<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 其他的配置项在这里不是非常重要，不再一一描述。<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 启动dnsmasq，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; systemctl start dnsmasq<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; systemctl status -l dnsmasq<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 使用netstat -anu，看是否有:5353端口的监听。<br> </div></div></div></div></div></div></div></div></div></div></div></div></div></div><div><br> <div>5、本地DNS劫持服务器，kdns<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 这个程序的功能是什么呢？<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 在文章一开始提到，要整个系统优先使用IPv6，而在目前的情况下，<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; 有些服务器同时支持IPv4和IPv6，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 很多程序都是优先使用IPv4的，IPv4不通的情况下才会考虑IPv6。</div></div><div>&nbsp;&nbsp;&nbsp;&nbsp; 可以根据这个现实情况的特点，把域名解析出来的IPv4劫持，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 替换成一个不可访问的地址上，像127.0.0.1，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 这样期望程序在连接IPv4协议的地址时出错，从而再试用后面的IPv6地址尝试。<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; kdns程序的处理流程是，作为系统直接使用的DNS服务器监听在:53端口。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 收到DNS解析请求时，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; a) 如果是IPv4解析请求，则先构造一个IPv6解析请求，转发到前面的dnsmasq:5353端口。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; b) 把当前的解析请求转发到dnsmasq:5353端口。<br> <div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 在收到DNS解析响应时，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; a) 如果是一个IPv4解析响应，则查看相应请求的域名是否有IPv6地址，<br> <div>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 如果该域名有IPv6地址，那么为什么还要IPv4地址呢。<br> <div>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 为了不让应用程序有选择IPv4的权利，在此对这个DNS请求进行劫持。<br> <div>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 把响应中的真实IPv4地址修改为固定的127.0.0.1地址。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 然后再把修改后的响应包返回给应用程序。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b) 如果是一个IPv6响应，则记录下相应的请求的域名是有IPv6地址的，供前一步检测使用。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 然后把包直接转发给应用程序。<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这里能够做到有IPv6地址的域名被劫持，没有的则通过，从而不影响正常使用。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当然也有可能会对某些程序造成困扰，就是这程序没有尝试其他的IPv6地址就报错了。<br> </div></div></div></div></div></div></div></div></div></div></div></div><div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 比如使用浏览器访问某网站，支持IPv6，那么浏览器解析域名时得到了两个IP地址，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 127.0.0.1和另一个IPv6地址。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果优先使用了被劫持的127.0.0.1地址访问不了网站就放弃了，则这次DNS劫持失败。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 因为在没有劫持的情况下，浏览器能够正常使用。<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当然这也可以看作是浏览器程序实现的不完善了，实际情况是现在的浏览器在这种情况下都能正常使用。<br> <div><br> </div></div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kdns是我用了1天时间仓促开发的小程序，可能还有不完善的地方，可以后续再完善。<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; 需要安装的请下载kdns代码：https://github.com/kitech/toxsh/tree/master/kdns<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 有什么改进意见或者疑问也可直接在项目上留言。<br> </div></div><div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 启动这个程序，监听在:53标准DNS协议端口上，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 并且在/etc/resolv.conf中只设置这一个nameserver即可，如，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; cat /etc/resolv.conf<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; nameserver ::1<br> <div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这样，整个系统的所有域名解析都会按照以前流程处理，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; client -&gt; kdns -&gt; dnsmasq -&gt; public dns<br> <div><br> </div></div></div></div></div></div></div></div></div><div><br> <div>6、软件的IPv6参数<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 在过渡到IPv6协议的过程中，有些程序需要根据参数决定使用的协议类型，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 如果不使用参数，即使给其传了IPv6地址，程序也可能当作IPv4地址使用，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 从而程序无法正确识别IP地址会报错。<br> <div><div><br> <div>&nbsp;&nbsp;&nbsp; 像traceroute有-6参数，<br> <div>&nbsp;&nbsp;&nbsp; curl 有-6参数，<br> <div><div>&nbsp;&nbsp;&nbsp; host有-6参数，<br> <div>&nbsp;&nbsp;&nbsp; dig有-6参数，<br> </div></div><div>&nbsp;&nbsp;&nbsp; ping有对应的ping6命令，<br> &nbsp;&nbsp;&nbsp; chromium有--enable-ipv6参数，<br> <div>&nbsp;&nbsp;&nbsp; firefox有ipv6.disable配置，<br> <div><br> <div>7、测试与测试工具<br> <div>&nbsp;&nbsp;&nbsp; 域名解析测试程序，dig, host, nslookup,<br> <div>&nbsp;&nbsp;&nbsp; 例子，dig @::1 ipv6.google.com<br> <div>&nbsp;&nbsp;&nbsp;&nbsp; host -d www.facebook.com ::1<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; curl -v www.facebook.com，可以看到使用的真实连接IP是IPv4的还是IPv6的。<br> <div><div><br> <div>&nbsp;&nbsp;&nbsp;&nbsp; ping6 ::1，查看本地IPv6协议的回环网络是否能通。<br> <div><br> </div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 还可以使用浏览器访问一些测试站点来测试，如，<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test-ipv6.com<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; he.net<br> </div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 等。<br> </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果使用chromium的话，可以实时监控到dns使用状态，<br> <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; chrome://dns-internals<br> <div><br> </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div><div>8、注意事项<br> <div><div>&nbsp;&nbsp;&nbsp;&nbsp; 请仔细阅读并理解后再尝试，并且最好有两台电脑，因为改动配置过程可能上不了网。 <br> <div>&nbsp;&nbsp;&nbsp;&nbsp; 有些家庭宽带网络环境，即使安装了这些也可能还是用不了。<br> </div></div><div><br> </div></div></div></div></div></div></div><div><div><br> <div><br> </div></div></div></div></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/812'>http://nullget.sourceforge.net/?q=node/812</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

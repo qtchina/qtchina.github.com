@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用inotifywait命令监控服务器svn的修改</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用inotifywait命令监控服务器svn的修改</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-23 09:22
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+一般在维护SVN服务器的时候，都会有一些特殊的需要，比如对svn目录的的自动checkout,checkout后的文件权限修改，以及对更新的文件做某些处理。<br />
+<br />
+这里展示一个我这服务器使用的一个简单脚本，是用来处理某些本地操作方式导致svn的目录中文件权限出错的问题。<br />
+<br />
+其重点还是介绍linux系统的inotify模式功能，异步IO事件机制在实际工作中的应用。<br />
+异步事件的分类大概包括：文件创建，文件修改，文件打开、关闭等，还有一些组合戒指事件，可以使用man inotify获取更准确详细的说明。<br />
+这个模式在使用其他语言处理IO事件的时候也结非常有用，像在C/C++，PHP，等。<br />
+<br />
+比如，如果没有这种异步IO事件通知的话，如果希望知道某目录下的文件修改，可能需要定时列出目录下的文件做比较，这种方法古老低效，容易出错。<br />
+<br />
+示例演示，<br />
+[code type="shell"]<br />
+#!/bin/sh<br />
+<br />
+## 监控svn checkout目录，如果权限有非nobody的文件，改掉<br />
+## 如果有异常的文能及时修正，让这套系统正常运转<br />
+<br />
+EVT_FILE=/tmp/svnattr_event.lst<br />
+<br />
+echo 81920 > /proc/sys/fs/inotify/max_user_watches<br />
+while true<br />
+do<br />
+    touch $EVT_FILE;<br />
+    truncate --size 0 $EVT_FILE;<br />
+    inotifywait  -r -e attrib --outfile $EVT_FILE /data1/HTML<br />
+    <br />
+    while read eline<br />
+    do<br />
+            epath=$(echo "$eline" | awk '{print $1}')<br />
+            ename=$(echo "$eline" | awk '{print $2}')<br />
+            efile=$(echo "$eline" | awk '{print $3}')<br />
+        <br />
+            echo "file changed: $epath $ename $efile";<br />
+        <br />
+            flt=$(echo "$efile" | grep .swp | grep -v grep)<br />
+            if [ x"$flt" = x"" ] ; then<br />
+                echo "change attr to nobody.nobody(755)...";<br />
+                chown -R nobody.nobody "$epath"<br />
+                chmod -R 755 "$epath"<br />
+            fi<br />
+    done < $EVT_FILE;<br />
+    <br />
+    # maybe other file has this problem<br />
+    u0_fc=0<br />
+    u0_files=$(find /data1/HTML -uid 0 | tee /tmp/epfile.txt)<br />
+    if [ x"$u0_files" = x"" ] ; then<br />
+            true<br />
+    else<br />
+            #for f in $u0_files<br />
+        while read f<br />
+            do<br />
+                chown  nobody.nobody "$f"<br />
+                chmod  755 "$f"<br />
+                u0_fc=$(expr $u0_fc + 1)<br />
+            done < /tmp/epfile.txt<br />
+        unlink /tmp/epfile.txt<br />
+    fi<br />
+    if [ $u0_fc -gt 0 ] ; then<br />
+            echo "recorrect $u0_fc permission files.";<br />
+    else<br />
+            echo "all files no permission problem.";<br />
+    fi<br />
+done<br />
+[/code]<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/711'>http://nullget.sourceforge.net/?q=node/711</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

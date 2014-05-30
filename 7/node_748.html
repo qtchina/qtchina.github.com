@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>我的最小化linux桌面</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>我的最小化linux桌面</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-09-20 11:25
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+有一台配置一般的机器，安装的是arch linux，平时用它启动虚拟机windows系统。<br />
+所以，为了节省主机的资源，定制了脚本启动X，以最小化主机X资源占用。<br />
+我的启动脚本只启动了几个必须启动的进程，是在lxde桌面的基本上简化来的，<br />
+占用资源非常小了，再该机器上再启动虚拟机后运行良好，<br />
+cat start_mini_x.sh <br />
+#!/bin/sh<br />
+<br />
+X &<br />
+sleep 2<br />
+<br />
+export DISPLAY=:0.0<br />
+openbox &<br />
+fcitx &<br />
+lxterminal &<br />
+google-chrome &<br />
+chromium &<br />
+pulseaudio --start &<br />
+是不是相当简洁呢。<br />
+如果不需要声音，不用启动pulseaudio。<br />
+如果不输入中文，可以不启动fcitx。<br />
+如果不用浏览器，也可以不启动chromium。<br />
+执行X&后的sleep 2是为了让X完全进入到可用状态。<br />
+20130920<br />
+这几天系统的pulseaudio一直没声音，测试了几天都不行。<br />
+今天发现了一个包叫pulseaudio-alsa，安装上一试竟然好了，原来是只缺少这么个包。<br />
+而这个包里面只有一个文件，叫/etc/asound.conf，只有几行，内容如下：<br />
+# Use PulseAudio by default<br />
+pcm.!default {<br />
+  type pulse<br />
+  fallback "sysdefault"<br />
+  hint {<br />
+    show on<br />
+    description "Default ALSA Output (currently PulseAudio Sound Server)"<br />
+  }<br />
+}<br />
+<br />
+ctl.!default {<br />
+  type pulse<br />
+  fallback "sysdefault"<br />
+}<br />
+<br />
+# vim:set ft=alsaconf:<br />
+<br />
+就这么几行的问题，几天都没听到声音了。<br />
+可能是前段时间清系统的时间没注意清掉了。<br />
+根据这几天的搜索，对pulseaudio理解加深了一些，<br />
+它本身已经成为了声音服务代理，还是需要像alsa,oss后端实现输出声音。<br />
+那么是不是在不安装这个包的情况下，把这个配置文件放在用户目录也可以呢。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/748'>http://nullget.sourceforge.net/?q=node/748</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

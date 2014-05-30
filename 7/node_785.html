@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>PHP的PDO遇到MySql has gone away的解决方法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>PHP的PDO遇到MySql has gone away的解决方法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-27 18:17
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在MySQL特定的数据库参数配置的情况下，在一个超时的连接上调用任意的mysql函数，<br />
+<br />
+会导致PHP的PDO扩展报"MySQL has gone away"警告，导致程序无法继续执行。<br />
+<br />
+在使用多种PHP层的解决方案后，依旧无法避免这一问题的出现。<br />
+<br />
+原因在于PDO架构采用了连接对象缓存机制，在使用相同的dsn串连接数据库时，<br />
+<br />
+PDO会从连接池对象中取出有相同dsn串的连接，问题就出在这个地方。<br />
+<br />
+当该连接出现了"MySQL has gone away"之后，PDO并不知道这一情况，<br />
+<br />
+PDO连接对象仍旧在PDO的连接池中。<br />
+<br />
+下次即使在PHP层检测到这一问题，并重试连接，PDO却返回之前报了错的连接。<br />
+<br />
+问题的原因查找到了，接下来就是寻找解决方法。<br />
+<br />
+由于PDO没有提供关闭连接的方法，而是依靠PHP本身的引用计数与垃圾回收机制关闭连接，<br />
+<br />
+在大多数情况下这都没有问题，但这时候这种机制就略显无力了。<br />
+<br />
+经过多次实践修改测试，总结出来以下两种方式，<br />
+<br />
+第一种，修改dsn串后再次连接，这样能得到一个新的PDO连接，并存储到PDO连接池中。<br />
+        这种情况却有个问题，原有出问题的连接并不会自动释放，<br />
+        并且还有MySQL的TCP连接存在，会消耗客户端PHP进程与服务器MySQL服务进程的资源。<br />
+        好处是不需要做大的修改，只需要在PHP加个检测函数即可。<br />
+<br />
+第二种，修改PDO扩展，添加一个PDO方法，把当前对象使用的连接对象从连接池中删除，<br />
+        并强制销毁当前的PDO对象。<br />
+        这种好处是修正的比较彻底，但需要修改PDO扩展的C代码。<br />
+<br />
+现在把第二种方法对PDO的补丁代码放上来，以供参考，<br />
+php-5.5.8-PDO_destroy.patch:<br />
+[code type="diff"]<br />
+diff --git a/ext/pdo/pdo_dbh.c b/ext/pdo/pdo_dbh.c<br />
+index ac8d29a..c615aa5 100644<br />
+--- a/ext/pdo/pdo_dbh.c<br />
++++ b/ext/pdo/pdo_dbh.c<br />
+@@ -425,6 +425,43 @@ options:<br />
+ }<br />
+ /* }}} */<br />
+ <br />
++static void dbh_free(pdo_dbh_t *dbh TSRMLS_DC);<br />
++/* {{{ proto Boolean PDO::destroy()<br />
++   Force destory current PDO Object. Should only be used when got "Mysql has gone away" message. */<br />
++static PHP_METHOD(PDO, destroy)<br />
++{<br />
++    pdo_dbh_t *dbh = NULL;<br />
++    char *hashkey = NULL;<br />
++    zend_rsrc_list_entry *le = NULL;<br />
++    int rc = 0;<br />
++    zval *object = getThis();<br />
++<br />
++    dbh = (pdo_dbh_t *)zend_object_store_get_object(object TSRMLS_CC);<br />
++    if (dbh == NULL) {<br />
++        RETURN_TRUE;<br />
++    }<br />
++<br />
++    if (dbh->is_persistent && dbh->persistent_id != NULL) {<br />
++        // this is persistent PDO's DSN<br />
++        hashkey = dbh->persistent_id;<br />
++        rc = zend_hash_find(&EG(persistent_list), hashkey, dbh->persistent_id_len, (void*)&le);<br />
++        if (rc == SUCCESS) {<br />
++            rc = zend_hash_del(&EG(persistent_list), hashkey, dbh->persistent_id_len);<br />
++            if (rc != SUCCESS) {<br />
++            }<br />
++            assert(le->ptr == dbh);<br />
++            php_pdo_pdbh_dtor(le);<br />
++            le == NULL;<br />
++        }<br />
++    }<br />
++<br />
++    zval_dtor(object);<br />
++    ZVAL_NULL(object);<br />
++<br />
++    RETURN_TRUE;<br />
++}<br />
++/* }}} */<br />
++<br />
+ static zval *pdo_stmt_instantiate(pdo_dbh_t *dbh, zval *object, zend_class_entry *dbstmt_ce, zval *ctor_args TSRMLS_DC) /* {{{ */<br />
+ {<br />
+        if (ctor_args) {<br />
+@@ -1266,6 +1303,7 @@ ZEND_END_ARG_INFO()<br />
+ <br />
+ const zend_function_entry pdo_dbh_functions[] = {<br />
+        ZEND_MALIAS(PDO, __construct, dbh_constructor,  arginfo_pdo___construct,        ZEND_ACC_PUBLIC)<br />
++       PHP_ME(PDO, destroy,              arginfo_pdo__void,         ZEND_ACC_PUBLIC)<br />
+        PHP_ME(PDO, prepare,                            arginfo_pdo_prepare,            ZEND_ACC_PUBLIC)<br />
+        PHP_ME(PDO, beginTransaction,       arginfo_pdo__void,         ZEND_ACC_PUBLIC)<br />
+        PHP_ME(PDO, commit,                 arginfo_pdo__void,         ZEND_ACC_PUBLIC)<br />
+<br />
+[/code]<br />
+<br />
+这样使用PDO的PHP框架就能比较完善的使用MySQL了。<br />
+这段补丁代码针对php-5.5.8版本，请在打补丁时使用相应的php源代码包。<br />
+如需要使用这个补丁，请先仔细测试。<br />
+目前刚写完代码，做了简单的测试，还没有在正式项目中应用。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/785'>http://nullget.sourceforge.net/?q=node/785</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

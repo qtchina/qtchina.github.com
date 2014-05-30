@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>简易定制化代码部署</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>简易定制化代码部署</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-27 13:32
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+工作一直以开发为主，最近维护测试机，<br />
+在多台测试机的时候，需要把提交的代码以不同的方式部署到不同测试节点，<br />
+在这样一个不算复杂的需求推动下，总结并实现这么一种简易部署方式。<br />
+<br />
+web工程师开发流程如下，<br />
+提交代码到svn，svn钩子把代码checkout到本机，<br />
+做为本机web测试环境的nginx服务代码。<br />
+<br />
+在架构简单的情况下，一台测试机足够用的情况下运行良好。<br />
+不过，随着架构调整，组件变多，一台测试机无法安装所有的服务，<br />
+如除了nginx,php外，还需要安装gearman，redis等服务。<br />
+这时需要保证最新的代码也能同时部署到安装gearman测试机上。<br />
+<br />
+另外，对于当前的web开发，还有一些特殊的需求，如做js/css客户端优化功能，<br />
+而对js/css需要使用squid做前端访问缓存，又出现一种服务流程，并部署在其他测试机上。<br />
+经过上面的需求分析，实现这么个简单的测试部署方式，<br />
+svn提交+svn钩子+http通知+shell/php处理事件通知。<br />
+<br />
+首先，提交代码模式不变，<br />
+在需求部署的测试机上安装nginx+php服务，作为通知服务执行，<br />
+在php中，配置当前机器需要处理的项目列表，<br />
+查找项目的部署脚本代码，执行部署过程。<br />
+<br />
+代码目录结构：<br />
+[root@test003 trunk]# tree<br />
+├── deploy.d<br />
+│   ├── deploy.qtchina.net.sh<br />
+│   ├── dojquery.qtchina.net.sh<br />
+│   ├── functions.sh<br />
+│   ├── gearman.qtchina.net.sh<br />
+│   └── slae.qtchina.net.sh<br />
+├── deployd_impl.sh<br />
+├── deployd.php<br />
+├── r.js<br />
+├── squidclear.php<br />
+├── squidpurge<br />
+│   └── SquidPurge.php<br />
+└── squidpurge.php<br />
+<br />
+<br />
+代码的大概执行流程，<br />
+svn 钩子 -> curl http://x.x.x.x/deployd.php  ->  deployd_impl.sh -><br />
+functions.sh -> xxx.qtchina.net.sh --> (r.js | squidpurge) -> response<br />
+代码的部署，要么是推送模式，要么是拉取模式，这里使用的是拉取模式。<br />
+也比较直接，安装方便，充分利用现有的服务。<br />
+<br />
+通过代码归类的方式，比较好的解决了定制化部署不同项目的问题。<br />
+其他更成熟复杂的部署方式，像使用一些成熟稳定的运维工具nagois等当然也能很容易的实现，<br />
+只是再装那么多东西，不专业做运维，感觉会加大测试机的维护量。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/760'>http://nullget.sourceforge.net/?q=node/760</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

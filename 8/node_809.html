@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>自己实现类RUDP协议</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>自己实现类RUDP协议</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-18 14:42
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<div>UDP协议是一种无状态，不可靠协议，这个描述指的是UDP包之间没有前后顺序关系，也不一定所有的包都能达到目标地址。<br> <div>在UDP协议由于附带额外包数据小，不需要做包验证等特点，UDP协议效率还是比较高的。<br><div>所以，RFC结合TCP和UDP两种协议的优点，制订了RUDP协议标准。<br><div><br><div><div>RUDP的核心部分包括，加入包编号，包重传，包确认机制，模拟连接操作与断开连接操作。<br><div>标准RUDP协议为UDP包加了8字段的状态数据。</div></div><div><div><br><div>我在实现可靠UDP的时候，参考这RFC RUDP协议同标准，实现了包编号，包重传，包确认机制，<br><div>但没有实现模拟连接操作与断开操作。<br></div></div></div><div><br><div>之所以没有实现模拟三次握手连接，是发现连接包与其他数据包发送接收方式并不一致，<br><div>需要额外的方式保证连接包的可靠性。因为连接包参与编号和重传的话，控制上比较复杂，<br><div>还不如直接发送数据包，加上编号和和重传、确认，系统的可靠性就已经非常好了。<br><div><br><div>现在说明一下实际实现时的问题，虽然实现了编号和重传、确认机制，但一个需要注意的是，<br><div>需要在发送端实现类似网络协议桟中的发送缓存的机制，不能够有包就发送出去，<br><div>并参与重传检查。因为这样的话会有大量的包在发送，造成网络拥塞，<br><div>而实际需要重传的包迟迟没有机会参与重传，或者重传的包以很小的概率参与重传，<br><div><div><div>而润滑端由于验证包的到达顺序问题，虽然已经接收到了许多包，<br><div>但由于重传的包数量也非常大，产生了比较多的额外带宽，<br><div>但需要的包却一直收取不到，从而加大整个数据传输过程的延迟。<br><div><br><div>可以使用的方式就是在发送端做一个固定包数量发送队列，如果发送队列中还有包未发出，<br><div>则一直重传这个相对比较小的队列中的包。而后续的的需要发送的包放在另一个大队列中，<br><div>直到发送队列全部发送成功（已接收到确认包），在从大队列中拿出固定数量的包放在发送队列中，<br><div>重复执行以上过程，达到降低整个数据传输过程的延迟。<br type="_moz"></div></div></div></div></div></div></div></div></div><div><br><div><div>实现demo:<br type="_moz"><div><div>https://raw.githubusercontent.com/kitech/toxsh/master/p2psh/srudp.cpp<br><div>https://raw.githubusercontent.com/kitech/toxsh/master/p2psh/srudp.h<br><div><br type="_moz"></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/809'>http://nullget.sourceforge.net/?q=node/809</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

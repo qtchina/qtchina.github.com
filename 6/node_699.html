@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>nginx耗时模块的不阻塞主事件循环的异步处理机制</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>nginx耗时模块的不阻塞主事件循环的异步处理机制</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-11-29 13:58
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1)  在模块中生成线程池，把nginx的请求交给线程序池来处理<br />
+<br />
+     不过，需要在模块的handler中把r->main->count++，并且返回一个NGX_DONE，<br />
+<br />
+     这个值必须+1,否则在handler返回后，连接会被nginx断掉。<br />
+<br />
+2）使用upstream机制，把耗时请求放在backend进程处理，把nginx当一个连接池使用<br />
+<br />
+     这种方式稍微复杂，不是单单nginx模块的问题，实际是开发一个独立的fastcgi进程或者其他协议服务进程，<br />
+<br />
+     通过upstream访问后端。<br />
+<br />
+线程池模式示例代码：<br />
+<br />
+static ngx_int_t ngx_http_nullimp_handler(ngx_http_request_t *r)<br />
+{<br />
+    r->main->count += 1;<br />
+    pthread_t pth;<br />
+    int pcr;<br />
+    pcr = pthread_create(&pth, NULL, test_thread_proc, (void*)r);<br />
+<br />
+    return NGX_OK;<br />
+}<br />
+<br />
+static void *imp_thread_proc(void *arg)<br />
+{<br />
+    ngx_int_t rc;<br />
+    ngx_buf_t *b, pb;<br />
+    ngx_chain_t out;<br />
+<br />
+  <br />
+<br />
+     // do something long time  logic<br />
+<br />
+     sleep(3);<br />
+<br />
+    // ..........<br />
+<br />
+    // ..........<br />
+<br />
+    rc = ngx_http_send_header(r);<br />
+<br />
+    rc = ngx_http_output_filter(r, &out);<br />
+<br />
+    pthread_mutex_lock(&g_mutex);<br />
+    ngx_http_finalize_request(r, NGX_DONE);<br />
+    pthread_mutex_unlock(&g_mutex);<br />
+<br />
+}<br />
+<br />
+注意，ngx_http_finalize_request第二个参数表示请求处理结果，一般为NGX_DONE表示成功。<br />
+<br />
+每调用一次这个函数，相当于r->main->count--<br />
+<br />
+由于使用了多线程方式，需要使用mutex保证函数执行的原子性。<br />
+<br />
+这里的示例是不断创建新线程的方式实现，也可以用创建线程池，任务队列的方式实现。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/699'>http://nullget.sourceforge.net/?q=node/699</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

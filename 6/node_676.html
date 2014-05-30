@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>QCoreApplication小测试</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>QCoreApplication小测试</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-08-14 23:57
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+为了健壮和安装的原因，程序功能经常分割成几个小的二进制（后台的）程序，而不是合并成一个庞大的程序。<br />
+<br />
+Qt 4为那些需要GUI的Qt后台程序引入了模块的Qt库。多亏了面向嵌入式和许多明智的架构决策，Qt 5步入了新的层次。<br />
+<br />
+看看几个简单的函数:<br />
+<br />
+ QCoreApplication app(argc, argv);<br />
+ QTimer::singleShot(3000, &app, SLOT(quit()));<br />
+ return app.exec();<br />
+<br />
+这个非GUI Qt程序睡眠3秒后退出。 <br />
+<br />
+在我的原装i386 Kubuntu 12.04， Qt 4.8.1平台上，valgrind工具报告堆内存使用达102k，callgrind报告使用1.9M（×）内存。 <br />
+<br />
+<br />
+让我们看一下现在的Qt 5版本的数据：valgrind报告堆内存使用为4.9k，callgrid报告使用了大约114k内存。<br />
+<br />
+<br />
+这意味着Qt5少使用了20倍的内存，少用了16倍的指令来构造QCoreApplication和控制一个事件循环。<br />
+<br />
+<br />
+这有许多的有因。最明显的是Qt 5假设所有的字符串都是unicode的，因此初始化文本编码转换的工作仅发生在首次碰到非unicode字符时。另外Qt 5还大大改进了插件加载效率，不加载它们当然是最快的。<br />
+<br />
+<br />
+其他更多的改进也有，比如，Qt 5的C++11支持意味着在创建unicode QString对象不需要分配，并且在来回移植对象时代价更小。<br />
+<br />
+<br />
+总之，编写基于Qt 5的后台程序很有意思，如果你有任何更好的提高效率的代码，我们Qt 代码预览平台上见。<br />
+<br />
+<br />
+（×）声明; 指令耗时不能显示代码有多快，却能显示CPU处理了多少指令。注意我只测试了main()的效率，而忽略了操作系统的链接符号和库的解析，因为这些可在预加载链接和从主进程fork时优化。<br />
+<br />
+原文： http://labs.qt.nokia.com/2012/08/14/qcoreapplication-mini-benchmark/<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/676'>http://nullget.sourceforge.net/?q=node/676</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

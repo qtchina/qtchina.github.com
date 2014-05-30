@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux 下一代文件系统btrfs简介</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>linux 下一代文件系统btrfs简介</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-10-01 10:55
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+Btrfs被称为下一代文件系统。相对于ext2/ext3/ext4这系列特性已经非常稳定的文件系统来说，<br />
+btrfs具有很多先进的文件系统设计特性。<br />
+最近内核的每个新版本发布，都有btrfs的影子，开发活跃，令人很期待。<br />
+btrfs具体有哪些特性让人如此期待？它内部是如何实现的？<br />
+适用什么样的场景？怎么使用btrfs命令管理btrfs文件系统？<br />
+本文以当前最新的3.11内核的btrfs版本研究btrfs文件系统的功能特性。<br />
+1、btrfs发展史<br />
+   B-tree 文件系统，通常念成Butter FS，Better FS或者 B-tree FS。<br />
+   采用GPL协议。<br />
+   由Oracle于2007年发起并进行的COW(写入时复制）文件系统。<br />
+   btrfs的目标是取代ext2/ext3文件系统，改善现有功能限制并提供更多优秀特性。<br />
+2、btrfs特性简介<br />
+软件raid实现<br />
+类似lvm的卷管理<br />
+透明压缩zlib,lzo,(snappy,lz4)<br />
+可读/写快照<br />
+高磁盘空间利用率的小文件打包<br />
+高磁盘空间利用率的索引目录<br />
+动态inode分配<br />
+在线文件系统整理<br />
+基于子卷的磁盘配额<br />
+子卷差异的发送与接收，文件系统级的类diff/patch功能。<br />
+3、btrfs命令简介<br />
+之前的btrfs管理命令包含一系统btrfs-*命令。<br />
+现在的btrfs-progs包改进为唯一的btrfs命令与子命令模式。<br />
+除了管理用的btrfs命令工具，相关的还有：<br />
+创建btrfs文件系统:  mkfs.btrfs<br />
+检查、修复btrfs文件系统：btrfschk/fsck.btrfs<br />
+现在就主要的管理命令btrfs详细说明所有参数：<br />
+[gzleo@myubuntu ~]$ btrfs version<br />
+Btrfs v0.20-rc1-253-g7854c8b<br />
+[gzleo@myubuntu ~]$ btrfs<br />
+usage: btrfs [--help] [--version] <group> [<group>...] <command> [<args>]<br />
+<br />
+    btrfs subvolume create [<dest>/]<name><br />
+        创建一个子卷。必须在一个已经挂载的btrfs目录执行。Create a subvolume<br />
+    btrfs subvolume delete <subvolume> [<subvolume>...]<br />
+        删除子卷。Delete subvolume(s)<br />
+    btrfs subvolume list [-agopurts] [-G [+|-]value] [-C [+|-]value] [--sort=gen,ogen,rootid,path] <path><br />
+        列出子卷。List subvolumes (and snapshots)<br />
+    btrfs subvolume snapshot [-r] <source> [<dest>/]<name><br />
+        创建子卷的一个快照。Create a snapshot of the subvolume<br />
+    btrfs subvolume get-default <path><br />
+        获取btrfs文件系统的默认子卷。返回子卷ID。Get the default subvolume of a filesystem<br />
+    btrfs subvolume set-default <subvolid> <path><br />
+        设置btrfs文件系统的默认子卷。Set the default subvolume of a filesystem<br />
+    btrfs subvolume find-new <path> <lastgen><br />
+        查找子卷中的新文件。List the recently modified files in a filesystem<br />
+    btrfs subvolume show <subvol-path><br />
+        列出所有子卷。Show more information of the subvolume<br />
+<br />
+    btrfs filesystem df <path><br />
+        显示挂载的文件系统的空间使用信息。Show space usage information for a mount point<br />
+    btrfs filesystem show [--all-devices] [<uuid>|<label>]<br />
+        显示btrfs文件系统的结构。每个btrfs文件系统的磁盘组成与设备ID。Show the structure of a filesystem<br />
+<br />
+4、btrfs挂载参数介绍<br />
+compress=lzo|gzip|no(|snappy|lz4)  挂载压缩<br />
+subvol=btrfs subvolume name  挂载点子卷的名字<br />
+subvolid=258|259...          挂载点子卷的ID<br />
+ssd                           开启SSD磁盘优化<br />
+ssd_spread               开启SSD磁盘优化，对一些廉价SSD有优化。<br />
+autodefrag                自动检测随机写操作，并停止后台磁盘整理进程。<br />
+                                对bdb或sqlite有效果。但对虚拟化和大数据库无效。<br />
+在目前深度开发，不断改进的阶段，这些参数可能不断发生变化。<br />
+像在kernel-3.10中，就取消了一个subvolrootid参数。<br />
+在使用时，可查阅btrfs官方wiki获取最新的第一手资料。<br />
+5、btrfs特性演示与原理分析<br />
+mkfs.btrfs  /dev/sda /dev/sdb /dev/sdc<br />
+<br />
+6、btrfs现状总结<br />
+7、应用btrfs透明压缩的btrfs加速linux桌面系统<br />
+8、参考<br />
+<br />
+<br />
+<br />
+未完待续。。。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/767'>http://nullget.sourceforge.net/?q=node/767</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

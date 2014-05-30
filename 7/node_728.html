@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux google-chrome二进制包绿化安装</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>linux google-chrome二进制包绿化安装</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-24 15:01
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+ps:<br />
+由于google-chrome 28 不在支持centos 6.x版本，自己下载安装会由于库依赖问题导致无法正常运行。<br />
+经搜索，其他人已经解决了这个问题，要更新更新的google-chrome，请参考这些方式：<br />
+http://chrome.richardlloyd.org.uk/          <br />
+http://www.mjmwired.net/linux/2013/06/19/chrome-28-and-newer-for-centos-6/<br />
+<br />
+<br />
+下载版本，<br />
+下载.deb版本<br />
+deb2targz  google-chrome-unstable_28.0.1478.0-r194114_amd64.deb<br />
+lzma -d google-chrome-unstable_28.0.1478.0-r194114_amd64.tar.lzma<br />
+<br />
+<br />
+注意事项：<br />
+×）虽然和dbus相关，但不一定要启动dbus<br />
+×）这个是必须的，否则在打开settings页面时会退出<br />
+      dbus-uuidgen > /var/lib/dbus/machine-id<br />
+     注意，freedesktop规定这个machine-id必须放在/etc/machine-id，并在/var/lib/dbus/目录下创建一个链接。<br />
+     这里省劲直接创建在了该目录下。<br />
+×）必须使用自己的启动脚本，设置相应的安装目录环境变量<br />
+      ls -l mychrome<br />
+          ../../opt/google/chrome/google-chrome<br />
+      <br />
+×） 启动命令<br />
+       LANG=zh_CN.UTF-8  LD_LIBRARY_PATH=/home/gzleo/local/google-chome/opt/google/chrome/ PATH=$PATH:/home/gzleo/local/google-chome/opt/googlchrome/ ./mychrome --verbose<br />
+      <br />
+×）更多环境变量<br />
+      LANG=zh_CN.UTF-8 ，也可以写在启动命令中，这样google-chome界面才能正常显示中文。<br />
+<br />
+*)  sandbox问题，必须要使用root账号，建立这个链接，并把链接指向的文件权限改为4755<br />
+     ls -l /opt/google/chrome/chrome-sandbox<br />
+          /home/gzleo/local/google-chome/opt/google/chrome/chrome-sandbox<br />
+<br />
+×）或者不使用sandbox，则不需要root账号建立一个软链接了。<br />
+      在命令行后加 --no-sandbox 参数，但这是非常不推荐使用的。<br />
+<br />
+×）输入法的问题<br />
+     远程启动的chrome无法输入。但opera可以。<br />
+<br />
+<br />
+<br />
+<br />
+自动化脚本：<br />
+[code type="bash"]<br />
+#/bin/sh<br />
+set -x<br />
+INSTALL_ROOT=$HOME/local/google-chrome<br />
+CDIR=$(pwd)<br />
+<br />
+# wget http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_28.0.1500.20-r201172_amd64.deb       <br />
+#deb2targz google-chrome-*.deb                                                                                                              <br />
+#lzma -d google-chrome-*.tar.lzma                                                                                                           <br />
+<br />
+cd ./abc<br />
+tar xf ../google-chrome*1500*.tar<br />
+<br />
+rm -rf $INSTALL_ROOT<br />
+mkdir -pv $INSTALL_ROOT<br />
+<br />
+cp -a * $INSTALL_ROOT/<br />
+cd $INSTALL_ROOT<br />
+chmod 4755 opt/google/chrome/chrome-sandbox<br />
+<br />
+cd usr/bin/<br />
+ln -sv ../../opt/google/chrome/google-chrome mychrome<br />
+cd $INSTALL_ROOT<br />
+<br />
+# /opt/google/chrome/chrome-sandbox -> $INSTALL_ROOT/opt/google/chrome/chrome-sandbox                                                       <br />
+cd /opt/google/chrome/<br />
+ln -sv $INSTALL_ROOT/opt/google/chrome/chrome-sandbox<br />
+<br />
+cd $CDIR<br />
+# cp -v chrome.sh $INSTALL_ROOT/usr/bin/                                                                                                    <br />
+echo "LANGUAGE=zh_CN:zh LANG=zh_CN.UTF-8  LC_CTYPE=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LD_LIBRARY_PATH=/home/gzleo/local/google-chrome/opt/googl\<br />
+e/chrome/ PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/gzleo/bin:/home/gzleo/bin:/home/gzleo/local/google-chrome\<br />
+/opt/google/chrome/ $HOME/local/google-chrome/usr/bin/mychrome --verbose --no-sandbox &" > $INSTALL_ROOT/usr/bin/chrome.sh<br />
+chmod +x $INSTALL_ROOT/usr/bin/chrome.sh<br />
+<br />
+[/code]<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/728'>http://nullget.sourceforge.net/?q=node/728</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

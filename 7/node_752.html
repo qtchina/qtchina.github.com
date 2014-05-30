@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>使用burg启动安装在ntfs分区磁盘镜像的linux</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>使用burg启动安装在ntfs分区磁盘镜像的linux</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-09-08 17:14
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+burg是基于grub2的安装在windows上的bootloader，<br />
+相比grub4dos，支持的功能更丰富，配置文件与grub2非常相似。<br />
+<br />
+在上一篇中安装的linux使用的是ubuntu wubi中的grub2启动的，<br />
+相当于还是使用了ubuntu的启动，如果在卸载了ubuntu wubi则安装的linux也无法启动了。<br />
+<br />
+在尝试使用独立的bootloader启动磁盘镜像上的linux时，测试了grub4dos，但是由于与grub2的配置文件区别太大，<br />
+迁移到这上面需要完全重写启动配置项。<br />
+后来经过搜索，找到了burg，在尝试几次后，就正常启动了磁盘镜像上的linux系统。<br />
+<br />
+burg的安装：<br />
+下载安装到C:\burg\<br />
+把目录中buldr.mbr,buldr两个文件拷贝到C:\<br />
+<br />
+C:\burg\burg.cfg文件：<br />
+[root@myarchlap ~]# more /mnt/sda3/Burg/burg.cfg <br />
+<br />
+menuentry 'archbox'  {<br />
+ # gfxmode $linux_gfx_mode<br />
+ insmod gzio<br />
+ insmod ntfs<br />
+ set root='hd0,msdos4'<br />
+ #if [ x$feature_platform_search_hint = xy ]; then<br />
+ #  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos4 --hint-efi=hd0,msdos4 --hint-baremetal=ahci0,msdos4  189C084C9C0826BA<br />
+ #else<br />
+ #  search --no-floppy --fs-uuid --set=root 189C084C9C0826BA<br />
+ #fi<br />
+ loopback loop1 /ntfspage.img<br />
+ set root=(loop1)<br />
+ linux16 /boot/vmlinuz-linux root=UUID=189C084C9C0826BA  rw  logfile=/initramfs.log rootfstype=ext4 rootimg=/ntfspage.img<br />
+ initrd16 /boot/initramfs-linux.img<br />
+}<br />
+<br />
+enuentry 'Ubuntu' {<br />
+ #gfxmode $linux_gfx_mode<br />
+ insmod gzio<br />
+ insmod ntfs<br />
+ set root='hd0,msdos2'<br />
+ #if [ x$feature_platform_search_hint = xy ]; then<br />
+ #  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahci0,msdos2  BC967F24967EDDF8<br />
+ #else<br />
+ #  search --no-floppy --fs-uuid --set=root BC967F24967EDDF8<br />
+ #fi<br />
+ loopback loop0 /ubuntu/disks/root.disk<br />
+ set root=(loop0)<br />
+ linux16 /boot/vmlinuz-3.8.0-27-generic root=UUID=BC967F24967EDDF8 loop=/ubuntu/disks/root.disk ro   quiet splash $vt_handoff<br />
+ initrd16 /boot/initrd.img-3.8.0-27-generic<br />
+}<br />
+<br />
+menuentry "Windows" --class Windows {<br />
+  true<br />
+}<br />
+<br />
+menuentry "Linux" --class Linux {<br />
+  true<br />
+}<br />
+<br />
+menuentry "OSX2" --class MacOSX {<br />
+  true<br />
+}<br />
+<br />
+set default=0<br />
+set timeout=10<br />
+<br />
+# For normal theme<br />
+# set gfxmode=800x600<br />
+#set gfxfont="Unifont Regular 16"<br />
+#set theme_dir=${prefix}/themes/ubuntu<br />
+#load_config ${theme_dir}/theme.txt<br />
+#menu_region.text<br />
+#menu_region.gfx<br />
+#menu_viewer.ext<br />
+<br />
+# For sora theme<br />
+. ${prefix}/themes/sora/theme.cfg<br />
+<br />
+测试是否正常，启动cmd.exe命令行：<br />
+cd C:\burg<br />
+burg_emu -d /burg/ -c burg.cfg<br />
+<br />
+如果命令执行成功，配置文件没有问题，会看到一窗口显示了启动菜单。<br />
+如果直接进入了burg命令行模式，说明配置文件有问题。<br />
+回车进入某一菜单项，虽然不能启动系统，却可以大概检测配置文件中的指令是否有效。<br />
+<br />
+配置成功，可以删除ubuntu wubi了，新安装的磁盘镜像上的linux系统照样正常系统。<br />
+<br />
+本次启动起来的linux系统是在ubuntu的基于上安装上的，<br />
+下次准备在此基于研究不需要安装ubuntu wubi宿主系统，<br />
+直接在windows宿主系统上安装基于磁盘镜像linux的方式。<br />
+<br />
+在安装好一个小型可启动系统时，可以保存这个磁盘镜像文件，<br />
+在其他的机器上也能用。如果磁盘镜像文件建立时比较大，可通过resize2fs命令<br />
+收缩镜像文件的大小。一般来说，一个小的可运行系统可收缩到500M，<br />
+再通过一次压缩，这个磁盘镜像达到300M的大小，这样非常容易保存了。<br />
+<br />
+附，<br />
+雨林木风公司还基于burg做了更容易使用的封装，但在本人测试时尚不支持windows8，没能正常使用。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/752'>http://nullget.sourceforge.net/?q=node/752</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

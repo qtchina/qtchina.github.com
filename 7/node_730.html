@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>ARM处理器支持的数据宽度</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>ARM处理器支持的数据宽度</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-07 10:56
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<br />
+ARM 处理器支持6种数据类型;<br />
+<br />
+8位有符号和无符号字节。 (char, unsigned char)<br />
+<br />
+16位有符号和无符号半字，它们以2字节的边界对准。(short int, unsigned short int)<br />
+<br />
+32位有符号和无符号字，它们以4字节的边界对准。(int, unsigned int)<br />
+<br />
+ARM指令全是以32bit的字并且必须是字对准的。<br />
+​<br />
+Thumb指令是半字而且必以两字节的边界对准的。<br />
+<br />
+#include <stdio.h> <br />
+#include <stdlib.h> <br />
+<br />
+void main() <br />
+{ <br />
+    printf("sizeof(char) = %d\n", sizeof(char)); <br />
+    printf("sizeof(short) = %d\n", sizeof(short)); <br />
+    printf("sizeof(int) = %d\n", sizeof(int)); <br />
+    printf("sizeof(long) = %d\n", sizeof(long)); <br />
+    printf("sizeof(float) = %d\n", sizeof(float)); <br />
+    printf("sizeof(double) = %d\n", sizeof(double)); <br />
+} <br />
+运行结果： <br />
+<br />
+<br />
+[root@localhost width]# arm-linux-gcc arm-width.c -o arm-width <br />
+[root@localhost width]# ./arm-width <br />
+sizeof(char) = 1 <br />
+sizeof(short) = 2 <br />
+sizeof(int) = 4 <br />
+sizeof(long) = 4 <br />
+sizeof(float) = 4 <br />
+sizeof(double) = 8 <br />
+[root@localhost width]#<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/730'>http://nullget.sourceforge.net/?q=node/730</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

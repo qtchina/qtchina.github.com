@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>当前项目中传统简单的fastdfs存储架构总结</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>当前项目中传统简单的fastdfs存储架构总结</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-10-01 00:16
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+目前我们的图片存储系统，大概每个月使用1T的存储空间。<br />
+再加上图片处理后的图片，可能还会扩大2，3倍的存储容量。<br />
+之前使用NAS存储，已经无法满足这样的存储需求。<br />
+在上半年考虑使用分布式文件系统，经过调研，选用了开源的fastdfs。<br />
+由于初次使用，并没有使用太复杂的架构模式，而使用比较传统的使用模式。<br />
+先说下硬件情况，<br />
+现有同机房的4台fastdfs存储服务器，每台服务器使用6块2T的sata硬件做成raid5，大概可用存储容量为10多G。<br />
+<br />
+在设计时，考虑足够的容灾要求，把4台服务器做成两组group1，group2。<br />
+这样，这个集群的容量为20G，远比使用NAS来的简单许多。<br />
+另外，由于在测试使用fastdht组件时遇到了问题，目前没有使用自带的文件去重功能。准备在研究出来原因之前，使用代码级别的去重，在使用异步去重计算的辅助情况下，去重效果理论上与fastdfs自带的排重功能一致。<br />
+<br />
+目前项目上线2个月，已经存储了2T的图片文件。<br />
+目前的架构：<br />
+M1/group1/tracker1  =====  M2/group1/tracker2<br />
+M3/group2  =====   M4/group2<br />
+<br />
+后续需要考虑跨机房的情况，以及重新平衡文件分布的相关机制，让整个系统的负载与存储分布更合理。<br />
+由于在跨机房的情况下，每个机房都必须部署tracker服务，并且再tracker分配storage的时候，必须支持当前请求写入当前机房的storage中，需要在代码层，通过fastdfs API中指定tracker与storage定稿的方式，替代默认情况下由fastdfs自动选取服务的方式优化系统运行，同机房读写在同机房内完成。<br />
+而互为镜像的一组存储服务器，需要分布在不同的机房，还会考察fastdfs 的跨机房镜像的特性与实际运行效果。<br />
+<br />
+这种设计让每个机房都有一个数据的镜像，优化读写，但是当某机房内的fastdfs存储出现问题，在数据量为nTB的情况下，恢复起来会需要相当长的时间。这个还需要通过添加相应的同机房镜像的方式来解决。<br />
+<br />
+未来的架构：<br />
+RDC1                            RDC2<br />
+M1/group1   =====        M4/group1<br />
+M2/group2    =====       M5/group2<br />
+M3/gracker1   =====       M6/tracker1<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/766'>http://nullget.sourceforge.net/?q=node/766</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

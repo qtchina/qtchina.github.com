@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>支持上传文件的web压力测试方法</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>支持上传文件的web压力测试方法</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-09-03 10:38
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+1。常用的web压力测试工具有ab(apachebench)和webbench、siege。<br />
+<br />
+常用的web调试工具有wget，curl。<br />
+<br />
+本篇从压力测试的角度讲，以前两者为主，后两者主要列举它们的几个相应的用法。<br />
+<br />
+<br />
+2、由于网络上少见关于ab 的POST上传文件文章，就先从这个用法说起。<br />
+<br />
+在post上传文件时，需要使用multipart/form-data模式上传，这样服务器端才能正确识别上传的文件信息。<br />
+<br />
+命令行：ab -v 2 -T "multipart/form-data; boundary=---1234abcd" -p ~/abpost.txt  http://yourhost/upload.php<br />
+<br />
+在进行压力测试的时候，可以添加-n 500 -c 5参数，执行并发为5的请求，累计发出500次请求。<br />
+<br />
+<br />
+3、abpost.txt文件内容（注意不需要带==的头尾两行）：<br />
+<br />
+注：前面3个是普通的字符串值，最后一个是文件上传域。<br />
+<br />
+=====开始==========<br />
+<br />
+-----1234567890<br />
+Content-Disposition: form-data; name="p1"<br />
+<br />
+123444444444444444<br />
+-----1234567890<br />
+Content-Disposition: form-data; name="p2"<br />
+<br />
+7543545647667567567<br />
+-----1234567890<br />
+Content-Disposition: form-data; name="p3"<br />
+<br />
+1346402565.9724<br />
+-----1234567890<br />
+Content-Disposition: form-data; name="Filedata"; filename="ab1_pod.jpg"<br />
+Content-Type: image/jpeg<br />
+<br />
+<br />
+[base64 encoded file content here]<br />
+<br />
+--1234567890--<br />
+<br />
+=====结束==========<br />
+<br />
+<br />
+4、对于普通的post请求，去掉文件的abpost.txt的文件上传域一段，并且把 -T 参数改为常用的'application/x-www-form-urlencoded'。<br />
+<br />
+<br />
+5、webbench不支持POST请求，不再细说，GET压力测试的用法与结果和ab相似。<br />
+<br />
+<br />
+6、seige的特点是支持批量访问url列表， 不需要编写额外的脚本。<br />
+<br />
+     通过Siege 配置生成工具 sproxy，可方面生成测试结果表格。<br />
+<br />
+<br />
+7、curl版本的文件上传命令：<br />
+<br />
+curl -F "Filedata=@abcd.jpg" -F "p1=1234fggdg" -F "p2=dhdg57" -F<br />
+"p3=1346402565" -F "p4=026" http://yourhost/upload.php<br />
+<br />
+<br />
+8、wget -d 可输出http协议头信息。<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/680'>http://nullget.sourceforge.net/?q=node/680</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

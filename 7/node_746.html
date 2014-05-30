@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>gentoo默认使用clang编译包</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>gentoo默认使用clang编译包</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-27 19:28
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+clang-3.0以后，逐渐成熟稳定，由于它的编译速度，几次想使用其编译整个系统。<br />
+<br />
+目前，终于在clang-3.3，把系统的默认编译器设置为了clang。<br />
+由于gentoo的高度灵活性和可定制性，这个切换过程不太复杂。<br />
+<br />
+gentoo的多编译器设置机制：<br />
+在编译时gentoo其实使用是CC和CXX变量，所以只要能设置相应的变量，<br />
+gentoo的编译系统会使用这些变量执行编译。<br />
+另外，gentoo还给出了配置目录，/etc/portage/，用于定制化gentoo的编译过程。<br />
+其中目录/etc/portage/env/中的文件，可被用于配置编译器切换，如<br />
+该目录中有gcc,clang文件，分别对应使用gcc和clang编译时的环境变量设置。<br />
+<br />
+<br />
+配置如下：<br />
+make.conf文件：<br />
+添加 source /etc/portage/env/clang<br />
+<br />
+/etc/portage/env/clang:<br />
+[gzleo@myarchbox etc]$ more portage/env/clang<br />
+CC=clang <br />
+CXX=clang++ <br />
+CFLAGS="-O2 -pipe "  # for clang++ c++11, but can not use<br />
+CXXFLAGS="${CFLAGS} "<br />
+<br />
+/etc/portage/env/gcc文件:<br />
+CC=gcc <br />
+CXX=g++ <br />
+CFLAGS="-O2 -pipe " <br />
+CXXFLAGS="${CFLAGS} "<br />
+由于还有些包无法使用clang编译，还需要一个文件定义这些clang编译不过，而需要使用gcc的包列表。<br />
+/etc/portage/package.env文件:<br />
+######## clang faild <br />
+sys-boot/grub gcc<br />
+sys-devel/binutils gcc<br />
+sys-devel/gcc gcc<br />
+sys-boot/syslinux gcc<br />
+sys-firmware/sgabios gcc<br />
+dev-lisp/clisp gcc<br />
+dev-lisp/sbcl gcc<br />
+dev-libs/openssl gcc<br />
+app-emulation/qemu gcc<br />
+app-emulation/wine gcc<br />
+sys-devel/gdb gcc<br />
+media-tv/xbmc gcc<br />
+media-libs/libogg gcc<br />
+media-sound/wavpack gcc<br />
+dev-libs/libffi gcc<br />
+sys-libs/libstdc++ gcc<br />
+sys-libs/libstdc++-v3 gcc<br />
+sys-fs/e2fsprogs gcc<br />
+app-text/stardict gcc<br />
+app-crypt/gnupg gcc<br />
+dev-db/tora gcc<br />
+media-sound/amarok gcc<br />
+net-print/cups gcc<br />
+#net-fs/samba gcc<br />
+app-cdr/cdrtools gcc<br />
+kde-base/libkdcraw gcc<br />
+sys-fs/mtools gcc<br />
+sys-apps/busybox gcc<br />
+sys-power/cpupower gcc<br />
+x11-libs/libva gcc<br />
+app-crypt/mit-krb5 gcc<br />
+dev-libs/crypto++ gcc<br />
+dev-cpp/tbb gcc<br />
+sci-libs/fftw gcc<br />
+media-gfx/gimp clang<br />
+kde-base/libkipi gcc<br />
+kde-base/libkdcraw gcc<br />
+dev-db/hyperdex gcc<br />
+<br />
+重新编译整个系统，或者让系统逐渐更新为clang编译的包。<br />
+对于一般的包，gcc与clang编译的包是二进制兼容的，系统运行不成问题。<br />
+<br />
+这样定制配置后，比如有些可以使用intel编译的包，使用gentoo的编译系统也能无障碍编译了。<br />
+甚至，还可以使用gentoo的编译配置，实现交叉编译工具管理一些交叉编译的包。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/746'>http://nullget.sourceforge.net/?q=node/746</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

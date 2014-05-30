@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>gitlab安装</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>gitlab安装</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-12-23 23:02
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+gitlab是与github类似的git开放代码管理平台，不过gitlab是开源的版本，<br />
+可以在自己服务器上搭建类似github的代码管理平台。<br />
+gitlab是使用ruby on rails开发的，目前来说已经比较成熟。<br />
+在经历上次安装5.x版本的gitlab失败后，最近有抽了点时间，<br />
+为了能推动使用git库开发，再次尝试安装了一次，还算比较满意。<br />
+现在把安装过程和安装中遇到的问题与解决办法简单总结下来，<br />
+以备后续参考。<br />
+<br />
+安装版本选择，               <br />
+这次选用的是最新的6.4.0版本。<br />
+其他主要使用的包版本如下：<br />
+https://github.com/gitlabhq/gitlabhq/archive/v6.4.0.tar.gz<br />
+centos-6.5-x86_64<br />
+ruby-2.0.0-338<br />
+python2.7<br />
+mysql-5.5<br />
+nginx-1.4.3<br />
+redis-2.8<br />
+git-1.8.5.2<br />
+<br />
+注，在gitlab安装手册上，提示可以使用ruby-1.9.4-448。<br />
+开始的时候安装的这个版本，却发现无法编译支持ruby-openssl模块。<br />
+可能是手册更新稍慢，不适合这个centos系统版本。<br />
+后来改用了ruby-2.0才解决了这个问题。<br />
+<br />
+由于centos-6.5自带的这些包版本都比较低，所以这些包除上python2之外，<br />
+都是自己定制安装在非系统目录，这在后面的配置中也产生过问题。<br />
+如果方便的话，还是把这些包打包成centos6的rpm安装到系统目录会简单些。<br />
+<br />
+环境准备：<br />
+创建git用户，主目录为/home/git<br />
+安装ruby-2.0到/usr/local/ruby<br />
+安装git-1.8.5.2到/usr/local/git<br />
+安装redis-2.8到/usr/local/redis<br />
+安装nginx-1.4.3到/usr/local/nginx<br />
+使用yum install python2安装python2<br />
+mysql使用现有一台远程服务<br />
+<br />
+接下来按照安装手册，<br />
+下载gitlab-6.4.0.tar.gz解压到/home/git/gitlab<br />
+下载gitlab-shell并按照手册中的命令执行安装。<br />
+<br />
+配置，配置文件列表，<br />
+~/gitlab/config/gitlab.yml  <= gitlab.yml.example<br />
+~/gitlab/config/database.yml  <= database.yml.example<br />
+~/gitlab-shell/config.yml    <= config.yml.example<br />
+<br />
+<br />
+重要配置项说明：<br />
+gitlab.yml:<br />
+    host: 这指的是最终在gitlab平台上显示的git库地址主机名，也就是git库url中的域名。<br />
+    port: 提供的git库url的端口，一般是80，指的是前端的nginx代理需要配置的端口。<br />
+    如果配置为localhost:8001，那么最后创建gitlab项目的git库地址为：<br />
+    http://localhost:8001/username/projectname.git<br />
+    所以，一般情况下,host配置为提供git服务的域名，如git.qtchina.net，<br />
+    而端口设置为80，那么地址格式就比较好，这样地址格式为，<br />
+    http://git.qtchina.net/username/projectname.git<br />
+    https: 这个参数表示是否支持安全http协议访问git库。<br />
+           这个涉及到证书的安装配置，暂时设置为false了。<br />
+database.yml:<br />
+    这是gitlab使用的数据库配置，支持postgresql和mysql两种数据库。<br />
+    本次安装使用的现有mysql数据库。<br />
+    它的配置项比较简单，也就是数据库的ip地址，端口，用户名密码。<br />
+    但注意，这里gitlab区分了不同模式下的数据库，像产品级环境数据库production一段，<br />
+    development开发环境数据库一段和test开发环境数据库一段。<br />
+    在尝试区别并不太明显，全部按照产品级环境配置，其他的忽略。<br />
+gitlab-shell/config.yml:<br />
+    gitlab_url: 指的是gitlab的首页地址，该模块根据这个地址拼出gitlab api的地址并调用。<br />
+    像以现在的配置环境，这个地址配置为git.qtchina.net。<br />
+    其实这个地址和git库的地址一致，是因为gitlab在内部根据访问请求，<br />
+    准确路由到git库或者是web页面服务。<br />
+    redis: 这个提供gitlab内部事件队列的快速存储。设置为本地安装的redis即可。<br />
+gitlab-shell模块主要负责的是维护磁盘上的git库和用户验证工作。<br />
+<br />
+对gitlab代码的一些修改，<br />
+添加支持wiki中文标题<br />
+添加支持git库名带"."的情况<br />
+修正其他地方移动过来的git库无法修改项目信息的问题。<br />
+修改默认地repos地址<br />
+<br />
+启动与关闭，<br />
+/etc/init.d/gitlab start|stop<br />
+日志查询，~/gitlab/logs/*<br />
+<br />
+开启的端口号，<br />
+127.0.0.1:8080<br />
+*:80<br />
+*:6379<br />
+*:3306<br />
+<br />
+启动的进程，<br />
+unicorn_rails master<br />
+sidekiq 2.17.0 gitlab [0 of 25 busy]<br />
+python2 /home/git/gitlab/vendor/bundle/ruby/2.0.0/gems/gitlab-pygments.rb-0.5.4/lib/pygments/mentos.py<br />
+python2 /home/git/gitlab/vendor/bundle/ruby/2.0.0/gems/gitlab-pygments.rb-0.5.4/lib/pygments/mentos.py<br />
+unicorn_rails worker[0] -D -c /home/git/gitlab/config/unicorn.rb -E production<br />
+unicorn_rails worker[1] -D -c /home/git/gitlab/config/unicorn.rb -E production<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/778'>http://nullget.sourceforge.net/?q=node/778</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

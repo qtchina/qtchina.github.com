@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>git submodule 引用一个repo的branch分支</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>git submodule 引用一个repo的branch分支</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-12-05 10:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+git submodule add -b branch_name  git@abc.org:account/efg.git cname<br />
+git submodule add -b [branch] [URL] [DirectoryName]<br />
+<br />
+参数在于-b branch_name<br />
+<br />
+这个功能应该是在git-1.8.2加入的，<br />
+如果之前需要使用这个类似svn:externals类似的引用任意分支的功能则使用上比较复杂。<br />
+<br />
+在.gitmodules中显示比普通的submodule多了一个branch属性：<br />
+<br />
+[submodule "cname"]<br />
+        path = cname<br />
+        url = git@abc.org:account/efg.git<br />
+        branch = branch_name<br />
+<br />
+如果说在已经设置了submodule的path上切换到一个branch，可以使用这个命令，<br />
+git config -f .gitmodules submodule.<path>.branch <branch><br />
+<br />
+这相当于直接修改.gitmodules配置文件生效。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/776'>http://nullget.sourceforge.net/?q=node/776</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

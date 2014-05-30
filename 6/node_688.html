@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>基于本地php进程的web项目异步处理框架</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>基于本地php进程的web项目异步处理框架</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-09-25 10:26
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<pre><br />
+由于服务器权限管理问题，不能安装类似gearman的异步任务管理器。<br />
+<br />
+当前在实现的项目中存在许多可异步执行的处理，却要同步执行，影响使用方体验。<br />
+<br />
+为了优化项目，选择使用这种比较土的办法实现异步功能。<br />
+<br />
+机制描述：<br />
+<br />
+      在需要执行异步位置，启动一后台PHP进程执行异步任务。<br />
+<br />
+      异步任务的参数通过把当前的运行环境存储在临时文件，或者NoSQL中。<br />
+<br />
+      还需要把指定的任务名称及参数，可存储在各种常用队列中。<br />
+<br />
+      在启动异步任务进程时，把环境信息的路径或者key值作为进程参数传递过去。<br />
+<br />
+      异步任务进程启动后取出参数信息，恢复执行环境。<br />
+<br />
+      加载并执行指定的任务。<br />
+<br />
+      任务完成后将结果存储到指定的位置，或者不存储执行结果。<br />
+<br />
+关键点：<br />
+<br />
+      统一的简单的调用接口。<br />
+<br />
+      统一的环境信息及参数信息存储。<br />
+<br />
+      统一的环境信息恢复机制。<br />
+<br />
+      结果保存机制。<br />
+<br />
+优点：<br />
+<br />
+       不影响正常执行。<br />
+<br />
+       可复制当前的运行环境。<br />
+<br />
+       不经过web server层，执行效率好，并且不给web server带来额外压力。<br />
+<br />
+       部署简单，无额外依赖，现有的能运行LAMP架构皆可。<br />
+<br />
+       使用也很简单。<br />
+<br />
+       充分利用服务器资源。<br />
+<br />
+       利用进程池机制，防止系统过载。<br />
+<br />
+       任务队列保证任务确保任务不会丢失。<br />
+<br />
+缺点：<br />
+        注意在使用时不要搞死循环。<br />
+       不能灵活指定运行机器。<br />
+<br />
+实现：<br />
+<br />
+本地文件锁+couchbase的队列<br />
+<br />
+<br />
+</pre><br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/688'>http://nullget.sourceforge.net/?q=node/688</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

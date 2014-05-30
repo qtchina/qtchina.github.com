@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>最近使用kde桌面遇到的问题与解决</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>最近使用kde桌面遇到的问题与解决</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-05 14:29
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+kde是经常用的linux桌面环境，最近发现一个问题，就是有些程序的托盘图标显示不出来。<br />
+<br />
+前段时间也没太在意，今天到网上找了一下，确定也有别人遇到这个问题。<br />
+<br />
+仔细看了一下，最直接的解决方法是把.kde4配置目录删除，重新kde就好了。<br />
+<br />
+但是.kde4的配置已经非常多了，kde的使用时间非常长，如果都删除掉的话，<br />
+<br />
+还需要手工在一点点配置回来，这过程非常复杂。<br />
+<br />
+又找到一种针对这个问题的解决办法，https://bugs.kde.org/show_bug.cgi?id=290628<br />
+<br />
+把.kde4/share/config/plasma-desktop-appletsrc文件中的[Containerments]所有项目删除掉，<br />
+<br />
+在登陆进kde4的时候，整个任务栏一条恢复成原状了，可以再重新配置一下即可。<br />
+<br />
+另外，最近的kde的锁定屏幕功能，响应特别慢，等几分钟才能锁定上。<br />
+<br />
+还要注销功能也不好用，这些可能都与历史配置有关，但又不清楚具体和哪些配置项目相关，<br />
+<br />
+kmix的进程在，但在托盘旁边也显示不出来，这些还需要后续解决。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/806'>http://nullget.sourceforge.net/?q=node/806</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

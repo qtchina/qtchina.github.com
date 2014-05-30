@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>redis中的key的两种过期机制</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>redis中的key的两种过期机制</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-23 12:27
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+可以说redis是一个纯内存的缓存系统，其能存储的数据量不会超过节点的最大内存容量。<br />
+所以key的过期清理机制非常重要。<br />
+<br />
+一种比较常用的机制是，在读取key的时候，检测是否过期。<br />
+这是当前所有的内存K/V都在使得的办法，这种办法的CPU代价很低，顺便就能实现。<br />
+不过这种机制有一个问题，对于那些比较少访问的数据，<br />
+很有可能一直没有机会处理失效，而长时间浪费本应该回收的内存。<br />
+<br />
+redis实现了另外一种过期机制，定时分批扫描有过期设置的key。<br />
+比如每秒扫描100个这种key，如果有已经过期的，则删除。<br />
+下一秒扫描下个100个key，循环执行。<br />
+这种机制保证了过期的key一定能够从内存中删除，节省内存空间。<br />
+这机制由于需要定时扫描，有一定的CPU消耗。不过在每次扫描时，<br />
+并非扫描全部数据，所以算是对CPU消耗与内存消耗两者的比较好的折衷方案。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/732'>http://nullget.sourceforge.net/?q=node/732</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

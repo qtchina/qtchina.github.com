@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>用 PHP编写简单MySQL Bridge</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>用 PHP编写简单MySQL Bridge</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-07-23 22:37
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+许多虚拟主机空间提供MySQL服务，但不提供外部访问服务。<br />
+<br />
+如果需要外部依旧能够使用MySQL服务，需要在虚拟主机上安装一个桥接程序。<br />
+<br />
+当然这种桥接程序提供的是另一套接口了，而不是直接走的mysql协议了。<br />
+<br />
+其他使用这个服务的程序需要改到这套接口调用上。<br />
+<br />
+桥接程序不复杂，最简单的情况下只需要提供一个query接口即可。<br />
+<br />
+拿PHP为例，定义简单接口，实例MySQL服务的桥接接口程序。<br />
+服务器端程序pmp.php，定义了一个有两个参数的query接口，<br />
+<?php<br />
+/**<br />
+ * @param sql string<br />
+ * @param params array<br />
+ */<br />
+/*<br />
+  settings.php template:<br />
+  $db_host = "";<br />
+  $db_port = 3306;<br />
+  $db_user = "";<br />
+  $db_pass = "";<br />
+  $db_name = "";<br />
+ */<br />
+<br />
+require('settings.php');<br />
+<br />
+$json_command = $_POST['command'];<br />
+$command = json_decode($json_command, true);<br />
+<br />
+if (isset($command['dbname']) && !empty($command['dbname'])) {<br />
+    $db_name = $command['dbname'];<br />
+}<br />
+$sql = $command['sql'];<br />
+$params = $command['params'];<br />
+<br />
+$dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name}";<br />
+$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'');<br />
+<br />
+$pdo = new PDO($dsn, $db_user, $db_pass, $options);<br />
+$stmt = $pdo->prepare($sql);<br />
+<br />
+$ret = false;<br />
+if ($stmt) {<br />
+    $ret = $stmt->execute($params);<br />
+    $rows = array();<br />
+    for ($i = 0; $i < 3000; $i ++) {<br />
+        $row = $stmt->fetch(PDO::FETCH_BOTH);<br />
+        if ($row === false) {<br />
+            break;<br />
+        }<br />
+        $rows[] = $row;<br />
+    }<br />
+}<br />
+$result = array('ret'=> $ret,<br />
+                'rows' => $rows,<br />
+                'count' => count($rows),<br />
+                'last_insert_id' => $pdo->lastInsertId(),<br />
+                'affected_rows' => $stmt->rowCount(),<br />
+                'pdo_errno' => $pdo->errorCode(),<br />
+                'pdo_error' => $pdo->errorInfo(),<br />
+                'stmt_errno' => $stmt->errorCode(),<br />
+                'stmt_error' => $stmt->errorInfo(),<br />
+                'sql' => $sql,<br />
+                'params' => $params,<br />
+                );<br />
+<br />
+$json_result = json_encode($result);<br />
+echo $json_result;<br />
+<br />
+?><br />
+<br />
+客户端封装类，pmpc.php<br />
+<?php<br />
+class Pmpc <br />
+{<br />
+    private $_service_url = 'http://102.118.123.121/pmp.php';<br />
+    private $_service_ip = 'name.vaapp.com';<br />
+    private $_db_name = '';<br />
+    private $_timeout = 10;<br />
+<br />
+    public function __construct()<br />
+    {<br />
+    }<br />
+    <br />
+    public function query($sql, $params, $db_name = '')<br />
+    {<br />
+        $command = array('sql' => $sql, 'params' => $params);<br />
+        if (!empty($this->_db_name)) {<br />
+            $command['db_name'] = $this->_db_name;<br />
+        }       <br />
+        if (!empty($db_name)) {<br />
+            $command['db_name'] = $db_name;<br />
+        }<br />
+        $jcommand = json_encode($command);<br />
+<br />
+        $headers = array('Host: ' . $this->_service_ip);<br />
+        $data = curl_post($this->_service_url, array('command'=>$jcommand), $headers, $this->_timeout);<br />
+        return $data;<br />
+    }<br />
+};<br />
+<br />
+function curl_post($url, $data = array(), $header = array(), $timeout = 5, $port = 80)<br />
+{<br />
+    $ch = curl_init();<br />
+    curl_setopt($ch, CURLOPT_URL, $url);<br />
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);<br />
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);<br />
+    //curl_setopt($ch, CURLOPT_PORT, $port);<br />
+    !empty ($header) && curl_setopt($ch, CURLOPT_HTTPHEADER, $header);<br />
+    curl_setopt($ch, CURLOPT_POST, 1);<br />
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);<br />
+    <br />
+    $result = array();<br />
+    $result['result'] = curl_exec($ch);<br />
+    if (0 != curl_errno($ch)) {<br />
+        $result['errno'] = curl_errno($ch);<br />
+        $result['error']  = "Error:\n" . curl_error($ch);<br />
+        $result['reqinfo'] = curl_info($ch);<br />
+    }<br />
+   curl_close($ch);<br />
+   return $result;<br />
+}<br />
+?><br />
+<br />
+调用的时候也非常简单，如pmpt.php,<br />
+<?php<br />
+require_once('pmpc.php');<br />
+$pc = new Pmpc();<br />
+<br />
+$limit = rand(1,9);<br />
+$sql = "SELECT * FROM node WHERE 1 = :v1 ORDER BY nid LIMIT {$limit}";<br />
+$params = array(':v1' => 1);<br />
+$res = $pc->query($sql, $params);<br />
+var_dump($res);<br />
+<br />
+?><br />
+<br />
+这里的参数规则定义了必须使用数据库的bind模式，防止拼接SQL时容易出现的特殊符号转义问题。<br />
+客户端与服务器端之间的数据传递使用的是json格式，方便数据格式的转换。<br />
+这个实现支持客户端传入数据库名，但不支持客户端传入数据库IP及用户名密码等。<br />
+<br />
+目前的实现，还不太完善，如服务器端桥接程序没有很好的处理错误及异常情况。<br />
+客户端的封装没有在query方法返回类似数据库查询的数组结果，<br />
+而是返回了原始的HTTP请求的响应文本，需要改进为，客户端封装接口传入的参数与返回<br />
+的结果都是PHP的数组格式。<br />
+<br />
+<br />
+同类产品http://www.razorsql.com/<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/740'>http://nullget.sourceforge.net/?q=node/740</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

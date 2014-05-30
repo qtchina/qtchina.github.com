@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>基于/proc/loadavg的web前端压力自调节模块设计</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>基于/proc/loadavg的web前端压力自调节模块设计</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-11-23 09:58
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+cat /proc/loadavg<br />
+<br />
+从负载500的时候开始有选择的放弃某些请求的处理<br />
+<br />
+500-600   10%<br />
+<br />
+600-700   20%   <br />
+<br />
+700-800   40%   <br />
+<br />
+800-900    70%<br />
+<br />
+900-1000  100%<br />
+<br />
+1000以上的时候系统就崩溃了。<br />
+<br />
+设定每一档压力放弃20%的请求，到1000之后，不再处理任何请求<br />
+<br />
+放弃的请求放入队列中，随后慢慢的模拟发起这些请求。<br />
+<br />
+<br />
+需要在服务器还能动的情况下才有效，否则，做判断的请求未必能有机会执行。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/696'>http://nullget.sourceforge.net/?q=node/696</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

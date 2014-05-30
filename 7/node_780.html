@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>hyperdex导入数据测试</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>hyperdex导入数据测试</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-11 17:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+hyperdex发布了1.0正式版本。<br />
+抽了点时间预先测试了一次。<br />
+<br />
+本次测试使用的go绑定api编写的导入数据工具。<br />
+对go语言还不太熟悉，写的测试程序可能没有达到最优化状态。<br />
+另外hyperdex的go语言api还不完善，跑一段时间后内存被吃光。<br />
+使用的是普通的台式机，没有在服务器上测试。<br />
+hyperdex 导入数据测试结论，                                 <br />
+比较费资源，优化的不够。分区随意，很容易造成数据在多个节点分布不均匀。<br />
+导入测试100w记录后，在没有请求的情况依旧占用大量CPU。<br />
+导入速度不是太快，在普通台式机上，可写入每秒300-400条记录。<br />
+磁盘文件不会清理，目前还不知道怎么清理。<br />
+还没有测试区间搜索功能，第二索引搜索功能。 <br />
+<br />
+这次测试结果并没有到达预期的效果，但在hyperdex有一个基本的认识。<br />
+后面再通过测试程序做更全面的测试。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/780'>http://nullget.sourceforge.net/?q=node/780</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>apache代理配置</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>apache代理配置</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-07 10:34
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<VirtualHost *:80><br />
+   ProxyVia Full<br />
+   ProxyPreserveHost On<br />
+   ServerName dev-switching-stage-proxy.kitech.com<br />
+   ServerAlias slae.kitech.com<br />
+   ServerAlias photo.kitech.com.cn<br />
+   ServerAlias src.kitech.com.cn<br />
+   ServerAlias admin.photo.kitech.com.cn<br />
+   ServerAlias phpmyadmin.kitech.com<br />
+   ServerAlias imgcdn.kitech.com.cn<br />
+<br />
+   ProxyPass / http://10.207.0.201:8000/<br />
+   ProxyPassReverse / http://10.207.0.201:8000/<br />
+   # ProxyPassReverseCookieDomain photo.kitech.com.cn:8080     photo.kitech.com.cn                                                      <br />
+</VirtualHost><br />
+<br />
+ProxyVia Full 作用为添加一个标识性的header<br />
+ProxyPreserveHost On 添加一个Host: header，保持发向后端的host域名不变<br />
+ProxyPassReverse 保证在非80后端的情况可以正常使用。<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/751'>http://nullget.sourceforge.net/?q=node/751</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>fastcgi客户端PHP语言实现</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>fastcgi客户端PHP语言实现</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-03-19 22:30
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+在一个项目中，希望使用php直接与PHP-FPM进程通信，<br />
+跳过nginx代理，减少一点中间过程的效率损耗，<br />
+同时，更重要的是把PHP-FPM当作一个PHP进程池使用，<br />
+不要受到关于nginx的超时、缓冲设置的影响，让不同处理程序之间通信更直接，<br />
+特意使用PHP语言编写了一个fastcgi客户端类，实现协议的打包、发送与接收工作。<br />
+<br />
+在经过一段时间的完善之后，确定这种方式非常适用我们的需求场景，<br />
+花了一些时间，重新使用C语言编写了一个中间代理服务，<br />
+并集成了一个C版本的fastcgi客户端实现，现在已经不再需要这个PHP版本的了。<br />
+<br />
+现张贴在此，给有兴趣的朋友一个示例，给需要的朋友当作参考，<br />
+在实现fastcgi类的过程中，总结下来，需要注意的一些点，<br />
+对二进制数据包的封装，像处理C语言中的不同长度的整数，字符串在PHP语言中的处理方式。<br />
+对C语言中的变长结构体类型的数据结构，在PHP中不太好表达，需要使用比较原始的分支逻辑来实现，<br />
+还可以了解网络协议的封闭数据包，解析数据包的基本模式。<br />
+<br />
+如果用C语言实现，也许可以更简洁明了。<br />
+不过fastcgi协议本身非常简单，所以，PHP语言版本的实现也不算太复杂。<br />
+<br />
+直接上代码，<br />
+[code type="php"]<br />
+<?php<br />
+<br />
+    // 内部类不会有重复包含类名冲突问题<br />
+    class FastCGIClientImpl<br />
+    {<br />
+        const FCGI_HEADER_LEN = 0x08;<br />
+        const FCGI_VERSION_1 = 0x01;<br />
+<br />
+        // 可用于FCGI_Header的type组件的值<br />
+        const FCGI_BEGIN_REQUEST = 1;<br />
+        const FCGI_ABORT_REQUEST =  2;<br />
+        const FCGI_END_REQUEST  = 3;<br />
+        const FCGI_PARAMS  = 4;<br />
+        const FCGI_STDIN  = 5;<br />
+        const FCGI_STDOUT  = 6;<br />
+        const FCGI_STDERR  = 7;<br />
+        const FCGI_DATA  = 8;<br />
+        const FCGI_GET_VALUES  = 9;<br />
+        const FCGI_GET_VALUES_RESULT  = 10;<br />
+        const FCGI_UNKNOWN_TYPE  = 11;<br />
+        const FCGI_MAXTYPE = self::FCGI_UNKNOWN_TYPE;<br />
+<br />
+<br />
+        //<br />
+        const FCGI_NULL_REQUEST_ID  = 0x00;<br />
+<br />
+        // 可用于FCGI_BeginRequestBody的flags组件的掩码<br />
+        const FCGI_KEEP_CONN = 1;<br />
+        // 可用于FCGI_BeginRequestBody的role组件的值<br />
+        const FCGI_RESPONDER = 1;<br />
+        const FCGI_AUTHORIZER = 2;<br />
+        const FCGI_FILTER = 3;<br />
+<br />
+        // Values for protocolStatus component of FCGI_EndRequestBody<br />
+        const FCGI_REQUEST_COMPLETE = 0;<br />
+        const FCGI_CANT_MPX_CONN    = 1;<br />
+        const FCGI_OVERLOADED       = 2;<br />
+        const FCGI_UNKNOWN_ROLE     = 3;<br />
+<br />
+<br />
+        // members<br />
+        public $_sock = null;<br />
+        public $_app_status = 0;<br />
+        public $_fcgi_status_code = -1;<br />
+        public $_stderr_content = '';<br />
+        public $_stdout_raw_content = '';<br />
+        public $_stdout_real_content = '';<br />
+        public $_response = '';<br />
+        public $_http_status_code = 200;<br />
+        public $_http_status_msg = 'OK';<br />
+        public $_http_resp_headers = array();<br />
+<br />
+        <br />
+        // 构造函数<br />
+        function __construct()<br />
+        {<br />
+        }<br />
+<br />
+        // 是否是可添加padding的协议记录类型<br />
+        function isPadableRecord($appRecordType)<br />
+        {<br />
+            if ($appRecordType == self::FCGI_BEGIN_REQUEST<br />
+                || $appRecordType == self::FCGI_ABORT_REQUEST<br />
+                || $appRecordType == self::FCGI_END_REQUEST<br />
+                || $appRecordType == self::FCGI_STDIN<br />
+                ) {<br />
+                return true;<br />
+            }<br />
+<br />
+            return false;<br />
+        }<br />
+<br />
+        // 构造fastcgi头<br />
+        function fastcgiHeader($appRecordType, $contentLength)<br />
+        {<br />
+            assert($appRecordType >= self::FCGI_BEGIN_REQUEST);<br />
+            assert($contentLength >= 0);<br />
+<br />
+            $hdr = '';<br />
+            $hdr .= pack('C', self::FCGI_VERSION_1);  // version<br />
+            $hdr .= pack('C', $appRecordType);            // type: self::FCGI_BEGIN_REQUEST<br />
+<br />
+            $hdr .= pack('n', rand(1, 65535));        // rid1,rid0<br />
+<br />
+            $hdr .= pack('n', $contentLength);     // clen1,clen0<br />
+<br />
+            if ($this->isPadableRecord($appRecordType)) {<br />
+                $hdr .= pack('C', rand(0, 255));            // padlen<br />
+            } else {<br />
+                $hdr .= pack('C', 0x00);            // padlen<br />
+            }<br />
+            $hdr .= pack('C', 0x00);            // reserved<br />
+<br />
+            assert(strlen($hdr) == self::FCGI_HEADER_LEN);<br />
+<br />
+            return $hdr;<br />
+        }<br />
+<br />
+        // Build a FastCGI packet<br />
+        function buildPacket($appRecordType, $content)<br />
+        {<br />
+            $hdr = $this->fastcgiHeader($appRecordType, strlen($content));<br />
+            $pkt = $hdr . $content;<br />
+<br />
+            $padtext = '';<br />
+            $padlen = unpack('C', $hdr{6})[1];<br />
+            if ($this->isPadableRecord($appRecordType)) {<br />
+                if ($padlen > 0) {<br />
+                    $padtext = str_repeat(chr(rand(0, 255)), $padlen);<br />
+                    $pkt .= $padtext;<br />
+                    assert(strlen($padtext) == $padlen);<br />
+                }<br />
+<br />
+                // 为什么FastCGIConst:FCGI_PARAMS加padding后协议有问题<br />
+            }<br />
+<br />
+            assert(strlen($pkt) == ($padlen + strlen($content) + self::FCGI_HEADER_LEN));<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        // Build an FastCGI Name value pair<br />
+        function buildNvpair($name, $value)<br />
+        {<br />
+            $nlen = strlen($name);<br />
+            $vlen = strlen($value);<br />
+<br />
+            $nvpair = '';<br />
+            $nvpair .= $nlen < 128 ? pack('C', $nlen) : pack('N', $nlen | (0x01 << 31));<br />
+            $nvpair .= $vlen < 128 ? pack('C', $vlen) : pack('N', $vlen | (0x01 << 31));<br />
+<br />
+            assert(strlen($nvpair) == 2 || strlen($nvpair) == 5 || strlen($nvpair) == 8);<br />
+<br />
+            $nvpair .= $name . $value;<br />
+            return $nvpair;<br />
+        }<br />
+<br />
+        // 构造协议开始请求记录包<br />
+        function buildBeginRequest()<br />
+        {<br />
+            $beginRequestBody = pack('n', self::FCGI_RESPONDER) // role1,role0<br />
+            . pack('CNC', 0x00, rand(), 0x00)                              // flag, reserved5<br />
+            ;<br />
+            assert(strlen($beginRequestBody) == 8);<br />
+<br />
+            $pkt = $this->buildPacket(self::FCGI_BEGIN_REQUEST, $beginRequestBody);<br />
+            $padlen = unpack('C', $pkt{6})[1];<br />
+            assert(strlen($pkt) == (self::FCGI_HEADER_LEN * 2 + $padlen));<br />
+<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        // 构造协议中断请求记录包<br />
+        function buildAbortRequest()<br />
+        {<br />
+            $pkt = $this->buildPacket(self::FCGI_ABORT_REQUEST, '');<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        // 构造协议参数请求记录包<br />
+        function buildParamsRequest(array $params)<br />
+        {<br />
+            $pstr = '';<br />
+            foreach ($params as $name => $value) {<br />
+                $pstr .= $this->buildNvpair($name, $value);<br />
+            }<br />
+<br />
+            $pkt = '';<br />
+            $pkt .= $this->buildPacket(self::FCGI_PARAMS, $pstr);<br />
+            $pkt .= $this->buildPacket(self::FCGI_PARAMS, '');   // 为什么需要构建一个空包<br />
+<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        // 构造协议标准输入请求记录包<br />
+        function buildStdinRequest($stdin)<br />
+        {<br />
+            $pkt = $this->buildPacket(self::FCGI_STDIN, $stdin);<br />
+            $pkt .= $this->buildPacket(self::FCGI_STDIN, '');   // 为什么需要构建一个空包<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        // 构造协议结束请求记录包<br />
+        function buildEndRequest()<br />
+        {<br />
+            $body = pack('N', 301)<br />
+            . pack('C', 0x01)<br />
+            . pack('C*', 0x00, 0x00, 0x00)<br />
+            ;<br />
+            assert(strlen($body) == self::FCGI_HEADER_LEN);<br />
+<br />
+            $pkt = $this->buildPacket(self::FCGI_END_REQUEST, $body);<br />
+<br />
+            return $pkt;<br />
+        }<br />
+<br />
+        /**<br />
+         * Decode a FastCGI Packet<br />
+         *<br />
+         * @param String $data String containing all the packet<br />
+         * @return array<br />
+         */<br />
+        function decodePacketHeader($data)<br />
+        {<br />
+            $ret = array();<br />
+            $ret['version']       = unpack('C', $data{0})[1];<br />
+            $ret['type']          = unpack('C', $data{1})[1];<br />
+            $ret['requestId']     = unpack('n', substr($data, 2, 2))[1];<br />
+            $ret['contentLength'] = unpack('n', substr($data, 4, 2))[1];<br />
+            $ret['paddingLength'] = unpack('C', $data{6})[1];<br />
+            $ret['reserved']      = unpack('C', $data{7})[1];<br />
+            return $ret;<br />
+        }<br />
+<br />
+        /**<br />
+         * Read a FastCGI Packet<br />
+         *<br />
+         * @return array<br />
+         */<br />
+        function readPacket()<br />
+        {<br />
+            if ($packet = fread($this->_sock, self::FCGI_HEADER_LEN)) {<br />
+                $resp = $this->decodePacketHeader($packet);<br />
+                $resp['content'] = '';<br />
+                if ($resp['contentLength']) {<br />
+                    $len = $resp['contentLength'];<br />
+                    while ($len && $buf = fread($this->_sock, $len)) {<br />
+                        $len -= strlen($buf);<br />
+                        $resp['content'] .= $buf;<br />
+                        $buf = '';<br />
+                    }<br />
+                }<br />
+                if ($resp['paddingLength']) {<br />
+                    $buf = fread($this->_sock, $resp['paddingLength']);<br />
+                }<br />
+                return $resp;<br />
+            } else {<br />
+                return false;<br />
+            }<br />
+        }<br />
+<br />
+        // 连接到FastCGI服务器<br />
+        function connect($host, $port)<br />
+        {<br />
+            $fp = null;<br />
+            if ($this->_sock == null) {<br />
+                $fp = fsockopen($host, $port);<br />
+                if (!$fp) {<br />
+                    return false;<br />
+                }<br />
+            }<br />
+            $this->_sock = $fp;<br />
+            assert($this->_sock != null);<br />
+            return true;<br />
+        }<br />
+<br />
+        // 断开到FastCGI服务器的连接<br />
+        function disconnect()<br />
+        {<br />
+            if (is_resource($this->_sock)) {<br />
+                fclose($this->_sock);<br />
+                $this->_sock = null;<br />
+            }<br />
+        }<br />
+<br />
+        // 解析HTTP响应头信息<br />
+        function parseHttpHeader($stdout)<br />
+        {<br />
+            $hdr_end_pos = strpos($stdout, "\r\n\r\n");<br />
+            if ($hdr_end_pos < 0) {<br />
+                return false;<br />
+            }<br />
+<br />
+            $raw_hdr = explode("\r\n", substr($stdout, 0, $hdr_end_pos));<br />
+            foreach ($raw_hdr as $lineno => $row) {<br />
+                $kvpair = explode(': ', $row);<br />
+                if ($lineno == 0 && $kvpair[0] == 'Status') {<br />
+                    $this->_http_status_code = explode(' ', trim($kvpair[1]))[0];<br />
+                    $this->_http_status_msg = substr($kvpair[1], strlen($this->_http_status_code)+1);<br />
+                    $this->_http_status_msg = trim($this->_http_status_msg);<br />
+                } else {<br />
+                    $this->_http_resp_headers[$kvpair[0]] = $kvpair[1];<br />
+                }<br />
+            }<br />
+<br />
+            $this->_stdout_real_content = substr($stdout, $hdr_end_pos + 4);<br />
+<br />
+            return true;<br />
+        }<br />
+<br />
+        // 比较全面的测试方法<br />
+        public function requestFullTest(array $params, $stdin)<br />
+        {<br />
+            $fp = fsockopen('127.0.0.1', 9000);<br />
+            var_dump($fp);<br />
+            $this->_sock = $fp;<br />
+<br />
+            $breq = $this->buildBeginRequest();<br />
+            $data = $breq;<br />
+<br />
+            $str = $this->buildParamsRequest($params);<br />
+            $data .= $str;<br />
+<br />
+            $str = $this->buildStdinRequest($stdin);<br />
+            $data .= $str;<br />
+<br />
+            $str = $this->buildAbortRequest();<br />
+            $data .= $str;<br />
+<br />
+            $str = $this->buildEndRequest();<br />
+            $data .= $str;<br />
+<br />
+            $ret = fwrite($fp, $data, strlen($data));<br />
+            // var_dump($ret);<br />
+<br />
+            // $res = fread($fp, 3000);<br />
+            // $res = $readPacket();<br />
+            $response = '';<br />
+            $stdout_content = '';<br />
+            $stderr_content = '';<br />
+            $cnter = 0;<br />
+            do {<br />
+                $btime = microtime(true);<br />
+                $resp = $this->readPacket();<br />
+                $now = microtime(true);<br />
+                $dtime = $now - $btime;<br />
+                echo "read a pkt: {$cnter} on {$now}, used: {$dtime}\n"; $cnter++;<br />
+                if ($resp['type'] == self::FCGI_STDOUT || $resp['type'] == self::FCGI_STDERR) {<br />
+                    $response .= $resp['content'];<br />
+                }<br />
+                if ($resp['type'] == self::FCGI_STDOUT) {<br />
+                    $stdout_content .= $resp['content'];<br />
+                }<br />
+                if ($resp['type'] == self::FCGI_STDERR) {<br />
+                    $stderr_content .= $resp['content'];<br />
+                }<br />
+            } while ($resp && $resp['type'] != self::FCGI_END_REQUEST);<br />
+        <br />
+            print_r($resp);<br />
+            var_dump("response={$response}", "stdout={$stdout_content}", "stderr={$stderr_content}");<br />
+            sleep(5);<br />
+        <br />
+            fclose($fp);<br />
+            return true;<br />
+        }<br />
+<br />
+<br />
+        // 对外执行fastcgi调用的方法<br />
+        function request(array $params, $stdin)<br />
+        {<br />
+            $breq = $this->buildBeginRequest();<br />
+            $data = $breq;<br />
+<br />
+            $str = $this->buildParamsRequest($params);<br />
+            $data .= $str;<br />
+<br />
+            $str = $this->buildStdinRequest($stdin);<br />
+            $data .= $str;<br />
+<br />
+            $ret = fwrite($this->_sock, $data, strlen($data));<br />
+            if (!$ret) {<br />
+                assert($ret == strlen($data));<br />
+                return false;<br />
+            }<br />
+<br />
+            $resp = null;<br />
+            $cnter = 0;<br />
+            do {<br />
+                $btime = microtime(true);<br />
+                $resp = $this->readPacket();<br />
+                $now = microtime(true);<br />
+                $dtime = $now - $btime;<br />
+                echo "read a pkt: {$cnter} on {$now}, used: {$dtime}\n"; $cnter++;<br />
+                if ($resp['type'] == self::FCGI_STDOUT || $resp['type'] == self::FCGI_STDERR) {<br />
+                    $this->_response .= $resp['content'];<br />
+                }<br />
+                if ($resp['type'] == self::FCGI_STDOUT) {<br />
+                    $this->_stdout_raw_content .= $resp['content'];<br />
+                }<br />
+                if ($resp['type'] == self::FCGI_STDERR) {<br />
+                    $this->_stderr_content .= $resp['content'];<br />
+                }<br />
+            } while ($resp && $resp['type'] != self::FCGI_END_REQUEST);<br />
+<br />
+            if (!$resp) {<br />
+                return false;<br />
+            }<br />
+<br />
+            assert(strlen($resp['content']) == self::FCGI_HEADER_LEN);<br />
+            $this->_app_status = unpack('N', substr($resp['content'], 0, 4))[1];<br />
+            $this->_fcgi_status = unpack('C', $resp['content']{4})[1];<br />
+<br />
+            return true;<br />
+        }<br />
+<br />
+    }; // end class FastCGIClientImpl<br />
+?><br />
+[/code]<br />
+测试代码：<br />
+[code type="php"]<br />
+$client = new FastCGIClientImpl();<br />
+$content = 'key123=value456&keyabc=valueefggg&中文=abcdefg&hehe=汉字utf8的';<br />
+$res = $client->__invoke(<br />
+                      array(<br />
+                            'GATEWAY_INTERFACE' => 'FastCGI/1.0',<br />
+                            'REQUEST_METHOD' => 'POST',<br />
+                            'DOCUMENT_ROOT' => '/data1/vhosts/photo.house.kitech.com.cn',<br />
+                            'SCRIPT_FILENAME' => '/data1/vhosts/photo.house.kitech.com.cn/index.php',<br />
+                            'SCRIPT_NAME' => '/index.php',<br />
+                            'REQUEST_URI' => '/test/test6/simpost',<br />
+                            'SERVER_SOFTWARE' => 'php/fastcgiclient',<br />
+                            'REMOTE_ADDR' => '127.0.0.1',<br />
+                            'REMOTE_PORT' => '9985',<br />
+                            'SERVER_ADDR' => '127.0.0.1',<br />
+                            'SERVER_PORT' => '80',<br />
+                            'SERVER_NAME' => 'photo.house.kitech.com.cn',<br />
+                            'HTTP_HOST' => 'photo.house.kitech.com.cn',<br />
+                            'SERVER_PROTOCOL' => 'HTTP/1.0',<br />
+                            'CONTENT_TYPE' => 'application/x-www-form-urlencoded',<br />
+                            'CONTENT_LENGTH' => strlen($content),<br />
+                            'kitech.com.cn_CACHE_DIR' => '',<br />
+                            'kitech.com.cn_DATA_DIR' => '',<br />
+                            'kitech.com.cn_RSYNC_SERVER' => '',<br />
+                            'kitech.com.cn_STORAGE_SERVER' => '',<br />
+                            'kitech.com.cn_RSYNC_MODULES' => '',<br />
+                            'kitech.com.cn_RESOURCE_URL' => '',<br />
+                            'kitech.com.cn_DIST_URL' => '',<br />
+                            'kitech.com.cn_TAAA_127' => 'DallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDall123456789012345',<br />
+                            'kitech.com.cn_TAAA_128' => 'DallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDallasDall1234567890123456',<br />
+                                   ),<br />
+                      $content<br />
+                      );<br />
+<br />
+var_dump($res);<br />
+[/code]<br />
+<br />
+通过代码，还可以看出，跳过nginx后，可以动态设置程序的DOCUMENT_ROOT目录，<br />
+能够实现一个比用nginx配置虚拟主机更快速灵活地方式，请求不同虚拟项目的程序接口。<br />
+<br />
+参考资料：<br />
+http://www.fastcgi.com<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/795'>http://nullget.sourceforge.net/?q=node/795</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

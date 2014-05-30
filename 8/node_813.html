@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Linux桌面添加新的分辨率</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>Linux桌面添加新的分辨率</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-27 21:24
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+<br />
+xrandr --newmode "1680x1050" 147.1 1680 1784 1968 2256 1050 1051 1054 1087 +Hsync -Vsync<br />
+xrandr --addmode LVDS1 1680x1050<br />
+<br />
+原来的和控制中没有这个分辨率，通过这两个命令，添加新的分辨率<br />
+然后可在KDE的"显示与监控”配置项中找到这个新的分辨率可以使用。<br />
+<br />
+也可以继续使用xrandr命令，设置当前的显示分辨率，<br />
+xrandr --output LVDS1 --mode "1680x1050"<br />
+或者，<br />
+xrandr --output LVDS1 --mode "1920x1200"<br />
+<br />
+原来的1920x1200的字段实在太小了。<br />
+<br />
+16:10比例的其他分辨率：<br />
+"1440x900" 106.50 1440 1528 1672 1904 900 903 909 934 -hsync +vsync<br />
+<br />
+[code type="bash"]<br />
+#!/bin/sh<br />
+<br />
+xrandr --newmode "1680x1050" 147.1 1680 1784 1968 2256 1050 1051 1054 1087 +Hsync -Vsync<br />
+xrandr --addmode LVDS1 1680x1050<br />
+xrandr --output LVDS1 --mode "1680x1050"<br />
+# xrandr --output LVDS1 --mode "1920x1200"<br />
+[/code]<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/813'>http://nullget.sourceforge.net/?q=node/813</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

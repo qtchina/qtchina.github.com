@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>最近遇到的fastdfs响应超时问题</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>最近遇到的fastdfs响应超时问题</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-06-29 10:30
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+最近测试fastdfs，准备正式使用，但测试中遇到比较严重的问题：<br />
+<br />
+大多数情况下运行良好，偶尔一段时间，大概超过1个小时内，使用php客户端上传文件，<br />
+<br />
+一起显示110 Connection timed out错误。<br />
+<br />
+在服务器端也同样报这个错误，显示与另一台storage通信有接收响应超时，错误如下，<br />
+<br />
+经过分析，发现在报错比较多的情况，monitor显示sync delay 比较大，大概超过30m到1小时。<br />
+<br />
+猜测可以是同步镜像有一些问题，现在同步镜像的设置为24小时实时同步，可能比较耗资源。<br />
+<br />
+可以通过调整同步等待时间与同步时间段方式，测试是否确实与此有关。<br />
+<br />
+总结几种方法可以试着调整测试一下，<br />
+<br />
+调整同步等待时间与同步时间段。<br />
+<br />
+安装libevent-2.0-stable版本，目前使用centos 6自带的1.13-stable版本。<br />
+<br />
+使用connection pool，用网络连接池的方式减小连接消耗。<br />
+<br />
+调整read/write的线程数，使整个过程不会阻塞在某个IO操作上。目前的服务器做了raid，适当调整可提高IO效率。<br />
+<br />
+希望通过这些方式测试，确定这个问题的原因，并能解决。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/734'>http://nullget.sourceforge.net/?q=node/734</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

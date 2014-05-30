@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>couchbase应用注意事项</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>couchbase应用注意事项</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-30 12:57
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+尽量使用failover<br />
+<br />
+少用rebalance<br />
+<br />
+有出问题且无法恢复，先停止该节点进程再执行删除<br />
+<br />
+设置bucket的数据目录，不要存储在默认位置<br />
+<br />
+对使用内存要求不同的数据使用不同的bucket，设置不同的内存资源<br />
+<br />
+对非重要数据不做replicate备份。<br />
+<br />
+couchbase-1.8的离线备份速度非常慢，占CPU非常高，能看到是使用sqlite3命令备份的。<br />
+<br />
+不要存储大于50K的文本数据或二进制数据。<br />
+<br />
+couchbase-1.8.0某个bucket太大（>200G，分配内存比较小1-2G)，可能导致重启动后无法恢复，一直处理pend状态，无法提供服务。<br />
+<br />
+太大的bucket还是导致无法加入新的节点，也是一直处理pend状态，无法提供服务。<br />
+<br />
+不要在centos-5.4系统及更低版本系统上安装，系统负载稍大（load>80)可能会出些couchbase宕机问题。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/697'>http://nullget.sourceforge.net/?q=node/697</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

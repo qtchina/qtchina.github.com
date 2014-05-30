@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>linux桌面优化-pulse-shm</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>linux桌面优化-pulse-shm</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-27 09:43
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+目前使用arch linux,今天开机,偶然发现在/dev/shm目录不为空.<br />
+按说,这个目录一般使用的程序都是临时的,不会一直保存,所以看了一眼,<br />
+却发现有6个pulse-shm-xxx文件,每个文件65M,这不是一共占用了390M内存吗，还得了吗。<br />
+从文件名确认这一定是pulseaudio的文件了，查了下它的相关文档，<br />
+发现其实可以不使用共享内存的，其实还可以使用socket文件通信，<br />
+需要修改下默认的配置，/etc/pulse/daemon.conf设置项，enable-shm = no，<br />
+启动后没有这个文件了。<br />
+别一种方式，修改成system-instance模式启动pulseaudio，默认也不会使用共享内存，<br />
+<br />
+不过，在有这个文件的时候，也不太好理解，文件显示大小与占用大小有区别，<br />
+du -hs /dev/shm<br />
+36K     /dev/shm/<br />
+<br />
+而ll -h /dev/shm 则输出，<br />
+total 36K<br />
+-r-------- 1 gzleo wheel 65M Dec 27 09:29 pulse-shm-1405110259<br />
+-r-------- 1 gzleo wheel 65M Dec 27 09:25 pulse-shm-3445836608<br />
+-r-------- 1 gzleo wheel 65M Dec 27 09:26 pulse-shm-3758483149<br />
+-r-------- 1 gzleo wheel 65M Dec 27 09:26 pulse-shm-3887735865<br />
+-r-------- 1 gzleo wheel 65M Dec 27 09:26 pulse-shm-507393296<br />
+<br />
+看来它分配的内存文件，也不是系统一下全部都给它了。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/704'>http://nullget.sourceforge.net/?q=node/704</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

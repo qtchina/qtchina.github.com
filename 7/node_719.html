@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>支持自动重连接的PHP PDO类完善</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>支持自动重连接的PHP PDO类完善</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-03-09 18:28
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+PHP的PDO是取代原来的php-mysql、php-mysqli模块的统一数据库访问模块，<br />
+<br />
+比直接使用各自数据库提供的原始扩展函数相比，PDO的好处是移植性更好些。<br />
+<br />
+最近在使用PDO开发框架过程，对其有了更多些的认识。<br />
+<br />
+*）对长连接的支持<br />
+<br />
+*）异常的使用<br />
+<br />
+*）连接的自动关闭控制<br />
+<br />
+*）连接中断的重连接（MySQL has gone away)<br />
+<br />
+*）<br />
+<br />
+最近遇到特别麻烦的问题，使用长连接是，全出来 MySQL Server has gone away的问题。<br />
+<br />
+这种情况下PDO没有办法检测并重连接，也没有提供重新连接的相关方法。<br />
+<br />
+这样对长连接的使用有点悲催了，开始运行的很正常的系统，运行一段时间后，却因为数据库连接的问题系统瘫痪了。<br />
+<br />
+经过很多的代码测试与查找资料，实现了一个能重连接的PDO封装。在此分享思路与主要代码，补充PDO在实际应用中遇到的问题。<br />
+<br />
+该封装的主要思路：<br />
+使用PDO的异常模式设置，<br />
+通过PHP魔法方法__call($name, $args)代理PDO的所有方法，<br />
+在代理方法中截获PDO的异常，判断异常的类型，确定是否需要重新连接。<br />
+在这一层封装还屏蔽了PDO的异常功能，所有的PDO操作成功与否需要通过调用返回值和errorInfo等方法取得。<br />
+<br />
+这种方法为了实现自动重连功能，实际上降低了代码的效率。<br />
+在实际应用中，根据需要确定对效率的需求如何，是否可以接受这种效率损失。<br />
+<br />
+最后，希望能在PDO的核心改进这个问题，或者提供显著重连接的方法，<br />
+<br />
+或者提供显式的关闭当前已经中断连接的方法，<br />
+<br />
+更或者提供一个参数，让PDO确定在遇到这种问题时能够自动重连接，如PDO::AUTO_RECONNECT。<br />
+<br />
+抽时间出看看PDO的代码，看自己能否简单的HACKING下PDO扩展模块，实现我们需要的功能。<br />
+<br />
+附：自动重连接PDO封装类，<br />
+[code type="PHP"] <pre><br />
+   public function __call($name, array $arguments)<br />
+    {<br />
+        $result = false;<br />
+        $cnter = self::REQUERY_TIMES;<br />
+        do {<br />
+            try {<br />
+                $result = call_user_func_array(array($this->connection(), $name), $arguments);<br />
+                if ($result instanceof PDOStatement) {<br />
+                    $result = new ReconnectingPDOStatement($result);<br />
+                }<br />
+                break;<br />
+            } catch(PDOException $e) {<br />
+                if($e->getCode() != 'HY000' || !stristr($e->getMessage(), 'server has gone away')) {<br />
+                    throw $e;<br />
+                }<br />
+<br />
+                $this->reconnect();<br />
+            }<br />
+        } while($cnter-- > 0);<br />
+<br />
+        return $result;<br />
+    }<br />
+<br />
+    protected function connection()<br />
+    {<br />
+        return $this->pdo instanceof PDO ? $this->pdo : $this->connect();<br />
+    }<br />
+    public function connect()<br />
+    {<br />
+        $dsn = $this->dsn.';'.time()%10;<br />
+        if($this->pdo)<br />
+        {<br />
+            //让php先回收已断开长连接资源<br />
+            $this->pdo->setAttribute(PDO::ATTR_PERSISTENT, false);<br />
+            $this->pdo = null;<br />
+            $this->pdo = new PDO($dsn, $this->username, $this->password, (array) $this->driver_options);<br />
+            $this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 3600);<br />
+            $this->pdo->setAttribute(PDO::ATTR_PERSISTENT, true);<br />
+        }<br />
+        else<br />
+        {<br />
+            $this->pdo = new PDO($dsn, $this->username, $this->password, (array) $this->driver_options);<br />
+            $this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 3600);<br />
+        }<br />
+<br />
+        return $this->pdo;<br />
+    }<br />
+<br />
+    public function reconnect()<br />
+    {<br />
+        return $this->connect();<br />
+    }<br />
+}<br />
+<br />
+class ReconnectingPDOStatement<br />
+{<br />
+    private $_stmt = null;<br />
+<br />
+    public function __construct($stmt) {<br />
+        $this->_stmt = $stmt;<br />
+    }<br />
+<br />
+    public function __call($name, array $arguments) {<br />
+        $result = false;<br />
+        try {<br />
+            $result = call_user_func_array(array($this->_stmt, $name), $arguments);<br />
+        } catch (PDOException $e) {<br />
+            // var_dump($e);<br />
+        }<br />
+        return $result;<br />
+    }<br />
+}<br />
+</pre>[/code]<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/719'>http://nullget.sourceforge.net/?q=node/719</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

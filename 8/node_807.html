@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>32位 arch linux上使用4G内存：PAE内核使用</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>32位 arch linux上使用4G内存：PAE内核使用</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-14 14:10
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+原来2G内存的电脑，升级到4G内存后，由于系统是原版的32位archlinux，无法完全利用上4G内存。<br />
+<br />
+在aur.archlinux.org上有个linux-pae内核包，用于32位系统上使用超过4G的内存。<br />
+<br />
+按照编译普通aur包的方式编译出来新的内核包，<br />
+<br />
+pacman -U linux-pae-3.14.3-2-i686.pkg.tar.xz linux-pae-headers-3.14.3-2-i686.pkg.tar.xz<br />
+<br />
+重新使用新安装的内核启动系统。即可利用到4G以上的内存了。<br />
+<br />
+不过，原来安装的一些内核模块需要重新编译安装，像virtualbox,vmware这种第三方的内核模块。<br />
+<br />
+像virtualbox可以使用dkms install vboxhost/4.3.10命令安装，<br />
+<br />
+内核模块安装到了/usr/lib/modules/3.14.3-2-pae/kernel/misc/<br />
+<br />
+再用modprobe vboxdrv后，可以正常使用。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/807'>http://nullget.sourceforge.net/?q=node/807</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

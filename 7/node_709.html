@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>membase-1.7数据库导出备份</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>membase-1.7数据库导出备份</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-01-07 09:33
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+*) 存储位置/opt/membase/var/lib/membase/default-data/<br />
+*) 执行数据备份：<br />
+      cd /opt/membase/<br />
+      ./bin/mbbackup ./var/lib/membase/data/default-data/default /data1/backup/<br />
+      注意上面的命令的第一个参数，指向桶的名字命令的数据文件default。<br />
+      这样就把default桶的数据导出来了。查看导出文件大小，<br />
+      ls -lh /data1/backup/<br />
+      这个mbbackup命令没有别的参数，也没有别的选择，这么执行就ok。<br />
+       这么备份出来的是整个集群的数据吗？还是只这个结点的呢？ 对，数据仅是在这个结点上的。<br />
+*) 配置备份<br />
+     ./var/lib/membase/config/config.dat<br />
+     把这个配置文件也一起备份了，或者还是把./var/lib/membase/config/整个目录也备份了呢。<br />
+     这个目录只有一个文件，效果一样的。<br />
+*) 执行恢复<br />
+     文件拷贝方式备份/恢复，系统要求，与原来的结点一致，ip地址和主机名必须与原来一致。<br />
+     使用 mbrestore命令备份，适用于不同大小的集群/放入不同的bucket中/数据库文件已经损坏。<br />
+     ./bin/mbrestore /data1/backup/default /data1/backup/default-*.mb<br />
+*) 1.8=》2.0<br />
+      经测试，在使用备份恢复工具的时候，可以无障碍升级过去，不需要停机。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/709'>http://nullget.sourceforge.net/?q=node/709</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

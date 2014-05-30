@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>编写systemd的服务unit</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>编写systemd的服务unit</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-05-30 12:04
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+systemd在桌面系统上越来越流行了，它用来取代之后的sysvinit启动脚本，提高桌面的启动速度。<br />
+最近用archlinux的时候，已经删除了sysvinit包，像常用的rc.local已经就不支持了，<br />
+以前许多的指启动功能需要移植到systemd的service上来。<br />
+<br />
+本次测试只实现了rc.local的功能，使用了systemd一小部分子集，<br />
+并没有用到systemd的所有功能，如果需要更深入的学习systemd unit service的编写，请查阅systemd说明文档。<br />
+http://www.freedesktop.org/software/systemd/man/systemd.service.html<br />
+​<br />
+systemd unit 脚本是一种类ini格式的文件，按描述信息、执行、安装等分为多个section，<br />
+每个section多条name=value行，现就就最基本的section和name做下描述：<br />
+section:  Unit, Service, Install<br />
+<br />
+Unit section基本name：<br />
+Description=   服务的描述<br />
+Wants=    服务的依赖目标，如network.target<br />
+Before=   前置依赖目标，如network.target<br />
+After=  必须在某个启动目标之后<br />
+<br />
+Service section基本的name：<br />
+Type=oneshot | forking | dbus   oneshot针对简单的多行独立的命令，forking针对复杂的脚本<br />
+      并且在希望执行多个独立的命令的时候，使用使用oneshot方式，否则systemctl报错。<br />
+User=    启动该服务的用户如，root,nobody,ftp。默认使用root用户启动。<br />
+ExecStart=     启动该服务的命令行，可通过使用Type=oneshot出现多次，但其中的命令行必须使用绝对路径。<br />
+ExecStop=     关闭该服务的命令行，可通过使用Type=oneshot出现多次，但其中的命令行必须使用绝对路径。<br />
+<br />
+Install section的基本name:<br />
+WantedBy=multi-user.target  一般都是这个启动级别<br />
+Alias=     定义这个服务的别名<br />
+<br />
+注意，systemd unit文件中，name一定是大定字母开关。<br />
+<br />
+我的rc.local.service示例：<br />
+[code type="ini"]<br />
+[Unit]<br />
+Description=Old sysvinit rc.local service<br />
+Wants=<br />
+Before=<br />
+After=<br />
+<br />
+[Service]<br />
+Type=forking<br />
+User=root<br />
+ExecStart=/usr/bin/bash /etc/rc.local.systemd start<br />
+ExecStop=/usr/bin/true<br />
+<br />
+[Install]<br />
+WantedBy=multi-user.target<br />
+[/code]<br />
+<br />
+这个文件存为/etc/systemd/system/rc.local.service，在用systemctl status rc.local是可查看状态。<br />
+脚本的rc.local.systemd只是原来的rc.local改了个名字。<br />
+<br />
+另外常用的systemctl命令：<br />
+systemctl    不带参数，查看所有的系统自带的service和targets.<br />
+systemctl  --system daemon-reload 重新加载修改过后unit。<br />
+systemctl  enable rc.local.service  把该服务安装到启动目标。<br />
+systemctl  start   rc.local <br />
+systemctl  stop   rc.local<br />
+systemctl status rc.local<br />
+<br />
+在实现了简单的service后，甚至可以实现更复杂的服务unit。<br />
+例如，前面写的启动最小化linux桌面环境的脚本，也可以用systemd的方式启动，实现自动化了：<br />
+<code type="ini"><br />
+[Unit]<br />
+Description=test custom unit<br />
+<br />
+[Service]<br />
+Type=forking<br />
+User=gzleo<br />
+ExecStart=/home/gzleo/myscripts-svn/start_mini_x.sh<br />
+ExecStop=/usr/bin/killall  -9 X<br />
+<br />
+[Install]<br />
+WantedBy=multi-user.target<br />
+Alias=minidesk<br />
+</code><br />
+<br />
+服务中的启动脚本可参考前面的文档。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/749'>http://nullget.sourceforge.net/?q=node/749</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

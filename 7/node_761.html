@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>kde akonadi postgresql 配置</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>kde akonadi postgresql 配置</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2013-08-30 10:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+cat ~/.config/akonadi/akonadiserverrc<br />
+[%General]<br />
+Driver=QPSQL<br />
+<br />
+[QPSQL]<br />
+StartServer=false<br />
+ServerPath=/serv/stow/posgresql-9.3.x/bin/pg_ctl<br />
+InitDbPath=/serv/stow/posgresql-9.3.x/bin/initdb<br />
+Name=kde_akonadi<br />
+Host=localhost<br />
+Port=5432<br />
+User=postgres<br />
+Password=<br />
+Options=<br />
+<br />
+[Debug]<br />
+Tracer=dbus<br />
+<br />
+有着挺好，不过虽然kde这个组件一直不断改进，目前还是akonadi本身问题比较大，慢，耗资源厉害。<br />
+目前还一个bug，由于QtSql特殊字符处理的原因，会出现某个SQL执行报错。<br />
+但好像不怎么影响使用。<br />
+<br />
+当然，kde也支持mysql和sqlite数据库存储后端，喜欢用哪个都可以啊。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/761'>http://nullget.sourceforge.net/?q=node/761</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

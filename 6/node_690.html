@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>在coreseek中实现准一元分词与词库分词整合的方案</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>在coreseek中实现准一元分词与词库分词整合的方案</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-10-08 15:23
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+由于sphinx官方版本只支持n元分词，<br />
+<br />
+而coreseek改进版本，表面上是只支持词库分词的<br />
+<br />
+这样，使用coreseek的时候，由于其使用最大匹配算法分词，<br />
+<br />
+对于某些特殊的长词，可以分为多个词时，在使用短词搜索的时候，<br />
+<br />
+无法搜索出相应的结果。<br />
+<br />
+如，研究生教育，虽然在语义上应该分出“研究生”和“教育”，<br />
+<br />
+但是在搜索引擎中，最好也能搜索到”研究“这个词。<br />
+<br />
+经研究发现，coreseek支持一个同义词的功能，<br />
+<br />
+使用这个同义词功能，可以兼容这种搜索要求。<br />
+<br />
+如，在同义词库thesaurus.txt中可以有一条，<br />
+<br />
+ 研究生<br />
+<br />
+    -研究<br />
+<br />
+则表示分词的时候，这两个词都会被分出来，把搜索其中任何<br />
+<br />
+一个词的时候，都能得到这条结果。<br />
+<br />
+在更极端情况下，把研究生这个词库中的词可分出下面的“词”（字）：<br />
+<br />
+ 研究生<br />
+<br />
+    -研究，研，究，生<br />
+<br />
+这样，相当于词库分词与准n元分词的组合分词方式了。<br />
+<br />
+至于为什么叫准n元分词，因为，这些n元字不是根据原文分出来的，<br />
+<br />
+而是根据现有的词库分出来的，肯定要比纯n元分词的结果要少，<br />
+<br />
+这样的优点是与词库的准确度相关，并且能最小化索引数据库。<br />
+<br />
+与相比sphinx提供的纯n元分词，在分词效率与最终索引数据库大小上、<br />
+<br />
+搜索效率上有比较好的折中。<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/690'>http://nullget.sourceforge.net/?q=node/690</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

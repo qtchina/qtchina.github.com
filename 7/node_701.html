@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>图片搜索/匹配PHASH实现改进</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>图片搜索/匹配PHASH实现改进</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2012-12-09 15:19
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+phash是一个图片特征抽取算法实现，<br />
+该算法相对还比较简单，特征值只是一个64位无符号整数。<br />
+在使用PHP扩展程序处理的时候，原版本的扩展只返回资源类型的值，<br />
+只能实时做对比处理，无法把它存储起来。<br />
+<br />
+通过阅读它的PHP扩展，发现修改一下代码即能把资源转变为整数返回，<br />
+添加一个扩展函数，PHP_FUNCTION(phash_toint);<br />
+参数为使用phash_imagehash返回的资源类型值，<br />
+实现函数为，<br />
+PHP_FUNCTION(phash_toint)<br />
+{<br />
+    zval * h1_res = NULL;<br />
+    int h1_resid = -1;<br />
+    ulong64 * h1;<br />
+    zval * h2_res = NULL;<br />
+    int h2_resid = -1;<br />
+    ulong64 * h2;<br />
+<br />
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &h1_res) == FAILURE) {<br />
+        return;<br />
+    }<br />
+    ZEND_FETCH_RESOURCE(h1, ulong64 *, &h1_res, h1_resid, "ph_image_hash", le_ph_image_hash);<br />
+ <br />
+    long long int ih1 = *h1;<br />
+    char rbuf[32] = {0};<br />
+    sprintf(rbuf, "%lu", ih1);<br />
+<br />
+    RETVAL_STRING(rbuf, true);<br />
+}<br />
+<br />
+这样可以把图片的特征值存储起来，如存储在关系数据库中，后面可以直接拿来使用。<br />
+<br />
+另外，以使用mysql为例，通过编写一个mysql用户定义函数，<br />
+可以在查询的时候直接调用特征匹配算法，把匹配度在一定范围的结果返回，<br />
+<br />
+my_bool ham_init(UDF_INIT *initid, UDF_ARGS *args, char *message)<br />
+{<br />
+   return 0;<br />
+}<br />
+<br />
+void ham_deinit(UDF_INIT *initid)<br />
+{<br />
+}<br />
+<br />
+long long ham(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)<br />
+{<br />
+     ulonglong ih1 = *((ulonglong*) args->args[0]);<br />
+     ulonglong ih2 = *((ulonglong*) args->args[1]);<br />
+<br />
+     ulonglong x = ih1 ^ ih2;<br />
+     // x = 11611742962838811245UL ^ 10221281696820229275UL;<br />
+     const ulonglong m1 = 0x5555555555555555ULL;<br />
+        const ulonglong m2 = 0x3333333333333333ULL;<br />
+       const ulonglong h01 = 0x0101010101010101ULL;<br />
+      const ulonglong m4 = 0x0f0f0f0f0f0f0f0fULL;<br />
+​<br />
+    x -= (x >> 1) & m1;<br />
+     x = (x & m2) + ((x >> 2) & m2);<br />
+    x = (x + (x >> 4)) & m4;<br />
+<br />
+   return (x * h01)>>56;<br />
+}<br />
+自定义函数 ham(h1, h2);的两个参数是需要计算的两个图片的特征值，<br />
+返回值为特征的相似度，越小越相似，为0的时候为完全相同。 <br />
+通过编写mysql自定义函数的方式，把这个编译成一个插件，加载到mysql中，<br />
+如如下SQL，<br />
+select * from t1 where ham(phash_value_field, 34567) < 10;<br />
+即可检索出匹配度小于10结果。<br />
+<br />
+参考：<br />
+phash主站，http://www.phash.org<br />
+<br />
+<br />
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/701'>http://nullget.sourceforge.net/?q=node/701</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>

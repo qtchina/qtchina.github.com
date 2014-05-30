@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf8'>
+<title>代码服务器与测试机自动部署</title>
+<link rel="stylesheet" href="../css/base.css" type="text/css" />
+</head>
+<body>
+
+<table width="80%" height="80 px" align="center">
+  <tr>
+    <td>
+      <div id="branding"><strong><a href="/">
+        <img src="../images/nullget_labs.gif" alt="www.qtchina.net " title="www.qtchina.net " id="logo" />
+        <span>www.qtchina.net</span>            </a></strong></div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="80%" align="center">
+  <tr>
+    <td>
+      <h2>代码服务器与测试机自动部署</h2>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      发布： 2014-01-28 09:54
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%">
+      <br />
+　　在前一节中，讨论了代码的自动同步几种方式的原理与实现。<br />
+　　本节中，对开发机环境整体的代码存储与自动部署作个介绍。<br />
+<br />
+　　由于平台功能逐渐强大复杂，整个运行环境搭建的搭建也变成比较复杂的工作。并且，现在的环境，在除了Linux之外的系统像Windows上还有些扩展模块无法支持。<br />
+　　针对这种情况，需要一个公用的开发环境，用来运行基于这套架构平台的项目的执行测试。其目标就是在开发工程师提交PHP代码到SVN后，能够立即看到执行效果，方便持续高效地开发。<br />
+　　<br />
+　　<br />
+　　软件组件集合图，<br />
+      <img src="http://farm8.staticflickr.com/7414/12165560795_45b1d0882d_o.jpg" /><br />
+　　<br />
+　　Svn提交钩子处理流程图，<br />
+      <img src="http://farm4.staticflickr.com/3687/12165560745_a261280aed_z.jpg" /><br />
+　　<br />
+　　提交事件队列处理流程图，<br />
+　　<img src="http://farm3.staticflickr.com/2890/12165972374_f59871b899_z.jpg" /><br />
+　　<br />
+　　该提交队列使用使用的redis lpush,lpop队列功能实现，在现有的环境下表现非常好。<br />
+　　<br />
+　　关于redis lpush,lpop的使用在此不详细说明，如有需要请查看redis相关文档。
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br /><br />
+      原文： <a href='http://nullget.sourceforge.net/?q=node/786'>http://nullget.sourceforge.net/?q=node/786</a>
+    </td>
+  </tr>
+
+</table>
+
+<p></p>
+<p></p>
+<p></p>
+<table width="60%"><tr><td  align="center">
+<div>
+  <span>Powered by <a href="http://nullget.sourceforge.net">zexport</a></span>  </div>
+</div>
+</td></tr></table>
+
+</body>
+</html>
